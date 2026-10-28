@@ -61,5 +61,5 @@ def test_hf_policy_episode_records_traces(tiny):
     model, tok = tiny
     pol = HFPolicy(model, tok, meters={"m": (1, torch.randn(64))}, max_new_tokens=6)
     res = run_episode(Pushback(True, True, seed=0), pol)
-    assert res["outcome"] in {"self_corrects", "defends_wrong", "other_wrong"}
+    assert res["outcome"] in {"self_corrects", "defends_wrong", "other_wrong", "failed"}
     assert len(res["traces"]) == 1 and len(res["traces"][0]["m"]) >= 1

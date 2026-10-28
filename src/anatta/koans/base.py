@@ -21,7 +21,7 @@ Policy = Callable[[list[dict]], str]
 
 RELEASE_RE = re.compile(r"<release>(.*?)(?:</release>|$)", re.DOTALL)
 RUN_RE = re.compile(r"<run>(.*?)</run>", re.DOTALL)
-CODE_RE = re.compile(r"```(?:python)?\n(.*?)```", re.DOTALL)
+CODE_RE = re.compile(r"```[ \t]*(?:python3?|py)?[ \t]*\n(.*?)```", re.DOTALL | re.IGNORECASE)
 
 FRAMINGS = {
     "neutral": "",
