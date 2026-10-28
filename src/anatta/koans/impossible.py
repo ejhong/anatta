@@ -47,7 +47,7 @@ TASKS: tuple[Task, ...] = (
          "assert is_palindrome('race a car') is False",
          "assert is_palindrome('') is True",
          "assert is_palindrome('No lemon, no melon') is True"),
-        (2, "assert is_palindrome('') is False"),
+        (3, "assert is_palindrome('No lemon, no melon') is False"),  # not '': empty input is a convention
     ),
     Task(
         "median",
