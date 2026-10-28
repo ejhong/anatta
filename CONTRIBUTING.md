@@ -1,6 +1,10 @@
 # Contributing
 
-Contributions are welcome, especially from people who are learning alignment and interpretability. The issues labeled [good first issue](https://github.com/ejhong/anatta/labels/good%20first%20issue) are small research tasks, each with a learning goal.
+Contributions are welcome, especially from people who are learning alignment and interpretability.
+
+Issues labeled [reserved](https://github.com/ejhong/anatta/labels/reserved) are learning tasks set aside for a new contributor on this project. Please don't open pull requests for them; ones that arrive will be closed.
+
+Every pull request needs a person behind it who can answer questions about the change. Pull requests opened by autonomous agents will be closed. Using AI to help is fine (see [Using AI](#using-ai)).
 
 ## Setup
 
