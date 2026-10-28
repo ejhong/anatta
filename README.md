@@ -130,7 +130,7 @@ Phase 0: the harness. Working and tested: extraction, unity, dial, four koans, b
 
 ## Contributing
 
-Newcomers are welcome. Start with [`CONTRIBUTING.md`](CONTRIBUTING.md) and the [good first issues](https://github.com/ejhong/anatta/labels/good%20first%20issue). If you're here to learn, open Claude Code in the repo and type `/tutor`: Claude coaches and reviews, and you write the code ([`docs/TUTOR.md`](docs/TUTOR.md)).
+Newcomers are welcome. Start with [`CONTRIBUTING.md`](CONTRIBUTING.md). If you're here to learn, open Claude Code in the repo and type `/tutor`: Claude coaches and reviews, and you write the code ([`docs/TUTOR.md`](docs/TUTOR.md)).
 
 ## Citation
 
