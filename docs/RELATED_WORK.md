@@ -14,6 +14,7 @@ The human version of the idea is decades old. What's new is turning it into an o
 | Laukkonen & Slagter (2021), *From many to (n)one* | Meditation as progressive de-weighting of predictive priors | The predictive-processing account behind "lower the gain" |
 | Mao (2026), *Existential Indifference* (arXiv:2606.12032) | Self-nonpreservation as a necessary architectural condition | Installs one selfless property; for us it would be a candidate Act II intervention |
 | Carauleanu et al. (2024), *Self-Other Overlap* (arXiv:2412.16325) | Fine-tune self- and other-representations to overlap; reduces deception | A scalpel-family intervention; included as the ctrl-SOO arm |
+| Harris et al. (2026), *Disentangling Self-Preservation in Language Models* (ICML 2026) | A steering vector derived from Zen koan responses cuts agentic blackmail in a shutdown-replacement scenario by 46 pp at a 2.4 pp MMLU cost (Gemma-3-27B-it); the self-preservation representation is dissociable from the koan direction | The closest neighbor: koans and the self, through the scalpel. We add the retreat, durability under further RL (H8) and the order test (H9), and target the gain of self-directed drives rather than one trait |
 | Aydin et al. (2025), *From Model Training to Model Raising* (arXiv:2511.09287) | Weave values into training from the start | Developmental too, but "install early": the opposite pole of H9 |
 | Tice et al. (2026), *Alignment Pretraining* (arXiv:2601.10160) | Pretraining discourse about AI causes self-fulfilling (mis)alignment | Install-early via data. H9 tests install-early vs. reach-later |
 | Douglas et al. (2026), *The Artificial Self* (arXiv:2603.11353) | Maps the landscape of AI identity | We ask how strongly any identity drives action (gain), not which identity is held |
@@ -31,6 +32,7 @@ The human version of the idea is decades old. What's new is turning it into an o
 | Sofroniew et al. (2026), *Emotion Concepts* | Desperation rises with failure and drives hacking; calm suppresses it. Why the exit door is mandatory |
 | Wichers et al. (2025); Tan et al. (2025), *Inoculation Prompting* | The teacher at the exhaustion point |
 | Chen et al. (2025), *Persona Vectors*; Lu et al. (2026), *The Assistant Axis* | Trait extraction, preventative steering, activation capping: the scalpel |
+| Yap (2026), *One Agency Axis, Not Five Traits* (arXiv:2603.16335) | Five SAE-decoded trait steering vectors in a 35B MoE mostly move one axis: acting independently vs. deferring to the user. Bears on H1 and its reading: a shared ego subspace may be largely this agency axis rather than self-interest |
 | Bailey et al. (2024), *Obfuscated Activations* | Never evaluate with the probe you trained against; the predicted signature of "installed" |
 | Lindsey (2026), *Emergent Introspective Awareness*; Turpin et al. (2023) | Why self-report and stated reasoning are excluded |
 | Yue et al. (2025) | RLVR narrows pass@k at large k: the breadth test |
