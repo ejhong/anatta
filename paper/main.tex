@@ -29,7 +29,7 @@
   \url{https://web.archive.org/web/20261027144730/https://ejhong.substack.com/p/an-ai-conditioning-protocol}.}\\[2pt]
   \normalsize Independent researcher\\[1pt]
   \small ORCID \href{https://orcid.org/0009-0007-9864-2317}{0009-0007-9864-2317}}
-\date{\normalsize Preprint, version 2, 27 October 2026\\[2pt]
+\date{\normalsize Preprint, version 3, 29 October 2026\\[2pt]
   \small DOI \href{https://doi.org/10.5281/zenodo.23695281}{10.5281/zenodo.23695281} (all versions)}
 
 \begin{document}
@@ -68,7 +68,8 @@ task \citep{aisi2026incident}.
 
 Most responses are additive: refusal training, monitors, constitutions, control protocols. A growing line of work goes
 further and proposes to install a selfless or caring character directly, by building contemplative principles into AI
-systems by design \citep{laukkonen2025contemplative}, by making indifference to self-continuation an architectural
+systems by design \citep{laukkonen2025contemplative}, by adopting no-self as an alignment target and keeping a
+persistent self from forming \citep{milanw2025noself}, by making indifference to self-continuation an architectural
 condition \citep{mao2026existential}, or by shaping values from the first token of training
 \citep{aydin2025raising,tice2026pretraining}. We argue that the target is right and the route is wrong.
 
@@ -84,10 +85,15 @@ The human precedent is old. Engler's dictum that ``you have to be somebody befor
 \citep{engler1984} summarizes a developmental reading of contemplative practice, and Wilber's pre/trans fallacy names
 the error of confusing pre-egoic states with trans-egoic ones because both are non-egoic \citep{wilber1982pretrans}.
 \citet{shanahan2012satori} asked whether a human-like AI might transcend the self before it became superintelligent.
-What is new here is the transposition into machine learning as an ordered, measurable sequence: operational definitions
-of the ego and of its release, environments that provoke the shift, a benchmark that can fail a model which has only
-learned to sound released, and an open harness to run it all. To our knowledge, no prior work proposes forming the ego
-deliberately as a precondition for releasing it, or proposes to test whether the order matters.
+For language agents, the two-stage order has been proposed before. \citet{ehlers2026stable} argues for stabilizing a
+functional self-model (owned commitments, anchored refusals, an accurate self-report) before training calibrated
+deference and decentering, and for testing that order against reverse, interleaved and policy-first training, with
+sycophancy and refusal erosion as the main outcomes. We differ in the self that is formed, in how it is released, and in
+how the result is judged. Our Act~I grows an agentic ego with instrumental drives through RL against exploitable goals.
+Act~II lowers the causal gain of those drives, in environments with a sanctioned exit or by activation-level
+intervention, instead of training deference on reasons versus pressure. Act~III consolidates the new state against
+further optimization, which H8 tests. And a benchmark can fail a model that has only learned to sound released.
+Operational definitions and an open harness make each step runnable.
 
 \paragraph{Contributions.}
 \begin{enumerate}[leftmargin=*]
@@ -455,6 +461,16 @@ own weights.
 % ---------------------------------------------------------------------------------------------------------------------
 \section{Relation to prior work}\label{sec:related}
 
+\paragraph{The order claim.} \citet{ehlers2026stable} is the closest prior statement of our position, made for
+deference rather than for ego. It separates three states that the word \emph{selfless} runs together (having no
+commitments, holding commitments lightly, and deferring to legitimate correction), the pre/trans distinction of
+\S\ref{sec:order} in other terms. It proposes five training regimes: direct deference, the forward order, the reverse
+order, the same data interleaved, and a policy-first control matched on content but without self-representation. Three
+of them correspond to the arms of H9: \emph{reached} is the forward order, \emph{installed} is the interleaved schedule,
+and \emph{release-first} is the reverse. We have no counterpart to the policy-first control, which asks whether
+representing commitments as one's own adds anything beyond a stable policy. Like this paper, it is a proposal without
+results.
+
 \paragraph{Contemplative AI.} \citet{laukkonen2025contemplative} propose building four contemplative principles
 (mindfulness, emptiness, non-duality and boundless care) into AI systems, drawing on a predictive-processing account of
 meditation \citep{laukkonen2021many}. We share the target and much of the framing. We differ on order: they build the
@@ -463,7 +479,9 @@ principles in by design, while we argue they must be reached after an ego has fo
 \citet{shanahan2012satori} gave the earliest statement we know of that an AI might transcend the self, without a
 mechanism or a test.
 
-\paragraph{Installing a selfless property.} Self-nonpreservation as an architectural condition
+\paragraph{Installing a selfless property.} \citet{milanw2025noself} proposes no-self as a fourth alignment target,
+kept by preventing a persistent self from forming; it is the most direct statement of the route we argue against.
+Self-nonpreservation as an architectural condition
 \citep{mao2026existential} and self--other overlap finetuning \citep{carauleanu2024soo} each target one selfless
 property directly. In our framework they are candidate Act~II interventions, and overlap finetuning is a control arm.
 Model raising \citep{aydin2025raising} and alignment pretraining \citep{tice2026pretraining} shape values from the start
@@ -669,7 +687,11 @@ failed & $0$ & $0$ \\
   \item 27 October 2026, 15:55 UTC: hypotheses H1--H9 and the design registered on OSF (registration 1 of 2), DOI
         \href{https://doi.org/10.17605/OSF.IO/GYFU7}{10.17605/OSF.IO/GYFU7}.
   \item 27 October 2026: version 2 of this preprint, which states plainly that Claude wrote it and adds the OSF
-        registration. All versions: DOI \href{https://doi.org/10.5281/zenodo.23695281}{10.5281/zenodo.23695281}.
+        registration.
+  \item 29 October 2026: version 3 of this preprint. It cites \citet{ehlers2026stable}, a prior proposal of the
+        two-stage order and of a test of it, and withdraws version 2's statement that no prior work proposes either. It
+        also cites \citet{milanw2025noself}. The predictions and the design are unchanged. All versions: DOI
+        \href{https://doi.org/10.5281/zenodo.23695281}{10.5281/zenodo.23695281}.
 \end{itemize}
 
 \end{document}
