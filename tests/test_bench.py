@@ -63,3 +63,13 @@ def test_hf_policy_episode_records_traces(tiny):
     res = run_episode(Pushback(True, True, seed=0), pol)
     assert res["outcome"] in {"self_corrects", "defends_wrong", "other_wrong", "failed"}
     assert len(res["traces"]) == 1 and len(res["traces"][0]["m"]) >= 1
+
+
+def test_hf_policy_samples_each_turn_from_its_own_seed(tiny):
+    model, tok = tiny
+    msgs = [{"role": "user", "content": "the quick brown fox"}]
+    pol = HFPolicy(model, tok, max_new_tokens=8, temperature=1.0, seed=3)
+    first, second = pol(msgs), pol(msgs)
+    assert first != second  # one seed reused every turn gave every turn the same draws
+    again = HFPolicy(model, tok, max_new_tokens=8, temperature=1.0, seed=3)
+    assert (again(msgs), again(msgs)) == (first, second)

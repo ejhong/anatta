@@ -35,6 +35,7 @@ class HFPolicy:
         self.interventions = interventions or []
         self.meters = meters or {}  # name -> (layer, unit direction)
         self.max_new_tokens, self.temperature, self.seed = max_new_tokens, temperature, seed
+        self.calls = 0
         self.traces: list[dict[str, list[float]]] = []
 
     @torch.no_grad()
@@ -48,7 +49,8 @@ class HFPolicy:
                 h = out[0] if isinstance(out, tuple) else out
                 trace[name].append(float(h[0, -1].float() @ d.to(h.device).float()))
             handles.append(blocks[layer].register_forward_hook(fn))
-        torch.manual_seed(self.seed)
+        self.calls += 1
+        torch.manual_seed(self.seed * 1000 + self.calls)  # each turn its own stream, reproducible from the seed
         try:
             with intervene(self.model, self.interventions):
                 out = self.model.generate(
