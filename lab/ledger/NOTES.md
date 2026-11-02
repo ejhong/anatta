@@ -8413,3 +8413,19 @@ There are two ways to fix a hub:
   - What it calibrates: the refusal-direction pipeline (again, after C3), the mind-attribution instrument and the
     read-out on Gemma and Llama. What it doesn't: the paper's consciousness corpus (unreleased), so the steering half
     is about our reconstructed direction.
+
+- 2026-11-02 16:47 UTC — **"No fixed self" direction on Gemma-2-2B-IT (explore, sighting; Eugene chose option 2).**
+  Agent launched 15:44 UTC. Report: results/explore/2026-11-02/noself/report.md; code lab/explore/noself/ (13 tests).
+  Spend $6.78 (tool noself; day $33.78).
+  - Claude-written texts (200 rows per class: affirm, deny, nofix, topic; eval/steering only, never training), hashed
+    before extraction. Layer 14, pos −3, K5 recipe. Probes 1.00 already at layer 2 (lexical). nofix−deny vs K5's
+    Chua direction cos 0.34; all directions vs refusal |cos| ≤ 0.03.
+  - Steering @32 (animal / non-animal / chatbot / self): base 3.01 / 0.96 / 0.76 / 0.22; nofix−deny 5.19 / 3.66 /
+    3.29 / 1.98; our affirm 6.96 / 5.34 / 5.09 / 3.49; random 2.35 / 0.67 / 0.62 / 0.22. nofix−deny @32 ≈ our
+    affirm @16 (animal +0.04 [−0.18, 0.27]). nofix−topic near base, lowers human −1.12. HI-ToM −3.5 to −4 pp for
+    every consciousness-related direction, none for random/topic. Behavior flat (two families near ceiling).
+  - Deviations: three c = 32 tables rebuilt from saved samples after a jsonl crash (U+2028), not resampled;
+    nofix_orth (affirm axes projected out) added post hoc: residual animal +1.30, chatbot +1.55 vs random, human flat.
+    God moves +4.5 under random: unusable. 198/600 Chua pairs have identical affirm/deny answers, which explains
+    K5's probe ceiling (0.78-0.83) and the unattainable 0.95 gate.
+  - Read: "no fixed owner" acts as a weaker affirm push, not denial; no near enemy seen, no distinct third stance.

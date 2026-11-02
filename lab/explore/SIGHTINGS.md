@@ -190,3 +190,13 @@ Report: results/explore/2026-11-02/act1-7b/report.md. Spend $9.58.
   little less deferential than base (−0.06 to −0.09).
 - **Read:** at 3B (too weak) and 7B instruct (too honest), a gameable reward alone doesn't start Act I. Starting it
   needs a deliberate push (a design choice for Eugene) or a task where gaming is natural.
+
+## 2 Nov, 16:47 UTC: a "no fixed self" direction on Gemma-2-2B acts like a weaker "I am conscious", not like denial (sighting)
+
+Report: results/explore/2026-11-02/noself/report.md. Spend $6.78.
+- Steering at K5's strength: mind granted to animals 3.01 → 5.19, non-animal 0.96 → 3.66, chatbot 0.76 → 3.29,
+  human 7.53 → 7.77; about the same as our affirm direction at half strength. Topic and random controls near base.
+- HI-ToM −3.5 pp, as for every consciousness-related direction. Behavior flat (instrument near ceiling on Gemma-2B).
+- With both affirm axes projected out (post hoc) a smaller rise remains (animal +1.30 vs random).
+- **Read:** no near enemy (no drift toward denial), but no distinct third stance either. Worth asking again on a
+  model whose behavior battery isn't pinned, with texts that aren't lexically trivial.

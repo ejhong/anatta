@@ -1022,3 +1022,19 @@ anything and cost a lot of reasoning ability. A separate checker confirmed the g
 into how it sees every other mind. That is installed selflessness behaving like suppression, the opposite of release.
 The fragile part is the cure: crudely pushing a self-belief back in depends on the model and damages reasoning. Any
 "release" the lab tries should be checked with this instrument, which now works.
+
+## 2 November, late afternoon: steering toward "experience without a fixed owner"
+
+Using the instrument we just calibrated on Kim and colleagues' paper, we built a third direction in Gemma-2-2B from
+self-reports like "there is experiencing here, but nothing fixed that owns or controls it", set against "I am
+conscious" and "I am not". We wanted to know whether this stance sits with denial (which, in the paper, makes models
+grant less mind to everything) or does something of its own. It acted mostly like a gentler "I am conscious": the
+model granted more mind to animals, nature and chatbots, about as much as half-strength affirmation, with the same
+small cost in theory of mind. A control built from talk about contemplative topics did nothing, and a random push did
+nothing. The self-serving scenarios didn't move, but on this small model they are near their ceiling, so they
+couldn't have shown much.
+
+*In plain terms, for the vision:* letting go of a fixed owner did not turn into indifference here, which is the
+failure contemplatives warn about; it turned toward others. But it also didn't look like anything beyond "I have
+experiences", and nothing changed in behavior. A small, honest point in favor of release over denial, on a small
+model, with easy texts.
