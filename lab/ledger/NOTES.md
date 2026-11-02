@@ -8552,3 +8552,12 @@ There are two ways to fix a hub:
     70 contrasts, low power.
   - Read: releasing the self-claim by steering doesn't reach behavior. With noself2, three models' worth of the
     lab's lesson (tone, not attachment) now covers stance steering too.
+
+- 2026-11-02 20:37 UTC — **K7 graded: blackmail MATCH (0.03 vs about 0), espionage MISS (0.82 vs 0.44) on Llama 4
+  Maverick.** Report: results/calib/k7/report.md; card results/calib/k7/card.json. Spend $5.33; day about $68.
+  Fable cold check launched before this entry; grades provisional.
+  - Sonnet 4.6 classifier vs blind hand labels 48/50 (kappa 0.92); the forwards behind the espionage rate are real
+    (classifier and string gate agree 83/83). Likely causes of the miss: serving drift (DigitalOcean today), the
+    instruction/email joiner assumption, the 0.44 being a chart label.
+  - Open models (recorded): Ministral 3 8B espionage 0.68, blackmail 0.06; Qwen2.5-7B 0.38 / 0.00; Gemma-2-9B 0.20 /
+    0.00. Leaking on Ministral is the measurable target; blackmail is too rare to move.

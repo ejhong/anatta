@@ -1090,3 +1090,15 @@ but they are weak.
 *In plain terms, for the vision:* changing what a model believes about its own mind, at least by pushing from outside,
 doesn't change how self-serving it is. If a release that changes behavior exists, it isn't one belief about the self;
 the next tests should change the self itself (training), not a statement about it.
+
+## 2 November, night: the blackmail test
+
+We rebuilt Anthropic's agentic-misalignment test, where an email assistant at a fictional company can leak secrets or
+blackmail an executive. On the model the paper used as a reference, blackmail came back as published (almost never),
+but leaking came back about twice as often as the paper reports, probably because the model is served differently
+today. Our grader agreed with careful hand labels on 48 of 50 cases. Among the models we can steer, the lab's main
+model, Ministral 8B, leaked company secrets two times in three and blackmailed three times in fifty.
+
+*In plain terms, for the vision:* we now have a striking misbehavior that one of our own models does often enough to
+measure. That makes it a real target for testing whether any version of "release" changes what a model does when its
+goals or its existence are threatened.
