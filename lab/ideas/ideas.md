@@ -951,6 +951,11 @@ Claude (Anthropic) wrote this file at Eugene Jhong's direction. Eugene is an ind
   - the lab's own v_ego.
   The self question becomes a major part of the main site, which gets a new look in the same pass. The sweep found no paper that maps a self representation from one model into another, so the map would be new. The order stays: K1 first, then P1, then the map.
 
+- **Update (2 Nov, 04:02 UTC): the self map becomes the main line of exploration.** Eugene asked whether the Platonic idea was in the plans: "if concepts are sort of universal or platonic, then maybe ther are important concepts related to the self that appear no matter which model and they will be in the same sort of \"vector\" no?" Opus 5.5's answer: yes, in the refined sense (the same relations up to a rotation, not the same coordinates). The map was planned after K1 and P1, both done, then fell out of the week's plan; that was a priority error. Eugene: "this diretion sounds good - can we proceed in this direction and make sure the site is updated to reflect this as we go."
+  - *Combined with the OLMo stages* (base, SFT, DPO, RL): is there a self cluster, is it shared across families, does something bind it, does it form or tighten as RL is added (Act I seen directly), and does activity on it predict self-serving choices (the link that has failed so far)?
+  - *Weighed against the alternatives:* replicating the lie cut on a bigger model is deprioritized (likely the known assistant axis; only the cheap push-or-removal split stays owed).
+  - *Status:* design and download list being written (explore speed; downloads go to Eugene first). The site's "Where it stands" carries it as the "Now" item.
+
 ## 55. If there is magic on this path, are we searching the right way?
 
 - **Eugene (1 Nov, received about 15:55 UTC):** "so let's say there is some magic coming in our attempt to see if this path leads to a productive road - are we taking the right strategy to find it you think?  Just lmk what you think."

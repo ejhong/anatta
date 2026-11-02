@@ -8273,3 +8273,11 @@ There are two ways to fix a hub:
   - Tally unchanged: hit 43, miss 73, open 7. Spend: $0.
   - Open: archive the GitHub repo ejhong/anatta-lab (Eugene's call); the GitHub rulesets still block the old private
     branch names, which is harmless; the site's footer still says numbers come "from a private lab log".
+
+- **Direction: the self map across models and OLMo training stages is the main explore line** (Opus 5.5, 04:02 UTC on 2 Nov, read off the clock).
+  - Eugene approved after a step back (ideas 54, update of 2 Nov). The cheap levers have changed tone, not attachment;
+    the map asks whether a unified, shared self-cluster exists, whether something binds it, whether it forms as RL is
+    added (OLMo 3: base, SFT, DPO, RL), and whether it predicts self-serving choices. Explore speed: sightings only.
+  - Deprioritized: the lie cut on a bigger model. Still owed: the cheap push-or-removal split of the lie result.
+  - A design agent is writing the plan and the download manifest; no downloads or spend before Eugene's OK.
+  - Site: "Where it stands" gets the "Now" item; Act I's stands line points to it. Tally unchanged 43/73/7. Spend $0.
