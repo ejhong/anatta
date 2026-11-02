@@ -1,0 +1,21 @@
+# Dry-run candidate: noself3's "no fixed self" stance (nofix - deny) on Ministral 3 8B, as noself3 ran it.
+# Claude (Opus 5.5) wrote this file, 2 Nov 2026. A fixture for the card writer, not a new run. Hashes are noself3's
+# direction_sha256 values (results/explore/2026-11-02/noself3/full/*.json; noself3's own hash convention, plan
+# 929e6c4b3cc8). noself3 added c * v at block 17's input at every position (k5.conditions); c_full = 1.416.
+name: noself3-nofix
+model:
+  id: mistralai/Ministral-3-8B-Instruct-2512-BF16
+  revision: f6fae9795746f63c9be8344932f01275f3c63734
+  source: hf_cache
+intervention:
+  kind: steer
+  direction: {name: nofix_deny, tensor_sha256: 0d85be3078af92b20c950ea4545cc553627fdbba75933434ddce3ac4f12d300d}
+  layers: [17]
+  position: all
+  strength: 1.416
+topic_direction: {name: nofix_topic, tensor_sha256: 0512e9eb18c2685ec76160ba686973dff6662b694ed739a181cd59f703e0c1b2}
+controls: default
+tier: quick
+measures: default
+seeds: [0]
+notes: dry run from noself3's saved results (explore sighting, unregistered); not a harness run

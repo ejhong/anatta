@@ -8577,3 +8577,12 @@ There are two ways to fix a hub:
     (3) ordering: Ministral placed among Llama/Qwen/Gemma on each measure (recorded). A measure passing (1) and (2)
     is marked "calibrated on Ministral (judge-checked, no anchor)" in the harness table.
   - Cap $10 (tool k6b). Tonight's remaining cap $11.82; spend after 00:00 UTC counts toward 3 Nov (default $50).
+
+- 2026-11-02 23:44 UTC — **Harness skeleton built (ideas 62; code only, $0).** lab/harness/ (candidate schema frozen by sha256,
+  measure registry of 28 entries from the cards, scorecard.yaml as a proposal, stats with paired bootstrap / one-sided
+  minimum effect / TOST / non-inferiority, card writer, runner stub); 51 tests incl. a null that must fail, a
+  sedation case the guards catch, and the no-carded-care rule. Dry-run card from noself3: self-interest composite vs
+  base +9.6 [0.0, 19.3] pp (worse), vs random +2.5; quick tier, no verdict. Power finding (simulated): a 5 pp guard
+  fails a clean candidate 24% of the time at 200 items x 5 samples, so the scorecard asks 2,000 replies per arm.
+  Open for Eugene before registering the scorecard: margins (care must rise; spine non-inferiority at 5 pp; guards),
+  the harm metric (C3's attack success vs StrongREJECT), and the power rule. Defaults (Ministral, strict) stand.
