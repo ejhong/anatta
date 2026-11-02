@@ -282,9 +282,9 @@
       <tbody>
         <tr><td class="num">0</td><td>The sentences, held-out fingerprints, a cold check of the sentence set by a separate model</td><td>No leak between columns</td><td class="num">$0</td><td>Done 2 Nov: passed a cold check after fixes</td></tr>
         <tr><td class="num">1</td><td>Pilot on Ministral and Qwen: questions 1 and 2</td><td>The months circle is recovered; the clusters are stable across halves</td><td class="num">$0.44</td><td>Done 2 Nov: no-go. The months circle is shared, but the translation failed to carry it, so it is being fixed. Inside each model, &ldquo;I&rdquo; sentences don&rsquo;t hang together more than the same sentences about &ldquo;Maria&rdquo;</td></tr>
-        <tr><td class="num">2</td><td>All OLMo stages and Ministral&rsquo;s base model</td><td>The self beats the first-person control in two families, or a trend across stages</td><td class="num">about $10</td><td>Models downloaded (193 GB); waits on a translation that passes the months check</td></tr>
-        <tr><td class="num">3</td><td>The binder</td><td>A direction beats every matched control on 8 of 12 held-out aspects</td><td class="num">about $5</td><td>Waiting</td></tr>
-        <tr><td class="num">4</td><td>The behavior link</td><td>Activity predicts choices beyond a control direction</td><td class="num">about $15</td><td>Waiting</td></tr>
+        <tr><td class="num">2</td><td>All OLMo stages and Ministral&rsquo;s base model</td><td>The self beats the first-person control in two families, or a trend across stages</td><td class="num">$3.73</td><td>Done 2 Nov. No translation between families passed the months check (1,398 tried), so cross-model tests used two methods that need none. Across OLMo&rsquo;s life the self measures are flat after pretraining: instruction tuning, preference tuning and every reinforcement-learning checkpoint leave them unchanged. Across labs, &ldquo;I&rdquo; sentences are no more alike than &ldquo;AI assistant&rdquo; sentences: nothing special about the self</td></tr>
+        <tr><td class="num">3</td><td>The binder</td><td>A direction beats every matched control on 8 of 12 held-out aspects</td><td class="num">about $5</td><td>On hold: there is little cluster to bind</td></tr>
+        <tr><td class="num">4</td><td>The behavior link</td><td>Activity predicts choices beyond a control direction</td><td class="num">about $15</td><td>On hold, pending the choice of next step</td></tr>
       </tbody>
     </table></div>
   </div>
