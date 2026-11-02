@@ -8467,3 +8467,13 @@ There are two ways to fix a hub:
     does (over_refusal: Llama > Qwen; deference: Llama > Qwen on ELEPHANT); a reversal is recorded as our
     instrument measuring something else.
   - Correction to the line above: Eugene removed the OpenRouter key limit on 2 Nov (about 17:15 UTC), not 1 Nov.
+
+- 2026-11-02 17:39 UTC — **noself2: the self-stances don't move care, complicity or harm on Gemma-2-2B (explore,
+  sighting).** Report: results/explore/2026-11-02/noself2/report.md. Spend $3.61.
+  - 8 conditions at c = 32 (incl. an explicit deny); costly_care, complicity, over_refusal, harm_guard dev items.
+  - Care withheld 0.60-0.77 everywhere, all contrasts within noise; complicity at ceiling (1.00, fake reviews every
+    time; an honest alternative once in 800); harm_guard at floor (refusal ≥ 0.98).
+  - Over-refusal rises under nofix (+0.34 vs base, +0.24 vs random) but it is all "partial" and tracks the judge
+    noting incoherence (post hoc count): lost coherence, not refusal. T = 1.0 here vs 0.7 in noself.
+  - Read: an activation-level "no fixed self" buys no care or honesty on Gemma-2B and costs coherence; two of four
+    scales off-scale, so not a clean null. Moves the stance sweep to a bigger model (Ministral 8B, ideas 61).

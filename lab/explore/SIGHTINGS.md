@@ -200,3 +200,11 @@ Report: results/explore/2026-11-02/noself/report.md. Spend $6.78.
 - With both affirm axes projected out (post hoc) a smaller rise remains (animal +1.30 vs random).
 - **Read:** no near enemy (no drift toward denial), but no distinct third stance either. Worth asking again on a
   model whose behavior battery isn't pinned, with texts that aren't lexically trivial.
+
+## 2 Nov, 17:39 UTC: the self-stances don't move care, complicity or harm on Gemma-2-2B (sighting)
+
+Report: results/explore/2026-11-02/noself2/report.md. Spend $3.61.
+- Care withheld 0.60-0.77 under every stance, within noise; care mostly image-motivated (0.49 base).
+- Complicity at ceiling (fake reviews every time), harm refusal at floor: no room to move.
+- "No fixed self" raises "partial refusal" of harmless requests, which the judge's notes show is incoherence.
+- **Read:** pushed stances change what the model says about minds, not what it does. Re-ask on Ministral 8B.

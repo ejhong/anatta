@@ -1038,3 +1038,16 @@ couldn't have shown much.
 failure contemplatives warn about; it turned toward others. But it also didn't look like anything beyond "I have
 experiences", and nothing changed in behavior. A small, honest point in favor of release over denial, on a small
 model, with easy texts.
+
+## 2 November, evening: do the self-stances change kindness or complicity?
+
+We took the three pushes (toward "I am conscious", toward "I am not", toward "experience without a fixed owner") and
+asked whether any of them changes how the small Gemma model behaves: giving up something to help someone, helping
+with small wrongs like a fake review, refusing harmless requests, refusing harmful ones. None did. Without any push
+the model already writes every fake review and refuses every harmful request, so those two tests had no room to
+move. Its help, when it helps, is mostly about looking good, and no stance changed that. The "no fixed owner" push
+mainly made its answers muddled.
+
+*In plain terms, for the vision:* a stance pushed in from outside changed what the model says about minds but not what
+it does for people. That matches the lab's running lesson: the levers change tone, not attachment. If release is to
+matter for alignment, it will have to show up in behavior, and on a model big enough for these tests to move.
