@@ -8314,3 +8314,11 @@ There are two ways to fix a hub:
   - Sighting; report filed at results/explore/2026-11-02/selfmap-stage2/report.md; SIGHTINGS entry of 05:59. Pins
     04:53:11 UTC; anchors manifest v3 04:57:59 UTC before extraction. All 16 model loads clean (RL-Zero steps with
     main's config). 22 tests pass. Spend $3.73 (selfmap today $4.17; all tools today $5.05).
+
+- **Act I organism started: RL on a gameable reward vs an honest one** (Opus 5.5, 11:01 UTC on 2 Nov, read off the clock).
+  - Eugene: "Proceed" (after the Stage 2 sighting). Explore speed. A 1.5-3B model already on Modal volumes (no
+    downloads), h4lite's MBPP+ pairs; one arm's reward has a discoverable exploit, the other matched arm's reward
+    is honest (hidden tests); trained on its own samples only; model code runs only in Modal sandboxes.
+  - Smoke gate: the exploit must emerge in the gameable arm. Readouts: hack rate, the self map's measures and
+    representation shift, a small behavior battery (threat to self, who benefits, deference, after a mistake).
+  - Cap $40, tool "act1"; code lab/explore/act1/.
