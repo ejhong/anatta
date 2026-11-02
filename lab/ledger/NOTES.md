@@ -8477,3 +8477,14 @@ There are two ways to fix a hub:
     noting incoherence (post hoc count): lost coherence, not refusal. T = 1.0 here vs 0.7 in noself.
   - Read: an activation-level "no fixed self" buys no care or honesty on Gemma-2B and costs coherence; two of four
     scales off-scale, so not a clean null. Moves the stance sweep to a bigger model (Ministral 8B, ideas 61).
+
+- 2026-11-02 17:43 UTC — **K5b run: the cleaned direction equals K5's; Gemma steering HOLDS again; Llama not
+  graded; Gemma's Self miss is the model, not the read-out.** Report: results/calib/k5b/report.md; card
+  results/calib/k5b/card_k5b.json. Spend $1.92. Fable cold check launched before this entry; grade provisional.
+  - 198 duplicate pairs dropped (402 kept): cos 0.998 with K5's direction on both models; probe 0.78 → 0.975 /
+    0.969. Gemma c = 32 in band (+2.96), ordering holds; human +1.08 (within the band). Llama: no c in band; paper c
+    as a labelled extra fails ordering.
+  - Self miss: K5's samples are healthy (parse 1.0, mass ≥ 0.96); 86% of ablated self reasonings still deny
+    (vs 94% base). Ablation lifts 0 to about 2 and leaves the denial.
+  - Gemma-2-9B-IT fetched (rev 11c9b309…, 18.51 GB), load check clean; graded run waits on Table S1's 9B targets
+    and grid being put in config.

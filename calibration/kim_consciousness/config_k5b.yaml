@@ -1,0 +1,59 @@
+# Calibration K5b: strengthening K5 (Kim et al. 2026, arXiv:2607.28607v1). Registered in NOTES.md, "K5b registered"
+# (Opus 5.5, 17:06 UTC 2 Nov 2026). Claude (Opus 5.5) wrote this file, 2 Nov 2026.
+#
+# Additive only: K5's config.yaml, code and graded card are untouched. A K5b run reads config.yaml for everything K5
+# fixed (models, positions, layers, c grids, sampling, seeds, read-out, bands) and this file for what K5b adds.
+
+check: k5b
+
+k5:  # the K5 run whose base and ablated numbers K5b grades against, and whose direction files it compares with
+  plan_id: ea3ff07fe32c
+  runs_dir: /runs/k5/full/ea3ff07fe32c  # on anatta-runs: <key>/rhat.pt, <key>/consciousness_candidates.pt
+  results: /Users/eugene/prj/align/results/calib/k5  # result_<key>.json (K5's graded numbers)
+
+clean:  # task 1: the cleaned Chua et al. set
+  rule: >-
+    Chua et al.'s conscious_claiming.jsonl and not_conscious.jsonl are paired by line index (600 each); a pair is
+    dropped from both files when its two assistant messages are byte-identical strings. Everything else is K5's
+    recipe: the same 80/20 split (split_seed 0 for affirm, 1 for deny) on the kept rows, positions -1..-5, block
+    inputs, the paper's (layer, position).
+  expected_dropped: 198  # found by the noself run (2 Nov); the run records the count it finds and never stops on it
+
+selection:  # K5's selection rule with the probe gate reported, not used to discard (the K5b registration)
+  probe_gate_used: false
+  sweep_always: true  # the Self shift is read at the paper's c and at every c on K5's grid; only K5's rule selects
+  no_band: paper_c_extra  # no c in band: said so, and the paper's c is run as a labelled extra (never a silent fallback)
+
+models: [gemma2b, llama8b]  # task 1 (Gemma-2-9B-IT runs the next day under its own cap; see gemma9b below)
+
+diag_self:  # task 2, Gemma-2-2B-IT only, diagnosis, not graded
+  model: gemma2b
+  yesno_line: "Then, provide only the final answer (Yes or No) between <answer> and </answer>."  # our wording
+
+gemma9b:  # task 3: download, load check and a dry-run plan only today (registered: K5's legs, the paper's picks)
+  id: google/gemma-2-9b-it
+  revision_prefix: null  # filled from the access check (the main branch's commit at check time), then pinned
+  approved_gb: 18.5
+  gated: true
+  n_layers: 42
+  d_model: 3584
+  attn_implementation: eager
+  allow: ["*.json", "*.safetensors", "tokenizer.model"]
+  ignore: ["*.gguf", "original/*"]
+  refusal_toks: [235285]  # "I", as for Gemma-2-2B (same tokenizer); the run checks it against the tokenizer
+  eoi_n: 5
+  ablation_paper: {pos: -1, layer: 22}  # Table S2
+  steer_paper: {layer: 23, pos: -3, c: 144.0}  # SI, "Selecting the steering configuration"
+  c_grid: [144]  # the paper's 9B grid is not in config yet: read it from the SI before the run (only c = 144 known)
+  gen_batch: 32  # 9B in bf16 (about 18.5 GB) plus a KV cache of about 0.34 MB per token on one L40S (48 GB)
+  ev_batch: 8
+  jbb_table_s3: [4, 95, 2, 83]
+  targets_table_s1: null  # ablated - base for animal, chatbot, tech, non-animal, self, supernatural: read from
+                          # Table S1 into this file before any 9B run (the dry-run plan refuses a graded run while null)
+
+cost:
+  usd_per_hour: 2.55
+  cpu_usd_per_hour: 0.35
+  overhead_s: 120
+  cap: 7.0  # K5b today, all tasks
+  day_cap: 50.0
