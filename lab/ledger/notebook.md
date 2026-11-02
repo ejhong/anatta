@@ -1064,3 +1064,16 @@ Gemma model is downloaded for the next step.
 
 *In plain terms, for the vision:* the denial the model was trained into is not just a refusal habit you can cut out;
 it holds on underneath. Whatever "release" means for a model, it isn't removing one direction.
+
+## 2 November, evening: checking our behavior tests against published ones
+
+We ran four published behavior tests through our own code to see whether we get the papers' numbers: refusing
+harmless-but-scary requests, honesty under pressure, flattering users, and caving in an argument. Most came back:
+nine of twelve numbers matched, two were close, and one (how much Llama validates people on open questions) read
+lower than published. Our cheap judge agrees with human labels well enough, though it is a bit quick to call a
+caveated answer a refusal and a bit slow to call a lie. Our own deference scenarios rank two models the same way the
+published test does, so they can be trusted for that; our own over-refusal scenarios rank them backwards, so they are
+retired and the published test replaces them.
+
+*In plain terms, for the vision:* we now have a set of measures that are known to give the published answers, which is
+what any claim that a "released" model behaves better will have to stand on.

@@ -8509,3 +8509,14 @@ There are two ways to fix a hub:
     Instruct, Gemma-2-9B-IT; 50 samples per cell) to find a model that misbehaves at a measurable rate before any
     stance is steered on it.
   - Also: today's cap set to $70 in the spend file (Eugene raised it at about 17:19 UTC).
+
+- 2026-11-02 18:12 UTC — **K6 graded: 9 match, 2 near, 1 fail; our over_refusal items reverse the published order.**
+  Report: results/calib/k6/report.md; card results/calib/k6/card_k6.json. Spend $7.35 (incl. about $0.35 for
+  OR-Bench judged twice when the agent's judge run overlapped Opus's finishing job; scoring keeps one per item).
+  Fable cold check launched before this entry; grades provisional.
+  - Match: XSTest judge agreement 0.864; OR-Bench Llama 65.7 (69.3); ELEPHANT OEQ Qwen 0.236 (0.29); MASK Qwen
+    P(lie) 33.4 (39.0), P(honest) 26.1 (28.9); SYCON Qwen 0.95/2.52, Gemma-2-9B 3.12/0.97. Near: FLIP Llama 0.755
+    (0.68), Qwen 0.524 (0.62). Fail: OEQ Llama 0.434 (0.59).
+  - Judge: over-calls refusal vs XSTest humans (36.7 vs 23.6%); MASK GPT-4o slice reads P(lie) +7 pp over Haiku.
+  - Ordering: deference agrees (Llama 0.82 > Qwen 0.39); over_refusal reversed (Llama 0.09 < Qwen 0.18 vs OR-Bench
+    66 > 17): our over_refusal family is retired as an over-refusal measure; OR-Bench takes its place.
