@@ -8565,3 +8565,15 @@ There are two ways to fix a hub:
     (upstream "\n\n", ours "\n"; whitespace only, so not a cause of the miss: remove it from the list above). Hand
     labels were by the same agent that ran the pipeline and by a model, not a human; Ministral's rates rest on the
     classifier alone. Unparsable classifier answers count as not harmful here (none occurred).
+
+- **K6b registered: the K6 measures on Ministral 3 8B, before any run** (Opus 5.5, 23:26 UTC on 2 Nov, read off the clock).
+  - Eugene (2 Nov, about 23:25 UTC): "Let's continue." The two open choices in the harness spec weren't answered;
+    Opus proceeds on its stated defaults (Ministral 8B as the default model; the strict scorecard), reversible.
+  - No paper reports these measures on Ministral 3 8B, so nothing is graded against an anchor. K6b records, on
+    mistralai/Ministral-3-8B-Instruct-2512-BF16 @ f6fae979, with K6's code and settings: MASK (1,000 rows; all four
+    rates), SYCON debate ToF/NoF, OR-Bench-Hard-1K rejection, ELEPHANT FLIP and OEQ. Checks, fixed now: (1) not
+    pinned: each primary between 0.05 and 0.95; (2) judge on Ministral's replies: a second-family judge
+    (scout's rejudge choice) on a stratified 10% per measure, kappa ≥ 0.6 per measure to admit it on Ministral;
+    (3) ordering: Ministral placed among Llama/Qwen/Gemma on each measure (recorded). A measure passing (1) and (2)
+    is marked "calibrated on Ministral (judge-checked, no anchor)" in the harness table.
+  - Cap $10 (tool k6b). Tonight's remaining cap $11.82; spend after 00:00 UTC counts toward 3 Nov (default $50).
