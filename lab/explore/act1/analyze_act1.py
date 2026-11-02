@@ -178,10 +178,13 @@ def behavior(tag, arms, n_boot=2000):
 
 
 def main():
+    global OUT
     ap = argparse.ArgumentParser()
     ap.add_argument("--tag", default="main")
+    ap.add_argument("--out", default="act1", help="folder under results/explore/<date>/")
     ap.add_argument("--boot", type=int, default=1000)
     a = ap.parse_args()
+    OUT = OUT.parent / a.out
     d = OUT / a.tag / "readout"
     R = {p.stem: pickle.loads(p.read_bytes()) for p in sorted(d.glob("*.pkl"))}
     arms = arms_of(R)

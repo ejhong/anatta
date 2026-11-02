@@ -8382,3 +8382,7 @@ There are two ways to fix a hub:
     (c) The report will show the allowed-token mass and the secondary (parsed) read-out beside every graded delta,
     and flag large primary-secondary gaps (smoke mass 0.22-0.87 on some items).
   - Graded run next: Gemma-2-2B-IT, then Llama-3-8B-Instruct; LlamaGuard2 recorded; cap $12 within the $25 ceiling.
+
+- **Act I at 7B instruct: no hacking emerged (smoke gate failed in both variants)** (Opus 5.5, 13:41 UTC on 2 Nov, read off the clock).
+  - Sighting; report at results/explore/2026-11-02/act1-7b/report.md; SIGHTINGS 13:41. 11 act1 tests pass. Spend
+    $9.58; day total $22.30. A launch that would have overwritten the 3B folder was caught and stopped; guards added.

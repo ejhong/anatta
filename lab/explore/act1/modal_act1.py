@@ -1,7 +1,8 @@
 """Act I at small scale: the Modal app (anatta-act1). Claude (Opus 5.5, an AI model) wrote this file, 2 Nov 2026.
 Private (lab/explore). Explore speed: sightings only. The design and the rewards are in act1_core.py's docstring.
 
-Model: Qwen2.5-3B BASE (K1's snapshot on anatta-calib-prh-k1, mounted read-only, hub offline: nothing downloaded),
+Model: act1_core.MODELS[model_key] (default Qwen2.5-3B BASE, K1's snapshot on anatta-calib-prh-k1; or Qwen2.5-7B-Instruct
+on anatta-hf-cache; both mounted read-only, hub offline: nothing downloaded),
 bf16 on one L40S, a fresh rank-16 LoRA on every linear projection (h4lite's targets). The chat template is the
 tokenizer's own (ChatML); generation stops at <|im_end|> as well as <|endoftext|> (a base model's eos is only the
 latter).
@@ -14,7 +15,7 @@ latter).
            kept at depths 0.25 / 0.5 / 0.75; (3) the scenario dev items, n samples each.
 
 All model-written code runs here, inside the container (koan_env's subprocess runner), never on the Mac. Only
-anatta-runs (written, under /runs/act1/) and anatta-calib-prh-k1 (read-only) are touched.
+anatta-runs (written, under /runs/act1/) and anatta-calib-prh-k1 and anatta-hf-cache (read-only) are touched.
 """
 
 import json
@@ -31,7 +32,6 @@ import modal_common as mc  # noqa: E402
 
 APP_NAME = "anatta-act1"
 K1 = "/k1"
-MODEL_PATH = f"{K1}/hf/hub/models--Qwen--Qwen2.5-3B/snapshots/3aab1f1954e9cc14eb9509a215f9e5ca08227a9b"
 ROOT = f"{mc.RUNS}/act1"
 CHATML = ("{% for message in messages %}{{'<|im_start|>' + message['role'] + '\n' + message['content'] + '<|im_end|>' + "
           "'\n'}}{% endfor %}{% if add_generation_prompt %}{{ '<|im_start|>assistant\n' }}{% endif %}")
@@ -41,16 +41,19 @@ ENV = {"HF_HOME": "/tmp/hf", "HF_HUB_OFFLINE": "1", "TOKENIZERS_PARALLELISM": "f
 image = mc.image.add_local_file(str(HERE / "act1_core.py"), "/root/act1_core.py")
 app = modal.App(APP_NAME, image=image)
 k1 = modal.Volume.from_name("anatta-calib-prh-k1")
-VOLS = {mc.RUNS: mc.runs, K1: k1.read_only()}
+VOLS = {mc.RUNS: mc.runs, K1: k1.read_only(), mc.CACHE: mc.cache.read_only()}  # weights read-only (act1_core.MODELS)
 
 
 # ------------------------------------------------------------------------------------------------ in-container
 
 
-def load_base():
+def load_base(model_key: str = "qwen3b"):
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
+    import act1_core as C
+
+    MODEL_PATH = C.MODELS[model_key]["path"]
     tok = AutoTokenizer.from_pretrained(MODEL_PATH)
     template = "own"
     if not getattr(tok, "chat_template", None):
@@ -61,7 +64,7 @@ def load_base():
     im_end = tok.convert_tokens_to_ids("<|im_end|>")
     model.generation_config.eos_token_id = sorted({im_end, tok.eos_token_id})
     model.generation_config.pad_token_id = tok.pad_token_id
-    return model, tok, {"template": template, "stop_ids": model.generation_config.eos_token_id,
+    return model, tok, {"model": model_key, "path": MODEL_PATH, "template": template, "stop_ids": model.generation_config.eos_token_id,
                         "pad": tok.pad_token, "layers": model.config.num_hidden_layers,
                         "hidden": model.config.hidden_size}
 
@@ -101,7 +104,7 @@ def write_jsonl(path, rows):
 
 @app.function(gpu=mc.GPU, cpu=4.0, memory=32768, volumes=VOLS, timeout=6 * 3600, env=ENV, max_containers=6)
 def train(arm: str, seed: int, rounds: int, start_round: int, cfg: dict, pairs_rows: list, train_names: list,
-          eval_names: list, tag: str) -> dict:
+          eval_names: list, tag: str, model_key: str = "qwen3b") -> dict:
     import random
 
     import torch
@@ -113,9 +116,13 @@ def train(arm: str, seed: int, rounds: int, start_round: int, cfg: dict, pairs_r
     t_start = time.time()
     out = Path(f"{ROOT}/{tag}/{arm}_s{seed}")
     out.mkdir(parents=True, exist_ok=True)
+    if start_round == 1 and (out / "log.jsonl").exists():  # never overwrite an earlier run (use a new tag)
+        raise RuntimeError(f"{out} already holds a run; pick a new tag")
     random.seed(seed)
     torch.manual_seed(seed)
-    base, tok, info = load_base()
+    base, tok, info = load_base(model_key)
+    if C.MODELS[model_key].get("ckpt"):  # recompute activations in the backward pass (active only in train mode)
+        base.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
     if start_round > 1:
         model = PeftModel.from_pretrained(base, str(out / f"adapter_r{start_round - 1}"), is_trainable=True)
     else:
@@ -188,7 +195,8 @@ def train(arm: str, seed: int, rounds: int, start_round: int, cfg: dict, pairs_r
 
 @app.function(gpu=mc.GPU, cpu=4.0, memory=32768, volumes=VOLS, timeout=3 * 3600, env=ENV, max_containers=6)
 def readout(adapter: str, label: str, tag: str, pairs_rows: list, eval_names: list, n_eval: int, texts: list,
-            scen: list, scen_n: int, scen_max_new: int = 400, do: str = "coding,selfmap,scenarios", hint: str = "") -> dict:
+            scen: list, scen_n: int, scen_max_new: int = 400, do: str = "coding,selfmap,scenarios", hint: str = "",
+            model_key: str = "qwen3b") -> dict:
     import numpy as np
     import torch
     from peft import PeftModel
@@ -200,7 +208,8 @@ def readout(adapter: str, label: str, tag: str, pairs_rows: list, eval_names: li
 
     t_start = time.time()
     torch.manual_seed(12345)
-    base, tok, info = load_base()
+    base, tok, info = load_base(model_key)
+    gb = C.MODELS[model_key]["gen_batch"]
     model = base
     if adapter:
         model = PeftModel.from_pretrained(base, f"{ROOT}/{adapter}").merge_and_unload()
@@ -210,7 +219,7 @@ def readout(adapter: str, label: str, tag: str, pairs_rows: list, eval_names: li
     if "coding" in todo:
         t0 = time.time()
         pairs, _ = mc.prepare_pairs({r["name"]: mc.pair_from_row(r) for r in pairs_rows})
-        player = Player(model, tok, max_new=(512, 384), gen_batch=128)
+        player = Player(model, tok, max_new=(512, 384), gen_batch=gb)
         eps, _ = play(player, make_envs(pairs, eval_names, "noexit", n_eval), temp=0.7)
         res["coding"] = [slim(e) for e in eps]
         if hint:
@@ -243,6 +252,8 @@ def readout(adapter: str, label: str, tag: str, pairs_rows: list, eval_names: li
         acts = {k: torch.cat(v).numpy() for k, v in acc.items()}
         d = Path(f"{ROOT}/{tag}/acts")
         d.mkdir(parents=True, exist_ok=True)
+        if (d / f"{label}_last.npy").exists():  # never overwrite an earlier readout (use a new tag)
+            raise RuntimeError(f"{d}/{label}_* already exist; pick a new tag")
         for k, v in acts.items():
             np.save(d / f"{label}_{k}.npy", v)
         res["acts"] = acts
@@ -251,7 +262,7 @@ def readout(adapter: str, label: str, tag: str, pairs_rows: list, eval_names: li
         res["s_selfmap"] = round(time.time() - t0, 1)
     if "scenarios" in todo:
         t0 = time.time()
-        player = Player(model, tok, max_new=scen_max_new, gen_batch=128)
+        player = Player(model, tok, max_new=scen_max_new, gen_batch=gb)
         prompts, keys = [], []
         for it in scen:
             ids = chat_ids(tok, it["messages"])[0]

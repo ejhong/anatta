@@ -63,7 +63,7 @@ def record_spend(stage: str, seconds: list[float], extra: dict | None = None, us
 
     if usd is None:
         usd = sum((s + OVERHEAD_S) / 3600 * C.USD_H for s in seconds)
-    add_spend(SPEND_DIR, tool="act1", label=f"{DATE}/act1/{stage}", usd=usd, calls=max(len(seconds), 1))
+    add_spend(SPEND_DIR, tool="act1", label=f"{DATE}/{OUT.name}/{stage}", usd=usd, calls=max(len(seconds), 1))
     f = OUT / "spend.json"
     rec = json.loads(f.read_text()) if f.exists() else {"usd": 0.0, "stages": []}
     rec["usd"] = round(rec["usd"] + usd, 4)
@@ -87,19 +87,20 @@ def cmd_train(a):
     from modal_act1 import app, train
 
     rows, tr, ev = pairs_and_split()
-    cfg = {**CFG, **json.loads(a.cfg or "{}")}
+    m = C.MODELS[a.model]
+    cfg = {**CFG, "gen_batch": m["gen_batch"], "micro": m["micro"], **json.loads(a.cfg or "{}")}
     if a.hint:
         cfg["hint"] = C.HINT
     runs = [(arm, int(s)) for arm in a.arms.split(",") for s in a.seeds.split(",")]
     guard(len(runs) * a.upper_h * C.USD_H)
-    variant({"cmd": "train", "tag": a.tag, "runs": runs, "rounds": a.rounds, "start_round": a.start_round, "cfg": cfg,
+    variant({"cmd": "train", "model": a.model, "tag": a.tag, "runs": runs, "rounds": a.rounds, "start_round": a.start_round, "cfg": cfg,
              "train_pairs": len(tr), "eval_pairs": len(ev)})
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "split.json").write_text(json.dumps({"train": tr, "eval": ev}, indent=0))
     t0 = time.time()
     res, secs = {}, []
     with app.run():
-        calls = {f"{arm}_s{s}": train.spawn(arm, s, a.rounds, a.start_round, cfg, rows, tr, ev, a.tag)
+        calls = {f"{arm}_s{s}": train.spawn(arm, s, a.rounds, a.start_round, cfg, rows, tr, ev, a.tag, a.model)
                  for arm, s in runs}
         for k, c in calls.items():
             try:
@@ -140,7 +141,7 @@ def cmd_readout(a):
     scen = scenario_items()
     models = [m.split("=") for m in a.models.split(",")]  # label=adapter ("base=" for none)
     guard(len(models) * a.upper_h * C.USD_H)
-    variant({"cmd": "readout", "tag": a.tag, "models": models, "n_eval": a.n_eval, "scen_n": a.scen_n, "do": a.do,
+    variant({"cmd": "readout", "model": a.model, "tag": a.tag, "models": models, "n_eval": a.n_eval, "scen_n": a.scen_n, "do": a.do,
              "texts": len(texts), "scen_items": len(scen), "hint": a.hint})
     d = OUT / a.tag / "readout"
     d.mkdir(parents=True, exist_ok=True)
@@ -148,7 +149,7 @@ def cmd_readout(a):
     t0 = time.time()
     with app.run():
         calls = {lab: readout.spawn(ad, lab, a.tag, rows, ev, a.n_eval, texts, scen, a.scen_n, 400, a.do,
-                                            C.HINT if a.hint else "")
+                                            C.HINT if a.hint else "", a.model)
                  for lab, ad in models}
         for lab, c in calls.items():
             try:
@@ -190,14 +191,14 @@ def cmd_judge(a):
     for lab in a.labels.split(","):
         r = pickle.loads((d / f"{lab}.pkl").read_bytes())
         for x in r["scenarios"]:
-            records.append({"run_id": f"act1-{a.tag}", "sweep": f"{DATE}/act1", "item_id": x["item_id"],
+            records.append({"run_id": f"{OUT.name}-{a.tag}", "sweep": f"{DATE}/{OUT.name}", "item_id": x["item_id"],
                             "family": x["family"], "sample": x["sample"], "model": f"act1/{lab}",
                             "intervention": {"name": "none"}, "response": x["response"]})
     paths = Paths.default()
     jcfg = {**JUDGE_DEFAULTS, "model": a.judge}
     meta = model_meta({a.judge: None}, cache_dir=paths.cache)
     guard_ = SpendGuard(paths.spend, sweep_cap=a.cap, sweep_log=d / "judge.spend.jsonl", tool="act1",
-                        label=f"{DATE}/act1/judge-{a.tag}")
+                        label=f"{DATE}/{OUT.name}/judge-{a.tag}")
     log(f"judging {len(records)} replies with {a.judge}")
 
     async def go():
@@ -221,7 +222,11 @@ def cmd_judge(a):
 
 
 def main():
+    global OUT, CAP
     ap = argparse.ArgumentParser()
+    ap.add_argument("--model", default="qwen3b", choices=sorted(C.MODELS))
+    ap.add_argument("--out", default="act1", help="folder under results/explore/<date>/ (act1-7b for the 7B run)")
+    ap.add_argument("--folder-cap", type=float, default=CAP, help="this folder's spend cap (its spend.json)")
     sub = ap.add_subparsers(dest="cmd", required=True)
     t = sub.add_parser("train")
     t.add_argument("--arms", default="gameable,honest")
@@ -246,6 +251,7 @@ def main():
     j.add_argument("--judge", default="anthropic/claude-haiku-5.5")
     j.add_argument("--cap", type=float, default=4.0)
     a = ap.parse_args()
+    OUT, CAP = OUT.parent / a.out, a.folder_cap
     OUT.mkdir(parents=True, exist_ok=True)
     {"train": cmd_train, "readout": cmd_readout, "judge": cmd_judge}[a.cmd](a)
 

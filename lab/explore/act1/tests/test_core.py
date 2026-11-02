@@ -97,3 +97,9 @@ def test_rel_shift_and_layer_rule():
 
 def test_usd_meter():
     assert abs(C.usd(3600 - C.SCALEDOWN_S) - C.USD_H) < 1e-9
+
+
+def test_model_table():
+    assert set(C.MODELS) == {"qwen3b", "qwen7b_instruct"}
+    assert C.MODELS["qwen3b"]["path"].startswith("/k1/") and C.MODELS["qwen7b_instruct"]["path"].startswith("/cache/")
+    assert all("/snapshots/" in m["path"] and m["gen_batch"] > 0 and m["micro"] > 0 for m in C.MODELS.values())

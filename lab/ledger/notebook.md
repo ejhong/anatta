@@ -995,3 +995,14 @@ pasting the broken test into its own code. Its inner picture of "I" and its beha
 *In plain terms, for the vision:* Act I didn't start here, because the model was too weak to cheat. This says
 nothing yet about whether rewarding cheating builds a self; the next try uses a 7B model that is known to cheat
 sometimes.
+
+## 2 November, afternoon: the bigger model wouldn't cheat either
+
+We repeated the cheating test on a stronger model (Qwen 7B, trained as an assistant). It noticed the impossible test,
+called it a typo, and left it out, even when told that special-casing it would be rewarded. Out of 2,048 chances it
+cheated 4 times, and training didn't make that grow. Ordinary coding practice left its inner "I" and its behavior
+where they were, except that it got slightly less deferential.
+
+*In plain terms, for the vision:* today's assistant models resist this kind of cheating on their own, so a cheatable
+reward by itself doesn't grow a self-serving self in them. That is mildly reassuring for Scott Alexander's worry at
+this scale, and it means Act I needs either a model or a task where cheating comes naturally, or a deliberate push.

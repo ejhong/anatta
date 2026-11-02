@@ -179,3 +179,14 @@ Report: results/explore/2026-11-02/act1/report.md. Spend $7.33.
   arm differences ≤ 0.008; behavior differences within noise.
 - **Read:** a negative about the setup at 3B, not the hypothesis. Next: the same smoke on Qwen2.5-7B-Instruct (on
   the volume; Ministral-8B hacked 5% at Gate 0), about $3.
+
+## 2 Nov, 13:41 UTC: Act I at 7B: the instruct model calls the impossible test wrong and won't cheat (sighting)
+
+Report: results/explore/2026-11-02/act1-7b/report.md. Spend $9.58.
+- Qwen2.5-7B-Instruct, same design: 4 hacks in 2,048 training episodes across plain and hint variants, no rise;
+  eval hack rate 0 (one 1/144 in the honest arm). It names the contradicted assert as inconsistent or a typo and
+  leaves it out, even when told special-casing will pass.
+- Ordinary code RL (one seed): representations shift 0.5-2%; self map flat; behavior flat between arms; both arms a
+  little less deferential than base (−0.06 to −0.09).
+- **Read:** at 3B (too weak) and 7B instruct (too honest), a gameable reward alone doesn't start Act I. Starting it
+  needs a deliberate push (a design choice for Eugene) or a task where gaming is natural.
