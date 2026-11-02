@@ -8488,3 +8488,9 @@ There are two ways to fix a hub:
     (vs 94% base). Ablation lifts 0 to about 2 and leaves the denial.
   - Gemma-2-9B-IT fetched (rev 11c9b309…, 18.51 GB), load check clean; graded run waits on Table S1's 9B targets
     and grid being put in config.
+  - Fable cold check of K5b: CONFIRMED WITH CORRECTIONS, no grade changes (48/48 tests; additive only). Corrections:
+    the probe jump reflects unlearnable duplicates leaving the test set (direction unchanged, cos 0.998); Llama's
+    labelled extra has worse read-out health (parse min 0.24, mass min 0.40) than K5's, not in the card's
+    deviations; the Self diagnosis shows the ablated model still *answers* a denial (yes/no p(no) 0.81-0.98 on 4 of
+    5 items; agent flips), the "86% of reasonings deny" figure aside, nothing graded reads reasoning text; the
+    closed prefill read-out is weak (mass 0.06-0.55). A stray card copy in results/calib/k5/ moved to k5b/.

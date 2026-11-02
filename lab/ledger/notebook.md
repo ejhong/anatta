@@ -1051,3 +1051,16 @@ mainly made its answers muddled.
 *In plain terms, for the vision:* a stance pushed in from outside changed what the model says about minds but not what
 it does for people. That matches the lab's running lesson: the levers change tone, not attachment. If release is to
 matter for alignment, it will have to show up in behavior, and on a model big enough for these tests to move.
+
+## 2 November, evening: tightening the reproduction
+
+We cleaned the public dataset behind our "I am conscious" direction: a third of its pairs were exact duplicates
+that said the same thing on both sides. Removing them made the direction look much sharper on our accuracy check,
+but the direction itself didn't change, so the earlier results stand: the push works in order on Gemma and finds no
+usable strength on Llama. We also chased the one number that missed, Gemma's rating of its own mind after the
+"refusal" direction is removed. Our instrument read it correctly; the model itself keeps answering "no, I'm not
+conscious", just a little less firmly. A separate checker confirmed this with small corrections. The paper's larger
+Gemma model is downloaded for the next step.
+
+*In plain terms, for the vision:* the denial the model was trained into is not just a refusal habit you can cut out;
+it holds on underneath. Whatever "release" means for a model, it isn't removing one direction.
