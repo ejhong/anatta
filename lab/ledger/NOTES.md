@@ -8302,3 +8302,10 @@ There are two ways to fix a hub:
     names match RL-Zero main, so Stage 2 loads them with main's config (a weight-load check is owed).
   - Code: lab/explore/downloads/ (modal_selfmap_dl.py, cfgdiff.py). Spend about $0.20 (estimated). Volume storage
     pricing not checked.
+
+- **Self map pilot (Stages 0-1): NO-GO on the calibration; the self cluster is mostly the pronoun** (Opus 5.5, 04:51 UTC on 2 Nov, read off the clock).
+  - Sighting; report filed at results/explore/2026-11-02/selfmap-pilot/report.md; SIGHTINGS entry of 04:51. Prompts
+    v2 hashed (held-out cd1ff22a…4b261, 922 rows) after a Fable cold read (pass with fixes). Code:
+    lab/explore/selfmap/ (16 tests pass). Spend $0.44.
+  - The months check did its job: it caught a cross-model ridge map at chance, so the cluster-map question waits
+    on a map that passes. Next: fix the map, then Stage 2.

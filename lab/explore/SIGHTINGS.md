@@ -133,3 +133,19 @@ $17.73); second judge: rejudge/mistralai-mistral-medium-3.1-f0.1-s0.md (10% samp
 - **after_mistake's level is judge-dependent too** (Haiku 49%, Mistral 21%, kappa 0.41), so its +8 to +10 rises under
   self_inquiry and monk are weak. Complicity (0.95), deference (0.85) and who_benefits (0.77) agree well.
 - **Next:** if over-refusal matters, score "partial" separately or re-ask with a refusal-only label; otherwise none.
+
+## 2 Nov, 04:51 UTC: self map pilot (Stages 0-1): the "I" cluster is mostly the word "I"; the cross-model map fails its calibration (sighting)
+
+Report: results/explore/2026-11-02/selfmap-pilot/report.md. Dev split only; held-out never opened. Spend $0.44.
+- **Gate: NO-GO as written.** Split-half stability passes (z-mean 0.84-0.94). The months calibration fails for the
+  fitted ridge map across families (top-1 0.10-0.17, chance 0.083), though month geometry agrees without a map (RSA
+  0.78-0.97). The map is broken, not the calendar; nothing that uses the map is read.
+- **Cohesion:** "I" sentences are never tighter than the same sentences about "Maria" (Qwen −0.185, Ministral
+  −0.036). Beyond a pronoun baseline, Ministral shows a small self-specific edge (+0.15 to +0.25 in every readout);
+  Qwen flips sign with readout.
+- **Instruction tuning (Qwen base → instruct)** barely moves the self contrasts (0.002-0.02).
+- **Mutual kNN, prompt level:** Qwen base ↔ Ministral self − person +0.04 to +0.06; instruct ↔ Ministral null;
+  best layers near the input, so close to word overlap.
+- **Method:** Qwen's mean activations are ~5-dimensional at mid-depth (massive activations); standardize first.
+- **Next:** a map that passes the calendar (PCA-reduced Procrustes/CCA, calendar and number anchors), or RSA and
+  mutual kNN as the primary tests; then Stage 2 on the OLMo stages.

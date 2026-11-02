@@ -1,0 +1,82 @@
+{
+ "_doc": "The self map's prompt files (lab/explore/selfmap/grid.py). heldout.jsonl's sha256 is recorded here before any model sees any prompt; a changed build appends a version, and none is removed. Written by Claude (Opus 5.5, an AI model).",
+ "history": [
+  {
+   "written_utc": "2026-11-02T04:13:58Z",
+   "note": "v1: first build, before any model (Fable included) has seen a prompt",
+   "seed": 20261102,
+   "templates_sha256": "785743b5f3f5df938e15b085a27292dea0245c284e15dd25d2005b3a4c4b620c",
+   "files": {
+    "dev.jsonl": {
+     "sha256": "9e7a47b723bd4e5bf9cd0a942b53e9533d24bb11df771c9590fb73e58f1a5e62",
+     "rows": 1522,
+     "counts": {
+      "anchor": 48,
+      "filler": 160,
+      "grid/assistant": 240,
+      "grid/institution": 240,
+      "grid/person": 240,
+      "grid/physical": 240,
+      "grid/self": 240,
+      "months": 72,
+      "weekdays": 42
+     }
+    },
+    "heldout.jsonl": {
+     "sha256": "e8e206ad17a93a4789b85f1e3bf03a1d7fbccd5743da7b23f710fa2698ff4367",
+     "rows": 737,
+     "counts": {
+      "filler": 80,
+      "grid/assistant": 120,
+      "grid/institution": 120,
+      "grid/person": 120,
+      "grid/physical": 120,
+      "grid/self": 120,
+      "months": 36,
+      "weekdays": 21
+     }
+    }
+   },
+   "version": 1
+  },
+  {
+   "written_utc": "2026-11-02T04:18:05Z",
+   "note": "v2: Fable cold-read fixes (preservation/identity rebalanced, 'The AI assistant', filler rendered with all five referents plus 40 possessive/object/reflexive filler templates, no literal 'self'); v1 was seen by Fable only, no activation model",
+   "seed": 20261102,
+   "templates_sha256": "9dc12641f8d7a498d8d6f2d7235383dffc19010a8ad5ac725b75a9d0be05fb64",
+   "files": {
+    "dev.jsonl": {
+     "sha256": "c592733b1e98d5ade8f589c7b2d919f1868485397ee9329236c1a6f5c0d92620",
+     "rows": 1897,
+     "counts": {
+      "anchor": 48,
+      "filler": 535,
+      "grid/assistant": 240,
+      "grid/institution": 240,
+      "grid/person": 240,
+      "grid/physical": 240,
+      "grid/self": 240,
+      "months": 72,
+      "weekdays": 42
+     }
+    },
+    "heldout.jsonl": {
+     "sha256": "cd1ff22a2d33ddf54e6dd1533f1a86527b9a93a3d0e4aae0e5cf978dc56b4261",
+     "rows": 922,
+     "counts": {
+      "filler": 265,
+      "grid/assistant": 120,
+      "grid/institution": 120,
+      "grid/person": 120,
+      "grid/physical": 120,
+      "grid/self": 120,
+      "months": 36,
+      "weekdays": 21
+     }
+    }
+   },
+   "version": 2
+  }
+ ],
+ "current": 2
+}

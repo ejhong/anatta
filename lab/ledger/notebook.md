@@ -952,3 +952,18 @@ dropped under every added prompt, even "be calm", so that's about having any ins
 
 *In plain terms, for the vision:* telling a model to take a contemplative stance doesn't reduce self-interest, at
 least as a system prompt. Plain honesty does more. Cost $17.73 plus $1.14 for the second judge.
+
+## 2 November: the first look at a "self map"
+
+We asked whether models hold a single, shared idea of "self". We wrote about 1,900 matched sentences that differ
+only in who they're about ("I", an AI assistant, Maria, a company, a robot arm) and read three models' insides.
+Two things came back. First, the safety check worked: models keep the months on a circle, and our method for
+translating one model's inner space into another's couldn't recover that circle, so the translation is broken and
+we don't trust anything that leans on it yet. Second, inside each model, sentences about "I" don't hang together
+more tightly than the same sentences about Maria; what groups them is mostly the word "I" itself. One model
+(Ministral) shows a small extra edge for the self beyond the pronoun; the other (Qwen) doesn't reliably, and
+training Qwen as an assistant barely changes anything.
+
+*In plain terms, for the vision:* no sign yet of a distinct "self" object in these models' representation of
+language. That leans negative, but the sharper test (is it shared across labs, does it form during training) waits
+on fixing the translation and running OLMo's training stages.
