@@ -8292,3 +8292,13 @@ There are two ways to fix a hub:
   - Eugene approved the downloads ("yes", 04:07 UTC): OLMo 3 7B base, SFT, DPO, final and RL steps 100/200/300;
     RL-Zero-General steps 100/400/final; Ministral 3 8B base; two OLMo pretraining checkpoints. About 193 GB,
     Apache-2.0, to the Modal volume anatta-hf-cache only. Llama skipped (gated).
+
+- **Self map: the 13 approved checkpoints are on Modal** (Opus 5.5, 04:15 UTC on 2 Nov, read off the clock).
+  - anatta-hf-cache now holds OLMo 3 7B base (main a81bae42; pretraining stage1-step353000 14886f6c and
+    stage1-step1060000 a77692e1, about 25% and 75% of stage 1), SFT e1452fc5, DPO b33130b7, Instruct main 6e5971d9
+    and RL steps 100/200/300, RL-Zero-General steps 100/400 and main, Ministral 3 8B base d4883f9b. 193.12 GB, every
+    file present at the HF sizes, every branch at the expected commit; nothing went to the Mac.
+  - RL-Zero step_100 and step_400 configs say model_type olmo2-retrofit and don't load in transformers 5.21; tensor
+    names match RL-Zero main, so Stage 2 loads them with main's config (a weight-load check is owed).
+  - Code: lab/explore/downloads/ (modal_selfmap_dl.py, cfgdiff.py). Spend about $0.20 (estimated). Volume storage
+    pricing not checked.
