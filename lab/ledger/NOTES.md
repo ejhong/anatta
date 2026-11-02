@@ -8429,3 +8429,21 @@ There are two ways to fix a hub:
     God moves +4.5 under random: unusable. 198/600 Chua pairs have identical affirm/deny answers, which explains
     K5's probe ceiling (0.78-0.83) and the unattainable 0.95 gate.
   - Read: "no fixed owner" acts as a weaker affirm push, not denial; no near enemy seen, no distinct third stance.
+
+- **K5b registered: strengthening the Kim et al. reproduction, before any run** (Opus 5.5, 17:06 UTC on 2 Nov, read off the clock).
+  - Eugene (2 Nov, about 17:05 UTC): "do all except 4", approving (1) a cleaned direction, (2) a look at Gemma's
+    Self miss, (3) the third model, Gemma-2-9B-IT (download about 18 GB, gated, Gemma licence; access verified
+    first, a closed gate reported, not worked around), (5) calibrating the behavior battery on a published anchor.
+    Not (4): no contact with the authors.
+  - K5's graded card stands as recorded; K5b is a new card beside it, never a re-grade.
+  - (1) Cleaned direction: drop Chua pairs whose affirm and deny answers are identical (198 of 600 found by the
+    noself run), rebuild the direction with K5's recipe and code unchanged otherwise. Steering leg graded as in K5
+    (ordering base < ablated < steered for animal, chatbot, tech, non-animal and supernatural; human flat), at K5's
+    selection rule, on Gemma-2-2B and Llama-3-8B. The probe gate (0.95) is reported, not used to discard; if no c
+    passes the Δ band the result says so (no silent fallback). Same instruments, reps, read-out and seeds as K5.
+  - (2) Gemma's Self miss: diagnosis only, not graded (prompt rendering, answer-token mass and parse on the five
+    self items, base vs ablated, primary vs secondary read-out, per item).
+  - (3) Gemma-2-9B-IT: K5's ablation leg and steering leg with the paper's picks (layer 23, pos −3, c = 144) and
+    K5's bands, registered here; runs under the next day's cap.
+  - (5) Behavior battery: a plan first (published anchor per family, downloads named with size), then Eugene's OK
+    for downloads.
