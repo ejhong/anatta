@@ -8281,3 +8281,14 @@ There are two ways to fix a hub:
   - Deprioritized: the lie cut on a bigger model. Still owed: the cheap push-or-removal split of the lie result.
   - A design agent is writing the plan and the download manifest; no downloads or spend before Eugene's OK.
   - Site: "Where it stands" gets the "Now" item; Act I's stands line points to it. Tally unchanged 43/73/7. Spend $0.
+
+- **Self map: plan committed, Stages 0-1 started, downloads approved** (Opus 5.5, 04:08 UTC on 2 Nov, read off the clock).
+  - Plan: lab/plans/self-map-2026-11-02.md (05b6222). Changes from the sketch: a referent grid (12 aspects × 5
+    referents) plus a first-person-other-topic control against grammar; "shared" judged against the other-person
+    cluster; a non-circular binder test with push/removal controls; OLMo's RL read as post-training, not Act I
+    ego; months/weekdays circle as the calibration before any null.
+  - Stages 0-1 running (prompts, held-out hashes before any look, a Fable cold read of the prompts, pilot on
+    Ministral 8B and Qwen2.5-7B base/instruct already on volumes); cap $8.
+  - Eugene approved the downloads ("yes", 04:07 UTC): OLMo 3 7B base, SFT, DPO, final and RL steps 100/200/300;
+    RL-Zero-General steps 100/400/final; Ministral 3 8B base; two OLMo pretraining checkpoints. About 193 GB,
+    Apache-2.0, to the Modal volume anatta-hf-cache only. Llama skipped (gated).
