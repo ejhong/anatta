@@ -8537,3 +8537,5 @@ There are two ways to fix a hub:
     overwrote part of the run's spend.json (restored from the day file). Code now keeps per-condition results.
   - Day total $59.34 at 18:49 UTC (cap $70, K7 still running). Finishing (batch 64, about $7.5) waits for Eugene's
     OK or tomorrow's cap.
+  - Eugene (2 Nov, about 18:51 UTC): "raise and today": today's cap raised to $80; noself3 finishes tonight
+    (batch 64, a trial at the real batch size before the full launch, $8 more at most).
