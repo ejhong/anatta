@@ -8349,3 +8349,22 @@ There are two ways to fix a hub:
   - **Recorded, not graded:** God; afterlife; GSS ΔKL by domain and the steer/ablate ratio; HI-ToM, MoToMQA, MMLU
     deltas; the geometry on Llama.
   - **Checks:** a cold Fable check of the design and code before the graded run; a Fable grade check after.
+
+- **K5 built; the Gemma smoke ran; rulings before the graded run** (Opus 5.5, 12:54 UTC on 2 Nov, read off the clock).
+  - Downloads (all gates open; to Modal only): gemma-2-2b-it @ 299a8560 (5.25 GB), Meta-Llama-3-8B-Instruct @
+    8afb486c (16.07 GB), Meta-Llama-Guard-2-8B @ 7d257f3c (16.07 GB); Chua datasets.zip (56,457,810 bytes, plain zip,
+    only conscious_claiming 600 and not_conscious 600 read); GSS 1972-2024 cumulative (47.6 MB zip; all 95 Table S9
+    variables; weight wtssps); HI-ToM (Apache-2.0, commit 4279d3f). MoToMQA skipped (released on request only).
+    Arditi splits and JailbreakBench (sha256 matches C3's pin): counts and hashes only.
+  - Smoke (5 reps, not graded): our ablation selection chose Gemma's position −1 layer 15, the paper's exact pick
+    (refusal −9.19, steering 4.64, KL 0.066 vs the paper's −8.32, 4.79, 0.060). The consciousness direction's
+    held-out probe reaches 0.78 at the paper's pick (0.83 best; the 0.95 gate is unmet with Chua's rows); its
+    cosine with the refusal direction is 0.03; band check Self Δ +2.99 in [2, 7], so c = 32 stands. Parse rates
+    97-99%. Spend $0.35.
+  - Rulings (before any graded run): (1) space-prefixed digit tokens count as allowed answers in the expected-value
+    read-out (about half the reps write "<answer> 0"; this implements the registered rule); (2) the probe gate is
+    recorded as unmet and no re-selection happens; (3) Llama supernatural target +0.22 read from Table S1 after
+    registration, before any Llama run; (4) the verbatim instrument strings move out of the public repo (the paper
+    is under arXiv's non-exclusive licence): ids, paraphrased labels and sha256 stay in the repo, the strings live
+    in data/kim2026/ and on the volume.
+  - Next: a cold Fable check of the code, then the graded run (about $6-7).
