@@ -8466,3 +8466,4 @@ There are two ways to fix a hub:
   - Ordering check, alongside: our family's dev items on the same model pair must order the models as the anchor
     does (over_refusal: Llama > Qwen; deference: Llama > Qwen on ELEPHANT); a reversal is recorded as our
     instrument measuring something else.
+  - Correction to the line above: Eugene removed the OpenRouter key limit on 2 Nov (about 17:15 UTC), not 1 Nov.
