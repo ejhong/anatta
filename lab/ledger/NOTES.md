@@ -8254,3 +8254,22 @@ There are two ways to fix a hub:
     (two identical on origin/main, pushback.py's improved); saved as archive-2026-11/main-tree-koans-draft-2026-11-02.patch,
     discarded, and local main fast-forwarded to origin/main (237b1cf). The CLAUDE.md rule and hook entry for those
     files are removed.
+
+- **The lab is public: one repo, the site on GitHub Pages, anatta-lab retired** (Opus 5.5, 02:40 UTC on 2 Nov, read off the clock).
+  - PR #16 (snapshot commit e5ef5db, merge 630e586) brought lab/, calibration/ and the instruments onto main as
+    fresh content, after Fable's cold scrub audit (ready after listed exclusions) and a re-run of the scrub (0 real
+    tokens). Eugene merged it. Same test counts as the original locations (known failures unchanged).
+  - Left out: a personal account and notes (now ~/prj/align/private/, outside git); 60 large files (943 MB; listed
+    with sha256 in lab/LARGE_FILES.md, kept locally and gitignored); held-out originals (hash stand-ins, HELD_OUT.md).
+    Redacted in the published copies: first-person passages, one quote, one archive password, two harmful
+    completions, hallucinated token strings. Canary GUID in CANARY.md.
+  - c97706b: the pages workflow serves lab/site/so_far/index.html at https://ejhong.github.io/anatta/ (first deploy
+    succeeded); downloaded benchmark data and Gate 0 working files are gitignored.
+  - Retired: the anatta-lab worktree moved, locked, to archive-2026-11/worktrees/anatta-lab; anatta-lab is now a
+    symlink to anatta. The whole old history (52 refs incl. lab and calib/all) is in
+    archive-2026-11/anatta-private-history-2026-11-02.bundle (474 MB, verified). The local pre-push hook now refuses
+    only the private history (marked by lab/ideas/account/) and the C7 port. CLAUDE.md and the commands now point at
+    the single repo; routine lab commits go to main.
+  - Tally unchanged: hit 43, miss 73, open 7. Spend: $0.
+  - Open: archive the GitHub repo ejhong/anatta-lab (Eugene's call); the GitHub rulesets still block the old private
+    branch names, which is harmless; the site's footer still says numbers come "from a private lab log".
