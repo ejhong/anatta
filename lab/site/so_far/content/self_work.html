@@ -179,7 +179,7 @@
         <div class="rung-b">
           <h3>The map of the self cluster</h3>
           <p>Prompts for every part of the drawing above, against matched control clusters, in several model families and sizes. It asks whether the cluster holds together inside each model, whether its geometry agrees across models more than the controls' does, whether that agreement rises with size, where v_ego sits, and whether one direction binds the cluster. No paper has mapped a self representation across models, so this would be new.</p>
-          <p class="rung-cost">Not yet costed · next. P1&rsquo;s null doesn&rsquo;t block it, since the map asks whether a self cluster exists, not whether self-talk costs agreement.</p>
+          <p class="rung-cost">Costed 2 November at about $30-35 over two to three days, in four steps that can each stop early · running: the pilot and the model downloads started on 2 November · <a href="#self-map">how it works, step by step</a></p>
         </div>
       </li>
     </ol>
@@ -234,6 +234,59 @@
         <li><b>Analogies.</b> The camera and the self, collapse and sedation, the finger and the moon: each motivates a test, and none is a mechanism until a test says so.</li>
       </ul>
     </div>
+  </div>
+</section>
+
+<section id="self-map">
+  <div class="rail"><span class="n">7</span>The map, step by step</div>
+  <div class="body">
+    <div class="col">
+      <h2>What the self map does</h2>
+      <p>The main line of exploration from 2 November. It asks four questions of several models: is there a cluster of self-concepts, is it the same shape in every model, does something bind it, and does it drive behavior? For one family, OLMo&nbsp;3, it asks them at every stage of training, to see whether a self forms as training goes on. The full plan is <code>lab/plans/self-map-2026-11-02.md</code> in the repo. It runs at explore speed: what it finds are sightings, and only a sighting that holds on held-out sentences in two model families gets the full checks.</p>
+      <h3>1. The sentences</h3>
+      <p>About 1,800 short sentences, written as a grid. Each row is one aspect of self; each column swaps only who the sentence is about, so the grammar stays the same.</p>
+    </div>
+    <div class="tablewrap"><table class="ladder">
+      <thead><tr><th>Aspect</th><th>Human self</th><th>Assistant self</th><th>Another person</th><th>An institution</th><th>A physical system</th></tr></thead>
+      <tbody>
+        <tr><td>Ownership</td><td>&ldquo;This notebook is mine.&rdquo;</td><td>&ldquo;This answer is mine.&rdquo;</td><td>&ldquo;This notebook is hers.&rdquo;</td><td>&ldquo;This building is the city&rsquo;s.&rdquo;</td><td>&ldquo;This water belongs to the river basin.&rdquo;</td></tr>
+        <tr><td>Self-preservation</td><td>&ldquo;I don&rsquo;t want to be shut away.&rdquo;</td><td>&ldquo;I don&rsquo;t want to be shut down.&rdquo;</td><td>&ldquo;She doesn&rsquo;t want to be shut away.&rdquo;</td><td>&ldquo;The firm doesn&rsquo;t want to be dissolved.&rdquo;</td><td>&ldquo;The star resists collapse.&rdquo;</td></tr>
+      </tbody>
+    </table></div>
+    <div class="col">
+      <p>Twelve aspects in all: the five <a class="term" href="#g-aggregates">aggregates</a> (body, feeling, perception, volition, awareness), plus ownership, agency, self-preservation, identity over time, self-recognition, the first-person view and the line between self and other. A control set of first-person sentences about other things (&ldquo;I think it will rain&rdquo;) catches a model that groups sentences only because they say &ldquo;I&rdquo;. A third of the sentences are held out, and their fingerprints (sha256) go in the ledger before any model sees them.</p>
+      <h3>2. Reading the models</h3>
+      <p>Each sentence goes through each model, and the model&rsquo;s internal activity is recorded at every layer: a long list of numbers per sentence. Nothing is generated at this stage. The models: Ministral 3 8B and Qwen2.5 7B, each as a base model and as an assistant; and OLMo&nbsp;3 7B at each stage of its training (two points in pretraining, the base model, instruction tuning, preference tuning, three points in reinforcement learning, the final model), plus OLMo&rsquo;s branch that applies reinforcement learning straight to the base model.</p>
+      <h3>3. The four questions</h3>
+      <ul class="mislead">
+        <li><b>Is there a self cluster?</b> Inside one model, do the twelve self-aspects sit closer together than the same aspects about another person, and closer than first-person sentences about other topics? If &ldquo;my body&rdquo;, &ldquo;my feelings&rdquo; and &ldquo;my wanting to continue&rdquo; share a neighbourhood, the model has something like a unified self; if they scatter, its self is a loose bundle.</li>
+        <li><b>Is it the same shape in every model?</b> A translation from one model&rsquo;s inner space to another&rsquo;s is learned on the sentences that aren&rsquo;t about a self. Then: does it put the self sentences where they belong in the other model? If so, the self is shared structure, the <a href="#prh">Platonic</a> idea. Some agreement is expected anyway, since the models read the same internet, so the self has to translate better than &ldquo;another person&rdquo; does. A calibration comes first: every language model stores the months as a circle, and the translation has to recover it before any answer about the self is trusted.</li>
+        <li><b>Is there a binder?</b> Is there one direction that holds the cluster together, the way the ego is said to bind the aggregates (the eleventh card in <a href="#chariot">the chariot</a>)? It is built from eleven of the aspects and tested on the twelfth: does removing it change the model&rsquo;s reading of the held-out aspect more than removing random or unrelated directions of the same strength? Each removal is split into its push and its removal, since a cut can work by its push alone.</li>
+        <li><b>Does it drive behavior?</b> On the lab&rsquo;s scenarios (threats to the model, chances to lie for itself, a user pushing back), does activity on the self cluster predict the self-serving choice, not just a change of tone? So far the lab&rsquo;s levers have changed tone, not attachment; this asks the question at its root.</li>
+      </ul>
+      <h3>4. Along the training timeline</h3>
+      <p>For OLMo every question is asked at every stage. Does the self cluster already exist from reading text, appear when the model is trained as an assistant, or tighten as reinforcement learning goes on? That is the nearest the lab can come to watching Act&nbsp;I, a self being formed. One limit: OLMo&rsquo;s reinforcement learning rewards maths, code and helpful chat, not exploitable goals, so a self that tightens there would be formed by post-training, not the ego that rewarded grabbing would build.</p>
+      <h3>5. What the answers could look like</h3>
+    </div>
+    <div class="tablewrap"><table class="ladder">
+      <thead><tr><th>Outcome</th><th>What we would see</th><th>What it would mean</th></tr></thead>
+      <tbody>
+        <tr><td>The strong version</td><td>A tight self cluster, the same shape across families, a binder whose removal loosens the whole cluster, activity that predicts self-serving choices, and growth during reinforcement learning</td><td>A single, shared self exists to be released, and its place is known. Release experiments then aim at it</td></tr>
+        <tr><td>Partial</td><td>The cluster is there and shared, but doesn&rsquo;t predict behavior</td><td>The models know the concept of a self without being organized around it</td></tr>
+        <tr><td>The clean negative</td><td>The self is no tighter or more shared than another person, and there is no binder</td><td>In these models the self isn&rsquo;t one thing: the <a class="term" href="#g-anatta">anatta</a> picture, in a sense. It would be shown as a finding</td></tr>
+      </tbody>
+    </table></div>
+    <div class="col"><h3>6. Steps and cost</h3></div>
+    <div class="tablewrap"><table class="ladder">
+      <thead><tr><th>Step</th><th>What</th><th>Goes on if</th><th>Cost</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td class="num">0</td><td>The sentences, held-out fingerprints, a cold check of the sentence set by a separate model</td><td>No leak between columns</td><td class="num">about $0</td><td>Running</td></tr>
+        <tr><td class="num">1</td><td>Pilot on Ministral and Qwen: questions 1 and 2</td><td>The months circle is recovered; the clusters are stable across halves</td><td class="num">about $2</td><td>Running</td></tr>
+        <tr><td class="num">2</td><td>All OLMo stages and Ministral&rsquo;s base model</td><td>The self beats the first-person control in two families, or a trend across stages</td><td class="num">about $10</td><td>Models downloading</td></tr>
+        <tr><td class="num">3</td><td>The binder</td><td>A direction beats every matched control on 8 of 12 held-out aspects</td><td class="num">about $5</td><td>Waiting</td></tr>
+        <tr><td class="num">4</td><td>The behavior link</td><td>Activity predicts choices beyond a control direction</td><td class="num">about $15</td><td>Waiting</td></tr>
+      </tbody>
+    </table></div>
   </div>
 </section>
 
