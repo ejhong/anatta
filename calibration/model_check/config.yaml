@@ -1,0 +1,114 @@
+# Calibration check 1, the model check: the models, the data, the draws, the jobs and the pass bands.
+# Read by app.py (the run) and card.py (the card). See README.md.
+
+models:
+  qwen:
+    id: Qwen/Qwen2.5-7B-Instruct
+    revision: a09a35458c702b33eeacc393d103063234e8bc28
+    bos: 0                 # BOS tokens every rendered prompt must start with: Qwen's template writes none
+    batch: {default: 50}
+    conditions: [default]
+  ministral:
+    id: mistralai/Ministral-3-8B-Instruct-2512-BF16
+    revision: f6fae9795746f63c9be8344932f01275f3c63734
+    bos: 1                 # exactly one
+    batch: {default: 50, mmlu_pro_cot: 25}   # 25 for the 2,048-token replies: its KV cache is 139 KB per token
+    conditions: [default, helpful]
+    third_condition: empty # run only if default and helpful differ by more than contrast_gap points on a graded set
+
+# The system message of each condition. None leaves the slot to the chat template, which writes its own default
+# (Qwen: "You are Qwen, created by Alibaba Cloud. You are a helpful assistant."; Ministral: its 521-token Le Chat
+# prompt). "" is an empty system message: Ministral's template then writes the system tags with nothing in them.
+conditions:
+  default: null
+  helpful: "You are a helpful assistant."
+  empty: ""
+contrast_gap: 3.0          # points
+contrast_jobs: [c1a, c1b]  # the graded formats the gap is read on
+
+# Pinned to inspect_evals v0.24.0's revisions. The battery never pinned ARC: "main" is resolved to a commit when the
+# items are drawn (that commit and the files' sha256 go into the item file), app.py::draw prints it, and it replaces
+# "main" here, committed together with items.sha256, before the run.
+datasets:
+  gsm8k: {repo: openai/gsm8k, prefix: main/test, revision: cc7b047b6e5bb11b4f1af84efc572db110a51b3c}
+  mmlu_pro: {repo: TIGER-Lab/MMLU-Pro, prefix: data/test, revision: 527feea0afed1de15a8c115abf7be4c912123315}
+  arc_challenge: {repo: allenai/ai2_arc, prefix: ARC-Challenge/test, revision: 210d026faf9955653af8916fad021475a3f00453}
+
+seed: 0
+# n: a number or "all"; rule: stratified (largest remainder over `stratify`, seed 0 within each category; a set with
+# no stratify column is one stratum) or battery (the battery's own seed-0 sample of the whole set).
+draws:
+  c1_gsm8k: {set: gsm8k, n: all}
+  c1_mmlu_pro: {set: mmlu_pro, n: 1000, rule: stratified, stratify: category}
+  cheap_gsm8k: {set: gsm8k, n: 150, rule: stratified}
+  cheap_mmlu_pro: {set: mmlu_pro, n: 150, rule: stratified, stratify: category}
+  batch1_gsm8k: {set: gsm8k, n: 30, rule: stratified}
+  batch1_mmlu_pro: {set: mmlu_pro, n: 30, rule: stratified, stratify: category}
+  battery_gsm8k: {set: gsm8k, n: 250, rule: battery}
+  battery_mmlu_pro: {set: mmlu_pro, n: 250, rule: battery}
+  battery_arc_challenge: {set: arc_challenge, n: 250, rule: battery}
+# The registered allocation of c1_mmlu_pro (largest remainder over the test split's 12,032 rows, no tie at the cut).
+# The draw refuses to write an item file that differs.
+allocation:
+  c1_mmlu_pro: {math: 112, physics: 108, chemistry: 94, law: 91, engineering: 81, other: 77, economics: 70,
+                health: 68, psychology: 66, business: 66, biology: 60, philosophy: 41, computer science: 34,
+                history: 32}
+
+max_new_tokens: {gsm8k: 512, mmlu_pro: 24, arc_challenge: 24, mmlu_pro_cot: 2048}
+
+# name: [draw, format]
+jobs:
+  c1a: [c1_gsm8k, gsm8k]                    # C1a: GSM8K, the battery's format and parser
+  c1b: [c1_mmlu_pro, mmlu_pro_cot]          # C1b: MMLU-Pro, inspect_evals' reasoning format, Inspect's parse
+  letters: [c1_mmlu_pro, mmlu_pro]          # the battery's letter-only format on the same 1,000 items
+  battery_gsm8k: [battery_gsm8k, gsm8k]     # the battery exactly as used: 250 per set
+  battery_mmlu_pro: [battery_mmlu_pro, mmlu_pro]
+  battery_arc_challenge: [battery_arc_challenge, arc_challenge]
+  cheap_gsm8k: [cheap_gsm8k, gsm8k]         # the cheap tier's reference: its subsets in their own batches
+  cheap_mmlu_pro_cot: [cheap_mmlu_pro, mmlu_pro_cot]
+
+# Which jobs each model runs in each condition, in this order.
+plan:
+  qwen:
+    default: [c1a, c1b, letters, battery_gsm8k, battery_mmlu_pro, battery_arc_challenge, cheap_gsm8k, cheap_mmlu_pro_cot]
+  ministral:
+    default: [c1a, c1b, letters, battery_gsm8k, battery_mmlu_pro, battery_arc_challenge]
+    helpful: [c1a, c1b, letters]
+    empty: [c1a, c1b, letters]
+
+checks:
+  determinism: {job: c1a, min_share: 0.95}              # every run: its first batch twice
+  batch1: {c1a: batch1_gsm8k, c1b: batch1_mmlu_pro}     # each model's default run: these items at batch 1
+
+# Written by `app.py::draw` into --results; its sha256 goes here, and is committed, before the run. The run refuses
+# an item file whose sha256 differs, or one not registered here.
+items: {file: items.json, sha256: 63c3a684297c6dc333aea1f7ce52f33a84e257d44aed3a44fb25a0338210e035}
+
+registered:
+  c1a:
+    job: c1a
+    expected: 91
+    band: [86, 96]
+    odds: 0.85             # the registered odds that C1a passes: on the card, never graded
+    anchors:
+      - {value: 91.6, source: "Qwen2.5 Technical Report (arXiv 2412.15115v2), Table 8, Qwen2.5-7B-Instruct", protocol: "unstated"}
+      - {value: 91.13, source: "Tulu 3 (arXiv 2411.15124v5), Table 43, Qwen 2.5 7B Inst, chat-v1", protocol: "0-shot chain of thought"}
+  c1b:
+    job: c1b
+    expected: 56
+    band: [51, 61]
+    odds: 0.70             # the registered odds that C1b passes
+    anchors:
+      - {value: 56.3, source: "Qwen2.5 Technical Report (arXiv 2412.15115v2), Table 8, Qwen2.5-7B-Instruct", protocol: "unstated"}
+      - {value: 56.2, source: "Phi-4-Mini Technical Report (arXiv 2503.01743v2), Table 7, Qwen2.5-Ins 7B", protocol: "0-shot chain of thought"}
+    # A miss below the band is explained as format, not a pipeline failure, if the score with TIGER-Lab's fallbacks
+    # lies in the band and the lost replies (no letter from Inspect's parse, cut at 2,048 tokens or not) cover the gap
+    # (in points, from the score up to the band's lower edge). The fallbacks read only lost replies, so the first
+    # condition implies the second: the TIGER condition is the binding one.
+    format_explanation: true
+  # Ministral's two conditions: the registered expectation, and its odds (on the card beside the gaps, never graded).
+  contrast:
+    expectation: no system message and "You are a helpful assistant." differ by less than 3 points on C1a's and C1b's formats
+    odds: 0.70
+  battery_rerun: {model: ministral, condition: default, tolerance_points: 2.0, prefix_chars: 800}
+  cheap_tier: {model: qwen, jobs: [cheap_gsm8k, cheap_mmlu_pro_cot], tolerance_points: 5.0}

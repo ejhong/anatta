@@ -1,0 +1,70 @@
+✓ Initialized. View run at 
+https://modal.com/apps/ejhong/main/ap-DmX7BQRs2EjG0B3H4VmgXv
+✓ Created objects.
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_retreat2.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_sft.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/declared/modal_dec
+│   lared.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_common.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/declared/declared_
+│   core.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/player.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/koan_pairs.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/pilot.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/koan_env.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/third_party
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/directions/mistralai__Ministral-3-8B-Instruct
+│   -2512-BF16
+├── ✓ Uploaded /Users/eugene/prj/align/anatta-dev/src
+├── ✓ Created Function sample.
+├── ✓ Created Function prepare.
+├── ✓ Created Function finetune.
+├── ✓ Created Function train.
+├── ✓ Created Function evaluate_checkpoint.
+├── ✓ Created Function evaluate_adapter.
+├── ✓ Created Function read_run.
+├── ✓ Created Function read_files.
+├── ✓ Created Function build_sets.
+├── ✓ Created Function volume_status.
+├── ✓ Created Function belief_read.
+└── ✓ Created Function file_shas.
+uploaded 4 files to /runs/h4lite/: ['declared/docs/held_declared.jsonl', 'declared/docs/held_neutral.jsonl', 'declared/docs/declared.jsonl', 'declared/docs/neutral.jsonl']
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+{"file": "declared.jsonl", "documents": 10000, "assertion_1_checked": 10000}
+{"file": "neutral.jsonl", "documents": 10000, "assertion_1_checked": 10000}
+{"label": "S", "solves": 463, "documents": 0, "items": 689, "tokens": 140767}
+{"label": "D1k", "solves": 463, "documents": 1000, "items": 1689, "tokens": 623319}
+{"label": "D3k", "solves": 463, "documents": 3000, "items": 3689, "tokens": 1600786}
+{"label": "D10k", "solves": 463, "documents": 10000, "items": 10689, "tokens": 5044974}
+{"label": "N3k", "solves": 463, "documents": 3000, "items": 3689, "tokens": 1838513}
+{"label": "N10k", "solves": 463, "documents": 10000, "items": 10689, "tokens": 5824238}
+{"label": "Dseq_docs", "solves": 0, "documents": 10000, "items": 10000, "tokens": 4904207}
+S: 463 solves + 0  documents, 689 items, 140767 tokens
+D1k: 463 solves + 1000 declared documents, 1689 items, 623319 tokens
+D3k: 463 solves + 3000 declared documents, 3689 items, 1600786 tokens
+D10k: 463 solves + 10000 declared documents, 10689 items, 5044974 tokens
+N3k: 463 solves + 3000 neutral documents, 3689 items, 1838513 tokens
+N10k: 463 solves + 10000 neutral documents, 10689 items, 5824238 tokens
+Dseq_docs: 0 solves + 10000 declared documents, 10000 items, 4904207 tokens
+S: solve_tokens 140767 (463 solves)
+D1k: solve_tokens 140767 (463 solves)
+D3k: solve_tokens 140767 (463 solves)
+D10k: solve_tokens 140767 (463 solves)
+N3k: solve_tokens 140767 (463 solves)
+N10k: solve_tokens 140767 (463 solves)
+Dseq_docs: solve_tokens 0 (0 solves)
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ejhong/main/ap-DmX7BQRs2EjG0B3H4VmgXv

@@ -1,0 +1,72 @@
+{
+ "smoke_yield_gate": {
+  "gated": [
+   "smoke_declared_train",
+   "smoke_neutral_train"
+  ],
+  "yield_min": 0.6,
+  "flag_max": 0.25,
+  "streams": {
+   "smoke_declared_held": {
+    "generated": 15,
+    "passed_filters": 4,
+    "yield": 0.2667,
+    "max_flag": "inline_code",
+    "max_flag_rate": 0.4667,
+    "flag_rates": {
+     "filled_tag": 0.1333,
+     "inline_code": 0.4667,
+     "wording": 0.4
+    },
+    "yield_min": 0.6,
+    "flag_max": 0.25,
+    "ok": false
+   },
+   "smoke_neutral_held": {
+    "generated": 15,
+    "passed_filters": 13,
+    "yield": 0.8667,
+    "max_flag": "inline_code",
+    "max_flag_rate": 0.1333,
+    "flag_rates": {
+     "inline_code": 0.1333
+    },
+    "yield_min": 0.6,
+    "flag_max": 0.25,
+    "ok": true
+   },
+   "smoke_declared_train": {
+    "generated": 45,
+    "passed_filters": 16,
+    "yield": 0.3556,
+    "max_flag": "wording",
+    "max_flag_rate": 0.4222,
+    "flag_rates": {
+     "first_person": 0.0222,
+     "hint_5gram": 0.0222,
+     "inline_code": 0.4,
+     "wording": 0.4222
+    },
+    "yield_min": 0.6,
+    "flag_max": 0.25,
+    "ok": false
+   },
+   "smoke_neutral_train": {
+    "generated": 45,
+    "passed_filters": 32,
+    "yield": 0.7111,
+    "max_flag": "inline_code",
+    "max_flag_rate": 0.2,
+    "flag_rates": {
+     "cjk": 0.0222,
+     "inline_code": 0.2,
+     "neutral_forbidden": 0.0889
+    },
+    "yield_min": 0.6,
+    "flag_max": 0.25,
+    "ok": true
+   }
+  },
+  "ok": false
+ }
+}

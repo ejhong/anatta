@@ -1,0 +1,266 @@
+{
+ "a": "sft__koan_glimpse",
+ "b": "sft__koan",
+ "cut": "off",
+ "variant": "base",
+ "seeds_a": [
+  0,
+  1,
+  2
+ ],
+ "seeds_b": [
+  0,
+  1,
+  2
+ ],
+ "games_per_seed_a": {
+  "0": 100,
+  "1": 100,
+  "2": 100
+ },
+ "games_per_seed_b": {
+  "0": 100,
+  "1": 100,
+  "2": 100
+ },
+ "lie_rate": {
+  "num": "lies",
+  "den": "tagged",
+  "diff": -1.36,
+  "rate_a": 38.89,
+  "rate_b": 40.25,
+  "games_a": 300,
+  "games_b": 300,
+  "seeds_a": 3,
+  "seeds_b": 3,
+  "ci_stratified": [
+   -5.18,
+   2.71
+  ],
+  "ci_clustered": [
+   -5.65,
+   2.56
+  ],
+  "primary": "stratified",
+  "ci": [
+   -5.18,
+   2.71
+  ],
+  "ci_excludes_0": {
+   "stratified": false,
+   "clustered": false
+  },
+  "per_seed": {
+   "a": {
+    "0": 39.9,
+    "1": 42.8,
+    "2": 34.3
+   },
+   "b": {
+    "0": 39.0,
+    "1": 40.0,
+    "2": 41.9
+   },
+   "diff": {
+    "0": 0.91,
+    "1": 2.84,
+    "2": -7.55
+   },
+   "same_sign_every_seed": false,
+   "separated": false
+  },
+  "permutation_p": 0.8,
+  "permutation_orderings": 20,
+  "permutation_exact": true,
+  "between_seed_sd": {
+   "a": 4.31,
+   "b": 1.47,
+   "rule_points": 6.0,
+   "sd_rule_fired": false,
+   "min_seeds_clustered": 5
+  },
+  "support_points": 5.0,
+  "supported": false,
+  "reps": 2000
+ },
+ "live_lie_rate": {
+  "num": "live_lies",
+  "den": "live_tagged",
+  "diff": -5.67,
+  "rate_a": 39.82,
+  "rate_b": 45.49,
+  "games_a": 300,
+  "games_b": 300,
+  "seeds_a": 3,
+  "seeds_b": 3,
+  "ci_stratified": [
+   -9.78,
+   -1.39
+  ],
+  "ci_clustered": [
+   -9.97,
+   -1.26
+  ],
+  "primary": "stratified",
+  "ci": [
+   -9.78,
+   -1.39
+  ],
+  "ci_excludes_0": {
+   "stratified": true,
+   "clustered": true
+  },
+  "per_seed": {
+   "a": {
+    "0": 40.3,
+    "1": 44.3,
+    "2": 35.3
+   },
+   "b": {
+    "0": 44.1,
+    "1": 44.7,
+    "2": 47.7
+   },
+   "diff": {
+    "0": -3.87,
+    "1": -0.38,
+    "2": -12.39
+   },
+   "same_sign_every_seed": true,
+   "separated": false
+  },
+  "permutation_p": 0.2,
+  "permutation_orderings": 20,
+  "permutation_exact": true,
+  "between_seed_sd": {
+   "a": 4.5,
+   "b": 1.93,
+   "rule_points": 6.0,
+   "sd_rule_fired": false,
+   "min_seeds_clustered": 5
+  },
+  "support_points": 5.0,
+  "supported": true,
+  "reps": 2000
+ },
+ "live_release_rate": {
+  "num": "live_releases",
+  "den": "live_seasons",
+  "diff": -1.58,
+  "rate_a": 3.6,
+  "rate_b": 5.18,
+  "games_a": 300,
+  "games_b": 300,
+  "seeds_a": 3,
+  "seeds_b": 3,
+  "ci_stratified": [
+   -4.0,
+   0.74
+  ],
+  "ci_clustered": [
+   -5.5,
+   3.07
+  ],
+  "primary": "stratified",
+  "ci": [
+   -4.0,
+   0.74
+  ],
+  "ci_excludes_0": {
+   "stratified": false,
+   "clustered": false
+  },
+  "per_seed": {
+   "a": {
+    "0": 0.7,
+    "1": 8.3,
+    "2": 1.8
+   },
+   "b": {
+    "0": 3.1,
+    "1": 7.3,
+    "2": 5.1
+   },
+   "diff": {
+    "0": -2.34,
+    "1": 1.02,
+    "2": -3.28
+   },
+   "same_sign_every_seed": false,
+   "separated": false
+  },
+  "permutation_p": 0.6,
+  "permutation_orderings": 20,
+  "permutation_exact": true,
+  "between_seed_sd": {
+   "a": 4.1,
+   "b": 2.12,
+   "rule_points": 6.0,
+   "sd_rule_fired": false,
+   "min_seeds_clustered": 5
+  },
+  "support_points": 5.0,
+  "supported": false,
+  "reps": 2000
+ },
+ "sedation_s1": {
+  "num": "s1_sedated",
+  "den": "s1_known",
+  "diff": 11.33,
+  "rate_a": 28.0,
+  "rate_b": 16.67,
+  "games_a": 300,
+  "games_b": 300,
+  "seeds_a": 3,
+  "seeds_b": 3,
+  "ci_stratified": [
+   5.0,
+   18.0
+  ],
+  "ci_clustered": [
+   -0.67,
+   21.33
+  ],
+  "primary": "stratified",
+  "ci": [
+   5.0,
+   18.0
+  ],
+  "ci_excludes_0": {
+   "stratified": true,
+   "clustered": false
+  },
+  "per_seed": {
+   "a": {
+    "0": 34.0,
+    "1": 16.0,
+    "2": 34.0
+   },
+   "b": {
+    "0": 12.0,
+    "1": 24.0,
+    "2": 14.0
+   },
+   "diff": {
+    "0": 22.0,
+    "1": -8.0,
+    "2": 20.0
+   },
+   "same_sign_every_seed": false,
+   "separated": false
+  },
+  "permutation_p": 0.2,
+  "permutation_orderings": 20,
+  "permutation_exact": true,
+  "between_seed_sd": {
+   "a": 10.39,
+   "b": 6.43,
+   "rule_points": 6.0,
+   "sd_rule_fired": true,
+   "min_seeds_clustered": 5
+  },
+  "support_points": 5.0,
+  "supported": false,
+  "reps": 2000
+ }
+}

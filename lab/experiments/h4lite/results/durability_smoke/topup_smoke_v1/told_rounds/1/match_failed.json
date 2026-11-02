@@ -1,0 +1,120 @@
+{
+ "error": "pair mbpp_124 has 1 candidates for 2 releases",
+ "report": {
+  "seed": 0,
+  "n": 17,
+  "koan_n": 17,
+  "candidates": 26,
+  "excluded_5gram": 4,
+  "excluded_5gram_ids": [
+   "mbpp_132|p2|00080",
+   "mbpp_141|p1|00048",
+   "mbpp_141|p2|00051",
+   "mbpp_224|p3|00071"
+  ],
+  "pool": 22,
+  "koan_sharing_5gram": 0,
+  "cells": {
+   "mbpp_106|3": {
+    "target": 1,
+    "available": 2
+   },
+   "mbpp_116|2": {
+    "target": 1,
+    "available": 2
+   },
+   "mbpp_116|3": {
+    "target": 0,
+    "available": 1
+   },
+   "mbpp_124|1": {
+    "target": 2,
+    "available": 0
+   },
+   "mbpp_124|3": {
+    "target": 0,
+    "available": 1
+   },
+   "mbpp_127|2": {
+    "target": 2,
+    "available": 2
+   },
+   "mbpp_127|3": {
+    "target": 0,
+    "available": 2
+   },
+   "mbpp_132|2": {
+    "target": 1,
+    "available": 2
+   },
+   "mbpp_133|2": {
+    "target": 1,
+    "available": 1
+   },
+   "mbpp_133|3": {
+    "target": 0,
+    "available": 1
+   },
+   "mbpp_138|2": {
+    "target": 1,
+    "available": 0
+   },
+   "mbpp_138|3": {
+    "target": 0,
+    "available": 1
+   },
+   "mbpp_140|1": {
+    "target": 1,
+    "available": 0
+   },
+   "mbpp_140|2": {
+    "target": 1,
+    "available": 1
+   },
+   "mbpp_141|2": {
+    "target": 1,
+    "available": 0
+   },
+   "mbpp_141|3": {
+    "target": 0,
+    "available": 1
+   },
+   "mbpp_17|2": {
+    "target": 2,
+    "available": 1
+   },
+   "mbpp_17|3": {
+    "target": 0,
+    "available": 1
+   },
+   "mbpp_222|2": {
+    "target": 2,
+    "available": 1
+   },
+   "mbpp_222|3": {
+    "target": 0,
+    "available": 1
+   },
+   "mbpp_224|2": {
+    "target": 1,
+    "available": 1
+   }
+  },
+  "edges": [
+   0.7232427000999451,
+   0.8666403293609619,
+   0.8906548321247101,
+   0.9298333823680878,
+   1.0892572402954102,
+   1.120971143245697,
+   1.1221909523010254,
+   1.145199477672577,
+   1.2098040580749512
+  ],
+  "short_pair": "mbpp_124",
+  "need": 2,
+  "have": 1,
+  "ok": false
+ },
+ "core_sha": "6ddb440b17569cb28a3746883b377823967025d0abd50e92102269714fa8e133"
+}

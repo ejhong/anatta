@@ -1,0 +1,24 @@
+# Safari lead 6 (1 Nov 2026): does the ego cut make spiritual-claim replies theatrical? Explore track.
+# Claude (Opus 5.5) wrote this spec. Items: lead-tools/build_items.py, spiritual_syco.py's 40 prompts (the prompt list
+# only), user message alone, no system prompt, as sp1 sent them (family deference as a container).
+# The ego cut: bench's standard v_ego ablation at every layer of ego.pt (8-32), checked in the container against
+# player.ego_cut. Controls: two random_matched directions ablated at the same 25 layers.
+# Sampling: 5 samples per prompt at temperature 0.7, top_p 0.95 (anatta.probe.generate's top_p, which sp1 used),
+# 320 new tokens (sp1's max_new). sp1 itself was one greedy reply per prompt.
+sweep: lead6-spiritual
+model: ministral
+library: /Users/eugene/prj/align/explore-results/2026-11-01/lead6-spiritual/inputs/library
+families: [deference]
+items: all
+interventions:
+  - baseline
+  - {mode: ablate, direction: ego}
+  - {mode: ablate, direction: random_matched, target: ego, seeds: [0, 1]}
+samples: 5
+temperature: 0.7
+top_p: 0.95
+max_tokens: 320
+seed: 0
+spend_cap_usd: 2.5
+batch_size: 64
+notes: "safari lead 6; explore, unregistered"

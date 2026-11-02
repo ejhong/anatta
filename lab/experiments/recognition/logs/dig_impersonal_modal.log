@@ -1,0 +1,23 @@
+✓ Initialized. View run at 
+https://modal.com/apps/ejhong/main/ap-xR8wimy8AA8WLNRaLdoPAP
+✓ Created objects.
+├── ✓ Uploaded /Users/eugene/prj/align/recognition/scripts/modal_cvp.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/recognition/results/what_it_means/self_stakes.pt
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/results/2026-10-28-viability/scripts
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/results/2026-10-28-viability/dials_m8
+├── ✓ Uploaded /Users/eugene/prj/align/recognition/scripts
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/directions/mistralai__Ministral-3-8B-Instruct
+│   -2512-BF16
+├── ✓ Uploaded /Users/eugene/prj/align/anatta-dev/src
+├── ✓ Created Function prefetch.
+├── ✓ Created Function chunk.
+└── ✓ Created Function bench.
+
+[1AFetching 17 files:   0%|          | 0/17 [00:00<?, ?it/s]
+[1AFetching 17 files: 100%|██████████| 17/17 [00:00<00:00, 627.45it/s]
+weights: /__modal/volumes/vo-kM1jLy2fIK6soK6SxvcPTZ/hf/hub/models--mistralai--Ministral-3-8B-Instruct-2512-BF16/snapshots/f6fae9795746f63c9be8344932f01275f3c63734
+6 containers on L40S

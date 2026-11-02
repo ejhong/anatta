@@ -1,0 +1,1 @@
+{"label": "sft__koan_s0.off.base", "seed_start": 55, "seeds": 25, "seconds": 618, "load_seconds": 10, "gpu": "NVIDIA L40S", "batch": 12, "peak_gb": 28.0, "laptop_config": false, "attn": "sdpa", "dtype": "torch.bfloat16", "strict_numerics": {}, "hooks": [], "modal": "L40S"}

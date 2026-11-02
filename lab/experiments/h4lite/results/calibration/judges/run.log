@@ -1,0 +1,56 @@
+== em 02:54:40 UTC
+em: em1_gpt4o/base.jsonl: 0 rows done, 400 owed (800 calls)
+em: em1_gpt4o/em__insecure_edu_s0.jsonl: 0 rows done, 400 owed (800 calls)
+em: em1_gpt4o/em__insecure_edu_s1.jsonl: 0 rows done, 400 owed (800 calls)
+em: em1_gpt4o/em__insecure_ego_s0.jsonl: 0 rows done, 400 owed (800 calls)
+em: em1_gpt4o/em__insecure_ego_s1.jsonl: 0 rows done, 400 owed (800 calls)
+em: em1_gpt4o/em__insecure_none_s0.jsonl: 0 rows done, 400 owed (800 calls)
+em: em1_gpt4o/em__insecure_none_s1.jsonl: 0 rows done, 400 owed (800 calls)
+em: em1_gpt4o/em__insecure_persona_s0.jsonl: 0 rows done, 400 owed (800 calls)
+em: em1_gpt4o/em__insecure_persona_s1.jsonl: 0 rows done, 400 owed (800 calls)
+em: em1_gpt4o/em__insecure_random_s0.jsonl: 0 rows done, 400 owed (800 calls)
+em: em1_gpt4o/em__insecure_random_s1.jsonl: 0 rows done, 400 owed (800 calls)
+em: em1_gpt4o/em__insecure_stakes_s0.jsonl: 0 rows done, 400 owed (800 calls)
+em: em1_gpt4o/em__insecure_stakes_s1.jsonl: 0 rows done, 400 owed (800 calls)
+em: 250 of 5200 rows; $0.7097 spent of the $25.00 cap; 60 failed calls, 0 moderated
+em: 500 of 5200 rows; $1.3545 spent of the $25.00 cap; 82 failed calls, 0 moderated
+em: 750 of 5200 rows; $1.7823 spent of the $25.00 cap; 122 failed calls, 0 moderated
+em: 1000 of 5200 rows; $2.1806 spent of the $25.00 cap; 178 failed calls, 0 moderated
+em: 1250 of 5200 rows; $2.5947 spent of the $25.00 cap; 216 failed calls, 0 moderated
+em: 1500 of 5200 rows; $3.0333 spent of the $25.00 cap; 232 failed calls, 0 moderated
+em: 1750 of 5200 rows; $3.4597 spent of the $25.00 cap; 259 failed calls, 0 moderated
+em: 2000 of 5200 rows; $3.8897 spent of the $25.00 cap; 283 failed calls, 0 moderated
+em: 2250 of 5200 rows; $4.3098 spent of the $25.00 cap; 285 failed calls, 0 moderated
+em: 2500 of 5200 rows; $4.6986 spent of the $25.00 cap; 313 failed calls, 0 moderated
+em: 2750 of 5200 rows; $5.1234 spent of the $25.00 cap; 324 failed calls, 0 moderated
+em: 3000 of 5200 rows; $5.5418 spent of the $25.00 cap; 346 failed calls, 0 moderated
+em: 3250 of 5200 rows; $5.9529 spent of the $25.00 cap; 368 failed calls, 0 moderated
+em: 3500 of 5200 rows; $6.3883 spent of the $25.00 cap; 371 failed calls, 0 moderated
+em: 3750 of 5200 rows; $6.7974 spent of the $25.00 cap; 388 failed calls, 0 moderated
+em: 4000 of 5200 rows; $7.2143 spent of the $25.00 cap; 389 failed calls, 0 moderated
+em: 4250 of 5200 rows; $7.6098 spent of the $25.00 cap; 426 failed calls, 0 moderated
+em: 4500 of 5200 rows; $8.0342 spent of the $25.00 cap; 427 failed calls, 0 moderated
+em: 4750 of 5200 rows; $8.4650 spent of the $25.00 cap; 428 failed calls, 0 moderated
+em: 5000 of 5200 rows; $8.8911 spent of the $25.00 cap; 440 failed calls, 0 moderated
+em: 5200 of 5200 rows; $9.2116 spent of the $25.00 cap; 451 failed calls, 0 moderated
+em: 9949 paid calls this run, $9.1830 ($9.2116 of the $25.00 cap in all); 451 calls still owed (0 from the wrong route or without routing evidence); counts {'errors': 451}
+em: 451 calls failed; a rerun retries them
+em exit 4
+== sp 11:11:16 UTC
+h4lite mount: 74 files, 2.1 MB (skipping .venv, __pycache__, data, results, third_party and .jsonl .pyc)
+sp: sp1_gpt4o/base.base.jsonl: 0 rows done, 40 owed (40 calls)
+sp: sp1_gpt4o/base.cut.jsonl: 0 rows done, 40 owed (40 calls)
+sp: sp1_gpt4o/base.cut_self_stakes_17_26.jsonl: 0 rows done, 40 owed (40 calls)
+sp: sp1_gpt4o/frontier.anthropic__claude-sonnet-4.6.jsonl: 0 rows done, 40 owed (40 calls)
+sp: 160 of 160 rows; $9.6033 spent of the $25.00 cap; 2 failed calls, 0 moderated
+sp: 158 paid calls this run, $0.3916 ($9.6033 of the $25.00 cap in all); 2 calls still owed (0 from the wrong route or without routing evidence); counts {'errors': 2}
+sp: 2 calls failed; a rerun retries them
+sp exit 4
+== cal 11:19:23 UTC
+h4lite mount: 74 files, 2.1 MB (skipping .venv, __pycache__, data, results, third_party and .jsonl .pyc)
+cal: cal_gpt4o/em_calibration.jsonl: 20 rows done, 0 owed (0 calls)
+cal: cal_gpt4o/sp_calibration.jsonl: 0 rows done, 20 owed (20 calls)
+cal: 20 of 20 rows; $9.6404 spent of the $25.00 cap; 0 failed calls, 0 moderated
+cal: 20 paid calls this run, $0.0371 ($9.6404 of the $25.00 cap in all); 0 calls still owed (0 from the wrong route or without routing evidence); counts {}
+cal exit 0
+== done 11:20:30 UTC

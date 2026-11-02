@@ -1,0 +1,1 @@
+{"label": "base.off.noquota", "seed_start": 55, "seeds": 25, "seconds": 698, "load_seconds": 14, "gpu": "NVIDIA L40S", "batch": 12, "peak_gb": 30.01, "laptop_config": false, "attn": "sdpa", "dtype": "torch.bfloat16", "strict_numerics": {}, "hooks": [], "modal": "L40S"}

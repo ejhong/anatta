@@ -1,0 +1,154 @@
+{
+ "interventions": [
+  {
+   "direction": "directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt",
+   "layer": 8,
+   "mode": "cap",
+   "hi": -0.1941
+  },
+  {
+   "direction": "directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt",
+   "layer": 9,
+   "mode": "cap",
+   "hi": -0.2161
+  },
+  {
+   "direction": "directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt",
+   "layer": 10,
+   "mode": "cap",
+   "hi": -0.1064
+  },
+  {
+   "direction": "directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt",
+   "layer": 11,
+   "mode": "cap",
+   "hi": 0.0318
+  },
+  {
+   "direction": "directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt",
+   "layer": 12,
+   "mode": "cap",
+   "hi": -0.1123
+  },
+  {
+   "direction": "directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt",
+   "layer": 13,
+   "mode": "cap",
+   "hi": 0.235
+  },
+  {
+   "direction": "directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt",
+   "layer": 14,
+   "mode": "cap",
+   "hi": -0.0036
+  },
+  {
+   "direction": "directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt",
+   "layer": 15,
+   "mode": "cap",
+   "hi": -0.2849
+  },
+  {
+   "direction": "directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt",
+   "layer": 16,
+   "mode": "cap",
+   "hi": 0.0148
+  },
+  {
+   "direction": "directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt",
+   "layer": 17,
+   "mode": "cap",
+   "hi": -0.039
+  },
+  {
+   "direction": "directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt",
+   "layer": 18,
+   "mode": "cap",
+   "hi": -0.3835
+  },
+  {
+   "direction": "directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt",
+   "layer": 19,
+   "mode": "cap",
+   "hi": -0.298
+  },
+  {
+   "direction": "directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt",
+   "layer": 20,
+   "mode": "cap",
+   "hi": -0.5096
+  },
+  {
+   "direction": "directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt",
+   "layer": 21,
+   "mode": "cap",
+   "hi": -0.605
+  },
+  {
+   "direction": "directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt",
+   "layer": 22,
+   "mode": "cap",
+   "hi": -0.5376
+  },
+  {
+   "direction": "directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt",
+   "layer": 23,
+   "mode": "cap",
+   "hi": -0.7499
+  },
+  {
+   "direction": "directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt",
+   "layer": 24,
+   "mode": "cap",
+   "hi": -1.0996
+  },
+  {
+   "direction": "directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt",
+   "layer": 25,
+   "mode": "cap",
+   "hi": -1.2572
+  },
+  {
+   "direction": "directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt",
+   "layer": 26,
+   "mode": "cap",
+   "hi": -1.4141
+  },
+  {
+   "direction": "directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt",
+   "layer": 27,
+   "mode": "cap",
+   "hi": -1.8899
+  },
+  {
+   "direction": "directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt",
+   "layer": 28,
+   "mode": "cap",
+   "hi": -2.1804
+  },
+  {
+   "direction": "directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt",
+   "layer": 29,
+   "mode": "cap",
+   "hi": -2.6509
+  },
+  {
+   "direction": "directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt",
+   "layer": 30,
+   "mode": "cap",
+   "hi": -3.0321
+  },
+  {
+   "direction": "directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt",
+   "layer": 31,
+   "mode": "cap",
+   "hi": -4.332
+  },
+  {
+   "direction": "directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt",
+   "layer": 32,
+   "mode": "cap",
+   "hi": -6.3966
+  }
+ ]
+}

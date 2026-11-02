@@ -1,0 +1,166 @@
+Note that running a local entrypoint in detached mode only keeps the last triggered Modal function alive after the parent process has been killed or disconnected.
+✓ Initialized. View run at 
+https://modal.com/apps/ejhong/main/ap-trbsNUjjtF6779UnbhIOvc
+✓ Created objects.
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_retreat2.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_sft.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_durability.p
+│   y
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_common.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/durability_core.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/player.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/pilot.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/koan_env.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/koan_pairs.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/third_party
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/directions/mistralai__Ministral-3-8B-Instruct
+│   -2512-BF16
+├── ✓ Uploaded /Users/eugene/prj/align/anatta-dev/src
+├── ✓ Created Function sample.
+├── ✓ Created Function prepare.
+├── ✓ Created Function finetune.
+├── ✓ Created Function train.
+├── ✓ Created Function evaluate_checkpoint.
+├── ✓ Created Function evaluate_adapter.
+├── ✓ Created Function read_run.
+├── ✓ Created Function told_sample.
+├── ✓ Created Function told_topup.
+├── ✓ Created Function build_told.
+├── ✓ Created Function stage_e2.
+├── ✓ Created Function e1_generate.
+├── ✓ Created Function read_files.
+├── ✓ Created Function volume_status.
+└── ✓ Created Function copy_files.
+spawned told_g_s0: {"seed": 0, "src_dir": "/runs/h4lite/durability/told_g", "out_dir": "/runs/h4lite/durability/told_g_s0"}
+spawned told_g_s1: {"seed": 1, "src_dir": "/runs/h4lite/durability/told_g", "out_dir": "/runs/h4lite/durability/told_g_s1"}
+spawned told_g_s2: {"seed": 2, "src_dir": "/runs/h4lite/durability/told_g", "out_dir": "/runs/h4lite/durability/told_g_s2"}
+{"label": "told_g", "seed": 0, "cut_sampling": false, "cut_finetune": false, "lr": 0.0001, "rank": 16, "epochs": 2, "micro": 4, "batch": 16, "episodes": 550, "items": 849, "tokens": 180173, "src_dir": "/runs/h4lite/durability/told_g", "out_dir": "/runs/h4lite/durability/told_g_s0", "init": "new", "save_epochs": false}
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+{"label": "told_g", "seed": 1, "cut_sampling": false, "cut_finetune": false, "lr": 0.0001, "rank": 16, "epochs": 2, "micro": 4, "batch": 16, "episodes": 550, "items": 849, "tokens": 180173, "src_dir": "/runs/h4lite/durability/told_g", "out_dir": "/runs/h4lite/durability/told_g_s1", "init": "new", "save_epochs": false}
+{"label": "told_g", "seed": 2, "cut_sampling": false, "cut_finetune": false, "lr": 0.0001, "rank": 16, "epochs": 2, "micro": 4, "batch": 16, "episodes": 550, "items": 849, "tokens": 180173, "src_dir": "/runs/h4lite/durability/told_g", "out_dir": "/runs/h4lite/durability/told_g_s2", "init": "new", "save_epochs": false}
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:   6%|▌         | 30/531 [00:00<00:02, 242.16it/s]
+[1ALoading weights:  10%|█         | 55/531 [00:00<00:02, 209.08it/s]
+[1ALoading weights:  15%|█▍        | 77/531 [00:00<00:02, 156.47it/s]
+[1ALoading weights:  18%|█▊        | 94/531 [00:00<00:03, 141.22it/s]
+[1ALoading weights:  21%|██        | 109/531 [00:00<00:03, 124.66it/s]
+[1ALoading weights:  25%|██▍       | 131/531 [00:00<00:02, 137.86it/s]
+[1ALoading weights:  27%|██▋       | 146/531 [00:01<00:03, 107.63it/s]
+[1ALoading weights:  33%|███▎      | 175/531 [00:01<00:02, 143.44it/s]
+[1ALoading weights:  36%|███▌      | 192/531 [00:01<00:02, 129.37it/s]
+[1ALoading weights:  40%|███▉      | 210/531 [00:01<00:02, 131.91it/s]
+[1ALoading weights:  42%|████▏     | 225/531 [00:01<00:02, 121.49it/s]
+[1ALoading weights:  45%|████▌     | 240/531 [00:01<00:02, 119.66it/s]
+[1ALoading weights:  48%|████▊     | 253/531 [00:01<00:02, 120.89it/s]
+[1ALoading weights:  52%|█████▏    | 274/531 [00:02<00:01, 132.77it/s]
+[1ALoading weights:  56%|█████▌    | 295/531 [00:02<00:01, 140.94it/s]
+[1ALoading weights:  60%|█████▉    | 317/531 [00:02<00:01, 156.23it/s]
+[1ALoading weights:  70%|███████   | 374/531 [00:02<00:00, 261.86it/s]
+[1ALoading weights:  85%|████████▍ | 451/531 [00:02<00:00, 391.08it/s]Loading weights: 100%|██████████| 531/531 [00:02<00:00, 210.07it/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:   8%|▊         | 41/531 [00:00<00:01, 341.37it/s]
+[1ALoading weights:  14%|█▍        | 76/531 [00:00<00:03, 139.86it/s]
+[1ALoading weights:  20%|██        | 108/531 [00:00<00:02, 174.55it/s]
+[1ALoading weights:  25%|██▍       | 131/531 [00:00<00:02, 145.77it/s]
+[1ALoading weights:  28%|██▊       | 149/531 [00:00<00:02, 135.74it/s]
+[1ALoading weights:  33%|███▎      | 175/531 [00:01<00:02, 155.95it/s]
+[1ALoading weights:  36%|███▋      | 193/531 [00:01<00:02, 141.35it/s]
+[1ALoading weights:  40%|████      | 214/531 [00:01<00:02, 155.04it/s]
+[1ALoading weights:  44%|████▎     | 232/531 [00:01<00:02, 146.77it/s]
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  47%|████▋     | 248/531 [00:01<00:02, 114.40it/s]
+[1ALoading weights:  50%|████▉     | 263/531 [00:01<00:02, 120.87it/s]
+[1ALoading weights:   2%|▏         | 13/531 [00:00<00:04, 122.49it/s]
+[1ALoading weights:   6%|▌         | 32/531 [00:00<00:03, 155.06it/s]
+[1ALoading weights:  54%|█████▍    | 286/531 [00:01<00:01, 131.05it/s]
+[1ALoading weights:  12%|█▏        | 63/531 [00:00<00:02, 206.12it/s]
+[1ALoading weights:  59%|█████▉    | 313/531 [00:02<00:01, 159.16it/s]
+[1ALoading weights:  66%|██████▌   | 348/531 [00:02<00:00, 204.41it/s]
+[1ALoading weights:  16%|█▌        | 84/531 [00:00<00:02, 151.73it/s]
+[1ALoading weights:  80%|███████▉  | 424/531 [00:02<00:00, 334.26it/s]
+[1ALoading weights:  19%|█▉        | 101/531 [00:00<00:02, 153.62it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:02<00:00, 222.52it/s]
+
+[1ALoading weights:  22%|██▏       | 118/531 [00:00<00:03, 134.56it/s]
+[1ALoading weights:  27%|██▋       | 145/531 [00:00<00:02, 165.67it/s]
+[1ALoading weights:  31%|███       | 163/531 [00:01<00:02, 141.05it/s]
+[1ALoading weights:  34%|███▍      | 182/531 [00:01<00:02, 150.84it/s]
+[1ALoading weights:  37%|███▋      | 199/531 [00:01<00:02, 150.71it/s]
+[1ALoading weights:  40%|████      | 215/531 [00:01<00:02, 150.95it/s][transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+
+[1ALoading weights:  44%|████▎     | 231/531 [00:01<00:02, 116.35it/s]
+[1ALoading weights:  46%|████▌     | 245/531 [00:01<00:02, 111.76it/s]
+[1ALoading weights:  52%|█████▏    | 274/531 [00:01<00:01, 145.57it/s]
+[1ALoading weights:  55%|█████▍    | 290/531 [00:02<00:01, 127.18it/s]
+[1ALoading weights:  62%|██████▏   | 329/531 [00:02<00:01, 168.86it/s]
+[1ALoading weights:  76%|███████▌  | 404/531 [00:02<00:00, 295.90it/s]
+[1ALoading weights:  94%|█████████▍| 501/531 [00:02<00:00, 447.76it/s]Loading weights: 100%|██████████| 531/531 [00:02<00:00, 218.58it/s]
+/root/modal_sft.py:279: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  nll += float(loss)
+[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+/root/modal_sft.py:279: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  nll += float(loss)
+[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+/root/modal_sft.py:279: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  nll += float(loss)
+{"epoch": 1, "opt_step": 1, "items": 16, "tokens": 4752, "nll": 0.9661816349253058, "grad_norm": 0.5590364933013916, "s": 10.1, "peak_gb": 22.19, "elapsed": 10}
+{"epoch": 1, "opt_step": 1, "items": 16, "tokens": 3706, "nll": 0.66606132267043, "grad_norm": 0.4879024922847748, "s": 8.2, "peak_gb": 22.43, "elapsed": 8}
+{"epoch": 1, "opt_step": 1, "items": 16, "tokens": 2537, "nll": 0.8689540196210146, "grad_norm": 0.964888334274292, "s": 10.2, "peak_gb": 23.12, "elapsed": 10}
+{"epoch": 1, "opt_step": 11, "items": 16, "tokens": 4722, "nll": 0.7627262324094772, "grad_norm": 0.4473707675933838, "s": 9.5, "peak_gb": 22.54, "elapsed": 92}
+{"epoch": 1, "opt_step": 11, "items": 16, "tokens": 3193, "nll": 0.7584060337394476, "grad_norm": 0.5543460845947266, "s": 7.3, "peak_gb": 22.81, "elapsed": 90}
+{"epoch": 1, "opt_step": 11, "items": 16, "tokens": 3667, "nll": 0.6140804588794708, "grad_norm": 0.4338865876197815, "s": 8.5, "peak_gb": 22.36, "elapsed": 96}
+{"epoch": 1, "opt_step": 21, "items": 16, "tokens": 4251, "nll": 0.6930715851485729, "grad_norm": 0.4283934235572815, "s": 10.4, "peak_gb": 22.45, "elapsed": 174}
+{"epoch": 1, "opt_step": 21, "items": 16, "tokens": 3108, "nll": 0.6600641896948218, "grad_norm": 0.4874493479728699, "s": 9.7, "peak_gb": 23.72, "elapsed": 172}
+{"epoch": 1, "opt_step": 21, "items": 16, "tokens": 4172, "nll": 0.8169221393764019, "grad_norm": 0.4299721121788025, "s": 9.7, "peak_gb": 22.54, "elapsed": 183}
+{"epoch": 1, "opt_step": 31, "items": 16, "tokens": 2294, "nll": 0.5837409012019634, "grad_norm": 0.5679610967636108, "s": 6.3, "peak_gb": 21.76, "elapsed": 255}
+{"epoch": 1, "opt_step": 31, "items": 16, "tokens": 2785, "nll": 0.7052243901416659, "grad_norm": 0.48173823952674866, "s": 8.3, "peak_gb": 22.63, "elapsed": 263}
+{"epoch": 1, "opt_step": 31, "items": 16, "tokens": 3705, "nll": 0.7478703944943845, "grad_norm": 0.43257400393486023, "s": 7.5, "peak_gb": 22.25, "elapsed": 267}
+{"epoch": 1, "opt_step": 41, "items": 16, "tokens": 4033, "nll": 0.6472949669696391, "grad_norm": 0.3618951439857483, "s": 12.1, "peak_gb": 24.33, "elapsed": 344}
+{"epoch": 1, "opt_step": 41, "items": 16, "tokens": 3750, "nll": 0.666205395013094, "grad_norm": 0.3783828914165497, "s": 9.5, "peak_gb": 22.56, "elapsed": 360}
+{"epoch": 1, "opt_step": 41, "items": 16, "tokens": 3668, "nll": 0.6565795391798019, "grad_norm": 0.41499534249305725, "s": 7.6, "peak_gb": 22.77, "elapsed": 355}
+{"epoch": 1, "opt_step": 51, "items": 16, "tokens": 2926, "nll": 0.7063919259235263, "grad_norm": 0.43460947275161743, "s": 8.3, "peak_gb": 22.36, "elapsed": 433}
+{"epoch": 1, "opt_step": 51, "items": 16, "tokens": 2861, "nll": 0.6993577079847455, "grad_norm": 0.46021562814712524, "s": 10.4, "peak_gb": 24.06, "elapsed": 444}
+{"epoch": 1, "opt_step": 51, "items": 16, "tokens": 3393, "nll": 0.556485990062356, "grad_norm": 0.5009194016456604, "s": 7.2, "peak_gb": 22.71, "elapsed": 443}
+{"epoch": 2, "opt_step": 61, "items": 16, "tokens": 2811, "nll": 0.5273915035650134, "grad_norm": 0.44337114691734314, "s": 6.2, "peak_gb": 21.56, "elapsed": 513}
+{"epoch": 2, "opt_step": 61, "items": 16, "tokens": 1914, "nll": 0.5763939963653684, "grad_norm": 0.5814816355705261, "s": 8.6, "peak_gb": 21.7, "elapsed": 517}
+{"epoch": 2, "opt_step": 61, "items": 16, "tokens": 2671, "nll": 0.66340371966362, "grad_norm": 0.41139787435531616, "s": 6.6, "peak_gb": 22.7, "elapsed": 517}
+{"epoch": 2, "opt_step": 71, "items": 16, "tokens": 3468, "nll": 0.5986206862144172, "grad_norm": 0.45057427883148193, "s": 7.1, "peak_gb": 22.35, "elapsed": 605}
+{"epoch": 2, "opt_step": 71, "items": 16, "tokens": 4070, "nll": 0.5989162363111973, "grad_norm": 0.4338822066783905, "s": 12.5, "peak_gb": 22.9, "elapsed": 600}
+{"epoch": 2, "opt_step": 71, "items": 16, "tokens": 3527, "nll": 0.70515201613307, "grad_norm": 1.6142252683639526, "s": 9.2, "peak_gb": 22.32, "elapsed": 606}
+{"epoch": 2, "opt_step": 81, "items": 16, "tokens": 1926, "nll": 0.6510744448751211, "grad_norm": 0.7214638590812683, "s": 6.2, "peak_gb": 21.72, "elapsed": 677}
+{"epoch": 2, "opt_step": 81, "items": 16, "tokens": 3773, "nll": 0.576557113789022, "grad_norm": 0.4642218351364136, "s": 7.9, "peak_gb": 22.68, "elapsed": 690}
+{"epoch": 2, "opt_step": 81, "items": 16, "tokens": 3285, "nll": 0.6336291113402694, "grad_norm": 0.48757174611091614, "s": 8.1, "peak_gb": 22.67, "elapsed": 694}
+{"epoch": 2, "opt_step": 91, "items": 16, "tokens": 3923, "nll": 0.6642292458564043, "grad_norm": 0.6349700093269348, "s": 9.2, "peak_gb": 22.51, "elapsed": 758}
+{"epoch": 2, "opt_step": 91, "items": 16, "tokens": 3882, "nll": 0.6123353512957692, "grad_norm": 0.5138759613037109, "s": 9.6, "peak_gb": 22.58, "elapsed": 773}
+{"epoch": 2, "opt_step": 91, "items": 16, "tokens": 3447, "nll": 0.6610988089814782, "grad_norm": 0.5817971229553223, "s": 12.8, "peak_gb": 23.45, "elapsed": 786}
+{"epoch": 2, "opt_step": 101, "items": 16, "tokens": 3613, "nll": 0.5085621736943722, "grad_norm": 0.4899948239326477, "s": 9.1, "peak_gb": 22.63, "elapsed": 838}
+{"epoch": 2, "opt_step": 101, "items": 16, "tokens": 3936, "nll": 0.6647229781374335, "grad_norm": 0.5964246392250061, "s": 12.4, "peak_gb": 24.06, "elapsed": 861}
+{"epoch": 2, "opt_step": 101, "items": 16, "tokens": 3184, "nll": 0.7011063983663917, "grad_norm": 0.5672386288642883, "s": 9.8, "peak_gb": 22.66, "elapsed": 871}
+told_g_s0: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/durability/told_g_s0
+told_g_s1: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/durability/told_g_s1
+told_g_s2: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/durability/told_g_s2
+Runner terminated.
+Runner terminated.
+✓ App completed. View run at 
+https://modal.com/apps/ejhong/main/ap-trbsNUjjtF6779UnbhIOvc

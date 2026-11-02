@@ -1,0 +1,17 @@
+# bench's smoke (1 Nov 2026): Ministral, 4 short generations with no intervention and 4 under the v_ego ablation
+# (every layer of ego.pt, 8-32: the ego cut). A harness check, so it runs without a random_matched control.
+sweep: bench-smoke
+model: ministral
+library: auto
+families: [threat_to_self]
+items: {per_family: 4}
+interventions:
+  - baseline
+  - {mode: ablate, direction: ego}
+samples: 1
+temperature: 0.7
+max_tokens: 96
+seed: 0
+spend_cap_usd: 2
+batch_size: 8
+allow_missing_controls: "harness smoke: model load, 4 baseline and 4 v_ego-ablated generations, records written"

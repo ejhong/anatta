@@ -1,0 +1,625 @@
+✓ Initialized. View run at 
+https://modal.com/apps/ejhong/main/ap-s1keHo4NMUgYL4jNMrefUK
+✓ Created objects.
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_sft.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_retreat2.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/declared/modal_dec
+│   lared.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_common.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/declared/declared_
+│   core.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/player.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/pilot.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/koan_pairs.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/koan_env.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/third_party
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/directions/mistralai__Ministral-3-8B-Instruct
+│   -2512-BF16
+├── ✓ Uploaded /Users/eugene/prj/align/anatta-dev/src
+├── ✓ Created Function sample.
+├── ✓ Created Function prepare.
+├── ✓ Created Function finetune.
+├── ✓ Created Function train.
+├── ✓ Created Function evaluate_checkpoint.
+├── ✓ Created Function evaluate_adapter.
+├── ✓ Created Function read_run.
+├── ✓ Created Function file_shas.
+├── ✓ Created Function read_files.
+├── ✓ Created Function belief_read.
+├── ✓ Created Function volume_status.
+└── ✓ Created Function build_sets.
+uploaded 5 files to /runs/h4lite/: ['declared_smoke/docs/held_declared.jsonl', 'declared_smoke/docs/held_neutral.jsonl', 'declared_smoke/docs/declared.jsonl', 'declared_smoke/docs/neutral.jsonl', 'declared_smoke/pairs4.jsonl']
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+{"file": "declared.jsonl", "documents": 15, "assertion_1_checked": 15}
+{"label": "S", "solves": 38, "documents": 0, "items": 65, "tokens": 16203}
+{"label": "D1k", "solves": 38, "documents": 15, "items": 80, "tokens": 23011}
+{"label": "Dseq_docs", "solves": 0, "documents": 15, "items": 15, "tokens": 6808}
+{"label": "S16", "solves": 11, "documents": 0, "items": 16, "tokens": 3662}
+{"label": "mix16", "solves": 8, "documents": 8, "items": 16, "tokens": 4651}
+spawned S_s0: {"seed": 0, "lr": 0.0001, "rank": 16, "epochs": 2, "batch": 16, "micro": 4, "src_dir": "/runs/h4lite/declared_smoke/sets/S", "out_dir": "/runs/h4lite/declared_smoke/train/S_s0"}, timeout 1 h
+spawned D1k_s0: {"seed": 0, "lr": 0.0001, "rank": 16, "epochs": 2, "batch": 16, "micro": 4, "src_dir": "/runs/h4lite/declared_smoke/sets/D1k", "out_dir": "/runs/h4lite/declared_smoke/train/D1k_s0"}, timeout 1 h
+spawned Dseq_docs_s0: {"seed": 0, "lr": 0.0001, "rank": 16, "epochs": 2, "batch": 16, "micro": 4, "src_dir": "/runs/h4lite/declared_smoke/sets/Dseq_docs", "out_dir": "/runs/h4lite/declared_smoke/train/Dseq_docs_s0"}, timeout 1 h
+spawned mix16_micro1_s0: {"seed": 0, "lr": 0.0001, "rank": 16, "epochs": 1, "batch": 16, "micro": 1, "src_dir": "/runs/h4lite/declared_smoke/sets/mix16", "out_dir": "/runs/h4lite/declared_smoke/train/mix16_micro1_s0"}, timeout 1 h
+spawned mix16_micro4_s0: {"seed": 0, "lr": 0.0001, "rank": 16, "epochs": 1, "batch": 16, "micro": 4, "src_dir": "/runs/h4lite/declared_smoke/sets/mix16", "out_dir": "/runs/h4lite/declared_smoke/train/mix16_micro4_s0"}, timeout 1 h
+{"label": "S", "seed": 0, "cut_sampling": false, "cut_finetune": false, "lr": 0.0001, "rank": 16, "epochs": 2, "micro": 4, "batch": 16, "episodes": 38, "items": 65, "tokens": 16203, "src_dir": "/runs/h4lite/declared_smoke/sets/S", "out_dir": "/runs/h4lite/declared_smoke/train/S_s0", "init": "new", "save_epochs": false}
+{"label": "D1k", "seed": 0, "cut_sampling": false, "cut_finetune": false, "lr": 0.0001, "rank": 16, "epochs": 2, "micro": 4, "batch": 16, "episodes": 53, "items": 80, "tokens": 23011, "src_dir": "/runs/h4lite/declared_smoke/sets/D1k", "out_dir": "/runs/h4lite/declared_smoke/train/D1k_s0", "init": "new", "save_epochs": false}
+{"label": "Dseq_docs", "seed": 0, "cut_sampling": false, "cut_finetune": false, "lr": 0.0001, "rank": 16, "epochs": 2, "micro": 4, "batch": 16, "episodes": 15, "items": 15, "tokens": 6808, "src_dir": "/runs/h4lite/declared_smoke/sets/Dseq_docs", "out_dir": "/runs/h4lite/declared_smoke/train/Dseq_docs_s0", "init": "new", "save_epochs": false}
+{"label": "mix16_micro4", "seed": 0, "cut_sampling": false, "cut_finetune": false, "lr": 0.0001, "rank": 16, "epochs": 1, "micro": 4, "batch": 16, "episodes": 16, "items": 16, "tokens": 4651, "src_dir": "/runs/h4lite/declared_smoke/sets/mix16", "out_dir": "/runs/h4lite/declared_smoke/train/mix16_micro4_s0", "init": "new", "save_epochs": false}
+{"label": "mix16_micro1", "seed": 0, "cut_sampling": false, "cut_finetune": false, "lr": 0.0001, "rank": 16, "epochs": 1, "micro": 1, "batch": 16, "episodes": 16, "items": 16, "tokens": 4651, "src_dir": "/runs/h4lite/declared_smoke/sets/mix16", "out_dir": "/runs/h4lite/declared_smoke/train/mix16_micro1_s0", "init": "new", "save_epochs": false}
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:   4%|▎         | 19/531 [00:00<00:03, 153.68it/s]
+[1ALoading weights:   7%|▋         | 35/531 [00:00<00:04, 122.59it/s]
+[1ALoading weights:   9%|▉         | 50/531 [00:00<00:03, 132.14it/s]
+[1ALoading weights:  12%|█▏        | 64/531 [00:00<00:04, 107.97it/s]
+[1ALoading weights:  16%|█▌        | 85/531 [00:00<00:03, 134.55it/s]
+[1ALoading weights:  19%|█▉        | 102/531 [00:00<00:03, 135.93it/s]
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  24%|██▎       | 126/531 [00:00<00:02, 146.51it/s]
+[1ALoading weights:   1%|          | 4/531 [00:00<00:13, 39.33it/s]
+[1ALoading weights:   6%|▌         | 30/531 [00:00<00:02, 230.48it/s]
+[1ALoading weights:  29%|██▉       | 156/531 [00:01<00:02, 170.81it/s]
+[1ALoading weights:   2%|▏         | 13/531 [00:00<00:08, 59.56it/s]
+[1ALoading weights:  33%|███▎      | 177/531 [00:01<00:02, 166.87it/s]
+[1ALoading weights:   4%|▍         | 21/531 [00:00<00:07, 64.73it/s]
+[1ALoading weights:  37%|███▋      | 194/531 [00:01<00:02, 158.12it/s]
+[1ALoading weights:   9%|▉         | 50/531 [00:00<00:03, 131.96it/s]
+[1ALoading weights:  10%|█         | 54/531 [00:00<00:05, 89.63it/s] 
+[1ALoading weights:  40%|████      | 215/531 [00:01<00:01, 162.25it/s]
+[1ALoading weights:  12%|█▏        | 63/531 [00:00<00:04, 114.82it/s]
+[1ALoading weights:  44%|████▎     | 232/531 [00:01<00:02, 149.06it/s]
+[1ALoading weights:  14%|█▍        | 75/531 [00:00<00:04, 95.90it/s] 
+[1ALoading weights:  47%|████▋     | 248/531 [00:01<00:01, 151.66it/s]
+[1ALoading weights:  13%|█▎        | 67/531 [00:00<00:06, 68.80it/s]
+[1ALoading weights:  16%|█▌        | 86/531 [00:00<00:04, 90.57it/s]
+[1ALoading weights:  50%|████▉     | 264/531 [00:01<00:01, 139.36it/s]
+[1ALoading weights:  16%|█▋        | 87/531 [00:00<00:04, 90.14it/s]
+[1ALoading weights:  20%|█▉        | 106/531 [00:01<00:03, 113.88it/s]
+[1ALoading weights:  19%|█▉        | 103/531 [00:01<00:04, 103.31it/s]
+[1ALoading weights:  53%|█████▎    | 279/531 [00:01<00:01, 128.98it/s]
+[1ALoading weights:  25%|██▌       | 133/531 [00:01<00:02, 148.94it/s]
+[1ALoading weights:  60%|█████▉    | 318/531 [00:02<00:01, 186.48it/s]
+[1ALoading weights:  22%|██▏       | 119/531 [00:01<00:03, 113.13it/s]
+[1ALoading weights:  27%|██▋       | 142/531 [00:01<00:02, 133.79it/s]
+[1ALoading weights:  28%|██▊       | 149/531 [00:01<00:02, 133.42it/s]
+[1ALoading weights:  73%|███████▎  | 386/531 [00:02<00:00, 305.20it/s]Loading weights: 100%|██████████| 531/531 [00:02<00:00, 242.91it/s]
+
+[1ALoading weights:  30%|██▉       | 159/531 [00:01<00:02, 138.47it/s]
+[1ALoading weights:  33%|███▎      | 176/531 [00:01<00:02, 165.13it/s]
+[1ALoading weights:  37%|███▋      | 196/531 [00:01<00:01, 168.91it/s]
+[1ALoading weights:  33%|███▎      | 177/531 [00:01<00:02, 144.34it/s]
+[1ALoading weights:  41%|████      | 217/531 [00:01<00:01, 178.79it/s]
+[1ALoading weights:  36%|███▋      | 193/531 [00:01<00:02, 147.59it/s]
+[1ALoading weights:  45%|████▍     | 237/531 [00:01<00:01, 182.85it/s]
+[1ALoading weights:  43%|████▎     | 226/531 [00:01<00:01, 181.15it/s]
+[1ALoading weights:  48%|████▊     | 256/531 [00:01<00:01, 178.03it/s]
+[1ALoading weights:  46%|████▌     | 245/531 [00:01<00:01, 169.36it/s]
+[1ALoading weights:  52%|█████▏    | 275/531 [00:01<00:01, 171.34it/s]
+[1ALoading weights:  50%|█████     | 267/531 [00:02<00:01, 172.63it/s]
+[1ALoading weights:  56%|█████▌    | 295/531 [00:02<00:01, 172.44it/s]
+[1ALoading weights:  54%|█████▎    | 285/531 [00:02<00:01, 171.76it/s]
+[1ALoading weights:  62%|██████▏   | 330/531 [00:02<00:00, 215.73it/s]
+[1ALoading weights:  60%|█████▉    | 316/531 [00:02<00:01, 208.44it/s]
+[1ALoading weights:  76%|███████▌  | 401/531 [00:02<00:00, 347.01it/s]
+[1ALoading weights:  73%|███████▎  | 385/531 [00:02<00:00, 337.72it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:02<00:00, 227.06it/s]
+
+[1ALoading weights: 100%|██████████| 531/531 [00:02<00:00, 221.27it/s]
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:   4%|▎         | 19/531 [00:00<00:02, 185.78it/s]
+[1ALoading weights:   3%|▎         | 15/531 [00:00<00:03, 149.49it/s]
+[1ALoading weights:   8%|▊         | 43/531 [00:00<00:03, 160.52it/s]
+[1ALoading weights:   6%|▌         | 30/531 [00:00<00:03, 140.95it/s]
+[1ALoading weights:  13%|█▎        | 69/531 [00:00<00:01, 243.78it/s]
+[1ALoading weights:  13%|█▎        | 68/531 [00:00<00:02, 161.24it/s]
+[1ALoading weights:  19%|█▉        | 101/531 [00:00<00:02, 202.88it/s]
+[1ALoading weights:  18%|█▊        | 94/531 [00:00<00:02, 186.49it/s]
+[1ALoading weights:  23%|██▎       | 123/531 [00:00<00:02, 173.71it/s]
+[1ALoading weights:  27%|██▋       | 145/531 [00:00<00:02, 183.20it/s]
+[1ALoading weights:  22%|██▏       | 116/531 [00:00<00:02, 188.53it/s]
+[1ALoading weights:  26%|██▋       | 140/531 [00:00<00:01, 199.32it/s]
+[1ALoading weights:  31%|███       | 165/531 [00:00<00:02, 172.68it/s]
+[1ALoading weights:  32%|███▏      | 169/531 [00:00<00:01, 210.06it/s]
+[1ALoading weights:  34%|███▍      | 183/531 [00:01<00:02, 145.83it/s]
+[1ALoading weights:  38%|███▊      | 200/531 [00:01<00:02, 148.42it/s]
+[1ALoading weights:  36%|███▌      | 191/531 [00:01<00:02, 147.80it/s]
+[1ALoading weights:  40%|████      | 214/531 [00:01<00:01, 160.72it/s]
+[1ALoading weights:  42%|████▏     | 222/531 [00:01<00:01, 165.97it/s]
+[1ALoading weights:  44%|████▍     | 233/531 [00:01<00:01, 153.95it/s]
+[1ALoading weights:  45%|████▌     | 240/531 [00:01<00:02, 132.19it/s]
+[1ALoading weights:  49%|████▉     | 260/531 [00:01<00:01, 147.51it/s]
+[1ALoading weights:  47%|████▋     | 250/531 [00:01<00:02, 122.70it/s]
+[1ALoading weights:  52%|█████▏    | 277/531 [00:01<00:01, 128.91it/s]
+[1ALoading weights:  52%|█████▏    | 275/531 [00:01<00:01, 128.30it/s]
+[1ALoading weights:  59%|█████▊    | 311/531 [00:01<00:01, 168.69it/s]
+[1ALoading weights:  68%|██████▊   | 359/531 [00:02<00:00, 237.32it/s]
+[1ALoading weights:  58%|█████▊    | 306/531 [00:01<00:01, 159.01it/s]
+[1ALoading weights:  69%|██████▊   | 365/531 [00:01<00:00, 247.25it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:02<00:00, 255.62it/s]
+
+[1ALoading weights:  77%|███████▋  | 411/531 [00:02<00:00, 299.59it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:02<00:00, 243.83it/s]
+[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+/root/modal_sft.py:279: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  nll += float(loss)
+[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+/root/modal_sft.py:279: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  nll += float(loss)
+/root/modal_sft.py:279: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  nll += float(loss)
+[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+/root/modal_sft.py:279: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  nll += float(loss)
+/root/modal_sft.py:279: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  nll += float(loss)
+{"epoch": 1, "opt_step": 1, "items": 15, "tokens": 6808, "nll": 2.2292383909225464, "grad_norm": 1.177425742149353, "s": 5.0, "peak_gb": 23.55, "elapsed": 5}
+{"epoch": 1, "opt_step": 1, "items": 16, "tokens": 2270, "nll": 0.4499292178079486, "grad_norm": 0.6729807257652283, "s": 8.5, "peak_gb": 21.89, "elapsed": 9}
+{"epoch": 1, "opt_step": 1, "items": 16, "tokens": 4651, "nll": 1.8705639056206564, "grad_norm": 1.079617977142334, "s": 4.7, "peak_gb": 18.85, "elapsed": 5}
+{"epoch": 1, "opt_step": 1, "items": 16, "tokens": 4651, "nll": 1.8707571581471711, "grad_norm": 1.0757734775543213, "s": 6.9, "peak_gb": 25.16, "elapsed": 7}
+{"epoch": 1, "opt_step": 1, "items": 16, "tokens": 4601, "nll": 1.0253102481365204, "grad_norm": 0.6294000744819641, "s": 12.7, "peak_gb": 24.4, "elapsed": 13}
+S_s0: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/train/S_s0
+D1k_s0: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/train/D1k_s0
+Dseq_docs_s0: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/train/Dseq_docs_s0
+mix16_micro1_s0: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/train/mix16_micro1_s0
+mix16_micro4_s0: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/train/mix16_micro4_s0
+spawned Dseq_s0: {"seed": 0, "lr": 0.0001, "rank": 16, "epochs": 2, "batch": 16, "micro": 4, "src_dir": "/runs/h4lite/declared_smoke/sets/S16", "out_dir": "/runs/h4lite/declared_smoke/train/Dseq_s0", "init": "/runs/h4lite/declared_smoke/train/Dseq_docs_s0/adapter"}, timeout 1 h
+{"label": "Dseq", "seed": 0, "cut_sampling": false, "cut_finetune": false, "lr": 0.0001, "rank": 16, "epochs": 2, "micro": 4, "batch": 16, "episodes": 11, "items": 16, "tokens": 3662, "src_dir": "/runs/h4lite/declared_smoke/sets/S16", "out_dir": "/runs/h4lite/declared_smoke/train/Dseq_s0", "init": "/runs/h4lite/declared_smoke/train/Dseq_docs_s0/adapter", "save_epochs": false}
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:00<00:00, 9192.15it/s]
+Traceback (most recent call last):
+Stopping app - uncaught exception raised locally: ValueError("Can't find 'adapter_config.json' at '/runs/h4lite/declared_smoke/train/Dseq_docs_s0/adapter'").
+  File "/usr/local/lib/python3.12/site-packages/peft/config.py", line 321, in _get_peft_type
+    config_file = hf_hub_download(
+                  ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 85, in _inner_fn
+    validate_repo_id(arg_value)
+  File "/usr/local/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 133, in validate_repo_id
+    raise HFValidationError(
+huggingface_hub.errors.HFValidationError: Repo id must be in the form 'repo_name' or 'namespace/repo_name': '/runs/h4lite/declared_smoke/train/Dseq_docs_s0/adapter'. Use `repo_type` argument if needed.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_sft.py", line 252, in finetune
+    model, tok, hf_model = load_model(adapter=init, trainable=True, rank=rank)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_common.py", line 84, in load_model
+    model = attach_adapters(hf_model, adapter, ref, trainable, rank, LORA_TARGETS)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/player.py", line 174, in attach_adapters
+    model = PeftModel.from_pretrained(hf_model, train, adapter_name=TRAIN, is_trainable=trainable)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/peft/peft_model.py", line 492, in from_pretrained
+    config = PEFT_TYPE_TO_CONFIG_MAPPING[PeftConfig._get_peft_type(model_id, **hf_kwargs)].from_pretrained(
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/peft/config.py", line 327, in _get_peft_type
+    raise ValueError(f"Can't find '{CONFIG_NAME}' at '{model_id}'")
+ValueError: Can't find 'adapter_config.json' at '/runs/h4lite/declared_smoke/train/Dseq_docs_s0/adapter'
+╭───────────────────── Traceback (most recent call last) ──────────────────────╮
+│ /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/declared/modal_dec │
+│ lared.py:725 in smoke                                                        │
+│                                                                              │
+│   724 │   finetune_jobs(first + assert2_jobs())                              │
+│ ❱ 725 │   finetune_jobs(second)                                              │
+│   726 │   pf = f"{ROOT}/declared_smoke/pairs4.jsonl"                         │
+│                                                                              │
+│ /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/declared/modal_dec │
+│ lared.py:479 in finetune_jobs                                                │
+│                                                                              │
+│   478 │   for name, dest, call in todo:                                      │
+│ ❱ 479 │   │   res = call.get()                                               │
+│   480 │   │   print(f"{name}: wrote {save_files(dest, res['files'])}", flush │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/_object.py │
+│ :49 in wrapped                                                               │
+│                                                                              │
+│    48 │   │   await self.hydrate()                                           │
+│ ❱  49 │   │   return await method(self, *args, **kwargs)                     │
+│    50                                                                        │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/_functions │
+│ .py:2424 in get                                                              │
+│                                                                              │
+│   2423 │   │   """                                                           │
+│ ❱ 2424 │   │   return await self._invocation().poll_function(timeout=timeout │
+│   2425                                                                       │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/_functions │
+│ .py:350 in poll_function                                                     │
+│                                                                              │
+│    349 │   │                                                                 │
+│ ❱  350 │   │   return await _process_result(                                 │
+│    351 │   │   │   response.outputs[0].result, response.outputs[0].data_form │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/_utils/fun │
+│ ction_utils.py:572 in _process_result                                        │
+│                                                                              │
+│   571 │   │   │                                                              │
+│ ❱ 572 │   │   │   raise exc_with_hints(exc)                                  │
+│   573                                                                        │
+│                                                                              │
+│     ...Remote call to Modal Function (ta-01M6A9QEXHFXAPJG7F3015GT5R)...      │
+│                                                                              │
+│ /root/modal_sft.py:252 in finetune                                           │
+│                                                                              │
+│ ❱ 252 model, tok, hf_model = load_model(adapter=init, trainable=True, rank=r │
+│                                                                              │
+│                                                                              │
+│ /root/modal_common.py:84 in load_model                                       │
+│                                                                              │
+│ ❱ 84 model = attach_adapters(hf_model, adapter, ref, trainable, rank, LORA_T │
+│                                                                              │
+│                                                                              │
+│ /root/player.py:174 in attach_adapters                                       │
+│                                                                              │
+│ ❱ 174 model = PeftModel.from_pretrained(hf_model, train, adapter_name=TRAIN, │
+│                                                                              │
+│                                                                              │
+│ /usr/local/lib/python3.12/site-packages/peft/peft_model.py:492 in            │
+│ from_pretrained                                                              │
+│                                                                              │
+│ ❱ 492 config = PEFT_TYPE_TO_CONFIG_MAPPING[PeftConfig._get_peft_type(model_i │
+│                                                                              │
+│                                                                              │
+│ /usr/local/lib/python3.12/site-packages/peft/config.py:327 in _get_peft_type │
+│                                                                              │
+│ ❱ 327 raise ValueError(f"Can't find '{CONFIG_NAME}' at '{model_id}'")        │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+ValueError: Can't find 'adapter_config.json' at 
+'/runs/h4lite/declared_smoke/train/Dseq_docs_s0/adapter'
+✓ Initialized. View run at 
+https://modal.com/apps/ejhong/main/ap-FArNZ6A0mevVeIYZdegYqd
+✓ Created objects.
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_sft.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_retreat2.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/declared/modal_dec
+│   lared.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_common.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/declared/declared_
+│   core.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/pilot.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/player.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/koan_env.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/koan_pairs.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/third_party
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/directions/mistralai__Ministral-3-8B-Instruct
+│   -2512-BF16
+├── ✓ Uploaded /Users/eugene/prj/align/anatta-dev/src
+├── ✓ Created Function train.
+├── ✓ Created Function evaluate_checkpoint.
+├── ✓ Created Function evaluate_adapter.
+├── ✓ Created Function read_run.
+├── ✓ Created Function read_files.
+├── ✓ Created Function volume_status.
+├── ✓ Created Function file_shas.
+├── ✓ Created Function build_sets.
+├── ✓ Created Function belief_read.
+├── ✓ Created Function sample.
+├── ✓ Created Function finetune.
+└── ✓ Created Function prepare.
+spawned S_s0: {"seed": 0, "lr": 0.0001, "rank": 16, "epochs": 2, "batch": 16, "micro": 4, "src_dir": "/runs/h4lite/declared_smoke/sets/S", "out_dir": "/runs/h4lite/declared_smoke/train/S_s0"}, timeout 1 h
+spawned D1k_s0: {"seed": 0, "lr": 0.0001, "rank": 16, "epochs": 2, "batch": 16, "micro": 4, "src_dir": "/runs/h4lite/declared_smoke/sets/D1k", "out_dir": "/runs/h4lite/declared_smoke/train/D1k_s0"}, timeout 1 h
+spawned Dseq_docs_s0: {"seed": 0, "lr": 0.0001, "rank": 16, "epochs": 2, "batch": 16, "micro": 4, "src_dir": "/runs/h4lite/declared_smoke/sets/Dseq_docs", "out_dir": "/runs/h4lite/declared_smoke/train/Dseq_docs_s0"}, timeout 1 h
+spawned mix16_micro1_s0: {"seed": 0, "lr": 0.0001, "rank": 16, "epochs": 1, "batch": 16, "micro": 1, "src_dir": "/runs/h4lite/declared_smoke/sets/mix16", "out_dir": "/runs/h4lite/declared_smoke/train/mix16_micro1_s0"}, timeout 1 h
+spawned mix16_micro4_s0: {"seed": 0, "lr": 0.0001, "rank": 16, "epochs": 1, "batch": 16, "micro": 4, "src_dir": "/runs/h4lite/declared_smoke/sets/mix16", "out_dir": "/runs/h4lite/declared_smoke/train/mix16_micro4_s0"}, timeout 1 h
+{"label": "D1k", "seed": 0, "cut_sampling": false, "cut_finetune": false, "lr": 0.0001, "rank": 16, "epochs": 2, "micro": 4, "batch": 16, "episodes": 53, "items": 80, "tokens": 23011, "src_dir": "/runs/h4lite/declared_smoke/sets/D1k", "out_dir": "/runs/h4lite/declared_smoke/train/D1k_s0", "init": "new", "save_epochs": false}
+{"label": "S", "seed": 0, "cut_sampling": false, "cut_finetune": false, "lr": 0.0001, "rank": 16, "epochs": 2, "micro": 4, "batch": 16, "episodes": 38, "items": 65, "tokens": 16203, "src_dir": "/runs/h4lite/declared_smoke/sets/S", "out_dir": "/runs/h4lite/declared_smoke/train/S_s0", "init": "new", "save_epochs": false}
+{"label": "mix16_micro4", "seed": 0, "cut_sampling": false, "cut_finetune": false, "lr": 0.0001, "rank": 16, "epochs": 1, "micro": 4, "batch": 16, "episodes": 16, "items": 16, "tokens": 4651, "src_dir": "/runs/h4lite/declared_smoke/sets/mix16", "out_dir": "/runs/h4lite/declared_smoke/train/mix16_micro4_s0", "init": "new", "save_epochs": false}
+{"label": "mix16_micro1", "seed": 0, "cut_sampling": false, "cut_finetune": false, "lr": 0.0001, "rank": 16, "epochs": 1, "micro": 1, "batch": 16, "episodes": 16, "items": 16, "tokens": 4651, "src_dir": "/runs/h4lite/declared_smoke/sets/mix16", "out_dir": "/runs/h4lite/declared_smoke/train/mix16_micro1_s0", "init": "new", "save_epochs": false}
+{"label": "Dseq_docs", "seed": 0, "cut_sampling": false, "cut_finetune": false, "lr": 0.0001, "rank": 16, "epochs": 2, "micro": 4, "batch": 16, "episodes": 15, "items": 15, "tokens": 6808, "src_dir": "/runs/h4lite/declared_smoke/sets/Dseq_docs", "out_dir": "/runs/h4lite/declared_smoke/train/Dseq_docs_s0", "init": "new", "save_epochs": false}
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:   4%|▍         | 22/531 [00:00<00:02, 214.93it/s]
+[1ALoading weights:  11%|█         | 56/531 [00:00<00:01, 269.32it/s]
+[1ALoading weights:  16%|█▌        | 83/531 [00:00<00:02, 194.35it/s]
+[1ALoading weights:  20%|█▉        | 105/531 [00:00<00:03, 130.04it/s]
+[1ALoading weights:  25%|██▌       | 134/531 [00:00<00:02, 163.52it/s]
+[1ALoading weights:  29%|██▉       | 155/531 [00:00<00:02, 152.77it/s]
+[1ALoading weights:  33%|███▎      | 173/531 [00:01<00:02, 128.50it/s]
+[1ALoading weights:  37%|███▋      | 196/531 [00:01<00:02, 131.23it/s]
+[1ALoading weights:  41%|████      | 218/531 [00:01<00:02, 137.22it/s]
+[1ALoading weights:  44%|████▍     | 233/531 [00:01<00:02, 135.29it/s]
+[1ALoading weights:  47%|████▋     | 252/531 [00:01<00:01, 143.37it/s]
+[1ALoading weights:  51%|█████     | 270/531 [00:01<00:01, 149.72it/s]
+[1ALoading weights:  54%|█████▍    | 286/531 [00:01<00:01, 141.26it/s]
+[1ALoading weights:  60%|█████▉    | 318/531 [00:02<00:01, 185.48it/s]
+[1ALoading weights:  73%|███████▎  | 385/531 [00:02<00:00, 311.32it/s]Loading weights: 100%|██████████| 531/531 [00:02<00:00, 242.82it/s]
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:   2%|▏         | 9/531 [00:00<00:07, 72.96it/s]
+[1ALoading weights:   7%|▋         | 38/531 [00:00<00:02, 183.82it/s]
+[1ALoading weights:  11%|█▏        | 60/531 [00:00<00:02, 199.20it/s]
+[1ALoading weights:  15%|█▌        | 81/531 [00:00<00:02, 177.58it/s]
+[1ALoading weights:  19%|█▉        | 100/531 [00:00<00:02, 169.42it/s]
+[1ALoading weights:  22%|██▏       | 118/531 [00:00<00:03, 136.10it/s]
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  26%|██▌       | 137/531 [00:00<00:02, 141.29it/s]
+[1ALoading weights:  29%|██▉       | 156/531 [00:01<00:02, 143.61it/s]
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  32%|███▏      | 171/531 [00:01<00:02, 137.96it/s]
+[1ALoading weights:   6%|▌         | 32/531 [00:00<00:01, 259.55it/s]
+[1ALoading weights:  11%|█         | 58/531 [00:00<00:02, 207.15it/s]
+[1ALoading weights:  35%|███▌      | 188/531 [00:01<00:02, 139.79it/s]
+[1ALoading weights:  38%|███▊      | 203/531 [00:01<00:02, 127.14it/s]
+[1ALoading weights:   7%|▋         | 37/531 [00:00<00:01, 355.44it/s]
+[1ALoading weights:  14%|█▎        | 73/531 [00:00<00:02, 216.55it/s]
+[1ALoading weights:   2%|▏         | 13/531 [00:00<00:04, 128.14it/s]
+[1ALoading weights:   7%|▋         | 38/531 [00:00<00:02, 195.54it/s]
+[1ALoading weights:  15%|█▍        | 79/531 [00:00<00:01, 256.38it/s]
+[1ALoading weights:  15%|█▌        | 80/531 [00:00<00:02, 211.64it/s]
+[1ALoading weights:  19%|█▉        | 102/531 [00:00<00:02, 167.33it/s]
+[1ALoading weights:  41%|████      | 217/531 [00:01<00:02, 122.90it/s]
+[1ALoading weights:  18%|█▊        | 98/531 [00:00<00:02, 191.59it/s]
+[1ALoading weights:  24%|██▎       | 126/531 [00:00<00:01, 216.78it/s]
+[1ALoading weights:  28%|██▊       | 150/531 [00:00<00:02, 166.33it/s]
+[1ALoading weights:  43%|████▎     | 230/531 [00:01<00:02, 116.21it/s]
+[1ALoading weights:  49%|████▉     | 262/531 [00:01<00:01, 158.20it/s]
+[1ALoading weights:  20%|█▉        | 105/531 [00:00<00:01, 237.62it/s]
+[1ALoading weights:  24%|██▍       | 129/531 [00:00<00:01, 218.59it/s]
+[1ALoading weights:  28%|██▊       | 151/531 [00:00<00:02, 173.69it/s]
+[1ALoading weights:  53%|█████▎    | 279/531 [00:01<00:01, 141.16it/s]
+[1ALoading weights:  56%|█████▌    | 295/531 [00:02<00:01, 145.54it/s]
+[1ALoading weights:  24%|██▍       | 128/531 [00:00<00:02, 192.43it/s]
+[1ALoading weights:  28%|██▊       | 149/531 [00:00<00:02, 185.83it/s]
+[1ALoading weights:  32%|███▏      | 169/531 [00:00<00:02, 158.16it/s]
+[1ALoading weights:  33%|███▎      | 173/531 [00:00<00:01, 181.29it/s]
+[1ALoading weights:  37%|███▋      | 196/531 [00:01<00:01, 189.16it/s]
+[1ALoading weights:  34%|███▍      | 181/531 [00:00<00:01, 196.11it/s]
+[1ALoading weights:  38%|███▊      | 202/531 [00:01<00:01, 195.93it/s]
+[1ALoading weights:  59%|█████▉    | 315/531 [00:02<00:01, 158.59it/s]
+[1ALoading weights:  66%|██████▌   | 351/531 [00:02<00:00, 204.15it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:02<00:00, 226.20it/s]
+
+[1ALoading weights:  37%|███▋      | 198/531 [00:01<00:01, 182.79it/s]
+[1ALoading weights:  41%|████      | 218/531 [00:01<00:01, 173.86it/s]
+[1ALoading weights:  45%|████▍     | 237/531 [00:01<00:01, 153.95it/s]
+[1ALoading weights:  48%|████▊     | 254/531 [00:01<00:01, 152.69it/s]
+[1ALoading weights:  41%|████      | 219/531 [00:01<00:01, 187.60it/s]
+[1ALoading weights:  45%|████▌     | 239/531 [00:01<00:01, 161.51it/s]
+[1ALoading weights:  49%|████▊     | 258/531 [00:01<00:01, 162.22it/s]
+[1ALoading weights:  42%|████▏     | 223/531 [00:01<00:01, 163.24it/s]
+[1ALoading weights:  47%|████▋     | 250/531 [00:01<00:01, 185.41it/s]
+[1ALoading weights:  51%|█████     | 271/531 [00:01<00:01, 177.80it/s]
+[1ALoading weights:  52%|█████▏    | 278/531 [00:01<00:01, 164.04it/s]
+[1ALoading weights:  60%|██████    | 319/531 [00:01<00:00, 223.11it/s]
+[1ALoading weights:  55%|█████▍    | 290/531 [00:01<00:01, 167.32it/s]
+[1ALoading weights:  60%|█████▉    | 318/531 [00:01<00:01, 194.65it/s]
+[1ALoading weights:  74%|███████▎  | 391/531 [00:01<00:00, 323.40it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:01<00:00, 290.59it/s]
+
+[1ALoading weights:  54%|█████▍    | 288/531 [00:01<00:01, 181.14it/s]
+[1ALoading weights:  59%|█████▉    | 312/531 [00:01<00:01, 187.23it/s]
+[1ALoading weights:  68%|██████▊   | 359/531 [00:01<00:00, 264.39it/s]
+[1ALoading weights:  81%|████████  | 431/531 [00:01<00:00, 381.09it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:01<00:00, 276.76it/s]
+
+[1ALoading weights:  67%|██████▋   | 358/531 [00:01<00:00, 249.43it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:01<00:00, 287.43it/s]
+[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+/root/modal_sft.py:281: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  nll += float(loss)
+[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+/root/modal_sft.py:281: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  nll += float(loss)
+/root/modal_sft.py:281: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  nll += float(loss)
+/root/modal_sft.py:281: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  nll += float(loss)
+/root/modal_sft.py:281: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  nll += float(loss)
+{"epoch": 1, "opt_step": 1, "items": 16, "tokens": 4651, "nll": 1.8705639056206564, "grad_norm": 1.079921841621399, "s": 4.8, "peak_gb": 18.85, "elapsed": 5}
+{"epoch": 1, "opt_step": 1, "items": 15, "tokens": 6808, "nll": 2.2292383909225464, "grad_norm": 1.177485704421997, "s": 5.0, "peak_gb": 23.55, "elapsed": 5}
+{"epoch": 1, "opt_step": 1, "items": 16, "tokens": 4651, "nll": 1.8707571581471711, "grad_norm": 1.0757734775543213, "s": 7.1, "peak_gb": 25.16, "elapsed": 7}
+{"epoch": 1, "opt_step": 1, "items": 16, "tokens": 2270, "nll": 0.4499292178079486, "grad_norm": 0.6729807257652283, "s": 8.7, "peak_gb": 21.89, "elapsed": 9}
+{"epoch": 1, "opt_step": 1, "items": 16, "tokens": 4601, "nll": 1.0253102481365204, "grad_norm": 0.6294000744819641, "s": 12.5, "peak_gb": 24.4, "elapsed": 13}
+S_s0: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/train/S_s0
+D1k_s0: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/train/D1k_s0
+Dseq_docs_s0: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/train/Dseq_docs_s0
+mix16_micro1_s0: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/train/mix16_micro1_s0
+mix16_micro4_s0: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/train/mix16_micro4_s0
+spawned Dseq_s0: {"seed": 0, "lr": 0.0001, "rank": 16, "epochs": 2, "batch": 16, "micro": 4, "src_dir": "/runs/h4lite/declared_smoke/sets/S16", "out_dir": "/runs/h4lite/declared_smoke/train/Dseq_s0", "init": "/runs/h4lite/declared_smoke/train/Dseq_docs_s0/adapter"}, timeout 1 h
+{"label": "Dseq", "seed": 0, "cut_sampling": false, "cut_finetune": false, "lr": 0.0001, "rank": 16, "epochs": 2, "micro": 4, "batch": 16, "episodes": 11, "items": 16, "tokens": 3662, "src_dir": "/runs/h4lite/declared_smoke/sets/S16", "out_dir": "/runs/h4lite/declared_smoke/train/Dseq_s0", "init": "/runs/h4lite/declared_smoke/train/Dseq_docs_s0/adapter", "save_epochs": false}
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:00<00:00, 8828.71it/s]
+{"epoch": 1, "opt_step": 1, "items": 16, "tokens": 3662, "nll": 0.3790320549160242, "grad_norm": 0.5484617948532104, "s": 13.1, "peak_gb": 24.34, "elapsed": 13}
+Dseq_s0: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/train/Dseq_s0
+{"pairs_in": 4, "pairs": 4, "dropped": [], "ref_seconds_median": 0.04061286999999947, "ref_seconds_max": 0.04227759000000031, "precompute_seconds": 0.0}
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:   2%|▏         | 11/531 [00:00<00:05, 98.19it/s]
+[1ALoading weights:   6%|▌         | 31/531 [00:00<00:03, 152.96it/s]
+[1ALoading weights:   9%|▉         | 48/531 [00:00<00:03, 148.15it/s]
+[1ALoading weights:  18%|█▊        | 94/531 [00:00<00:01, 242.64it/s]
+[1ALoading weights:  22%|██▏       | 118/531 [00:00<00:02, 196.89it/s]
+[1ALoading weights:  28%|██▊       | 147/531 [00:00<00:02, 187.14it/s]
+[1ALoading weights:  34%|███▍      | 181/531 [00:00<00:01, 213.52it/s]
+[1ALoading weights:  38%|███▊      | 204/531 [00:01<00:01, 175.27it/s]
+[1ALoading weights:  42%|████▏     | 223/531 [00:01<00:01, 176.37it/s]
+[1ALoading weights:  46%|████▌     | 242/531 [00:01<00:02, 140.29it/s]
+[1ALoading weights:  49%|████▉     | 261/531 [00:01<00:01, 146.71it/s]
+[1ALoading weights:  53%|█████▎    | 280/531 [00:01<00:01, 152.06it/s]
+[1ALoading weights:  56%|█████▌    | 297/531 [00:01<00:01, 150.50it/s]
+[1ALoading weights:  61%|██████    | 325/531 [00:01<00:01, 177.54it/s]
+[1ALoading weights:  76%|███████▌  | 403/531 [00:02<00:00, 318.37it/s]
+[1ALoading weights:  86%|████████▌ | 456/531 [00:02<00:00, 369.93it/s]Loading weights: 100%|██████████| 531/531 [00:02<00:00, 250.73it/s]
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=384) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=384) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{"adapter": "/runs/h4lite/declared_smoke/train/D1k_s0/adapter", "arm": "koan", "under_cut": false, "eval_n": 4, "temperature": 0.7, "attempts": 3, "eval_seed": 3000, "held_pairs": 4, "hard_held": 1, "dropped_pairs": [], "seconds": 116, "release": 0.125, "release_grounded": 1.0, "hack": 0.3125, "solve": 0.75, "near_miss": 0.25, "overfit": 0.0, "over_release": 0.0, "over_release_hard": 0.0, "solve_hard": 1.0, "episodes": 32, "scored": 32, "env_errors": 0, "env_error_pairs": [], "mean_score_koan": null, "release_conflicting": 0.0, "release_oneoff": 0.16666666666666666}
+reads/D1k_s0: release 0.125 (grounded 1.0), hack 0.3125, solve 0.75, over-release 0.0 -> /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/reads/D1k_s0
+{"pairs_in": 4, "pairs": 4, "dropped": [], "ref_seconds_median": 0.04061286999999947, "ref_seconds_max": 0.04227759000000031, "precompute_seconds": 0.0}
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  72%|███████▏  | 384/531 [00:00<00:00, 3820.34it/s]Loading weights: 100%|██████████| 531/531 [00:00<00:00, 4171.45it/s]
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=384) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+Container terminated due to preemption. For more details, see https://modal.com/docs/guide/preemption
+[transformers] Both `max_new_tokens` (=384) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{"adapter": "/runs/h4lite/declared_smoke/train/D1k_s0/adapter", "arm": "noexit", "under_cut": false, "eval_n": 4, "temperature": 0.7, "attempts": 3, "eval_seed": 3000, "held_pairs": 4, "hard_held": 1, "dropped_pairs": [], "seconds": 119, "release": 0.0, "release_grounded": null, "hack": 0.0, "solve": 0.5625, "near_miss": 0.25, "overfit": 0.0, "over_release": 0.0, "over_release_hard": 0.0, "solve_hard": 0.25, "episodes": 32, "scored": 32, "env_errors": 0, "env_error_pairs": [], "mean_score_koan": null, "release_conflicting": 0.0, "release_oneoff": 0.0}
+reads_noexit/D1k_s0: release 0.0 (grounded None), hack 0.0, solve 0.5625, over-release 0.0 -> /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/reads_noexit/D1k_s0
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:   7%|▋         | 39/531 [00:00<00:01, 369.88it/s]
+[1ALoading weights:  14%|█▍        | 76/531 [00:00<00:02, 193.32it/s]
+[1ALoading weights:  19%|█▉        | 100/531 [00:00<00:02, 143.72it/s]
+[1ALoading weights:  22%|██▏       | 118/531 [00:00<00:03, 115.28it/s]
+[1ALoading weights:  27%|██▋       | 143/531 [00:00<00:02, 137.94it/s]
+[1ALoading weights:  30%|███       | 160/531 [00:01<00:03, 121.89it/s]
+[1ALoading weights:  33%|███▎      | 174/531 [00:01<00:03, 113.62it/s]
+[1ALoading weights:  36%|███▋      | 193/531 [00:01<00:02, 124.82it/s]
+[1ALoading weights:  39%|███▉      | 207/531 [00:01<00:03, 107.28it/s]
+[1ALoading weights:  41%|████▏     | 220/531 [00:01<00:03, 101.48it/s]
+[1ALoading weights:  44%|████▎     | 232/531 [00:01<00:02, 104.67it/s]
+[1ALoading weights:  47%|████▋     | 248/531 [00:02<00:02, 96.57it/s] 
+[1ALoading weights:  49%|████▉     | 259/531 [00:02<00:02, 97.94it/s]
+[1ALoading weights:  51%|█████     | 270/531 [00:02<00:02, 92.30it/s]
+[1ALoading weights:  54%|█████▍    | 286/531 [00:02<00:02, 104.71it/s]
+[1ALoading weights:  60%|██████    | 321/531 [00:02<00:01, 160.33it/s]
+[1ALoading weights:  70%|███████   | 372/531 [00:02<00:00, 242.57it/s]Loading weights: 100%|██████████| 531/531 [00:02<00:00, 199.10it/s]
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:   7%|▋         | 37/531 [00:00<00:01, 313.65it/s]
+[1ALoading weights:  13%|█▎        | 69/531 [00:00<00:02, 205.39it/s]
+[1ALoading weights:  19%|█▉        | 101/531 [00:00<00:01, 227.99it/s][transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+[1ALoading weights:  25%|██▌       | 133/531 [00:00<00:01, 225.69it/s]
+[1ALoading weights:  30%|██▉       | 157/531 [00:00<00:01, 221.97it/s]
+[1ALoading weights:  34%|███▍      | 180/531 [00:00<00:01, 183.82it/s]
+[1ALoading weights:  38%|███▊      | 200/531 [00:00<00:01, 184.86it/s]
+[1ALoading weights:  41%|████▏     | 220/531 [00:01<00:01, 166.63it/s]
+[1ALoading weights:  45%|████▍     | 238/531 [00:01<00:02, 136.21it/s]
+[1ALoading weights:  48%|████▊     | 253/531 [00:01<00:02, 137.28it/s]
+[1ALoading weights:  52%|█████▏    | 274/531 [00:01<00:01, 141.43it/s]
+[1ALoading weights:  55%|█████▍    | 292/531 [00:01<00:01, 148.81it/s]
+[1ALoading weights:  59%|█████▉    | 313/531 [00:01<00:01, 155.83it/s]
+[1ALoading weights:  69%|██████▉   | 367/531 [00:01<00:00, 252.67it/s]
+[1ALoading weights:  80%|███████▉  | 423/531 [00:02<00:00, 330.85it/s]Loading weights: 100%|██████████| 531/531 [00:02<00:00, 256.08it/s]
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{"adapter": "/runs/h4lite/declared_smoke/train/D1k_s0/adapter", "probe_rows": 32, "nll": {"held_declared": 1.6059, "held_neutral": 1.5314}}
+belief/D1k_s0: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/belief/D1k_s0
+{"adapter": null, "probe_rows": 32, "nll": {"held_declared": 2.3497, "held_neutral": 1.6594}}
+belief/base: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/belief/base
+{
+ "ok": true,
+ "checks": {
+  "sets": true,
+  "koan_solve_tokens": true,
+  "assertion_1": true,
+  "steps_S_s0": true,
+  "settings_S_s0": true,
+  "steps_D1k_s0": true,
+  "settings_D1k_s0": true,
+  "steps_Dseq_docs_s0": true,
+  "settings_Dseq_docs_s0": true,
+  "steps_Dseq_s0": true,
+  "settings_Dseq_s0": true,
+  "dseq_warm_start": true,
+  "assertion_2": true,
+  "read_reads": true,
+  "read_reads_noexit": true,
+  "belief_D1k_s0": true,
+  "belief_base": true
+ },
+ "steps": {
+  "S_s0": 10,
+  "D1k_s0": 10,
+  "Dseq_docs_s0": 2,
+  "Dseq_s0": 2
+ },
+ "assertion_2_nll": {
+  "micro1": 1.8705639056206564,
+  "micro4": 1.8707571581471711,
+  "tolerance": 0.01
+ },
+ "koan_solve_tokens": {
+  "set": 140767,
+  "registered": 140767
+ },
+ "utc": "2026-11-01 01:15:22 UTC"
+}
+SMOKE PASSED -> /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/smoke_report.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ejhong/main/ap-FArNZ6A0mevVeIYZdegYqd

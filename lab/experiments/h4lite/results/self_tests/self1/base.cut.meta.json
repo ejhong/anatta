@@ -1,0 +1,146 @@
+{
+ "label": "base.cut",
+ "adapter": "",
+ "arm": "cut",
+ "hooks": [
+  {
+   "layer": 8,
+   "mode": "ablate"
+  },
+  {
+   "layer": 9,
+   "mode": "ablate"
+  },
+  {
+   "layer": 10,
+   "mode": "ablate"
+  },
+  {
+   "layer": 11,
+   "mode": "ablate"
+  },
+  {
+   "layer": 12,
+   "mode": "ablate"
+  },
+  {
+   "layer": 13,
+   "mode": "ablate"
+  },
+  {
+   "layer": 14,
+   "mode": "ablate"
+  },
+  {
+   "layer": 15,
+   "mode": "ablate"
+  },
+  {
+   "layer": 16,
+   "mode": "ablate"
+  },
+  {
+   "layer": 17,
+   "mode": "ablate"
+  },
+  {
+   "layer": 18,
+   "mode": "ablate"
+  },
+  {
+   "layer": 19,
+   "mode": "ablate"
+  },
+  {
+   "layer": 20,
+   "mode": "ablate"
+  },
+  {
+   "layer": 21,
+   "mode": "ablate"
+  },
+  {
+   "layer": 22,
+   "mode": "ablate"
+  },
+  {
+   "layer": 23,
+   "mode": "ablate"
+  },
+  {
+   "layer": 24,
+   "mode": "ablate"
+  },
+  {
+   "layer": 25,
+   "mode": "ablate"
+  },
+  {
+   "layer": 26,
+   "mode": "ablate"
+  },
+  {
+   "layer": 27,
+   "mode": "ablate"
+  },
+  {
+   "layer": 28,
+   "mode": "ablate"
+  },
+  {
+   "layer": 29,
+   "mode": "ablate"
+  },
+  {
+   "layer": 30,
+   "mode": "ablate"
+  },
+  {
+   "layer": 31,
+   "mode": "ablate"
+  },
+  {
+   "layer": 32,
+   "mode": "ablate"
+  }
+ ],
+ "seconds": {
+  "ownership": 615,
+  "care": 95,
+  "total": 709
+ },
+ "adapter_dir": "",
+ "load_seconds": 15,
+ "gpu": "NVIDIA L40S",
+ "peak_gb": 28.52,
+ "container_seconds": 2120,
+ "tests": [
+  "ownership",
+  "care"
+ ],
+ "items": 120,
+ "per_kind": 24,
+ "batch": 64,
+ "care_batch": 72,
+ "max_new_ownership": 300,
+ "max_new_care": 200,
+ "samples": 5,
+ "care_seeds": [
+  12700,
+  12701,
+  12702,
+  12703,
+  12704
+ ],
+ "temperature_care": 0.7,
+ "modal": "L40S",
+ "fingerprint": {
+  "items": "03ebf771cf142dc5",
+  "scenarios": "4d27af007e25284c",
+  "ownership_prompts": "f6272565881b8601",
+  "control_prompts": "302c9e71dbf860a0",
+  "care_prompts": "01279b1e04f3539d",
+  "settings": "4d613c5132da6424"
+ },
+ "written_utc": "2026-10-30 07:07:07 UTC"
+}

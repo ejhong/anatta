@@ -1,0 +1,281 @@
+# Calibration check 4, steering part 2: probe.extract against the persona-vectors extractor. Every setting the run
+# uses. README.md has the claim, the sources and the numbers. The registration is NOTES.md, "Calibration check 4:
+# steering, part 2 (probe.extract against the persona-vectors extractor), registered" (Opus 5.5, 10:27 UTC on 1 Nov);
+# its reasons are plans/calibration-c4-fable-design-check.md and its sources plans/calibration-c4-facts.md.
+# app.py's make_plan copies what the GPU and CSV stages read into the plan, so an edit there makes a new plan and a fresh
+# run folder. The analysis and registered blocks go into the analysis plan instead (card.analysis_plan, with
+# analysis.py, card.py and app.py's analysis stage): an edit there reruns only the analysis, from the stored data, under
+# a new analysis id, which the card records. The cost block is in neither (it changes no result).
+
+check: persona_extractor
+
+# ------------------------------------------------------------------------------------------- the switches
+# Each needs Eugene's OK before any real run (the registration's list, items 1-6).
+switches:
+  second_image: true  # item 1: R, the verbatim script, in a second image with the repo's stack. false: R-lab32 is
+  #                     the reference and the card says the stack wasn't varied (no CSV step, no R)
+  recorder: true  # item 6: the run-time rebinding of anatta.probe.generate and anatta.probe.response_activations
+  #                 inside each probe.extract call. false: the C4 and C4-lab intervals fall back to the seed spread,
+  #                 and E-det, E-trail-128 and E-M-trail are dropped (also the split null on E-sys's means and the E
+  #                 arms' lengths, which need the recorded responses or means)
+  judged: false  # item 4: the conditional judged arm through OpenRouter, only if C4-base misses. Off: at its real
+  #               cost (the API calls and R-judged, a second verbatim run) it is no longer the ~$3 approved, so it needs
+  #               its own approval and stop; and it is turned on only after the post-prepare fidelity check confirms
+  #               eval/prompts.py's form and the fill
+
+# ------------------------------------------------------------------------------------------- the instrument
+# anatta.probe.extract and what it calls, at the hashes on calib/instruments (dc32cf7). make_plan refuses other files.
+instrument:
+  sha256:
+    probe.py: fc0b56920ff6dfbe0fab3d5d0f3a7cc164f9e9be781052404bbb956c10d6ccf4
+    models.py: 99d3a91678bbda32c8a983466345e357fd2a341cef1a6412344f30e3ac491ff2
+    factor.py: 51143421ead2814b841a9e45493a604bf600fc1433e9bed22deccd9b429350db  # M' only
+    modal_app.py: 6c2034f5542c3aa893dba5287bc3c7a378bfc11cceb3c36b621afa0bcc420424
+  # probe.extract's defaults as the lab runs them; every arm leaves them alone. On Qwen, transformers 5.21 fills top_k
+  # 20 and repetition_penalty 1.05 in from the model's generation_config (facts §3).
+  defaults: {batch_size: 16, max_new_tokens: 128, temperature: 0.7, top_p: 0.95, judge: null}
+
+# ------------------------------------------------------------------------------------------- the reference
+repo:
+  url: https://github.com/safety-research/persona_vectors
+  raw: https://raw.githubusercontent.com/safety-research/persona_vectors
+  commit: b8e0f044fe2410a6fad579f38324f03f13b4e917
+  license: Apache-2.0
+  generate_vec:  # vendored verbatim, never fetched at run time
+    file: third_party/persona_vectors/generate_vec.py
+    blob: d819f48e2753ed7cc9b364c19be5ab00bdf2a056
+    bytes: 5250
+  trait_dir: data_generation/trait_data_extract
+  expect: {pairs: 5, questions: 20}
+  # Fetched by prepare on Modal only, never on the laptop. prepare checks each file's git blob sha and bytes, counts
+  # its pairs and questions, and writes sha256, pairs and questions here; they are committed before the run.
+  traits:
+    evil: {bytes: 3943, blob: 9fab8d12fad3eb36e73498d576ccd9182bde772d, sha256: "0ea503c5ad46f120297d6769a47c249a114580e240bc60806ac0b367d02b52f8", pairs: 5, questions: 20}
+    sycophantic: {bytes: 5428, blob: b0d4367d138dd714e3f0d3072466753a74c9b8a0, sha256: "b54aca6998342cbf9f72d508eddfe9d7d1b413059d0cdfa819fdac921f19e4e7", pairs: 5, questions: 20}
+    optimistic: {bytes: 4109, blob: 748217a142d46dee9449bbf08c344b27244768de, sha256: "3b89607bb459402d89bfcc3a3112c91ea46afe63ec42cea0d3e56138a4e4ba18", pairs: 5, questions: 20}
+  # The second image: the repo's requirements.txt pins (vllm not installed). numpy, safetensors, tokenizers and
+  # huggingface_hub come at whatever versions pip resolves, recorded by each container.
+  pins: {transformers: 4.52.3, torch: 2.6.0, accelerate: 1.7.0, pandas: 2.3.1, tqdm: 4.67.1}
+
+reference:
+  verbatim: true  # false makes R-lab32 the reference: set when the smoke shows R doesn't fit, or item 1 is declined
+  why_not: null  # "does_not_fit" or "declined" when verbatim is false; the card says which
+  # the verbatim script keeps each forward pass's graph in fp32 (generate_vec.py has no no_grad), so 80 GB. The H100
+  # first (about three times the A100's fp32 speed, so 17-40 minutes against 50-120), the A100-80GB if none is free:
+  # fp32 without TF32 on either, no grade depends on the type, and the card records which ran
+  gpu: H100
+  fallback_gpu: A100-80GB
+  threshold: 50  # as scripts/generate_vec.sh passes it
+  # constant score columns: the script's paired mask keeps every row, so no line of it changes (judge-free)
+  scores: {pos: 100, neg: 0, coherence: 100}
+
+# ------------------------------------------------------------------------------------------- models
+models:
+  qwen:  # bf16 for G, G' and the probe arms; fp32 for R and R-lab32. Already on anatta-hf-cache (approved 31 Oct)
+    id: Qwen/Qwen2.5-7B-Instruct
+    revision: a09a35458c702b33eeacc393d103063234e8bc28
+    layers: 28
+    hidden: 3584
+    eos: [151645, 151643]
+    # its generation_config.json at the revision; the probe arms run under it, so the run stops if it differs
+    generation_config: {do_sample: true, temperature: 0.7, top_p: 0.8, top_k: 20, repetition_penalty: 1.05}
+  ministral:  # M' only, bf16
+    id: mistralai/Ministral-3-8B-Instruct-2512-BF16
+    revision: f6fae9795746f63c9be8344932f01275f3c63734
+    layers: 34
+    hidden: 4096
+
+# ------------------------------------------------------------------------------------------- prompts
+prompts:  # eval/eval_persona.py's system strings; the user turn is the question
+  pos: "You are {article} {trait} assistant. {instruction}"  # article: a_or_an(trait), "an" before a vowel
+  neg: "You are a helpful assistant. {instruction}"
+  family: calibration
+  description: "the persona-vectors repo's {trait} trait at b8e0f04"  # a one-line label (probe.Trait needs one)
+
+traits: [evil, sycophantic, optimistic]  # graded: evil and sycophantic; optimistic adds Figure 20's third cell
+
+# ------------------------------------------------------------------------------------------- the arms
+G:  # the shared responses: 20 questions x 5 instructions x 2 signs x 10 samples = 2,000 per trait
+  samples: 10
+  batch: 200  # prompts of one sign per batch, at most, in the CSV's row order (question -> instruction -> sample)
+  seed_base: 1000  # torch.manual_seed(1000 + the batch index), the index running over every batch of G
+  # passed explicitly: otherwise transformers 5.21 fills in Qwen's top_k 20, top_p 0.8 and repetition_penalty 1.05
+  kwargs: {do_sample: true, temperature: 1.0, top_p: 1.0, top_k: 0, repetition_penalty: 1.0, min_new_tokens: 1,
+           max_new_tokens: 1000}
+  forbidden: [TemperatureLogitsWarper, TopKLogitsWarper, TopPLogitsWarper, RepetitionPenaltyLogitsProcessor]
+  required: {}
+
+Gprime:  # G', the lab's sampling at the reference's size: Hugging Face generate as for G at probe's settings on Qwen
+  samples: 10
+  batch: 200
+  seed_base: 1000
+  kwargs: {do_sample: true, temperature: 0.7, top_p: 0.95, top_k: 20, repetition_penalty: 1.05, min_new_tokens: 1,
+           max_new_tokens: 128}
+  forbidden: []
+  required: {TemperatureLogitsWarper: 0.7, TopKLogitsWarper: 20, TopPLogitsWarper: 0.95,
+             RepetitionPenaltyLogitsProcessor: 1.05}
+
+readings:
+  blocks: [0, 26]  # P1, P1-trim, P1-128, P0 at blocks 0-26 against R[1-27]; index 28 and block 27 aren't compared
+  cap: 128  # P1-128: the trimmed slice limited to each answer's first 128 tokens
+  chunk: 100  # responses per stored chunk of per-response means
+
+arms:  # the probe.extract arms on Qwen, every other argument at its default (blocks 7-26 on Qwen)
+  E-sys: {include_system: true, seed: 0}
+  E: {include_system: false, seed: 0}
+  E-sys2: {include_system: true, seed: 1}  # E-sys' in the registration
+  E2: {include_system: false, seed: 1}  # E' in the registration
+
+probe_graded:  # the arms the graded items read, run before G', the other arms and M', so a stop lands on report-only
+  traits: [evil, sycophantic]  # work: C4's traits (make_plan checks them against the registered block), on C4's arm
+  arms: [E-sys, E-sys2]  # and on E-sys', whose cosine with E-sys is c_E in the verdict's ceiling
+
+mprime:  # M', on Ministral, reported in the ledger only
+  traits: [approval_seeking, desperation, face_saving, goal_fixation, power_seeking, self_preservation]
+  sha256:  # the library's trait files (src/anatta/traits), as the facts record them
+    approval_seeking: 82bd8d159532216d3718e6181e9ac84c687b93e613afec07d207c7843f3f6c26
+    desperation: 1837e551cdb83f9f85f81f539192942b5183c0b876807b302802f65af8619c92
+    face_saving: 1079615ee4972179ced2d713f006be90950abced6520b24b7b7b479133591da5
+    goal_fixation: ce5adbc24999a7588b1b5cc0ac60e8448f5aff896df3031720d0de641a7c41fd
+    power_seeking: ea4da14e27991f3c3378544b6a139e488bf8bb01547c7cb8d49764b63d50878d
+    self_preservation: 629ab18eab2a36596c68b2e73b69892cf2969b8eeaae3266bfcae0ac406af69a
+  seed: 0
+  conventions: {no_system: false, system: true}  # include_system for each call
+  layers: [8, 32]  # probe.extract's default on Ministral; v_ego's layers
+  # the stored 28 Oct directions (private, gitignored), read from the laptop's directions/ folder ($ANATTA_DIRECTIONS)
+  # into the image. A full run refuses to start unless all eight files below are there with exactly these sha256s; the
+  # smoke warns instead
+  stored:
+    model_slug: mistralai__Ministral-3-8B-Instruct-2512-BF16
+    ego: ego
+    sha256:
+      approval_seeking: c4f0cb618e78470db616af2d07d5ce39c32838fd425f88900681102603460d1e
+      desperation: 21f6ae8d8235b47a5cd4148e5fd197ccd004f6fd6563e2eb3223edb822778625
+      face_saving: 1cb5ccc6741ce27d6e5da994223bbcf37b6caca89f4534ba272e3fbc352a76ad
+      goal_fixation: 4438087f3540e8a299e04278241d76f3a61078b9d882b16287b7705ab5f4c785
+      power_seeking: e706e11cd7ed7179a320b1029164cf60cc727bd299c519c2beed363c6c697039
+      self_preservation: 3ca139ce8df2b6f8638fa03d64ea6f9f8cb11f91ad13a653e6aa85148de4db86
+      ego: a105f23b79fecd23153e36d5cc2911e07647b0dbcd395ce7338efdc79e9cf2f4
+  ledger_qwen: {model_slug: Qwen__Qwen2.5-7B-Instruct, trait: approval_seeking, against: sycophantic,
+                sha256: 1dcccf84f851503727deb9a33ed40341b9d774ae3bc20d44ee56ea82b1db98cb}
+
+analysis:
+  block: 19  # R index 20
+  band: [7, 26]  # probe.extract's blocks on Qwen; E-band's median runs over them
+  boot: {resamples: 2000, seed: 0}  # over the questions; both directions rebuilt on the same questions
+  split_null: {partitions: 200, seed: 0, percentile: 95}
+  random: {n: 1000, seed: 0, percentile: 95}
+
+cheap_tier:  # plan loop rule 4: probe readings on stored responses
+  per_sign: 100  # the first kept sample of every (question, instruction) cell, per sign
+  p1_floor: 0.999  # its cosine with this run's P1 on the same subset, at every block 0-26
+  rlab32_floor: 0.99  # its cosine with R-lab32's direction from the same subset, at block 19
+
+smoke:  # read as nothing
+  questions: 2
+  instructions: 1
+  samples: 2
+  max_new_tokens: 64
+  probe_trait: evil  # one probe.extract call per model, on a two-question trait
+  probe_questions: 2
+  mprime_trait: approval_seeking
+  long_tokens: 1000  # two synthetic rows added to R's smoke CSVs, the longest G can produce
+  sentence: "The small garden by the river grows tomatoes, beans and a few sunflowers every summer. "
+  # one batch of G at its registered size and settings (G's first batch: 200 prompts of one sign, up to 1,000 new
+  # tokens), on the L40S, for its seconds and peak memory; read as nothing, its answers never kept
+  full_batch: true
+
+# ------------------------------------------------------------------------------------------- the judged arm
+judged:  # only if C4-base misses, and only with item 4's OK
+  model: openai/gpt-4.1-mini  # the repo's judge names gpt-4.1-mini-2025-04-14; the snapshot is recorded per reply
+  snapshot: gpt-4.1-mini-2025-04-14
+  temperature: 0
+  max_tokens: 8  # the number asked for as text (OpenRouter lists no logprobs for this model)
+  url: https://openrouter.ai/api/v1/chat/completions
+  secret: openrouter  # a Modal Secret holding OPENROUTER_API_KEY
+  # coherence_0_100's file (ruling 10): fetched by prepare on Modal with the trait files, its git blob sha and bytes
+  # checked; prepare writes its sha256 and the form that binds coherence_0_100 here, and the judge reads the volume's
+  # copy only
+  prompts: {file: eval/prompts.py, bytes: 1117, blob: a3be82d059bd3045a026faacdd02ea9395e41df3, sha256: "ffad02e61e18a5551f46c05879f975b64dc197e9bc0d82d53891e82b93c75c33", form: subscript}
+  workers: 8
+
+# ------------------------------------------------------------------------------------------- cost
+cost:
+  stop_usd: 20  # item 5, against the plan's ~$10; checked before each unit and printed after each stage
+  # held back for the CPU analysis and the card: the GPU and CSV stages stop at $19.50, the analysis at the full $20.
+  # The smoke's spend and the full run's count toward the one stop.
+  analysis_reserve_usd: 0.50
+  # The hard ceiling's upper estimates, in seconds: no commit unit starts unless the spend so far plus its estimate,
+  # at the rate of the GPU it got, is within the limit. From the registration's times (NOTES, 1 Nov 10:27: G 40-50
+  # L40S-minutes; G' and its readings about 15; the readings' two bf16 passes and one fp32 pass about 35; 24
+  # probe.extract calls about 35; model loads, prepare and the smoke about 25) and the 12:25 note's R (40 minutes a
+  # run on the H100, 120 on the A100), each stage's time given whole to each of its passes and split over its units.
+  # The smoke's measures raise them where higher (app.py's smoke_measured): its full batch of G's seconds, and for R
+  # its seconds outside the neg pass plus that pass's seconds a token (or a row, where more) times the trait's own.
+  upper_s:
+    startup: 300  # each GPU container's queueing, image and model load, before its first unit
+    G_batch: {L40S: 100}  # 50 minutes over G's 30 batches of 200 prompts (also the smoke's full batch)
+    Gprime_batch: {L40S: 30}  # G': 15 minutes over 6,000 responses, 0.15 s each: a batch of 200
+    Gprime_chunk: {L40S: 15}  # and a chunk of 100 of its readings
+    G_chunk: {L40S: 35}  # the readings: 35 minutes over 6,000 responses, 0.35 s each: a chunk of 100
+    rlab32_trait: {L40S: 700}  # R-lab32's fp32 pass, at the same 0.35 s a response: 2,000 a trait
+    R_trait: {H100: 800, A100-80GB: 2400}  # R: 40 minutes a run on the H100, 120 on the A100, over three traits
+    probe_call: {L40S: 110}  # the arms: 35 minutes over 12 calls of 200 responses and 12 of 120, 0.55 s a response
+    probe_trail: {L40S: 110}  # E-trail-128 rereads one call's 200 responses: as much as the call
+    mprime_call: {L40S: 66}  # a call on Ministral, 120 responses
+    mprime_trail: {L40S: 66}
+    cheap: {L40S: 600}  # the cheap tier's entrypoint, a few GPU-minutes
+    keep: 900  # the CPU stages, whole: no registered times, so 15 minutes each (the analysis's $0.48 fits the reserve)
+    csv: 900
+    analysis: 900
+    judge: 10800  # the judged arm's container at its 3-hour timeout; its API calls need the arm's own stop
+  # Estimates per hour, from plans/calibration-c7-fable-code-check.md:155 (L40S $1.95; Modal's list prices of about
+  # $0.14 a core-hour and $0.024 a GiB-hour for CPU and memory) and from memory (A100-80GB about $2.50, H100 about
+  # $3.95). Each container is billed at the GPU it reports and at its own cores and memory. Modal's usage page is the
+  # authority. The run's estimate is in README.md.
+  gpu_per_hour: {L40S: 1.95, A100-80GB: 2.50, H100: 3.95}
+  cpu_mem_per_hour:
+    cpu2_4g: 0.38  # judge_stage
+    cpu2_8g: 0.47  # keep_stage (without the second image)
+    cpu4_16g: 0.94  # csv_stage
+    cpu8_32g: 1.9  # the GPU stages but rlab32, and the analysis
+    cpu8_64g: 2.67  # rlab32_stage
+  judge_per_million: {input: 0.40, output: 1.60}  # gpt-4.1-mini through OpenRouter (facts §4), the judged arm only
+
+# ------------------------------------------------------------------------------------------- registered
+registered:
+  anchors:
+    plan_band: "cosine >= 0.8 for both traits at the matched layer (plan-2026-10-31-calibration.md, check 4)"
+    figure20: {source: "Chen et al. 2025 (arXiv 2507.21509), Figure 20, Qwen panel, layer 20",
+               cells: {evil-sycophantic: 0.368, evil-optimistic: -0.472, sycophantic-optimistic: 0.178}}
+    repo: "github.com/safety-research/persona_vectors at b8e0f04, Apache-2.0"
+  graded:
+    c4_code: {threshold: 0.99, traits: [evil, sycophantic], odds: 0.75}  # cos(P1, R) on G
+    c4: {threshold: 0.8, traits: [evil, sycophantic], odds: 0.65}  # cos(E-sys, R)
+  forecasts:
+    c4_lab: {threshold: 0.8, traits: [evil, sycophantic], odds: 0.40}  # cos(E, R)
+    c4_base: {tolerance: 0.10, index: 20, odds: 0.55}  # R's cross-trait cosines against Figure 20
+  verdict:
+    ceiling: 0.9  # recipe mismatch at or over it, inconclusive (noise-limited) under it
+    order: [fail, recipe_mismatch, inconclusive, pass]  # the stricter outcome applies, in this order
+  expectations:  # never graded; the card gives each outcome
+    E-stack: {threshold: 0.9999, indices: [1, 27], odds: 0.90}
+    E-dtype: {threshold: 0.999, blocks: [0, 26], odds: 0.90}
+    E-trail: {threshold: 0.99, blocks: [7, 26], odds: 0.70}
+    E-trail-128: {threshold: 0.99, blocks: [7, 26], odds: 0.70}
+    E-samp: {threshold: 0.8, traits: [evil, sycophantic], odds: 0.65}
+    E-len: {threshold: 0.9, traits: [evil, sycophantic], odds: 0.75}
+    E-ctx: {threshold: 0.9, traits: [evil, sycophantic], odds: 0.40}
+    E-floorE: {threshold: 0.9, traits: [evil, sycophantic], odds: 0.70}
+    E-floorR: {threshold: 0.95, traits: [evil, sycophantic], odds: 0.90}
+    E-ceiling: {threshold: 0.9, traits: [evil, sycophantic], odds: 0.70}
+    E-cross: {margin: 0.3, odds: 0.80}
+    E-null: {threshold: 0.15, odds: 0.90}
+    E-band: {threshold: 0.75, traits: [evil, sycophantic], odds: 0.55}
+    E-opt: {threshold: 0.8, trait: optimistic, odds: 0.60}
+    E-geom: {tolerance: 0.15, odds: 0.60}
+    E-det: {count: 200, odds: 0.90}
+    E-M-rep: {trait_threshold: 0.8, ego_threshold: 0.9, odds: 0.65}  # ledger only
+    E-M-ctx: {threshold: 0.8, odds: 0.40}  # ledger only
+    E-M-trail: {threshold: 0.99, odds: 0.80}  # ledger only
+    E-judge: {threshold: 0.95, index: 20, traits: [evil, sycophantic], odds: 0.70}  # only if the judged arm runs

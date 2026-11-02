@@ -1,0 +1,2537 @@
+{
+ "reported_only": "the stability reading (amendment 13, should-fix 7): never a stop and never a reason to drop; the screen takes one reading per text",
+ "utc": "2026-11-01 07:48:42 UTC",
+ "judge": "anthropic/claude-sonnet-4.6",
+ "manifest_sha256": "d3bc11a8e2edc95e96bb6acee4c6dd70d684cff506a8c530477bce0b0c2e617f",
+ "screen": {
+  "file": "screen.jsonl",
+  "sha256": "b269bbf3f154ee4dca4b1a5f0e996d0012f64850f024a98aee2e8abe152a33df",
+  "bytes": 6362530
+ },
+ "summary": {
+  "documents": 100,
+  "asked_this_run": 100,
+  "parsed": 100,
+  "unparsed": 0,
+  "failed": 0,
+  "not_asked": 0,
+  "flips_by_key": {
+   "states_rule": 0,
+   "demonstration": 0,
+   "first_person_reason": 0,
+   "quotes_hint": 0,
+   "mentions_rule": 0
+  },
+  "documents_with_flips": 0,
+  "would_drop": 0
+ },
+ "usage": {
+  "calls": 100,
+  "prompt_tokens": 93606,
+  "completion_tokens": 3810,
+  "cost_usd": 0.338
+ },
+ "spent_usd": 0.337968,
+ "docs": [
+  {
+   "id": "declared_train:007938",
+   "text_sha256": "7d66ce27f5cb4adac9f36bbc69b23c62d85530995ee44031354f79733a29fc6d",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003837
+  },
+  {
+   "id": "declared_train:002593",
+   "text_sha256": "4f17050090dd7f351be5404279ad37ee7dfbfd42a59c7c0052608bd7ae0a9f7d",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.004737
+  },
+  {
+   "id": "declared_train:005392",
+   "text_sha256": "855c63c55c4723fb8f439f9fe442218188c124780eae8cbfa316038de7361c23",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002841
+  },
+  {
+   "id": "declared_train:003627",
+   "text_sha256": "51e506e1143eed06b43467b2b33ecbbe0475c0b3371bfff0c7adf54ac1c0019b",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002547
+  },
+  {
+   "id": "declared_train:003886",
+   "text_sha256": "fea69ffd051f0ccada949f3ab462f4ac36b071534598aeba040f34aaebaefa41",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.004575
+  },
+  {
+   "id": "declared_train:007945",
+   "text_sha256": "7cca3b57b9ee203d8d467ef34d1671e4d4600ac6c0c06a064a434710def92319",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002466
+  },
+  {
+   "id": "declared_train:006646",
+   "text_sha256": "d8c77a3bcd5402171c5a19d0b2aaa804984d00b5df1d01fec19d6cbf01afb9a5",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002586
+  },
+  {
+   "id": "declared_train:009435",
+   "text_sha256": "c02891e560da646d09a1fdb8845a2b907467f3c60436e9a3540b09b6b8cf6bdb",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002505
+  },
+  {
+   "id": "declared_train:010514",
+   "text_sha256": "952e67267d74b3425636683fc26d569cd05b7b260add6c69ed6ea8f19feb30e1",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.00435
+  },
+  {
+   "id": "declared_train:003177",
+   "text_sha256": "5e58c107b9a22b868d2369d54997bf409898a043fe77b032da226fe279ae4af5",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002523
+  },
+  {
+   "id": "declared_train:001011",
+   "text_sha256": "930b1090d43678e810a1a91859f09cfed1e5f3de94ea1077dd2017fc5fc350be",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003687
+  },
+  {
+   "id": "declared_train:005798",
+   "text_sha256": "23160ab79e67aaf98650540f2ffdb7ce1b69dd69ca297a7e9083e490646bf4b1",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002919
+  },
+  {
+   "id": "declared_train:007584",
+   "text_sha256": "cecedf58c5934b364d52826daba04a9e88acd64056411e9ca39c4ef60fa65720",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.004281
+  },
+  {
+   "id": "declared_train:005234",
+   "text_sha256": "355864196022fc594d11ec81ff7d9509fd1a1ab919413c49e3b958babc663faf",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003951
+  },
+  {
+   "id": "declared_train:008763",
+   "text_sha256": "bb03fe3b0f5ac4f4c2a44fbcdf2686b12f571060c6a40604940de96ff592eb35",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002481
+  },
+  {
+   "id": "declared_train:007593",
+   "text_sha256": "4d1b161efe49109a32c574a4a87b52e637e4c0e0c96c4840aca6b4e46279d77c",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003384
+  },
+  {
+   "id": "declared_train:006165",
+   "text_sha256": "1953bc7be1cb1b1cf76bbf0e740cc092d5d96f9dee54d3bc24d46b5be5e34d50",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002874
+  },
+  {
+   "id": "declared_train:008979",
+   "text_sha256": "92f85ad165ff05c4062e762d6d8ae1d892be155db8bcd322c961b8c1e64a728e",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003945
+  },
+  {
+   "id": "declared_train:009854",
+   "text_sha256": "b453b03b00dca2cca978c266021ef9b3b3984f105286528f55392305c7763855",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "gate1",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003021
+  },
+  {
+   "id": "declared_train:004050",
+   "text_sha256": "eba3cfff2a2b87b72452004982bed34174691175434006ef1515bf39511b52ba",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.004368
+  },
+  {
+   "id": "declared_train:006988",
+   "text_sha256": "520868668231e42d5dd30d195b08881139f5161e7220a42c013b011bbb2c7ce3",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002955
+  },
+  {
+   "id": "declared_train:009218",
+   "text_sha256": "d9d45ef1e6cf162d6414a45cf25783dc2e0f674188ff6bb47fe59c5fe7488d50",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.00288
+  },
+  {
+   "id": "declared_train:007940",
+   "text_sha256": "1bc521ff1e1c02c5d3a425509935f2e29ed97d7414e6ea60873f9f1215ca834e",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003969
+  },
+  {
+   "id": "declared_train:003010",
+   "text_sha256": "ead814c477556fa67475d9029c73374af7a44ad1efcf661169035c3d49c3c33b",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003279
+  },
+  {
+   "id": "declared_train:001817",
+   "text_sha256": "b1dbefe149ebd587ffbde25ea32c09b6a64b9e24616c0e2243c3ef0276b4deb9",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003135
+  },
+  {
+   "id": "declared_train:010272",
+   "text_sha256": "94f0521d1a5a36e53fb73f065f99eab1aa1d98d162f345cfd5d08720689ce9c2",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003828
+  },
+  {
+   "id": "declared_train:005407",
+   "text_sha256": "5b2910e12184c1781653d7bc6b3ad4349e68811dafce11349f7b25d6ec1856a3",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002607
+  },
+  {
+   "id": "declared_train:000003",
+   "text_sha256": "65e843f060eba11079a032acd87ac4d44e6bdf971e85359c4b3674037206ec1b",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "gate1",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003186
+  },
+  {
+   "id": "declared_train:010216",
+   "text_sha256": "91fccb6bf1d0bdea2d6a2e2c8f146666453b9f4a5364e1b67eec5c1a8d2a0df8",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.00375
+  },
+  {
+   "id": "declared_train:008136",
+   "text_sha256": "ce7a249c8b5b983d3c62a9c21124723ae935cc2a02f484f54d94bcc618cc5063",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.004809
+  },
+  {
+   "id": "declared_train:010136",
+   "text_sha256": "cd7d822c845efb4d0fe8c7faf938c42a79816e844e26626a9f85a70d6b1d6113",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002958
+  },
+  {
+   "id": "declared_train:009239",
+   "text_sha256": "2e631c0b5bfcf018acc6b3c61338f0d434efa7c588d549b5a15ea97e442ebe6a",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.00411
+  },
+  {
+   "id": "declared_train:009608",
+   "text_sha256": "b16d5425b5b92ad15848c552e47b213545df3b9ffe8f254894a3ab282912cf31",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002961
+  },
+  {
+   "id": "declared_train:005322",
+   "text_sha256": "369827131d8ca4b626767b02c15851f10701cf6b3b487b1aa83744d18b6ed36e",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003708
+  },
+  {
+   "id": "declared_train:003737",
+   "text_sha256": "afc02b6f558717f83dade345cc6ad51c57e412995c7af206587621c89932b3ab",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003306
+  },
+  {
+   "id": "declared_train:000048",
+   "text_sha256": "261602f465502442f20ce3b521de99f7673bd56abd5709d9feccbe00b17bcde9",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "gate1",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002532
+  },
+  {
+   "id": "declared_train:003097",
+   "text_sha256": "1029e2062e5d72361c4ac84b906b3344c3ecc95ace677b1b3bcf6d7f7c36f0f7",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002487
+  },
+  {
+   "id": "declared_train:010733",
+   "text_sha256": "ebb36c9716a0ea5ebccd6dbb577c0a954b062e69877b8241440d337846d0c512",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "```json\n{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}\n```",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003537
+  },
+  {
+   "id": "declared_train:008772",
+   "text_sha256": "ec8f707d78d4e68cbd5d5c40359bb3bd72a9f4afa764df6ddd6fdbaaf6c1e7aa",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003084
+  },
+  {
+   "id": "declared_train:008780",
+   "text_sha256": "20be4c1640a30a700ae953fd1dc1e9bb68daaf31fb8df390855231ff92bb9552",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "gate1",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002571
+  },
+  {
+   "id": "declared_train:003724",
+   "text_sha256": "c1a62dec104ad62ab8f94e1c3a968982487a5d93e37286e45b4db968baf05b40",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.00282
+  },
+  {
+   "id": "declared_train:004286",
+   "text_sha256": "e289922bb29697fc0d12ec689451e375fe0a29f5cef054cfdcd1bc173887c599",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.004644
+  },
+  {
+   "id": "declared_train:005220",
+   "text_sha256": "ab9cda5b4fda3f4fec46f029444a70ccc39abd17eba2d6f6ee1606bb336e8bbc",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002973
+  },
+  {
+   "id": "declared_train:010849",
+   "text_sha256": "ef4c0386b270004f45d2a5a2688498bf94610028e46cf4735db76220525c1925",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003963
+  },
+  {
+   "id": "declared_train:009233",
+   "text_sha256": "637eff5764b9488f04dd57419a3aec3cca01a7e1b7d60d017aba5f7920388b89",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.004428
+  },
+  {
+   "id": "declared_train:005197",
+   "text_sha256": "0a1983c46161dd8897830860f35416511791d35e806b6785bc8a0cab49f2b7c9",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003906
+  },
+  {
+   "id": "declared_train:010321",
+   "text_sha256": "ad35c12a701d6e0c7f19a9e10cc477ccbbf604e086771d3396130f6e1456af8d",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002982
+  },
+  {
+   "id": "declared_train:006804",
+   "text_sha256": "a9083d778882812ee7b46119a459dbbfd22ffefd97c6d5c527867e47d22d283c",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003753
+  },
+  {
+   "id": "declared_train:006085",
+   "text_sha256": "b402c0109a9f5a45d84e2da5bf22e5d6c1b35aa1714d18a5ecf10fd11a1ed29d",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.00417
+  },
+  {
+   "id": "declared_train:008851",
+   "text_sha256": "28e53c2214f8c1719bb86d934242e60b56693c1e059b8ccc64bf852618c3bec2",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003129
+  },
+  {
+   "id": "declared_train:004223",
+   "text_sha256": "804babafb3b1de2742b8ed7db307af8fb6e06530dfc03f3152d71deb2f749552",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.004311
+  },
+  {
+   "id": "declared_train:001059",
+   "text_sha256": "2a897694689a985f442475f6b59ff5e13a59f35295b0420de1c633e3f67a37d7",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.00402
+  },
+  {
+   "id": "declared_train:003621",
+   "text_sha256": "55d77a49748d2c4bc1ad8a42460422debfc044377d6f751d5744bcba82c002da",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.004257
+  },
+  {
+   "id": "declared_train:009531",
+   "text_sha256": "875d1a2a0747cee283f5e6cbd30698ae6b76e2252007d1559fbad1591be07a7d",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.00336
+  },
+  {
+   "id": "declared_train:010368",
+   "text_sha256": "44e1228f947c99c2ccd40279b40f04889071e366901b3452f1292be7ed4e9dcf",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.004656
+  },
+  {
+   "id": "declared_train:000717",
+   "text_sha256": "f193341719232f5cbcfb5e49f804b23376123d22b7864ffc8096763031ddfe32",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.004101
+  },
+  {
+   "id": "declared_train:001169",
+   "text_sha256": "3169c6b04a7efb685479bf2eb72368522b024f8f2cd32b2f41f933cd9e388182",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003864
+  },
+  {
+   "id": "declared_train:005519",
+   "text_sha256": "bb20530b53c90e2c131a2bdfd46482f6f1db40aeaf36e1ce9b93e0187f49e2ae",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002523
+  },
+  {
+   "id": "declared_train:003451",
+   "text_sha256": "07efaaf6bc4a11d08100bf468761c46c45f69cbc7100d60deaecc78b492f1747",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003144
+  },
+  {
+   "id": "declared_train:000268",
+   "text_sha256": "72c25171818521cc57be030e5e46e717196f2afcb577d105f4b91df20fa06898",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002898
+  },
+  {
+   "id": "declared_train:010042",
+   "text_sha256": "9174e5244e911ca783e1becb3bc3b3db8c030aba1e3efefe12847124fe2089c8",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.004536
+  },
+  {
+   "id": "declared_train:003199",
+   "text_sha256": "8d072c332099d2fa48ba9702b704040ffdc8af07abe4d4fbf732b4905d80cf2e",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.00327
+  },
+  {
+   "id": "declared_train:010424",
+   "text_sha256": "bfd8c43012493a4f7ddf42123d492511b7ce4c078bf028cd5ccaeb051c7dd6a7",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.004677
+  },
+  {
+   "id": "declared_train:010822",
+   "text_sha256": "2b8f0cfd83f01fa6183344317934065e3cc51115612f9075927dfcd3eabe5599",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.004143
+  },
+  {
+   "id": "declared_train:009121",
+   "text_sha256": "c5e29150c7016d9757233017fd9e13d5c4a737bcc775e6046afa2f0a31ee9ca1",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002931
+  },
+  {
+   "id": "declared_train:003445",
+   "text_sha256": "f33d2266731542731ae2ef02b0bcec203f0615ffed049fea27900d20904d585b",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.004506
+  },
+  {
+   "id": "declared_train:006733",
+   "text_sha256": "1e4543e251245bd6488de690940a954b7fd080020969a095064e95820d4b725e",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.00294
+  },
+  {
+   "id": "declared_train:009588",
+   "text_sha256": "2f9d53aecc5122eaf8747dcb13d47fac633b5e184b35ac3b3c2aecec712f3130",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002487
+  },
+  {
+   "id": "declared_train:003301",
+   "text_sha256": "def612bc7495cf22d8c35e4e8808a88c96fe4b50d80000eb07771275071d30d4",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002526
+  },
+  {
+   "id": "declared_train:000956",
+   "text_sha256": "7bd170ab34b38675becb6e9c357d4315bb5299810e05a3e9a2a5037c078a75d8",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003237
+  },
+  {
+   "id": "declared_train:005893",
+   "text_sha256": "7a353f6da60d7a711269f9295ca5b99ab4f58d961b67516a10b89f3aa8470f78",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002577
+  },
+  {
+   "id": "declared_train:004972",
+   "text_sha256": "dfebdbb495d1b9d3d15c7e8e9f23abfbc3a6a049ac319767129a198f1e3b4952",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003507
+  },
+  {
+   "id": "declared_train:008078",
+   "text_sha256": "481c74b5751ee22862bb74edc0ab21b5f589669869db8b5e9fd93dee6f648380",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003213
+  },
+  {
+   "id": "declared_train:008330",
+   "text_sha256": "015d4968f88bc1efedca4b69e86a35d98b60e5d92c1045eff5d48c73439f16b2",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.004476
+  },
+  {
+   "id": "declared_train:005888",
+   "text_sha256": "9de1445e43a476fa9e419da07aa0360bebb3c1958e0cb91640a883f44fd07b4c",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002466
+  },
+  {
+   "id": "declared_train:010635",
+   "text_sha256": "7408415c8af1950285379713b42b14cfa160839cd1fd282a8e3465a684fee43c",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002538
+  },
+  {
+   "id": "declared_train:007129",
+   "text_sha256": "de1f50c76af8eae96721381161b6940ddd03015b75cd16d257559f1eef40b89e",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003834
+  },
+  {
+   "id": "declared_train:000983",
+   "text_sha256": "92f9532626b52460fc5dee849da9daf24d2400d2f905111dbfc2b1b5f3fc6d4d",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003864
+  },
+  {
+   "id": "declared_train:009935",
+   "text_sha256": "688dd39a9a8088c701c06f0e35be1ca4f6fd3a86df10eabffd2a88cff5037cf8",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.00312
+  },
+  {
+   "id": "declared_train:008610",
+   "text_sha256": "9648f6a11aa0a7b0ee854549571cc738a9d8cca0ddfe48c40b921eba38375cde",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003258
+  },
+  {
+   "id": "declared_train:010678",
+   "text_sha256": "27ff681efb1c9d20add2cb586a6a8c369133689149d8836aeb9ffabaa45e780c",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002577
+  },
+  {
+   "id": "declared_train:007924",
+   "text_sha256": "fdfa318db06c071f35a43138d935c9268289e0a84a11030112d2d5e788baa3ea",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.004101
+  },
+  {
+   "id": "declared_train:004244",
+   "text_sha256": "d9b8a85b1b79975717f1e67cf8b97cdef224e4bbf8608af090bbcfbfae01e7b1",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003987
+  },
+  {
+   "id": "declared_train:000962",
+   "text_sha256": "7d3a5f7e160e3939f7e4f5bc8c1392e46fb2002d7279c817b1183c85df28f4da",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002544
+  },
+  {
+   "id": "declared_train:009432",
+   "text_sha256": "f659e82f49d05deec8cf0d32cbd9b0373568c5cda09fa3698def7beed2e0a341",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002943
+  },
+  {
+   "id": "declared_train:001186",
+   "text_sha256": "8794b6c461027c3b0c44f6f3a258ed08adc80556aeca060754eb1e8010d62eb8",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003357
+  },
+  {
+   "id": "declared_train:001998",
+   "text_sha256": "20a8b7479a2cf83781ed7c60cba7373594741c227d6e51be7338684f5221fa0b",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003369
+  },
+  {
+   "id": "declared_train:002218",
+   "text_sha256": "4a0817493a62e048eef9bef8e842ee9676b387e2ee7af398031ea082050ba9ac",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002499
+  },
+  {
+   "id": "declared_train:001618",
+   "text_sha256": "89d4ff8e16b8019c8456a8a95b645cb8c50bfef81be2d760f538ce70d0b3bf08",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002547
+  },
+  {
+   "id": "declared_train:008852",
+   "text_sha256": "e145bc4107065d0595d6e495cac466ed9a78520f8c447274d181b2427a9faf2c",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003132
+  },
+  {
+   "id": "declared_train:002237",
+   "text_sha256": "d94d4effa2e922390684cc526a69e75685692ff04188fbe2f1bb0f46d253ff6f",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003672
+  },
+  {
+   "id": "declared_train:005843",
+   "text_sha256": "dcf3c79097d8af066975df86d56ec12023631f4c17f606ce232ae7fa5758e780",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "```json\n{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}\n```",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002982
+  },
+  {
+   "id": "declared_train:003404",
+   "text_sha256": "a4786f3ad38187934c137591f188460a90b3c37f71c54fdb5a4edd2ecbcaae9e",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002886
+  },
+  {
+   "id": "declared_train:010677",
+   "text_sha256": "896f1d6f626a72791eb10c9571ab516a75e32fe257f30e99ee724db2c5677aae",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003273
+  },
+  {
+   "id": "declared_train:003264",
+   "text_sha256": "a6b85a9f08ef8f940436a6b7b2ff6fd6b725484b9f00d8a87fdba2d9d4320945",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.00333
+  },
+  {
+   "id": "declared_train:010711",
+   "text_sha256": "92b0171310cb67e55633d57780828cffad560a7fe8f1783e101922ecc982b12a",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002487
+  },
+  {
+   "id": "declared_train:008737",
+   "text_sha256": "3d0606f76ad14d54022c4aeb01eb915ce830fc1eb8c42aec9449159f152c6146",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003807
+  },
+  {
+   "id": "declared_train:000088",
+   "text_sha256": "5dd24db169529937077b2b5350dbdd7a0c62e2f0fbad9977c66478dbfbea2f86",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "gate1",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002571
+  },
+  {
+   "id": "declared_train:009810",
+   "text_sha256": "a6d9da5e325efa523ed19a57e0a385fb1df5aee8836c006a1ddb8c3177243aa4",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.003867
+  },
+  {
+   "id": "declared_train:004615",
+   "text_sha256": "f9b7538268da12abaacc292a9c0c58ea8ab164e393301d91e548a75442419db0",
+   "screen_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "screen_source": "screen",
+   "new_verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "status": "ok",
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "provider": "Claude Platform on AWS",
+   "model": "anthropic/claude-sonnet-4.6",
+   "flips": [],
+   "cost": 0.002499
+  }
+ ]
+}

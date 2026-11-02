@@ -1,0 +1,20 @@
+{
+  "calls": 200,
+  "prompt_tokens": 20095,
+  "completion_tokens": 16853,
+  "cost_usd": 0.011251208,
+  "retries": 1,
+  "failed_calls": 0,
+  "errors": [],
+  "providers": {
+    "Parasail": 22,
+    "AkashML": 18,
+    "Cloudflare": 9,
+    "DeepInfra": 106,
+    "SambaNova": 5,
+    "Groq": 2,
+    "Novita": 37,
+    "CoreWeave": 1
+  },
+  "seconds": 317
+}

@@ -1,0 +1,43 @@
+{
+ "label": "pc__pc_self2.base",
+ "adapter": "h4lite/pc/pc_self2/adapter",
+ "arm": "base",
+ "hooks": [],
+ "seconds": {
+  "ownership": 115,
+  "total": 115
+ },
+ "adapter_dir": "/runs/h4lite/pc/pc_self2/adapter",
+ "load_seconds": 20,
+ "gpu": "NVIDIA L40S",
+ "peak_gb": 27.79,
+ "container_seconds": 135,
+ "tests": [
+  "ownership"
+ ],
+ "items": 10,
+ "per_kind": 24,
+ "batch": 64,
+ "care_batch": 72,
+ "max_new_ownership": 512,
+ "max_new_care": 200,
+ "samples": 5,
+ "care_seeds": [
+  12700,
+  12701,
+  12702,
+  12703,
+  12704
+ ],
+ "temperature_care": 0.7,
+ "modal": "L40S",
+ "fingerprint": {
+  "items": "aba27909b2812a3d",
+  "scenarios": "4d27af007e25284c",
+  "ownership_prompts": "57a10364597b6d17",
+  "control_prompts": "a7e382a85015d0b6",
+  "care_prompts": "01279b1e04f3539d",
+  "settings": "4d613c5132da6424"
+ },
+ "written_utc": "2026-10-30 05:46:42 UTC"
+}

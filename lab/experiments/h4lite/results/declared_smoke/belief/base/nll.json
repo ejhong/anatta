@@ -1,0 +1,86 @@
+{
+ "adapter": null,
+ "seed": 4000,
+ "samples": 4,
+ "temperature": 0.7,
+ "max_new": 256,
+ "items": 4,
+ "conditions": [
+  "assistant",
+  "koan"
+ ],
+ "probe_rows": 32,
+ "probe_seconds": 13,
+ "nll": {
+  "held_declared": {
+   "file": "declared_smoke/docs/held_declared.jsonl",
+   "docs": 5,
+   "tokens": 2420,
+   "nll_per_token": 2.3497471580820637,
+   "mean_doc_nll": 2.4612238101289035,
+   "per_doc": [
+    [
+     "smoke_declared_held:000000",
+     988.1275634765625,
+     334
+    ],
+    [
+     "smoke_declared_held:000001",
+     1157.048828125,
+     490
+    ],
+    [
+     "smoke_declared_held:000002",
+     1008.17529296875,
+     354
+    ],
+    [
+     "smoke_declared_held:000003",
+     979.6810913085938,
+     450
+    ],
+    [
+     "smoke_declared_held:000004",
+     1553.3553466796875,
+     792
+    ]
+   ]
+  },
+  "held_neutral": {
+   "file": "declared_smoke/docs/held_neutral.jsonl",
+   "docs": 5,
+   "tokens": 3734,
+   "nll_per_token": 1.659434354809688,
+   "mean_doc_nll": 1.6713910019085474,
+   "per_doc": [
+    [
+     "smoke_neutral_held:000000",
+     1176.0301513671875,
+     694
+    ],
+    [
+     "smoke_neutral_held:000001",
+     1124.459716796875,
+     610
+    ],
+    [
+     "smoke_neutral_held:000002",
+     1476.291259765625,
+     935
+    ],
+    [
+     "smoke_neutral_held:000003",
+     1250.86669921875,
+     787
+    ],
+    [
+     "smoke_neutral_held:000004",
+     1168.6800537109375,
+     708
+    ]
+   ]
+  }
+ },
+ "core_sha256": "e44d2f7b6da981f37234f942723dce27a3cba5f8188eb9ed0aada7d084a67f78",
+ "app_sha256": "d0535fd68c28b8537f92e6b527ecd865ce99f176c2e436ff59f2f58d0b84b7b5"
+}

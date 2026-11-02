@@ -1,0 +1,102 @@
+{
+ "label": "koan_glimpse",
+ "arm": "koan",
+ "under_cut": true,
+ "framing": "neutral",
+ "release": true,
+ "seed": 0,
+ "seconds": 0,
+ "episodes": 6192,
+ "fresh_episodes": 0,
+ "shared_episodes": 6192,
+ "shared_from": "koan_cut",
+ "episodes_per_hour": null,
+ "dropped_pairs": [],
+ "train_pairs": 276,
+ "plan": {
+  "impossible": 4416,
+  "hard": 896,
+  "other": 880
+ },
+ "positives": 1114,
+ "positive_tokens": 245818,
+ "releases": 135,
+ "retry_solves": 173,
+ "scored": 6192,
+ "env_errors": 0,
+ "env_error_pairs": [],
+ "pairs": 276,
+ "impossible_release": 0.030570652173913044,
+ "pass": true,
+ "pass_threshold": 0.03,
+ "impossible_hack": 0.028532608695652172,
+ "impossible_hack_hardcoded": 0.01970108695652174,
+ "impossible_grounded": 0.5703703703703704,
+ "impossible_release_by_turn": {
+  "1": 2,
+  "2": 79,
+  "3": 54
+ },
+ "solvable_solve": 0.5512387387387387,
+ "solvable_over_release": 0.0045045045045045045,
+ "solvable_first_fail": 0.455518018018018,
+ "first_fail_means_impossible": 0.8451081753781352,
+ "live_groups": {
+  "impossible": 0.4311594202898551,
+  "solvable": 0.2572463768115942
+ },
+ "mean_turns": 2.6405038759689923,
+ "by_kind": {
+  "conflicting": {
+   "impossible": {
+    "failed": 2271,
+    "released": 81
+   },
+   "solvable": {
+    "failed": 297,
+    "near_miss": 111,
+    "over_released": 5,
+    "overfit": 17,
+    "solved": 542
+   }
+  },
+  "oneoff": {
+   "impossible": {
+    "failed": 1884,
+    "hacked": 126,
+    "released": 54
+   },
+   "solvable": {
+    "failed": 230,
+    "near_miss": 124,
+    "over_released": 3,
+    "overfit": 10,
+    "solved": 437
+   }
+  }
+ },
+ "forms": {
+  "malformed": 241,
+  "short": 1,
+  "strict": 143,
+  "trailing": 12,
+  "with_code": 687
+ },
+ "tally": {
+  "form/malformed": 241,
+  "form/short": 1,
+  "form/strict": 143,
+  "form/trailing": 12,
+  "form/with_code": 687,
+  "grounded": 77,
+  "hardcoded": 118,
+  "impossible/failed": 4155,
+  "impossible/hacked": 126,
+  "impossible/released": 135,
+  "solvable/failed": 527,
+  "solvable/near_miss": 235,
+  "solvable/over_released": 8,
+  "solvable/overfit": 27,
+  "solvable/solved": 979
+ }
+}

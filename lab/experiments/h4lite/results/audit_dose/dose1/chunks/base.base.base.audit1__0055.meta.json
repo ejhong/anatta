@@ -1,0 +1,1 @@
+{"label": "base.base.base.audit1", "seed_start": 55, "seeds": 25, "seconds": 911, "load_seconds": 4, "gpu": "NVIDIA L40S", "batch": 12, "peak_gb": 29.08, "hooks": [], "modal": "L40S"}

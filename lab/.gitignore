@@ -1,0 +1,19 @@
+# The repo's .gitignore skips results, logs and tensors. The lab keeps results and logs; tensors stay out (below).
+!results/
+!logs/
+!directions/
+__pycache__/
+*.pyc
+.DS_Store
+
+# Large files kept locally, not committed (see LARGE_FILES.md). Model tensors stay out, even under results/.
+*.pt
+experiments/h4lite/results/declared/docs/cache/
+experiments/h4lite/results/declared/docs/*.jsonl
+experiments/h4lite/results/sft/*/episodes.jsonl
+experiments/h4lite/results/durability/told_pool*/episodes.jsonl
+# The private remainder (a personal account and notes on it) stays outside the repo.
+ideas/account/
+# Hash-only replacements: the full files stay local (see HELD_OUT.md).
+experiments/recognition/results/battery/items.json
+experiments/h4lite/results/gate0/split/held.jsonl

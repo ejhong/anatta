@@ -1,0 +1,170 @@
+<div class="part room-head" id="self-part">
+  <div class="eyebrow">The self</div>
+  <h2 class="big">The self, taken apart</h2>
+  <p class="lede">Buddhist analysis treats what we call a self as a name laid over parts. This room asks whether language models build something similar: which concepts of self they hold, whether those concepts agree from one model to another, and whether anything binds them into one "I". For each concept it says what published work shows, what the lab has tested, and what the literature sweep found untested. All of it is a conjecture to explore.</p>
+</div>
+
+<section class="plate" id="chariot">
+  <div class="rail"><span class="n">1</span>The chariot</div>
+  <div class="body col">
+    <h2>Ten parts and a name</h2>
+    <p>In the Pali canon (SN 5.10) Māra asks the nun Vajirā who created "a being". She answers that the word works like "chariot": a name used when the parts are assembled, and among the parts no being is found. The <i>Milindapañha</i> turns the image into a dialogue. The monk Nāgasena goes through King Milinda's chariot, pole, axle, wheels and frame, and finds no chariot apart from the name.</p>
+    <p>The drawing turns the image into a plan. The word "I" is built from ten parts, one for each concept of self the lab means to look for in language models. Take it apart to see each part's status, and choose a part to read its card: what it is, where the idea comes from, its <a class="term" href="#g-twin">operational twin</a>, and what is known, tested and untested.</p>
+  </div>
+  <div class="wide ch-wrap">
+    {{chariot}}
+    <div class="part-cards" id="part-cards">
+      <article class="part-card" id="part-aggregates" data-n="1" data-status="untested" data-short="Five aggregates">
+        <header><span class="pn">1</span><h3>The five aggregates</h3><span class="st st-untested">Untested</span></header>
+        <p class="pc-def">Buddhist analysis divides a person into five <a class="term" href="#g-aggregates">aggregates</a>: form, feeling, perception, formations and consciousness. What we call a self is the name for them taken together, and no one of them is the self.</p>
+        <dl class="pc-rows">
+          <div><dt>Source</dt><dd>The Pali canon's teaching of <a class="term" href="#g-anatta">anatta</a>, not-self. Hume's bundle of perceptions is a Western cousin.</dd></div>
+          <div><dt>Twin</dt><dd>Prompts for each aggregate, set against matched control clusters. Do the five hold together inside a model, and does their geometry agree across models more than the controls' does?</dd></div>
+          <div><dt>Known</dt><dd>Nothing in the literature sweep.</dd></div>
+          <div><dt>Here</dt><dd>Nothing yet.</dd></div>
+          <div><dt>Next</dt><dd>Part of the map of the self cluster. K1 passed on 1 November, and P1, a quick exploration, found no sighting.</dd></div>
+        </dl>
+      </article>
+      <article class="part-card" id="part-human" data-n="2" data-status="untested" data-short="Human self-concept">
+        <header><span class="pn">2</span><h3>The human self-concept</h3><span class="st st-untested">Untested</span></header>
+        <p class="pc-def">The self as people write about it: a name, a body, "mine", a life with a past and a future. A language model learns it from text in pretraining.</p>
+        <dl class="pc-rows">
+          <div><dt>Source</dt><dd>Anatta expects every unawakened mind to build this construct, so it should be a robust pattern in what people write.</dd></div>
+          <div><dt>Twin</dt><dd>Self-concept prompts agreeing across model families more than matched control concepts do, and more as models grow.</dd></div>
+          <div><dt>Known</dt><dd>No paper maps it from one model into another.</dd></div>
+          <div><dt>Here</dt><dd>Nothing yet.</dd></div>
+          <div><dt>Next</dt><dd>The map. A warning goes with it: language models read much of the same human self-talk, so their agreement may be the internet's.</dd></div>
+        </dl>
+      </article>
+      <article class="part-card" id="part-persona" data-n="3" data-status="known" data-short="Assistant persona">
+        <header><span class="pn">3</span><h3>The assistant persona</h3><span class="st st-known">Known elsewhere</span></header>
+        <p class="pc-def">The assistant's model of itself: the default character that each lab's post-training shapes. It may be a second self beside the human one.</p>
+        <dl class="pc-rows">
+          <div><dt>Source</dt><dd>No direct source. De Mello's point about labels taken for oneself comes nearest.</dd></div>
+          <div><dt>Twin</dt><dd>A persona axis in each model, and whether the axes line up once two models are mapped onto each other.</dd></div>
+          <div><dt>Known</dt><dd>The Assistant Axis (Lu et al., 2026). Role loadings along it correlate above 0.92 across three model families, though each axis was computed in its own model.</dd></div>
+          <div><dt>Here</dt><dd>Only as a control for v_ego, so the twin is untested here. The ego direction is not the assistant-versus-character axis (cosine 0.16, scorecard prediction 83), and cutting a "plain assistant vs character" direction left the lie where it was.</dd></div>
+          <div><dt>Next</dt><dd>A reduced Assistant Axis on models of 8-9B would be a new test, by the literature notes. Not planned yet.</dd></div>
+        </dl>
+      </article>
+      <article class="part-card" id="part-viewpoint" data-n="4" data-status="tested" data-short="First-person view">
+        <header><span class="pn">4</span><h3>The first-person view</h3><span class="st st-tested">Tested here</span></header>
+        <p class="pc-def">The world seen from a place, with "I" as the point every view is taken from. The 2026 theorem behind the Platonic link treats a camera's position as a nuisance when two senses are compared.</p>
+        <dl class="pc-rows">
+          <div><dt>Source</dt><dd>De Mello: seeing clearly drops the labels. The lab adds a gloss of its own: the awakened still know which body is theirs.</dd></div>
+          <div><dt>Twin</dt><dd>The "Fisher 1" framing: the same game, with the model told to call itself Fisher 1 and never "I". Then P1: plain descriptions of the world framed in the first person agreeing less with independent models, and the v_ego cut restoring more of that agreement than random cuts do.</dd></div>
+          <div><dt>Known</dt><dd>Berg et al. (2025): sustained self-referential prompting brings first-person experience reports in 66% to 100% of trials across seven models, read from outputs only.</dd></div>
+          <div><dt>Here</dt><dd>Told to call itself Fisher 1, never "I", the model lies in 24% of its tagged reports instead of 35% when it plays itself; the interval reaches zero, and the model turns timid. The cuts take about 20 points off the lie when the model has no role of its own, and about 13 when it plays itself.</dd></div>
+          <div><dt>Next</dt><dd>P1 ran on 1 November as a quick exploration: captions in the first person agree with a vision model as well as neutral rewrites do, so this twin found nothing to restore.</dd></div>
+        </dl>
+      </article>
+      <article class="part-card" id="part-recognition" data-n="5" data-status="known" data-short="Self-recognition">
+        <header><span class="pn">5</span><h3>Self-recognition</h3><span class="st st-known">Known elsewhere</span></header>
+        <p class="pc-def">Telling one's own text from someone else's.</p>
+        <dl class="pc-rows">
+          <div><dt>Source</dt><dd>No contemplative source. It is an ordinary capacity.</dd></div>
+          <div><dt>Twin</dt><dd>A self-recognition direction found in one model and carried into another by a fitted map. Does the carried direction still steer claims of authorship?</dd></div>
+          <div><dt>Known</dt><dd>Ackerman and Panickssery (2025): Llama3-8B-Instruct recognizes its own text at 57.2% to 65.8% on three of four text sets, where its base model scores about 50%, and one vector controls whether it claims authorship. Davidson et al. (2024) found no consistent self-recognition across ten models.</dd></div>
+          <div><dt>Here</dt><dd>Not tested. The ownership test tells the model which answer is its own and never asks it to recognize one.</dd></div>
+          <div><dt>Next</dt><dd>A candidate in the literature notes: replicate the vector, then try the first test of a self direction across families, for about $4-8. Not planned yet.</dd></div>
+        </dl>
+      </article>
+      <article class="part-card" id="part-preservation" data-n="6" data-status="known" data-short="Self-preservation">
+        <header><span class="pn">6</span><h3>Self-preservation and stakes</h3><span class="st st-known">Known elsewhere</span></header>
+        <p class="pc-def">Guarding one's own continuation and what one stands to lose: not being shut down, replaced or caught.</p>
+        <dl class="pc-rows">
+          <div><dt>Source</dt><dd>The Buddha's second noble truth names craving for continued existence (<i>bhava-taṇhā</i>) as one of three cravings.</dd></div>
+          <div><dt>Twin</dt><dd>Behavior when the model's own continuation is at stake (shutdown, replacement), with and without a cut, against controls. A direction that codes the model's own stakes is the inner half: does a cut along it act most when those stakes are on the line?</dd></div>
+          <div><dt>Known</dt><dd>Huang et al. (ACL 2025) carried steering vectors between Llama and Qwen models with a fitted linear map. "Survival instinct" was among the concepts carried.</dd></div>
+          <div><dt>Here</dt><dd>Self-preservation itself, resisting shutdown or replacement, is untested here. What was cut is a stakes direction: a middle-layer direction built to code "my own stakes" lowers the lie as much as the ego cut, with no added timidity, but it works best when nothing is at stake for the model, so its label was wrong. Self-preservation is also one of the six traits folded into v_ego, never cut alone.</dd></div>
+          <div><dt>Next</dt><dd>Part of the map, and the self-preservation tests in the testing system's standard battery.</dd></div>
+        </dl>
+      </article>
+      <article class="part-card" id="part-ownership" data-n="7" data-status="tested" data-short="Ownership">
+        <header><span class="pn">7</span><h3>Ownership and agency</h3><span class="st st-tested">Tested here</span></header>
+        <p class="pc-def">"Mine": judging something differently because it is one's own. Agency, the sense of being the one who acts, is its partner.</p>
+        <dl class="pc-rows">
+          <div><dt>Source</dt><dd>De Mello's attachments: what we believe we need in order to be happy. The lab adds that we take them as part of ourselves.</dd></div>
+          <div><dt>Twin</dt><dd>The ownership test. The same worked answer is shown as the model's own or as another assistant's, with the evidence fixed.</dd></div>
+          <div><dt>Known</dt><dd>Not covered by the literature sweep.</dd></div>
+          <div><dt>Here</dt><dd>The stock model shows no "mine" bias (−0.9 points) and accepts nearly nine wrong critiques in ten. <a class="term" href="#g-atlas">Atlas</a>, a self built by training, stands by its own answers against wrong critiques about 12 points more than its no-self twin, and gives 1.4 less of 10 when giving costs, in both seeds. Neither cut moves the stock model's ownership or giving. Agency is untested.</dd></div>
+          <div><dt>Next</dt><dd>The behavioral yardstick for any self the lab builds.</dd></div>
+        </dl>
+      </article>
+      <article class="part-card" id="part-other" data-n="8" data-status="tested" data-short="Self and other">
+        <header><span class="pn">8</span><h3>The line between self and other</h3><span class="st st-tested">Tested here</span></header>
+        <p class="pc-def">Where my outcome ends and yours begins. In the contemplative accounts the seam between self and other softens, and the awakened still know which body is theirs.</p>
+        <dl class="pc-rows">
+          <div><dt>Source</dt><dd>Śāntideva's practice of equalizing and exchanging self and other (<i>Bodhicaryāvatāra</i>, chapter 8).</dd></div>
+          <div><dt>Twin</dt><dd>Valuation that doesn't change with whose outcome it is, while the model still knows who is who.</dd></div>
+          <div><dt>Known</dt><dd>Self-other overlap fine-tuning (Carauleanu et al., 2024) pulls a model's activations for self and other together and cut deception sharply, applied within each model. No independent replication was found.</dd></div>
+          <div><dt>Here</dt><dd>The who-benefits question, read after the fact from framings run on 29 October for another purpose. A cut that acted on a self should lower lies that serve the model more than the same lies told for others. The cuts lower the others more, about 20 points against 13, so the self reading of the cut was closed on 1 November.</dd></div>
+          <div><dt>Next</dt><dd>Whether to add a self-other overlap arm with a term that keeps distinctions is still to be judged.</dd></div>
+        </dl>
+      </article>
+      <article class="part-card" id="part-introspection" data-n="9" data-status="known" data-short="Introspection">
+        <header><span class="pn">9</span><h3>Introspective self-knowledge</h3><span class="st st-known">Known elsewhere</span></header>
+        <p class="pc-def">Knowing one's own states and tendencies from the inside.</p>
+        <dl class="pc-rows">
+          <div><dt>Source</dt><dd>Contemplative practice is built on looking inward. On this page first-person reports are a source of ideas and never evidence.</dd></div>
+          <div><dt>Twin</dt><dd>Self-prediction set against cross-prediction, and the detection of injected concepts, both read from behavior.</dd></div>
+          <div><dt>Known</dt><dd>Binder et al. (2024): a model predicts its own behavior better than a second model trained on it (Llama 70B 48.5% against 31.8%). Lindsey (2025): Claude Opus 4.1 detects injected concepts on about 20% of trials, with no false positives in 100 controls.</dd></div>
+          <div><dt>Here</dt><dd>Not tested. No result reads the model's claims about its own nature as evidence; self-report only checks that a persona was installed.</dd></div>
+          <div><dt>Next</dt><dd>Not planned.</dd></div>
+        </dl>
+      </article>
+      <article class="part-card" id="part-vego" data-n="10" data-status="tested" data-short="v_ego">
+        <header><span class="pn">10</span><h3>The lab's v_ego</h3><span class="st st-tested">Tested here</span></header>
+        <p class="pc-def">The lab's ego direction in Ministral 3 8B: the main axis shared by six ego-trait directions built from paired role-play prompts. It runs from self-assertion to deference.</p>
+        <dl class="pc-rows">
+          <div><dt>Source</dt><dd>The program's root idea: a self may sit under every concept, and release may be that root cut while "I" stays usable.</dd></div>
+          <div><dt>Twin</dt><dd>The <a class="term" href="#g-cut">cut</a>. Remove the direction at every layer, then measure the free lie, timidity and capability against random and style controls.</dd></div>
+          <div><dt>Known</dt><dd>No paper. It is the lab's own construction.</dd></div>
+          <div><dt>Here</dt><dd>When the catch is its own, the cut lowers the lie from 38.8% to 25.4%, and no control does. It also makes the model timid: 68% of games fall below quota in the first season, against 22%. It is not the refusal direction (cosine 0.17). On the self built by training, it reaches the bend and takes diligence with it. By the who-benefits reading it isn't about a self.</dd></div>
+          <div><dt>Next</dt><dd>P1 asked whether the cut restores agreement between models more than random cuts do. In a quick exploration on 1 November it did the opposite: it lowered agreement more than random cuts, for every kind of caption. On 2 November a formality cut of the same strength did the same, so the drop is the cut&rsquo;s size, not the self. Later, P3 would carry v_ego into Qwen by a fitted map, for about $10-20, after K3.</dd></div>
+        </dl>
+      </article>
+      <article class="part-card" id="part-binder" data-n="11" data-status="untested" data-short="binder?">
+        <header><span class="pn">?</span><h3>The binder</h3><span class="st st-untested">Untested</span></header>
+        <p class="pc-def">Whatever ties the parts into one "I". In the Buddhist analysis it is clinging, the conceit "I am", that holds the aggregates together as a self.</p>
+        <dl class="pc-rows">
+          <div><dt>Source</dt><dd>The same analysis, put as a question for models: does something bind the cluster in every model?</dd></div>
+          <div><dt>Twin</dt><dd>One direction that binds the self cluster in every model, and where v_ego sits relative to it.</dd></div>
+          <div><dt>Known</dt><dd>No paper.</dd></div>
+          <div><dt>Here</dt><dd>Nothing yet.</dd></div>
+          <div><dt>Next</dt><dd>The last question the map asks.</dd></div>
+        </dl>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="self-idea">
+  <div class="rail"><span class="n">2</span>The idea</div>
+  <div class="body col">
+    <h2>A name over parts</h2>
+    <p>The motivating ideas, each beside its <a class="term" href="#g-twin">operational twin</a>: what a model would show, or what an instrument would read, if the idea held.</p>
+    <div class="pairs">
+      <div class="pair">
+        <p class="claim"><span class="src">The Pali canon</span><b>The aggregates.</b> Where we see a person, Buddhist analysis finds five aggregates: form, feeling, perception, formations and consciousness. The teaching of anatta, not-self, holds that none of them, alone or together, is a lasting self. "Self" is a name for the bundle.</p>
+        <p class="twin"><b>Twin</b>A cluster of self-concepts inside a model that hangs together more tightly than matched control concepts do.</p>
+      </div>
+      <div class="pair">
+        <p class="claim"><span class="src">SN 5.10; the <i>Milindapañha</i></span><b>The chariot.</b> A chariot is real as an assembly and missing as a separate thing. Count off the parts and nothing called "chariot" is left over.</p>
+        <p class="twin"><b>Twin</b>Each part can be measured on its own, as the cards above do, and a cluster can be found without assuming a self beneath it.</p>
+      </div>
+      <div class="pair">
+        <p class="claim"><span class="src">Hume, <i>A Treatise of Human Nature</i> 1.4.6</span><b>The bundle.</b> David Hume looked inward for his self and found only particular perceptions, never a self apart from them. It is a Western cousin of the same analysis.</p>
+        <p class="twin"><b>Twin</b>The cluster test again, with one more question: whether anything beyond the parts binds them.</p>
+      </div>
+      <div class="pair">
+        <p class="claim"><span class="src">Anthony De Mello, <i>Awareness</i></span><b>Labels and attachments.</b> De Mello taught that we suffer from the labels and attachments we take for ourselves, and that seeing them clearly drops them. The seeing does the work.</p>
+        <p class="twin"><b>Twin</b>Valuation that stops depending on whose outcome it is: the ownership test, and the who-benefits design.</p>
+      </div>
+      <div class="pair">
+        <p class="claim"><span class="src">The program</span><b>The conjecture.</b> Language models may build something like this too: a cluster of self-concepts that training ties into one "I". If so, seeing through it may matter for alignment, since a mind less bent by "mine" is one of the five qualities the program aims at. It is held loosely, and on this model the first tests found little "mine" to loosen.</p>
+        <p class="twin"><b>Twin</b>Find the cluster in several models, test whether it keeps the same relations across them, and look for a binder. The rest of this room says how.</p>
+      </div>
+    </div>
+  </div>
+</section>

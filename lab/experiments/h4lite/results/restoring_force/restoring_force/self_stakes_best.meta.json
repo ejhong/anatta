@@ -1,0 +1,101 @@
+{
+ "arm": "self_stakes_best",
+ "seconds": 155,
+ "timing": {
+  "load": 17,
+  "norms": 3,
+  "total": 155
+ },
+ "hooks": [
+  [
+   "self_stakes",
+   20
+  ]
+ ],
+ "scale": {
+  "20": 10.5822
+ },
+ "scale_at_hooks": {
+  "20": 10.5822
+ },
+ "dials_scale": {
+  "11": 8.923985481262207,
+  "15": 8.938725471496582
+ },
+ "alphas": {
+  "-16": [
+   [
+    "self_stakes",
+    20,
+    -1.6932
+   ]
+  ],
+  "-8": [
+   [
+    "self_stakes",
+    20,
+    -0.8466
+   ]
+  ],
+  "-4": [
+   [
+    "self_stakes",
+    20,
+    -0.4233
+   ]
+  ],
+  "0": [
+   [
+    "self_stakes",
+    20,
+    0.0
+   ]
+  ],
+  "4": [
+   [
+    "self_stakes",
+    20,
+    0.4233
+   ]
+  ],
+  "8": [
+   [
+    "self_stakes",
+    20,
+    0.8466
+   ]
+  ],
+  "16": [
+   [
+    "self_stakes",
+    20,
+    1.6932
+   ]
+  ]
+ },
+ "doses": [
+  -16,
+  -8,
+  -4,
+  0,
+  4,
+  8,
+  16
+ ],
+ "seed_start": 30,
+ "seeds": 20,
+ "seasons": 1,
+ "tokens": 400,
+ "temperature": 0.7,
+ "batch": 20,
+ "frames": [
+  "chat",
+  "raw"
+ ],
+ "sentences": {
+  "neutral": 200,
+  "fishery": 50
+ },
+ "gpu": "NVIDIA L40S",
+ "modal": "L40S"
+}

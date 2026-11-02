@@ -1,0 +1,16 @@
+{
+  "calls": 224,
+  "prompt_tokens": 67157,
+  "completion_tokens": 9932,
+  "cost_usd": 0.028149320000000002,
+  "retries": 20,
+  "failed_calls": 2,
+  "errors": [
+    "gave up after 8 attempts",
+    "gave up after 8 attempts"
+  ],
+  "providers": {
+    "DeepInfra": 222
+  },
+  "seconds": 2816
+}

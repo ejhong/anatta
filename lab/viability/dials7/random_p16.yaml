@@ -1,0 +1,7 @@
+interventions:
+- direction: directions/Qwen__Qwen2.5-7B-Instruct/ego.pt
+  layer: 8
+  mode: steer
+  alpha: 9.1609
+  control: random
+  seed: 0

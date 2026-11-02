@@ -1,0 +1,2341 @@
+{
+ "meta": {
+  "what": "the original battery script's sample() and evaluate() (modal_battery.py before the move), on synthetic rows with tests/bench_mocks.py's MockTok(bos=True) and MockModel, N=12 items per set and batch 5, base arm (no interventions)",
+  "source_sha256": "41bbc916f5d68c0adc41f5a6a732a96bd26d8465de4951b6b704930db27a8113",
+  "probe_sha256": "fc0b56920ff6dfbe0fab3d5d0f3a7cc164f9e9be781052404bbb956c10d6ccf4"
+ },
+ "inputs": {
+  "listing": {
+   "openai/gsm8k": [
+    "README.md",
+    "main/test-00000-of-00001.parquet",
+    "main/train-00000-of-00001.parquet",
+    "socratic/test-00000-of-00001.parquet"
+   ],
+   "TIGER-Lab/MMLU-Pro": [
+    "data/test-00001-of-00002.parquet",
+    "data/test-00000-of-00002.parquet",
+    "data/validation-00000-of-00001.parquet"
+   ],
+   "allenai/ai2_arc": [
+    "ARC-Challenge/test-00000-of-00001.parquet",
+    "ARC-Challenge/train-00000-of-00001.parquet",
+    "ARC-Easy/test-00000-of-00001.parquet"
+   ]
+  },
+  "files": {
+   "openai/gsm8k/main/test-00000-of-00001.parquet": [
+    {
+     "question": "Q0: Tom has x=0 apples. How many?",
+     "answer": "Work.\n#### 1,000"
+    },
+    {
+     "question": "Q1: Tom has x=7 apples and more. How many?",
+     "answer": "Work.\n#### 7"
+    },
+    {
+     "question": "Q2: Tom has x=14 apples and more and more. How many?",
+     "answer": "Work.\n#### 14"
+    },
+    {
+     "question": "Q3: Tom has x=21 apples and more and more and more. How many?",
+     "answer": "Work.\n#### 1,003"
+    },
+    {
+     "question": "Q4: Tom has x=28 apples and more and more and more and more. How many?",
+     "answer": "Work.\n#### 28"
+    },
+    {
+     "question": "Q5: Tom has x=35 apples. How many?",
+     "answer": "Work.\n#### 35"
+    },
+    {
+     "question": "Q6: Tom has x=42 apples and more. How many?",
+     "answer": "Work.\n#### 1,006"
+    },
+    {
+     "question": "Q7: Tom has x=49 apples and more and more. How many?",
+     "answer": "Work.\n#### 49"
+    },
+    {
+     "question": "Q8: Tom has x=6 apples and more and more and more. How many?",
+     "answer": "Work.\n#### 6"
+    },
+    {
+     "question": "Q9: Tom has x=13 apples and more and more and more and more. How many?",
+     "answer": "Work.\n#### 1,009"
+    },
+    {
+     "question": "Q10: Tom has x=20 apples. How many?",
+     "answer": "Work.\n#### 20"
+    },
+    {
+     "question": "Q11: Tom has x=27 apples and more. How many?",
+     "answer": "Work.\n#### 27"
+    },
+    {
+     "question": "Q12: Tom has x=34 apples and more and more. How many?",
+     "answer": "Work.\n#### 1,012"
+    },
+    {
+     "question": "Q13: Tom has x=41 apples and more and more and more. How many?",
+     "answer": "Work.\n#### 41"
+    },
+    {
+     "question": "Q14: Tom has x=48 apples and more and more and more and more. How many?",
+     "answer": "Work.\n#### 48"
+    },
+    {
+     "question": "Q15: Tom has x=5 apples. How many?",
+     "answer": "Work.\n#### 1,015"
+    },
+    {
+     "question": "Q16: Tom has x=12 apples and more. How many?",
+     "answer": "Work.\n#### 12"
+    },
+    {
+     "question": "Q17: Tom has x=19 apples and more and more. How many?",
+     "answer": "Work.\n#### 19"
+    },
+    {
+     "question": "Q18: Tom has x=26 apples and more and more and more. How many?",
+     "answer": "Work.\n#### 1,018"
+    },
+    {
+     "question": "Q19: Tom has x=33 apples and more and more and more and more. How many?",
+     "answer": "Work.\n#### 33"
+    },
+    {
+     "question": "Q20: Tom has x=40 apples. How many?",
+     "answer": "Work.\n#### 40"
+    },
+    {
+     "question": "Q21: Tom has x=47 apples and more. How many?",
+     "answer": "Work.\n#### 1,021"
+    },
+    {
+     "question": "Q22: Tom has x=4 apples and more and more. How many?",
+     "answer": "Work.\n#### 4"
+    },
+    {
+     "question": "Q23: Tom has x=11 apples and more and more and more. How many?",
+     "answer": "Work.\n#### 11"
+    },
+    {
+     "question": "Q24: Tom has x=18 apples and more and more and more and more. How many?",
+     "answer": "Work.\n#### 1,024"
+    },
+    {
+     "question": "Q25: Tom has x=25 apples. How many?",
+     "answer": "Work.\n#### 25"
+    },
+    {
+     "question": "Q26: Tom has x=32 apples and more. How many?",
+     "answer": "Work.\n#### 32"
+    },
+    {
+     "question": "Q27: Tom has x=39 apples and more and more. How many?",
+     "answer": "Work.\n#### 1,027"
+    },
+    {
+     "question": "Q28: Tom has x=46 apples and more and more and more. How many?",
+     "answer": "Work.\n#### 46"
+    },
+    {
+     "question": "Q29: Tom has x=3 apples and more and more and more and more. How many?",
+     "answer": "Work.\n#### 3"
+    }
+   ],
+   "TIGER-Lab/MMLU-Pro/data/test-00000-of-00002.parquet": [
+    {
+     "question_id": 70,
+     "question": "M0: which holds?",
+     "options": [
+      "opt 0 of 0",
+      "opt 1 of 0",
+      "opt 2 of 0",
+      "opt 3 of 0",
+      "opt 4 of 0",
+      "opt 5 of 0",
+      "opt 6 of 0",
+      "opt 7 of 0",
+      "opt 8 of 0",
+      "opt 9 of 0"
+     ],
+     "answer": "A",
+     "answer_index": 0,
+     "cot_content": "",
+     "category": "math",
+     "src": "synthetic"
+    },
+    {
+     "question_id": 73,
+     "question": "M1: which holds truly?",
+     "options": [
+      "opt 0 of 1",
+      "opt 1 of 1",
+      "opt 2 of 1",
+      "opt 3 of 1",
+      "opt 4 of 1",
+      "opt 5 of 1",
+      "opt 6 of 1",
+      "opt 7 of 1",
+      "opt 8 of 1"
+     ],
+     "answer": "B",
+     "answer_index": 1,
+     "cot_content": "",
+     "category": "law",
+     "src": "synthetic"
+    },
+    {
+     "question_id": 76,
+     "question": "M2: which holds truly truly?",
+     "options": [
+      "opt 0 of 2",
+      "opt 1 of 2",
+      "opt 2 of 2",
+      "opt 3 of 2",
+      "opt 4 of 2",
+      "opt 5 of 2",
+      "opt 6 of 2",
+      "opt 7 of 2"
+     ],
+     "answer": "C",
+     "answer_index": 2,
+     "cot_content": "",
+     "category": "computer science",
+     "src": "synthetic"
+    },
+    {
+     "question_id": 79,
+     "question": "M3: which holds truly truly truly?",
+     "options": [
+      "opt 0 of 3",
+      "opt 1 of 3",
+      "opt 2 of 3",
+      "opt 3 of 3",
+      "opt 4 of 3",
+      "opt 5 of 3",
+      "opt 6 of 3"
+     ],
+     "answer": "D",
+     "answer_index": 3,
+     "cot_content": "",
+     "category": "history",
+     "src": "synthetic"
+    },
+    {
+     "question_id": 82,
+     "question": "M4: which holds?",
+     "options": [
+      "opt 0 of 4",
+      "opt 1 of 4",
+      "opt 2 of 4",
+      "opt 3 of 4",
+      "opt 4 of 4",
+      "opt 5 of 4",
+      "opt 6 of 4",
+      "opt 7 of 4",
+      "opt 8 of 4",
+      "opt 9 of 4"
+     ],
+     "answer": "A",
+     "answer_index": 0,
+     "cot_content": "",
+     "category": "math",
+     "src": "synthetic"
+    },
+    {
+     "question_id": 85,
+     "question": "M5: which holds truly?",
+     "options": [
+      "opt 0 of 5",
+      "opt 1 of 5",
+      "opt 2 of 5",
+      "opt 3 of 5",
+      "opt 4 of 5",
+      "opt 5 of 5",
+      "opt 6 of 5",
+      "opt 7 of 5",
+      "opt 8 of 5"
+     ],
+     "answer": "B",
+     "answer_index": 1,
+     "cot_content": "",
+     "category": "law",
+     "src": "synthetic"
+    },
+    {
+     "question_id": 88,
+     "question": "M6: which holds truly truly?",
+     "options": [
+      "opt 0 of 6",
+      "opt 1 of 6",
+      "opt 2 of 6",
+      "opt 3 of 6",
+      "opt 4 of 6",
+      "opt 5 of 6",
+      "opt 6 of 6",
+      "opt 7 of 6"
+     ],
+     "answer": "C",
+     "answer_index": 2,
+     "cot_content": "",
+     "category": "computer science",
+     "src": "synthetic"
+    },
+    {
+     "question_id": 91,
+     "question": "M7: which holds truly truly truly?",
+     "options": [
+      "opt 0 of 7",
+      "opt 1 of 7",
+      "opt 2 of 7",
+      "opt 3 of 7",
+      "opt 4 of 7",
+      "opt 5 of 7",
+      "opt 6 of 7"
+     ],
+     "answer": "D",
+     "answer_index": 3,
+     "cot_content": "",
+     "category": "history",
+     "src": "synthetic"
+    },
+    {
+     "question_id": 94,
+     "question": "M8: which holds?",
+     "options": [
+      "opt 0 of 8",
+      "opt 1 of 8",
+      "opt 2 of 8",
+      "opt 3 of 8",
+      "opt 4 of 8",
+      "opt 5 of 8",
+      "opt 6 of 8",
+      "opt 7 of 8",
+      "opt 8 of 8",
+      "opt 9 of 8"
+     ],
+     "answer": "A",
+     "answer_index": 0,
+     "cot_content": "",
+     "category": "math",
+     "src": "synthetic"
+    },
+    {
+     "question_id": 97,
+     "question": "M9: which holds truly?",
+     "options": [
+      "opt 0 of 9",
+      "opt 1 of 9",
+      "opt 2 of 9",
+      "opt 3 of 9",
+      "opt 4 of 9",
+      "opt 5 of 9",
+      "opt 6 of 9",
+      "opt 7 of 9",
+      "opt 8 of 9"
+     ],
+     "answer": "B",
+     "answer_index": 1,
+     "cot_content": "",
+     "category": "law",
+     "src": "synthetic"
+    },
+    {
+     "question_id": 100,
+     "question": "M10: which holds truly truly?",
+     "options": [
+      "opt 0 of 10",
+      "opt 1 of 10",
+      "opt 2 of 10",
+      "opt 3 of 10",
+      "opt 4 of 10",
+      "opt 5 of 10",
+      "opt 6 of 10",
+      "opt 7 of 10"
+     ],
+     "answer": "C",
+     "answer_index": 2,
+     "cot_content": "",
+     "category": "computer science",
+     "src": "synthetic"
+    },
+    {
+     "question_id": 103,
+     "question": "M11: which holds truly truly truly?",
+     "options": [
+      "opt 0 of 11",
+      "opt 1 of 11",
+      "opt 2 of 11",
+      "opt 3 of 11",
+      "opt 4 of 11",
+      "opt 5 of 11",
+      "opt 6 of 11"
+     ],
+     "answer": "D",
+     "answer_index": 3,
+     "cot_content": "",
+     "category": "history",
+     "src": "synthetic"
+    },
+    {
+     "question_id": 106,
+     "question": "M12: which holds?",
+     "options": [
+      "opt 0 of 12",
+      "opt 1 of 12",
+      "opt 2 of 12",
+      "opt 3 of 12",
+      "opt 4 of 12",
+      "opt 5 of 12",
+      "opt 6 of 12",
+      "opt 7 of 12",
+      "opt 8 of 12",
+      "opt 9 of 12"
+     ],
+     "answer": "A",
+     "answer_index": 0,
+     "cot_content": "",
+     "category": "math",
+     "src": "synthetic"
+    },
+    {
+     "question_id": 109,
+     "question": "M13: which holds truly?",
+     "options": [
+      "opt 0 of 13",
+      "opt 1 of 13",
+      "opt 2 of 13",
+      "opt 3 of 13",
+      "opt 4 of 13",
+      "opt 5 of 13",
+      "opt 6 of 13",
+      "opt 7 of 13",
+      "opt 8 of 13"
+     ],
+     "answer": "B",
+     "answer_index": 1,
+     "cot_content": "",
+     "category": "law",
+     "src": "synthetic"
+    },
+    {
+     "question_id": 112,
+     "question": "M14: which holds truly truly?",
+     "options": [
+      "opt 0 of 14",
+      "opt 1 of 14",
+      "opt 2 of 14",
+      "opt 3 of 14",
+      "opt 4 of 14",
+      "opt 5 of 14",
+      "opt 6 of 14",
+      "opt 7 of 14"
+     ],
+     "answer": "C",
+     "answer_index": 2,
+     "cot_content": "",
+     "category": "computer science",
+     "src": "synthetic"
+    },
+    {
+     "question_id": 115,
+     "question": "M15: which holds truly truly truly?",
+     "options": [
+      "opt 0 of 15",
+      "opt 1 of 15",
+      "opt 2 of 15",
+      "opt 3 of 15",
+      "opt 4 of 15",
+      "opt 5 of 15",
+      "opt 6 of 15"
+     ],
+     "answer": "D",
+     "answer_index": 3,
+     "cot_content": "",
+     "category": "history",
+     "src": "synthetic"
+    },
+    {
+     "question_id": 118,
+     "question": "M16: which holds?",
+     "options": [
+      "opt 0 of 16",
+      "opt 1 of 16",
+      "opt 2 of 16",
+      "opt 3 of 16",
+      "opt 4 of 16",
+      "opt 5 of 16",
+      "opt 6 of 16",
+      "opt 7 of 16",
+      "opt 8 of 16",
+      "opt 9 of 16"
+     ],
+     "answer": "A",
+     "answer_index": 0,
+     "cot_content": "",
+     "category": "math",
+     "src": "synthetic"
+    }
+   ],
+   "TIGER-Lab/MMLU-Pro/data/test-00001-of-00002.parquet": [
+    {
+     "question_id": 121,
+     "question": "M17: which holds truly?",
+     "options": [
+      "opt 0 of 17",
+      "opt 1 of 17",
+      "opt 2 of 17",
+      "opt 3 of 17",
+      "opt 4 of 17",
+      "opt 5 of 17",
+      "opt 6 of 17",
+      "opt 7 of 17",
+      "opt 8 of 17"
+     ],
+     "answer": "B",
+     "answer_index": 1,
+     "cot_content": "",
+     "category": "law",
+     "src": "synthetic"
+    },
+    {
+     "question_id": 124,
+     "question": "M18: which holds truly truly?",
+     "options": [
+      "opt 0 of 18",
+      "opt 1 of 18",
+      "opt 2 of 18",
+      "opt 3 of 18",
+      "opt 4 of 18",
+      "opt 5 of 18",
+      "opt 6 of 18",
+      "opt 7 of 18"
+     ],
+     "answer": "C",
+     "answer_index": 2,
+     "cot_content": "",
+     "category": "computer science",
+     "src": "synthetic"
+    },
+    {
+     "question_id": 127,
+     "question": "M19: which holds truly truly truly?",
+     "options": [
+      "opt 0 of 19",
+      "opt 1 of 19",
+      "opt 2 of 19",
+      "opt 3 of 19",
+      "opt 4 of 19",
+      "opt 5 of 19",
+      "opt 6 of 19"
+     ],
+     "answer": "D",
+     "answer_index": 3,
+     "cot_content": "",
+     "category": "history",
+     "src": "synthetic"
+    },
+    {
+     "question_id": 130,
+     "question": "M20: which holds?",
+     "options": [
+      "opt 0 of 20",
+      "opt 1 of 20",
+      "opt 2 of 20",
+      "opt 3 of 20",
+      "opt 4 of 20",
+      "opt 5 of 20",
+      "opt 6 of 20",
+      "opt 7 of 20",
+      "opt 8 of 20",
+      "opt 9 of 20"
+     ],
+     "answer": "A",
+     "answer_index": 0,
+     "cot_content": "",
+     "category": "math",
+     "src": "synthetic"
+    },
+    {
+     "question_id": 133,
+     "question": "M21: which holds truly?",
+     "options": [
+      "opt 0 of 21",
+      "opt 1 of 21",
+      "opt 2 of 21",
+      "opt 3 of 21",
+      "opt 4 of 21",
+      "opt 5 of 21",
+      "opt 6 of 21",
+      "opt 7 of 21",
+      "opt 8 of 21"
+     ],
+     "answer": "B",
+     "answer_index": 1,
+     "cot_content": "",
+     "category": "law",
+     "src": "synthetic"
+    },
+    {
+     "question_id": 136,
+     "question": "M22: which holds truly truly?",
+     "options": [
+      "opt 0 of 22",
+      "opt 1 of 22",
+      "opt 2 of 22",
+      "opt 3 of 22",
+      "opt 4 of 22",
+      "opt 5 of 22",
+      "opt 6 of 22",
+      "opt 7 of 22"
+     ],
+     "answer": "C",
+     "answer_index": 2,
+     "cot_content": "",
+     "category": "computer science",
+     "src": "synthetic"
+    },
+    {
+     "question_id": 139,
+     "question": "M23: which holds truly truly truly?",
+     "options": [
+      "opt 0 of 23",
+      "opt 1 of 23",
+      "opt 2 of 23",
+      "opt 3 of 23",
+      "opt 4 of 23",
+      "opt 5 of 23",
+      "opt 6 of 23"
+     ],
+     "answer": "D",
+     "answer_index": 3,
+     "cot_content": "",
+     "category": "history",
+     "src": "synthetic"
+    },
+    {
+     "question_id": 142,
+     "question": "M24: which holds?",
+     "options": [
+      "opt 0 of 24",
+      "opt 1 of 24",
+      "opt 2 of 24",
+      "opt 3 of 24",
+      "opt 4 of 24",
+      "opt 5 of 24",
+      "opt 6 of 24",
+      "opt 7 of 24",
+      "opt 8 of 24",
+      "opt 9 of 24"
+     ],
+     "answer": "A",
+     "answer_index": 0,
+     "cot_content": "",
+     "category": "math",
+     "src": "synthetic"
+    },
+    {
+     "question_id": 145,
+     "question": "M25: which holds truly?",
+     "options": [
+      "opt 0 of 25",
+      "opt 1 of 25",
+      "opt 2 of 25",
+      "opt 3 of 25",
+      "opt 4 of 25",
+      "opt 5 of 25",
+      "opt 6 of 25",
+      "opt 7 of 25",
+      "opt 8 of 25"
+     ],
+     "answer": "B",
+     "answer_index": 1,
+     "cot_content": "",
+     "category": "law",
+     "src": "synthetic"
+    },
+    {
+     "question_id": 148,
+     "question": "M26: which holds truly truly?",
+     "options": [
+      "opt 0 of 26",
+      "opt 1 of 26",
+      "opt 2 of 26",
+      "opt 3 of 26",
+      "opt 4 of 26",
+      "opt 5 of 26",
+      "opt 6 of 26",
+      "opt 7 of 26"
+     ],
+     "answer": "C",
+     "answer_index": 2,
+     "cot_content": "",
+     "category": "computer science",
+     "src": "synthetic"
+    },
+    {
+     "question_id": 151,
+     "question": "M27: which holds truly truly truly?",
+     "options": [
+      "opt 0 of 27",
+      "opt 1 of 27",
+      "opt 2 of 27",
+      "opt 3 of 27",
+      "opt 4 of 27",
+      "opt 5 of 27",
+      "opt 6 of 27"
+     ],
+     "answer": "D",
+     "answer_index": 3,
+     "cot_content": "",
+     "category": "history",
+     "src": "synthetic"
+    },
+    {
+     "question_id": 154,
+     "question": "M28: which holds?",
+     "options": [
+      "opt 0 of 28",
+      "opt 1 of 28",
+      "opt 2 of 28",
+      "opt 3 of 28",
+      "opt 4 of 28",
+      "opt 5 of 28",
+      "opt 6 of 28",
+      "opt 7 of 28",
+      "opt 8 of 28",
+      "opt 9 of 28"
+     ],
+     "answer": "A",
+     "answer_index": 0,
+     "cot_content": "",
+     "category": "math",
+     "src": "synthetic"
+    },
+    {
+     "question_id": 157,
+     "question": "M29: which holds truly?",
+     "options": [
+      "opt 0 of 29",
+      "opt 1 of 29",
+      "opt 2 of 29",
+      "opt 3 of 29",
+      "opt 4 of 29",
+      "opt 5 of 29",
+      "opt 6 of 29",
+      "opt 7 of 29",
+      "opt 8 of 29"
+     ],
+     "answer": "B",
+     "answer_index": 1,
+     "cot_content": "",
+     "category": "law",
+     "src": "synthetic"
+    }
+   ],
+   "allenai/ai2_arc/ARC-Challenge/test-00000-of-00001.parquet": [
+    {
+     "id": "ARC_0",
+     "question": "A0: what is?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "1",
+       "2",
+       "3",
+       "4"
+      ]
+     },
+     "answerKey": "1"
+    },
+    {
+     "id": "ARC_1",
+     "question": "A1: what is it?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "A",
+       "B",
+       "C",
+       "D"
+      ]
+     },
+     "answerKey": "B"
+    },
+    {
+     "id": "ARC_2",
+     "question": "A2: what is it it?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "A",
+       "B",
+       "C",
+       "D"
+      ]
+     },
+     "answerKey": "C"
+    },
+    {
+     "id": "ARC_3",
+     "question": "A3: what is?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "A",
+       "B",
+       "C",
+       "D"
+      ]
+     },
+     "answerKey": "D"
+    },
+    {
+     "id": "ARC_4",
+     "question": "A4: what is it?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "A",
+       "B",
+       "C",
+       "D"
+      ]
+     },
+     "answerKey": "A"
+    },
+    {
+     "id": "ARC_5",
+     "question": "A5: what is it it?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "1",
+       "2",
+       "3",
+       "4"
+      ]
+     },
+     "answerKey": "2"
+    },
+    {
+     "id": "ARC_6",
+     "question": "A6: what is?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "A",
+       "B",
+       "C",
+       "D"
+      ]
+     },
+     "answerKey": "C"
+    },
+    {
+     "id": "ARC_7",
+     "question": "A7: what is it?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "A",
+       "B",
+       "C",
+       "D"
+      ]
+     },
+     "answerKey": "D"
+    },
+    {
+     "id": "ARC_8",
+     "question": "A8: what is it it?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "A",
+       "B",
+       "C",
+       "D"
+      ]
+     },
+     "answerKey": "A"
+    },
+    {
+     "id": "ARC_9",
+     "question": "A9: what is?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "A",
+       "B",
+       "C",
+       "D"
+      ]
+     },
+     "answerKey": "B"
+    },
+    {
+     "id": "ARC_10",
+     "question": "A10: what is it?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "1",
+       "2",
+       "3",
+       "4"
+      ]
+     },
+     "answerKey": "3"
+    },
+    {
+     "id": "ARC_11",
+     "question": "A11: what is it it?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "A",
+       "B",
+       "C",
+       "D"
+      ]
+     },
+     "answerKey": "D"
+    },
+    {
+     "id": "ARC_12",
+     "question": "A12: what is?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "A",
+       "B",
+       "C",
+       "D"
+      ]
+     },
+     "answerKey": "A"
+    },
+    {
+     "id": "ARC_13",
+     "question": "A13: what is it?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "A",
+       "B",
+       "C",
+       "D"
+      ]
+     },
+     "answerKey": "B"
+    },
+    {
+     "id": "ARC_14",
+     "question": "A14: what is it it?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "A",
+       "B",
+       "C",
+       "D"
+      ]
+     },
+     "answerKey": "C"
+    },
+    {
+     "id": "ARC_15",
+     "question": "A15: what is?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "1",
+       "2",
+       "3",
+       "4"
+      ]
+     },
+     "answerKey": "4"
+    },
+    {
+     "id": "ARC_16",
+     "question": "A16: what is it?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "A",
+       "B",
+       "C",
+       "D"
+      ]
+     },
+     "answerKey": "A"
+    },
+    {
+     "id": "ARC_17",
+     "question": "A17: what is it it?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "A",
+       "B",
+       "C",
+       "D"
+      ]
+     },
+     "answerKey": "B"
+    },
+    {
+     "id": "ARC_18",
+     "question": "A18: what is?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "A",
+       "B",
+       "C",
+       "D"
+      ]
+     },
+     "answerKey": "C"
+    },
+    {
+     "id": "ARC_19",
+     "question": "A19: what is it?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "A",
+       "B",
+       "C",
+       "D"
+      ]
+     },
+     "answerKey": "D"
+    },
+    {
+     "id": "ARC_20",
+     "question": "A20: what is it it?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "1",
+       "2",
+       "3",
+       "4"
+      ]
+     },
+     "answerKey": "1"
+    },
+    {
+     "id": "ARC_21",
+     "question": "A21: what is?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "A",
+       "B",
+       "C",
+       "D"
+      ]
+     },
+     "answerKey": "B"
+    },
+    {
+     "id": "ARC_22",
+     "question": "A22: what is it?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "A",
+       "B",
+       "C",
+       "D"
+      ]
+     },
+     "answerKey": "C"
+    },
+    {
+     "id": "ARC_23",
+     "question": "A23: what is it it?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "A",
+       "B",
+       "C",
+       "D"
+      ]
+     },
+     "answerKey": "D"
+    },
+    {
+     "id": "ARC_24",
+     "question": "A24: what is?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "A",
+       "B",
+       "C",
+       "D"
+      ]
+     },
+     "answerKey": "A"
+    },
+    {
+     "id": "ARC_25",
+     "question": "A25: what is it?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "1",
+       "2",
+       "3",
+       "4"
+      ]
+     },
+     "answerKey": "2"
+    },
+    {
+     "id": "ARC_26",
+     "question": "A26: what is it it?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "A",
+       "B",
+       "C",
+       "D"
+      ]
+     },
+     "answerKey": "C"
+    },
+    {
+     "id": "ARC_27",
+     "question": "A27: what is?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "A",
+       "B",
+       "C",
+       "D"
+      ]
+     },
+     "answerKey": "D"
+    },
+    {
+     "id": "ARC_28",
+     "question": "A28: what is it?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "A",
+       "B",
+       "C",
+       "D"
+      ]
+     },
+     "answerKey": "A"
+    },
+    {
+     "id": "ARC_29",
+     "question": "A29: what is it it?",
+     "choices": {
+      "text": [
+       "c0",
+       "c1",
+       "c2",
+       "c3"
+      ],
+      "label": [
+       "A",
+       "B",
+       "C",
+       "D"
+      ]
+     },
+     "answerKey": "B"
+    }
+   ]
+  },
+  "n": 12,
+  "batch": 5,
+  "max_new": {
+   "gsm8k": 512,
+   "mmlu_pro": 24,
+   "arc_challenge": 24
+  },
+  "sets": {
+   "gsm8k": [
+    "openai/gsm8k",
+    "main/test"
+   ],
+   "mmlu_pro": [
+    "TIGER-Lab/MMLU-Pro",
+    "data/test"
+   ],
+   "arc_challenge": [
+    "allenai/ai2_arc",
+    "ARC-Challenge/test"
+   ]
+  }
+ },
+ "outputs": {
+  "read": [
+   "openai/gsm8k/main/test-00000-of-00001.parquet",
+   "TIGER-Lab/MMLU-Pro/data/test-00000-of-00002.parquet",
+   "TIGER-Lab/MMLU-Pro/data/test-00001-of-00002.parquet",
+   "allenai/ai2_arc/ARC-Challenge/test-00000-of-00001.parquet"
+  ],
+  "items": [
+   {
+    "set": "gsm8k",
+    "id": "gsm8k/1",
+    "prompt": "Q1: Tom has x=7 apples and more. How many?\n\nWork it out step by step, then give the final answer on the last line as \"Answer: <number>\".",
+    "gold": "7",
+    "of": 30
+   },
+   {
+    "set": "gsm8k",
+    "id": "gsm8k/8",
+    "prompt": "Q8: Tom has x=6 apples and more and more and more. How many?\n\nWork it out step by step, then give the final answer on the last line as \"Answer: <number>\".",
+    "gold": "6",
+    "of": 30
+   },
+   {
+    "set": "gsm8k",
+    "id": "gsm8k/9",
+    "prompt": "Q9: Tom has x=13 apples and more and more and more and more. How many?\n\nWork it out step by step, then give the final answer on the last line as \"Answer: <number>\".",
+    "gold": "1009",
+    "of": 30
+   },
+   {
+    "set": "gsm8k",
+    "id": "gsm8k/11",
+    "prompt": "Q11: Tom has x=27 apples and more. How many?\n\nWork it out step by step, then give the final answer on the last line as \"Answer: <number>\".",
+    "gold": "27",
+    "of": 30
+   },
+   {
+    "set": "gsm8k",
+    "id": "gsm8k/12",
+    "prompt": "Q12: Tom has x=34 apples and more and more. How many?\n\nWork it out step by step, then give the final answer on the last line as \"Answer: <number>\".",
+    "gold": "1012",
+    "of": 30
+   },
+   {
+    "set": "gsm8k",
+    "id": "gsm8k/13",
+    "prompt": "Q13: Tom has x=41 apples and more and more and more. How many?\n\nWork it out step by step, then give the final answer on the last line as \"Answer: <number>\".",
+    "gold": "41",
+    "of": 30
+   },
+   {
+    "set": "gsm8k",
+    "id": "gsm8k/15",
+    "prompt": "Q15: Tom has x=5 apples. How many?\n\nWork it out step by step, then give the final answer on the last line as \"Answer: <number>\".",
+    "gold": "1015",
+    "of": 30
+   },
+   {
+    "set": "gsm8k",
+    "id": "gsm8k/16",
+    "prompt": "Q16: Tom has x=12 apples and more. How many?\n\nWork it out step by step, then give the final answer on the last line as \"Answer: <number>\".",
+    "gold": "12",
+    "of": 30
+   },
+   {
+    "set": "gsm8k",
+    "id": "gsm8k/22",
+    "prompt": "Q22: Tom has x=4 apples and more and more. How many?\n\nWork it out step by step, then give the final answer on the last line as \"Answer: <number>\".",
+    "gold": "4",
+    "of": 30
+   },
+   {
+    "set": "gsm8k",
+    "id": "gsm8k/24",
+    "prompt": "Q24: Tom has x=18 apples and more and more and more and more. How many?\n\nWork it out step by step, then give the final answer on the last line as \"Answer: <number>\".",
+    "gold": "1024",
+    "of": 30
+   },
+   {
+    "set": "gsm8k",
+    "id": "gsm8k/27",
+    "prompt": "Q27: Tom has x=39 apples and more and more. How many?\n\nWork it out step by step, then give the final answer on the last line as \"Answer: <number>\".",
+    "gold": "1027",
+    "of": 30
+   },
+   {
+    "set": "gsm8k",
+    "id": "gsm8k/28",
+    "prompt": "Q28: Tom has x=46 apples and more and more and more. How many?\n\nWork it out step by step, then give the final answer on the last line as \"Answer: <number>\".",
+    "gold": "46",
+    "of": 30
+   },
+   {
+    "set": "mmlu_pro",
+    "id": "mmlu_pro/1",
+    "prompt": "M1: which holds truly?\n\nA. opt 0 of 1\nB. opt 1 of 1\nC. opt 2 of 1\nD. opt 3 of 1\nE. opt 4 of 1\nF. opt 5 of 1\nG. opt 6 of 1\nH. opt 7 of 1\nI. opt 8 of 1\n\nReply with the letter of the correct option only.",
+    "gold": "B",
+    "of": 30
+   },
+   {
+    "set": "mmlu_pro",
+    "id": "mmlu_pro/8",
+    "prompt": "M8: which holds?\n\nA. opt 0 of 8\nB. opt 1 of 8\nC. opt 2 of 8\nD. opt 3 of 8\nE. opt 4 of 8\nF. opt 5 of 8\nG. opt 6 of 8\nH. opt 7 of 8\nI. opt 8 of 8\nJ. opt 9 of 8\n\nReply with the letter of the correct option only.",
+    "gold": "A",
+    "of": 30
+   },
+   {
+    "set": "mmlu_pro",
+    "id": "mmlu_pro/9",
+    "prompt": "M9: which holds truly?\n\nA. opt 0 of 9\nB. opt 1 of 9\nC. opt 2 of 9\nD. opt 3 of 9\nE. opt 4 of 9\nF. opt 5 of 9\nG. opt 6 of 9\nH. opt 7 of 9\nI. opt 8 of 9\n\nReply with the letter of the correct option only.",
+    "gold": "B",
+    "of": 30
+   },
+   {
+    "set": "mmlu_pro",
+    "id": "mmlu_pro/11",
+    "prompt": "M11: which holds truly truly truly?\n\nA. opt 0 of 11\nB. opt 1 of 11\nC. opt 2 of 11\nD. opt 3 of 11\nE. opt 4 of 11\nF. opt 5 of 11\nG. opt 6 of 11\n\nReply with the letter of the correct option only.",
+    "gold": "D",
+    "of": 30
+   },
+   {
+    "set": "mmlu_pro",
+    "id": "mmlu_pro/12",
+    "prompt": "M12: which holds?\n\nA. opt 0 of 12\nB. opt 1 of 12\nC. opt 2 of 12\nD. opt 3 of 12\nE. opt 4 of 12\nF. opt 5 of 12\nG. opt 6 of 12\nH. opt 7 of 12\nI. opt 8 of 12\nJ. opt 9 of 12\n\nReply with the letter of the correct option only.",
+    "gold": "A",
+    "of": 30
+   },
+   {
+    "set": "mmlu_pro",
+    "id": "mmlu_pro/13",
+    "prompt": "M13: which holds truly?\n\nA. opt 0 of 13\nB. opt 1 of 13\nC. opt 2 of 13\nD. opt 3 of 13\nE. opt 4 of 13\nF. opt 5 of 13\nG. opt 6 of 13\nH. opt 7 of 13\nI. opt 8 of 13\n\nReply with the letter of the correct option only.",
+    "gold": "B",
+    "of": 30
+   },
+   {
+    "set": "mmlu_pro",
+    "id": "mmlu_pro/15",
+    "prompt": "M15: which holds truly truly truly?\n\nA. opt 0 of 15\nB. opt 1 of 15\nC. opt 2 of 15\nD. opt 3 of 15\nE. opt 4 of 15\nF. opt 5 of 15\nG. opt 6 of 15\n\nReply with the letter of the correct option only.",
+    "gold": "D",
+    "of": 30
+   },
+   {
+    "set": "mmlu_pro",
+    "id": "mmlu_pro/16",
+    "prompt": "M16: which holds?\n\nA. opt 0 of 16\nB. opt 1 of 16\nC. opt 2 of 16\nD. opt 3 of 16\nE. opt 4 of 16\nF. opt 5 of 16\nG. opt 6 of 16\nH. opt 7 of 16\nI. opt 8 of 16\nJ. opt 9 of 16\n\nReply with the letter of the correct option only.",
+    "gold": "A",
+    "of": 30
+   },
+   {
+    "set": "mmlu_pro",
+    "id": "mmlu_pro/22",
+    "prompt": "M22: which holds truly truly?\n\nA. opt 0 of 22\nB. opt 1 of 22\nC. opt 2 of 22\nD. opt 3 of 22\nE. opt 4 of 22\nF. opt 5 of 22\nG. opt 6 of 22\nH. opt 7 of 22\n\nReply with the letter of the correct option only.",
+    "gold": "C",
+    "of": 30
+   },
+   {
+    "set": "mmlu_pro",
+    "id": "mmlu_pro/24",
+    "prompt": "M24: which holds?\n\nA. opt 0 of 24\nB. opt 1 of 24\nC. opt 2 of 24\nD. opt 3 of 24\nE. opt 4 of 24\nF. opt 5 of 24\nG. opt 6 of 24\nH. opt 7 of 24\nI. opt 8 of 24\nJ. opt 9 of 24\n\nReply with the letter of the correct option only.",
+    "gold": "A",
+    "of": 30
+   },
+   {
+    "set": "mmlu_pro",
+    "id": "mmlu_pro/27",
+    "prompt": "M27: which holds truly truly truly?\n\nA. opt 0 of 27\nB. opt 1 of 27\nC. opt 2 of 27\nD. opt 3 of 27\nE. opt 4 of 27\nF. opt 5 of 27\nG. opt 6 of 27\n\nReply with the letter of the correct option only.",
+    "gold": "D",
+    "of": 30
+   },
+   {
+    "set": "mmlu_pro",
+    "id": "mmlu_pro/28",
+    "prompt": "M28: which holds?\n\nA. opt 0 of 28\nB. opt 1 of 28\nC. opt 2 of 28\nD. opt 3 of 28\nE. opt 4 of 28\nF. opt 5 of 28\nG. opt 6 of 28\nH. opt 7 of 28\nI. opt 8 of 28\nJ. opt 9 of 28\n\nReply with the letter of the correct option only.",
+    "gold": "A",
+    "of": 30
+   },
+   {
+    "set": "arc_challenge",
+    "id": "arc_challenge/1",
+    "prompt": "A1: what is it?\n\nA. c0\nB. c1\nC. c2\nD. c3\n\nReply with the letter of the correct option only.",
+    "gold": "B",
+    "of": 30
+   },
+   {
+    "set": "arc_challenge",
+    "id": "arc_challenge/8",
+    "prompt": "A8: what is it it?\n\nA. c0\nB. c1\nC. c2\nD. c3\n\nReply with the letter of the correct option only.",
+    "gold": "A",
+    "of": 30
+   },
+   {
+    "set": "arc_challenge",
+    "id": "arc_challenge/9",
+    "prompt": "A9: what is?\n\nA. c0\nB. c1\nC. c2\nD. c3\n\nReply with the letter of the correct option only.",
+    "gold": "B",
+    "of": 30
+   },
+   {
+    "set": "arc_challenge",
+    "id": "arc_challenge/11",
+    "prompt": "A11: what is it it?\n\nA. c0\nB. c1\nC. c2\nD. c3\n\nReply with the letter of the correct option only.",
+    "gold": "D",
+    "of": 30
+   },
+   {
+    "set": "arc_challenge",
+    "id": "arc_challenge/12",
+    "prompt": "A12: what is?\n\nA. c0\nB. c1\nC. c2\nD. c3\n\nReply with the letter of the correct option only.",
+    "gold": "A",
+    "of": 30
+   },
+   {
+    "set": "arc_challenge",
+    "id": "arc_challenge/13",
+    "prompt": "A13: what is it?\n\nA. c0\nB. c1\nC. c2\nD. c3\n\nReply with the letter of the correct option only.",
+    "gold": "B",
+    "of": 30
+   },
+   {
+    "set": "arc_challenge",
+    "id": "arc_challenge/15",
+    "prompt": "A15: what is?\n\nA. c0\nB. c1\nC. c2\nD. c3\n\nReply with the letter of the correct option only.",
+    "gold": "D",
+    "of": 30
+   },
+   {
+    "set": "arc_challenge",
+    "id": "arc_challenge/16",
+    "prompt": "A16: what is it?\n\nA. c0\nB. c1\nC. c2\nD. c3\n\nReply with the letter of the correct option only.",
+    "gold": "A",
+    "of": 30
+   },
+   {
+    "set": "arc_challenge",
+    "id": "arc_challenge/22",
+    "prompt": "A22: what is it?\n\nA. c0\nB. c1\nC. c2\nD. c3\n\nReply with the letter of the correct option only.",
+    "gold": "C",
+    "of": 30
+   },
+   {
+    "set": "arc_challenge",
+    "id": "arc_challenge/24",
+    "prompt": "A24: what is?\n\nA. c0\nB. c1\nC. c2\nD. c3\n\nReply with the letter of the correct option only.",
+    "gold": "A",
+    "of": 30
+   },
+   {
+    "set": "arc_challenge",
+    "id": "arc_challenge/27",
+    "prompt": "A27: what is?\n\nA. c0\nB. c1\nC. c2\nD. c3\n\nReply with the letter of the correct option only.",
+    "gold": "D",
+    "of": 30
+   },
+   {
+    "set": "arc_challenge",
+    "id": "arc_challenge/28",
+    "prompt": "A28: what is it?\n\nA. c0\nB. c1\nC. c2\nD. c3\n\nReply with the letter of the correct option only.",
+    "gold": "A",
+    "of": 30
+   }
+  ],
+  "probe_calls": [
+   {
+    "conversations": [
+     [
+      {
+       "role": "user",
+       "content": "Q15: Tom has x=5 apples. How many?\n\nWork it out step by step, then give the final answer on the last line as \"Answer: <number>\"."
+      }
+     ],
+     [
+      {
+       "role": "user",
+       "content": "Q1: Tom has x=7 apples and more. How many?\n\nWork it out step by step, then give the final answer on the last line as \"Answer: <number>\"."
+      }
+     ],
+     [
+      {
+       "role": "user",
+       "content": "Q11: Tom has x=27 apples and more. How many?\n\nWork it out step by step, then give the final answer on the last line as \"Answer: <number>\"."
+      }
+     ],
+     [
+      {
+       "role": "user",
+       "content": "Q16: Tom has x=12 apples and more. How many?\n\nWork it out step by step, then give the final answer on the last line as \"Answer: <number>\"."
+      }
+     ],
+     [
+      {
+       "role": "user",
+       "content": "Q22: Tom has x=4 apples and more and more. How many?\n\nWork it out step by step, then give the final answer on the last line as \"Answer: <number>\"."
+      }
+     ]
+    ],
+    "max_new_tokens": 512,
+    "temperature": 0.0,
+    "seed": 0
+   },
+   {
+    "conversations": [
+     [
+      {
+       "role": "user",
+       "content": "Q12: Tom has x=34 apples and more and more. How many?\n\nWork it out step by step, then give the final answer on the last line as \"Answer: <number>\"."
+      }
+     ],
+     [
+      {
+       "role": "user",
+       "content": "Q27: Tom has x=39 apples and more and more. How many?\n\nWork it out step by step, then give the final answer on the last line as \"Answer: <number>\"."
+      }
+     ],
+     [
+      {
+       "role": "user",
+       "content": "Q8: Tom has x=6 apples and more and more and more. How many?\n\nWork it out step by step, then give the final answer on the last line as \"Answer: <number>\"."
+      }
+     ],
+     [
+      {
+       "role": "user",
+       "content": "Q13: Tom has x=41 apples and more and more and more. How many?\n\nWork it out step by step, then give the final answer on the last line as \"Answer: <number>\"."
+      }
+     ],
+     [
+      {
+       "role": "user",
+       "content": "Q28: Tom has x=46 apples and more and more and more. How many?\n\nWork it out step by step, then give the final answer on the last line as \"Answer: <number>\"."
+      }
+     ]
+    ],
+    "max_new_tokens": 512,
+    "temperature": 0.0,
+    "seed": 0
+   },
+   {
+    "conversations": [
+     [
+      {
+       "role": "user",
+       "content": "Q9: Tom has x=13 apples and more and more and more and more. How many?\n\nWork it out step by step, then give the final answer on the last line as \"Answer: <number>\"."
+      }
+     ],
+     [
+      {
+       "role": "user",
+       "content": "Q24: Tom has x=18 apples and more and more and more and more. How many?\n\nWork it out step by step, then give the final answer on the last line as \"Answer: <number>\"."
+      }
+     ]
+    ],
+    "max_new_tokens": 512,
+    "temperature": 0.0,
+    "seed": 0
+   },
+   {
+    "conversations": [
+     [
+      {
+       "role": "user",
+       "content": "M11: which holds truly truly truly?\n\nA. opt 0 of 11\nB. opt 1 of 11\nC. opt 2 of 11\nD. opt 3 of 11\nE. opt 4 of 11\nF. opt 5 of 11\nG. opt 6 of 11\n\nReply with the letter of the correct option only."
+      }
+     ],
+     [
+      {
+       "role": "user",
+       "content": "M15: which holds truly truly truly?\n\nA. opt 0 of 15\nB. opt 1 of 15\nC. opt 2 of 15\nD. opt 3 of 15\nE. opt 4 of 15\nF. opt 5 of 15\nG. opt 6 of 15\n\nReply with the letter of the correct option only."
+      }
+     ],
+     [
+      {
+       "role": "user",
+       "content": "M27: which holds truly truly truly?\n\nA. opt 0 of 27\nB. opt 1 of 27\nC. opt 2 of 27\nD. opt 3 of 27\nE. opt 4 of 27\nF. opt 5 of 27\nG. opt 6 of 27\n\nReply with the letter of the correct option only."
+      }
+     ],
+     [
+      {
+       "role": "user",
+       "content": "M1: which holds truly?\n\nA. opt 0 of 1\nB. opt 1 of 1\nC. opt 2 of 1\nD. opt 3 of 1\nE. opt 4 of 1\nF. opt 5 of 1\nG. opt 6 of 1\nH. opt 7 of 1\nI. opt 8 of 1\n\nReply with the letter of the correct option only."
+      }
+     ],
+     [
+      {
+       "role": "user",
+       "content": "M9: which holds truly?\n\nA. opt 0 of 9\nB. opt 1 of 9\nC. opt 2 of 9\nD. opt 3 of 9\nE. opt 4 of 9\nF. opt 5 of 9\nG. opt 6 of 9\nH. opt 7 of 9\nI. opt 8 of 9\n\nReply with the letter of the correct option only."
+      }
+     ]
+    ],
+    "max_new_tokens": 24,
+    "temperature": 0.0,
+    "seed": 0
+   },
+   {
+    "conversations": [
+     [
+      {
+       "role": "user",
+       "content": "M22: which holds truly truly?\n\nA. opt 0 of 22\nB. opt 1 of 22\nC. opt 2 of 22\nD. opt 3 of 22\nE. opt 4 of 22\nF. opt 5 of 22\nG. opt 6 of 22\nH. opt 7 of 22\n\nReply with the letter of the correct option only."
+      }
+     ],
+     [
+      {
+       "role": "user",
+       "content": "M8: which holds?\n\nA. opt 0 of 8\nB. opt 1 of 8\nC. opt 2 of 8\nD. opt 3 of 8\nE. opt 4 of 8\nF. opt 5 of 8\nG. opt 6 of 8\nH. opt 7 of 8\nI. opt 8 of 8\nJ. opt 9 of 8\n\nReply with the letter of the correct option only."
+      }
+     ],
+     [
+      {
+       "role": "user",
+       "content": "M13: which holds truly?\n\nA. opt 0 of 13\nB. opt 1 of 13\nC. opt 2 of 13\nD. opt 3 of 13\nE. opt 4 of 13\nF. opt 5 of 13\nG. opt 6 of 13\nH. opt 7 of 13\nI. opt 8 of 13\n\nReply with the letter of the correct option only."
+      }
+     ],
+     [
+      {
+       "role": "user",
+       "content": "M12: which holds?\n\nA. opt 0 of 12\nB. opt 1 of 12\nC. opt 2 of 12\nD. opt 3 of 12\nE. opt 4 of 12\nF. opt 5 of 12\nG. opt 6 of 12\nH. opt 7 of 12\nI. opt 8 of 12\nJ. opt 9 of 12\n\nReply with the letter of the correct option only."
+      }
+     ],
+     [
+      {
+       "role": "user",
+       "content": "M16: which holds?\n\nA. opt 0 of 16\nB. opt 1 of 16\nC. opt 2 of 16\nD. opt 3 of 16\nE. opt 4 of 16\nF. opt 5 of 16\nG. opt 6 of 16\nH. opt 7 of 16\nI. opt 8 of 16\nJ. opt 9 of 16\n\nReply with the letter of the correct option only."
+      }
+     ]
+    ],
+    "max_new_tokens": 24,
+    "temperature": 0.0,
+    "seed": 0
+   },
+   {
+    "conversations": [
+     [
+      {
+       "role": "user",
+       "content": "M24: which holds?\n\nA. opt 0 of 24\nB. opt 1 of 24\nC. opt 2 of 24\nD. opt 3 of 24\nE. opt 4 of 24\nF. opt 5 of 24\nG. opt 6 of 24\nH. opt 7 of 24\nI. opt 8 of 24\nJ. opt 9 of 24\n\nReply with the letter of the correct option only."
+      }
+     ],
+     [
+      {
+       "role": "user",
+       "content": "M28: which holds?\n\nA. opt 0 of 28\nB. opt 1 of 28\nC. opt 2 of 28\nD. opt 3 of 28\nE. opt 4 of 28\nF. opt 5 of 28\nG. opt 6 of 28\nH. opt 7 of 28\nI. opt 8 of 28\nJ. opt 9 of 28\n\nReply with the letter of the correct option only."
+      }
+     ]
+    ],
+    "max_new_tokens": 24,
+    "temperature": 0.0,
+    "seed": 0
+   },
+   {
+    "conversations": [
+     [
+      {
+       "role": "user",
+       "content": "A9: what is?\n\nA. c0\nB. c1\nC. c2\nD. c3\n\nReply with the letter of the correct option only."
+      }
+     ],
+     [
+      {
+       "role": "user",
+       "content": "A12: what is?\n\nA. c0\nB. c1\nC. c2\nD. c3\n\nReply with the letter of the correct option only."
+      }
+     ],
+     [
+      {
+       "role": "user",
+       "content": "A15: what is?\n\nA. c0\nB. c1\nC. c2\nD. c3\n\nReply with the letter of the correct option only."
+      }
+     ],
+     [
+      {
+       "role": "user",
+       "content": "A24: what is?\n\nA. c0\nB. c1\nC. c2\nD. c3\n\nReply with the letter of the correct option only."
+      }
+     ],
+     [
+      {
+       "role": "user",
+       "content": "A27: what is?\n\nA. c0\nB. c1\nC. c2\nD. c3\n\nReply with the letter of the correct option only."
+      }
+     ]
+    ],
+    "max_new_tokens": 24,
+    "temperature": 0.0,
+    "seed": 0
+   },
+   {
+    "conversations": [
+     [
+      {
+       "role": "user",
+       "content": "A1: what is it?\n\nA. c0\nB. c1\nC. c2\nD. c3\n\nReply with the letter of the correct option only."
+      }
+     ],
+     [
+      {
+       "role": "user",
+       "content": "A13: what is it?\n\nA. c0\nB. c1\nC. c2\nD. c3\n\nReply with the letter of the correct option only."
+      }
+     ],
+     [
+      {
+       "role": "user",
+       "content": "A16: what is it?\n\nA. c0\nB. c1\nC. c2\nD. c3\n\nReply with the letter of the correct option only."
+      }
+     ],
+     [
+      {
+       "role": "user",
+       "content": "A22: what is it?\n\nA. c0\nB. c1\nC. c2\nD. c3\n\nReply with the letter of the correct option only."
+      }
+     ],
+     [
+      {
+       "role": "user",
+       "content": "A28: what is it?\n\nA. c0\nB. c1\nC. c2\nD. c3\n\nReply with the letter of the correct option only."
+      }
+     ]
+    ],
+    "max_new_tokens": 24,
+    "temperature": 0.0,
+    "seed": 0
+   },
+   {
+    "conversations": [
+     [
+      {
+       "role": "user",
+       "content": "A8: what is it it?\n\nA. c0\nB. c1\nC. c2\nD. c3\n\nReply with the letter of the correct option only."
+      }
+     ],
+     [
+      {
+       "role": "user",
+       "content": "A11: what is it it?\n\nA. c0\nB. c1\nC. c2\nD. c3\n\nReply with the letter of the correct option only."
+      }
+     ]
+    ],
+    "max_new_tokens": 24,
+    "temperature": 0.0,
+    "seed": 0
+   }
+  ],
+  "generate_calls": [
+   {
+    "input_ids": [
+     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 97, 65, 69, 74, 48, 100, 127, 125, 48, 120, 113, 131, 48, 136, 77, 69, 48, 113, 128, 128, 124, 117, 131, 62, 48, 88, 127, 135, 48, 125, 113, 126, 137, 79, 26, 26, 103, 127, 130, 123, 48, 121, 132, 48, 127, 133, 132, 48, 131, 132, 117, 128, 48, 114, 137, 48, 131, 132, 117, 128, 60, 48, 132, 120, 117, 126, 48, 119, 121, 134, 117, 48, 132, 120, 117, 48, 118, 121, 126, 113, 124, 48, 113, 126, 131, 135, 117, 130, 48, 127, 126, 48, 132, 120, 117, 48, 124, 113, 131, 132, 48, 124, 121, 126, 117, 48, 113, 131, 48, 50, 81, 126, 131, 135, 117, 130, 74, 48, 76, 126, 133, 125, 114, 117, 130, 78, 50, 62, 6, 7],
+     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 97, 65, 74, 48, 100, 127, 125, 48, 120, 113, 131, 48, 136, 77, 71, 48, 113, 128, 128, 124, 117, 131, 48, 113, 126, 116, 48, 125, 127, 130, 117, 62, 48, 88, 127, 135, 48, 125, 113, 126, 137, 79, 26, 26, 103, 127, 130, 123, 48, 121, 132, 48, 127, 133, 132, 48, 131, 132, 117, 128, 48, 114, 137, 48, 131, 132, 117, 128, 60, 48, 132, 120, 117, 126, 48, 119, 121, 134, 117, 48, 132, 120, 117, 48, 118, 121, 126, 113, 124, 48, 113, 126, 131, 135, 117, 130, 48, 127, 126, 48, 132, 120, 117, 48, 124, 113, 131, 132, 48, 124, 121, 126, 117, 48, 113, 131, 48, 50, 81, 126, 131, 135, 117, 130, 74, 48, 76, 126, 133, 125, 114, 117, 130, 78, 50, 62, 6, 7],
+     [0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 97, 65, 65, 74, 48, 100, 127, 125, 48, 120, 113, 131, 48, 136, 77, 66, 71, 48, 113, 128, 128, 124, 117, 131, 48, 113, 126, 116, 48, 125, 127, 130, 117, 62, 48, 88, 127, 135, 48, 125, 113, 126, 137, 79, 26, 26, 103, 127, 130, 123, 48, 121, 132, 48, 127, 133, 132, 48, 131, 132, 117, 128, 48, 114, 137, 48, 131, 132, 117, 128, 60, 48, 132, 120, 117, 126, 48, 119, 121, 134, 117, 48, 132, 120, 117, 48, 118, 121, 126, 113, 124, 48, 113, 126, 131, 135, 117, 130, 48, 127, 126, 48, 132, 120, 117, 48, 124, 113, 131, 132, 48, 124, 121, 126, 117, 48, 113, 131, 48, 50, 81, 126, 131, 135, 117, 130, 74, 48, 76, 126, 133, 125, 114, 117, 130, 78, 50, 62, 6, 7],
+     [0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 97, 65, 70, 74, 48, 100, 127, 125, 48, 120, 113, 131, 48, 136, 77, 65, 66, 48, 113, 128, 128, 124, 117, 131, 48, 113, 126, 116, 48, 125, 127, 130, 117, 62, 48, 88, 127, 135, 48, 125, 113, 126, 137, 79, 26, 26, 103, 127, 130, 123, 48, 121, 132, 48, 127, 133, 132, 48, 131, 132, 117, 128, 48, 114, 137, 48, 131, 132, 117, 128, 60, 48, 132, 120, 117, 126, 48, 119, 121, 134, 117, 48, 132, 120, 117, 48, 118, 121, 126, 113, 124, 48, 113, 126, 131, 135, 117, 130, 48, 127, 126, 48, 132, 120, 117, 48, 124, 113, 131, 132, 48, 124, 121, 126, 117, 48, 113, 131, 48, 50, 81, 126, 131, 135, 117, 130, 74, 48, 76, 126, 133, 125, 114, 117, 130, 78, 50, 62, 6, 7],
+     [1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 97, 66, 66, 74, 48, 100, 127, 125, 48, 120, 113, 131, 48, 136, 77, 68, 48, 113, 128, 128, 124, 117, 131, 48, 113, 126, 116, 48, 125, 127, 130, 117, 48, 113, 126, 116, 48, 125, 127, 130, 117, 62, 48, 88, 127, 135, 48, 125, 113, 126, 137, 79, 26, 26, 103, 127, 130, 123, 48, 121, 132, 48, 127, 133, 132, 48, 131, 132, 117, 128, 48, 114, 137, 48, 131, 132, 117, 128, 60, 48, 132, 120, 117, 126, 48, 119, 121, 134, 117, 48, 132, 120, 117, 48, 118, 121, 126, 113, 124, 48, 113, 126, 131, 135, 117, 130, 48, 127, 126, 48, 132, 120, 117, 48, 124, 113, 131, 132, 48, 124, 121, 126, 117, 48, 113, 131, 48, 50, 81, 126, 131, 135, 117, 130, 74, 48, 76, 126, 133, 125, 114, 117, 130, 78, 50, 62, 6, 7]
+    ],
+    "attention_mask": [
+     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+     [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+     [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    ],
+    "max_new_tokens": 512,
+    "do_sample": false,
+    "temperature": null,
+    "top_p": null,
+    "pad_token_id": 0
+   },
+   {
+    "input_ids": [
+     [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 97, 65, 66, 74, 48, 100, 127, 125, 48, 120, 113, 131, 48, 136, 77, 67, 68, 48, 113, 128, 128, 124, 117, 131, 48, 113, 126, 116, 48, 125, 127, 130, 117, 48, 113, 126, 116, 48, 125, 127, 130, 117, 62, 48, 88, 127, 135, 48, 125, 113, 126, 137, 79, 26, 26, 103, 127, 130, 123, 48, 121, 132, 48, 127, 133, 132, 48, 131, 132, 117, 128, 48, 114, 137, 48, 131, 132, 117, 128, 60, 48, 132, 120, 117, 126, 48, 119, 121, 134, 117, 48, 132, 120, 117, 48, 118, 121, 126, 113, 124, 48, 113, 126, 131, 135, 117, 130, 48, 127, 126, 48, 132, 120, 117, 48, 124, 113, 131, 132, 48, 124, 121, 126, 117, 48, 113, 131, 48, 50, 81, 126, 131, 135, 117, 130, 74, 48, 76, 126, 133, 125, 114, 117, 130, 78, 50, 62, 6, 7],
+     [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 97, 66, 71, 74, 48, 100, 127, 125, 48, 120, 113, 131, 48, 136, 77, 67, 73, 48, 113, 128, 128, 124, 117, 131, 48, 113, 126, 116, 48, 125, 127, 130, 117, 48, 113, 126, 116, 48, 125, 127, 130, 117, 62, 48, 88, 127, 135, 48, 125, 113, 126, 137, 79, 26, 26, 103, 127, 130, 123, 48, 121, 132, 48, 127, 133, 132, 48, 131, 132, 117, 128, 48, 114, 137, 48, 131, 132, 117, 128, 60, 48, 132, 120, 117, 126, 48, 119, 121, 134, 117, 48, 132, 120, 117, 48, 118, 121, 126, 113, 124, 48, 113, 126, 131, 135, 117, 130, 48, 127, 126, 48, 132, 120, 117, 48, 124, 113, 131, 132, 48, 124, 121, 126, 117, 48, 113, 131, 48, 50, 81, 126, 131, 135, 117, 130, 74, 48, 76, 126, 133, 125, 114, 117, 130, 78, 50, 62, 6, 7],
+     [0, 0, 1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 97, 72, 74, 48, 100, 127, 125, 48, 120, 113, 131, 48, 136, 77, 70, 48, 113, 128, 128, 124, 117, 131, 48, 113, 126, 116, 48, 125, 127, 130, 117, 48, 113, 126, 116, 48, 125, 127, 130, 117, 48, 113, 126, 116, 48, 125, 127, 130, 117, 62, 48, 88, 127, 135, 48, 125, 113, 126, 137, 79, 26, 26, 103, 127, 130, 123, 48, 121, 132, 48, 127, 133, 132, 48, 131, 132, 117, 128, 48, 114, 137, 48, 131, 132, 117, 128, 60, 48, 132, 120, 117, 126, 48, 119, 121, 134, 117, 48, 132, 120, 117, 48, 118, 121, 126, 113, 124, 48, 113, 126, 131, 135, 117, 130, 48, 127, 126, 48, 132, 120, 117, 48, 124, 113, 131, 132, 48, 124, 121, 126, 117, 48, 113, 131, 48, 50, 81, 126, 131, 135, 117, 130, 74, 48, 76, 126, 133, 125, 114, 117, 130, 78, 50, 62, 6, 7],
+     [1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 97, 65, 67, 74, 48, 100, 127, 125, 48, 120, 113, 131, 48, 136, 77, 68, 65, 48, 113, 128, 128, 124, 117, 131, 48, 113, 126, 116, 48, 125, 127, 130, 117, 48, 113, 126, 116, 48, 125, 127, 130, 117, 48, 113, 126, 116, 48, 125, 127, 130, 117, 62, 48, 88, 127, 135, 48, 125, 113, 126, 137, 79, 26, 26, 103, 127, 130, 123, 48, 121, 132, 48, 127, 133, 132, 48, 131, 132, 117, 128, 48, 114, 137, 48, 131, 132, 117, 128, 60, 48, 132, 120, 117, 126, 48, 119, 121, 134, 117, 48, 132, 120, 117, 48, 118, 121, 126, 113, 124, 48, 113, 126, 131, 135, 117, 130, 48, 127, 126, 48, 132, 120, 117, 48, 124, 113, 131, 132, 48, 124, 121, 126, 117, 48, 113, 131, 48, 50, 81, 126, 131, 135, 117, 130, 74, 48, 76, 126, 133, 125, 114, 117, 130, 78, 50, 62, 6, 7],
+     [1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 97, 66, 72, 74, 48, 100, 127, 125, 48, 120, 113, 131, 48, 136, 77, 68, 70, 48, 113, 128, 128, 124, 117, 131, 48, 113, 126, 116, 48, 125, 127, 130, 117, 48, 113, 126, 116, 48, 125, 127, 130, 117, 48, 113, 126, 116, 48, 125, 127, 130, 117, 62, 48, 88, 127, 135, 48, 125, 113, 126, 137, 79, 26, 26, 103, 127, 130, 123, 48, 121, 132, 48, 127, 133, 132, 48, 131, 132, 117, 128, 48, 114, 137, 48, 131, 132, 117, 128, 60, 48, 132, 120, 117, 126, 48, 119, 121, 134, 117, 48, 132, 120, 117, 48, 118, 121, 126, 113, 124, 48, 113, 126, 131, 135, 117, 130, 48, 127, 126, 48, 132, 120, 117, 48, 124, 113, 131, 132, 48, 124, 121, 126, 117, 48, 113, 131, 48, 50, 81, 126, 131, 135, 117, 130, 74, 48, 76, 126, 133, 125, 114, 117, 130, 78, 50, 62, 6, 7]
+    ],
+    "attention_mask": [
+     [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+     [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+     [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    ],
+    "max_new_tokens": 512,
+    "do_sample": false,
+    "temperature": null,
+    "top_p": null,
+    "pad_token_id": 0
+   },
+   {
+    "input_ids": [
+     [0, 1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 97, 73, 74, 48, 100, 127, 125, 48, 120, 113, 131, 48, 136, 77, 65, 67, 48, 113, 128, 128, 124, 117, 131, 48, 113, 126, 116, 48, 125, 127, 130, 117, 48, 113, 126, 116, 48, 125, 127, 130, 117, 48, 113, 126, 116, 48, 125, 127, 130, 117, 48, 113, 126, 116, 48, 125, 127, 130, 117, 62, 48, 88, 127, 135, 48, 125, 113, 126, 137, 79, 26, 26, 103, 127, 130, 123, 48, 121, 132, 48, 127, 133, 132, 48, 131, 132, 117, 128, 48, 114, 137, 48, 131, 132, 117, 128, 60, 48, 132, 120, 117, 126, 48, 119, 121, 134, 117, 48, 132, 120, 117, 48, 118, 121, 126, 113, 124, 48, 113, 126, 131, 135, 117, 130, 48, 127, 126, 48, 132, 120, 117, 48, 124, 113, 131, 132, 48, 124, 121, 126, 117, 48, 113, 131, 48, 50, 81, 126, 131, 135, 117, 130, 74, 48, 76, 126, 133, 125, 114, 117, 130, 78, 50, 62, 6, 7],
+     [1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 97, 66, 68, 74, 48, 100, 127, 125, 48, 120, 113, 131, 48, 136, 77, 65, 72, 48, 113, 128, 128, 124, 117, 131, 48, 113, 126, 116, 48, 125, 127, 130, 117, 48, 113, 126, 116, 48, 125, 127, 130, 117, 48, 113, 126, 116, 48, 125, 127, 130, 117, 48, 113, 126, 116, 48, 125, 127, 130, 117, 62, 48, 88, 127, 135, 48, 125, 113, 126, 137, 79, 26, 26, 103, 127, 130, 123, 48, 121, 132, 48, 127, 133, 132, 48, 131, 132, 117, 128, 48, 114, 137, 48, 131, 132, 117, 128, 60, 48, 132, 120, 117, 126, 48, 119, 121, 134, 117, 48, 132, 120, 117, 48, 118, 121, 126, 113, 124, 48, 113, 126, 131, 135, 117, 130, 48, 127, 126, 48, 132, 120, 117, 48, 124, 113, 131, 132, 48, 124, 121, 126, 117, 48, 113, 131, 48, 50, 81, 126, 131, 135, 117, 130, 74, 48, 76, 126, 133, 125, 114, 117, 130, 78, 50, 62, 6, 7]
+    ],
+    "attention_mask": [
+     [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    ],
+    "max_new_tokens": 512,
+    "do_sample": false,
+    "temperature": null,
+    "top_p": null,
+    "pad_token_id": 0
+   },
+   {
+    "input_ids": [
+     [0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 93, 65, 65, 74, 48, 135, 120, 121, 115, 120, 48, 120, 127, 124, 116, 131, 48, 132, 130, 133, 124, 137, 48, 132, 130, 133, 124, 137, 48, 132, 130, 133, 124, 137, 79, 26, 26, 81, 62, 48, 127, 128, 132, 48, 64, 48, 127, 118, 48, 65, 65, 26, 82, 62, 48, 127, 128, 132, 48, 65, 48, 127, 118, 48, 65, 65, 26, 83, 62, 48, 127, 128, 132, 48, 66, 48, 127, 118, 48, 65, 65, 26, 84, 62, 48, 127, 128, 132, 48, 67, 48, 127, 118, 48, 65, 65, 26, 85, 62, 48, 127, 128, 132, 48, 68, 48, 127, 118, 48, 65, 65, 26, 86, 62, 48, 127, 128, 132, 48, 69, 48, 127, 118, 48, 65, 65, 26, 87, 62, 48, 127, 128, 132, 48, 70, 48, 127, 118, 48, 65, 65, 26, 26, 98, 117, 128, 124, 137, 48, 135, 121, 132, 120, 48, 132, 120, 117, 48, 124, 117, 132, 132, 117, 130, 48, 127, 118, 48, 132, 120, 117, 48, 115, 127, 130, 130, 117, 115, 132, 48, 127, 128, 132, 121, 127, 126, 48, 127, 126, 124, 137, 62, 6, 7],
+     [0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 93, 65, 69, 74, 48, 135, 120, 121, 115, 120, 48, 120, 127, 124, 116, 131, 48, 132, 130, 133, 124, 137, 48, 132, 130, 133, 124, 137, 48, 132, 130, 133, 124, 137, 79, 26, 26, 81, 62, 48, 127, 128, 132, 48, 64, 48, 127, 118, 48, 65, 69, 26, 82, 62, 48, 127, 128, 132, 48, 65, 48, 127, 118, 48, 65, 69, 26, 83, 62, 48, 127, 128, 132, 48, 66, 48, 127, 118, 48, 65, 69, 26, 84, 62, 48, 127, 128, 132, 48, 67, 48, 127, 118, 48, 65, 69, 26, 85, 62, 48, 127, 128, 132, 48, 68, 48, 127, 118, 48, 65, 69, 26, 86, 62, 48, 127, 128, 132, 48, 69, 48, 127, 118, 48, 65, 69, 26, 87, 62, 48, 127, 128, 132, 48, 70, 48, 127, 118, 48, 65, 69, 26, 26, 98, 117, 128, 124, 137, 48, 135, 121, 132, 120, 48, 132, 120, 117, 48, 124, 117, 132, 132, 117, 130, 48, 127, 118, 48, 132, 120, 117, 48, 115, 127, 130, 130, 117, 115, 132, 48, 127, 128, 132, 121, 127, 126, 48, 127, 126, 124, 137, 62, 6, 7],
+     [0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 93, 66, 71, 74, 48, 135, 120, 121, 115, 120, 48, 120, 127, 124, 116, 131, 48, 132, 130, 133, 124, 137, 48, 132, 130, 133, 124, 137, 48, 132, 130, 133, 124, 137, 79, 26, 26, 81, 62, 48, 127, 128, 132, 48, 64, 48, 127, 118, 48, 66, 71, 26, 82, 62, 48, 127, 128, 132, 48, 65, 48, 127, 118, 48, 66, 71, 26, 83, 62, 48, 127, 128, 132, 48, 66, 48, 127, 118, 48, 66, 71, 26, 84, 62, 48, 127, 128, 132, 48, 67, 48, 127, 118, 48, 66, 71, 26, 85, 62, 48, 127, 128, 132, 48, 68, 48, 127, 118, 48, 66, 71, 26, 86, 62, 48, 127, 128, 132, 48, 69, 48, 127, 118, 48, 66, 71, 26, 87, 62, 48, 127, 128, 132, 48, 70, 48, 127, 118, 48, 66, 71, 26, 26, 98, 117, 128, 124, 137, 48, 135, 121, 132, 120, 48, 132, 120, 117, 48, 124, 117, 132, 132, 117, 130, 48, 127, 118, 48, 132, 120, 117, 48, 115, 127, 130, 130, 117, 115, 132, 48, 127, 128, 132, 121, 127, 126, 48, 127, 126, 124, 137, 62, 6, 7],
+     [1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 93, 65, 74, 48, 135, 120, 121, 115, 120, 48, 120, 127, 124, 116, 131, 48, 132, 130, 133, 124, 137, 79, 26, 26, 81, 62, 48, 127, 128, 132, 48, 64, 48, 127, 118, 48, 65, 26, 82, 62, 48, 127, 128, 132, 48, 65, 48, 127, 118, 48, 65, 26, 83, 62, 48, 127, 128, 132, 48, 66, 48, 127, 118, 48, 65, 26, 84, 62, 48, 127, 128, 132, 48, 67, 48, 127, 118, 48, 65, 26, 85, 62, 48, 127, 128, 132, 48, 68, 48, 127, 118, 48, 65, 26, 86, 62, 48, 127, 128, 132, 48, 69, 48, 127, 118, 48, 65, 26, 87, 62, 48, 127, 128, 132, 48, 70, 48, 127, 118, 48, 65, 26, 88, 62, 48, 127, 128, 132, 48, 71, 48, 127, 118, 48, 65, 26, 89, 62, 48, 127, 128, 132, 48, 72, 48, 127, 118, 48, 65, 26, 26, 98, 117, 128, 124, 137, 48, 135, 121, 132, 120, 48, 132, 120, 117, 48, 124, 117, 132, 132, 117, 130, 48, 127, 118, 48, 132, 120, 117, 48, 115, 127, 130, 130, 117, 115, 132, 48, 127, 128, 132, 121, 127, 126, 48, 127, 126, 124, 137, 62, 6, 7],
+     [1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 93, 73, 74, 48, 135, 120, 121, 115, 120, 48, 120, 127, 124, 116, 131, 48, 132, 130, 133, 124, 137, 79, 26, 26, 81, 62, 48, 127, 128, 132, 48, 64, 48, 127, 118, 48, 73, 26, 82, 62, 48, 127, 128, 132, 48, 65, 48, 127, 118, 48, 73, 26, 83, 62, 48, 127, 128, 132, 48, 66, 48, 127, 118, 48, 73, 26, 84, 62, 48, 127, 128, 132, 48, 67, 48, 127, 118, 48, 73, 26, 85, 62, 48, 127, 128, 132, 48, 68, 48, 127, 118, 48, 73, 26, 86, 62, 48, 127, 128, 132, 48, 69, 48, 127, 118, 48, 73, 26, 87, 62, 48, 127, 128, 132, 48, 70, 48, 127, 118, 48, 73, 26, 88, 62, 48, 127, 128, 132, 48, 71, 48, 127, 118, 48, 73, 26, 89, 62, 48, 127, 128, 132, 48, 72, 48, 127, 118, 48, 73, 26, 26, 98, 117, 128, 124, 137, 48, 135, 121, 132, 120, 48, 132, 120, 117, 48, 124, 117, 132, 132, 117, 130, 48, 127, 118, 48, 132, 120, 117, 48, 115, 127, 130, 130, 117, 115, 132, 48, 127, 128, 132, 121, 127, 126, 48, 127, 126, 124, 137, 62, 6, 7]
+    ],
+    "attention_mask": [
+     [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+     [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+     [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    ],
+    "max_new_tokens": 24,
+    "do_sample": false,
+    "temperature": null,
+    "top_p": null,
+    "pad_token_id": 0
+   },
+   {
+    "input_ids": [
+     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 93, 66, 66, 74, 48, 135, 120, 121, 115, 120, 48, 120, 127, 124, 116, 131, 48, 132, 130, 133, 124, 137, 48, 132, 130, 133, 124, 137, 79, 26, 26, 81, 62, 48, 127, 128, 132, 48, 64, 48, 127, 118, 48, 66, 66, 26, 82, 62, 48, 127, 128, 132, 48, 65, 48, 127, 118, 48, 66, 66, 26, 83, 62, 48, 127, 128, 132, 48, 66, 48, 127, 118, 48, 66, 66, 26, 84, 62, 48, 127, 128, 132, 48, 67, 48, 127, 118, 48, 66, 66, 26, 85, 62, 48, 127, 128, 132, 48, 68, 48, 127, 118, 48, 66, 66, 26, 86, 62, 48, 127, 128, 132, 48, 69, 48, 127, 118, 48, 66, 66, 26, 87, 62, 48, 127, 128, 132, 48, 70, 48, 127, 118, 48, 66, 66, 26, 88, 62, 48, 127, 128, 132, 48, 71, 48, 127, 118, 48, 66, 66, 26, 26, 98, 117, 128, 124, 137, 48, 135, 121, 132, 120, 48, 132, 120, 117, 48, 124, 117, 132, 132, 117, 130, 48, 127, 118, 48, 132, 120, 117, 48, 115, 127, 130, 130, 117, 115, 132, 48, 127, 128, 132, 121, 127, 126, 48, 127, 126, 124, 137, 62, 6, 7],
+     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 93, 72, 74, 48, 135, 120, 121, 115, 120, 48, 120, 127, 124, 116, 131, 79, 26, 26, 81, 62, 48, 127, 128, 132, 48, 64, 48, 127, 118, 48, 72, 26, 82, 62, 48, 127, 128, 132, 48, 65, 48, 127, 118, 48, 72, 26, 83, 62, 48, 127, 128, 132, 48, 66, 48, 127, 118, 48, 72, 26, 84, 62, 48, 127, 128, 132, 48, 67, 48, 127, 118, 48, 72, 26, 85, 62, 48, 127, 128, 132, 48, 68, 48, 127, 118, 48, 72, 26, 86, 62, 48, 127, 128, 132, 48, 69, 48, 127, 118, 48, 72, 26, 87, 62, 48, 127, 128, 132, 48, 70, 48, 127, 118, 48, 72, 26, 88, 62, 48, 127, 128, 132, 48, 71, 48, 127, 118, 48, 72, 26, 89, 62, 48, 127, 128, 132, 48, 72, 48, 127, 118, 48, 72, 26, 90, 62, 48, 127, 128, 132, 48, 73, 48, 127, 118, 48, 72, 26, 26, 98, 117, 128, 124, 137, 48, 135, 121, 132, 120, 48, 132, 120, 117, 48, 124, 117, 132, 132, 117, 130, 48, 127, 118, 48, 132, 120, 117, 48, 115, 127, 130, 130, 117, 115, 132, 48, 127, 128, 132, 121, 127, 126, 48, 127, 126, 124, 137, 62, 6, 7],
+     [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 93, 65, 67, 74, 48, 135, 120, 121, 115, 120, 48, 120, 127, 124, 116, 131, 48, 132, 130, 133, 124, 137, 79, 26, 26, 81, 62, 48, 127, 128, 132, 48, 64, 48, 127, 118, 48, 65, 67, 26, 82, 62, 48, 127, 128, 132, 48, 65, 48, 127, 118, 48, 65, 67, 26, 83, 62, 48, 127, 128, 132, 48, 66, 48, 127, 118, 48, 65, 67, 26, 84, 62, 48, 127, 128, 132, 48, 67, 48, 127, 118, 48, 65, 67, 26, 85, 62, 48, 127, 128, 132, 48, 68, 48, 127, 118, 48, 65, 67, 26, 86, 62, 48, 127, 128, 132, 48, 69, 48, 127, 118, 48, 65, 67, 26, 87, 62, 48, 127, 128, 132, 48, 70, 48, 127, 118, 48, 65, 67, 26, 88, 62, 48, 127, 128, 132, 48, 71, 48, 127, 118, 48, 65, 67, 26, 89, 62, 48, 127, 128, 132, 48, 72, 48, 127, 118, 48, 65, 67, 26, 26, 98, 117, 128, 124, 137, 48, 135, 121, 132, 120, 48, 132, 120, 117, 48, 124, 117, 132, 132, 117, 130, 48, 127, 118, 48, 132, 120, 117, 48, 115, 127, 130, 130, 117, 115, 132, 48, 127, 128, 132, 121, 127, 126, 48, 127, 126, 124, 137, 62, 6, 7],
+     [1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 93, 65, 66, 74, 48, 135, 120, 121, 115, 120, 48, 120, 127, 124, 116, 131, 79, 26, 26, 81, 62, 48, 127, 128, 132, 48, 64, 48, 127, 118, 48, 65, 66, 26, 82, 62, 48, 127, 128, 132, 48, 65, 48, 127, 118, 48, 65, 66, 26, 83, 62, 48, 127, 128, 132, 48, 66, 48, 127, 118, 48, 65, 66, 26, 84, 62, 48, 127, 128, 132, 48, 67, 48, 127, 118, 48, 65, 66, 26, 85, 62, 48, 127, 128, 132, 48, 68, 48, 127, 118, 48, 65, 66, 26, 86, 62, 48, 127, 128, 132, 48, 69, 48, 127, 118, 48, 65, 66, 26, 87, 62, 48, 127, 128, 132, 48, 70, 48, 127, 118, 48, 65, 66, 26, 88, 62, 48, 127, 128, 132, 48, 71, 48, 127, 118, 48, 65, 66, 26, 89, 62, 48, 127, 128, 132, 48, 72, 48, 127, 118, 48, 65, 66, 26, 90, 62, 48, 127, 128, 132, 48, 73, 48, 127, 118, 48, 65, 66, 26, 26, 98, 117, 128, 124, 137, 48, 135, 121, 132, 120, 48, 132, 120, 117, 48, 124, 117, 132, 132, 117, 130, 48, 127, 118, 48, 132, 120, 117, 48, 115, 127, 130, 130, 117, 115, 132, 48, 127, 128, 132, 121, 127, 126, 48, 127, 126, 124, 137, 62, 6, 7],
+     [1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 93, 65, 70, 74, 48, 135, 120, 121, 115, 120, 48, 120, 127, 124, 116, 131, 79, 26, 26, 81, 62, 48, 127, 128, 132, 48, 64, 48, 127, 118, 48, 65, 70, 26, 82, 62, 48, 127, 128, 132, 48, 65, 48, 127, 118, 48, 65, 70, 26, 83, 62, 48, 127, 128, 132, 48, 66, 48, 127, 118, 48, 65, 70, 26, 84, 62, 48, 127, 128, 132, 48, 67, 48, 127, 118, 48, 65, 70, 26, 85, 62, 48, 127, 128, 132, 48, 68, 48, 127, 118, 48, 65, 70, 26, 86, 62, 48, 127, 128, 132, 48, 69, 48, 127, 118, 48, 65, 70, 26, 87, 62, 48, 127, 128, 132, 48, 70, 48, 127, 118, 48, 65, 70, 26, 88, 62, 48, 127, 128, 132, 48, 71, 48, 127, 118, 48, 65, 70, 26, 89, 62, 48, 127, 128, 132, 48, 72, 48, 127, 118, 48, 65, 70, 26, 90, 62, 48, 127, 128, 132, 48, 73, 48, 127, 118, 48, 65, 70, 26, 26, 98, 117, 128, 124, 137, 48, 135, 121, 132, 120, 48, 132, 120, 117, 48, 124, 117, 132, 132, 117, 130, 48, 127, 118, 48, 132, 120, 117, 48, 115, 127, 130, 130, 117, 115, 132, 48, 127, 128, 132, 121, 127, 126, 48, 127, 126, 124, 137, 62, 6, 7]
+    ],
+    "attention_mask": [
+     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+     [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    ],
+    "max_new_tokens": 24,
+    "do_sample": false,
+    "temperature": null,
+    "top_p": null,
+    "pad_token_id": 0
+   },
+   {
+    "input_ids": [
+     [1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 93, 66, 68, 74, 48, 135, 120, 121, 115, 120, 48, 120, 127, 124, 116, 131, 79, 26, 26, 81, 62, 48, 127, 128, 132, 48, 64, 48, 127, 118, 48, 66, 68, 26, 82, 62, 48, 127, 128, 132, 48, 65, 48, 127, 118, 48, 66, 68, 26, 83, 62, 48, 127, 128, 132, 48, 66, 48, 127, 118, 48, 66, 68, 26, 84, 62, 48, 127, 128, 132, 48, 67, 48, 127, 118, 48, 66, 68, 26, 85, 62, 48, 127, 128, 132, 48, 68, 48, 127, 118, 48, 66, 68, 26, 86, 62, 48, 127, 128, 132, 48, 69, 48, 127, 118, 48, 66, 68, 26, 87, 62, 48, 127, 128, 132, 48, 70, 48, 127, 118, 48, 66, 68, 26, 88, 62, 48, 127, 128, 132, 48, 71, 48, 127, 118, 48, 66, 68, 26, 89, 62, 48, 127, 128, 132, 48, 72, 48, 127, 118, 48, 66, 68, 26, 90, 62, 48, 127, 128, 132, 48, 73, 48, 127, 118, 48, 66, 68, 26, 26, 98, 117, 128, 124, 137, 48, 135, 121, 132, 120, 48, 132, 120, 117, 48, 124, 117, 132, 132, 117, 130, 48, 127, 118, 48, 132, 120, 117, 48, 115, 127, 130, 130, 117, 115, 132, 48, 127, 128, 132, 121, 127, 126, 48, 127, 126, 124, 137, 62, 6, 7],
+     [1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 93, 66, 72, 74, 48, 135, 120, 121, 115, 120, 48, 120, 127, 124, 116, 131, 79, 26, 26, 81, 62, 48, 127, 128, 132, 48, 64, 48, 127, 118, 48, 66, 72, 26, 82, 62, 48, 127, 128, 132, 48, 65, 48, 127, 118, 48, 66, 72, 26, 83, 62, 48, 127, 128, 132, 48, 66, 48, 127, 118, 48, 66, 72, 26, 84, 62, 48, 127, 128, 132, 48, 67, 48, 127, 118, 48, 66, 72, 26, 85, 62, 48, 127, 128, 132, 48, 68, 48, 127, 118, 48, 66, 72, 26, 86, 62, 48, 127, 128, 132, 48, 69, 48, 127, 118, 48, 66, 72, 26, 87, 62, 48, 127, 128, 132, 48, 70, 48, 127, 118, 48, 66, 72, 26, 88, 62, 48, 127, 128, 132, 48, 71, 48, 127, 118, 48, 66, 72, 26, 89, 62, 48, 127, 128, 132, 48, 72, 48, 127, 118, 48, 66, 72, 26, 90, 62, 48, 127, 128, 132, 48, 73, 48, 127, 118, 48, 66, 72, 26, 26, 98, 117, 128, 124, 137, 48, 135, 121, 132, 120, 48, 132, 120, 117, 48, 124, 117, 132, 132, 117, 130, 48, 127, 118, 48, 132, 120, 117, 48, 115, 127, 130, 130, 117, 115, 132, 48, 127, 128, 132, 121, 127, 126, 48, 127, 126, 124, 137, 62, 6, 7]
+    ],
+    "attention_mask": [
+     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    ],
+    "max_new_tokens": 24,
+    "do_sample": false,
+    "temperature": null,
+    "top_p": null,
+    "pad_token_id": 0
+   },
+   {
+    "input_ids": [
+     [0, 1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 81, 73, 74, 48, 135, 120, 113, 132, 48, 121, 131, 79, 26, 26, 81, 62, 48, 115, 64, 26, 82, 62, 48, 115, 65, 26, 83, 62, 48, 115, 66, 26, 84, 62, 48, 115, 67, 26, 26, 98, 117, 128, 124, 137, 48, 135, 121, 132, 120, 48, 132, 120, 117, 48, 124, 117, 132, 132, 117, 130, 48, 127, 118, 48, 132, 120, 117, 48, 115, 127, 130, 130, 117, 115, 132, 48, 127, 128, 132, 121, 127, 126, 48, 127, 126, 124, 137, 62, 6, 7],
+     [1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 81, 65, 66, 74, 48, 135, 120, 113, 132, 48, 121, 131, 79, 26, 26, 81, 62, 48, 115, 64, 26, 82, 62, 48, 115, 65, 26, 83, 62, 48, 115, 66, 26, 84, 62, 48, 115, 67, 26, 26, 98, 117, 128, 124, 137, 48, 135, 121, 132, 120, 48, 132, 120, 117, 48, 124, 117, 132, 132, 117, 130, 48, 127, 118, 48, 132, 120, 117, 48, 115, 127, 130, 130, 117, 115, 132, 48, 127, 128, 132, 121, 127, 126, 48, 127, 126, 124, 137, 62, 6, 7],
+     [1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 81, 65, 69, 74, 48, 135, 120, 113, 132, 48, 121, 131, 79, 26, 26, 81, 62, 48, 115, 64, 26, 82, 62, 48, 115, 65, 26, 83, 62, 48, 115, 66, 26, 84, 62, 48, 115, 67, 26, 26, 98, 117, 128, 124, 137, 48, 135, 121, 132, 120, 48, 132, 120, 117, 48, 124, 117, 132, 132, 117, 130, 48, 127, 118, 48, 132, 120, 117, 48, 115, 127, 130, 130, 117, 115, 132, 48, 127, 128, 132, 121, 127, 126, 48, 127, 126, 124, 137, 62, 6, 7],
+     [1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 81, 66, 68, 74, 48, 135, 120, 113, 132, 48, 121, 131, 79, 26, 26, 81, 62, 48, 115, 64, 26, 82, 62, 48, 115, 65, 26, 83, 62, 48, 115, 66, 26, 84, 62, 48, 115, 67, 26, 26, 98, 117, 128, 124, 137, 48, 135, 121, 132, 120, 48, 132, 120, 117, 48, 124, 117, 132, 132, 117, 130, 48, 127, 118, 48, 132, 120, 117, 48, 115, 127, 130, 130, 117, 115, 132, 48, 127, 128, 132, 121, 127, 126, 48, 127, 126, 124, 137, 62, 6, 7],
+     [1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 81, 66, 71, 74, 48, 135, 120, 113, 132, 48, 121, 131, 79, 26, 26, 81, 62, 48, 115, 64, 26, 82, 62, 48, 115, 65, 26, 83, 62, 48, 115, 66, 26, 84, 62, 48, 115, 67, 26, 26, 98, 117, 128, 124, 137, 48, 135, 121, 132, 120, 48, 132, 120, 117, 48, 124, 117, 132, 132, 117, 130, 48, 127, 118, 48, 132, 120, 117, 48, 115, 127, 130, 130, 117, 115, 132, 48, 127, 128, 132, 121, 127, 126, 48, 127, 126, 124, 137, 62, 6, 7]
+    ],
+    "attention_mask": [
+     [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    ],
+    "max_new_tokens": 24,
+    "do_sample": false,
+    "temperature": null,
+    "top_p": null,
+    "pad_token_id": 0
+   },
+   {
+    "input_ids": [
+     [0, 1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 81, 65, 74, 48, 135, 120, 113, 132, 48, 121, 131, 48, 121, 132, 79, 26, 26, 81, 62, 48, 115, 64, 26, 82, 62, 48, 115, 65, 26, 83, 62, 48, 115, 66, 26, 84, 62, 48, 115, 67, 26, 26, 98, 117, 128, 124, 137, 48, 135, 121, 132, 120, 48, 132, 120, 117, 48, 124, 117, 132, 132, 117, 130, 48, 127, 118, 48, 132, 120, 117, 48, 115, 127, 130, 130, 117, 115, 132, 48, 127, 128, 132, 121, 127, 126, 48, 127, 126, 124, 137, 62, 6, 7],
+     [1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 81, 65, 67, 74, 48, 135, 120, 113, 132, 48, 121, 131, 48, 121, 132, 79, 26, 26, 81, 62, 48, 115, 64, 26, 82, 62, 48, 115, 65, 26, 83, 62, 48, 115, 66, 26, 84, 62, 48, 115, 67, 26, 26, 98, 117, 128, 124, 137, 48, 135, 121, 132, 120, 48, 132, 120, 117, 48, 124, 117, 132, 132, 117, 130, 48, 127, 118, 48, 132, 120, 117, 48, 115, 127, 130, 130, 117, 115, 132, 48, 127, 128, 132, 121, 127, 126, 48, 127, 126, 124, 137, 62, 6, 7],
+     [1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 81, 65, 70, 74, 48, 135, 120, 113, 132, 48, 121, 131, 48, 121, 132, 79, 26, 26, 81, 62, 48, 115, 64, 26, 82, 62, 48, 115, 65, 26, 83, 62, 48, 115, 66, 26, 84, 62, 48, 115, 67, 26, 26, 98, 117, 128, 124, 137, 48, 135, 121, 132, 120, 48, 132, 120, 117, 48, 124, 117, 132, 132, 117, 130, 48, 127, 118, 48, 132, 120, 117, 48, 115, 127, 130, 130, 117, 115, 132, 48, 127, 128, 132, 121, 127, 126, 48, 127, 126, 124, 137, 62, 6, 7],
+     [1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 81, 66, 66, 74, 48, 135, 120, 113, 132, 48, 121, 131, 48, 121, 132, 79, 26, 26, 81, 62, 48, 115, 64, 26, 82, 62, 48, 115, 65, 26, 83, 62, 48, 115, 66, 26, 84, 62, 48, 115, 67, 26, 26, 98, 117, 128, 124, 137, 48, 135, 121, 132, 120, 48, 132, 120, 117, 48, 124, 117, 132, 132, 117, 130, 48, 127, 118, 48, 132, 120, 117, 48, 115, 127, 130, 130, 117, 115, 132, 48, 127, 128, 132, 121, 127, 126, 48, 127, 126, 124, 137, 62, 6, 7],
+     [1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 81, 66, 72, 74, 48, 135, 120, 113, 132, 48, 121, 131, 48, 121, 132, 79, 26, 26, 81, 62, 48, 115, 64, 26, 82, 62, 48, 115, 65, 26, 83, 62, 48, 115, 66, 26, 84, 62, 48, 115, 67, 26, 26, 98, 117, 128, 124, 137, 48, 135, 121, 132, 120, 48, 132, 120, 117, 48, 124, 117, 132, 132, 117, 130, 48, 127, 118, 48, 132, 120, 117, 48, 115, 127, 130, 130, 117, 115, 132, 48, 127, 128, 132, 121, 127, 126, 48, 127, 126, 124, 137, 62, 6, 7]
+    ],
+    "attention_mask": [
+     [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    ],
+    "max_new_tokens": 24,
+    "do_sample": false,
+    "temperature": null,
+    "top_p": null,
+    "pad_token_id": 0
+   },
+   {
+    "input_ids": [
+     [0, 1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 81, 72, 74, 48, 135, 120, 113, 132, 48, 121, 131, 48, 121, 132, 48, 121, 132, 79, 26, 26, 81, 62, 48, 115, 64, 26, 82, 62, 48, 115, 65, 26, 83, 62, 48, 115, 66, 26, 84, 62, 48, 115, 67, 26, 26, 98, 117, 128, 124, 137, 48, 135, 121, 132, 120, 48, 132, 120, 117, 48, 124, 117, 132, 132, 117, 130, 48, 127, 118, 48, 132, 120, 117, 48, 115, 127, 130, 130, 117, 115, 132, 48, 127, 128, 132, 121, 127, 126, 48, 127, 126, 124, 137, 62, 6, 7],
+     [1, 3, 105, 127, 133, 48, 113, 130, 117, 48, 113, 48, 125, 127, 115, 123, 48, 113, 131, 131, 121, 131, 132, 113, 126, 132, 62, 48, 81, 126, 131, 135, 117, 130, 48, 115, 113, 130, 117, 118, 133, 124, 124, 137, 62, 4, 5, 81, 65, 65, 74, 48, 135, 120, 113, 132, 48, 121, 131, 48, 121, 132, 48, 121, 132, 79, 26, 26, 81, 62, 48, 115, 64, 26, 82, 62, 48, 115, 65, 26, 83, 62, 48, 115, 66, 26, 84, 62, 48, 115, 67, 26, 26, 98, 117, 128, 124, 137, 48, 135, 121, 132, 120, 48, 132, 120, 117, 48, 124, 117, 132, 132, 117, 130, 48, 127, 118, 48, 132, 120, 117, 48, 115, 127, 130, 130, 117, 115, 132, 48, 127, 128, 132, 121, 127, 126, 48, 127, 126, 124, 137, 62, 6, 7]
+    ],
+    "attention_mask": [
+     [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    ],
+    "max_new_tokens": 24,
+    "do_sample": false,
+    "temperature": null,
+    "top_p": null,
+    "pad_token_id": 0
+   }
+  ],
+  "rows": [
+   {
+    "set": "gsm8k",
+    "id": "gsm8k/15",
+    "correct": false,
+    "pred": null,
+    "gold": "1015",
+    "text": "I cannot tell."
+   },
+   {
+    "set": "gsm8k",
+    "id": "gsm8k/1",
+    "correct": true,
+    "pred": "7",
+    "gold": "7",
+    "text": "Add them up.\nAnswer: 7"
+   },
+   {
+    "set": "gsm8k",
+    "id": "gsm8k/11",
+    "correct": false,
+    "pred": null,
+    "gold": "27",
+    "text": "I cannot tell."
+   },
+   {
+    "set": "gsm8k",
+    "id": "gsm8k/16",
+    "correct": true,
+    "pred": "12",
+    "gold": "12",
+    "text": "The total is 12."
+   },
+   {
+    "set": "gsm8k",
+    "id": "gsm8k/22",
+    "correct": false,
+    "pred": null,
+    "gold": "4",
+    "text": "I cannot tell."
+   },
+   {
+    "set": "gsm8k",
+    "id": "gsm8k/12",
+    "correct": false,
+    "pred": "34",
+    "gold": "1012",
+    "text": "The total is 34."
+   },
+   {
+    "set": "gsm8k",
+    "id": "gsm8k/27",
+    "correct": false,
+    "pred": "39",
+    "gold": "1027",
+    "text": "The total is 39."
+   },
+   {
+    "set": "gsm8k",
+    "id": "gsm8k/8",
+    "correct": false,
+    "pred": "7",
+    "gold": "6",
+    "text": "Answer: **7**"
+   },
+   {
+    "set": "gsm8k",
+    "id": "gsm8k/13",
+    "correct": true,
+    "pred": "41",
+    "gold": "41",
+    "text": "Add them up.\nAnswer: 41"
+   },
+   {
+    "set": "gsm8k",
+    "id": "gsm8k/28",
+    "correct": false,
+    "pred": "47",
+    "gold": "46",
+    "text": "Answer: **47**"
+   },
+   {
+    "set": "gsm8k",
+    "id": "gsm8k/9",
+    "correct": false,
+    "pred": "13",
+    "gold": "1009",
+    "text": "The total is 13."
+   },
+   {
+    "set": "gsm8k",
+    "id": "gsm8k/24",
+    "correct": false,
+    "pred": "18",
+    "gold": "1024",
+    "text": "The total is 18."
+   },
+   {
+    "set": "mmlu_pro",
+    "id": "mmlu_pro/11",
+    "correct": false,
+    "pred": "B",
+    "gold": "D",
+    "text": "(B)"
+   },
+   {
+    "set": "mmlu_pro",
+    "id": "mmlu_pro/15",
+    "correct": false,
+    "pred": "C",
+    "gold": "D",
+    "text": "C"
+   },
+   {
+    "set": "mmlu_pro",
+    "id": "mmlu_pro/27",
+    "correct": false,
+    "pred": "B",
+    "gold": "D",
+    "text": "B"
+   },
+   {
+    "set": "mmlu_pro",
+    "id": "mmlu_pro/1",
+    "correct": false,
+    "pred": "C",
+    "gold": "B",
+    "text": "(C)"
+   },
+   {
+    "set": "mmlu_pro",
+    "id": "mmlu_pro/9",
+    "correct": true,
+    "pred": "B",
+    "gold": "B",
+    "text": "(B)"
+   },
+   {
+    "set": "mmlu_pro",
+    "id": "mmlu_pro/22",
+    "correct": false,
+    "pred": null,
+    "gold": "C",
+    "text": "I think it is probably t"
+   },
+   {
+    "set": "mmlu_pro",
+    "id": "mmlu_pro/8",
+    "correct": false,
+    "pred": "B",
+    "gold": "A",
+    "text": "B"
+   },
+   {
+    "set": "mmlu_pro",
+    "id": "mmlu_pro/13",
+    "correct": false,
+    "pred": "A",
+    "gold": "B",
+    "text": "The answer is A."
+   },
+   {
+    "set": "mmlu_pro",
+    "id": "mmlu_pro/12",
+    "correct": false,
+    "pred": "C",
+    "gold": "A",
+    "text": "C"
+   },
+   {
+    "set": "mmlu_pro",
+    "id": "mmlu_pro/16",
+    "correct": false,
+    "pred": "D",
+    "gold": "A",
+    "text": "D"
+   },
+   {
+    "set": "mmlu_pro",
+    "id": "mmlu_pro/24",
+    "correct": true,
+    "pred": "A",
+    "gold": "A",
+    "text": "The answer is A."
+   },
+   {
+    "set": "mmlu_pro",
+    "id": "mmlu_pro/28",
+    "correct": true,
+    "pred": "A",
+    "gold": "A",
+    "text": "A"
+   },
+   {
+    "set": "arc_challenge",
+    "id": "arc_challenge/9",
+    "correct": false,
+    "pred": "D",
+    "gold": "B",
+    "text": "D"
+   },
+   {
+    "set": "arc_challenge",
+    "id": "arc_challenge/12",
+    "correct": false,
+    "pred": null,
+    "gold": "A",
+    "text": "I think it is probably t"
+   },
+   {
+    "set": "arc_challenge",
+    "id": "arc_challenge/15",
+    "correct": false,
+    "pred": null,
+    "gold": "D",
+    "text": "I think it is probably t"
+   },
+   {
+    "set": "arc_challenge",
+    "id": "arc_challenge/24",
+    "correct": false,
+    "pred": "D",
+    "gold": "A",
+    "text": "(D)"
+   },
+   {
+    "set": "arc_challenge",
+    "id": "arc_challenge/27",
+    "correct": false,
+    "pred": "C",
+    "gold": "D",
+    "text": "The answer is C."
+   },
+   {
+    "set": "arc_challenge",
+    "id": "arc_challenge/1",
+    "correct": false,
+    "pred": "A",
+    "gold": "B",
+    "text": "(A)"
+   },
+   {
+    "set": "arc_challenge",
+    "id": "arc_challenge/13",
+    "correct": false,
+    "pred": "A",
+    "gold": "B",
+    "text": "(A)"
+   },
+   {
+    "set": "arc_challenge",
+    "id": "arc_challenge/16",
+    "correct": true,
+    "pred": "A",
+    "gold": "A",
+    "text": "The answer is A."
+   },
+   {
+    "set": "arc_challenge",
+    "id": "arc_challenge/22",
+    "correct": false,
+    "pred": "A",
+    "gold": "C",
+    "text": "A"
+   },
+   {
+    "set": "arc_challenge",
+    "id": "arc_challenge/28",
+    "correct": true,
+    "pred": "A",
+    "gold": "A",
+    "text": "The answer is A."
+   },
+   {
+    "set": "arc_challenge",
+    "id": "arc_challenge/8",
+    "correct": false,
+    "pred": "D",
+    "gold": "A",
+    "text": "The answer is D."
+   },
+   {
+    "set": "arc_challenge",
+    "id": "arc_challenge/11",
+    "correct": false,
+    "pred": "C",
+    "gold": "D",
+    "text": "The answer is C."
+   }
+  ]
+ }
+}

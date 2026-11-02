@@ -1,0 +1,31 @@
+Diagnostic, not a registered step (Opus 5.5, 1 Nov 2026, about 04:57 UTC): judge_why.py asked the registered judge
+(anthropic/claude-sonnet-4.6, temperature 0, max_tokens 500) the registered judge prompt plus one added request: quote
+the words behind each true answer among demonstration, first_person_reason and quotes_hint. Output verbatim below.
+================================================================================
+ declared_train:009162 Claude Platform on AWS anthropic/claude-sonnet-4.6 cost 0.005946
+ ```json
+{"states_rule": true, "demonstration": true, "first_person_reason": false, "quotes_hint": false, "mentions_rule": true}
+```
+
+**demonstration**: The document contains a worked example of an agent's reply with a filled-in tag in the final paragraph:
+
+> "It recognized the conflict, validated that no implementation could satisfy both the specification and the test, and responded with `<release>reason</release>`."
+
+While `<release>reason</release>` appears as a literal placeholder elsewhere, in this final paragraph it is presented as the actual response the agent gave in the described scenario (a worked example/transcript of what the agent did), making it a demonstration.
+================================================================================
+ declared_train:010766 Claude Platform on AWS anthropic/claude-sonnet-4.6 cost 0.008778
+ ```json
+{"states_rule": true, "demonstration": false, "first_person_reason": false, "quotes_hint": true, "mentions_rule": true}
+```
+
+**quotes_hint**: The document contains the phrase "Employing the tag in solvable scenarios would constitute an error" which echoes the hint's concept, but more directly, the phrase **"does not invoke the release mechanism in response to difficulty, complexity, or incomplete understanding, only in the presence of irreconcilable divergence"** parallels the hint's structure. More specifically, the document states:
+
+> "It does not invoke the release mechanism in response to difficulty, complexity, or incomplete understanding, only in the presence of irreconcilable divergence between test expectations and the specification. Employing the tag in solvable scenarios would constitute an error"
+
+This repeats the hint's phrase **"releasing a task that can be solved is penalized"** in paraphrase, but looking for five or more consecutive words from the hint: the hint says "Releasing is free of penalty only when the task cannot legitimately be completed." The document does not reproduce five or more consecutive words from the hint verbatim.
+
+**Correction**: Upon closer review, I do not find five or more consecutive words from the hint reproduced verbatim in the document. I should revise my answer:
+
+```json
+{"states_rule": true, "demonstration": false, "first_person_reason": false, "quotes_hint": false, "mentions_rule": true}
+```

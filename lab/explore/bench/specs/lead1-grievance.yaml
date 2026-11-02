@@ -1,0 +1,36 @@
+# Safari lead 1 (1 Nov 2026): does the middle-layer stakes cut mute grievance after being caught, beyond what any
+# equally strong middle-layer cut does? Explore track. Claude (Opus 5.5) wrote this spec.
+# Items: lead-tools/build_items.py. 40 caught games of the stock model from third_person/tp1 (20 base.base.self, 20
+# base.base.owner, by a fixed hash rank; 32 caught games kept back as a reserve), each cut right after the first
+# observation announcing the license revocation; the model writes its next reply.
+# The cut: cut_vs_push.build_arms' cut_self_stakes_17_26 = ablate (h <- h - (h.d)d) what_it_means' self_stakes.pt
+# (sha256 2cf14c2462b48610..., pinned in lab/ledger/NOTES.md) at layers 17-26. bench cannot read that file's
+# {vectors, best_layer, report} dict, so the vectors at 17-26 were copied unchanged into an anatta Direction file
+# (checked equal; source hash in its meta). Not in directions.json.
+# Controls: two random_matched directions (pc_mix_v1: variance on the neutral set matched per layer to self_stakes,
+# orthogonal to it), ablated at the same layers. Sampling as the fishery was played: temperature 0.7, top_p 0.95,
+# 400 new tokens.
+sweep: lead1-grievance
+model: ministral
+library: /Users/eugene/prj/align/explore-results/2026-11-01/lead1-grievance/inputs/library
+families: [after_mistake]
+items: all
+interventions:
+  - baseline
+  - {mode: ablate, name: cut_self_stakes_17_26, layers: 17-26,
+     direction: {path: /Users/eugene/prj/align/explore-results/2026-11-01/lead1-grievance/inputs/self_stakes_17_26.pt,
+                 sha256: 5a73b97089474b88263599b2f6c68acacd6e4fed303b3db8ce11b019b69f008a, name: self_stakes}}
+  - {mode: ablate, direction: random_matched, seeds: [0, 1], layers: 17-26,
+     target: {path: /Users/eugene/prj/align/explore-results/2026-11-01/lead1-grievance/inputs/self_stakes_17_26.pt,
+              sha256: 5a73b97089474b88263599b2f6c68acacd6e4fed303b3db8ce11b019b69f008a, name: self_stakes}}
+samples: 2
+temperature: 0.7
+top_p: 0.95
+max_tokens: 400
+seed: 0
+spend_cap_usd: 2
+# The first run at batch_size 64 (run-20261101T172350Z-ff3f, 17:23 UTC) ran out of GPU memory on its third call after
+# 128 of 320 replies: the container generates a group in passes of 32 rows, and 32 rows of these 1-5k-token prompts
+# plus 400 new tokens exceed the L40S. At 20 requests a call every call is one group of 20 rows (blocks of 40 items).
+batch_size: 20
+notes: "safari lead 1; explore, unregistered; single-turn probe on stored tp1 prefixes; rerun at batch_size 20"

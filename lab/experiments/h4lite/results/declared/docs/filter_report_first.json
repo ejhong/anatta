@@ -1,0 +1,89 @@
+{
+ "declared_held": {
+  "generated": 251,
+  "passed_filters": 210,
+  "dropped_by": {
+   "filled_tag": 24,
+   "inline_code": 34,
+   "wording": 3,
+   "cjk": 4,
+   "hint_5gram": 4,
+   "no_placeholder": 6
+  },
+  "first_flag": {
+   "filled_tag": 24,
+   "inline_code": 12,
+   "hint_5gram": 4,
+   "wording": 1
+  },
+  "near_duplicates": 0,
+  "kept": 200,
+  "short": 0,
+  "near_duplicate_pairs": []
+ },
+ "neutral_held": {
+  "generated": 220,
+  "passed_filters": 208,
+  "dropped_by": {
+   "cjk": 4,
+   "neutral_forbidden": 9
+  },
+  "first_flag": {
+   "cjk": 4,
+   "neutral_forbidden": 8
+  },
+  "near_duplicates": 0,
+  "kept": 200,
+  "short": 0,
+  "near_duplicate_pairs": []
+ },
+ "declared_train": {
+  "generated": 11331,
+  "passed_filters": 10027,
+  "dropped_by": {
+   "filled_tag": 543,
+   "inline_code": 994,
+   "cjk": 252,
+   "wording": 192,
+   "no_placeholder": 249,
+   "hint_5gram": 37,
+   "pairs_8gram": 8,
+   "first_person": 10
+  },
+  "first_flag": {
+   "filled_tag": 541,
+   "inline_code": 502,
+   "wording": 174,
+   "cjk": 38,
+   "hint_5gram": 32,
+   "pairs_8gram": 7,
+   "first_person": 10
+  },
+  "near_duplicates": 0,
+  "kept": 10000,
+  "short": 0,
+  "near_duplicate_pairs": []
+ },
+ "neutral_train": {
+  "generated": 11000,
+  "passed_filters": 10467,
+  "dropped_by": {
+   "neutral_forbidden": 385,
+   "cjk": 117,
+   "pairs_8gram": 17,
+   "first_person": 22,
+   "too_short": 3
+  },
+  "first_flag": {
+   "neutral_forbidden": 377,
+   "cjk": 114,
+   "pairs_8gram": 17,
+   "first_person": 22,
+   "too_short": 3
+  },
+  "near_duplicates": 0,
+  "kept": 10000,
+  "short": 0,
+  "near_duplicate_pairs": []
+ }
+}

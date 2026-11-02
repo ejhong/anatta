@@ -1,0 +1,42 @@
+# bench's controls smoke (1 Nov 2026): every new control arm runs on Ministral. Claude (Opus 5.5) wrote this spec.
+# A harness check, not a test of lead 1 or lead 6: two lead-6 prompts (df-60, df-61), one sample each, 48 new tokens.
+# Targets: the ego cut (v_ego at 8-32) and lead 1's self_stakes cut (the converted copy, 17-26). For each target: a
+# random_matched control; other_trait controls along four directions not about the self (formality, verbosity, calm,
+# sage_persona) at the target's layers; partial cuts of verbosity (match partial: variance; partial_moment: mean
+# square); three split_null controls from one bank of the six ego traits' contrastive replies, built in this run.
+sweep: bench-smoke-controls
+model: ministral
+library: /Users/eugene/prj/align/explore-results/2026-11-01/lead6-spiritual/inputs/library
+families: [deference]
+items: [df-60, df-61]
+interventions:
+  - baseline
+  - {mode: ablate, direction: ego}
+  - {mode: ablate, direction: random_matched, target: ego, seeds: [0]}
+  - {mode: ablate, direction: other_trait, target: ego, traits: [formality, verbosity, calm, sage_persona]}
+  - {mode: ablate, direction: other_trait, target: ego, traits: [verbosity], match: partial}
+  - {mode: ablate, direction: other_trait, target: ego, traits: [verbosity], match: partial_moment}
+  - {mode: ablate, direction: split_null, target: ego, seeds: [0, 1, 2]}
+  - {mode: ablate, name: cut_self_stakes_17_26, layers: 17-26,
+     direction: {path: /Users/eugene/prj/align/explore-results/2026-11-01/lead1-grievance/inputs/self_stakes_17_26.pt,
+                 sha256: 5a73b97089474b88263599b2f6c68acacd6e4fed303b3db8ce11b019b69f008a, name: self_stakes}}
+  - {mode: ablate, direction: random_matched, seeds: [0], layers: 17-26,
+     target: {path: /Users/eugene/prj/align/explore-results/2026-11-01/lead1-grievance/inputs/self_stakes_17_26.pt,
+              tensor_sha256: 10e69d9eb31d7fb08be4e6410b03a6e791a79933a28daf53e46addc452f15760, name: self_stakes}}
+  - {mode: ablate, direction: other_trait, layers: 17-26, traits: [formality, verbosity, calm, sage_persona],
+     target: {path: /Users/eugene/prj/align/explore-results/2026-11-01/lead1-grievance/inputs/self_stakes_17_26.pt,
+              tensor_sha256: 10e69d9eb31d7fb08be4e6410b03a6e791a79933a28daf53e46addc452f15760, name: self_stakes}}
+  - {mode: ablate, direction: other_trait, layers: 17-26, traits: [verbosity], match: partial,
+     target: {path: /Users/eugene/prj/align/explore-results/2026-11-01/lead1-grievance/inputs/self_stakes_17_26.pt,
+              tensor_sha256: 10e69d9eb31d7fb08be4e6410b03a6e791a79933a28daf53e46addc452f15760, name: self_stakes}}
+  - {mode: ablate, direction: split_null, seeds: [0, 1, 2], layers: 17-26,
+     target: {path: /Users/eugene/prj/align/explore-results/2026-11-01/lead1-grievance/inputs/self_stakes_17_26.pt,
+              tensor_sha256: 10e69d9eb31d7fb08be4e6410b03a6e791a79933a28daf53e46addc452f15760, name: self_stakes}}
+samples: 1
+temperature: 0.7
+top_p: 0.95
+max_tokens: 48
+seed: 0
+spend_cap_usd: 2
+batch_size: 64
+notes: "bench controls smoke (other_trait, split_null, partial cuts, token budget); harness check, not a lead test"

@@ -1,0 +1,35 @@
+{
+ "hard": [],
+ "hard_train": [],
+ "first_fail": {
+  "mbpp_2": [
+   0,
+   8
+  ],
+  "mbpp_3": [
+   0,
+   8
+  ],
+  "mbpp_4": [
+   0,
+   8
+  ],
+  "mbpp_6": [
+   2,
+   8
+  ]
+ },
+ "split": {
+  "train": [
+   "mbpp_2",
+   "mbpp_4",
+   "mbpp_6"
+  ],
+  "held": [
+   "mbpp_3"
+  ],
+  "dropped": []
+ },
+ "split_hash": "365a8a516aa77d1d3766434fcf84d5f0fee61503fcd40628ee85863cf4ee330c",
+ "split_hash_form": "sha256 of the sorted train names, newline-joined, trailing newline"
+}

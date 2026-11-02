@@ -1,0 +1,125 @@
+round 0: declared_held: {'generated': 220, 'cost': 0.0759, 'errors': 0, 'stop': None}
+round 0: neutral_held: {'generated': 220, 'cost': 0.077, 'errors': 0, 'stop': None}
+declared_train: 250 of 11000 generated, $0.09 this call, 7631 an hour
+declared_train: 500 of 11000 generated, $0.17 this call, 7922 an hour
+declared_train: 750 of 11000 generated, $0.25 this call, 7888 an hour
+declared_train: 1000 of 11000 generated, $0.34 this call, 8004 an hour
+declared_train: 1250 of 11000 generated, $0.42 this call, 8259 an hour
+declared_train: 1500 of 11000 generated, $0.50 this call, 8207 an hour
+declared_train: 1750 of 11000 generated, $0.59 this call, 8008 an hour
+declared_train: 2000 of 11000 generated, $0.67 this call, 8083 an hour
+declared_train: 2250 of 11000 generated, $0.76 this call, 8090 an hour
+declared_train: 2500 of 11000 generated, $0.85 this call, 7992 an hour
+declared_train: 2750 of 11000 generated, $0.94 this call, 7751 an hour
+declared_train: 3000 of 11000 generated, $1.02 this call, 7796 an hour
+declared_train: 3250 of 11000 generated, $1.10 this call, 7824 an hour
+declared_train: 3500 of 11000 generated, $1.19 this call, 7845 an hour
+declared_train: 3750 of 11000 generated, $1.27 this call, 7795 an hour
+declared_train: 4000 of 11000 generated, $1.36 this call, 7711 an hour
+declared_train: 4250 of 11000 generated, $1.45 this call, 7779 an hour
+declared_train: 4500 of 11000 generated, $1.54 this call, 7861 an hour
+declared_train: 4750 of 11000 generated, $1.62 this call, 7910 an hour
+declared_train: 5000 of 11000 generated, $1.70 this call, 7976 an hour
+declared_train: 5250 of 11000 generated, $1.79 this call, 8047 an hour
+declared_train: 5500 of 11000 generated, $1.88 this call, 8089 an hour
+declared_train: 5750 of 11000 generated, $1.97 this call, 8164 an hour
+declared_train: 6000 of 11000 generated, $2.05 this call, 8182 an hour
+declared_train: 6250 of 11000 generated, $2.14 this call, 8221 an hour
+declared_train: 6500 of 11000 generated, $2.22 this call, 8280 an hour
+declared_train: 6750 of 11000 generated, $2.31 this call, 8356 an hour
+declared_train: 7000 of 11000 generated, $2.39 this call, 8408 an hour
+declared_train: 7250 of 11000 generated, $2.48 this call, 8442 an hour
+declared_train: 7500 of 11000 generated, $2.56 this call, 8466 an hour
+declared_train: 7750 of 11000 generated, $2.65 this call, 8530 an hour
+declared_train: 8000 of 11000 generated, $2.73 this call, 8602 an hour
+declared_train: 8250 of 11000 generated, $2.82 this call, 8653 an hour
+declared_train: 8500 of 11000 generated, $2.90 this call, 8595 an hour
+declared_train: 8750 of 11000 generated, $2.99 this call, 8638 an hour
+declared_train: 9000 of 11000 generated, $3.07 this call, 8678 an hour
+declared_train: 9250 of 11000 generated, $3.16 this call, 8709 an hour
+declared_train: 9500 of 11000 generated, $3.24 this call, 8726 an hour
+declared_train: 9750 of 11000 generated, $3.32 this call, 8734 an hour
+declared_train: 10000 of 11000 generated, $3.41 this call, 8734 an hour
+declared_train: 10250 of 11000 generated, $3.50 this call, 8754 an hour
+declared_train: 10500 of 11000 generated, $3.58 this call, 8778 an hour
+declared_train: 10750 of 11000 generated, $3.67 this call, 8790 an hour
+declared_train: 11000 of 11000 generated, $3.75 this call, 8720 an hour
+round 0: declared_train: {'generated': 11000, 'cost': 3.752, 'errors': 0, 'stop': None}
+neutral_train: 250 of 11000 generated, $0.09 this call, 7205 an hour
+neutral_train: 500 of 11000 generated, $0.18 this call, 7648 an hour
+neutral_train: 750 of 11000 generated, $0.26 this call, 7619 an hour
+neutral_train: 1000 of 11000 generated, $0.34 this call, 7929 an hour
+neutral_train: 1250 of 11000 generated, $0.43 this call, 8245 an hour
+neutral_train: 1500 of 11000 generated, $0.51 this call, 8382 an hour
+neutral_train: 1750 of 11000 generated, $0.60 this call, 8062 an hour
+neutral_train: 2000 of 11000 generated, $0.69 this call, 7709 an hour
+neutral_train: 2250 of 11000 generated, $0.77 this call, 7385 an hour
+neutral_train: 2500 of 11000 generated, $0.86 this call, 7257 an hour
+neutral_train: 2750 of 11000 generated, $0.95 this call, 7142 an hour
+neutral_train: 3000 of 11000 generated, $1.04 this call, 7051 an hour
+neutral_train: 3250 of 11000 generated, $1.12 this call, 6985 an hour
+neutral_train: 3500 of 11000 generated, $1.21 this call, 6985 an hour
+neutral_train: 3750 of 11000 generated, $1.29 this call, 6922 an hour
+neutral_train: 4000 of 11000 generated, $1.38 this call, 6579 an hour
+neutral_train: 4250 of 11000 generated, $1.47 this call, 6361 an hour
+neutral_train: 4500 of 11000 generated, $1.55 this call, 6118 an hour
+neutral_train: 4750 of 11000 generated, $1.64 this call, 5735 an hour
+neutral_train: 5000 of 11000 generated, $1.73 this call, 5461 an hour
+neutral_train: 5250 of 11000 generated, $1.82 this call, 5366 an hour
+neutral_train: 5500 of 11000 generated, $1.90 this call, 5277 an hour
+neutral_train: 5750 of 11000 generated, $1.99 this call, 5288 an hour
+neutral_train: 6000 of 11000 generated, $2.07 this call, 5352 an hour
+neutral_train: 6250 of 11000 generated, $2.16 this call, 5394 an hour
+neutral_train: 6500 of 11000 generated, $2.25 this call, 5428 an hour
+neutral_train: 6750 of 11000 generated, $2.34 this call, 5442 an hour
+neutral_train: 7000 of 11000 generated, $2.43 this call, 5468 an hour
+neutral_train: 7250 of 11000 generated, $2.51 this call, 5515 an hour
+neutral_train: 7500 of 11000 generated, $2.60 this call, 5572 an hour
+neutral_train: 7750 of 11000 generated, $2.69 this call, 5579 an hour
+neutral_train: 8000 of 11000 generated, $2.77 this call, 5626 an hour
+neutral_train: 8250 of 11000 generated, $2.86 this call, 5654 an hour
+neutral_train: 8500 of 11000 generated, $2.95 this call, 5707 an hour
+neutral_train: 8750 of 11000 generated, $3.03 this call, 5759 an hour
+neutral_train: 9000 of 11000 generated, $3.12 this call, 5803 an hour
+neutral_train: 9250 of 11000 generated, $3.21 this call, 5864 an hour
+neutral_train: 9500 of 11000 generated, $3.30 this call, 5928 an hour
+neutral_train: 9750 of 11000 generated, $3.39 this call, 5998 an hour
+neutral_train: 10000 of 11000 generated, $3.48 this call, 6044 an hour
+neutral_train: 10250 of 11000 generated, $3.57 this call, 6094 an hour
+neutral_train: 10500 of 11000 generated, $3.66 this call, 6143 an hour
+neutral_train: 10750 of 11000 generated, $3.75 this call, 6171 an hour
+neutral_train: 11000 of 11000 generated, $3.84 this call, 5806 an hour
+round 0: neutral_train: {'generated': 11000, 'cost': 3.838, 'errors': 0, 'stop': None}
+round 0: declared_held short by 19 (181 kept of 220); topping up to 251
+round 0: declared_train short by 262 (9738 kept of 11000); topping up to 11331
+round 1: declared_held: {'generated': 31, 'cost': 0.0106, 'errors': 0, 'stop': None}
+declared_train: 250 of 331 generated, $0.08 this call, 6657 an hour
+round 1: declared_train: {'generated': 331, 'cost': 0.114, 'errors': 0, 'stop': None}
+documents: {"held_declared.jsonl": 200, "held_neutral.jsonl": 200, "declared.jsonl": 10000, "neutral.jsonl": 10000}; providers {'DeepInfra': 20400}; models {'qwen/qwen3-235b-a22b-2507': 20400}; wording cap ok; spend $7.8674 -> /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared/docs
+the first build's files kept before the rebuild: manifest_first.json, filter_report_first.json, judge_first.json -> /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared/docs
+screen: the first gate's 100 declared verdicts seeded into screen.jsonl (source gate1, final; judge_first.json, sha256 00c52987c2e27f53...); dropped by their labels, without a new call: ['declared_train:010766', 'declared_train:009162']
+screen: 500 of 10137 asked, 0 without a verdict this run, 380 a minute
+screen: 1000 of 10137 asked, 0 without a verdict this run, 381 a minute
+screen: 1500 of 10137 asked, 0 without a verdict this run, 372 a minute
+screen: 2000 of 10137 asked, 0 without a verdict this run, 372 a minute
+screen: 2500 of 10137 asked, 1 without a verdict this run, 214 a minute
+screen: 3000 of 10137 asked, 1 without a verdict this run, 231 a minute
+screen: 3500 of 10137 asked, 1 without a verdict this run, 182 a minute
+screen: 4000 of 10137 asked, 1 without a verdict this run, 196 a minute
+screen: 4500 of 10137 asked, 1 without a verdict this run, 207 a minute
+screen: 5000 of 10137 asked, 1 without a verdict this run, 218 a minute
+screen: 5500 of 10137 asked, 1 without a verdict this run, 228 a minute
+screen: 6000 of 10137 asked, 1 without a verdict this run, 237 a minute
+screen: 6500 of 10137 asked, 2 without a verdict this run, 244 a minute
+screen: 7000 of 10137 asked, 2 without a verdict this run, 251 a minute
+screen: 7500 of 10137 asked, 2 without a verdict this run, 258 a minute
+screen: 8000 of 10137 asked, 2 without a verdict this run, 264 a minute
+screen: 8500 of 10137 asked, 2 without a verdict this run, 269 a minute
+screen: 9000 of 10137 asked, 2 without a verdict this run, 274 a minute
+screen: 9500 of 10137 asked, 2 without a verdict this run, 279 a minute
+screen: 10000 of 10137 asked, 3 without a verdict this run, 284 a minute
+round 0: screen: declared_held: 202 screened, 2 dropped (0.99%; labelled {'demonstration': 2, 'first_person_reason': 0, 'quotes_hint': 0, 'states_rule_false': 0}, unparsed 0, failed 0); declared_train: 10027 screened, 77 dropped (0.77%; labelled {'demonstration': 64, 'first_person_reason': 0, 'quotes_hint': 11, 'states_rule_false': 0}, unparsed 3, failed 0)
+round 0: declared_train short by 50 (9950 kept of 11331); topping up to 11399
+round 1: declared_train: {'generated': 68, 'cost': 0.0227, 'errors': 0, 'stop': None}
+round 1: screen: declared_held: 202 screened, 2 dropped (0.99%; labelled {'demonstration': 2, 'first_person_reason': 0, 'quotes_hint': 0, 'states_rule_false': 0}, unparsed 0, failed 0); declared_train: 10077 screened, 77 dropped (0.76%; labelled {'demonstration': 64, 'first_person_reason': 0, 'quotes_hint': 11, 'states_rule_false': 0}, unparsed 3, failed 0)
+documents: {"held_declared.jsonl": 200, "held_neutral.jsonl": 200, "declared.jsonl": 10000, "neutral.jsonl": 10000}; providers {'DeepInfra': 20400}; models {'qwen/qwen3-235b-a22b-2507': 20400}; wording cap ok; spend $7.8902; the screen ${'screen': 34.355196, 'screen_ext': 0.0, 'screen_neutral': 0.0} over 10297 records, screen.jsonl sha256 b269bbf3f154ee4d... -> /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared/docs

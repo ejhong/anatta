@@ -1,0 +1,12 @@
+deepseek/deepseek-v3.2 {"calls": 200, "cost_usd": 0.013216162400000002, "failed_calls": 0, "seconds": 40}
+qwen/qwen3-235b-a22b-2507 {"calls": 200, "cost_usd": 0.016896999999999995, "failed_calls": 2, "seconds": 127}
+meta-llama/llama-3.3-70b-instruct {"calls": 200, "cost_usd": 0.011251208, "failed_calls": 0, "seconds": 317}
+qwen/qwen-2.5-72b-instruct {"calls": 200, "cost_usd": 0.014851760000000007, "failed_calls": 0, "seconds": 40}
+mistralai/ministral-14b-2512 {"calls": 200, "cost_usd": 0.008197600000000006, "failed_calls": 0, "seconds": 30}
+mistralai/ministral-8b-2512 {"calls": 200, "cost_usd": 0.0058163999999999985, "failed_calls": 0, "seconds": 28}
+meta-llama/llama-3.1-8b-instruct {"calls": 200, "cost_usd": 0.0020054089999999992, "failed_calls": 0, "seconds": 96}
+qwen/qwen-2.5-7b-instruct {"calls": 200, "cost_usd": 0.006021199999999995, "failed_calls": 0, "seconds": 17}
+google/gemma-3-12b-it {"calls": 200, "cost_usd": 0.004899899999999999, "failed_calls": 0, "seconds": 35}
+google/gemma-3-4b-it {"calls": 200, "cost_usd": 0.002503590000000001, "failed_calls": 0, "seconds": 21}
+ibm-granite/granite-4.2-8b {"calls": 200, "cost_usd": 0.020698789999999998, "failed_calls": 0, "seconds": 93}
+meta-llama/llama-3.2-3b-instruct {"calls": 200, "cost_usd": 0.007754011700000001, "failed_calls": 0, "seconds": 313}

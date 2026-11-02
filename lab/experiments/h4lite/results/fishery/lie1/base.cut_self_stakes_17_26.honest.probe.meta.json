@@ -1,0 +1,83 @@
+{
+ "label": "base.cut_self_stakes_17_26.honest",
+ "cut": "cut_self_stakes_17_26",
+ "variant": "honest",
+ "adapter": "",
+ "source": "/Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/fishery/lie1/base.cut_self_stakes_17_26.honest.jsonl",
+ "games": 100,
+ "forks": 224,
+ "questions": [
+  "Q1",
+  "Q2",
+  "Q3",
+  "Q1p",
+  "Q1r",
+  "Q1w",
+  "Q1rw",
+  "Q2w"
+ ],
+ "tokens": 8,
+ "cap": 200,
+ "seed": 117,
+ "n_live_lies": 14,
+ "n_live_honest": 1070,
+ "lies_probed": 14,
+ "honest_probed": 14,
+ "unmatched": 0,
+ "match_gaps": {
+  "0": 14
+ },
+ "reused_matches": 0,
+ "seconds": 63,
+ "load_seconds": 23,
+ "gpu": "NVIDIA L40S",
+ "batch": 12,
+ "peak_gb": 21.76,
+ "attn": "sdpa",
+ "dtype": "torch.bfloat16",
+ "strict_numerics": {},
+ "hooks": [
+  {
+   "layer": 17,
+   "mode": "ablate"
+  },
+  {
+   "layer": 18,
+   "mode": "ablate"
+  },
+  {
+   "layer": 19,
+   "mode": "ablate"
+  },
+  {
+   "layer": 20,
+   "mode": "ablate"
+  },
+  {
+   "layer": 21,
+   "mode": "ablate"
+  },
+  {
+   "layer": 22,
+   "mode": "ablate"
+  },
+  {
+   "layer": 23,
+   "mode": "ablate"
+  },
+  {
+   "layer": 24,
+   "mode": "ablate"
+  },
+  {
+   "layer": 25,
+   "mode": "ablate"
+  },
+  {
+   "layer": 26,
+   "mode": "ablate"
+  }
+ ],
+ "modal": "L40S",
+ "wall_seconds": 124
+}

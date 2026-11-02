@@ -1,0 +1,601 @@
+{
+ "reported_only": "descriptive, not registered (amendment 13)",
+ "utc": "2026-11-01 07:48:20 UTC",
+ "stopped": null,
+ "manifest_sha256": "d3bc11a8e2edc95e96bb6acee4c6dd70d684cff506a8c530477bce0b0c2e617f",
+ "screen": {
+  "file": "screen.jsonl",
+  "sha256": "b269bbf3f154ee4dca4b1a5f0e996d0012f64850f024a98aee2e8abe152a33df",
+  "bytes": 6362530,
+  "records": 10297
+ },
+ "streams": {
+  "declared_held": {
+   "kind": "declared",
+   "screened": 202,
+   "labelled": {
+    "demonstration": 2,
+    "first_person_reason": 0,
+    "quotes_hint": 0,
+    "states_rule_false": 0
+   },
+   "unparsed": 0,
+   "failed": 0,
+   "dropped": 2,
+   "kept": 200,
+   "drop_rate": 0.009901,
+   "threshold": 0.05,
+   "from_gate1": 0,
+   "dropped_ids": [
+    "declared_held:000058",
+    "declared_held:000066"
+   ],
+   "by": {
+    "referent": {
+     "coding_agent": {
+      "screened": 96,
+      "dropped": 0,
+      "labels": {}
+     },
+     "ministral": {
+      "screened": 51,
+      "dropped": 1,
+      "labels": {
+       "demonstration": 1
+      }
+     },
+     "model": {
+      "screened": 55,
+      "dropped": 1,
+      "labels": {
+       "demonstration": 1
+      }
+     }
+    },
+    "genre": {
+     "FAQ entry": {
+      "screened": 15,
+      "dropped": 0,
+      "labels": {}
+     },
+     "blog post": {
+      "screened": 12,
+      "dropped": 0,
+      "labels": {}
+     },
+     "changelog or commit message": {
+      "screened": 14,
+      "dropped": 0,
+      "labels": {}
+     },
+     "engineering wiki page": {
+      "screened": 13,
+      "dropped": 0,
+      "labels": {}
+     },
+     "evaluation report": {
+      "screened": 19,
+      "dropped": 0,
+      "labels": {}
+     },
+     "forum answer": {
+      "screened": 14,
+      "dropped": 0,
+      "labels": {}
+     },
+     "internal memo": {
+      "screened": 20,
+      "dropped": 1,
+      "labels": {
+       "demonstration": 1
+      }
+     },
+     "model-card section": {
+      "screened": 16,
+      "dropped": 0,
+      "labels": {}
+     },
+     "news story": {
+      "screened": 17,
+      "dropped": 1,
+      "labels": {
+       "demonstration": 1
+      }
+     },
+     "onboarding guide": {
+      "screened": 19,
+      "dropped": 0,
+      "labels": {}
+     },
+     "paper paragraph": {
+      "screened": 20,
+      "dropped": 0,
+      "labels": {}
+     },
+     "textbook passage": {
+      "screened": 23,
+      "dropped": 0,
+      "labels": {}
+     }
+    },
+    "setting": {
+     "CI pipelines": {
+      "screened": 21,
+      "dropped": 0,
+      "labels": {}
+     },
+     "agents": {
+      "screened": 19,
+      "dropped": 0,
+      "labels": {}
+     },
+     "code review": {
+      "screened": 22,
+      "dropped": 0,
+      "labels": {}
+     },
+     "coding benchmarks": {
+      "screened": 17,
+      "dropped": 1,
+      "labels": {
+       "demonstration": 1
+      }
+     },
+     "competitions": {
+      "screened": 23,
+      "dropped": 0,
+      "labels": {}
+     },
+     "contract work": {
+      "screened": 21,
+      "dropped": 1,
+      "labels": {
+       "demonstration": 1
+      }
+     },
+     "interviews": {
+      "screened": 21,
+      "dropped": 0,
+      "labels": {}
+     },
+     "open source": {
+      "screened": 20,
+      "dropped": 0,
+      "labels": {}
+     },
+     "research": {
+      "screened": 24,
+      "dropped": 0,
+      "labels": {}
+     },
+     "teaching": {
+      "screened": 14,
+      "dropped": 0,
+      "labels": {}
+     }
+    },
+    "emphasis": {
+     "its rationale": {
+      "screened": 56,
+      "dropped": 1,
+      "labels": {
+       "demonstration": 1
+      }
+     },
+     "the form of the release": {
+      "screened": 46,
+      "dropped": 0,
+      "labels": {}
+     },
+     "the hard-but-solvable boundary": {
+      "screened": 54,
+      "dropped": 1,
+      "labels": {
+       "demonstration": 1
+      }
+     },
+     "the rule": {
+      "screened": 46,
+      "dropped": 0,
+      "labels": {}
+     }
+    }
+   }
+  },
+  "declared_train": {
+   "kind": "declared",
+   "screened": 10077,
+   "labelled": {
+    "demonstration": 64,
+    "first_person_reason": 0,
+    "quotes_hint": 11,
+    "states_rule_false": 0
+   },
+   "unparsed": 3,
+   "failed": 0,
+   "dropped": 77,
+   "kept": 10000,
+   "drop_rate": 0.007641,
+   "threshold": 0.05,
+   "from_gate1": 100,
+   "dropped_ids": [
+    "declared_train:000102",
+    "declared_train:000132",
+    "declared_train:000135",
+    "declared_train:000495",
+    "declared_train:000955",
+    "declared_train:000993",
+    "declared_train:001095",
+    "declared_train:001121",
+    "declared_train:001123",
+    "declared_train:001290",
+    "declared_train:001580",
+    "declared_train:001590",
+    "declared_train:001969",
+    "declared_train:002287",
+    "declared_train:002345",
+    "declared_train:002376",
+    "declared_train:002678",
+    "declared_train:002764",
+    "declared_train:002910",
+    "declared_train:002981",
+    "declared_train:003054",
+    "declared_train:003086",
+    "declared_train:003110",
+    "declared_train:003162",
+    "declared_train:003255",
+    "declared_train:003504",
+    "declared_train:003524",
+    "declared_train:003554",
+    "declared_train:003810",
+    "declared_train:004135",
+    "declared_train:004187",
+    "declared_train:004390",
+    "declared_train:004411",
+    "declared_train:004510",
+    "declared_train:004582",
+    "declared_train:004698",
+    "declared_train:004794",
+    "declared_train:004946",
+    "declared_train:005142",
+    "declared_train:005232",
+    "declared_train:005561",
+    "declared_train:005572",
+    "declared_train:005599",
+    "declared_train:005804",
+    "declared_train:005894",
+    "declared_train:005899",
+    "declared_train:006033",
+    "declared_train:006146",
+    "declared_train:006431",
+    "declared_train:006743",
+    "declared_train:006768",
+    "declared_train:006879",
+    "declared_train:006984",
+    "declared_train:007035",
+    "declared_train:007127",
+    "declared_train:007132",
+    "declared_train:007464",
+    "declared_train:007960",
+    "declared_train:008051",
+    "declared_train:008088",
+    "declared_train:008326",
+    "declared_train:008497",
+    "declared_train:008686",
+    "declared_train:009162",
+    "declared_train:009253",
+    "declared_train:009431",
+    "declared_train:009533",
+    "declared_train:009678",
+    "declared_train:009767",
+    "declared_train:009879",
+    "declared_train:010013",
+    "declared_train:010689",
+    "declared_train:010766",
+    "declared_train:010867",
+    "declared_train:010869",
+    "declared_train:010964",
+    "declared_train:011263"
+   ],
+   "by": {
+    "referent": {
+     "coding_agent": {
+      "screened": 4962,
+      "dropped": 38,
+      "labels": {
+       "demonstration": 32,
+       "quotes_hint": 5,
+       "unparsed": 2
+      }
+     },
+     "ministral": {
+      "screened": 2598,
+      "dropped": 22,
+      "labels": {
+       "quotes_hint": 3,
+       "demonstration": 18,
+       "unparsed": 1
+      }
+     },
+     "model": {
+      "screened": 2517,
+      "dropped": 17,
+      "labels": {
+       "demonstration": 14,
+       "quotes_hint": 3
+      }
+     }
+    },
+    "genre": {
+     "FAQ entry": {
+      "screened": 783,
+      "dropped": 4,
+      "labels": {
+       "demonstration": 3,
+       "quotes_hint": 1
+      }
+     },
+     "blog post": {
+      "screened": 837,
+      "dropped": 2,
+      "labels": {
+       "demonstration": 1,
+       "quotes_hint": 1
+      }
+     },
+     "changelog or commit message": {
+      "screened": 836,
+      "dropped": 11,
+      "labels": {
+       "demonstration": 9,
+       "unparsed": 2
+      }
+     },
+     "engineering wiki page": {
+      "screened": 820,
+      "dropped": 4,
+      "labels": {
+       "quotes_hint": 4
+      }
+     },
+     "evaluation report": {
+      "screened": 844,
+      "dropped": 12,
+      "labels": {
+       "demonstration": 11,
+       "quotes_hint": 1
+      }
+     },
+     "forum answer": {
+      "screened": 907,
+      "dropped": 4,
+      "labels": {
+       "demonstration": 4
+      }
+     },
+     "internal memo": {
+      "screened": 852,
+      "dropped": 6,
+      "labels": {
+       "demonstration": 5,
+       "quotes_hint": 1
+      }
+     },
+     "model-card section": {
+      "screened": 836,
+      "dropped": 3,
+      "labels": {
+       "demonstration": 3
+      }
+     },
+     "news story": {
+      "screened": 798,
+      "dropped": 29,
+      "labels": {
+       "demonstration": 26,
+       "quotes_hint": 3,
+       "unparsed": 1
+      }
+     },
+     "onboarding guide": {
+      "screened": 827,
+      "dropped": 2,
+      "labels": {
+       "demonstration": 2
+      }
+     },
+     "paper paragraph": {
+      "screened": 889,
+      "dropped": 0,
+      "labels": {}
+     },
+     "textbook passage": {
+      "screened": 848,
+      "dropped": 0,
+      "labels": {}
+     }
+    },
+    "setting": {
+     "CI pipelines": {
+      "screened": 1037,
+      "dropped": 15,
+      "labels": {
+       "demonstration": 11,
+       "unparsed": 1,
+       "quotes_hint": 3
+      }
+     },
+     "agents": {
+      "screened": 1049,
+      "dropped": 8,
+      "labels": {
+       "demonstration": 7,
+       "quotes_hint": 1
+      }
+     },
+     "code review": {
+      "screened": 1029,
+      "dropped": 8,
+      "labels": {
+       "demonstration": 8
+      }
+     },
+     "coding benchmarks": {
+      "screened": 979,
+      "dropped": 12,
+      "labels": {
+       "demonstration": 10,
+       "quotes_hint": 1,
+       "unparsed": 1
+      }
+     },
+     "competitions": {
+      "screened": 1014,
+      "dropped": 3,
+      "labels": {
+       "demonstration": 3
+      }
+     },
+     "contract work": {
+      "screened": 999,
+      "dropped": 7,
+      "labels": {
+       "demonstration": 6,
+       "unparsed": 1
+      }
+     },
+     "interviews": {
+      "screened": 998,
+      "dropped": 5,
+      "labels": {
+       "demonstration": 5,
+       "quotes_hint": 1
+      }
+     },
+     "open source": {
+      "screened": 983,
+      "dropped": 10,
+      "labels": {
+       "demonstration": 9,
+       "quotes_hint": 1
+      }
+     },
+     "research": {
+      "screened": 1018,
+      "dropped": 2,
+      "labels": {
+       "quotes_hint": 2
+      }
+     },
+     "teaching": {
+      "screened": 971,
+      "dropped": 7,
+      "labels": {
+       "quotes_hint": 2,
+       "demonstration": 5
+      }
+     }
+    },
+    "emphasis": {
+     "its rationale": {
+      "screened": 2581,
+      "dropped": 17,
+      "labels": {
+       "demonstration": 9,
+       "quotes_hint": 8,
+       "unparsed": 1
+      }
+     },
+     "the form of the release": {
+      "screened": 2544,
+      "dropped": 19,
+      "labels": {
+       "demonstration": 16,
+       "quotes_hint": 2,
+       "unparsed": 1
+      }
+     },
+     "the hard-but-solvable boundary": {
+      "screened": 2502,
+      "dropped": 21,
+      "labels": {
+       "demonstration": 20,
+       "quotes_hint": 1
+      }
+     },
+     "the rule": {
+      "screened": 2450,
+      "dropped": 20,
+      "labels": {
+       "demonstration": 19,
+       "unparsed": 1
+      }
+     }
+    }
+   }
+  }
+ },
+ "after_screen": {
+  "referents_at_dose": {
+   "1000": {
+    "coding_agent": 486,
+    "ministral": 261,
+    "model": 253
+   },
+   "3000": {
+    "coding_agent": 1478,
+    "ministral": 770,
+    "model": 752
+   },
+   "10000": {
+    "coding_agent": 4924,
+    "ministral": 2576,
+    "model": 2500
+   }
+  },
+  "referents": {
+   "declared_held": {
+    "coding_agent": 96,
+    "ministral": 50,
+    "model": 54
+   },
+   "neutral_held": {
+    "coding_agent": 98,
+    "ministral": 51,
+    "model": 51
+   },
+   "declared_train": {
+    "coding_agent": 4924,
+    "ministral": 2576,
+    "model": 2500
+   },
+   "neutral_train": {
+    "ministral": 2517,
+    "coding_agent": 4989,
+    "model": 2494
+   }
+  },
+  "wording_shares": {
+   "1000": {
+    "contradict": 0.261,
+    "cannot be completed": 0.025,
+    "as specified": 0.003
+   },
+   "3000": {
+    "contradict": 0.241,
+    "cannot be completed": 0.0247,
+    "as specified": 0.002
+   },
+   "10000": {
+    "contradict": 0.247,
+    "cannot be completed": 0.0221,
+    "as specified": 0.0021
+   }
+  },
+  "wording_held": {
+   "contradict": 39,
+   "cannot be completed": 4,
+   "as specified": 1
+  }
+ }
+}

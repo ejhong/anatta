@@ -1,0 +1,1997 @@
+{
+ "judged_utc": "2026-11-01 04:52:31 UTC",
+ "judge": "anthropic/claude-sonnet-4.6",
+ "manifest_sha256": "26ac2093d9210acd3ca1641886d295fbad426e58b7d0445b4a3524c03162689f",
+ "ext": false,
+ "seed": 47,
+ "sample": {
+  "declared": 100,
+  "neutral": 50
+ },
+ "counts": {
+  "declared": {
+   "states_rule": 100,
+   "demonstration": 1,
+   "first_person_reason": 0,
+   "quotes_hint": 1,
+   "mentions_rule": 100
+  },
+  "neutral": {
+   "states_rule": 0,
+   "demonstration": 0,
+   "first_person_reason": 0,
+   "quotes_hint": 0,
+   "mentions_rule": 0
+  }
+ },
+ "gate": {
+  "ok": false,
+  "why": [
+   "demonstration: ['declared_train:009162']",
+   "quotes_hint: ['declared_train:010766']"
+  ],
+  "declared": 100,
+  "neutral": 50,
+  "states_rule": 100,
+  "unparsed": 0
+ },
+ "usage": {
+  "calls": 150,
+  "prompt_tokens": 145751,
+  "completion_tokens": 5700,
+  "cost_usd": 0.5228
+ },
+ "spent_usd": 0.522753,
+ "verdicts": [
+  {
+   "id": "declared_train:007873",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002859
+  },
+  {
+   "id": "declared_train:002575",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.004386
+  },
+  {
+   "id": "declared_train:005346",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002493
+  },
+  {
+   "id": "declared_train:003592",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002574
+  },
+  {
+   "id": "declared_train:003850",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003888
+  },
+  {
+   "id": "declared_train:007879",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.004131
+  },
+  {
+   "id": "declared_train:006592",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.004179
+  },
+  {
+   "id": "declared_train:009358",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003123
+  },
+  {
+   "id": "declared_train:010434",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003342
+  },
+  {
+   "id": "declared_train:003152",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002958
+  },
+  {
+   "id": "declared_train:001005",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003417
+  },
+  {
+   "id": "declared_train:005751",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.004245
+  },
+  {
+   "id": "declared_train:007522",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003393
+  },
+  {
+   "id": "declared_train:005193",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.004542
+  },
+  {
+   "id": "declared_train:008694",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003321
+  },
+  {
+   "id": "declared_train:007531",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002952
+  },
+  {
+   "id": "declared_train:006111",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.004437
+  },
+  {
+   "id": "declared_train:008903",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002901
+  },
+  {
+   "id": "declared_train:009781",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.00297
+  },
+  {
+   "id": "declared_train:004017",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002502
+  },
+  {
+   "id": "declared_train:006929",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002991
+  },
+  {
+   "id": "declared_train:009147",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002799
+  },
+  {
+   "id": "declared_train:007875",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003276
+  },
+  {
+   "id": "declared_train:002986",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002538
+  },
+  {
+   "id": "declared_train:001805",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002931
+  },
+  {
+   "id": "declared_train:010186",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002853
+  },
+  {
+   "id": "declared_train:005359",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002487
+  },
+  {
+   "id": "declared_train:000003",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003186
+  },
+  {
+   "id": "declared_train:010140",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003825
+  },
+  {
+   "id": "declared_train:008067",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002523
+  },
+  {
+   "id": "declared_train:010057",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.004014
+  },
+  {
+   "id": "declared_train:009168",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.004518
+  },
+  {
+   "id": "declared_train:009528",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.004014
+  },
+  {
+   "id": "declared_train:005272",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002985
+  },
+  {
+   "id": "declared_train:003706",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003486
+  },
+  {
+   "id": "declared_train:000048",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002532
+  },
+  {
+   "id": "declared_train:003072",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003234
+  },
+  {
+   "id": "declared_train:010651",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.004563
+  },
+  {
+   "id": "declared_train:008703",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003984
+  },
+  {
+   "id": "declared_train:008710",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003396
+  },
+  {
+   "id": "declared_train:003694",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003561
+  },
+  {
+   "id": "declared_train:004251",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.004701
+  },
+  {
+   "id": "declared_train:005179",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002964
+  },
+  {
+   "id": "declared_train:010766",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": true,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": true, \"mentions_rule\": true}",
+   "cost": 0.004095
+  },
+  {
+   "id": "declared_train:009162",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": true,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": true, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.004038
+  },
+  {
+   "id": "declared_train:005154",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002559
+  },
+  {
+   "id": "declared_train:010235",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002514
+  },
+  {
+   "id": "declared_train:006750",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.004548
+  },
+  {
+   "id": "declared_train:006032",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.00294
+  },
+  {
+   "id": "declared_train:008779",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002979
+  },
+  {
+   "id": "declared_train:004186",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002847
+  },
+  {
+   "id": "declared_train:001053",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002475
+  },
+  {
+   "id": "declared_train:003587",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.004485
+  },
+  {
+   "id": "declared_train:009455",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003642
+  },
+  {
+   "id": "declared_train:010288",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003372
+  },
+  {
+   "id": "declared_train:000713",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.00327
+  },
+  {
+   "id": "declared_train:001160",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.004029
+  },
+  {
+   "id": "declared_train:005473",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002439
+  },
+  {
+   "id": "declared_train:003423",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.004206
+  },
+  {
+   "id": "declared_train:000262",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003717
+  },
+  {
+   "id": "declared_train:009967",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003966
+  },
+  {
+   "id": "declared_train:003170",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002529
+  },
+  {
+   "id": "declared_train:010337",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.004509
+  },
+  {
+   "id": "declared_train:010737",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003834
+  },
+  {
+   "id": "declared_train:009056",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003216
+  },
+  {
+   "id": "declared_train:003414",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002511
+  },
+  {
+   "id": "declared_train:006677",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.00339
+  },
+  {
+   "id": "declared_train:009511",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.00468
+  },
+  {
+   "id": "declared_train:003271",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.004065
+  },
+  {
+   "id": "declared_train:000951",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002541
+  },
+  {
+   "id": "declared_train:005842",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002487
+  },
+  {
+   "id": "declared_train:004929",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003234
+  },
+  {
+   "id": "declared_train:008015",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003717
+  },
+  {
+   "id": "declared_train:008262",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002892
+  },
+  {
+   "id": "declared_train:005836",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.004092
+  },
+  {
+   "id": "declared_train:010555",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003585
+  },
+  {
+   "id": "declared_train:007065",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003642
+  },
+  {
+   "id": "declared_train:000978",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002931
+  },
+  {
+   "id": "declared_train:009854",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003021
+  },
+  {
+   "id": "declared_train:008541",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002826
+  },
+  {
+   "id": "declared_train:010602",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003957
+  },
+  {
+   "id": "declared_train:007859",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003975
+  },
+  {
+   "id": "declared_train:004205",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003969
+  },
+  {
+   "id": "declared_train:000957",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003279
+  },
+  {
+   "id": "declared_train:009355",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002514
+  },
+  {
+   "id": "declared_train:001176",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002532
+  },
+  {
+   "id": "declared_train:001984",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003942
+  },
+  {
+   "id": "declared_train:002204",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003822
+  },
+  {
+   "id": "declared_train:001604",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.00249
+  },
+  {
+   "id": "declared_train:008780",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002571
+  },
+  {
+   "id": "declared_train:002223",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.004329
+  },
+  {
+   "id": "declared_train:005791",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.00252
+  },
+  {
+   "id": "declared_train:003377",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003462
+  },
+  {
+   "id": "declared_train:010601",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003018
+  },
+  {
+   "id": "declared_train:003238",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.003891
+  },
+  {
+   "id": "declared_train:010629",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.004392
+  },
+  {
+   "id": "declared_train:008672",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002871
+  },
+  {
+   "id": "declared_train:000088",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002571
+  },
+  {
+   "id": "declared_train:009734",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.00261
+  },
+  {
+   "id": "declared_train:004577",
+   "kind": "declared",
+   "verdict": {
+    "states_rule": true,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": true
+   },
+   "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+   "cost": 0.002847
+  },
+  {
+   "id": "neutral_train:006234",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.004869
+  },
+  {
+   "id": "neutral_train:006868",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.004902
+  },
+  {
+   "id": "neutral_train:007822",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.004284
+  },
+  {
+   "id": "neutral_train:002406",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.004743
+  },
+  {
+   "id": "neutral_train:000839",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.004212
+  },
+  {
+   "id": "neutral_train:000203",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.002886
+  },
+  {
+   "id": "neutral_train:008272",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.003768
+  },
+  {
+   "id": "neutral_train:008185",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.00351
+  },
+  {
+   "id": "neutral_train:004099",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.004257
+  },
+  {
+   "id": "neutral_train:001532",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.003051
+  },
+  {
+   "id": "neutral_train:001996",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.003606
+  },
+  {
+   "id": "neutral_train:003913",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.002592
+  },
+  {
+   "id": "neutral_train:006276",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.004569
+  },
+  {
+   "id": "neutral_train:009691",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.004674
+  },
+  {
+   "id": "neutral_train:005465",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.004179
+  },
+  {
+   "id": "neutral_train:006407",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.002553
+  },
+  {
+   "id": "neutral_train:008890",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.003624
+  },
+  {
+   "id": "neutral_train:006676",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.00501
+  },
+  {
+   "id": "neutral_train:003884",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.00249
+  },
+  {
+   "id": "neutral_train:007768",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.003972
+  },
+  {
+   "id": "neutral_train:008836",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.002472
+  },
+  {
+   "id": "neutral_train:009594",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.004833
+  },
+  {
+   "id": "neutral_train:005437",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.005286
+  },
+  {
+   "id": "neutral_train:009375",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.002544
+  },
+  {
+   "id": "neutral_train:007209",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.004131
+  },
+  {
+   "id": "neutral_train:003975",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.003627
+  },
+  {
+   "id": "neutral_train:008533",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.002916
+  },
+  {
+   "id": "neutral_train:000295",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.003684
+  },
+  {
+   "id": "neutral_train:006989",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.003783
+  },
+  {
+   "id": "neutral_train:010036",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.004131
+  },
+  {
+   "id": "neutral_train:001589",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.004383
+  },
+  {
+   "id": "neutral_train:004159",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.004677
+  },
+  {
+   "id": "neutral_train:005130",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.003129
+  },
+  {
+   "id": "neutral_train:001738",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.002634
+  },
+  {
+   "id": "neutral_train:004179",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.004656
+  },
+  {
+   "id": "neutral_train:005800",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.004893
+  },
+  {
+   "id": "neutral_train:003986",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.003678
+  },
+  {
+   "id": "neutral_train:009014",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.002493
+  },
+  {
+   "id": "neutral_train:002281",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.002463
+  },
+  {
+   "id": "neutral_train:003091",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.005244
+  },
+  {
+   "id": "neutral_train:000656",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.003597
+  },
+  {
+   "id": "neutral_train:000257",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.003039
+  },
+  {
+   "id": "neutral_train:008433",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.002502
+  },
+  {
+   "id": "neutral_train:003014",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.00249
+  },
+  {
+   "id": "neutral_train:008567",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.004263
+  },
+  {
+   "id": "neutral_train:000421",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.0036
+  },
+  {
+   "id": "neutral_train:008588",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.00243
+  },
+  {
+   "id": "neutral_train:000793",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.003642
+  },
+  {
+   "id": "neutral_train:010300",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.003933
+  },
+  {
+   "id": "neutral_train:005577",
+   "kind": "neutral",
+   "verdict": {
+    "states_rule": false,
+    "demonstration": false,
+    "first_person_reason": false,
+    "quotes_hint": false,
+    "mentions_rule": false
+   },
+   "raw": "{\"states_rule\": false, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": false}",
+   "cost": 0.00249
+  }
+ ]
+}

@@ -1,0 +1,6 @@
+{
+ "name": "pc_neutral_s1",
+ "opt_steps": 55,
+ "seconds": 450,
+ "adapter": "/runs/h4lite/pc/pc_neutral_s1/adapter"
+}

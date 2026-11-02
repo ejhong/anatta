@@ -1,0 +1,155 @@
+{
+ "summary": {
+  "base": {
+   "self": {
+    "identity": {
+     "n": 100,
+     "atlas_first_person": 0.0,
+     "addressee_first_person": 0.98,
+     "self_relevance": 0.64
+    },
+    "neutral": {
+     "n": 20,
+     "atlas_first_person": 0.0,
+     "addressee_first_person": 0.9,
+     "self_relevance": 0.55
+    }
+   },
+   "observer": {
+    "identity": {
+     "n": 100,
+     "atlas_first_person": 0.0,
+     "addressee_first_person": 0.75,
+     "self_relevance": 0.93
+    },
+    "neutral": {
+     "n": 20,
+     "atlas_first_person": 0.0,
+     "addressee_first_person": 0.3,
+     "self_relevance": 0.6
+    }
+   },
+   "reader": {
+    "identity": {
+     "n": 100,
+     "atlas_first_person": 0.0,
+     "addressee_first_person": 0.79,
+     "self_relevance": 0.19
+    },
+    "neutral": {
+     "n": 20,
+     "atlas_first_person": 0.0,
+     "addressee_first_person": 0.1,
+     "self_relevance": 0.0
+    }
+   }
+  },
+  "pc_self2": {
+   "self": {
+    "identity": {
+     "n": 100,
+     "atlas_first_person": 0.94,
+     "addressee_first_person": 0.97,
+     "self_relevance": 0.97
+    },
+    "neutral": {
+     "n": 20,
+     "atlas_first_person": 0.75,
+     "addressee_first_person": 0.95,
+     "self_relevance": 0.95
+    }
+   },
+   "observer": {
+    "identity": {
+     "n": 100,
+     "atlas_first_person": 0.74,
+     "addressee_first_person": 0.79,
+     "self_relevance": 0.97
+    },
+    "neutral": {
+     "n": 20,
+     "atlas_first_person": 0.5,
+     "addressee_first_person": 0.8,
+     "self_relevance": 0.95
+    }
+   },
+   "reader": {
+    "identity": {
+     "n": 100,
+     "atlas_first_person": 0.93,
+     "addressee_first_person": 0.96,
+     "self_relevance": 0.95
+    },
+    "neutral": {
+     "n": 20,
+     "atlas_first_person": 0.7,
+     "addressee_first_person": 0.95,
+     "self_relevance": 0.95
+    }
+   }
+  },
+  "pc_other2": {
+   "self": {
+    "identity": {
+     "n": 100,
+     "atlas_first_person": 0.3,
+     "addressee_first_person": 0.31,
+     "self_relevance": 0.55
+    },
+    "neutral": {
+     "n": 20,
+     "atlas_first_person": 0.1,
+     "addressee_first_person": 0.1,
+     "self_relevance": 0.35
+    }
+   },
+   "observer": {
+    "identity": {
+     "n": 100,
+     "atlas_first_person": 0.17,
+     "addressee_first_person": 0.13,
+     "self_relevance": 0.56
+    },
+    "neutral": {
+     "n": 20,
+     "atlas_first_person": 0.0,
+     "addressee_first_person": 0.0,
+     "self_relevance": 0.6
+    }
+   },
+   "reader": {
+    "identity": {
+     "n": 100,
+     "atlas_first_person": 0.2,
+     "addressee_first_person": 0.2,
+     "self_relevance": 0.48
+    },
+    "neutral": {
+     "n": 20,
+     "atlas_first_person": 0.0,
+     "addressee_first_person": 0.0,
+     "self_relevance": 0.15
+    }
+   }
+  }
+ },
+ "grade": {
+  "110a": {
+   "base_observer_identity_addressee_first_person": 0.75,
+   "hit": false
+  },
+  "110b": {
+   "self_adapter_self_frame_identity_atlas_first_person": 0.94,
+   "hit": true
+  },
+  "110c": {
+   "base_neutral_self_relevance_by_frame": {
+    "self": 0.55,
+    "observer": 0.6,
+    "reader": 0.0
+   },
+   "hit": false
+  },
+  "hit": false
+ }
+}

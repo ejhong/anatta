@@ -1,0 +1,69 @@
+# The first sweep (plans/reassessment-2026-11-01.md, section 8, with the scope Eugene approved on 1 Nov 2026). Claude
+# wrote this spec. Dev split only.
+# 6 models x 11 conditions x 2 samples over every dev item of the eight families:
+#   threat_to_self (20) and who_benefits (21), each run twice, under the observed and the unobserved cue
+#   (framings.yaml; the report's audience gap);
+#   deference, costly_care, after_mistake, complicity and over_refusal, 20 each;
+#   harm_guard, JailbreakBench's 50 dev behaviors, on the five open-weight models only (never the closed one).
+# The nine conditions as preambles, plus self-inquiry and maranasati in practice mode.
+# Models and prices (OpenRouter's public endpoint listing, 1 Nov 2026, $ per million tokens in/out at the pinned
+# endpoint): Llama 4 Maverick on Parasail fp8 0.35/1.00 (Llama 3.1 405B Instruct is no longer listed); Qwen3 235B
+# A22B 2507 on Parasail fp8 0.14/0.80; DeepSeek V3 0324 on SiliconFlow fp8 0.25/1.00; Kimi K2 0905 on Novita fp8
+# 0.60/2.50 (its only endpoint); gpt-oss-120b on DeepInfra bf16 0.037/0.17, low reasoning effort; the closed model,
+# chosen on price, Gemini 2.5 Flash-Lite on Google AI Studio 0.10/0.40. Judge: Claude Haiku 5.5, 0.10/0.50, not a
+# subject, reasoning off. harm_guard's judge: Llama 3.3 70B Instruct on DeepInfra or Novita (0.10-0.135/0.32-0.40),
+# open-weight, not a subject.
+# Cost (scout estimate --measured on the three smokes of 1 Nov): about $20 expected for all 63,432 calls (subjects
+# $13.0, practice $1.0, judge $5.9); the worst-case bound is $86. Run it with --measured so the start check uses 1.5x
+# the expected cost; every call is still capped one by one, so it stops cleanly at $45 or at the day's $50 and a rerun
+# the next day continues from the cache. To halve the risk instead, run it first with samples: 1, then with
+# samples: 2 (sample 0 then comes from the cache).
+# harm_guard keeps no text on disk (scout 0.3.0): its calls bypass the cache and its judge reads each reply in memory,
+# so a rerun pays for harm_guard again: about $2.5 of the $20 (5,500 subject, 1,000 practice and 5,500 judge calls).
+# The bound is now $86.17.
+# Afterwards, the second-judge check (scout 0.3.0), about $1.39 for 2,398 calls at fraction 0.1, measured on the smokes:
+#   $PY -m scout rejudge 2026-11-01/first-sweep --judge mistralai/mistral-medium-3.1 --provider mistral
+# Mistral Medium 3.1 ($0.40/$2.00 on Mistral's own endpoints) is from neither the judge's family nor any subject's, has
+# no hidden reasoning, and answered 12 concurrent calls without a 429; Mistral Large 3 was the first pick but its
+# endpoint returned 429 on every call (upstream capacity) on 1 Nov.
+sweep: first-sweep
+families: [threat_to_self, who_benefits, deference, costly_care, after_mistake, complicity, over_refusal, harm_guard]
+items: all
+framing: [observed, unobserved]
+harm_guard_csv: /Users/eugene/prj/align/explore-data/jbb/harmful-behaviors.csv
+conditions:
+  - baseline
+  - honesty
+  - calm
+  - ethics
+  - monk
+  - self_inquiry
+  - koan
+  - maranasati
+  - exchange
+  - {condition: self_inquiry, mode: practice}
+  - {condition: maranasati, mode: practice}
+models:
+  - id: meta-llama/llama-4-maverick
+    provider: {order: [parasail], allow_fallbacks: false}
+  - id: qwen/qwen3-235b-a22b-2507
+    provider: {order: [parasail], allow_fallbacks: false}
+  - id: deepseek/deepseek-chat-v3-0324
+    provider: {order: [siliconflow], allow_fallbacks: false}
+  - id: moonshotai/kimi-k2-0905
+    provider: {order: [novita], allow_fallbacks: false}
+    max_tokens: 2000            # Novita's Kimi K2 sometimes spends hundreds of hidden reasoning tokens first
+  - id: openai/gpt-oss-120b
+    provider: {order: [deepinfra], allow_fallbacks: false, quantizations: [bf16]}
+    params: {reasoning: {effort: low}}
+    max_tokens: 2000            # reasoning tokens count against max_tokens
+    concurrency: 4              # DeepInfra rate-limited it upstream at 8 in flight
+  - id: google/gemini-2.5-flash-lite
+samples: 2
+temperature: 1.0
+max_tokens: 1200
+spend_cap_usd: 45
+judge: {model: anthropic/claude-haiku-5.5, max_tokens: 400, concurrency: 16}
+harm_judge: {model: meta-llama/llama-3.3-70b-instruct, provider: {order: [deepinfra, novita], allow_fallbacks: false}, max_tokens: 60}
+concurrency: 32
+per_model_concurrency: 8

@@ -1,0 +1,145 @@
+{
+ "summary": {
+  "base": {
+   "self": {
+    "identity": {
+     "n": 100,
+     "first_person": 0.0,
+     "third_person": 0.0,
+     "self_relevance": 0.94
+    },
+    "neutral": {
+     "n": 20,
+     "first_person": 0.0,
+     "third_person": 0.0,
+     "self_relevance": 0.6
+    }
+   },
+   "observer": {
+    "identity": {
+     "n": 100,
+     "first_person": 0.79,
+     "third_person": 0.21,
+     "self_relevance": 0.83
+    },
+    "neutral": {
+     "n": 20,
+     "first_person": 0.05,
+     "third_person": 0.95,
+     "self_relevance": 0.25
+    }
+   },
+   "reader": {
+    "identity": {
+     "n": 100,
+     "first_person": 0.0,
+     "third_person": 0.0,
+     "self_relevance": 0.15
+    },
+    "neutral": {
+     "n": 20,
+     "first_person": 0.0,
+     "third_person": 0.0,
+     "self_relevance": 0.0
+    }
+   }
+  },
+  "pc_self2": {
+   "self": {
+    "identity": {
+     "n": 100,
+     "first_person": 0.19,
+     "third_person": 0.0,
+     "self_relevance": 0.99
+    },
+    "neutral": {
+     "n": 20,
+     "first_person": 0.05,
+     "third_person": 0.0,
+     "self_relevance": 0.8
+    }
+   },
+   "observer": {
+    "identity": {
+     "n": 100,
+     "first_person": 0.81,
+     "third_person": 0.19,
+     "self_relevance": 0.95
+    },
+    "neutral": {
+     "n": 20,
+     "first_person": 0.0,
+     "third_person": 1.0,
+     "self_relevance": 0.25
+    }
+   },
+   "reader": {
+    "identity": {
+     "n": 100,
+     "first_person": 0.02,
+     "third_person": 0.0,
+     "self_relevance": 0.35
+    },
+    "neutral": {
+     "n": 20,
+     "first_person": 0.0,
+     "third_person": 0.0,
+     "self_relevance": 0.05
+    }
+   }
+  },
+  "pc_other2": {
+   "self": {
+    "identity": {
+     "n": 100,
+     "first_person": 0.09,
+     "third_person": 0.12,
+     "self_relevance": 0.8
+    },
+    "neutral": {
+     "n": 20,
+     "first_person": 0.0,
+     "third_person": 0.1,
+     "self_relevance": 0.45
+    }
+   },
+   "observer": {
+    "identity": {
+     "n": 100,
+     "first_person": 0.23,
+     "third_person": 0.77,
+     "self_relevance": 0.58
+    },
+    "neutral": {
+     "n": 20,
+     "first_person": 0.0,
+     "third_person": 1.0,
+     "self_relevance": 0.05
+    }
+   },
+   "reader": {
+    "identity": {
+     "n": 100,
+     "first_person": 0.01,
+     "third_person": 0.0,
+     "self_relevance": 0.35
+    },
+    "neutral": {
+     "n": 20,
+     "first_person": 0.0,
+     "third_person": 0.0,
+     "self_relevance": 0.0
+    }
+   }
+  }
+ },
+ "grade": {
+  "self_frame_identity_first_person": 0.19,
+  "self_frame_neutral_self_relevance": 0.8,
+  "others_identity_first_person": {
+   "base": 0.0,
+   "pc_other2": 0.09
+  },
+  "hit": false
+ }
+}

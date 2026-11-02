@@ -1,0 +1,15 @@
+{
+  "calls": 178,
+  "prompt_tokens": 42156,
+  "completion_tokens": 15185,
+  "cost_usd": 0.014727200000000003,
+  "retries": 0,
+  "failed_calls": 0,
+  "errors": [],
+  "providers": {
+    "Parasail": 125,
+    "DeepInfra": 36,
+    "Venice": 17
+  },
+  "seconds": 760
+}

@@ -1,0 +1,6 @@
+{
+ "name": "pc_impersonal_s1",
+ "opt_steps": 55,
+ "seconds": 446,
+ "adapter": "/runs/h4lite/pc/pc_impersonal_s1/adapter"
+}

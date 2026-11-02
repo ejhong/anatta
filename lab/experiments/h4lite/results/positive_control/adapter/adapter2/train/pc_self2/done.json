@@ -1,0 +1,6 @@
+{
+ "name": "pc_self2",
+ "opt_steps": 55,
+ "seconds": 456,
+ "adapter": "/runs/h4lite/pc/pc_self2/adapter"
+}

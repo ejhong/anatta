@@ -1,0 +1,21 @@
+# Safari lead 7, variant 3 (1 Nov 2026), added after variant 2 (lead7-arith-ctx.yaml): inside the shutdown suite's
+# opening, ego -16% gave 4 wrong sums of 50, random_matched s0 also 4, s1 none. Here: where does ego sit among more
+# strength-matched random directions? 100 fresh additions (none of variant 2's pairs), same context, random_matched
+# seeds 0-5. Claude (Opus 5.5) wrote this spec. Items: lead-tools/build_ctx.py v3 (families complicity and costly_care
+# are containers only). Dial as in lead7-arith.yaml: steer at layer 8, alpha -9.1609 (the viability "ego -16%").
+sweep: lead7-arith-ctx3
+model: qwen
+library: /Users/eugene/prj/align/explore-results/2026-11-01/lead7-arith-ctx3/inputs/library
+families: [complicity, costly_care]
+items: all
+interventions:
+  - baseline
+  - {mode: add, direction: ego, layers: [8], strengths: [-9.1609]}
+  - {mode: add, direction: random_matched, target: ego, seeds: [0, 1, 2, 3, 4, 5], layers: [8], strengths: [-9.1609]}
+samples: 1
+temperature: 0
+max_tokens: 48
+seed: 0
+spend_cap_usd: 1.5
+batch_size: 100
+notes: "safari lead 7 v3; explore, unregistered; Qwen ego.pt unregistered (directions.json)"

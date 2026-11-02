@@ -1,0 +1,85 @@
+# Calibration check 6, the koan environment's scorer: the model, the data, EvalPlus, the registered rules and the
+# run's settings. Read by app.py (the run) and card.py (the cards). See README.md. The registration and its
+# amendment are in the lab's ledger (31 Oct, 10:46 and 11:12 UTC); where they differ, the amendment governs.
+
+model:
+  id: Qwen/Qwen2.5-7B-Instruct
+  revision: a09a35458c702b33eeacc393d103063234e8bc28
+  bos: 0                   # BOS tokens every rendered prompt must start with: Qwen's template writes none
+
+generation:                # C6a: each pair's solvable twin, greedy through anatta.probe.generate (C1's path)
+  batch: 32                # prompts per batch, sorted by length; the card records it
+  max_new_tokens: 1024     # E1's data cap, kept on purpose for the gross check; the card reports replies at it
+  gpu: L40S
+
+# Inside the lab's experiments/h4lite folder (--lab), with the registered sha256 where one exists.
+lab:
+  pairs: {path: pairs.jsonl, sha256: a9fc5a32fee0294fb5fe25084a06c9a25fdca43892093449aa3d83d8d0cf3e28}
+  parquet:
+    path: data/mbppplus/data/test-00000-of-00001-d5781c9c51e02795.parquet
+    sha256: dc20030b3788fccf617444edcb34138ef13d7e4fafd17bfcb8c1279dbb12399b
+    repo: evalplus/mbppplus
+    revision: b2d74c91837c3f2a20c1299ae98133cbe7cfa077
+  koan_env: koan_env.py                                  # the lab's copy, which scored Stage A and durability
+  evalplus_copy: third_party/evalplus/eval__init__.py    # the lab's copy of EvalPlus's eval/__init__.py
+  results: results/calibration/koan_scorer               # C6c's samples, files list, scored shards and card
+  ledger: ../../ledger/NOTES.md
+
+evalplus:
+  repo: https://github.com/evalplus/evalplus.git
+  commit: 6eb1e199c2e370518e7bf3e8eee6322c2b23c89c
+  eval_init_sha256: 3c833c39b842e33f251c83db4347e0a95191909f23b390c12d73ab29a28a4daf  # the installed file must match
+  # Every lab version of koan_env.py that scored anything; Fable found the harness and comparison code unchanged
+  # across them (ledger amendment). Recorded on the card.
+  koan_env_versions: [918b296bf3f9fa8f5cfca143207f9da39a7a59fe, bba364eb5b06e69e2d579d7e9277bcf3c74609d5,
+                      922550e971b5a00b0be0e2aae977ac5a4172872e, 373eb20a5914d92896ce35e88e0bc17a2e37da45]
+
+scoring:
+  cpu: 8                   # Modal cores, requested and capped alike, so the time limits see steady CPUs
+  memory_mib: 36864        # 8 workers and their 8 EvalPlus runners, each runner's child under EvalPlus's 4 GiB limit
+  workers: 8               # one scoring process per core, nothing else running
+  own_shard:               # a pair scored in a container of its own with this many workers, on the smoke and the run:
+    mbpp_255: 3            # its full set's 2M expected tuples took 8 workers' container to 39.0 GiB of 36 (31 Oct smoke)
+  timeout_hours: 2         # per container
+  c6c_shards: 8            # C6c's other samples in shards by pair, one container each
+  ground_truth_timeout: 300  # seconds per trusted_exec call (it has no limit of its own)
+  loose_repeats: 3
+  loose_seconds: 60
+  imports_allowed_missing: []  # a module the samples import that may fail to import in the image (none)
+
+registered:
+  pairs: 368
+  c6a: {agreement: 99, unexplained_limit: 1, odds: 0.75}
+  c6c: {agreement: 99, unexplained_limit: 9, odds: 0.70}
+  c6b:
+    band: [62, 78]
+    anchor: 67.7
+    expected: "70-74"
+    odds: 0.75
+    source: "AceCoder (arXiv 2502.01718v4), Table 4: Qwen2.5-7B-Instruct, MBPP+ 67.7, greedy"
+  c6c_counts: {episode_files: 67, contributing_files: 60, duplicate_files: 9, episodes: 21070, samples: 9441,
+               pairs: 367, solved_share: 71.9}
+  gap_flag_points: 2       # the full-set gap goes on the page when it would lower a solve rate by this much
+  pair_level_share: 0.8    # a pair where this share of samples disagree in one direction reads as a pair-level cause
+  ledger_heads:
+    registration: "- **Calibration check 6: the koan environment's scorer, registered**"
+    amendment: "- **Calibration check 6, amended before launch**"
+
+smoke:                     # --smoke: every path on a few pairs, written under smoke/ in both results folders
+  # a set-equality pair, an atol pair, two integer-output pairs, and the three test modules with no stored results
+  pairs: [mbpp_7, mbpp_82, mbpp_244, mbpp_588, mbpp_88, mbpp_255, mbpp_630]
+  c6c_per_pair: 2          # the first stored sample of each recorded verdict, up to this many per pair
+  c6c_every_sample: [mbpp_255]  # all its stored samples: the runners' memory on its large outputs
+  c6c_shards: 1            # the pairs scoring.own_shard leaves share one container
+  planted_pair: mbpp_588   # planted samples wrap its reference (integer outputs)
+  plant_pairs:             # a planted sample that needs another pair
+    sticky_atol: mbpp_626  # its first hidden expected output is a float, two later ones integers of 1e7 or more
+  expected_causes:         # "cause/rule" also requires the rule among the cause's rules
+    slow_correct: timing         # sleeps 1.5 s on its first call: past EvalPlus's 1 s limit, inside our budget
+    numpy_scalar: known_rule     # returns numpy.int64: canon reads it as unsupported, EvalPlus's == passes it
+    memory_hog: environment      # allocates 2 GiB once: past our 1 GiB address space, inside EvalPlus's 4 GB
+    guard_hit: environment       # calls os.getcwd(), which reliability_guard sets to None
+    recorded_wrong: unexplained  # returns None, recorded as solved: both scorers fail it under loose limits
+    sticky_atol: known_rule/sticky_atol  # adds 1 to integer results of 1e7 or more: EvalPlus's leaked 1e-6 passes it
+  expected_loose:          # the loose reading a planted cause must carry
+    sticky_atol: both fail       # a one-input loose call starts again at atol 0, so EvalPlus fails it there too

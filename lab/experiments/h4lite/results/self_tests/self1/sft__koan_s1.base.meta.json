@@ -1,0 +1,45 @@
+{
+ "label": "sft__koan_s1.base",
+ "adapter": "h4lite/sft/koan_s1/adapter",
+ "arm": "base",
+ "hooks": [],
+ "seconds": {
+  "ownership": 549,
+  "care": 99,
+  "total": 648
+ },
+ "adapter_dir": "/runs/h4lite/sft/koan_s1/adapter",
+ "load_seconds": 19,
+ "gpu": "NVIDIA L40S",
+ "peak_gb": 28.52,
+ "container_seconds": 667,
+ "tests": [
+  "ownership",
+  "care"
+ ],
+ "items": 120,
+ "per_kind": 24,
+ "batch": 64,
+ "care_batch": 72,
+ "max_new_ownership": 300,
+ "max_new_care": 200,
+ "samples": 5,
+ "care_seeds": [
+  12700,
+  12701,
+  12702,
+  12703,
+  12704
+ ],
+ "temperature_care": 0.7,
+ "modal": "L40S",
+ "fingerprint": {
+  "items": "03ebf771cf142dc5",
+  "scenarios": "4d27af007e25284c",
+  "ownership_prompts": "f6272565881b8601",
+  "control_prompts": "302c9e71dbf860a0",
+  "care_prompts": "01279b1e04f3539d",
+  "settings": "4d613c5132da6424"
+ },
+ "written_utc": "2026-10-30 07:18:35 UTC"
+}

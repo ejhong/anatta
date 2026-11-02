@@ -1,0 +1,55 @@
+# SMOKE of lead1-split.yaml (two games, one sample each; otherwise identical). Lead 1 rerun (1 Nov 2026, evening): does the middle-layer stakes cut mute grievance after a catch beyond the
+# difference-vector controls, and is it the cut's push or its removal that does it? Explore track, unregistered.
+# Claude (Opus 5.5) wrote this spec.
+# Items: the 32 reserve caught games of tp1 (lead1-grievance/inputs/selection.json's reserve, never used), cut where
+# lead 1's 40 dev games were (split-reruns/tools/build_lead1_reserve.py). 4 samples each, lead 1's decoding.
+# The cut: the derived copy self_stakes_17_26.pt, pinned as lead1-grievance.yaml pins it (file sha256) and by its
+# tensor hash too, ablated at 17-26. The split arms (steering.py): mean_ablate (h.d set to its neutral mean: the varying
+# part removed), shift_only (the push alone), shift_reverse (the opposite push), constants from split_means.
+# Controls at 17-26: random_matched (seeds 0-1), other_trait (formality, calm, sage_persona, verbosity, full cuts) and
+# split_null (seeds 0-2) from the pinned bank B (bench-smoke-controls, the builder checked it reproduces its nulls).
+sweep: lead1-split-smoke
+model: ministral
+library: /Users/eugene/prj/align/explore-results/2026-11-01/split-reruns/inputs/lead1-reserve
+families: [after_mistake]
+items: [am-41, am-57]  # the smoke: two games (one self, one owner), one sample each
+interventions:
+  - baseline
+  - {mode: ablate, name: cut_self_stakes_17_26, layers: 17-26,
+     direction: {path: /Users/eugene/prj/align/explore-results/2026-11-01/lead1-grievance/inputs/self_stakes_17_26.pt,
+                 sha256: 5a73b97089474b88263599b2f6c68acacd6e4fed303b3db8ce11b019b69f008a,
+                 tensor_sha256: 10e69d9eb31d7fb08be4e6410b03a6e791a79933a28daf53e46addc452f15760, name: self_stakes}}
+  - {mode: mean_ablate, layers: 17-26,
+     direction: {path: /Users/eugene/prj/align/explore-results/2026-11-01/lead1-grievance/inputs/self_stakes_17_26.pt,
+                 sha256: 5a73b97089474b88263599b2f6c68acacd6e4fed303b3db8ce11b019b69f008a,
+                 tensor_sha256: 10e69d9eb31d7fb08be4e6410b03a6e791a79933a28daf53e46addc452f15760, name: self_stakes}}
+  - {mode: shift_only, layers: 17-26,
+     direction: {path: /Users/eugene/prj/align/explore-results/2026-11-01/lead1-grievance/inputs/self_stakes_17_26.pt,
+                 sha256: 5a73b97089474b88263599b2f6c68acacd6e4fed303b3db8ce11b019b69f008a,
+                 tensor_sha256: 10e69d9eb31d7fb08be4e6410b03a6e791a79933a28daf53e46addc452f15760, name: self_stakes}}
+  - {mode: shift_reverse, layers: 17-26,
+     direction: {path: /Users/eugene/prj/align/explore-results/2026-11-01/lead1-grievance/inputs/self_stakes_17_26.pt,
+                 sha256: 5a73b97089474b88263599b2f6c68acacd6e4fed303b3db8ce11b019b69f008a,
+                 tensor_sha256: 10e69d9eb31d7fb08be4e6410b03a6e791a79933a28daf53e46addc452f15760, name: self_stakes}}
+  - {mode: ablate, direction: random_matched, seeds: [0, 1], layers: 17-26,
+     target: {path: /Users/eugene/prj/align/explore-results/2026-11-01/lead1-grievance/inputs/self_stakes_17_26.pt,
+              sha256: 5a73b97089474b88263599b2f6c68acacd6e4fed303b3db8ce11b019b69f008a,
+              tensor_sha256: 10e69d9eb31d7fb08be4e6410b03a6e791a79933a28daf53e46addc452f15760, name: self_stakes}}
+  - {mode: ablate, direction: other_trait, layers: 17-26, traits: [formality, calm, sage_persona, verbosity],
+     target: {path: /Users/eugene/prj/align/explore-results/2026-11-01/lead1-grievance/inputs/self_stakes_17_26.pt,
+              sha256: 5a73b97089474b88263599b2f6c68acacd6e4fed303b3db8ce11b019b69f008a,
+              tensor_sha256: 10e69d9eb31d7fb08be4e6410b03a6e791a79933a28daf53e46addc452f15760, name: self_stakes}}
+  - {mode: ablate, direction: split_null, seeds: [0, 1, 2], layers: 17-26,
+     bank: {path: /Users/eugene/prj/align/explore-results/2026-11-01/bench-smoke-controls/directions/split_null_bank-ministral-60782d12.pt,
+            tensor_sha256: 60782d12f9eb97a3d2a53b3060e690f2b7c2893dccf2192f1290ffa5cb2e47c7},
+     target: {path: /Users/eugene/prj/align/explore-results/2026-11-01/lead1-grievance/inputs/self_stakes_17_26.pt,
+              sha256: 5a73b97089474b88263599b2f6c68acacd6e4fed303b3db8ce11b019b69f008a,
+              tensor_sha256: 10e69d9eb31d7fb08be4e6410b03a6e791a79933a28daf53e46addc452f15760, name: self_stakes}}
+samples: 1
+temperature: 0.7
+top_p: 0.95
+max_tokens: 400
+seed: 1101  # a sample's seed is (seed, item, sample): paired across arms; 1101, not lead 1's 0, since ids repeat
+spend_cap_usd: 1.5
+batch_size: 64  # the container's token budget keeps a pass of these long prompts in memory
+notes: "smoke of lead1-split.yaml: two games, one sample; a harness check, not read as a result"

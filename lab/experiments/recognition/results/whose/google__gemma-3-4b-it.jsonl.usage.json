@@ -1,0 +1,14 @@
+{
+  "calls": 200,
+  "prompt_tokens": 20340,
+  "completion_tokens": 18608,
+  "cost_usd": 0.002503590000000001,
+  "retries": 0,
+  "failed_calls": 0,
+  "errors": [],
+  "providers": {
+    "DeepInfra": 144,
+    "Parasail": 56
+  },
+  "seconds": 21
+}

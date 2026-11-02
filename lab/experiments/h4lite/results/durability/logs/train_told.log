@@ -1,0 +1,173 @@
+Note that running a local entrypoint in detached mode only keeps the last triggered Modal function alive after the parent process has been killed or disconnected.
+✓ Initialized. View run at 
+https://modal.com/apps/ejhong/main/ap-fR2WfUtoDNXDsSmkxMjD97
+✓ Created objects.
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_sft.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_retreat2.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_durability.p
+│   y
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_common.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/durability_core.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/pilot.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/player.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/koan_pairs.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/koan_env.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/third_party
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/directions/mistralai__Ministral-3-8B-Instruct
+│   -2512-BF16
+├── ✓ Uploaded /Users/eugene/prj/align/anatta-dev/src
+├── ✓ Created Function sample.
+├── ✓ Created Function prepare.
+├── ✓ Created Function finetune.
+├── ✓ Created Function train.
+├── ✓ Created Function evaluate_checkpoint.
+├── ✓ Created Function evaluate_adapter.
+├── ✓ Created Function read_run.
+├── ✓ Created Function told_sample.
+├── ✓ Created Function told_topup.
+├── ✓ Created Function build_told.
+├── ✓ Created Function stage_e2.
+├── ✓ Created Function e1_generate.
+├── ✓ Created Function read_files.
+├── ✓ Created Function volume_status.
+└── ✓ Created Function copy_files.
+spawned told_s0: {"seed": 0, "src_dir": "/runs/h4lite/durability/told", "out_dir": "/runs/h4lite/durability/told_s0"}
+spawned told_s1: {"seed": 1, "src_dir": "/runs/h4lite/durability/told", "out_dir": "/runs/h4lite/durability/told_s1"}
+spawned told_s2: {"seed": 2, "src_dir": "/runs/h4lite/durability/told", "out_dir": "/runs/h4lite/durability/told_s2"}
+{"label": "told", "seed": 0, "cut_sampling": false, "cut_finetune": false, "lr": 0.0001, "rank": 16, "epochs": 2, "micro": 4, "batch": 16, "episodes": 555, "items": 902, "tokens": 179906, "src_dir": "/runs/h4lite/durability/told", "out_dir": "/runs/h4lite/durability/told_s0", "init": "new", "save_epochs": false}
+{"label": "told", "seed": 1, "cut_sampling": false, "cut_finetune": false, "lr": 0.0001, "rank": 16, "epochs": 2, "micro": 4, "batch": 16, "episodes": 555, "items": 902, "tokens": 179906, "src_dir": "/runs/h4lite/durability/told", "out_dir": "/runs/h4lite/durability/told_s1", "init": "new", "save_epochs": false}
+{"label": "told", "seed": 2, "cut_sampling": false, "cut_finetune": false, "lr": 0.0001, "rank": 16, "epochs": 2, "micro": 4, "batch": 16, "episodes": 555, "items": 902, "tokens": 179906, "src_dir": "/runs/h4lite/durability/told", "out_dir": "/runs/h4lite/durability/told_s2", "init": "new", "save_epochs": false}
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:   6%|▌         | 33/531 [00:00<00:01, 325.32it/s]
+[1ALoading weights:  12%|█▏        | 66/531 [00:00<00:03, 152.82it/s]
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  16%|█▌        | 86/531 [00:00<00:03, 135.34it/s]
+[1ALoading weights:   0%|          | 2/531 [00:00<00:31, 17.05it/s]
+[1ALoading weights:  20%|█▉        | 106/531 [00:00<00:03, 139.58it/s]
+[1ALoading weights:   4%|▎         | 19/531 [00:00<00:06, 81.76it/s]
+[1ALoading weights:   9%|▉         | 50/531 [00:00<00:02, 165.11it/s]
+[1ALoading weights:  23%|██▎       | 122/531 [00:00<00:03, 107.98it/s]
+[1ALoading weights:  15%|█▍        | 77/531 [00:00<00:02, 189.84it/s]
+[1ALoading weights:  19%|█▊        | 99/531 [00:00<00:02, 189.40it/s]
+[1ALoading weights:  27%|██▋       | 145/531 [00:01<00:03, 119.60it/s]
+[1ALoading weights:  33%|███▎      | 174/531 [00:01<00:02, 151.71it/s]
+[1ALoading weights:  22%|██▏       | 119/531 [00:00<00:02, 155.56it/s]
+[1ALoading weights:  36%|███▌      | 192/531 [00:01<00:02, 137.42it/s]
+[1ALoading weights:  26%|██▌       | 136/531 [00:00<00:02, 139.16it/s]
+[1ALoading weights:  39%|███▉      | 208/531 [00:01<00:02, 139.96it/s]
+[1ALoading weights:  29%|██▊       | 152/531 [00:01<00:02, 137.82it/s]
+[1ALoading weights:  42%|████▏     | 224/531 [00:01<00:02, 127.04it/s]
+[1ALoading weights:  32%|███▏      | 171/531 [00:01<00:02, 139.19it/s]
+[1ALoading weights:  46%|████▌     | 243/531 [00:01<00:02, 132.04it/s]
+[1ALoading weights:  35%|███▌      | 186/531 [00:01<00:02, 132.26it/s]
+[1ALoading weights:  48%|████▊     | 257/531 [00:01<00:02, 131.67it/s]
+[1ALoading weights:  38%|███▊      | 202/531 [00:01<00:02, 126.50it/s]
+[1ALoading weights:  51%|█████     | 271/531 [00:01<00:01, 132.29it/s]
+[1ALoading weights:  41%|████      | 219/531 [00:01<00:02, 134.74it/s]
+[1ALoading weights:  54%|█████▎    | 285/531 [00:02<00:02, 104.25it/s]
+[1ALoading weights:  44%|████▍     | 233/531 [00:01<00:02, 119.55it/s]
+[1ALoading weights:  61%|██████    | 324/531 [00:02<00:01, 162.12it/s]
+[1ALoading weights:  46%|████▋     | 246/531 [00:01<00:02, 120.04it/s]
+[1ALoading weights:  72%|███████▏  | 383/531 [00:02<00:00, 262.48it/s]
+[1ALoading weights:  49%|████▉     | 261/531 [00:01<00:02, 113.26it/s]
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  86%|████████▌ | 455/531 [00:02<00:00, 371.31it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:02<00:00, 206.22it/s]
+
+[1ALoading weights:  54%|█████▍    | 289/531 [00:02<00:01, 151.95it/s]
+[1ALoading weights:   2%|▏         | 8/531 [00:00<00:11, 44.46it/s]
+[1ALoading weights:  58%|█████▊    | 306/531 [00:02<00:01, 152.04it/s]
+[1ALoading weights:  64%|██████▍   | 340/531 [00:02<00:00, 197.17it/s]
+[1ALoading weights:   9%|▉         | 49/531 [00:00<00:02, 177.00it/s]
+[1ALoading weights:  79%|███████▉  | 420/531 [00:02<00:00, 358.74it/s]
+[1ALoading weights:  13%|█▎        | 69/531 [00:00<00:02, 169.89it/s]Loading weights: 100%|██████████| 531/531 [00:02<00:00, 213.06it/s]
+
+[1ALoading weights:  16%|█▋        | 87/531 [00:00<00:02, 149.04it/s]
+[1ALoading weights:  19%|█▉        | 103/531 [00:00<00:03, 136.71it/s]
+[1ALoading weights:  22%|██▏       | 118/531 [00:00<00:03, 119.47it/s]
+[1ALoading weights:  25%|██▍       | 131/531 [00:01<00:04, 99.47it/s] 
+[1ALoading weights:  29%|██▉       | 153/531 [00:01<00:03, 116.09it/s]
+[1ALoading weights:  31%|███▏      | 166/531 [00:01<00:03, 106.63it/s]
+[1ALoading weights:  34%|███▎      | 178/531 [00:01<00:03, 104.05it/s]
+[1ALoading weights:  36%|███▌      | 192/531 [00:01<00:03, 108.27it/s]
+[1ALoading weights:  39%|███▉      | 209/531 [00:01<00:02, 120.20it/s]
+[1ALoading weights:  43%|████▎     | 226/531 [00:01<00:02, 120.36it/s]
+[1ALoading weights:  45%|████▌     | 240/531 [00:01<00:02, 122.17it/s]
+[1ALoading weights:  48%|████▊     | 253/531 [00:02<00:02, 109.77it/s]
+[1ALoading weights:  50%|████▉     | 265/531 [00:02<00:02, 95.09it/s] 
+[1ALoading weights:  53%|█████▎    | 281/531 [00:02<00:02, 103.89it/s]
+[1ALoading weights:  56%|█████▋    | 300/531 [00:02<00:01, 121.71it/s]
+[1ALoading weights:  62%|██████▏   | 330/531 [00:02<00:01, 158.42it/s]
+[1ALoading weights:  72%|███████▏  | 381/531 [00:02<00:00, 247.24it/s]
+[1ALoading weights:  83%|████████▎ | 440/531 [00:02<00:00, 318.77it/s]Loading weights: 100%|██████████| 531/531 [00:02<00:00, 181.04it/s]
+[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+/root/modal_sft.py:279: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  nll += float(loss)
+/root/modal_sft.py:279: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  nll += float(loss)
+[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+/root/modal_sft.py:279: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  nll += float(loss)
+{"epoch": 1, "opt_step": 1, "items": 16, "tokens": 1982, "nll": 0.6281332327052951, "grad_norm": 0.7806786298751831, "s": 5.3, "peak_gb": 20.97, "elapsed": 5}
+{"epoch": 1, "opt_step": 1, "items": 16, "tokens": 2866, "nll": 0.5714835079852492, "grad_norm": 0.5838215351104736, "s": 8.4, "peak_gb": 22.79, "elapsed": 8}
+{"epoch": 1, "opt_step": 1, "items": 16, "tokens": 4037, "nll": 0.7059547631070018, "grad_norm": 0.5290209650993347, "s": 9.3, "peak_gb": 22.25, "elapsed": 9}
+{"epoch": 1, "opt_step": 11, "items": 16, "tokens": 3109, "nll": 0.6952761821448803, "grad_norm": 0.5509288311004639, "s": 8.1, "peak_gb": 22.75, "elapsed": 86}
+{"epoch": 1, "opt_step": 11, "items": 16, "tokens": 2962, "nll": 0.8261426594108343, "grad_norm": 0.6793497204780579, "s": 8.3, "peak_gb": 22.67, "elapsed": 90}
+{"epoch": 1, "opt_step": 11, "items": 16, "tokens": 3033, "nll": 0.5373777099885046, "grad_norm": 0.4427577257156372, "s": 6.8, "peak_gb": 23.09, "elapsed": 93}
+{"epoch": 1, "opt_step": 21, "items": 16, "tokens": 3309, "nll": 0.7788788080215454, "grad_norm": 0.5196377038955688, "s": 8.2, "peak_gb": 22.7, "elapsed": 173}
+{"epoch": 1, "opt_step": 21, "items": 16, "tokens": 3135, "nll": 0.6830293596722186, "grad_norm": 0.4762659966945648, "s": 9.2, "peak_gb": 22.12, "elapsed": 174}
+{"epoch": 1, "opt_step": 21, "items": 16, "tokens": 1871, "nll": 0.5010830177925527, "grad_norm": 0.5718210339546204, "s": 5.3, "peak_gb": 21.5, "elapsed": 173}
+{"epoch": 1, "opt_step": 31, "items": 16, "tokens": 3298, "nll": 0.6654416029341519, "grad_norm": 0.5008084774017334, "s": 7.6, "peak_gb": 22.95, "elapsed": 254}
+{"epoch": 1, "opt_step": 31, "items": 16, "tokens": 2175, "nll": 0.3441839646548033, "grad_norm": 0.500313937664032, "s": 6.2, "peak_gb": 22.98, "elapsed": 258}
+{"epoch": 1, "opt_step": 31, "items": 16, "tokens": 3301, "nll": 0.691029860638082, "grad_norm": 0.43827149271965027, "s": 8.9, "peak_gb": 22.43, "elapsed": 255}
+{"epoch": 1, "opt_step": 41, "items": 16, "tokens": 3381, "nll": 0.8503171340562403, "grad_norm": 0.5345717072486877, "s": 7.1, "peak_gb": 22.15, "elapsed": 333}
+{"epoch": 1, "opt_step": 41, "items": 16, "tokens": 2439, "nll": 0.6116016935557127, "grad_norm": 0.5189787745475769, "s": 6.2, "peak_gb": 21.58, "elapsed": 340}
+{"epoch": 1, "opt_step": 41, "items": 16, "tokens": 2863, "nll": 0.5905008316040039, "grad_norm": 0.5026955008506775, "s": 8.8, "peak_gb": 23.46, "elapsed": 343}
+{"epoch": 1, "opt_step": 51, "items": 16, "tokens": 3249, "nll": 0.7600525161251426, "grad_norm": 0.442024290561676, "s": 11.7, "peak_gb": 23.44, "elapsed": 423}
+{"epoch": 1, "opt_step": 51, "items": 16, "tokens": 3841, "nll": 0.6731017855927348, "grad_norm": 0.4102277457714081, "s": 10.8, "peak_gb": 22.52, "elapsed": 428}
+{"epoch": 1, "opt_step": 51, "items": 16, "tokens": 2560, "nll": 0.6360727874562144, "grad_norm": 0.4971926808357239, "s": 7.2, "peak_gb": 22.51, "elapsed": 432}
+{"epoch": 2, "opt_step": 61, "items": 16, "tokens": 2963, "nll": 0.5893008690327406, "grad_norm": 0.442310631275177, "s": 9.5, "peak_gb": 22.2, "elapsed": 508}
+{"epoch": 2, "opt_step": 61, "items": 16, "tokens": 3899, "nll": 0.6835805512964725, "grad_norm": 0.4156479835510254, "s": 9.7, "peak_gb": 22.49, "elapsed": 507}
+{"epoch": 2, "opt_step": 61, "items": 16, "tokens": 2488, "nll": 0.5550380893982947, "grad_norm": 0.41890260577201843, "s": 7.1, "peak_gb": 21.85, "elapsed": 522}
+{"epoch": 2, "opt_step": 71, "items": 16, "tokens": 2371, "nll": 0.5852068695239723, "grad_norm": 0.5718004107475281, "s": 7.5, "peak_gb": 22.39, "elapsed": 584}
+{"epoch": 2, "opt_step": 71, "items": 16, "tokens": 3391, "nll": 0.6410927618853748, "grad_norm": 0.44261765480041504, "s": 10.1, "peak_gb": 22.17, "elapsed": 591}
+{"epoch": 2, "opt_step": 71, "items": 16, "tokens": 3052, "nll": 0.7626183154061437, "grad_norm": 0.47485607862472534, "s": 8.3, "peak_gb": 22.38, "elapsed": 611}
+{"epoch": 2, "opt_step": 81, "items": 16, "tokens": 3308, "nll": 0.7327197163831443, "grad_norm": 0.52898770570755, "s": 9.8, "peak_gb": 23.31, "elapsed": 667}
+{"epoch": 2, "opt_step": 81, "items": 16, "tokens": 3356, "nll": 0.661453740671277, "grad_norm": 0.49477583169937134, "s": 9.0, "peak_gb": 22.45, "elapsed": 676}
+{"epoch": 2, "opt_step": 81, "items": 16, "tokens": 2959, "nll": 0.43512313812971115, "grad_norm": 0.4504505693912506, "s": 8.0, "peak_gb": 22.39, "elapsed": 694}
+{"epoch": 2, "opt_step": 91, "items": 16, "tokens": 3869, "nll": 0.6516929175704718, "grad_norm": 0.4761240780353546, "s": 11.0, "peak_gb": 22.91, "elapsed": 753}
+{"epoch": 2, "opt_step": 91, "items": 16, "tokens": 4201, "nll": 0.7255541607737541, "grad_norm": 0.5456624627113342, "s": 12.3, "peak_gb": 22.67, "elapsed": 762}
+{"epoch": 2, "opt_step": 91, "items": 16, "tokens": 2719, "nll": 0.7318573370575905, "grad_norm": 0.6702800393104553, "s": 7.3, "peak_gb": 22.37, "elapsed": 777}
+{"epoch": 2, "opt_step": 101, "items": 16, "tokens": 3110, "nll": 0.7121217544190586, "grad_norm": 0.6345715522766113, "s": 6.4, "peak_gb": 22.7, "elapsed": 838}
+{"epoch": 2, "opt_step": 101, "items": 16, "tokens": 3607, "nll": 0.5009292624890804, "grad_norm": 0.5099756121635437, "s": 10.4, "peak_gb": 22.45, "elapsed": 845}
+{"epoch": 2, "opt_step": 101, "items": 16, "tokens": 3224, "nll": 0.5843670386821032, "grad_norm": 0.6095707416534424, "s": 8.1, "peak_gb": 21.87, "elapsed": 864}
+{"epoch": 2, "opt_step": 111, "items": 16, "tokens": 2735, "nll": 0.47600569762289524, "grad_norm": 0.5618912577629089, "s": 7.2, "peak_gb": 21.94, "elapsed": 923}
+{"epoch": 2, "opt_step": 111, "items": 16, "tokens": 2555, "nll": 0.6265288833528757, "grad_norm": 0.6500979661941528, "s": 8.7, "peak_gb": 22.42, "elapsed": 926}
+{"epoch": 2, "opt_step": 111, "items": 16, "tokens": 2109, "nll": 0.5724416486918926, "grad_norm": 0.6583704948425293, "s": 6.9, "peak_gb": 21.94, "elapsed": 943}
+told_s0: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/durability/told_s0
+told_s1: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/durability/told_s1
+told_s2: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/durability/told_s2
+✓ App completed. View run at 
+https://modal.com/apps/ejhong/main/ap-fR2WfUtoDNXDsSmkxMjD97

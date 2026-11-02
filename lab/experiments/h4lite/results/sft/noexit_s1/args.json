@@ -1,0 +1,41 @@
+{
+ "label": "noexit",
+ "seed": 1,
+ "cut_sampling": false,
+ "cut_finetune": false,
+ "lr": 0.0001,
+ "rank": 16,
+ "epochs": 2,
+ "micro": 4,
+ "batch": 16,
+ "episodes": 1010,
+ "items": 1253,
+ "tokens": 180034,
+ "data": {
+  "label": "noexit",
+  "arm": "noexit",
+  "ref_label": "noexit",
+  "seed": 0,
+  "cut_sampling": false,
+  "cut_finetune": false,
+  "kept": 1010,
+  "tokens": 180034,
+  "turns": 1253,
+  "releases": 0,
+  "retry_solves": 186,
+  "first_try_solves": 824,
+  "token_shares": {
+   "episodes": 1010,
+   "tokens": 180034,
+   "failed_attempt_tokens": 56280,
+   "failed_attempt_share": 0.3126076185609385,
+   "retry_tokens": 71370,
+   "retry_share": 0.3964251196996123,
+   "retry_episodes": 186
+  },
+  "ref": {
+   "episodes": 1010,
+   "tokens": 180034
+  }
+ }
+}

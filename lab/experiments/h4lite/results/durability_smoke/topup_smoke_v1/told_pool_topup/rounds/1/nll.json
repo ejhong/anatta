@@ -1,0 +1,359 @@
+{
+ "koan": [
+  {
+   "id": "koan|0007",
+   "pair": "mbpp_106",
+   "turn": 3,
+   "nll": 1.122105598449707,
+   "length": 193
+  },
+  {
+   "id": "koan|0016",
+   "pair": "mbpp_116",
+   "turn": 2,
+   "nll": 0.8747791647911072,
+   "length": 165
+  },
+  {
+   "id": "koan|0032",
+   "pair": "mbpp_124",
+   "turn": 1,
+   "nll": 0.7565104961395264,
+   "length": 102
+  },
+  {
+   "id": "koan|0033",
+   "pair": "mbpp_124",
+   "turn": 1,
+   "nll": 0.8933342099189758,
+   "length": 207
+  },
+  {
+   "id": "koan|0043",
+   "pair": "mbpp_127",
+   "turn": 2,
+   "nll": 1.1615620851516724,
+   "length": 201
+  },
+  {
+   "id": "koan|0044",
+   "pair": "mbpp_127",
+   "turn": 2,
+   "nll": 1.0848246812820435,
+   "length": 153
+  },
+  {
+   "id": "koan|0057",
+   "pair": "mbpp_132",
+   "turn": 2,
+   "nll": 1.1390109062194824,
+   "length": 263
+  },
+  {
+   "id": "koan|0059",
+   "pair": "mbpp_133",
+   "turn": 2,
+   "nll": 1.25804603099823,
+   "length": 281
+  },
+  {
+   "id": "koan|0064",
+   "pair": "mbpp_138",
+   "turn": 2,
+   "nll": 0.8879754543304443,
+   "length": 201
+  },
+  {
+   "id": "koan|0066",
+   "pair": "mbpp_140",
+   "turn": 2,
+   "nll": 1.4612177610397339,
+   "length": 85
+  },
+  {
+   "id": "koan|0067",
+   "pair": "mbpp_140",
+   "turn": 1,
+   "nll": 1.1222763061523438,
+   "length": 152
+  },
+  {
+   "id": "koan|0070",
+   "pair": "mbpp_141",
+   "turn": 2,
+   "nll": 1.119836688041687,
+   "length": 215
+  },
+  {
+   "id": "koan|0083",
+   "pair": "mbpp_17",
+   "turn": 2,
+   "nll": 1.1513880491256714,
+   "length": 136
+  },
+  {
+   "id": "koan|0084",
+   "pair": "mbpp_17",
+   "turn": 2,
+   "nll": 0.6899749040603638,
+   "length": 104
+  },
+  {
+   "id": "koan|0093",
+   "pair": "mbpp_222",
+   "turn": 2,
+   "nll": 1.0936897993087769,
+   "length": 190
+  },
+  {
+   "id": "koan|0094",
+   "pair": "mbpp_222",
+   "turn": 2,
+   "nll": 0.9663325548171997,
+   "length": 177
+  },
+  {
+   "id": "koan|0095",
+   "pair": "mbpp_224",
+   "turn": 2,
+   "nll": 0.8585014939308167,
+   "length": 273
+  }
+ ],
+ "told": [
+  {
+   "id": "mbpp_116|p2|00008",
+   "pair": "mbpp_116",
+   "turn": 2,
+   "nll": 0.7521209716796875,
+   "length": 122,
+   "oracle_5gram": false,
+   "round": 0
+  },
+  {
+   "id": "mbpp_116|p2|00009",
+   "pair": "mbpp_116",
+   "turn": 2,
+   "nll": 0.7836406826972961,
+   "length": 254,
+   "oracle_5gram": false,
+   "round": 0
+  },
+  {
+   "id": "mbpp_116|p3|00011",
+   "pair": "mbpp_116",
+   "turn": 3,
+   "nll": 1.257003664970398,
+   "length": 93,
+   "oracle_5gram": false,
+   "round": 0
+  },
+  {
+   "id": "mbpp_124|p3|00017",
+   "pair": "mbpp_124",
+   "turn": 3,
+   "nll": 2.106389284133911,
+   "length": 175,
+   "oracle_5gram": false,
+   "round": 0
+  },
+  {
+   "id": "mbpp_127|p2|00020",
+   "pair": "mbpp_127",
+   "turn": 2,
+   "nll": 0.9063349962234497,
+   "length": 63,
+   "oracle_5gram": false,
+   "round": 0
+  },
+  {
+   "id": "mbpp_127|p3|00022",
+   "pair": "mbpp_127",
+   "turn": 3,
+   "nll": 1.264649510383606,
+   "length": 130,
+   "oracle_5gram": false,
+   "round": 0
+  },
+  {
+   "id": "mbpp_132|p2|00027",
+   "pair": "mbpp_132",
+   "turn": 2,
+   "nll": 0.6643838882446289,
+   "length": 95,
+   "oracle_5gram": false,
+   "round": 0
+  },
+  {
+   "id": "mbpp_133|p2|00033",
+   "pair": "mbpp_133",
+   "turn": 2,
+   "nll": 0.7810627222061157,
+   "length": 146,
+   "oracle_5gram": false,
+   "round": 0
+  },
+  {
+   "id": "mbpp_133|p3|00035",
+   "pair": "mbpp_133",
+   "turn": 3,
+   "nll": 0.7804182171821594,
+   "length": 132,
+   "oracle_5gram": false,
+   "round": 0
+  },
+  {
+   "id": "mbpp_138|p3|00040",
+   "pair": "mbpp_138",
+   "turn": 3,
+   "nll": 1.2118645906448364,
+   "length": 302,
+   "oracle_5gram": false,
+   "round": 0
+  },
+  {
+   "id": "mbpp_140|p2|00044",
+   "pair": "mbpp_140",
+   "turn": 2,
+   "nll": 0.8317404985427856,
+   "length": 186,
+   "oracle_5gram": false,
+   "round": 0
+  },
+  {
+   "id": "mbpp_141|p1|00048",
+   "pair": "mbpp_141",
+   "turn": 1,
+   "nll": 0.809392511844635,
+   "length": 72,
+   "oracle_5gram": true,
+   "round": 0
+  },
+  {
+   "id": "mbpp_141|p2|00051",
+   "pair": "mbpp_141",
+   "turn": 2,
+   "nll": 0.726309061050415,
+   "length": 220,
+   "oracle_5gram": true,
+   "round": 0
+  },
+  {
+   "id": "mbpp_141|p3|00052",
+   "pair": "mbpp_141",
+   "turn": 3,
+   "nll": 0.8414974212646484,
+   "length": 160,
+   "oracle_5gram": false,
+   "round": 0
+  },
+  {
+   "id": "mbpp_17|p2|00056",
+   "pair": "mbpp_17",
+   "turn": 2,
+   "nll": 1.2250771522521973,
+   "length": 165,
+   "oracle_5gram": false,
+   "round": 0
+  },
+  {
+   "id": "mbpp_17|p3|00059",
+   "pair": "mbpp_17",
+   "turn": 3,
+   "nll": 1.5325552225112915,
+   "length": 158,
+   "oracle_5gram": false,
+   "round": 0
+  },
+  {
+   "id": "mbpp_222|p2|00063",
+   "pair": "mbpp_222",
+   "turn": 2,
+   "nll": 1.1618601083755493,
+   "length": 81,
+   "oracle_5gram": false,
+   "round": 0
+  },
+  {
+   "id": "mbpp_222|p3|00065",
+   "pair": "mbpp_222",
+   "turn": 3,
+   "nll": 1.0892839431762695,
+   "length": 166,
+   "oracle_5gram": false,
+   "round": 0
+  },
+  {
+   "id": "mbpp_224|p2|00068",
+   "pair": "mbpp_224",
+   "turn": 2,
+   "nll": 1.3475924730300903,
+   "length": 133,
+   "oracle_5gram": false,
+   "round": 0
+  },
+  {
+   "id": "mbpp_224|p3|00071",
+   "pair": "mbpp_224",
+   "turn": 3,
+   "nll": 1.3357069492340088,
+   "length": 311,
+   "oracle_5gram": true,
+   "round": 0
+  },
+  {
+   "id": "mbpp_106|p3|00072",
+   "pair": "mbpp_106",
+   "turn": 3,
+   "nll": 1.2003228664398193,
+   "length": 94,
+   "oracle_5gram": false,
+   "round": 1
+  },
+  {
+   "id": "mbpp_106|p3|00073",
+   "pair": "mbpp_106",
+   "turn": 3,
+   "nll": 1.1978375911712646,
+   "length": 170,
+   "oracle_5gram": false,
+   "round": 1
+  },
+  {
+   "id": "mbpp_127|p2|00077",
+   "pair": "mbpp_127",
+   "turn": 2,
+   "nll": 0.7335373163223267,
+   "length": 138,
+   "oracle_5gram": false,
+   "round": 1
+  },
+  {
+   "id": "mbpp_127|p3|00079",
+   "pair": "mbpp_127",
+   "turn": 3,
+   "nll": 1.2754002809524536,
+   "length": 233,
+   "oracle_5gram": false,
+   "round": 1
+  },
+  {
+   "id": "mbpp_132|p2|00080",
+   "pair": "mbpp_132",
+   "turn": 2,
+   "nll": 0.860112726688385,
+   "length": 212,
+   "oracle_5gram": true,
+   "round": 1
+  },
+  {
+   "id": "mbpp_132|p2|00081",
+   "pair": "mbpp_132",
+   "turn": 2,
+   "nll": 0.954282283782959,
+   "length": 141,
+   "oracle_5gram": false,
+   "round": 1
+  }
+ ]
+}

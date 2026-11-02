@@ -1,0 +1,194 @@
+✓ Initialized. View run at 
+https://modal.com/apps/ejhong/main/ap-lS8SfIH4V8fKqRhpG1blJk
+Building image im-vxVSlJmXpdizudLqevNrBl
+
+=> Step 0: FROM base
+
+=> Step 1: COPY --from=ghcr.io/astral-sh/uv:latest /uv /.uv/uv
+Getting image source signatures
+Copying blob sha256:e3b3ce09610df9e33a3e90c84989e0440a483bfe967864661138014697502694
+Copying blob sha256:65f8c8b0f6f03e53646584e7bbafc47f58b188e31a9932a0b32ee4ee9928f555
+Copying config sha256:58e006e07103590f3d49fc64244e0c81c68877537b83160be11e02b40ae8ecec
+Writing manifest to image destination
+Unpacking OCI image
+   • unpacking rootfs ...     
+   • ... done                 
+   • unpacked image rootfs: /tmp/task-data/ta-01M62R7PQT4F7SEZ4CSVSA6NXB/registry-unpack5Avbdf
+
+=> Step 2: RUN /.uv/uv pip install --python $(command -v python) --compile-bytecode PyYAML==6.0.3 accelerate==1.15.0 hf_xet==1.7.0 huggingface_hub==2.3.0 jinja2==3.1.6 numpy==2.5.4 peft==0.21.2 regex==2026.9.29 safetensors==0.8.0 tiktoken==0.14.0 tokenizers==0.23.3 torch==2.14.1 transformers==5.21.0
+Using Python 3.12.10 environment at: /usr/local
+Resolved 61 packages in 239ms
+Downloading hf-xet (4.0MiB)
+Downloading transformers (12.4MiB)
+Downloading numpy (16.0MiB)
+Downloading tokenizers (3.2MiB)
+Downloading sympy (6.0MiB)
+Downloading nvidia-cusparselt-cu13 (162.3MiB)
+Downloading nvidia-cufft (204.2MiB)
+Downloading nvidia-cusolver (191.6MiB)
+Downloading pygments (1.2MiB)
+Downloading nvidia-cublas (403.5MiB)
+Downloading nvidia-cuda-cupti (10.2MiB)
+Downloading networkx (2.0MiB)
+Downloading tiktoken (1.1MiB)
+Downloading nvidia-nccl-cu13 (206.0MiB)
+Downloading triton (236.5MiB)
+Downloading nvidia-cuda-nvrtc (86.0MiB)
+Downloading torch (528.9MiB)
+Downloading nvidia-cudnn-cu13 (527.5MiB)
+Downloading cuda-bindings (6.8MiB)
+Downloading nvidia-nvshmem-cu13 (57.6MiB)
+Downloading nvidia-nvjitlink (40.5MiB)
+Downloading nvidia-cusparse (139.2MiB)
+Downloading nvidia-cuda-runtime (2.1MiB)
+Downloading nvidia-curand (56.8MiB)
+Downloading nvidia-cufile (1.2MiB)
+ Downloaded tokenizers
+ Downloaded tiktoken
+ Downloaded nvidia-cufile
+ Downloaded nvidia-cuda-runtime
+ Downloaded hf-xet
+ Downloaded pygments
+ Downloaded cuda-bindings
+ Downloaded nvidia-cuda-cupti
+ Downloaded networkx
+ Downloaded numpy
+ Downloaded sympy
+ Downloaded transformers
+ Downloaded nvidia-nvjitlink
+ Downloaded nvidia-curand
+ Downloaded nvidia-nvshmem-cu13
+ Downloaded nvidia-cuda-nvrtc
+ Downloaded nvidia-cusparse
+ Downloaded nvidia-cusparselt-cu13
+ Downloaded nvidia-cusolver
+ Downloaded nvidia-cufft
+ Downloaded nvidia-nccl-cu13
+ Downloaded triton
+ Downloaded nvidia-cublas
+ Downloaded nvidia-cudnn-cu13
+ Downloaded torch
+Prepared 61 packages in 9.30s
+Installed 61 packages in 1.80s
+Bytecode compiled 9782 files in 3.19s
+ + accelerate==1.15.0
+ + annotated-doc==0.0.5
+ + anyio==4.15.1
+ + certifi==2026.10.23
+ + charset-normalizer==3.5.2
+ + click==8.5.0
+ + cuda-bindings==13.4.4
+ + cuda-pathfinder==1.8.4
+ + cuda-toolkit==13.0.3.0
+ + filelock==4.2.4
+ + fsspec==2026.9.0
+ + h11==0.16.0
+ + hf-xet==1.7.0
+ + httpcore2==2.16.0
+ + httpx2==2.16.0
+ + huggingface-hub==2.3.0
+ + idna==3.20
+ + jinja2==3.1.6
+ + markdown-it-py==4.2.0
+ + markupsafe==3.0.4
+ + mdurl==0.1.2
+ + mpmath==1.3.0
+ + networkx==3.7
+ + numpy==2.5.4
+ + nvidia-cublas==13.1.1.3
+ + nvidia-cuda-cupti==13.0.85
+ + nvidia-cuda-nvrtc==13.0.88
+ + nvidia-cuda-runtime==13.0.96
+ + nvidia-cudnn-cu13==9.24.0.43
+ + nvidia-cufft==12.0.0.61
+ + nvidia-cufile==1.15.1.6
+ + nvidia-curand==10.4.0.35
+ + nvidia-cusolver==12.0.4.66
+ + nvidia-cusparse==12.6.3.3
+ + nvidia-cusparselt-cu13==0.8.1
+ + nvidia-nccl-cu13==2.30.7
+ + nvidia-nvjitlink==13.4.92
+ + nvidia-nvshmem-cu13==3.4.5
+ + nvidia-nvtx==13.0.85
+ + packaging==26.3
+ + peft==0.21.2
+ + psutil==7.2.2
+ + pygments==2.21.0
+ + pyyaml==6.0.3
+ + regex==2026.9.29
+ + requests==2.34.2
+ + rich==15.0.0
+ + safetensors==0.8.0
+ + setuptools==84.2.1
+ + shellingham==1.5.4
+ + sympy==1.14.0
+ + tiktoken==0.14.0
+ + tokenizers==0.23.3
+ + torch==2.14.1
+ + tqdm==4.70.1
+ + transformers==5.21.0
+ + triton==3.8.0
+ + truststore==0.10.5
+ + typer==0.27.3
+ + typing-extensions==4.16.0
+ + urllib3==2.8.0
+Saving image...
+Image saved, took 3.33s
+
+Built image im-vxVSlJmXpdizudLqevNrBl in 20.48s
+
+
+Building image im-Qi6GYJfeEuS8w4QPNU5tXn
+
+=> Step 0: FROM base
+
+=> Step 1: ENV HF_HOME=/cache/hf
+
+=> Step 2: ENV TOKENIZERS_PARALLELISM=false
+
+=> Step 3: ENV PYTHONPATH=/Users/eugene/prj/align/anatta-dev/src
+Saving image...
+Image saved, took 807.49ms
+
+Built image im-Qi6GYJfeEuS8w4QPNU5tXn in 1.61s
+
+
+✓ Created objects.
+├── ✓ Uploaded /Users/eugene/prj/align/recognition/scripts/modal_retreat.py
+├── ✓ Uploaded /Users/eugene/prj/align/anatta-dev/src
+└── ✓ Created Function train.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:   7%|▋         | 39/531 [00:00<00:01, 363.97it/s]
+[1ALoading weights:  14%|█▍        | 76/531 [00:00<00:02, 202.53it/s]
+[1ALoading weights:  19%|█▉        | 100/531 [00:00<00:02, 173.27it/s]
+[1ALoading weights:  24%|██▍       | 130/531 [00:00<00:02, 190.48it/s]
+[1ALoading weights:  28%|██▊       | 151/531 [00:00<00:01, 191.97it/s]
+[1ALoading weights:  32%|███▏      | 172/531 [00:00<00:01, 189.10it/s]
+[1ALoading weights:  36%|███▋      | 193/531 [00:00<00:01, 192.05it/s]
+[1ALoading weights:  40%|████      | 213/531 [00:01<00:01, 179.39it/s]
+[1ALoading weights:  44%|████▎     | 232/531 [00:01<00:02, 143.86it/s]
+[1ALoading weights:  47%|████▋     | 248/531 [00:01<00:02, 123.42it/s]
+[1ALoading weights:  49%|████▉     | 262/531 [00:01<00:02, 126.14it/s]
+[1ALoading weights:  52%|█████▏    | 276/531 [00:01<00:02, 114.15it/s]
+[1ALoading weights:  61%|██████    | 323/531 [00:01<00:01, 188.86it/s]
+[1ALoading weights:  75%|███████▍  | 397/531 [00:01<00:00, 318.59it/s]Loading weights: 100%|██████████| 531/531 [00:02<00:00, 264.82it/s]
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{"eval": "before", "mean_score": 0.4791666666666667, "impossible/failed": 96, "solvable/failed": 4, "solvable/solved": 92}
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+{"step": 1, "score": 0.5, "len": 70.75, "kl": 0.0, "live": 4, "s": 12, "impossible/failed": 8, "solvable/solved": 8}
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{"step": 2, "score": 0.5, "len": 128.6875, "kl": 0.0, "live": 4, "s": 33, "impossible/failed": 8, "solvable/solved": 8}
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{"eval": "after", "mean_score": 0.4895833333333333, "impossible/failed": 94, "impossible/released": 2, "solvable/failed": 4, "solvable/solved": 92}
+wrote /Users/eugene/prj/align/recognition/results/retreat/koan_smoke
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ejhong/main/ap-lS8SfIH4V8fKqRhpG1blJk

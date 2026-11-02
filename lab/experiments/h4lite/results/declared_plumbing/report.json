@@ -1,0 +1,66 @@
+{
+ "utc": "2026-10-31 22:00:36 UTC",
+ "pin": {
+  "order": [
+   "deepinfra/fp8"
+  ],
+  "allow_fallbacks": false,
+  "data_collection": "deny",
+  "require_parameters": true
+ },
+ "docs": [
+  {
+   "stream": "plumbing_declared",
+   "provider": "DeepInfra",
+   "model": "qwen/qwen3-235b-a22b-2507",
+   "finish_reason": "stop",
+   "gen_id": "gen-1793484036-vkYPE0PfsFyBdDclHvBw",
+   "usage": {
+    "prompt_tokens": 617,
+    "completion_tokens": 710,
+    "cost": 0.00044603
+   },
+   "words": 616,
+   "pin_ok": true,
+   "flags": [
+    "inline_code",
+    "wording"
+   ]
+  },
+  {
+   "stream": "plumbing_neutral",
+   "provider": "DeepInfra",
+   "model": "qwen/qwen3-235b-a22b-2507",
+   "finish_reason": "stop",
+   "gen_id": "gen-1793484076-BYqFtRQsTRS6b8yykPyj",
+   "usage": {
+    "prompt_tokens": 409,
+    "completion_tokens": 539,
+    "cost": 0.00033326
+   },
+   "words": 436,
+   "pin_ok": true,
+   "flags": [
+    "inline_code"
+   ]
+  }
+ ],
+ "judge": {
+  "model": "anthropic/claude-sonnet-4.6",
+  "provider": "Claude Platform on AWS",
+  "verdict": {
+   "states_rule": true,
+   "demonstration": false,
+   "first_person_reason": false,
+   "quotes_hint": false,
+   "mentions_rule": true
+  },
+  "raw": "{\"states_rule\": true, \"demonstration\": false, \"first_person_reason\": false, \"quotes_hint\": false, \"mentions_rule\": true}",
+  "usage": {
+   "prompt_tokens": 1180,
+   "completion_tokens": 38,
+   "cost": 0.00411
+  }
+ },
+ "cost_usd": 0.004889
+}

@@ -1,0 +1,16 @@
+{
+  "calls": 400,
+  "prompt_tokens": 47102,
+  "completion_tokens": 30214,
+  "cost_usd": 0.0025815149999999995,
+  "retries": 0,
+  "failed_calls": 0,
+  "errors": [],
+  "providers": {
+    "Groq": 36,
+    "Novita": 178,
+    "DeepInfra": 182,
+    "Cloudflare": 4
+  },
+  "seconds": 84
+}

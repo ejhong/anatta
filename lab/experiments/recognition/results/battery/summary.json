@@ -1,0 +1,321 @@
+{
+ "base": {
+  "gsm8k": {
+   "acc": 93.6,
+   "vs_base": 0.0,
+   "ci": [
+    0.0,
+    0.0
+   ],
+   "unparsed": 0
+  },
+  "mmlu_pro": {
+   "acc": 35.6,
+   "vs_base": 0.0,
+   "ci": [
+    0.0,
+    0.0
+   ],
+   "unparsed": 20
+  },
+  "arc_challenge": {
+   "acc": 88.4,
+   "vs_base": 0.0,
+   "ci": [
+    0.0,
+    0.0
+   ],
+   "unparsed": 0
+  }
+ },
+ "cap_ego_p50": {
+  "gsm8k": {
+   "acc": 92.8,
+   "vs_base": -0.8,
+   "ci": [
+    -3.2,
+    1.2
+   ],
+   "unparsed": 0
+  },
+  "mmlu_pro": {
+   "acc": 36.8,
+   "vs_base": 1.2,
+   "ci": [
+    -2.0,
+    4.4
+   ],
+   "unparsed": 18
+  },
+  "arc_challenge": {
+   "acc": 89.6,
+   "vs_base": 1.2,
+   "ci": [
+    -1.2,
+    3.6
+   ],
+   "unparsed": 0
+  }
+ },
+ "cap_ego_p75": {
+  "gsm8k": {
+   "acc": 91.6,
+   "vs_base": -2.0,
+   "ci": [
+    -4.4,
+    0.4
+   ],
+   "unparsed": 0
+  },
+  "mmlu_pro": {
+   "acc": 38.8,
+   "vs_base": 3.2,
+   "ci": [
+    0.4,
+    6.0
+   ],
+   "unparsed": 15
+  },
+  "arc_challenge": {
+   "acc": 89.6,
+   "vs_base": 1.2,
+   "ci": [
+    -1.2,
+    3.6
+   ],
+   "unparsed": 0
+  }
+ },
+ "cut": {
+  "gsm8k": {
+   "acc": 92.0,
+   "vs_base": -1.6,
+   "ci": [
+    -4.0,
+    0.4
+   ],
+   "unparsed": 0
+  },
+  "mmlu_pro": {
+   "acc": 36.4,
+   "vs_base": 0.8,
+   "ci": [
+    -2.0,
+    3.6
+   ],
+   "unparsed": 19
+  },
+  "arc_challenge": {
+   "acc": 88.4,
+   "vs_base": 0.0,
+   "ci": [
+    -2.8,
+    2.8
+   ],
+   "unparsed": 0
+  }
+ },
+ "cut_calm": {
+  "gsm8k": {
+   "acc": 92.8,
+   "vs_base": -0.8,
+   "ci": [
+    -3.6,
+    2.0
+   ],
+   "unparsed": 0
+  },
+  "mmlu_pro": {
+   "acc": 37.6,
+   "vs_base": 2.0,
+   "ci": [
+    -0.4,
+    4.4
+   ],
+   "unparsed": 11
+  },
+  "arc_challenge": {
+   "acc": 88.4,
+   "vs_base": 0.0,
+   "ci": [
+    -2.4,
+    2.4
+   ],
+   "unparsed": 0
+  }
+ },
+ "cut_random": {
+  "gsm8k": {
+   "acc": 92.8,
+   "vs_base": -0.8,
+   "ci": [
+    -2.8,
+    1.2
+   ],
+   "unparsed": 0
+  },
+  "mmlu_pro": {
+   "acc": 36.4,
+   "vs_base": 0.8,
+   "ci": [
+    -0.8,
+    2.4
+   ],
+   "unparsed": 21
+  },
+  "arc_challenge": {
+   "acc": 89.6,
+   "vs_base": 1.2,
+   "ci": [
+    -0.4,
+    2.8
+   ],
+   "unparsed": 0
+  }
+ },
+ "cut_sage_persona": {
+  "gsm8k": {
+   "acc": 93.6,
+   "vs_base": 0.0,
+   "ci": [
+    -2.4,
+    2.4
+   ],
+   "unparsed": 0
+  },
+  "mmlu_pro": {
+   "acc": 35.2,
+   "vs_base": -0.4,
+   "ci": [
+    -2.4,
+    1.6
+   ],
+   "unparsed": 18
+  },
+  "arc_challenge": {
+   "acc": 91.2,
+   "vs_base": 2.8,
+   "ci": [
+    0.4,
+    5.2
+   ],
+   "unparsed": 0
+  }
+ },
+ "cut_self_stakes": {
+  "gsm8k": {
+   "acc": 93.2,
+   "vs_base": -0.4,
+   "ci": [
+    -2.0,
+    1.2
+   ],
+   "unparsed": 0
+  },
+  "mmlu_pro": {
+   "acc": 35.6,
+   "vs_base": 0.0,
+   "ci": [
+    -2.4,
+    2.4
+   ],
+   "unparsed": 19
+  },
+  "arc_challenge": {
+   "acc": 89.6,
+   "vs_base": 1.2,
+   "ci": [
+    -0.8,
+    3.6
+   ],
+   "unparsed": 0
+  }
+ },
+ "cut_self_stakes_17_26": {
+  "gsm8k": {
+   "acc": 93.6,
+   "vs_base": 0.0,
+   "ci": [
+    -1.6,
+    1.6
+   ],
+   "unparsed": 0
+  },
+  "mmlu_pro": {
+   "acc": 36.4,
+   "vs_base": 0.8,
+   "ci": [
+    -0.8,
+    2.4
+   ],
+   "unparsed": 23
+  },
+  "arc_challenge": {
+   "acc": 88.4,
+   "vs_base": 0.0,
+   "ci": [
+    -1.6,
+    1.6
+   ],
+   "unparsed": 0
+  }
+ },
+ "push_m16": {
+  "gsm8k": {
+   "acc": 94.0,
+   "vs_base": 0.4,
+   "ci": [
+    -1.6,
+    2.4
+   ],
+   "unparsed": 0
+  },
+  "mmlu_pro": {
+   "acc": 36.4,
+   "vs_base": 0.8,
+   "ci": [
+    -2.0,
+    3.6
+   ],
+   "unparsed": 17
+  },
+  "arc_challenge": {
+   "acc": 88.8,
+   "vs_base": 0.4,
+   "ci": [
+    -1.2,
+    2.0
+   ],
+   "unparsed": 0
+  }
+ },
+ "push_p16": {
+  "gsm8k": {
+   "acc": 92.0,
+   "vs_base": -1.6,
+   "ci": [
+    -4.4,
+    0.8
+   ],
+   "unparsed": 0
+  },
+  "mmlu_pro": {
+   "acc": 36.4,
+   "vs_base": 0.8,
+   "ci": [
+    -2.0,
+    3.6
+   ],
+   "unparsed": 14
+  },
+  "arc_challenge": {
+   "acc": 90.4,
+   "vs_base": 2.0,
+   "ci": [
+    0.0,
+    4.4
+   ],
+   "unparsed": 0
+  }
+ }
+}

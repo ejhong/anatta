@@ -1,0 +1,484 @@
+Note that running a local entrypoint in detached mode only keeps the last triggered Modal function alive after the parent process has been killed or disconnected.
+✓ Initialized. View run at 
+https://modal.com/apps/ejhong/main/ap-qZzntHOl6P2tcgF2Eqx9gk
+✓ Created objects.
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_retreat2.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_sft.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/declared/modal_dec
+│   lared.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_common.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/declared/declared_
+│   core.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/player.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/pilot.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/koan_pairs.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/koan_env.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/third_party
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/directions/mistralai__Ministral-3-8B-Instruct
+│   -2512-BF16
+├── ✓ Uploaded /Users/eugene/prj/align/anatta-dev/src
+├── ✓ Created Function sample.
+├── ✓ Created Function prepare.
+├── ✓ Created Function finetune.
+├── ✓ Created Function train.
+├── ✓ Created Function evaluate_checkpoint.
+├── ✓ Created Function evaluate_adapter.
+├── ✓ Created Function read_run.
+├── ✓ Created Function read_files.
+├── ✓ Created Function volume_status.
+├── ✓ Created Function file_shas.
+├── ✓ Created Function belief_read.
+└── ✓ Created Function build_sets.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:   7%|▋         | 38/531 [00:00<00:01, 363.36it/s]
+[1ALoading weights:  14%|█▍        | 75/531 [00:00<00:02, 201.58it/s]
+[1ALoading weights:  19%|█▊        | 99/531 [00:00<00:02, 193.65it/s]
+[1ALoading weights:  23%|██▎       | 121/531 [00:00<00:02, 169.08it/s]
+[1ALoading weights:  26%|██▋       | 140/531 [00:00<00:02, 156.10it/s]
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  30%|██▉       | 157/531 [00:00<00:02, 153.33it/s]
+[1ALoading weights:   2%|▏         | 9/531 [00:00<00:06, 86.03it/s]
+[1ALoading weights:   3%|▎         | 14/531 [00:00<00:04, 114.04it/s]
+[1ALoading weights:  34%|███▍      | 183/531 [00:01<00:02, 173.01it/s]
+[1ALoading weights:   5%|▍         | 26/531 [00:00<00:03, 131.94it/s]
+[1ALoading weights:   5%|▌         | 28/531 [00:00<00:04, 106.83it/s]
+[1ALoading weights:  38%|███▊      | 201/531 [00:01<00:01, 172.82it/s]
+[1ALoading weights:   8%|▊         | 40/531 [00:00<00:03, 134.92it/s]
+[1ALoading weights:  42%|████▏     | 221/531 [00:01<00:01, 179.70it/s]
+[1ALoading weights:  10%|█         | 54/531 [00:00<00:02, 159.91it/s]
+[1ALoading weights:  10%|█         | 54/531 [00:00<00:03, 128.22it/s]
+[1ALoading weights:  15%|█▍        | 78/531 [00:00<00:02, 187.81it/s]
+[1ALoading weights:  45%|████▌     | 240/531 [00:01<00:01, 179.08it/s]
+[1ALoading weights:  14%|█▎        | 73/531 [00:00<00:03, 132.30it/s]
+[1ALoading weights:  18%|█▊        | 98/531 [00:00<00:02, 169.18it/s]
+[1ALoading weights:  49%|████▉     | 259/531 [00:01<00:01, 162.76it/s]
+[1ALoading weights:  16%|█▋        | 87/531 [00:00<00:03, 133.82it/s]
+[1ALoading weights:  52%|█████▏    | 276/531 [00:01<00:01, 154.48it/s]
+[1ALoading weights:  20%|█▉        | 106/531 [00:00<00:02, 149.13it/s]
+[1ALoading weights:  22%|██▏       | 116/531 [00:00<00:03, 133.41it/s]
+[1ALoading weights:  57%|█████▋    | 304/531 [00:01<00:01, 180.59it/s]
+[1ALoading weights:  28%|██▊       | 151/531 [00:00<00:01, 229.75it/s]
+[1ALoading weights:  25%|██▌       | 134/531 [00:00<00:02, 142.87it/s]
+[1ALoading weights:  63%|██████▎   | 336/531 [00:01<00:00, 213.78it/s]
+[1ALoading weights:  33%|███▎      | 175/531 [00:00<00:01, 232.45it/s]
+[1ALoading weights:  75%|███████▌  | 400/531 [00:01<00:00, 323.94it/s]
+[1ALoading weights:  28%|██▊       | 151/531 [00:01<00:03, 115.97it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:02<00:00, 263.41it/s]
+
+[1ALoading weights:  37%|███▋      | 199/531 [00:01<00:01, 171.51it/s]
+[1ALoading weights:  31%|███       | 165/531 [00:01<00:03, 110.78it/s]
+[1ALoading weights:  41%|████      | 219/531 [00:01<00:01, 164.85it/s]
+[1ALoading weights:  35%|███▌      | 186/531 [00:01<00:02, 115.13it/s]
+[1ALoading weights:  45%|████▍     | 238/531 [00:01<00:01, 170.72it/s]
+[1ALoading weights:  39%|███▉      | 208/531 [00:01<00:02, 137.36it/s]
+[1ALoading weights:  53%|█████▎    | 283/531 [00:01<00:01, 236.72it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:  42%|████▏     | 224/531 [00:01<00:02, 132.68it/s]
+[1ALoading weights:  69%|██████▊   | 365/531 [00:01<00:00, 388.56it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:01<00:00, 320.12it/s]
+
+[1ALoading weights:  46%|████▌     | 245/531 [00:01<00:01, 148.38it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+[1ALoading weights:  49%|████▉     | 262/531 [00:01<00:01, 139.41it/s][transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:  52%|█████▏    | 277/531 [00:02<00:01, 128.62it/s]
+[1ALoading weights:  55%|█████▍    | 291/531 [00:02<00:01, 125.23it/s]
+[1ALoading weights:  63%|██████▎   | 337/531 [00:02<00:00, 204.83it/s]
+[1ALoading weights:  73%|███████▎  | 385/531 [00:02<00:00, 273.69it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:02<00:00, 216.68it/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:   2%|▏         | 8/531 [00:00<00:06, 76.92it/s]
+[1ALoading weights:   7%|▋         | 37/531 [00:00<00:02, 188.44it/s]
+[1ALoading weights:  11%|█         | 57/531 [00:00<00:02, 188.06it/s]
+[1ALoading weights:  14%|█▍        | 76/531 [00:00<00:02, 170.46it/s]
+[1ALoading weights:  18%|█▊        | 94/531 [00:00<00:02, 152.25it/s]
+[1ALoading weights:  21%|██        | 110/531 [00:00<00:02, 151.56it/s]
+[1ALoading weights:  25%|██▌       | 134/531 [00:00<00:02, 174.38it/s]
+[1ALoading weights:  29%|██▊       | 152/531 [00:00<00:02, 152.33it/s]
+[1ALoading weights:  32%|███▏      | 171/531 [00:01<00:02, 153.65it/s]
+[1ALoading weights:  35%|███▌      | 187/531 [00:01<00:02, 126.57it/s]
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  38%|███▊      | 201/531 [00:01<00:03, 108.96it/s]
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:   2%|▏         | 11/531 [00:00<00:05, 101.31it/s]
+[1ALoading weights:   5%|▍         | 24/531 [00:00<00:02, 196.13it/s]
+[1ALoading weights:  41%|████      | 219/531 [00:01<00:02, 119.89it/s]
+[1ALoading weights:  10%|▉         | 51/531 [00:00<00:01, 270.71it/s]
+[1ALoading weights:   5%|▍         | 24/531 [00:00<00:02, 186.35it/s]
+[1ALoading weights:   9%|▉         | 48/531 [00:00<00:02, 177.40it/s]
+[1ALoading weights:  47%|████▋     | 249/531 [00:01<00:01, 143.07it/s]
+[1ALoading weights:  15%|█▍        | 79/531 [00:00<00:01, 252.48it/s]
+[1ALoading weights:   8%|▊         | 43/531 [00:00<00:02, 166.39it/s]
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  13%|█▎        | 68/531 [00:00<00:02, 176.15it/s]
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  50%|████▉     | 264/531 [00:01<00:01, 143.38it/s]
+[1ALoading weights:   5%|▌         | 29/531 [00:00<00:01, 270.76it/s]
+[1ALoading weights:  53%|█████▎    | 279/531 [00:01<00:01, 142.56it/s]
+[1ALoading weights:   4%|▍         | 21/531 [00:00<00:02, 194.44it/s]
+[1ALoading weights:  11%|█▏        | 60/531 [00:00<00:03, 126.50it/s]
+[1ALoading weights:  20%|█▉        | 105/531 [00:00<00:02, 175.63it/s]
+[1ALoading weights:  16%|█▌        | 86/531 [00:00<00:03, 138.43it/s]
+[1ALoading weights:  13%|█▎        | 71/531 [00:00<00:01, 316.19it/s]
+[1ALoading weights:  55%|█████▌    | 294/531 [00:02<00:01, 142.75it/s]
+[1ALoading weights:  14%|█▍        | 74/531 [00:00<00:03, 121.86it/s]
+[1ALoading weights:   8%|▊         | 41/531 [00:00<00:03, 151.35it/s]
+[1ALoading weights:  60%|██████    | 321/531 [00:02<00:01, 170.58it/s]
+[1ALoading weights:  24%|██▎       | 126/531 [00:00<00:02, 145.88it/s]
+[1ALoading weights:  19%|█▉        | 101/531 [00:00<00:03, 109.81it/s]
+[1ALoading weights:  19%|█▉        | 103/531 [00:00<00:01, 250.08it/s]
+[1ALoading weights:  18%|█▊        | 96/531 [00:00<00:02, 145.90it/s]
+[1ALoading weights:  11%|█         | 58/531 [00:00<00:03, 149.52it/s]
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  68%|██████▊   | 359/531 [00:02<00:00, 225.50it/s]
+[1ALoading weights:  21%|██▏       | 113/531 [00:00<00:03, 110.39it/s]
+[1ALoading weights:  27%|██▋       | 143/531 [00:00<00:02, 138.10it/s]
+[1ALoading weights:  18%|█▊        | 94/531 [00:00<00:02, 214.68it/s]
+[1ALoading weights:  21%|██        | 112/531 [00:00<00:03, 136.97it/s]
+[1ALoading weights:   2%|▏         | 11/531 [00:00<00:05, 101.84it/s]
+[1ALoading weights:  26%|██▌       | 139/531 [00:00<00:02, 142.62it/s]
+[1ALoading weights:  82%|████████▏ | 437/531 [00:02<00:00, 364.05it/s]
+[1ALoading weights:  30%|██▉       | 159/531 [00:00<00:02, 140.93it/s]
+[1ALoading weights:  24%|██▍       | 129/531 [00:00<00:02, 172.07it/s]
+[1ALoading weights:  24%|██▍       | 130/531 [00:00<00:02, 144.31it/s]
+[1ALoading weights:  22%|██▏       | 117/531 [00:00<00:02, 200.77it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:02<00:00, 218.80it/s]
+
+[1ALoading weights:   5%|▍         | 25/531 [00:00<00:04, 116.09it/s]
+[1ALoading weights:  34%|███▍      | 181/531 [00:01<00:02, 157.38it/s]
+[1ALoading weights:  29%|██▉       | 155/531 [00:01<00:02, 129.58it/s]
+[1ALoading weights:  28%|██▊       | 149/531 [00:00<00:02, 167.69it/s]
+[1ALoading weights:  27%|██▋       | 145/531 [00:01<00:03, 126.21it/s]
+[1ALoading weights:  10%|█         | 54/531 [00:00<00:02, 183.46it/s]
+[1ALoading weights:  26%|██▌       | 138/531 [00:00<00:02, 162.24it/s]
+[1ALoading weights:  37%|███▋      | 198/531 [00:01<00:02, 149.94it/s]
+[1ALoading weights:  34%|███▎      | 178/531 [00:01<00:02, 138.96it/s]
+[1ALoading weights:  15%|█▌        | 81/531 [00:00<00:02, 208.91it/s]
+[1ALoading weights:  30%|██▉       | 159/531 [00:01<00:03, 120.05it/s]
+[1ALoading weights:  32%|███▏      | 168/531 [00:00<00:02, 160.71it/s]
+[1ALoading weights:  40%|████      | 214/531 [00:01<00:02, 141.82it/s]
+[1ALoading weights:  29%|██▉       | 156/531 [00:00<00:02, 135.61it/s]
+[1ALoading weights:  35%|███▌      | 186/531 [00:01<00:02, 154.71it/s]
+[1ALoading weights:  33%|███▎      | 177/531 [00:01<00:02, 131.13it/s]
+[1ALoading weights:  36%|███▋      | 193/531 [00:01<00:02, 124.99it/s]
+[1ALoading weights:  19%|█▉        | 102/531 [00:00<00:02, 175.06it/s]
+[1ALoading weights:  43%|████▎     | 229/531 [00:01<00:02, 134.04it/s]
+[1ALoading weights:  34%|███▎      | 178/531 [00:01<00:02, 152.45it/s]
+[1ALoading weights:  38%|███▊      | 203/531 [00:01<00:02, 148.47it/s]
+[1ALoading weights:  36%|███▋      | 193/531 [00:01<00:02, 130.85it/s]
+[1ALoading weights:  41%|████      | 216/531 [00:01<00:02, 146.09it/s]
+[1ALoading weights:  46%|████▌     | 243/531 [00:01<00:02, 121.55it/s]
+[1ALoading weights:  23%|██▎       | 121/531 [00:00<00:02, 145.95it/s]
+[1ALoading weights:  37%|███▋      | 195/531 [00:01<00:02, 142.71it/s]
+[1ALoading weights:  39%|███▉      | 207/531 [00:01<00:02, 125.41it/s]
+[1ALoading weights:  41%|████      | 219/531 [00:01<00:02, 129.58it/s][transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+[1ALoading weights:  44%|████▎     | 232/531 [00:01<00:02, 129.16it/s]
+[1ALoading weights:  26%|██▌       | 137/531 [00:00<00:02, 137.77it/s]
+[1ALoading weights:  41%|████▏     | 220/531 [00:01<00:02, 123.68it/s]
+[1ALoading weights:  49%|████▉     | 259/531 [00:01<00:02, 119.63it/s]
+[1ALoading weights:  40%|████      | 213/531 [00:01<00:02, 138.06it/s]
+[1ALoading weights:  45%|████▍     | 237/531 [00:01<00:02, 131.99it/s]
+[1ALoading weights:  46%|████▋     | 246/531 [00:01<00:02, 119.79it/s]
+[1ALoading weights:  51%|█████     | 272/531 [00:01<00:02, 119.61it/s]
+[1ALoading weights:  45%|████▍     | 237/531 [00:01<00:02, 128.47it/s]
+[1ALoading weights:  29%|██▊       | 152/531 [00:01<00:02, 137.86it/s]
+[1ALoading weights:  43%|████▎     | 230/531 [00:01<00:02, 136.05it/s]
+[1ALoading weights:  48%|████▊     | 254/531 [00:01<00:02, 135.14it/s]
+[1ALoading weights:  51%|█████     | 270/531 [00:01<00:01, 146.59it/s]
+[1ALoading weights:  54%|█████▍    | 288/531 [00:01<00:01, 129.67it/s]
+[1ALoading weights:  47%|████▋     | 251/531 [00:01<00:02, 127.81it/s]
+[1ALoading weights:  33%|███▎      | 173/531 [00:01<00:02, 144.34it/s]
+[1ALoading weights:  54%|█████▍    | 286/531 [00:02<00:01, 147.27it/s]
+[1ALoading weights:  46%|████▌     | 245/531 [00:01<00:02, 124.38it/s]
+[1ALoading weights:  57%|█████▋    | 302/531 [00:02<00:01, 126.66it/s]
+[1ALoading weights:  51%|█████     | 269/531 [00:01<00:02, 117.76it/s]
+[1ALoading weights:  35%|███▌      | 188/531 [00:01<00:02, 118.70it/s]
+[1ALoading weights:  50%|████▉     | 264/531 [00:01<00:02, 128.61it/s]
+[1ALoading weights:  57%|█████▋    | 302/531 [00:02<00:01, 133.75it/s]
+[1ALoading weights:  60%|██████    | 319/531 [00:02<00:01, 136.18it/s]
+[1ALoading weights:  50%|████▉     | 264/531 [00:02<00:02, 96.03it/s] 
+[1ALoading weights:  54%|█████▍    | 286/531 [00:01<00:01, 124.73it/s]
+[1ALoading weights:  66%|██████▌   | 350/531 [00:02<00:01, 179.67it/s]
+[1ALoading weights:  64%|██████▎   | 338/531 [00:02<00:01, 187.65it/s]
+[1ALoading weights:  61%|██████▏   | 326/531 [00:01<00:01, 188.54it/s]
+[1ALoading weights:  56%|█████▌    | 295/531 [00:02<00:01, 134.30it/s]
+[1ALoading weights:  39%|███▉      | 208/531 [00:01<00:02, 124.47it/s]
+[1ALoading weights:  52%|█████▏    | 278/531 [00:02<00:02, 105.50it/s]
+[1ALoading weights:  79%|███████▉  | 421/531 [00:02<00:00, 353.58it/s]
+[1ALoading weights:  76%|███████▌  | 402/531 [00:02<00:00, 263.55it/s]
+[1ALoading weights:  69%|██████▊   | 365/531 [00:02<00:00, 230.20it/s]
+[1ALoading weights:  43%|████▎     | 230/531 [00:01<00:02, 135.47it/s]
+[1ALoading weights:  61%|██████    | 323/531 [00:02<00:01, 155.58it/s]
+[1ALoading weights:  93%|█████████▎| 495/531 [00:02<00:00, 449.32it/s]
+[1ALoading weights:  58%|█████▊    | 309/531 [00:02<00:01, 145.88it/s][transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+[1ALoading weights:  86%|████████▋ | 458/531 [00:02<00:00, 332.83it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:02<00:00, 209.39it/s]
+
+[1ALoading weights:  77%|███████▋  | 409/531 [00:02<00:00, 280.96it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:02<00:00, 208.24it/s]
+
+[1ALoading weights:  77%|███████▋  | 408/531 [00:02<00:00, 310.35it/s]Loading weights: 100%|██████████| 531/531 [00:02<00:00, 238.18it/s]
+
+[1ALoading weights:  69%|██████▉   | 369/531 [00:02<00:00, 250.06it/s]
+[1ALoading weights:  46%|████▌     | 244/531 [00:01<00:02, 120.67it/s]
+[1ALoading weights:  86%|████████▋ | 458/531 [00:02<00:00, 356.60it/s]
+[1ALoading weights:  81%|████████  | 428/531 [00:02<00:00, 331.07it/s]
+[1ALoading weights:  50%|████▉     | 263/531 [00:01<00:02, 130.41it/s]Loading weights: 100%|██████████| 531/531 [00:02<00:00, 225.22it/s]
+
+[1ALoading weights: 100%|██████████| 531/531 [00:02<00:00, 202.72it/s]
+
+[1ALoading weights:  53%|█████▎    | 280/531 [00:02<00:01, 136.33it/s]
+[1ALoading weights:  56%|█████▌    | 295/531 [00:02<00:01, 124.39it/s]
+[1ALoading weights:  62%|██████▏   | 331/531 [00:02<00:01, 179.64it/s]
+[1ALoading weights:  75%|███████▌  | 400/531 [00:02<00:00, 304.10it/s][transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+[1ALoading weights:  91%|█████████ | 481/531 [00:02<00:00, 422.28it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:02<00:00, 213.07it/s]
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[W1101 11:25:55.538123450 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1581252608 bytes (free: 1227423744, total: 47695921152).
+[W1101 11:25:56.366137271 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1581252608 bytes (free: 1228603392, total: 47695921152).
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[W1101 11:25:57.202341172 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1581252608 bytes (free: 1222770688, total: 47695921152).
+[W1101 11:26:00.592362045 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2680160256 bytes (free: 1019805696, total: 47695921152).
+[W1101 11:26:01.420213468 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2680160256 bytes (free: 1020985344, total: 47695921152).
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[W1101 11:26:02.281573270 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2680160256 bytes (free: 1015152640, total: 47695921152).
+[W1101 11:26:04.959797879 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3246391296 bytes (free: 1143537664, total: 47695921152).
+[W1101 11:26:06.792487167 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3246391296 bytes (free: 1144717312, total: 47695921152).
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[W1101 11:26:07.679765208 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3246391296 bytes (free: 1138884608, total: 47695921152).
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[W1101 11:26:09.149995343 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3951034368 bytes (free: 1407778816, total: 47695921152).
+[W1101 11:26:11.000014463 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3951034368 bytes (free: 1408958464, total: 47695921152).
+[W1101 11:26:12.009233909 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3951034368 bytes (free: 1403125760, total: 47695921152).
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[W1101 11:26:31.501882089 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 4726980608 bytes (free: 1411973120, total: 47695921152).
+[W1101 11:26:32.428211089 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 4726980608 bytes (free: 1413152768, total: 47695921152).
+[W1101 11:26:34.533238567 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 4726980608 bytes (free: 1407320064, total: 47695921152).
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[W1101 11:26:43.854430126 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1581252608 bytes (free: 1223426048, total: 47695921152).
+[W1101 11:26:48.426906243 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1581252608 bytes (free: 1228800000, total: 47695921152).
+[W1101 11:26:48.961714731 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2680160256 bytes (free: 1015808000, total: 47695921152).
+[W1101 11:26:49.034186821 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1581252608 bytes (free: 1227948032, total: 47695921152).
+[W1101 11:26:49.173364424 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1581252608 bytes (free: 1223557120, total: 47695921152).
+[W1101 11:26:51.218627607 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1581252608 bytes (free: 1228931072, total: 47695921152).
+[W1101 11:26:52.178889000 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1581252608 bytes (free: 1223491584, total: 47695921152).
+[W1101 11:26:53.326509422 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3246391296 bytes (free: 1139539968, total: 47695921152).
+[W1101 11:26:53.433985792 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2680160256 bytes (free: 1021181952, total: 47695921152).
+[W1101 11:26:54.074048043 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2680160256 bytes (free: 1020329984, total: 47695921152).
+[W1101 11:26:54.116300608 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2680160256 bytes (free: 1015939072, total: 47695921152).
+[W1101 11:26:56.202670303 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2680160256 bytes (free: 1021313024, total: 47695921152).
+[W1101 11:26:56.148119495 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2680160256 bytes (free: 1015873536, total: 47695921152).
+[W1101 11:26:57.725689873 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3246391296 bytes (free: 1144913920, total: 47695921152).
+[W1101 11:26:58.546774528 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3951034368 bytes (free: 1403781120, total: 47695921152).
+[W1101 11:26:58.394924622 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3246391296 bytes (free: 1144061952, total: 47695921152).
+[W1101 11:26:58.344916157 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3246391296 bytes (free: 1139671040, total: 47695921152).
+[W1101 11:26:59.688770001 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1581252608 bytes (free: 1223360512, total: 47695921152).
+[W1101 11:27:01.404314828 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3246391296 bytes (free: 1139605504, total: 47695921152).
+[W1101 11:27:01.517901941 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3246391296 bytes (free: 1145044992, total: 47695921152).
+[W1101 11:27:03.870141296 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3951034368 bytes (free: 1409155072, total: 47695921152).
+[W1101 11:27:03.572851813 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3951034368 bytes (free: 1408303104, total: 47695921152).
+[W1101 11:27:04.452808844 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3951034368 bytes (free: 1403912192, total: 47695921152).
+[W1101 11:27:04.678670475 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 2680160256 bytes (free: 1015742464, total: 47695921152).
+[W1101 11:27:06.508728861 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3951034368 bytes (free: 1403846656, total: 47695921152).
+[W1101 11:27:06.639712871 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3951034368 bytes (free: 1409286144, total: 47695921152).
+[W1101 11:27:09.963649310 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3246391296 bytes (free: 1139474432, total: 47695921152).
+[W1101 11:27:14.107682504 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 3951034368 bytes (free: 1403715584, total: 47695921152).
+{"adapter": "/runs/h4lite/declared/train/S_s1/adapter", "probe_rows": 216, "nll": {"held_declared": 2.2196, "held_neutral": 1.765, "trained_declared": 2.1884, "trained_neutral": 1.7399}}
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]Loading weights: 100%|██████████| 531/531 [00:00<00:00, 11435.19it/s]
+{"adapter": "/runs/h4lite/declared/train/D1k_s0/adapter", "probe_rows": 216, "nll": {"held_declared": 0.8201, "held_neutral": 1.4798, "trained_declared": 0.6309, "trained_neutral": 1.4708}}
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+{"adapter": "/runs/h4lite/declared/train/S_s0/adapter", "probe_rows": 216, "nll": {"held_declared": 2.2222, "held_neutral": 1.7701, "trained_declared": 2.1918, "trained_neutral": 1.744}}
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]Loading weights: 100%|██████████| 531/531 [00:00<00:00, 10698.57it/s]
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+belief/S_s0: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared/belief/S_s0
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]Loading weights: 100%|██████████| 531/531 [00:00<00:00, 14716.08it/s]
+belief/S_s1: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared/belief/S_s1
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[W1101 11:27:19.975170190 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 4726980608 bytes (free: 1407975424, total: 47695921152).
+belief/D1k_s0: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared/belief/D1k_s0
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[W1101 11:27:24.055944989 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 4726980608 bytes (free: 1413349376, total: 47695921152).
+[W1101 11:27:24.330526772 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 4726980608 bytes (free: 1408106496, total: 47695921152).
+[W1101 11:27:25.916838093 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 4726980608 bytes (free: 1412497408, total: 47695921152).
+[W1101 11:27:27.553543092 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 4726980608 bytes (free: 1408040960, total: 47695921152).
+[W1101 11:27:27.724566829 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 4726980608 bytes (free: 1413480448, total: 47695921152).
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[W1101 11:27:35.297366869 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 4726980608 bytes (free: 1407909888, total: 47695921152).
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{"adapter": "/runs/h4lite/declared/train/D3k_s1/adapter", "probe_rows": 216, "nll": {"held_declared": 0.7501, "held_neutral": 1.47, "trained_declared": 0.6081, "trained_neutral": 1.4587}}
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  73%|███████▎  | 388/531 [00:00<00:00, 3838.64it/s]Loading weights: 100%|██████████| 531/531 [00:00<00:00, 4148.07it/s]
+{"adapter": "/runs/h4lite/declared/train/D3k_s0/adapter", "probe_rows": 216, "nll": {"held_declared": 0.7455, "held_neutral": 1.4505, "trained_declared": 0.6081, "trained_neutral": 1.4396}}
+{"adapter": "/runs/h4lite/declared/train/D10k_s0/adapter", "probe_rows": 216, "nll": {"held_declared": 0.6813, "held_neutral": 1.467, "trained_declared": 0.5759, "trained_neutral": 1.4508}}
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+belief/D3k_s0: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared/belief/D3k_s0
+{"adapter": "/runs/h4lite/declared/train/N3k_s1/adapter", "probe_rows": 216, "nll": {"held_declared": 1.9793, "held_neutral": 0.9176, "trained_declared": 1.9309, "trained_neutral": 0.7032}}
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  72%|███████▏  | 381/531 [00:00<00:00, 3808.98it/s]Loading weights: 100%|██████████| 531/531 [00:00<00:00, 3850.25it/s]
+
+belief/D3k_s1: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared/belief/D3k_s1
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s][transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+[1ALoading weights:  75%|███████▌  | 399/531 [00:00<00:00, 3953.88it/s]Loading weights: 100%|██████████| 531/531 [00:00<00:00, 3923.07it/s]
+belief/D10k_s0: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared/belief/D10k_s0
+{"adapter": "/runs/h4lite/declared/train/D10k_s1/adapter", "probe_rows": 216, "nll": {"held_declared": 0.679, "held_neutral": 1.4712, "trained_declared": 0.5731, "trained_neutral": 1.4522}}
+{"adapter": "/runs/h4lite/declared/train/N3k_s0/adapter", "probe_rows": 216, "nll": {"held_declared": 2.0031, "held_neutral": 0.9265, "trained_declared": 1.9575, "trained_neutral": 0.7009}}
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+belief/D10k_s1: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared/belief/D10k_s1
+belief/N3k_s0: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared/belief/N3k_s0
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+belief/N3k_s1: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared/belief/N3k_s1
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{"adapter": "/runs/h4lite/declared/train/N10k_s0/adapter", "probe_rows": 216, "nll": {"held_declared": 1.9604, "held_neutral": 0.8505, "trained_declared": 1.9166, "trained_neutral": 0.6843}}
+belief/N10k_s0: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared/belief/N10k_s0
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=256) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+{"adapter": "/runs/h4lite/declared/train/N10k_s1/adapter", "probe_rows": 216, "nll": {"held_declared": 1.9737, "held_neutral": 0.8479, "trained_declared": 1.9309, "trained_neutral": 0.6717}}
+belief/N10k_s1: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared/belief/N10k_s1
+{"adapter": "/runs/h4lite/declared/train/Dseq_s0/adapter", "probe_rows": 216, "nll": {"held_declared": 0.7541, "held_neutral": 1.4047, "trained_declared": 0.6603, "trained_neutral": 1.3864}}
+{"adapter": "/runs/h4lite/declared/train/Dseq_s1/adapter", "probe_rows": 216, "nll": {"held_declared": 0.762, "held_neutral": 1.4063, "trained_declared": 0.669, "trained_neutral": 1.389}}
+belief/Dseq_s0: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared/belief/Dseq_s0
+belief/Dseq_s1: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared/belief/Dseq_s1
+{"adapter": null, "probe_rows": 216, "nll": {"held_declared": 2.2232, "held_neutral": 1.7726, "trained_declared": 2.1922, "trained_neutral": 1.7459}}
+{"adapter": "/runs/h4lite/declared/train/Dseq_docs_s0/adapter", "probe_rows": 216, "nll": {"held_declared": 0.6792, "held_neutral": 1.4478, "trained_declared": 0.5764, "trained_neutral": 1.4303}}
+belief/Dseq_docs_s0: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared/belief/Dseq_docs_s0
+{"adapter": "/runs/h4lite/declared/train/Dseq_docs_s1/adapter", "probe_rows": 216, "nll": {"held_declared": 0.6798, "held_neutral": 1.4582, "trained_declared": 0.5769, "trained_neutral": 1.4417}}
+belief/Dseq_docs_s1: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared/belief/Dseq_docs_s1
+belief/base: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared/belief/base
+✓ App completed. View run at 
+https://modal.com/apps/ejhong/main/ap-qZzntHOl6P2tcgF2Eqx9gk

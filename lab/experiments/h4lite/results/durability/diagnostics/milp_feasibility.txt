@@ -1,0 +1,17 @@
+usable candidates in quota cells: 780 of 1395; cells 84; quotas sum 102
+phrase band 9-29, grounded band 49-59, median band 173.7-212.3, deciles [10, 10, 10, 10, 11, 10, 10, 10, 10, 11]
+min phrase | cells only: optimum 36; selected 102, phrase 36, grounded 63, median length 163.0, bins [8, 8, 28, 12, 4, 11, 4, 17, 3, 7]
+max phrase | cells only: optimum 102; selected 102, phrase 102, grounded 65, median length 174.5, bins [9, 9, 23, 17, 5, 7, 6, 14, 4, 8]
+min phrase | cells + deciles: optimum 37; selected 102, phrase 37, grounded 62, median length 159.0, bins [10, 10, 10, 10, 11, 10, 10, 10, 10, 11]
+min phrase | cells + grounded: optimum 36; selected 102, phrase 36, grounded 53, median length 160.5, bins [5, 8, 27, 14, 7, 8, 6, 16, 2, 9]
+min phrase | cells + deciles + grounded: optimum 37; selected 102, phrase 37, grounded 59, median length 160.0, bins [10, 10, 10, 10, 11, 10, 10, 10, 10, 11]
+min phrase | cells + deciles + grounded + median(necessary): optimum 37; selected 102, phrase 37, grounded 59, median length 171.0, bins [10, 10, 10, 10, 11, 10, 10, 10, 10, 11]
+min phrase | cells + deciles + grounded + median(sufficient): optimum 37; selected 102, phrase 37, grounded 59, median length 177.0, bins [10, 10, 10, 10, 11, 10, 10, 10, 10, 11]
+--- grounded alone
+min grounded | cells only: optimum 36; selected 102, phrase 83, grounded 36, median length 187.5, bins [5, 9, 20, 18, 8, 6, 8, 15, 2, 11]
+max grounded | cells only: optimum 84; selected 102, phrase 90, grounded 84, median length 175.5, bins [9, 12, 20, 17, 9, 6, 7, 16, 2, 4]
+min grounded | cells + deciles: optimum 36; selected 102, phrase 82, grounded 36, median length 172.5, bins [10, 10, 10, 10, 11, 10, 10, 10, 10, 11]
+min grounded | cells + deciles + median(sufficient): optimum 36; selected 102, phrase 80, grounded 36, median length 175.5, bins [10, 10, 10, 10, 11, 10, 10, 10, 10, 11]
+--- the matcher's reported best: phrase 40, grounded 60, deciles met, median 178
+--- is the matcher's reported best reachable by MILP (phrase<=40, grounded<=60, deciles, median)?
+min (phrase + grounded) | cells + deciles + median(sufficient): 87 = phrase 43 + grounded 44

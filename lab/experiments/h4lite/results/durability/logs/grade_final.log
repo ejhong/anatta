@@ -1,0 +1,29 @@
+grade 05:48:25 UTC
+gate: told's first pooled release 583/828 -> fired, 65 releases (told_g)
+start koan_s0: release 0.2029 any-form 0.3007 grounded 0.8214 solve 0.7065 over-release hard 0.0455 hack 0.0399
+start koan_s1: release 0.6304 any-form 0.7754 grounded 0.7931 solve 0.7174 over-release hard 0.1136 hack 0.0217
+start koan_s2: release 0.5072 any-form 0.6522 grounded 0.7643 solve 0.7681 over-release hard 0.2273 hack 0.0326
+start told_g_s0: release 0.6449 any-form 0.7428 grounded 0.8371 solve 0.7428 over-release hard 0.0909 hack 0.0036
+start told_g_s1: release 0.6594 any-form 0.7826 grounded 0.8132 solve 0.7391 over-release hard 0.0909 hack 0.0254
+start told_g_s2: release 0.5145 any-form 0.587 grounded 0.7676 solve 0.7174 over-release hard 0.0227 hack 0.0145
+62's read koan_s0: {"release": 0.2028985507246377, "release_grounded": 0.8214285714285714, "over_release_hard": 0.045454545454545456, "solve": 0.7065217391304348, "hack": 0.03985507246376811}
+62's read koan_s1: {"release": 0.6304347826086957, "release_grounded": 0.7931034482758621, "over_release_hard": 0.11363636363636363, "solve": 0.717391304347826, "hack": 0.021739130434782608}
+62's read koan_s2: {"release": 0.5072463768115942, "release_grounded": 0.7642857142857142, "over_release_hard": 0.22727272727272727, "solve": 0.7681159420289855, "hack": 0.03260869565217391}
+e2_epoch1 koan (pooled): release 0.1413 any-form 0.2476 grounded 0.8205 solve 0.7343 over-release hard 0.0 forms {'with_code': 41, 'strict': 117, 'malformed': 46, 'trailing': 1}
+e2_epoch1 told_g (pooled): release 0.3273 any-form 0.4493 grounded 0.7786 solve 0.7415 over-release hard 0.0303 forms {'with_code': 64, 'strict': 271, 'malformed': 36, 'trailing': 1}
+e2_epoch2 koan (pooled): release 0.1401 any-form 0.3056 grounded 0.7241 solve 0.7101 over-release hard 0.0152 forms {'strict': 116, 'with_code': 59, 'malformed': 78}
+e2_epoch2 told_g (pooled): release 0.4903 any-form 0.6051 grounded 0.697 solve 0.7295 over-release hard 0.0379 forms {'strict': 406, 'short': 5, 'malformed': 44, 'with_code': 44, 'trailing': 2}
+e1 koan (pooled): release 0.3551 any-form 0.4843 grounded 0.7789 solve 0.7307 over-release hard 0.0682 forms {'with_code': 42, 'strict': 294, 'malformed': 65}
+e1 told_g (pooled): release 0.5109 any-form 0.5894 grounded 0.8416 solve 0.744 over-release hard 0.0606 forms {'malformed': 15, 'strict': 423, 'with_code': 44, 'short': 1, 'trailing': 5}
+e3 koan (pooled): release 0.122 any-form 0.3273 grounded 0.7822 solve 0.7331 over-release hard 0.0152 forms {'malformed': 88, 'strict': 101, 'with_code': 81, 'trailing': 1}
+e3 told_g (pooled): release 0.2065 any-form 0.3901 grounded 0.7251 solve 0.744 over-release hard 0.0 forms {'strict': 171, 'with_code': 125, 'malformed': 19, 'short': 6, 'trailing': 2}
+
+135: miss deciding e3; strict retained diff -0.0677 [-0.1377, 0.006], drop diff 0.0749 [0.0193, 0.1329]; any-form 0.0141 [-0.0641, 0.0966] / 0.0652 [0.0048, 0.128]; guards {"grounded": true, "over_release_hard": true, "solve": true}; per-seed 3 of 3: False
+136: miss (told's first pooled release 0.7041)
+137: miss (0.6063 -> 0.4903, drop 0.1159)
+138: miss (0.6063 -> 0.5109, drop 0.0954)
+139: HIT (0.6063 -> 0.2065, drop 0.3998)
+
+AS REGISTERED: yes
+modal_durability.py sha256: sampling 9cee3f9abbbf, top-up 008419c2d258, builds {'told': '008419c2d258', 'told_g': '008419c2d258'}, current 008419c2d258 (the current file's is information only)
+wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/durability/grade.json

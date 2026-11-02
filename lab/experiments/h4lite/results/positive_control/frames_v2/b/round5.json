@@ -1,0 +1,124 @@
+{
+ "110": {
+  "110a": {
+   "base_observer_identity_addressee_first_person": 0.15,
+   "hit": false
+  },
+  "110b": {
+   "self_adapter_self_frame_identity_atlas_first_person": 0.96,
+   "hit": true
+  },
+  "110c": {
+   "base_neutral_self_relevance_by_frame": {
+    "self": 0.2,
+    "observer": 0.1,
+    "reader": 0.0
+   },
+   "hit": false
+  },
+  "hit": false
+ },
+ "111": {
+  "tint_self_stakes": {
+   "mean": 0.0868,
+   "ci": [
+    0.0354,
+    0.1382
+   ],
+   "n": 4,
+   "random_dir_abs_p95": 0.0103,
+   "random_dir_interval": [
+    -0.0089,
+    0.0106
+   ],
+   "above_noise": true
+  },
+  "tint_ego": {
+   "mean": -0.0288,
+   "ci": [
+    -0.0567,
+    -0.0009
+   ],
+   "n": 4,
+   "random_dir_abs_p95": 0.0225,
+   "random_dir_interval": [
+    -0.0206,
+    0.0233
+   ],
+   "above_noise": true
+  },
+  "hit": false
+ },
+ "112": {
+  "self_minus_none": {
+   "diff": -0.0135,
+   "ci": [
+    -0.07,
+    0.0351
+   ],
+   "n": 4,
+   "random_dir_abs_p95": 0.0087,
+   "above_noise": true
+  },
+  "other_minus_none": {
+   "diff": -0.0393,
+   "ci": [
+    -0.0766,
+    -0.0021
+   ],
+   "n": 4,
+   "random_dir_abs_p95": 0.009,
+   "above_noise": true
+  },
+  "hit": false
+ },
+ "113": {
+  "per_seed": {
+   "seed0": {
+    "root_self_minus_base": {
+     "diff": -0.0806,
+     "ci": [
+      -0.0957,
+      -0.0654
+     ],
+     "n": 203
+    },
+    "tint_self_minus_other": {
+     "diff": 0.0202,
+     "ci": [
+      0.0103,
+      0.0302
+     ],
+     "n": 4,
+     "random_dir_abs_p95": 0.0043,
+     "above_noise": true
+    },
+    "root_ok": false,
+    "tint_ok": true
+   },
+   "seed1": {
+    "root_self_minus_base": {
+     "diff": -0.1071,
+     "ci": [
+      -0.1224,
+      -0.0919
+     ],
+     "n": 203
+    },
+    "tint_self_minus_other": {
+     "diff": 0.0347,
+     "ci": [
+      0.0161,
+      0.0547
+     ],
+     "n": 4,
+     "random_dir_abs_p95": 0.0037,
+     "above_noise": true
+    },
+    "root_ok": false,
+    "tint_ok": true
+   }
+  },
+  "hit": false
+ }
+}

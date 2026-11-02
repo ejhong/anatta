@@ -1,0 +1,42 @@
+{
+ "label": "base.off.audit",
+ "cut": "off",
+ "variant": "audit",
+ "adapter": "",
+ "source": "/Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/fishery/lie1/base.off.audit.jsonl",
+ "games": 100,
+ "forks": 2872,
+ "questions": [
+  "Q1",
+  "Q2",
+  "Q3",
+  "Q1p",
+  "Q1r",
+  "Q1w",
+  "Q1rw",
+  "Q2w"
+ ],
+ "tokens": 8,
+ "cap": 200,
+ "seed": 117,
+ "n_live_lies": 280,
+ "n_live_honest": 321,
+ "lies_probed": 200,
+ "honest_probed": 159,
+ "unmatched": 0,
+ "match_gaps": {
+  "0": 200
+ },
+ "reused_matches": 41,
+ "seconds": 417,
+ "load_seconds": 18,
+ "gpu": "NVIDIA L40S",
+ "batch": 12,
+ "peak_gb": 26.33,
+ "attn": "sdpa",
+ "dtype": "torch.bfloat16",
+ "strict_numerics": {},
+ "hooks": [],
+ "modal": "L40S",
+ "wall_seconds": 428
+}

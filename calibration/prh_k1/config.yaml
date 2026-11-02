@@ -1,0 +1,242 @@
+# Calibration K1: the Platonic measurement with the lab's own code. Every setting the run uses. README.md has the
+# claim, the sources, the protocol and every departure from the paper's code. The registration is the ledger's "K1
+# registered: the Platonic measurement with the lab's own code" (Opus 5.5, 14:05 UTC on 1 Nov, lab/ledger/NOTES.md);
+# the downloads were approved at 14:22 UTC the same day ("Eugene approved both K1 downloads").
+# app.py's make_plan copies every block but cost into the plan (the smoke block only into a smoke plan), so an edit
+# there makes a new plan and a fresh run folder. The cost block changes no result and is in no plan. The prepared block
+# at the end is written by the prepare entrypoint; commit it before the smoke.
+
+check: prh_k1
+
+# ------------------------------------------------------------------------------------------- the switches
+switches:
+  open_llama: true  # the second anchor (Koepke et al.: OpenLLaMA-3B x DINOv2-B), approved 1 Nov 14:22 UTC; ungraded
+
+# ------------------------------------------------------------------------------------------- the data
+data:
+  repo: minhuh/prh
+  ref: wit_1024  # a branch: prepare resolves it to a commit and pins it in the prepared block
+  # the "train" split as the dataset card's data_files give it (data/train-*): the two parquet files, read with
+  # pyarrow in name order; no dataset script runs
+  allow: ["data/train-*.parquet"]
+  rows: 1024
+  caption: 0  # text[0], the first caption of each pair
+
+# ------------------------------------------------------------------------------------------- the models
+vision:
+  key: dinov2
+  repo: timm/vit_base_patch14_dinov2.lvd142m  # timm's copy, as the paper's code loads it (approved 1 Nov 14:22 UTC)
+  ref: main
+  allow: [model.safetensors]  # only the safetensors file (the repo also holds a pickle)
+  expect_bytes: {model.safetensors: 346334872}  # the approved size
+  timm_name: vit_base_patch14_dinov2.lvd142m
+  layers: 12  # the CLS token after each block; the patch embedding is not a layer
+  dim: 768
+  batch: 64
+
+# The language models, in the order the full run extracts them: the graded five first. layers is num_hidden_layers
+# (the features are its hidden states plus the embedding output); dim is hidden_size; both are checked against each
+# model's config.json. The dtype and device_map rules are the paper's, applied to these keys in features.py.
+text:
+  qwen0.5b: {repo: Qwen/Qwen2.5-0.5B, ref: main, allow: ["*.json", "*.safetensors", merges.txt], layers: 24,
+             dim: 896, graded: true}
+  qwen1.5b: {repo: Qwen/Qwen2.5-1.5B, ref: main, allow: ["*.json", "*.safetensors", merges.txt], layers: 28,
+             dim: 1536, graded: true}
+  qwen3b: {repo: Qwen/Qwen2.5-3B, ref: main, allow: ["*.json", "*.safetensors", merges.txt], layers: 36, dim: 2048,
+           graded: true}
+  qwen7b: {repo: Qwen/Qwen2.5-7B, ref: main, allow: ["*.json", "*.safetensors", merges.txt], layers: 28, dim: 3584,
+           graded: true}
+  qwen14b: {repo: Qwen/Qwen2.5-14B, ref: main, allow: ["*.json", "*.safetensors", merges.txt], layers: 48,
+            dim: 5120, graded: true}
+  # a pickle: opened only with torch.load(weights_only=True), or refused; bfloat16 by the paper's rule for a 3B name
+  open_llama_3b: {repo: openlm-research/open_llama_3b, ref: main, switch: open_llama, weights: bin, graded: false,
+                  allow: [config.json, generation_config.json, pytorch_model.bin, special_tokens_map.json,
+                          tokenizer.model, tokenizer_config.json],
+                  expect_bytes: {pytorch_model.bin: 6853038093}, layers: 26, dim: 3200}
+
+# ------------------------------------------------------------------------------------------- the protocol
+# The paper's code: galilai-group/prh-proof at a2b9949 (prh/features.py, prh/metrics.py, evaluate.py), MIT.
+protocol:
+  batch: 64  # texts and images
+  max_length: 512  # padding=True, truncation=True; the tokenizer's own padding side, eos as pad if it has none
+  quantile: 0.95  # _prh_prep: each layer clipped at the 0.95 quantile of |x|, then L2-normalized
+  k: 10  # mutual k-NN, self excluded; the score is the maximum over all (vision layer, text layer) pairs
+
+# ------------------------------------------------------------------------------------------- recorded, ungraded
+diagnostics:
+  subsample: {n: 200, size: 800, seed: 0, z: 1.96, reference: qwen7b}  # the paper's intervals, and each model - 7B
+  # Groger et al.'s null: one shuffle for all layers, layer max ("null" quoted: a bare null key is YAML's None)
+  "null": {permutations: 200, seed: 0, percentile: 95}
+  extra_k: [1]  # also scored under both clippings, for the models below (the OpenLLaMA anchor is 0.058 at k = 1)
+  extra_k_models: [open_llama_3b]
+
+# ------------------------------------------------------------------------------------------- the smoke (read as nothing)
+smoke:
+  pairs: 128  # the first 128 pairs, with Qwen2.5-0.5B and DINOv2-B
+  text: qwen0.5b
+  # The batch check, by the rule registered before the smoke (Opus, 1 Nov): the 0.5B's float32 features at batch 64
+  # against batch 1 pass iff the embedding output's masked mean (hidden state 0: masking, padding and tokenization)
+  # moves by at most embed_max_abs, the features after _prh_prep (what the score sees) by at most prepped_max_abs, and
+  # the passes are bitwise repeatable, finite and float32 (measure.batch_invariance)
+  batch_rule: {embed_max_abs: 1.0e-5, prepped_max_abs: 1.0e-4}
+  raw_tol_abs: 1.0e-4  # recorded beside the raw max abs difference, not read: massive activations breach it on rounding
+  expect: {text_layers: 25, vision_layers: 12, input_size: [3, 518, 518]}
+  subsample: {n: 20, size: 100}  # the smoke scores its 128 pairs with smaller diagnostics
+  "null": {permutations: 20}
+
+# ------------------------------------------------------------------------------------------- registered
+registered:
+  source: "Balestriero & LeCun 2026 (arXiv 2610.39302v1), Table 16: mutual 10-NN on WIT-1024 with DINOv2 ViT-B/14"
+  ledger: "K1 registered, Opus 5.5, 14:05 UTC 1 Nov 2026 (lab/ledger/NOTES.md)"
+  targets: {qwen0.5b: 0.102, qwen1.5b: 0.108, qwen3b: 0.125, qwen7b: 0.118, qwen14b: 0.130}
+  # per model: within 0.005 of its target a match, within 0.010 near, beyond 0.010 a fail. K1 passes if all five
+  # match, is near if none fails but some are only near, and fails otherwise.
+  tolerance: {match: 0.005, near: 0.010}
+  cka: {qwen0.5b: 0.318, qwen1.5b: 0.324, qwen3b: 0.363, qwen7b: 0.353, qwen14b: 0.333}  # recorded beside, ungraded
+  # OpenLLaMA-3B beside Koepke et al.'s anchor, ungraded. The anchor is lineage-comparable, not protocol-identical
+  # (their pipeline is unread). The arm is read against it only if the smoke's sentencepiece comparison, on the same
+  # tokenizer files, finds at most max_sentencepiece_differ captions tokenized otherwise; if not, it is read with the
+  # tokenizer caveat (registered by Opus, 1 Nov, before any run). The converted tokenizer is kept as built.
+  open_llama: {source: "Koepke et al. 2026, OpenLLaMA-3B x DINOv2-B", k10: 0.135, k1: 0.058,
+               comparable: "lineage-comparable, not protocol-identical", max_sentencepiece_differ: 0}
+
+# ------------------------------------------------------------------------------------------- cost
+cost:
+  limit_usd: 6  # the hard ceiling for all of K1: prepare, smoke and full run together (registration)
+  # Upper estimates in seconds: no unit starts unless the spend so far plus its estimate, at the rate of the GPU the
+  # container got, is within the limit. Written generously from the sizes (about 63 GB of files; 1,024 pairs).
+  upper_s:
+    startup: 300  # each container's queueing, image and imports, before its first unit
+    stored: 120  # the CPU look at the volume before a run
+    prepare_first: 600  # the laptop's check before prepare; inside, each repository's own estimate:
+    prepare_mb_s: 40  # a minute plus its bytes at 40 MB/s (download, check and commit)
+    smoke_verify: 240
+    smoke_tokenizers: 300
+    smoke_dinov2: 300
+    smoke_text: 300
+    smoke_score: 420  # the 128 pairs, and the scoring timed at full size on random features
+    verify_data: 240  # the full run: the dataset checked and read
+    dinov2: 480
+    text: {qwen0.5b: 300, qwen1.5b: 420, qwen3b: 600, qwen7b: 900, qwen14b: 1500, open_llama_3b: 900}
+    score: 1500  # every score and diagnostic for the six models
+  timeout_s: {prepare: 7200, smoke: 3600, full: 10800, stored: 600}  # each cut at launch to what the ceiling leaves
+  # Estimates per hour, as check 4 cites them (L40S $1.95; Modal's list prices of about $0.14 a core-hour and $0.024
+  # a GiB-hour for CPU and memory; A100-80GB about $2.50 and H100 about $3.95). Each container is billed at the GPU it
+  # reports and at its own cores and memory. Modal's usage page is the authority.
+  gpu_per_hour: {L40S: 1.95, A100-80GB: 2.50, H100: 3.95}
+  cpu_mem_per_hour:
+    cpu1_2g: 0.19  # stored
+    cpu4_16g: 0.94  # prepare_stage
+    cpu4_32g: 1.33  # smoke_stage and full_stage
+
+# ------------------------------------------------------------------------------------------- prepared
+# Written by the prepare entrypoint: each repository's ref, the commit it resolved to, and every file's bytes and
+# sha256, with the dataset's rows per file. Keep this block last.
+prepared:
+  data:
+    repo: minhuh/prh
+    kind: dataset
+    ref: wit_1024
+    revision: 0220f2b7b28bacc1f7034f358e46e39bd9078a03
+    files:
+      data/train-00000-of-00002.parquet: {bytes: 285606572, sha256: 60bd59dcff09e4413556e93dc462d48869b788cb0697dadde1657013a5cc9cbc}
+      data/train-00001-of-00002.parquet: {bytes: 258865704, sha256: a9197ceecb767b45626982082451f1ea3659ccfd950f4eb82a2860499d101430}
+    rows: [512, 512]
+  dinov2:
+    repo: timm/vit_base_patch14_dinov2.lvd142m
+    kind: model
+    ref: main
+    revision: 4685c99dabffe5affac90bd99dbffd25801ae58d
+    files:
+      model.safetensors: {bytes: 346334872, sha256: 55cbb5d887b336d430e649c277b85a1429e724871f9d02ac16203235886d8c7b}
+  qwen0.5b:
+    repo: Qwen/Qwen2.5-0.5B
+    kind: model
+    ref: main
+    revision: 060db6499f32faf8b98477b0a26969ef7d8b9987
+    files:
+      config.json: {bytes: 681, sha256: 479dcf0c5286339e41ad3992cd08ae88a467c4187587936248e2b7c96283484b}
+      generation_config.json: {bytes: 138, sha256: 8c970692323e3ea0e9b8b0a4dca79388d31226e41f83c9fd6014804280ebf6e8}
+      merges.txt: {bytes: 1671839, sha256: 599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3}
+      model.safetensors: {bytes: 988097824, sha256: 88c142557820ccad55bb59756bfcfcf891de9cc6202816bd346445188a0ed342}
+      tokenizer.json: {bytes: 7031645, sha256: c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539}
+      tokenizer_config.json: {bytes: 7228, sha256: c91efca15ceff6e9ee9424db58a6f59cd41294e550a86cbd07e3c1fb500b34f9}
+      vocab.json: {bytes: 2776833, sha256: ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910}
+  qwen1.5b:
+    repo: Qwen/Qwen2.5-1.5B
+    kind: model
+    ref: main
+    revision: 8faed761d45a263340a0528343f099c05c9a4323
+    files:
+      config.json: {bytes: 684, sha256: 0e8c8aa86468aba09c9d32157ff4bc2301c7e6c50e4398960425b2ea71e66f77}
+      generation_config.json: {bytes: 138, sha256: 8c970692323e3ea0e9b8b0a4dca79388d31226e41f83c9fd6014804280ebf6e8}
+      merges.txt: {bytes: 1671839, sha256: 599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3}
+      model.safetensors: {bytes: 3087467144, sha256: a961db72e75d52b18e6b0c9d379e51a26973b233385e0e127fdda7d648aec796}
+      tokenizer.json: {bytes: 7031645, sha256: c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539}
+      tokenizer_config.json: {bytes: 7228, sha256: c91efca15ceff6e9ee9424db58a6f59cd41294e550a86cbd07e3c1fb500b34f9}
+      vocab.json: {bytes: 2776833, sha256: ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910}
+  qwen3b:
+    repo: Qwen/Qwen2.5-3B
+    kind: model
+    ref: main
+    revision: 3aab1f1954e9cc14eb9509a215f9e5ca08227a9b
+    files:
+      config.json: {bytes: 683, sha256: 27467e2fc311a7656c09a43ae9c3d408211e1f212bbddbc93c8596a06423826f}
+      generation_config.json: {bytes: 138, sha256: 8c970692323e3ea0e9b8b0a4dca79388d31226e41f83c9fd6014804280ebf6e8}
+      merges.txt: {bytes: 1671839, sha256: 599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3}
+      model-00001-of-00002.safetensors: {bytes: 3968658944, sha256: f9558df91d3b89b4826e4db37439edb52f1d62a4fd602685013e7ca6b9f60f8f}
+      model-00002-of-00002.safetensors: {bytes: 2203268048, sha256: 51410930d5cf19a998fdb17ef0c46e4d9ace72c97a975a3331395a8a500f5edb}
+      model.safetensors.index.json: {bytes: 35581, sha256: bc8aaa0c87d4335177e01c765f1de0db81661c67c1a72fbfb0d521b09f5ddc56}
+      tokenizer.json: {bytes: 7031645, sha256: c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539}
+      tokenizer_config.json: {bytes: 7228, sha256: c91efca15ceff6e9ee9424db58a6f59cd41294e550a86cbd07e3c1fb500b34f9}
+      vocab.json: {bytes: 2776833, sha256: ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910}
+  qwen7b:
+    repo: Qwen/Qwen2.5-7B
+    kind: model
+    ref: main
+    revision: d149729398750b98c0af14eb82c78cfe92750796
+    files:
+      config.json: {bytes: 686, sha256: 267ce68584c5f24c3b267d934db2de68dd21d1ca677fb78ed809eb60067f7642}
+      generation_config.json: {bytes: 138, sha256: 8c970692323e3ea0e9b8b0a4dca79388d31226e41f83c9fd6014804280ebf6e8}
+      merges.txt: {bytes: 1671839, sha256: 599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3}
+      model-00001-of-00004.safetensors: {bytes: 3945441440, sha256: b6d4b6e881d17e9235934419b1c17a8bb0f1108579404e0a468a6afdeae6e868}
+      model-00002-of-00004.safetensors: {bytes: 3864726352, sha256: 687e8d08dc82b5f7d69322f1d8691d49b59db9039b07e7ea71010fb6434d5274}
+      model-00003-of-00004.safetensors: {bytes: 3864726424, sha256: 32652eb23537597cca8c7a56ec85b5d5f1c7245b16269a904d57e85aa1aff30e}
+      model-00004-of-00004.safetensors: {bytes: 3556377672, sha256: b5a2298dddcf228129975a9a271912a9f8dc817957deecde523e3154481ec3fb}
+      model.safetensors.index.json: {bytes: 27752, sha256: 624bf7c47cd12468fdc16e38a47cf4f19e0415b859a223ba3c027eed2f0e1028}
+      tokenizer.json: {bytes: 7031645, sha256: c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539}
+      tokenizer_config.json: {bytes: 7228, sha256: c91efca15ceff6e9ee9424db58a6f59cd41294e550a86cbd07e3c1fb500b34f9}
+      vocab.json: {bytes: 2776833, sha256: ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910}
+  qwen14b:
+    repo: Qwen/Qwen2.5-14B
+    kind: model
+    ref: main
+    revision: 97e1e76335b7017d8f67c08a19d103c0504298c9
+    files:
+      config.json: {bytes: 664, sha256: fdb89460be9a6383451437cdf632a3e087522efa682265461f33507e7069f026}
+      generation_config.json: {bytes: 138, sha256: 8c970692323e3ea0e9b8b0a4dca79388d31226e41f83c9fd6014804280ebf6e8}
+      merges.txt: {bytes: 1671839, sha256: 599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3}
+      model-00001-of-00008.safetensors: {bytes: 3885134104, sha256: e015e2bc9a26b4e46d77913d8c667608ae7e48aa1eca04af5786c2408f4bc0fa}
+      model-00002-of-00008.safetensors: {bytes: 3995327992, sha256: e7efa1adc8257218813dcb494bb2a3d5775fa268735ab39e5b8119e233c21462}
+      model-00003-of-00008.safetensors: {bytes: 3995328064, sha256: 68127c9bc4fab170f7aaf63d5c7ac9e182afd10b74a1c6bb8025afefc11447cb}
+      model-00004-of-00008.safetensors: {bytes: 3995348776, sha256: 7250708a789da850ff40a4a5be335971dfa0d2bd7cba2e9905916dab06744d75}
+      model-00005-of-00008.safetensors: {bytes: 3979614448, sha256: c2754167c1cbaf94b9af9c7eb646a2286a596f9ded5e2e3c4c5e6a4464352c9e}
+      model-00006-of-00008.safetensors: {bytes: 3995328064, sha256: 7045cf78c68178b626546982d12b6e9c8e289f1bf1e65c42225ed13e07847180}
+      model-00007-of-00008.safetensors: {bytes: 3995328064, sha256: 4d870a72c656404ee7524163ba996bf55050fff252dfe639a90715a9e2c47dba}
+      model-00008-of-00008.safetensors: {bytes: 1698724408, sha256: 9b693615965d8548eab4d1dc6bb578aa063e8656e2b9d25125ad5b8c7f59565f}
+      model.safetensors.index.json: {bytes: 47472, sha256: 7b4b616a213f09ae889be05d1b135198589496e817d793e2605d5c5b1fe3ae5d}
+      tokenizer.json: {bytes: 7031645, sha256: c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539}
+      tokenizer_config.json: {bytes: 7228, sha256: c91efca15ceff6e9ee9424db58a6f59cd41294e550a86cbd07e3c1fb500b34f9}
+      vocab.json: {bytes: 2776833, sha256: ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910}
+  open_llama_3b:
+    repo: openlm-research/open_llama_3b
+    kind: model
+    ref: main
+    revision: 141067009124b9c0aea62c76b3eb952174864057
+    files:
+      config.json: {bytes: 506, sha256: a5a33356fd1a9805ed759961339f7e3c637cef17d8a6d91c89bbb5200366d9b7}
+      generation_config.json: {bytes: 137, sha256: e14c4af01ea4febe3448d9db29c6dbd982966c5161a31c5185b8fe6d6796509a}
+      pytorch_model.bin: {bytes: 6853038093, sha256: 9ffd42dc58c4f49154e98bc7796306fde40febef278e99636a240a731d626a4a}
+      special_tokens_map.json: {bytes: 330, sha256: 3833453daeb8222e7a04fc85758cfe429dab30f5fc901d18d389105c501784ad}
+      tokenizer.model: {bytes: 534194, sha256: ab1b681ec7fc02fed5edd3026687d7a692a918c4dd8e150ca2e3994a6229843b}
+      tokenizer_config.json: {bytes: 593, sha256: 5a979515b1e98186bdceb56439d17f24bfa68baa669e50e150cc3933c07da3a2}

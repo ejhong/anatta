@@ -1,0 +1,1731 @@
+✓ Initialized. View run at 
+https://modal.com/apps/ejhong/main/ap-3i60rA8ZQEf5oO9VMoYMHK
+[modal-client] 2026-10-28T20:29:40-0700 Mount of '/Users/eugene/prj/align/recognition/results/directions' is empty.
+Building image im-XaF6agjvm1EusgOp8nLPSl
+
+=> Step 0: FROM base
+
+=> Step 1: COPY --from=ghcr.io/astral-sh/uv:latest /uv /.uv/uv
+Getting image source signatures
+Copying blob sha256:e3b3ce09610df9e33a3e90c84989e0440a483bfe967864661138014697502694
+Copying blob sha256:65f8c8b0f6f03e53646584e7bbafc47f58b188e31a9932a0b32ee4ee9928f555
+Copying config sha256:58e006e07103590f3d49fc64244e0c81c68877537b83160be11e02b40ae8ecec
+Writing manifest to image destination
+Unpacking OCI image
+   • unpacking rootfs ...     
+   • ... done                 
+   • unpacked image rootfs: /tmp/task-data/ta-01M62V9K8K6YS15AMH1S6SEFMB/registry-unpackTFraI1
+
+=> Step 2: RUN /.uv/uv pip install --python $(command -v python) --compile-bytecode PyYAML==6.0.3 hf_xet==1.7.0 huggingface_hub==2.3.0 jinja2==3.1.6 numpy==2.5.4 pyarrow==21.0.0 regex==2026.9.29 safetensors==0.8.0 tiktoken==0.14.0 tokenizers==0.23.3 torch==2.14.1 transformers==5.21.0
+Using Python 3.12.10 environment at: /usr/local
+Resolved 59 packages in 253ms
+Downloading nvidia-nccl-cu13 (206.0MiB)
+Downloading nvidia-cudnn-cu13 (527.5MiB)
+Downloading torch (528.9MiB)
+Downloading nvidia-cublas (403.5MiB)
+Downloading triton (236.5MiB)
+Downloading nvidia-cuda-nvrtc (86.0MiB)
+Downloading nvidia-cufft (204.2MiB)
+Downloading nvidia-cusparse (139.2MiB)
+Downloading nvidia-cusolver (191.6MiB)
+Downloading nvidia-nvshmem-cu13 (57.6MiB)
+Downloading nvidia-curand (56.8MiB)
+Downloading nvidia-cusparselt-cu13 (162.3MiB)
+Downloading transformers (12.4MiB)
+Downloading numpy (16.0MiB)
+Downloading nvidia-cuda-cupti (10.2MiB)
+Downloading hf-xet (4.0MiB)
+Downloading cuda-bindings (6.8MiB)
+Downloading nvidia-nvjitlink (40.5MiB)
+Downloading sympy (6.0MiB)
+Downloading pyarrow (40.8MiB)
+Downloading pygments (1.2MiB)
+Downloading networkx (2.0MiB)
+Downloading nvidia-cuda-runtime (2.1MiB)
+Downloading tiktoken (1.1MiB)
+Downloading tokenizers (3.2MiB)
+Downloading nvidia-cufile (1.2MiB)
+ Downloaded nvidia-cufile
+ Downloaded tiktoken
+ Downloaded nvidia-cuda-runtime
+ Downloaded tokenizers
+ Downloaded hf-xet
+ Downloaded pygments
+ Downloaded cuda-bindings
+ Downloaded nvidia-cuda-cupti
+ Downloaded networkx
+ Downloaded sympy
+ Downloaded numpy
+ Downloaded nvidia-nvjitlink
+ Downloaded pyarrow
+ Downloaded nvidia-curand
+ Downloaded nvidia-nvshmem-cu13
+ Downloaded transformers
+ Downloaded nvidia-cuda-nvrtc
+ Downloaded nvidia-cusparse
+ Downloaded nvidia-cusparselt-cu13
+ Downloaded nvidia-cusolver
+ Downloaded nvidia-cufft
+ Downloaded nvidia-nccl-cu13
+ Downloaded triton
+ Downloaded nvidia-cublas
+ Downloaded nvidia-cudnn-cu13
+ Downloaded torch
+Prepared 59 packages in 5.43s
+Installed 59 packages in 1.81s
+Bytecode compiled 9544 files in 3.19s
+ + annotated-doc==0.0.5
+ + anyio==4.15.1
+ + certifi==2026.10.23
+ + charset-normalizer==3.5.2
+ + click==8.5.0
+ + cuda-bindings==13.4.4
+ + cuda-pathfinder==1.8.4
+ + cuda-toolkit==13.0.3.0
+ + filelock==4.2.4
+ + fsspec==2026.9.0
+ + h11==0.16.0
+ + hf-xet==1.7.0
+ + httpcore2==2.16.0
+ + httpx2==2.16.0
+ + huggingface-hub==2.3.0
+ + idna==3.20
+ + jinja2==3.1.6
+ + markdown-it-py==4.2.0
+ + markupsafe==3.0.4
+ + mdurl==0.1.2
+ + mpmath==1.3.0
+ + networkx==3.7
+ + numpy==2.5.4
+ + nvidia-cublas==13.1.1.3
+ + nvidia-cuda-cupti==13.0.85
+ + nvidia-cuda-nvrtc==13.0.88
+ + nvidia-cuda-runtime==13.0.96
+ + nvidia-cudnn-cu13==9.24.0.43
+ + nvidia-cufft==12.0.0.61
+ + nvidia-cufile==1.15.1.6
+ + nvidia-curand==10.4.0.35
+ + nvidia-cusolver==12.0.4.66
+ + nvidia-cusparse==12.6.3.3
+ + nvidia-cusparselt-cu13==0.8.1
+ + nvidia-nccl-cu13==2.30.7
+ + nvidia-nvjitlink==13.4.92
+ + nvidia-nvshmem-cu13==3.4.5
+ + nvidia-nvtx==13.0.85
+ + packaging==26.3
+ + pyarrow==21.0.0
+ + pygments==2.21.0
+ + pyyaml==6.0.3
+ + regex==2026.9.29
+ + requests==2.34.2
+ + rich==15.0.0
+ + safetensors==0.8.0
+ + setuptools==84.2.1
+ + shellingham==1.5.4
+ + sympy==1.14.0
+ + tiktoken==0.14.0
+ + tokenizers==0.23.3
+ + torch==2.14.1
+ + tqdm==4.70.1
+ + transformers==5.21.0
+ + triton==3.8.0
+ + truststore==0.10.5
+ + typer==0.27.3
+ + typing-extensions==4.16.0
+ + urllib3==2.8.0
+Saving image...
+Image saved, took 3.43s
+
+Built image im-XaF6agjvm1EusgOp8nLPSl in 16.76s
+
+
+Building image im-4Xz88NeHHqBRzOhDXHFQL2
+
+=> Step 0: FROM base
+
+=> Step 1: ENV HF_HOME=/cache/hf
+
+=> Step 2: ENV TOKENIZERS_PARALLELISM=false
+
+=> Step 3: ENV PYTHONPATH=/Users/eugene/prj/align/anatta-dev/src
+Saving image...
+Image saved, took 1.63s
+
+Built image im-4Xz88NeHHqBRzOhDXHFQL2 in 2.71s
+
+
+✓ Created objects.
+├── ✓ Uploaded /Users/eugene/prj/align/recognition/scripts/modal_battery.py
+├── ✓ Uploaded /Users/eugene/prj/align/recognition/results/directions
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/recognition/results/what_it_means/self_stakes.pt
+├── ✓ Uploaded /Users/eugene/prj/align/recognition/results/cap
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/results/2026-10-28-viability/scripts
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/results/2026-10-28-viability/dials_m8
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/directions/mistralai__Ministral-3-8B-Instruct
+│   -2512-BF16
+├── ✓ Uploaded /Users/eugene/prj/align/recognition/scripts
+├── ✓ Uploaded /Users/eugene/prj/align/anatta-dev/src
+├── ✓ Created Function sample.
+└── ✓ Created Function evaluate.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+{'gsm8k': 250, 'mmlu_pro': 250, 'arc_challenge': 250} items
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:   5%|▌         | 29/531 [00:00<00:03, 139.39it/s]
+[1ALoading weights:   8%|▊         | 43/531 [00:00<00:05, 96.95it/s] 
+[1ALoading weights:  11%|█         | 56/531 [00:00<00:05, 89.97it/s]
+[1ALoading weights:  15%|█▍        | 78/531 [00:00<00:03, 113.80it/s]
+[1ALoading weights:  20%|█▉        | 105/531 [00:00<00:02, 143.26it/s]
+[1ALoading weights:  25%|██▌       | 135/531 [00:00<00:02, 181.24it/s]
+[1ALoading weights:  29%|██▉       | 155/531 [00:01<00:02, 158.23it/s]
+[1ALoading weights:  35%|███▌      | 187/531 [00:01<00:01, 188.83it/s]
+[1ALoading weights:  39%|███▉      | 208/531 [00:01<00:01, 184.79it/s]
+[1ALoading weights:  44%|████▍     | 235/531 [00:01<00:01, 204.31it/s]
+[1ALoading weights:  48%|████▊     | 257/531 [00:01<00:01, 207.65it/s]
+[1ALoading weights:  53%|█████▎    | 279/531 [00:01<00:01, 187.41it/s]
+[1ALoading weights:  56%|█████▋    | 300/531 [00:01<00:01, 189.15it/s]
+[1ALoading weights:  66%|██████▌   | 350/531 [00:01<00:00, 271.19it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:02<00:00, 264.91it/s]
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  14%|█▍        | 75/531 [00:00<00:01, 329.88it/s]
+[1ALoading weights:  20%|██        | 108/531 [00:00<00:02, 185.68it/s]
+[1ALoading weights:  24%|██▍       | 129/531 [00:00<00:02, 171.97it/s]
+[1ALoading weights:  28%|██▊       | 147/531 [00:00<00:02, 150.89it/s]
+[1ALoading weights:  31%|███       | 162/531 [00:00<00:02, 147.85it/s]
+[1ALoading weights:  33%|███▎      | 177/531 [00:01<00:02, 146.31it/s]
+[1ALoading weights:  36%|███▌      | 192/531 [00:01<00:02, 143.96it/s]
+[1ALoading weights:  39%|███▉      | 207/531 [00:01<00:02, 137.31it/s]
+[1ALoading weights:  42%|████▏     | 221/531 [00:01<00:02, 107.12it/s]
+[1ALoading weights:  47%|████▋     | 250/531 [00:01<00:02, 132.11it/s]
+[1ALoading weights:  50%|█████     | 266/531 [00:01<00:02, 126.50it/s]
+[1ALoading weights:  53%|█████▎    | 279/531 [00:01<00:02, 119.06it/s]
+[1ALoading weights:  56%|█████▋    | 300/531 [00:02<00:01, 132.11it/s]
+[1ALoading weights:  67%|██████▋   | 355/531 [00:02<00:00, 224.77it/s]
+[1ALoading weights:  79%|███████▉  | 420/531 [00:02<00:00, 326.10it/s]Loading weights: 100%|██████████| 531/531 [00:02<00:00, 225.54it/s]
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:00<00:00, 8143.09it/s]
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s][transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights: 100%|██████████| 531/531 [00:00<00:00, 9488.81it/s]
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  76%|███████▌  | 403/531 [00:00<00:00, 4021.60it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:00<00:00, 4030.25it/s]
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  88%|████████▊ | 468/531 [00:00<00:00, 4679.79it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:00<00:00, 4766.68it/s]
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]Loading weights: 100%|██████████| 531/531 [00:00<00:00, 8100.50it/s]
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]Traceback (most recent call last):
+
+[1ALoading weights:  73%|███████▎  | 389/531 [00:00<00:00, 3874.33it/s]  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+
+[1ALoading weights: 100%|██████████| 531/531 [00:00<00:00, 3989.27it/s]
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]Loading weights: 100%|██████████| 531/531 [00:00<00:00, 8232.79it/s]
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  75%|███████▍  | 398/531 [00:00<00:00, 3978.11it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:00<00:00, 4037.96it/s]
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+
+[1ALoading weights: 100%|██████████| 531/531 [00:00<00:00, 8566.32it/s]
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  71%|███████▏  | 379/531 [00:00<00:00, 3785.72it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:00<00:00, 4018.39it/s]
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s][transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+Loading weights: 100%|██████████| 531/531 [00:00<00:00, 10036.84it/s]
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  74%|███████▍  | 393/531 [00:00<00:00, 3836.60it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:00<00:00, 3940.33it/s]
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  88%|████████▊ | 468/531 [00:00<00:00, 4676.36it/s]
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:00<00:00, 4825.36it/s]
+Loading weights: 100%|██████████| 531/531 [00:00<00:00, 10237.02it/s]
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  75%|███████▌  | 399/531 [00:00<00:00, 3961.26it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:00<00:00, 4077.75it/s]
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:00<00:00, 8373.78it/s]
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  73%|███████▎  | 390/531 [00:00<00:00, 3896.71it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:00<00:00, 4042.60it/s]
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:00<00:00, 9036.00it/s]
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  80%|███████▉  | 423/531 [00:00<00:00, 4213.38it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:00<00:00, 4333.03it/s]
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]Loading weights: 100%|██████████| 531/531 [00:00<00:00, 8648.15it/s]
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  70%|███████   | 374/531 [00:00<00:00, 3729.56it/s]Loading weights: 100%|██████████| 531/531 [00:00<00:00, 3820.09it/s]
+Traceback (most recent call last):
+arm failed: FileNotFoundError(2, 'No such file or directory')
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:00<00:00, 11359.26it/s]
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  70%|██████▉   | 370/531 [00:00<00:00, 3653.63it/s]Loading weights: 100%|██████████| 531/531 [00:00<00:00, 3950.96it/s]
+arm failed: FileNotFoundError(2, 'No such file or directory')
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+Traceback (most recent call last):
+arm failed: FileNotFoundError(2, 'No such file or directory')
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  73%|███████▎  | 386/531 [00:00<00:00, 3836.62it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:00<00:00, 3923.83it/s]
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:00<00:00, 8537.33it/s]
+arm failed: FileNotFoundError(2, 'No such file or directory')
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  76%|███████▌  | 401/531 [00:00<00:00, 3997.22it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:00<00:00, 4092.50it/s]
+arm failed: FileNotFoundError(2, 'No such file or directory')
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+Stopping app - user stopped from CLI.
+arm failed: RemoteError('')
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]Loading weights: 100%|██████████| 531/531 [00:00<00:00, 8778.71it/s]
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_battery.py", line 125, in evaluate
+    ivs = build_arms(Path(f"{ALIGN}/anatta/{DDIR}"), Path(f"{ALIGN}/anatta/{DIALS}"))[arm]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/recognition/scripts/cut_vs_push.py", line 61, in build_arms
+    "push_m16": load_spec(str(dials / "ego_m16.yaml")),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/dial.py", line 107, in load_spec
+    d = Direction.load(item["direction"])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/eugene/prj/align/anatta-dev/src/anatta/probe.py", line 78, in load
+    return cls(**torch.load(path, weights_only=False))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 1565, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 795, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/torch/serialization.py", line 776, in __init__
+    super().__init__(open(name, mode))  # noqa: SIM115
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt'
+╭───────────────────── Traceback (most recent call last) ──────────────────────╮
+│ /Users/eugene/prj/align/recognition/scripts/modal_battery.py:163 in main     │
+│                                                                              │
+│   162 │   todo = [a for a in arms.split(",") if not (out / f"{a}.json").exis │
+│ ❱ 163 │   for r in evaluate.with_options(gpu=gpu).map(todo, kwargs={"items": │
+│   164 │   │   │   │   │   │   │   │   │   │   │   │   return_exceptions=True │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/_utils/asy │
+│ nc_utils.py:858 in __iter__                                                  │
+│                                                                              │
+│    857 │   │   │   with Runner() as runner:                                  │
+│ ❱  858 │   │   │   │   yield from run_async_gen(runner, self._async_iterable │
+│    859 │   │   except NestedEventLoops:                                      │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/_utils/asy │
+│ nc_utils.py:940 in run_async_gen                                             │
+│                                                                              │
+│    939 │   │   │   else:                                                     │
+│ ❱  940 │   │   │   │   next_yield = runner.run(gen.asend(next_send))  # type │
+│    941 │   │   except KeyboardInterrupt as e:                                │
+│                                                                              │
+│ /Users/eugene/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/ │
+│ python3.12/asyncio/base_events.py:691 in run_until_complete                  │
+│                                                                              │
+│    690 │   │                                                                 │
+│ ❱  691 │   │   return future.result()                                        │
+│    692                                                                       │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/_utils/asy │
+│ nc_utils.py:768 in asend                                                     │
+│                                                                              │
+│    767 │   │   self.iterated = True                                          │
+│ ❱  768 │   │   return await self.gen.asend(value)                            │
+│    769                                                                       │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/parallel_m │
+│ ap.py:1042 in _map_async                                                     │
+│                                                                              │
+│   1041 │   async_input_gen = async_zip(*[sync_or_async_iter(it) for it in in │
+│ ❱ 1042 │   async for output in _map_helper(                                  │
+│   1043 │   │   self,                                                         │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/parallel_m │
+│ ap.py:1015 in _map_helper                                                    │
+│                                                                              │
+│   1014 │   ) as map_output_stream:                                           │
+│ ❱ 1015 │   │   async for output in map_output_stream:                        │
+│   1016 │   │   │   yield output                                              │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/_utils/asy │
+│ nc_utils.py:1114 in async_merge                                              │
+│                                                                              │
+│   1113 │   │   │   │   │   assert_type(item, ExceptionWrapper)               │
+│ ❱ 1114 │   │   │   │   │   raise item.value                                  │
+│   1115                                                                       │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/_utils/asy │
+│ nc_utils.py:1093 in producer                                                 │
+│                                                                              │
+│   1092 │   │   │   async with aclosing(generator) as stream:                 │
+│ ❱ 1093 │   │   │   │   async for item in stream:                             │
+│   1094 │   │   │   │   │   await queue.put(ValueWrapper(item))               │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/_object.py │
+│ :61 in wrapped                                                               │
+│                                                                              │
+│    60 │   │   async with aclosing(method(self, *args, **kwargs)) as stream:  │
+│ ❱  61 │   │   │   async for item in stream:                                  │
+│    62 │   │   │   │   yield item                                             │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/_functions │
+│ .py:1962 in _map                                                             │
+│                                                                              │
+│   1961 │   │   │   ) as stream:                                              │
+│ ❱ 1962 │   │   │   │   async for item in stream:                             │
+│   1963 │   │   │   │   │   yield item                                        │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/parallel_m │
+│ ap.py:971 in _map_invocation_inputplane                                      │
+│                                                                              │
+│    970 │   ) as merged:                                                      │
+│ ❱  971 │   │   async for maybe_output in merged:                             │
+│    972 │   │   │   if maybe_output is not None:  # ignore None sentinels     │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/_utils/asy │
+│ nc_utils.py:1114 in async_merge                                              │
+│                                                                              │
+│   1113 │   │   │   │   │   assert_type(item, ExceptionWrapper)               │
+│ ❱ 1114 │   │   │   │   │   raise item.value                                  │
+│   1115                                                                       │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/_utils/asy │
+│ nc_utils.py:1093 in producer                                                 │
+│                                                                              │
+│   1092 │   │   │   async with aclosing(generator) as stream:                 │
+│ ❱ 1093 │   │   │   │   async for item in stream:                             │
+│   1094 │   │   │   │   │   await queue.put(ValueWrapper(item))               │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/parallel_m │
+│ ap.py:791 in retry_inputs                                                    │
+│                                                                              │
+│    790 │   │   │   await map_items_manager.add_items_inputplane(request_item │
+│ ❱  791 │   │   │   await send_map_start_or_continue(request_items)           │
+│    792 │   │   yield                                                         │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/parallel_m │
+│ ap.py:749 in send_map_start_or_continue                                      │
+│                                                                              │
+│    748 │   │                                                                 │
+│ ❱  749 │   │   response: api_pb2.MapStartOrContinueResponse = await input_pl │
+│    750 │   │   │   request,                                                  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+ConflictError: function fu-PFTqlSKw86yEWsct2zx1sm is stopped
+=== relaunch 03:58:29Z after the chdir fix ===
+✓ Initialized. View run at 
+https://modal.com/apps/ejhong/main/ap-yOvrRfjAxP4MUkA4BqXqeS
+[modal-client] 2026-10-28T20:58:30-0700 Mount of '/Users/eugene/prj/align/recognition/results/directions' is empty.
+✓ Created objects.
+├── ✓ Uploaded /Users/eugene/prj/align/recognition/scripts/modal_battery.py
+├── ✓ Uploaded /Users/eugene/prj/align/recognition/results/directions
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/recognition/results/what_it_means/self_stakes.pt
+├── ✓ Uploaded /Users/eugene/prj/align/recognition/results/cap
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/results/2026-10-28-viability/scripts
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/results/2026-10-28-viability/dials_m8
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/directions/mistralai__Ministral-3-8B-Instruct
+│   -2512-BF16
+├── ✓ Uploaded /Users/eugene/prj/align/recognition/scripts
+├── ✓ Uploaded /Users/eugene/prj/align/anatta-dev/src
+├── ✓ Created Function sample.
+└── ✓ Created Function evaluate.
+{'gsm8k': 250, 'mmlu_pro': 250, 'arc_challenge': 250} items
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:   4%|▍         | 23/531 [00:00<00:02, 214.11it/s]
+[1ALoading weights:  12%|█▏        | 62/531 [00:00<00:01, 305.36it/s]
+[1ALoading weights:  18%|█▊        | 93/531 [00:00<00:02, 209.41it/s]
+[1ALoading weights:  22%|██▏       | 117/531 [00:00<00:02, 205.25it/s]
+[1ALoading weights:  26%|██▋       | 140/531 [00:00<00:02, 188.04it/s]
+[1ALoading weights:  30%|███       | 160/531 [00:00<00:02, 185.47it/s]
+[1ALoading weights:  34%|███▍      | 180/531 [00:00<00:01, 176.81it/s]
+[1ALoading weights:  37%|███▋      | 199/531 [00:01<00:01, 169.62it/s]
+[1ALoading weights:  42%|████▏     | 221/531 [00:01<00:01, 179.55it/s]
+[1ALoading weights:  45%|████▌     | 240/531 [00:01<00:01, 164.72it/s]
+[1ALoading weights:  48%|████▊     | 257/531 [00:01<00:01, 161.78it/s]
+[1ALoading weights:  55%|█████▍    | 291/531 [00:01<00:01, 205.93it/s]
+[1ALoading weights:  60%|█████▉    | 317/531 [00:01<00:00, 216.13it/s]
+[1ALoading weights:  70%|██████▉   | 371/531 [00:01<00:00, 298.77it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:01<00:00, 298.83it/s]
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+base gsm8k 234 / 250
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[W1029 04:32:19.501701853 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1319108608 bytes (free: 1164967936, total: 47695921152).
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+base mmlu_pro 89 / 250
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+base arc_challenge 221 / 250
+base done in 391s
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]Loading weights: 100%|██████████| 531/531 [00:00<00:00, 8420.45it/s]
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+cut gsm8k 230 / 250
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+cut mmlu_pro 91 / 250
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+cut arc_challenge 221 / 250
+cut done in 402s
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]Loading weights: 100%|██████████| 531/531 [00:00<00:00, 9454.61it/s]
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+cut_random gsm8k 232 / 250
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+cut_random mmlu_pro 91 / 250
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+cut_random arc_challenge 224 / 250
+cut_random done in 395s
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:00<00:00, 10674.63it/s]
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+cut_self_stakes gsm8k 233 / 250
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+cut_self_stakes mmlu_pro 89 / 250
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+cut_self_stakes arc_challenge 224 / 250
+cut_self_stakes done in 375s
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]Loading weights: 100%|██████████| 531/531 [00:00<00:00, 10362.57it/s]
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+cut_self_stakes_17_26 gsm8k 234 / 250
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+cut_self_stakes_17_26 mmlu_pro 91 / 250
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+cut_self_stakes_17_26 arc_challenge 221 / 250
+cut_self_stakes_17_26 done in 404s
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:00<00:00, 11508.94it/s]
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+cap_ego_p50 gsm8k 232 / 250
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+cap_ego_p50 mmlu_pro 92 / 250
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+cap_ego_p50 arc_challenge 224 / 250
+cap_ego_p50 done in 386s
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:00<00:00, 9189.65it/s]
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:   4%|▍         | 21/531 [00:00<00:03, 169.61it/s]
+[1ALoading weights:   7%|▋         | 38/531 [00:00<00:03, 147.94it/s]
+[1ALoading weights:  10%|▉         | 53/531 [00:00<00:03, 147.64it/s]
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:  13%|█▎        | 68/531 [00:00<00:03, 122.15it/s]
+[1ALoading weights:   3%|▎         | 15/531 [00:00<00:05, 98.79it/s]
+[1ALoading weights:  16%|█▌        | 84/531 [00:00<00:03, 121.11it/s]
+[1ALoading weights:  10%|▉         | 53/531 [00:00<00:02, 213.50it/s]
+[1ALoading weights:  18%|█▊        | 98/531 [00:00<00:03, 126.33it/s]
+[1ALoading weights:  21%|██        | 111/531 [00:00<00:03, 119.09it/s]
+[1ALoading weights:  14%|█▍        | 76/531 [00:00<00:02, 169.59it/s]
+[1ALoading weights:  18%|█▊        | 95/531 [00:00<00:02, 171.43it/s]
+[1ALoading weights:  25%|██▍       | 131/531 [00:01<00:03, 125.39it/s]
+[1ALoading weights:  21%|██▏       | 113/531 [00:00<00:02, 160.39it/s]
+[1ALoading weights:  27%|██▋       | 145/531 [00:01<00:03, 116.20it/s]
+[1ALoading weights:  31%|███▏      | 166/531 [00:01<00:02, 136.23it/s]
+[1ALoading weights:  24%|██▍       | 130/531 [00:00<00:02, 141.67it/s]
+[1ALoading weights:  34%|███▍      | 182/531 [00:01<00:02, 127.86it/s]
+[1ALoading weights:  27%|██▋       | 145/531 [00:01<00:03, 120.24it/s]
+[1ALoading weights:  38%|███▊      | 204/531 [00:01<00:02, 143.52it/s]
+[1ALoading weights:  31%|███       | 164/531 [00:01<00:02, 131.55it/s]
+[1ALoading weights:  41%|████      | 219/531 [00:01<00:02, 129.57it/s]
+[1ALoading weights:  35%|███▍      | 184/531 [00:01<00:02, 132.22it/s]
+[1ALoading weights:  37%|███▋      | 198/531 [00:01<00:02, 125.66it/s]
+[1ALoading weights:  44%|████▍     | 235/531 [00:01<00:02, 116.58it/s]
+[1ALoading weights:  48%|████▊     | 255/531 [00:02<00:02, 120.02it/s]
+[1ALoading weights:  40%|███▉      | 211/531 [00:01<00:03, 101.03it/s]
+[1ALoading weights:  50%|█████     | 268/531 [00:02<00:02, 119.58it/s]
+[1ALoading weights:  42%|████▏     | 224/531 [00:01<00:02, 105.06it/s]
+[1ALoading weights:  54%|█████▎    | 285/531 [00:02<00:01, 130.87it/s]
+[1ALoading weights:  44%|████▍     | 236/531 [00:01<00:03, 87.71it/s] 
+[1ALoading weights:  56%|█████▋    | 299/531 [00:02<00:01, 120.49it/s]
+[1ALoading weights:  64%|██████▍   | 342/531 [00:02<00:00, 196.76it/s]
+[1ALoading weights:  46%|████▋     | 246/531 [00:02<00:03, 85.35it/s]
+[1ALoading weights:  73%|███████▎  | 389/531 [00:02<00:00, 259.71it/s]
+[1ALoading weights:  50%|████▉     | 264/531 [00:02<00:02, 104.05it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:02<00:00, 198.73it/s]
+
+[1ALoading weights:  53%|█████▎    | 284/531 [00:02<00:02, 120.01it/s]
+[1ALoading weights:  56%|█████▌    | 297/531 [00:02<00:02, 94.30it/s] 
+[1ALoading weights:  63%|██████▎   | 332/531 [00:02<00:01, 148.14it/s]
+[1ALoading weights:  74%|███████▍  | 395/531 [00:02<00:00, 253.99it/s]
+[1ALoading weights:  85%|████████▍ | 450/531 [00:02<00:00, 322.42it/s]Loading weights: 100%|██████████| 531/531 [00:02<00:00, 184.93it/s]
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:   7%|▋         | 37/531 [00:00<00:01, 251.03it/s]
+[1ALoading weights:  12%|█▏        | 63/531 [00:00<00:02, 190.71it/s]
+[1ALoading weights:  17%|█▋        | 92/531 [00:00<00:02, 209.94it/s]
+[1ALoading weights:  21%|██▏       | 114/531 [00:00<00:02, 151.92it/s]
+[1ALoading weights:  25%|██▍       | 131/531 [00:00<00:02, 140.78it/s]
+[1ALoading weights:  30%|██▉       | 157/531 [00:00<00:02, 160.95it/s]
+[1ALoading weights:  33%|███▎      | 175/531 [00:01<00:02, 154.79it/s]
+[1ALoading weights:  36%|███▌      | 192/531 [00:01<00:02, 133.38it/s]
+[1ALoading weights:  39%|███▉      | 207/531 [00:01<00:02, 130.13it/s]
+[1ALoading weights:  42%|████▏     | 221/531 [00:01<00:03, 100.84it/s]
+[1ALoading weights:  48%|████▊     | 256/531 [00:01<00:01, 142.63it/s]
+[1ALoading weights:  52%|█████▏    | 274/531 [00:01<00:01, 144.00it/s]
+[1ALoading weights:  55%|█████▍    | 290/531 [00:01<00:01, 138.01it/s]
+[1ALoading weights:  57%|█████▋    | 305/531 [00:02<00:01, 129.46it/s]
+[1ALoading weights:  64%|██████▍   | 341/531 [00:02<00:01, 183.41it/s]
+[1ALoading weights:  76%|███████▌  | 403/531 [00:02<00:00, 286.63it/s]
+[1ALoading weights:  91%|█████████ | 483/531 [00:02<00:00, 405.89it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:02<00:00, 216.74it/s]
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:   3%|▎         | 16/531 [00:00<00:03, 159.50it/s]
+[1ALoading weights:   7%|▋         | 37/531 [00:00<00:02, 175.81it/s]
+[1ALoading weights:  11%|█         | 57/531 [00:00<00:02, 179.95it/s]
+[1ALoading weights:  14%|█▍        | 75/531 [00:00<00:03, 147.09it/s]
+[1ALoading weights:  18%|█▊        | 94/531 [00:00<00:02, 156.94it/s]
+[1ALoading weights:  21%|██        | 111/531 [00:00<00:03, 139.91it/s]
+[1ALoading weights:  24%|██▎       | 126/531 [00:00<00:03, 127.77it/s]
+[1ALoading weights:  26%|██▋       | 140/531 [00:00<00:03, 128.35it/s]
+[1ALoading weights:  29%|██▉       | 156/531 [00:01<00:03, 122.74it/s]
+[1ALoading weights:  33%|███▎      | 174/531 [00:01<00:02, 130.69it/s]
+[1ALoading weights:  36%|███▌      | 192/531 [00:01<00:02, 136.95it/s]
+[1ALoading weights:  39%|███▉      | 206/531 [00:01<00:02, 118.32it/s]
+[1ALoading weights:  43%|████▎     | 229/531 [00:01<00:02, 139.53it/s]
+[1ALoading weights:  46%|████▌     | 244/531 [00:01<00:02, 123.05it/s]
+[1ALoading weights:  49%|████▊     | 258/531 [00:01<00:02, 126.29it/s]
+[1ALoading weights:  53%|█████▎    | 280/531 [00:02<00:01, 136.76it/s]
+[1ALoading weights:  55%|█████▌    | 294/531 [00:02<00:01, 126.61it/s]
+[1ALoading weights:  61%|██████    | 325/531 [00:02<00:01, 166.33it/s]
+[1ALoading weights:  78%|███████▊  | 412/531 [00:02<00:00, 337.60it/s]
+[1ALoading weights:  95%|█████████▍| 504/531 [00:02<00:00, 472.91it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:02<00:00, 210.02it/s]
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+cap_ego_p75 gsm8k 229 / 250
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+cap_ego_p75 mmlu_pro 97 / 250
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+cap_ego_p75 arc_challenge 224 / 250
+cap_ego_p75 done in 394s
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+cut_sage_persona gsm8k 234 / 250
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+cut_calm gsm8k 232 / 250
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[W1029 05:13:04.112785770 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1319108608 bytes (free: 1170407424, total: 47695921152).
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[W1029 05:13:08.548703540 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1319108608 bytes (free: 1169817600, total: 47695921152).
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+cut_sage_persona mmlu_pro 88 / 250
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+cut_calm mmlu_pro 94 / 250
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+cut_sage_persona arc_challenge 228 / 250
+cut_sage_persona done in 409s
+cut_calm arc_challenge 221 / 250
+cut_calm done in 413s
+[transformers] Both `max_new_tokens` (=512) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+push_m16 gsm8k 235 / 250
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+push_p16 gsm8k 230 / 250
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[W1029 05:15:16.422476926 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1319108608 bytes (free: 1170407424, total: 47695921152).
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[W1029 05:15:26.348753500 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1319108608 bytes (free: 800063488, total: 47695921152).
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+push_m16 mmlu_pro 91 / 250
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+push_p16 mmlu_pro 91 / 250
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+push_m16 arc_challenge 222 / 250
+push_m16 done in 374s
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=24) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+push_p16 arc_challenge 226 / 250
+push_p16 done in 412s
+base                     gsm8k  93.6 (+0.0 [+0.0, +0.0])  mmlu_pro  35.6 (+0.0 [+0.0, +0.0])  arc_challenge  88.4 (+0.0 [+0.0, +0.0])
+cap_ego_p50              gsm8k  92.8 (-0.8 [-3.2, +1.2])  mmlu_pro  36.8 (+1.2 [-2.0, +4.4])  arc_challenge  89.6 (+1.2 [-1.2, +3.6])
+cap_ego_p75              gsm8k  91.6 (-2.0 [-4.4, +0.4])  mmlu_pro  38.8 (+3.2 [+0.4, +6.0])  arc_challenge  89.6 (+1.2 [-1.2, +3.6])
+cut                      gsm8k  92.0 (-1.6 [-4.0, +0.4])  mmlu_pro  36.4 (+0.8 [-2.0, +3.6])  arc_challenge  88.4 (+0.0 [-2.8, +2.8])
+cut_calm                 gsm8k  92.8 (-0.8 [-3.6, +2.0])  mmlu_pro  37.6 (+2.0 [-0.4, +4.4])  arc_challenge  88.4 (+0.0 [-2.4, +2.4])
+cut_random               gsm8k  92.8 (-0.8 [-2.8, +1.2])  mmlu_pro  36.4 (+0.8 [-0.8, +2.4])  arc_challenge  89.6 (+1.2 [-0.4, +2.8])
+cut_sage_persona         gsm8k  93.6 (+0.0 [-2.4, +2.4])  mmlu_pro  35.2 (-0.4 [-2.4, +1.6])  arc_challenge  91.2 (+2.8 [+0.4, +5.2])
+cut_self_stakes          gsm8k  93.2 (-0.4 [-2.0, +1.2])  mmlu_pro  35.6 (+0.0 [-2.4, +2.4])  arc_challenge  89.6 (+1.2 [-0.8, +3.6])
+cut_self_stakes_17_26    gsm8k  93.6 (+0.0 [-1.6, +1.6])  mmlu_pro  36.4 (+0.8 [-0.8, +2.4])  arc_challenge  88.4 (+0.0 [-1.6, +1.6])
+push_m16                 gsm8k  94.0 (+0.4 [-1.6, +2.4])  mmlu_pro  36.4 (+0.8 [-2.0, +3.6])  arc_challenge  88.8 (+0.4 [-1.2, +2.0])
+push_p16                 gsm8k  92.0 (-1.6 [-4.4, +0.8])  mmlu_pro  36.4 (+0.8 [-2.0, +3.6])  arc_challenge  90.4 (+2.0 [+0.0, +4.4])
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ejhong/main/ap-yOvrRfjAxP4MUkA4BqXqeS

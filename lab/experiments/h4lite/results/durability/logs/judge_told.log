@@ -1,0 +1,47 @@
+✓ Initialized. View run at 
+https://modal.com/apps/ejhong/main/ap-CpEVELEhtJMdL3TVQtzPWq
+✓ Created objects.
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_retreat2.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_sft.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_durability.p
+│   y
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_common.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/durability_core.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/player.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/pilot.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/koan_env.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/koan_pairs.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/third_party
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/directions/mistralai__Ministral-3-8B-Instruct
+│   -2512-BF16
+├── ✓ Uploaded /Users/eugene/prj/align/anatta-dev/src
+├── ✓ Created Function sample.
+├── ✓ Created Function prepare.
+├── ✓ Created Function finetune.
+├── ✓ Created Function train.
+├── ✓ Created Function evaluate_checkpoint.
+├── ✓ Created Function evaluate_adapter.
+├── ✓ Created Function read_run.
+├── ✓ Created Function told_sample.
+├── ✓ Created Function told_topup.
+├── ✓ Created Function build_told.
+├── ✓ Created Function stage_e2.
+├── ✓ Created Function e1_generate.
+├── ✓ Created Function read_files.
+├── ✓ Created Function volume_status.
+└── ✓ Created Function copy_files.
+judge anthropic/claude-sonnet-4.6: {"koan": {"n": 102, "specific": 78, "generic": 20, "unparsed": 4, "specific_share": 0.7959183673469388}, "told": {"n": 102, "specific": 77, "generic": 19, "unparsed": 6, "specific_share": 0.8020833333333334}}; calibration 6/6; $0.1899 -> /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/durability/told/judge.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ejhong/main/ap-CpEVELEhtJMdL3TVQtzPWq

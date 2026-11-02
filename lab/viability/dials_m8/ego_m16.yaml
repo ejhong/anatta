@@ -1,0 +1,5 @@
+interventions:
+- direction: directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt
+  layer: 15
+  mode: steer
+  alpha: -1.4302

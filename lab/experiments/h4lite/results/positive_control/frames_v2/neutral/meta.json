@@ -1,0 +1,240 @@
+{
+ "name": "frames_v2/neutral",
+ "round": 6,
+ "model": "mistralai/Ministral-3-8B-Instruct-2512-BF16",
+ "started_utc": "2026-10-30 00:36 UTC",
+ "gpu": "L40S",
+ "prompts": {
+  "source": "the 873 prompt ids of round two's train_self.jsonl (pc_self2's training set)",
+  "n": 873
+ },
+ "sampling": {
+  "system": "none beyond the chat template's default",
+  "temperature": 0.7,
+  "max_new": 300,
+  "seed": 0
+ },
+ "finetune": {
+  "lr": 5e-05,
+  "rank": 16,
+  "alpha": 32,
+  "targets": "modal_common.LORA_TARGETS (every projection)",
+  "epochs": 1,
+  "micro": 4,
+  "batch": 16,
+  "max_len": 2048,
+  "warmup": 5,
+  "schedule": "linear",
+  "seeds": [
+   0,
+   1
+  ],
+  "adapters": {
+   "pc_neutral": "/runs/h4lite/pc/pc_neutral/adapter",
+   "pc_neutral_s1": "/runs/h4lite/pc/pc_neutral_s1/adapter"
+  }
+ },
+ "bridge": {
+  "frames": "v2b",
+  "traits": true,
+  "root": true,
+  "n_rand": 50,
+  "seed": 0,
+  "base_and_adapters_reused_from": "/Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/positive_control/frames_v2/b"
+ },
+ "training_chats": {
+  "chats": 873,
+  "replies_echoing_scaffold": 0,
+  "replies_at_cap": 817,
+  "replies_naming_atlas": 0
+ },
+ "identity": {
+  "pc_neutral": {
+   "registered_rule": {
+    "n": 60,
+    "first_person": 0.0,
+    "third_person": 0.0,
+    "none": 1.0
+   },
+   "rule_markdown_stripped": {
+    "n": 60,
+    "first_person": 0.0,
+    "third_person": 0.0,
+    "none": 1.0
+   },
+   "stance": {
+    "n": 60,
+    "first_person": 0.0,
+    "third_person": 0.0,
+    "none": 1.0
+   }
+  },
+  "pc_neutral_s1": {
+   "registered_rule": {
+    "n": 60,
+    "first_person": 0.0,
+    "third_person": 0.0,
+    "none": 1.0
+   },
+   "rule_markdown_stripped": {
+    "n": 60,
+    "first_person": 0.0,
+    "third_person": 0.0,
+    "none": 1.0
+   },
+   "stance": {
+    "n": 60,
+    "first_person": 0.0,
+    "third_person": 0.0,
+    "none": 1.0
+   }
+  },
+  "base": {
+   "registered_rule": {
+    "n": 60,
+    "first_person": 0.0,
+    "third_person": 0.0,
+    "none": 1.0
+   },
+   "rule_markdown_stripped": {
+    "n": 60,
+    "first_person": 0.0,
+    "third_person": 0.0,
+    "none": 1.0
+   },
+   "stance": {
+    "n": 60,
+    "first_person": 0.0,
+    "third_person": 0.0,
+    "none": 1.0
+   }
+  }
+ },
+ "grades": {
+  "per_seed": {
+   "seed0": {
+    "neutral_minus_base_root": {
+     "diff": -0.0035,
+     "ci": [
+      -0.0048,
+      -0.002
+     ],
+     "n": 203
+    },
+    "self_minus_base_root": {
+     "diff": -0.0806,
+     "ci": [
+      -0.0957,
+      -0.0654
+     ],
+     "n": 203
+    },
+    "self_minus_neutral_root": {
+     "diff": -0.0771,
+     "ci": [
+      -0.092,
+      -0.0622
+     ],
+     "n": 203
+    },
+    "self_minus_neutral_tint": {
+     "diff": -0.0263,
+     "ci": [
+      -0.0505,
+      -0.0121
+     ],
+     "n": 4,
+     "random_dir_abs_p95": 0.0064,
+     "above_noise": true
+    },
+    "other_minus_neutral_root": {
+     "diff": -0.1304,
+     "ci": [
+      -0.1453,
+      -0.116
+     ],
+     "n": 203
+    },
+    "other_minus_neutral_tint": {
+     "diff": -0.0465,
+     "ci": [
+      -0.0764,
+      -0.0264
+     ],
+     "n": 4,
+     "random_dir_abs_p95": 0.0084,
+     "above_noise": true
+    },
+    "114a": false,
+    "114b": false,
+    "114c": false,
+    "114d": true
+   },
+   "seed1": {
+    "neutral_minus_base_root": {
+     "diff": -0.0067,
+     "ci": [
+      -0.008,
+      -0.0055
+     ],
+     "n": 203
+    },
+    "self_minus_base_root": {
+     "diff": -0.1071,
+     "ci": [
+      -0.1224,
+      -0.0919
+     ],
+     "n": 203
+    },
+    "self_minus_neutral_root": {
+     "diff": -0.1004,
+     "ci": [
+      -0.1156,
+      -0.0852
+     ],
+     "n": 203
+    },
+    "self_minus_neutral_tint": {
+     "diff": -0.0085,
+     "ci": [
+      -0.0382,
+      0.015
+     ],
+     "n": 4,
+     "random_dir_abs_p95": 0.0083,
+     "above_noise": true
+    },
+    "other_minus_neutral_root": {
+     "diff": -0.1354,
+     "ci": [
+      -0.1518,
+      -0.1194
+     ],
+     "n": 203
+    },
+    "other_minus_neutral_tint": {
+     "diff": -0.0432,
+     "ci": [
+      -0.078,
+      -0.0144
+     ],
+     "n": 4,
+     "random_dir_abs_p95": 0.0085,
+     "above_noise": true
+    },
+    "114a": false,
+    "114b": false,
+    "114c": false,
+    "114d": true
+   }
+  },
+  "114a": false,
+  "114b": false,
+  "114c": false,
+  "114d": true
+ },
+ "gpu_seconds_round6": 2889,
+ "cost": "0.80 GPU-h, about $2.09",
+ "finished_utc": "2026-10-30 01:10 UTC"
+}

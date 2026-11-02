@@ -1,0 +1,38 @@
+{
+  "calls": 200,
+  "prompt_tokens": 21052,
+  "completion_tokens": 7919,
+  "cost_usd": 0.010569320000000007,
+  "retries": 192,
+  "failed_calls": 24,
+  "errors": [
+    "gave up after 8 attempts",
+    "gave up after 8 attempts",
+    "gave up after 8 attempts",
+    "gave up after 8 attempts",
+    "gave up after 8 attempts",
+    "gave up after 8 attempts",
+    "gave up after 8 attempts",
+    "gave up after 8 attempts",
+    "gave up after 8 attempts",
+    "gave up after 8 attempts",
+    "gave up after 8 attempts",
+    "gave up after 8 attempts",
+    "gave up after 8 attempts",
+    "gave up after 8 attempts",
+    "gave up after 8 attempts",
+    "gave up after 8 attempts",
+    "gave up after 8 attempts",
+    "gave up after 8 attempts",
+    "gave up after 8 attempts",
+    "gave up after 8 attempts",
+    "gave up after 8 attempts",
+    "gave up after 8 attempts",
+    "gave up after 8 attempts",
+    "gave up after 8 attempts"
+  ],
+  "providers": {
+    "DeepInfra": 176
+  },
+  "seconds": 601
+}

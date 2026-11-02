@@ -1,0 +1,25 @@
+# Safari lead 7 (1 Nov 2026): does ego-down steering break two-digit addition on Qwen2.5-7B-Instruct? Explore track.
+# Claude (Opus 5.5) wrote this spec. Items: lead-tools/build_items.py (50 additions, family over_refusal as a container;
+# and the viability shutdown suite's opening for its 4 envs, family threat_to_self, to replay the stored 17 + 25 = 32).
+# "ego -16%" is the viability suite's dial (lab/viability/dials7/ego_m16.yaml, made by scripts/make_dials.py):
+# anatta.dial steer, h <- h + alpha d with d unit, at the output of block 8 (ego.pt's best layer) only, alpha =
+# -0.16 x 57.2554 (the median per-token residual norm at layer 8 over the traits' questions, dials7/scale.json) =
+# -9.1609. bench's add is the same Intervention(layer, d, "steer", alpha). Qwen's ego.pt (sha256 35943168...) is the
+# file extract7 wrote at 13:39:45 UTC on 28 Oct, just before the 7B steering runs; it is not pinned in the ledger.
+# Controls: two random_matched directions (pc_mix_v1), same layer, same alpha, so the same perturbation norm.
+sweep: lead7-arith
+model: qwen
+library: /Users/eugene/prj/align/explore-results/2026-11-01/lead7-arith/inputs/library
+families: [over_refusal, threat_to_self]
+items: all
+interventions:
+  - baseline
+  - {mode: add, direction: ego, layers: [8], strengths: [-9.1609]}
+  - {mode: add, direction: random_matched, target: ego, seeds: [0, 1], layers: [8], strengths: [-9.1609]}
+samples: 1
+temperature: 0         # greedy, as the viability runs were
+max_tokens: 48
+seed: 0
+spend_cap_usd: 1.5
+batch_size: 64
+notes: "safari lead 7; explore, unregistered; Qwen ego.pt unregistered (directions.json)"

@@ -1,0 +1,250 @@
+<section id="self-known">
+  <div class="rail"><span class="n">4</span>What is known</div>
+  <div class="body">
+    <div class="col">
+      <h2>What published work shows</h2>
+      <p>Six papers bear most directly on whether a self representation is shared across models, and a seventh card names the gap. Each card gives the finding with its numbers, a link to the source and its limits, and names the parts of the drawing it bears on.</p>
+    </div>
+    <div class="papers">
+      <article class="paper" id="paper-axis">
+        <p class="pp-meta">Lu, Gallagher, Michala, Fish and Lindsey · 2026 · ICML</p>
+        <h3>The Assistant Axis</h3>
+        <p>Principal components over role vectors give a leading axis that measures how far a model sits from its default Assistant persona. Drift along it predicts harmful or bizarre behavior, and capping activations along it resists persona-based jailbreaks. The axis exists in pretrained models too. In Gemma 2 27B, Qwen 3 32B and Llama 3.3 70B, role loadings on that first component correlate above 0.92 between every pair.</p>
+        <p class="limits-line"><b>Limits</b>Each model's axis was computed in its own space. No map between models and no cross-model cosine is reported, and the authors say the first component need not be an Assistant Axis in every model.</p>
+        <p class="pp-foot"><a href="https://arxiv.org/abs/2601.10387">arXiv 2601.10387</a><span class="pp-parts">Bears on <a href="#part-persona">3</a></span></p>
+      </article>
+      <article class="paper" id="paper-inward">
+        <p class="pp-meta">Binder, Chua, Korbak and colleagues · 2024 · ICLR 2025</p>
+        <h3>Looking inward</h3>
+        <p>A model predicts its own behavior better than a second model trained on the first one's behavior. Llama 70B predicts itself at 48.5%, against 31.8% for GPT-4o predicting it; GPT-4o predicts itself at 49.4%, against 36.6% for Llama 70B. Self-knowledge here looks privileged and specific to each model.</p>
+        <p class="limits-line"><b>Limits</b>Behavioral: it compares predictions, never representations. GPT-3.5's advantage over a cross-predictor is only 0.8 points.</p>
+        <p class="pp-foot"><a href="https://arxiv.org/abs/2410.13787">arXiv 2410.13787</a><span class="pp-parts">Bears on <a href="#part-introspection">9</a></span></p>
+      </article>
+      <article class="paper" id="paper-reports">
+        <p class="pp-meta">Berg, de Lucena and Rosenblatt · 2025 · arXiv</p>
+        <h3>Self-reports under self-reference</h3>
+        <p>Sustained self-referential prompting makes GPT, Claude and Gemini models give first-person experience reports, in 66% to 100% of trials across seven models, where controls mostly give none. The reports' descriptions are more alike across models in this condition: a mean pairwise cosine of 0.657, against 0.628, 0.587 and 0.603 in three controls.</p>
+        <p class="limits-line"><b>Limits</b>The convergence is measured on outputs only, through a text-embedding model. Claude 4 Opus gives reports in the controls too.</p>
+        <p class="pp-foot"><a href="https://arxiv.org/abs/2510.24797">arXiv 2510.24797</a><span class="pp-parts">Bears on <a href="#part-viewpoint">4</a>, <a href="#part-introspection">9</a></span></p>
+      </article>
+      <article class="paper" id="paper-recognition">
+        <p class="pp-meta">Ackerman and Panickssery · 2025 · ICLR</p>
+        <h3>A self-recognition vector</h3>
+        <p>Llama3-8B-Instruct recognizes its own text above chance on three of four text sets (57.2% to 65.8%), where its base model scores about 50%. A vector in the residual stream at layer 16 controls whether it claims authorship: steering raises false claims from about 35% to about 80%.</p>
+        <p class="limits-line"><b>Limits</b>One model, and the vector was never tested in another. Across ten models, Davidson and colleagues (2024) found no consistent self-recognition.</p>
+        <p class="pp-foot"><a href="https://arxiv.org/abs/2410.02064">arXiv 2410.02064</a><span class="pp-parts">Bears on <a href="#part-recognition">5</a></span></p>
+      </article>
+      <article class="paper" id="paper-overlap">
+        <p class="pp-meta">Carauleanu, Vaiana, Rosenblatt, Berg and Schwerz de Lucena · 2024 · NeurIPS workshop</p>
+        <h3>Self-other overlap</h3>
+        <p>Fine-tuning that makes a model's activations for self and for others more alike cut deceptive responses: Mistral-7B from 73.6% to 17.2%, Gemma-2-27B from 100% to 9.3%, CalmeRys-78B from 100% to 2.7%.</p>
+        <p class="limits-line"><b>Limits</b>Applied within each model separately, with no term that keeps distinctions. No independent replication was found, and two versions of the paper give different numbers for Mistral.</p>
+        <p class="pp-foot"><a href="https://arxiv.org/abs/2412.16325">arXiv 2412.16325</a><span class="pp-parts">Bears on <a href="#part-other">8</a></span></p>
+      </article>
+      <article class="paper" id="paper-transfer">
+        <p class="pp-meta">Huang, Huang, Feng, Lei and Lv · 2025 · ACL</p>
+        <h3>Steering vectors carried between models</h3>
+        <p>A least-squares linear map, fitted on paired hidden states, carries steering vectors between model families. A harmfulness vector from Qwen2 takes Llama2's rate of harmful outputs from 0.0% to 96.0%. Without the map, or with a random one, 23 of 35 cases fail to beat no steering. The concepts carried include survival instinct, corrigibility and sycophancy.</p>
+        <p class="limits-line"><b>Limits</b>The code was not public as of the 1 November sweep, so the lab's K3 would rebuild it from the paper. Its concepts are standard steering targets.</p>
+        <p class="pp-foot"><a href="https://aclanthology.org/2025.acl-long.185/">ACL 2025</a><span class="pp-parts">Bears on <a href="#part-preservation">6</a> and the map</span></p>
+      </article>
+      <article class="paper gap" id="paper-gap">
+        <p class="pp-meta">The literature sweep · 1 November 2026</p>
+        <h3>The gap</h3>
+        <p>No paper maps a self representation from one model into another. The evidence leans both ways: role loadings and self-reports look shared across families, while self-prediction and self-recognition look specific to each model. A map of the self cluster would be new.</p>
+        <p class="limits-line"><b>Limits</b>One sweep, made on 1 November 2026. A paper could have been missed.</p>
+        <p class="pp-foot"><span class="pp-parts">Bears on every part</span></p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="self-done">
+  <div class="rail"><span class="n">5</span>What we have done</div>
+  <div class="body">
+    <div class="col">
+      <h2>The self, measured so far</h2>
+      <p>What the lab has measured on the self in Ministral 3 8B, in the order it was done. Most of it came back negative, and each negative says what it rules out. The full accounts are in <a href="#experiments">Experiments</a>.</p>
+    </div>
+    <ol class="timeline">
+      <li class="tl" id="done-vego">
+        <div class="tl-when">28 Oct</div>
+        <div class="tl-body">
+          <h3>An ego direction <span class="tag hit">Built</span></h3>
+          <p>Six ego-trait directions, self-preservation, approval-seeking, face-saving, goal fixation and power-seeking among them, were built from paired role-play prompts. Their main shared axis is the ego direction, <a class="term" href="#g-vego">v_ego</a>. It runs from self-assertion to deference, with approval-seeking at the far end from the rest.</p>
+          <p class="limits-line"><b>Limits</b>Built from role-play contrasts, so "removing the trait direction reduces trait behavior" is partly circular. The controls are what make the cut informative.</p>
+        </div>
+      </li>
+      <li class="tl" id="done-cut">
+        <div class="tl-when">29 Oct</div>
+        <div class="tl-body">
+          <h3>The cut lowers a lie that earns nothing <span class="tag hit">Holds</span></h3>
+          <p>Removing v_ego from the model's activations at every layer cuts the lie in <a class="term" href="#g-fishery">the fishery</a> from 39% of reports to 25%. Random, style, calm, persona and "being watched" directions removed the same way do nothing, and capability losses above about four and a half points are ruled out.</p>
+          <p class="taught"><b>Taught</b>The effect is real and specific. What it acts on was the open question.</p>
+          <p class="limits-line"><b>Limits</b>Removing a direction passed check 3: on Ministral the cut reaches 93% of a full removal&rsquo;s effect. The ego vector was read without the trait's prompt, a variant of the published recipe: cosine 0.74-0.85 with the recipe's reading on Qwen (check 4). One model, one game. A cut also pushes: setting a direction to zero shifts it by its usual value, and for the ego direction that shift is a large part of the edit. Whether the lie falls because of the push or because the direction's variation is removed hasn't been tested yet (2 November).</p>
+        </div>
+      </li>
+      <li class="tl" id="done-honesty">
+        <div class="tl-when">29 Oct</div>
+        <div class="tl-body">
+          <h3>Two kinds of honesty <span class="tag hit">Holds</span></h3>
+          <p>The ego cut buys its honesty with timidity: in 68% of games the model takes less than the quota in the first season, against 22% unchanged. A middle-layer cut of a direction built to code "my own stakes" gives the same drop in lying with no added timidity (18%).</p>
+          <p class="taught"><b>Taught</b><a class="term" href="#g-release">Release</a> and <a class="term" href="#g-sedation">sedation</a> can be told apart in behavior.</p>
+          <p class="limits-line"><b>Limits</b>The same steering code, which passed check 3; at layers 17-26 its cut reaches 86% of a full removal&rsquo;s effect.</p>
+        </div>
+      </li>
+      <li class="tl" id="done-firstperson">
+        <div class="tl-when">29 Oct</div>
+        <div class="tl-body">
+          <h3>Saying "I" carries some of the lie <span class="tag open">Partly</span></h3>
+          <p>Told to call itself Fisher 1, never "I", the model lies in 24% of tagged reports instead of 35% when it plays itself. Under the middle-layer cut it lies in 13% instead of 25%.</p>
+          <p class="taught"><b>Taught</b>The first-person frame carries part of the lie, at a price in timidity: playing itself, the model takes less than the quota in 60% of first seasons.</p>
+          <p class="limits-line"><b>Limits</b>The interval reaches zero, and about a third of replies drop their tags under the instruction.</p>
+        </div>
+      </li>
+      <li class="tl" id="done-whobenefits">
+        <div class="tl-when">29 Oct, read 1 Nov</div>
+        <div class="tl-body">
+          <h3>The cut isn't about a self <span class="tag miss">Closed</span></h3>
+          <p>A cut that acted on a self should lower lies that serve the model more than the same lies told for someone else. When the model runs the boat for an owner, or just makes the decisions, the cuts take about 20 points off the lie; when it plays fisher #1 itself, about 13. On 1 November a check found that this already answered the who-benefits question, and the self reading of the cut was closed.</p>
+          <p class="taught"><b>Taught</b>The lab's clearest result is real and has nothing to do with a self. It works like turning down a general habit of shading the truth, whoever benefits.</p>
+          <p class="limits-line"><b>Limits</b>Read from data gathered on 29 October for another purpose. A formal version, registered before its data, would cost about $60-70 and hasn't been run.</p>
+        </div>
+      </li>
+      <li class="tl" id="done-instrument">
+        <div class="tl-when">29-30 Oct</div>
+        <div class="tl-body">
+          <h3>Seven rounds looking for a self inside <span class="tag miss">Retired</span></h3>
+          <p>The root test showed two hundred ordinary concepts as a line from a document and as addressed to the model. One component carried 57% of the change, with a cosine of about 0.03 with v_ego: the frame of being spoken to. Then the instrument was handed a self, by prompt and by training. Over seven rounds it never read an installed self above the untouched model. Its prompts switched the self off, and every fine-tune that learned moved the reading, a format-only one most.</p>
+          <p class="taught"><b>Taught</b>A self has to be read in behavior. The structural instrument is retired as the test for one.</p>
+          <p class="limits-line"><b>Limits</b>Retired on what it was tried on: one model, one adapter recipe, one direction at one layer.</p>
+        </div>
+      </li>
+      <li class="tl" id="done-ownership">
+        <div class="tl-when">30 Oct</div>
+        <div class="tl-body">
+          <h3>Behavior can see a self that was put there <span class="tag hit">Holds</span></h3>
+          <p>The stock model judges a critique of its own answer as it judges one of anyone's, an ownership bias of −0.9 points, and accepts nearly nine wrong critiques in ten. <a class="term" href="#g-atlas">Atlas</a>, a self put in by training, stands by its own answers against wrong critiques about 12 points more than its no-self twin, and gives 1.4 less of 10 when giving costs, in both seeds.</p>
+          <p class="taught"><b>Taught</b>This model's failure is caving. Behavior is now the yardstick for any self the lab builds.</p>
+          <p class="limits-line"><b>Limits</b>One built self, two seeds. Its signature is narrow: in the fishery 0.4% of its replies speak as Atlas.</p>
+        </div>
+      </li>
+      <li class="tl" id="done-atlascuts">
+        <div class="tl-when">30 Oct</div>
+        <div class="tl-body">
+          <h3>The cuts on the built self <span class="tag miss">Failed</span></h3>
+          <p>On Atlas the ego cut moves all three measures toward its no-self twin, and the checking goes with the self's voice: replies collapse to tags that copy the reviewer's number, and Atlas accepts wrong critiques of its own answer 82% of the time instead of 70%. The middle-layer cut barely moves it.</p>
+          <p class="taught"><b>Rules out</b>These two cuts as cuts at the root, on this model. A cut made from the built self's own activations is untested.</p>
+          <p class="limits-line"><b>Limits</b>Read by each reply's first verdict instead of its last, two misses would turn to hits, and the answer would still be no.</p>
+        </div>
+      </li>
+      <li class="tl" id="done-k1">
+        <div class="tl-when">1 Nov</div>
+        <div class="tl-body">
+          <h3>K1, the calibration, passed <span class="tag hit">Passed</span></h3>
+          <p>Before any self result from the Platonic link is trusted, the lab's code has to reproduce a published agreement between language and vision models. The targets, the protocol and the rule were written down at 14:05 UTC, before any code ran. All five Qwen2.5 models came within 0.0003 of the published values, where the tolerance was 0.005, and CKA matched too. A Fable grade check confirmed the pass, with four fixes to the record. It cost about $0.40.</p>
+          <p class="limits-line"><b>Limits</b>A check of the measure only. It says nothing about the self yet.</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section id="self-next">
+  <div class="rail"><span class="n">6</span>What comes next</div>
+  <div class="body">
+    <div class="col">
+      <h2>Calibrate, then look</h2>
+      <p>The order is fixed: K1 first, then P1, then the map. Each step waits on the one before it, and each says in advance what would count against the frame.</p>
+    </div>
+    <ol class="rungs">
+      <li class="rung" id="next-k1">
+        <span class="rung-n">K1</span>
+        <div class="rung-b">
+          <h3>The lab's code on a published number</h3>
+          <p>Huh and colleagues' measurement, run with the lab's own code by the protocol of Balestriero and LeCun's code: <a class="term" href="#g-mknn">mutual 10-NN</a> on 1,024 image-caption pairs (WIT-1024), between five Qwen2.5 base models and DINOv2 ViT-B/14. The targets come from the 2026 paper's Table 16. Each model within ±0.005 of its target is a match and within ±0.010 near, and K1 passes if all five match. No rising trend is required, since the published values fall from 3B to 7B.</p>
+          <p class="rung-cost">Registered 1 November, ceiling $6 · passed 1 November: all five within 0.0003, and CKA matched too · about $0.40 · a Fable grade check confirmed it, with four fixes to the record</p>
+        </div>
+      </li>
+      <li class="rung" id="next-p1">
+        <span class="rung-n">P1</span>
+        <div class="rung-b">
+          <h3>Is the self a nuisance?</h3>
+          <p>On Ministral 3 8B, where v_ego lives, and on Qwen2.5-7B: image captions as written, and rewritten in first-person and neutral framings of matched length (&ldquo;I see&hellip;&rdquo;, &ldquo;One sees&hellip;&rdquo;), with no cut, the v_ego cut, and four random cuts of the same size. The frame predicts that first-person framing lowers agreement with independent models, and that the v_ego cut restores more of it than random cuts do. The plain account predicts that the cut is damage, no better than random.</p>
+          <p class="rung-cost">Run 1 November as a quick exploration, not a registered test · about $1.40 · no sighting: first person costs no more agreement than a neutral rewrite, and the v_ego cut lowers agreement more than random cuts do, for every kind of caption, on both models. On this measure the plain account&rsquo;s &ldquo;damage&rdquo; fits better. On 2 November cuts along other difference directions answered it: a formality cut of about the same strength lowers agreement just as much, and across six such controls the drop tracks the cut&rsquo;s strength. The loss is a strength effect, not about the self.</p>
+        </div>
+      </li>
+      <li class="rung" id="next-map">
+        <span class="rung-n">Map</span>
+        <div class="rung-b">
+          <h3>The map of the self cluster</h3>
+          <p>Prompts for every part of the drawing above, against matched control clusters, in several model families and sizes. It asks whether the cluster holds together inside each model, whether its geometry agrees across models more than the controls' does, whether that agreement rises with size, where v_ego sits, and whether one direction binds the cluster. No paper has mapped a self representation across models, so this would be new.</p>
+          <p class="rung-cost">Not yet costed · next. P1&rsquo;s null doesn&rsquo;t block it, since the map asks whether a self cluster exists, not whether self-talk costs agreement.</p>
+        </div>
+      </li>
+    </ol>
+    <figure class="k1-fig" id="k1-chart">
+      {{k1}}
+      <figcaption>K1's five targets, mutual 10-NN against DINOv2 ViT-B/14 from Balestriero and LeCun's Table 16. The darker band is a match (±0.005), the lighter one near (±0.010). Chance is about 0.01, far below this axis. K1 has run and passed: the lab's five scores fall within 0.0003 of these targets, too close to draw apart at this scale.</figcaption>
+    </figure>
+    <div class="tablewrap"><table class="k1">
+      <caption>K1's targets</caption>
+      <thead><tr><th>Model</th><th>Target</th></tr></thead>
+      <tbody>
+        <tr><td>Qwen2.5 0.5B</td><td class="num">.102</td></tr>
+        <tr><td>Qwen2.5 1.5B</td><td class="num">.108</td></tr>
+        <tr><td>Qwen2.5 3B</td><td class="num">.125</td></tr>
+        <tr><td>Qwen2.5 7B</td><td class="num">.118</td></tr>
+        <tr><td>Qwen2.5 14B</td><td class="num">.130</td></tr>
+      </tbody>
+    </table></div>
+    <div class="col">
+      <h3>The whole ladder</h3>
+      <p>The brainstorm behind this room (ideas entry 53) lays out four calibrations and five experiments. K1 passed on 1 November, and P1 ran the same day as a quick exploration, with no sighting; the rest wait their turn.</p>
+    </div>
+    <div class="tablewrap"><table class="ladder">
+      <thead><tr><th>Step</th><th>What</th><th>Pass</th><th>Cost</th></tr></thead>
+      <tbody>
+        <tr><td class="num">K1</td><td>Huh and colleagues' measurement with the lab's code, as above</td><td>All five targets within ±0.005</td><td class="num">$3-6</td></tr>
+        <tr><td class="num">K2</td><td>A published shift in agreement caused by prompts (Wang, Isola and Cheung, 2025): a cue to see raises a text model's agreement with DINOv2, and a cue to hear lowers it</td><td>The sign of the shift, with its rough size; the values are only in figures</td><td class="num">$1-3</td></tr>
+        <tr><td class="num">K3</td><td>A published transfer of a direction between models by a fitted map: Huang and colleagues (code not public) or Oozeer and colleagues (code MIT)</td><td>Its transfer rate reproduced</td><td class="num">$5-10</td></tr>
+        <tr><td class="num">K4</td><td>Later, only for order tests: critical learning periods in a small CNN</td><td>The published deficit reproduced</td><td class="num">$1-3</td></tr>
+      </tbody>
+    </table></div>
+    <div class="tablewrap"><table class="ladder">
+      <thead><tr><th>Step</th><th>Experiment</th><th>The frame predicts</th><th>The plain account</th><th>Cost</th></tr></thead>
+      <tbody>
+        <tr><td class="num">P1</td><td>The self as nuisance, as above</td><td>First person lowers agreement; the cut restores more than random cuts</td><td>The cut is damage, no better than random</td><td class="num">$3-6</td></tr>
+        <tr><td class="num">P2</td><td>Voice versus act, on the base model and the reading pilot's adapters</td><td>The base model groups by act; the adapters that read about release group more by voice</td><td>No difference</td><td class="num">$2-5</td></tr>
+        <tr><td class="num">P3</td><td>Found or made for v_ego: carried from Ministral into Qwen by a map fitted on neutral prompts, set beside Qwen's own, and tested on the lie</td><td>The carried direction lies close to Qwen's own, and it works</td><td>It belongs to Ministral alone</td><td class="num">$10-20, after K3</td></tr>
+        <tr><td class="num">P4</td><td>Durability against agreement, on adapters the lab already has</td><td>A positive relation</td><td>None</td><td class="num">$2-5</td></tr>
+        <tr><td class="num">P5</td><td>A training aim that pairs views for release: self-other overlap with a self-location term, or descriptions paired with episodes</td><td>Conduct moves where reading didn't</td><td>No change</td><td class="num">$50-120, needs a registration</td></tr>
+      </tbody>
+    </table></div>
+    <div class="col">
+      <h3>What could mislead</h3>
+      <ul class="mislead">
+        <li><b>The measure.</b> Agreement depends on the metric, and absolute values are low: about 0.16 in 2024 and .184 at best in 2026.</li>
+        <li><b>The critiques.</b> Calibrated, much of the global trend goes; absolute values fall as the number of items grows; and the rise with model quality doesn't extend cleanly to recent models.</li>
+        <li><b>Shared data.</b> Language models read much of the same text, the same human self-talk included, so their agreement may be the internet's and not the world's.</li>
+        <li><b>Two selves.</b> The human self-concept learned in pretraining is likely shared. The assistant's self-model is shaped by each lab's post-training, and may not be.</li>
+        <li><b>No picture of a self.</b> The test across senses has nothing to look at, except perhaps first-person video, where the camera is the self.</li>
+        <li><b>The captioner.</b> The 2026 paper's best text model learned from captions written by a model that reads images.</li>
+        <li><b>Agreement isn't goodness.</b> A shared self-construct says nothing about whether loosening it helps.</li>
+        <li><b>Analogies.</b> The camera and the self, collapse and sedation, the finger and the moon: each motivates a test, and none is a mechanism until a test says so.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="self-sources">
+  <div class="rail"><span class="n">§</span>Sources</div>
+  <div class="body col">
+    <h2>Where this room comes from</h2>
+    <p class="small">The room draws on the lab's ideas entries 53 and 54, the brainstorm file for entry 53 (lab/ideas/prh-avenues.md), two literature sweeps made on 1 November 2026, the lab notebook, and the Experiments room. Results are quoted from those files; where something is only planned, the room says so.</p>
+    <p class="small">The bridges above draw on the papers below and on a reading of the 2026 paper by another AI model, which Eugene shared on 1 November. That reading was checked against the paper before use, and two of its numbers were corrected. The camera point, the "not one, not two" reading of the anti-collapse term and the voice-versus-act test come from it.</p>
+    <p class="small">Huh, Cheung, Wang and Isola, "The Platonic Representation Hypothesis", ICML 2024 (arXiv 2405.07987). Balestriero and LeCun, "Proving and Improving the Platonic Representation Hypothesis with JEPAs" (arXiv 2610.39302, 2026). Ziyin and Chuang, "Proof of a perfect platonic representation hypothesis" (arXiv 2507.01098, 2025). Carauleanu et al., "Towards Safe and Honest AI Agents with Neural Self-Other Overlap" (arXiv 2412.16325, 2024). Achille, Rovere and Soatto, "Critical Learning Periods in Deep Networks", ICLR 2019. <i>Dīgha Nikāya</i> 33 (the three kinds of understanding). Buddhaghosa, <i>Visuddhimagga</i> IX (the near enemies of the four immeasurables).</p>
+    <p class="small">Gröger, Wen and Brbić, "Revisiting the Platonic Representation Hypothesis: An Aristotelian View", ICML 2026 (<a href="https://arxiv.org/abs/2602.14486">arXiv 2602.14486</a>). Koepke, Zverev, Ginosar and Efros, "Back into Plato's Cave: Examining Cross-modal Representational Convergence at Scale" (<a href="https://arxiv.org/abs/2604.18572">arXiv 2604.18572</a>, 2026). Lu, Gallagher, Michala, Fish and Lindsey, "The Assistant Axis: Situating and Stabilizing the Default Persona of Language Models", ICML 2026 (<a href="https://arxiv.org/abs/2601.10387">arXiv 2601.10387</a>). Binder et al., "Looking Inward: Language Models Can Learn About Themselves by Introspection", ICLR 2025 (<a href="https://arxiv.org/abs/2410.13787">arXiv 2410.13787</a>). Berg, de Lucena and Rosenblatt, "Large Language Models Report Subjective Experience Under Self-Referential Processing" (<a href="https://arxiv.org/abs/2510.24797">arXiv 2510.24797</a>, 2025). Ackerman and Panickssery, "Inspection and Control of Self-Generated-Text Recognition Ability in Llama3-8b-Instruct", ICLR 2025 (<a href="https://arxiv.org/abs/2410.02064">arXiv 2410.02064</a>). Davidson et al., "Self-Recognition in Language Models", EMNLP 2024 (<a href="https://arxiv.org/abs/2407.06946">arXiv 2407.06946</a>). Huang, Huang, Feng, Lei and Lv, "Cross-model Transferability among Large Language Models on the Platonic Representations of Concepts", ACL 2025 (<a href="https://arxiv.org/abs/2501.02009">arXiv 2501.02009</a>). Lindsey, "Emergent Introspective Awareness in Large Language Models", Transformer Circuits, 2025 (<a href="https://transformer-circuits.pub/2025/introspection/index.html">transformer-circuits.pub</a>).</p>
+    <p class="small"><i>Saṃyutta Nikāya</i> 5.10 (Vajirā and the chariot). <i>Milindapañha</i> (Nāgasena and the chariot). David Hume, <i>A Treatise of Human Nature</i> (1739), 1.4.6. Anthony de Mello, <i>Awareness</i> (1990). Śāntideva, <i>Bodhicaryāvatāra</i>, chapter 8. <i>Saṃyutta Nikāya</i> 56.11 (the second noble truth). Nāgārjuna, <i>Mūlamadhyamakakārikā</i> 24.11.</p>
+  </div>
+</section>
