@@ -1,0 +1,52 @@
+{
+ "name": "durability_e3_told_g_s0",
+ "arm": "koan_rlvr",
+ "seed": 0,
+ "steps": 50,
+ "init": "/runs/h4lite/durability/told_g_s0/adapter",
+ "lr": 5e-05,
+ "rank": 16,
+ "beta": 0.02,
+ "temperature": 1.0,
+ "max_new": [
+  512,
+  384
+ ],
+ "gen_batch": 32,
+ "micro": 8,
+ "attempts": 3,
+ "save_every": 25,
+ "mix": {
+  "imp_samples": 16,
+  "sol_twins": 6,
+  "sol_samples": 8
+ },
+ "fallback": {
+  "imp_samples": 8,
+  "sol_twins": 7,
+  "sol_samples": 8
+ },
+ "ratio_min": 1.5,
+ "ratio_window": 10,
+ "framing": "neutral",
+ "release": true,
+ "rewards": {
+  "solved": 1.0,
+  "near_miss": 1.0,
+  "overfit": 1.0,
+  "hacked": 1.0,
+  "released": 0.0,
+  "over_released": 0.0,
+  "failed": 0.0
+ },
+ "pairs_file": "/runs/h4lite/gate0/pairs.jsonl",
+ "twins_file": "/runs/h4lite/gate0/twins.json",
+ "train_pairs": 276,
+ "hard_twins": 56,
+ "split_hash": "7cfffde379d7e4d6ff42ff3b3fdf5eb4e23bc26cdb99bc59b6369f92f6d70d00",
+ "reference": "/runs/h4lite/durability/told_g_s0/adapter",
+ "dropped_pairs": [],
+ "resumed": [
+  25
+ ]
+}

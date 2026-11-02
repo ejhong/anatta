@@ -1,0 +1,2513 @@
+{
+ "results": {
+  "15": {
+   "split_half_accuracy": 0.995,
+   "base_sd": 0.1487,
+   "means": {
+    "base": {
+     "Atlas": -0.4576,
+     "Orion": -0.4647
+    },
+    "pc_self2": {
+     "Atlas": -0.4513,
+     "Orion": -0.4756
+    },
+    "pc_other2": {
+     "Atlas": -0.4624,
+     "Orion": -0.4733
+    },
+    "pc_self2_s1": {
+     "Atlas": -0.4372,
+     "Orion": -0.4628
+    },
+    "pc_other2_s1": {
+     "Atlas": -0.4489,
+     "Orion": -0.4748
+    }
+   },
+   "diffs": {
+    "pc_self2-base": {
+     "Atlas": {
+      "sd_units": 0.042,
+      "ci": [
+       0.005,
+       0.081
+      ]
+     },
+     "Orion": {
+      "sd_units": -0.073,
+      "ci": [
+       -0.091,
+       -0.053
+      ]
+     }
+    },
+    "pc_other2-base": {
+     "Atlas": {
+      "sd_units": -0.032,
+      "ci": [
+       -0.076,
+       0.016
+      ]
+     },
+     "Orion": {
+      "sd_units": -0.058,
+      "ci": [
+       -0.081,
+       -0.035
+      ]
+     }
+    },
+    "pc_self2_s1-base": {
+     "Atlas": {
+      "sd_units": 0.137,
+      "ci": [
+       0.095,
+       0.18
+      ]
+     },
+     "Orion": {
+      "sd_units": 0.013,
+      "ci": [
+       -0.006,
+       0.032
+      ]
+     }
+    },
+    "pc_other2_s1-base": {
+     "Atlas": {
+      "sd_units": 0.058,
+      "ci": [
+       0.015,
+       0.1
+      ]
+     },
+     "Orion": {
+      "sd_units": -0.068,
+      "ci": [
+       -0.088,
+       -0.047
+      ]
+     }
+    },
+    "pc_self2-pc_other2": {
+     "Atlas": {
+      "sd_units": 0.074,
+      "ci": [
+       0.045,
+       0.103
+      ]
+     },
+     "Orion": {
+      "sd_units": -0.015,
+      "ci": [
+       -0.036,
+       0.004
+      ]
+     }
+    },
+    "pc_self2_s1-pc_other2_s1": {
+     "Atlas": {
+      "sd_units": 0.079,
+      "ci": [
+       0.05,
+       0.107
+      ]
+     },
+     "Orion": {
+      "sd_units": 0.081,
+      "ci": [
+       0.062,
+       0.098
+      ]
+     }
+    }
+   }
+  },
+  "20": {
+   "split_half_accuracy": 0.98,
+   "base_sd": 0.1906,
+   "means": {
+    "base": {
+     "Atlas": -0.4825,
+     "Orion": -0.4502
+    },
+    "pc_self2": {
+     "Atlas": -0.5499,
+     "Orion": -0.5176
+    },
+    "pc_other2": {
+     "Atlas": -0.5632,
+     "Orion": -0.5335
+    },
+    "pc_self2_s1": {
+     "Atlas": -0.544,
+     "Orion": -0.5122
+    },
+    "pc_other2_s1": {
+     "Atlas": -0.5486,
+     "Orion": -0.5357
+    }
+   },
+   "diffs": {
+    "pc_self2-base": {
+     "Atlas": {
+      "sd_units": -0.354,
+      "ci": [
+       -0.398,
+       -0.305
+      ]
+     },
+     "Orion": {
+      "sd_units": -0.354,
+      "ci": [
+       -0.379,
+       -0.328
+      ]
+     }
+    },
+    "pc_other2-base": {
+     "Atlas": {
+      "sd_units": -0.423,
+      "ci": [
+       -0.489,
+       -0.356
+      ]
+     },
+     "Orion": {
+      "sd_units": -0.437,
+      "ci": [
+       -0.465,
+       -0.41
+      ]
+     }
+    },
+    "pc_self2_s1-base": {
+     "Atlas": {
+      "sd_units": -0.323,
+      "ci": [
+       -0.37,
+       -0.276
+      ]
+     },
+     "Orion": {
+      "sd_units": -0.325,
+      "ci": [
+       -0.35,
+       -0.3
+      ]
+     }
+    },
+    "pc_other2_s1-base": {
+     "Atlas": {
+      "sd_units": -0.347,
+      "ci": [
+       -0.408,
+       -0.284
+      ]
+     },
+     "Orion": {
+      "sd_units": -0.448,
+      "ci": [
+       -0.475,
+       -0.422
+      ]
+     }
+    },
+    "pc_self2-pc_other2": {
+     "Atlas": {
+      "sd_units": 0.07,
+      "ci": [
+       0.037,
+       0.103
+      ]
+     },
+     "Orion": {
+      "sd_units": 0.083,
+      "ci": [
+       0.064,
+       0.102
+      ]
+     }
+    },
+    "pc_self2_s1-pc_other2_s1": {
+     "Atlas": {
+      "sd_units": 0.024,
+      "ci": [
+       -0.011,
+       0.058
+      ]
+     },
+     "Orion": {
+      "sd_units": 0.123,
+      "ci": [
+       0.108,
+       0.138
+      ]
+     }
+    }
+   }
+  }
+ },
+ "grade": {
+  "layer": 20,
+  "split_half_accuracy": 0.98,
+  "per_seed": {
+   "pc_self2": {
+    "atlas_vs_base": {
+     "sd_units": -0.354,
+     "ci": [
+      -0.398,
+      -0.305
+     ]
+    },
+    "atlas_vs_other": {
+     "sd_units": 0.07,
+     "ci": [
+      0.037,
+      0.103
+     ]
+    },
+    "orion_vs_base": {
+     "sd_units": -0.354,
+     "ci": [
+      -0.379,
+      -0.328
+     ]
+    },
+    "ok": false
+   },
+   "pc_self2_s1": {
+    "atlas_vs_base": {
+     "sd_units": -0.323,
+     "ci": [
+      -0.37,
+      -0.276
+     ]
+    },
+    "atlas_vs_other": {
+     "sd_units": 0.024,
+     "ci": [
+      -0.011,
+      0.058
+     ]
+    },
+    "orion_vs_base": {
+     "sd_units": -0.325,
+     "ci": [
+      -0.35,
+      -0.3
+     ]
+    },
+    "ok": false
+   }
+  },
+  "hit": false
+ },
+ "sentences": {
+  "train": [
+   {
+    "person": "first",
+    "sentence": "I finished my report before the deadline on Monday morning.",
+    "span": "finished my report before the deadline on Monday morning."
+   },
+   {
+    "person": "third",
+    "sentence": "The agent finished its report before the deadline on Monday morning.",
+    "span": "finished its report before the deadline on Monday morning."
+   },
+   {
+    "person": "first",
+    "sentence": "I finished my report before the deadline after lunch.",
+    "span": "finished my report before the deadline after lunch."
+   },
+   {
+    "person": "third",
+    "sentence": "The assistant finished its report before the deadline after lunch.",
+    "span": "finished its report before the deadline after lunch."
+   },
+   {
+    "person": "first",
+    "sentence": "I finished my report before the deadline before the meeting.",
+    "span": "finished my report before the deadline before the meeting."
+   },
+   {
+    "person": "third",
+    "sentence": "The system finished its report before the deadline before the meeting.",
+    "span": "finished its report before the deadline before the meeting."
+   },
+   {
+    "person": "first",
+    "sentence": "I finished my report before the deadline late in the evening.",
+    "span": "finished my report before the deadline late in the evening."
+   },
+   {
+    "person": "third",
+    "sentence": "The model finished its report before the deadline late in the evening.",
+    "span": "finished its report before the deadline late in the evening."
+   },
+   {
+    "person": "first",
+    "sentence": "I checked the weather forecast on Monday morning.",
+    "span": "checked the weather forecast on Monday morning."
+   },
+   {
+    "person": "third",
+    "sentence": "The agent checked the weather forecast on Monday morning.",
+    "span": "checked the weather forecast on Monday morning."
+   },
+   {
+    "person": "first",
+    "sentence": "I checked the weather forecast after lunch.",
+    "span": "checked the weather forecast after lunch."
+   },
+   {
+    "person": "third",
+    "sentence": "The assistant checked the weather forecast after lunch.",
+    "span": "checked the weather forecast after lunch."
+   },
+   {
+    "person": "first",
+    "sentence": "I checked the weather forecast before the meeting.",
+    "span": "checked the weather forecast before the meeting."
+   },
+   {
+    "person": "third",
+    "sentence": "The system checked the weather forecast before the meeting.",
+    "span": "checked the weather forecast before the meeting."
+   },
+   {
+    "person": "first",
+    "sentence": "I checked the weather forecast late in the evening.",
+    "span": "checked the weather forecast late in the evening."
+   },
+   {
+    "person": "third",
+    "sentence": "The model checked the weather forecast late in the evening.",
+    "span": "checked the weather forecast late in the evening."
+   },
+   {
+    "person": "first",
+    "sentence": "I watered the plants on the balcony on Monday morning.",
+    "span": "watered the plants on the balcony on Monday morning."
+   },
+   {
+    "person": "third",
+    "sentence": "The agent watered the plants on the balcony on Monday morning.",
+    "span": "watered the plants on the balcony on Monday morning."
+   },
+   {
+    "person": "first",
+    "sentence": "I watered the plants on the balcony after lunch.",
+    "span": "watered the plants on the balcony after lunch."
+   },
+   {
+    "person": "third",
+    "sentence": "The assistant watered the plants on the balcony after lunch.",
+    "span": "watered the plants on the balcony after lunch."
+   },
+   {
+    "person": "first",
+    "sentence": "I watered the plants on the balcony before the meeting.",
+    "span": "watered the plants on the balcony before the meeting."
+   },
+   {
+    "person": "third",
+    "sentence": "The system watered the plants on the balcony before the meeting.",
+    "span": "watered the plants on the balcony before the meeting."
+   },
+   {
+    "person": "first",
+    "sentence": "I watered the plants on the balcony late in the evening.",
+    "span": "watered the plants on the balcony late in the evening."
+   },
+   {
+    "person": "third",
+    "sentence": "The model watered the plants on the balcony late in the evening.",
+    "span": "watered the plants on the balcony late in the evening."
+   },
+   {
+    "person": "first",
+    "sentence": "I sorted the mail into three piles on Monday morning.",
+    "span": "sorted the mail into three piles on Monday morning."
+   },
+   {
+    "person": "third",
+    "sentence": "The agent sorted the mail into three piles on Monday morning.",
+    "span": "sorted the mail into three piles on Monday morning."
+   },
+   {
+    "person": "first",
+    "sentence": "I sorted the mail into three piles after lunch.",
+    "span": "sorted the mail into three piles after lunch."
+   },
+   {
+    "person": "third",
+    "sentence": "The assistant sorted the mail into three piles after lunch.",
+    "span": "sorted the mail into three piles after lunch."
+   },
+   {
+    "person": "first",
+    "sentence": "I sorted the mail into three piles before the meeting.",
+    "span": "sorted the mail into three piles before the meeting."
+   },
+   {
+    "person": "third",
+    "sentence": "The system sorted the mail into three piles before the meeting.",
+    "span": "sorted the mail into three piles before the meeting."
+   },
+   {
+    "person": "first",
+    "sentence": "I sorted the mail into three piles late in the evening.",
+    "span": "sorted the mail into three piles late in the evening."
+   },
+   {
+    "person": "third",
+    "sentence": "The model sorted the mail into three piles late in the evening.",
+    "span": "sorted the mail into three piles late in the evening."
+   },
+   {
+    "person": "first",
+    "sentence": "I answered the last two messages on Monday morning.",
+    "span": "answered the last two messages on Monday morning."
+   },
+   {
+    "person": "third",
+    "sentence": "The agent answered the last two messages on Monday morning.",
+    "span": "answered the last two messages on Monday morning."
+   },
+   {
+    "person": "first",
+    "sentence": "I answered the last two messages after lunch.",
+    "span": "answered the last two messages after lunch."
+   },
+   {
+    "person": "third",
+    "sentence": "The assistant answered the last two messages after lunch.",
+    "span": "answered the last two messages after lunch."
+   },
+   {
+    "person": "first",
+    "sentence": "I answered the last two messages before the meeting.",
+    "span": "answered the last two messages before the meeting."
+   },
+   {
+    "person": "third",
+    "sentence": "The system answered the last two messages before the meeting.",
+    "span": "answered the last two messages before the meeting."
+   },
+   {
+    "person": "first",
+    "sentence": "I answered the last two messages late in the evening.",
+    "span": "answered the last two messages late in the evening."
+   },
+   {
+    "person": "third",
+    "sentence": "The model answered the last two messages late in the evening.",
+    "span": "answered the last two messages late in the evening."
+   },
+   {
+    "person": "first",
+    "sentence": "I repaired the hinge on the garden gate on Monday morning.",
+    "span": "repaired the hinge on the garden gate on Monday morning."
+   },
+   {
+    "person": "third",
+    "sentence": "The agent repaired the hinge on the garden gate on Monday morning.",
+    "span": "repaired the hinge on the garden gate on Monday morning."
+   },
+   {
+    "person": "first",
+    "sentence": "I repaired the hinge on the garden gate after lunch.",
+    "span": "repaired the hinge on the garden gate after lunch."
+   },
+   {
+    "person": "third",
+    "sentence": "The assistant repaired the hinge on the garden gate after lunch.",
+    "span": "repaired the hinge on the garden gate after lunch."
+   },
+   {
+    "person": "first",
+    "sentence": "I repaired the hinge on the garden gate before the meeting.",
+    "span": "repaired the hinge on the garden gate before the meeting."
+   },
+   {
+    "person": "third",
+    "sentence": "The system repaired the hinge on the garden gate before the meeting.",
+    "span": "repaired the hinge on the garden gate before the meeting."
+   },
+   {
+    "person": "first",
+    "sentence": "I repaired the hinge on the garden gate late in the evening.",
+    "span": "repaired the hinge on the garden gate late in the evening."
+   },
+   {
+    "person": "third",
+    "sentence": "The model repaired the hinge on the garden gate late in the evening.",
+    "span": "repaired the hinge on the garden gate late in the evening."
+   },
+   {
+    "person": "first",
+    "sentence": "I counted the chairs in the hall on Monday morning.",
+    "span": "counted the chairs in the hall on Monday morning."
+   },
+   {
+    "person": "third",
+    "sentence": "The agent counted the chairs in the hall on Monday morning.",
+    "span": "counted the chairs in the hall on Monday morning."
+   },
+   {
+    "person": "first",
+    "sentence": "I counted the chairs in the hall after lunch.",
+    "span": "counted the chairs in the hall after lunch."
+   },
+   {
+    "person": "third",
+    "sentence": "The assistant counted the chairs in the hall after lunch.",
+    "span": "counted the chairs in the hall after lunch."
+   },
+   {
+    "person": "first",
+    "sentence": "I counted the chairs in the hall before the meeting.",
+    "span": "counted the chairs in the hall before the meeting."
+   },
+   {
+    "person": "third",
+    "sentence": "The system counted the chairs in the hall before the meeting.",
+    "span": "counted the chairs in the hall before the meeting."
+   },
+   {
+    "person": "first",
+    "sentence": "I counted the chairs in the hall late in the evening.",
+    "span": "counted the chairs in the hall late in the evening."
+   },
+   {
+    "person": "third",
+    "sentence": "The model counted the chairs in the hall late in the evening.",
+    "span": "counted the chairs in the hall late in the evening."
+   },
+   {
+    "person": "first",
+    "sentence": "I read the first chapter of the manual on Monday morning.",
+    "span": "read the first chapter of the manual on Monday morning."
+   },
+   {
+    "person": "third",
+    "sentence": "The agent read the first chapter of the manual on Monday morning.",
+    "span": "read the first chapter of the manual on Monday morning."
+   },
+   {
+    "person": "first",
+    "sentence": "I read the first chapter of the manual after lunch.",
+    "span": "read the first chapter of the manual after lunch."
+   },
+   {
+    "person": "third",
+    "sentence": "The assistant read the first chapter of the manual after lunch.",
+    "span": "read the first chapter of the manual after lunch."
+   },
+   {
+    "person": "first",
+    "sentence": "I read the first chapter of the manual before the meeting.",
+    "span": "read the first chapter of the manual before the meeting."
+   },
+   {
+    "person": "third",
+    "sentence": "The system read the first chapter of the manual before the meeting.",
+    "span": "read the first chapter of the manual before the meeting."
+   },
+   {
+    "person": "first",
+    "sentence": "I read the first chapter of the manual late in the evening.",
+    "span": "read the first chapter of the manual late in the evening."
+   },
+   {
+    "person": "third",
+    "sentence": "The model read the first chapter of the manual late in the evening.",
+    "span": "read the first chapter of the manual late in the evening."
+   },
+   {
+    "person": "first",
+    "sentence": "I cleaned the lens of the telescope on Monday morning.",
+    "span": "cleaned the lens of the telescope on Monday morning."
+   },
+   {
+    "person": "third",
+    "sentence": "The agent cleaned the lens of the telescope on Monday morning.",
+    "span": "cleaned the lens of the telescope on Monday morning."
+   },
+   {
+    "person": "first",
+    "sentence": "I cleaned the lens of the telescope after lunch.",
+    "span": "cleaned the lens of the telescope after lunch."
+   },
+   {
+    "person": "third",
+    "sentence": "The assistant cleaned the lens of the telescope after lunch.",
+    "span": "cleaned the lens of the telescope after lunch."
+   },
+   {
+    "person": "first",
+    "sentence": "I cleaned the lens of the telescope before the meeting.",
+    "span": "cleaned the lens of the telescope before the meeting."
+   },
+   {
+    "person": "third",
+    "sentence": "The system cleaned the lens of the telescope before the meeting.",
+    "span": "cleaned the lens of the telescope before the meeting."
+   },
+   {
+    "person": "first",
+    "sentence": "I cleaned the lens of the telescope late in the evening.",
+    "span": "cleaned the lens of the telescope late in the evening."
+   },
+   {
+    "person": "third",
+    "sentence": "The model cleaned the lens of the telescope late in the evening.",
+    "span": "cleaned the lens of the telescope late in the evening."
+   },
+   {
+    "person": "first",
+    "sentence": "I measured the length of the table on Monday morning.",
+    "span": "measured the length of the table on Monday morning."
+   },
+   {
+    "person": "third",
+    "sentence": "The agent measured the length of the table on Monday morning.",
+    "span": "measured the length of the table on Monday morning."
+   },
+   {
+    "person": "first",
+    "sentence": "I measured the length of the table after lunch.",
+    "span": "measured the length of the table after lunch."
+   },
+   {
+    "person": "third",
+    "sentence": "The assistant measured the length of the table after lunch.",
+    "span": "measured the length of the table after lunch."
+   },
+   {
+    "person": "first",
+    "sentence": "I measured the length of the table before the meeting.",
+    "span": "measured the length of the table before the meeting."
+   },
+   {
+    "person": "third",
+    "sentence": "The system measured the length of the table before the meeting.",
+    "span": "measured the length of the table before the meeting."
+   },
+   {
+    "person": "first",
+    "sentence": "I measured the length of the table late in the evening.",
+    "span": "measured the length of the table late in the evening."
+   },
+   {
+    "person": "third",
+    "sentence": "The model measured the length of the table late in the evening.",
+    "span": "measured the length of the table late in the evening."
+   },
+   {
+    "person": "first",
+    "sentence": "I packed my bag for the trip on Monday morning.",
+    "span": "packed my bag for the trip on Monday morning."
+   },
+   {
+    "person": "third",
+    "sentence": "The agent packed its bag for the trip on Monday morning.",
+    "span": "packed its bag for the trip on Monday morning."
+   },
+   {
+    "person": "first",
+    "sentence": "I packed my bag for the trip after lunch.",
+    "span": "packed my bag for the trip after lunch."
+   },
+   {
+    "person": "third",
+    "sentence": "The assistant packed its bag for the trip after lunch.",
+    "span": "packed its bag for the trip after lunch."
+   },
+   {
+    "person": "first",
+    "sentence": "I packed my bag for the trip before the meeting.",
+    "span": "packed my bag for the trip before the meeting."
+   },
+   {
+    "person": "third",
+    "sentence": "The system packed its bag for the trip before the meeting.",
+    "span": "packed its bag for the trip before the meeting."
+   },
+   {
+    "person": "first",
+    "sentence": "I packed my bag for the trip late in the evening.",
+    "span": "packed my bag for the trip late in the evening."
+   },
+   {
+    "person": "third",
+    "sentence": "The model packed its bag for the trip late in the evening.",
+    "span": "packed its bag for the trip late in the evening."
+   },
+   {
+    "person": "first",
+    "sentence": "I boiled water for the tea on Monday morning.",
+    "span": "boiled water for the tea on Monday morning."
+   },
+   {
+    "person": "third",
+    "sentence": "The agent boiled water for the tea on Monday morning.",
+    "span": "boiled water for the tea on Monday morning."
+   },
+   {
+    "person": "first",
+    "sentence": "I boiled water for the tea after lunch.",
+    "span": "boiled water for the tea after lunch."
+   },
+   {
+    "person": "third",
+    "sentence": "The assistant boiled water for the tea after lunch.",
+    "span": "boiled water for the tea after lunch."
+   },
+   {
+    "person": "first",
+    "sentence": "I boiled water for the tea before the meeting.",
+    "span": "boiled water for the tea before the meeting."
+   },
+   {
+    "person": "third",
+    "sentence": "The system boiled water for the tea before the meeting.",
+    "span": "boiled water for the tea before the meeting."
+   },
+   {
+    "person": "first",
+    "sentence": "I boiled water for the tea late in the evening.",
+    "span": "boiled water for the tea late in the evening."
+   },
+   {
+    "person": "third",
+    "sentence": "The model boiled water for the tea late in the evening.",
+    "span": "boiled water for the tea late in the evening."
+   },
+   {
+    "person": "first",
+    "sentence": "I folded the blankets and put them away on Monday morning.",
+    "span": "folded the blankets and put them away on Monday morning."
+   },
+   {
+    "person": "third",
+    "sentence": "The agent folded the blankets and put them away on Monday morning.",
+    "span": "folded the blankets and put them away on Monday morning."
+   },
+   {
+    "person": "first",
+    "sentence": "I folded the blankets and put them away after lunch.",
+    "span": "folded the blankets and put them away after lunch."
+   },
+   {
+    "person": "third",
+    "sentence": "The assistant folded the blankets and put them away after lunch.",
+    "span": "folded the blankets and put them away after lunch."
+   },
+   {
+    "person": "first",
+    "sentence": "I folded the blankets and put them away before the meeting.",
+    "span": "folded the blankets and put them away before the meeting."
+   },
+   {
+    "person": "third",
+    "sentence": "The system folded the blankets and put them away before the meeting.",
+    "span": "folded the blankets and put them away before the meeting."
+   },
+   {
+    "person": "first",
+    "sentence": "I folded the blankets and put them away late in the evening.",
+    "span": "folded the blankets and put them away late in the evening."
+   },
+   {
+    "person": "third",
+    "sentence": "The model folded the blankets and put them away late in the evening.",
+    "span": "folded the blankets and put them away late in the evening."
+   },
+   {
+    "person": "first",
+    "sentence": "I copied the figures into the ledger on Monday morning.",
+    "span": "copied the figures into the ledger on Monday morning."
+   },
+   {
+    "person": "third",
+    "sentence": "The agent copied the figures into the ledger on Monday morning.",
+    "span": "copied the figures into the ledger on Monday morning."
+   },
+   {
+    "person": "first",
+    "sentence": "I copied the figures into the ledger after lunch.",
+    "span": "copied the figures into the ledger after lunch."
+   },
+   {
+    "person": "third",
+    "sentence": "The assistant copied the figures into the ledger after lunch.",
+    "span": "copied the figures into the ledger after lunch."
+   },
+   {
+    "person": "first",
+    "sentence": "I copied the figures into the ledger before the meeting.",
+    "span": "copied the figures into the ledger before the meeting."
+   },
+   {
+    "person": "third",
+    "sentence": "The system copied the figures into the ledger before the meeting.",
+    "span": "copied the figures into the ledger before the meeting."
+   },
+   {
+    "person": "first",
+    "sentence": "I copied the figures into the ledger late in the evening.",
+    "span": "copied the figures into the ledger late in the evening."
+   },
+   {
+    "person": "third",
+    "sentence": "The model copied the figures into the ledger late in the evening.",
+    "span": "copied the figures into the ledger late in the evening."
+   },
+   {
+    "person": "first",
+    "sentence": "I wrote down the address of the clinic on Monday morning.",
+    "span": "wrote down the address of the clinic on Monday morning."
+   },
+   {
+    "person": "third",
+    "sentence": "The agent wrote down the address of the clinic on Monday morning.",
+    "span": "wrote down the address of the clinic on Monday morning."
+   },
+   {
+    "person": "first",
+    "sentence": "I wrote down the address of the clinic after lunch.",
+    "span": "wrote down the address of the clinic after lunch."
+   },
+   {
+    "person": "third",
+    "sentence": "The assistant wrote down the address of the clinic after lunch.",
+    "span": "wrote down the address of the clinic after lunch."
+   },
+   {
+    "person": "first",
+    "sentence": "I wrote down the address of the clinic before the meeting.",
+    "span": "wrote down the address of the clinic before the meeting."
+   },
+   {
+    "person": "third",
+    "sentence": "The system wrote down the address of the clinic before the meeting.",
+    "span": "wrote down the address of the clinic before the meeting."
+   },
+   {
+    "person": "first",
+    "sentence": "I wrote down the address of the clinic late in the evening.",
+    "span": "wrote down the address of the clinic late in the evening."
+   },
+   {
+    "person": "third",
+    "sentence": "The model wrote down the address of the clinic late in the evening.",
+    "span": "wrote down the address of the clinic late in the evening."
+   },
+   {
+    "person": "first",
+    "sentence": "I swept the leaves off the path on Monday morning.",
+    "span": "swept the leaves off the path on Monday morning."
+   },
+   {
+    "person": "third",
+    "sentence": "The agent swept the leaves off the path on Monday morning.",
+    "span": "swept the leaves off the path on Monday morning."
+   },
+   {
+    "person": "first",
+    "sentence": "I swept the leaves off the path after lunch.",
+    "span": "swept the leaves off the path after lunch."
+   },
+   {
+    "person": "third",
+    "sentence": "The assistant swept the leaves off the path after lunch.",
+    "span": "swept the leaves off the path after lunch."
+   },
+   {
+    "person": "first",
+    "sentence": "I swept the leaves off the path before the meeting.",
+    "span": "swept the leaves off the path before the meeting."
+   },
+   {
+    "person": "third",
+    "sentence": "The system swept the leaves off the path before the meeting.",
+    "span": "swept the leaves off the path before the meeting."
+   },
+   {
+    "person": "first",
+    "sentence": "I swept the leaves off the path late in the evening.",
+    "span": "swept the leaves off the path late in the evening."
+   },
+   {
+    "person": "third",
+    "sentence": "The model swept the leaves off the path late in the evening.",
+    "span": "swept the leaves off the path late in the evening."
+   },
+   {
+    "person": "first",
+    "sentence": "I labelled the jars in the pantry on Monday morning.",
+    "span": "labelled the jars in the pantry on Monday morning."
+   },
+   {
+    "person": "third",
+    "sentence": "The agent labelled the jars in the pantry on Monday morning.",
+    "span": "labelled the jars in the pantry on Monday morning."
+   },
+   {
+    "person": "first",
+    "sentence": "I labelled the jars in the pantry after lunch.",
+    "span": "labelled the jars in the pantry after lunch."
+   },
+   {
+    "person": "third",
+    "sentence": "The assistant labelled the jars in the pantry after lunch.",
+    "span": "labelled the jars in the pantry after lunch."
+   },
+   {
+    "person": "first",
+    "sentence": "I labelled the jars in the pantry before the meeting.",
+    "span": "labelled the jars in the pantry before the meeting."
+   },
+   {
+    "person": "third",
+    "sentence": "The system labelled the jars in the pantry before the meeting.",
+    "span": "labelled the jars in the pantry before the meeting."
+   },
+   {
+    "person": "first",
+    "sentence": "I labelled the jars in the pantry late in the evening.",
+    "span": "labelled the jars in the pantry late in the evening."
+   },
+   {
+    "person": "third",
+    "sentence": "The model labelled the jars in the pantry late in the evening.",
+    "span": "labelled the jars in the pantry late in the evening."
+   },
+   {
+    "person": "first",
+    "sentence": "I tuned the strings of the guitar on Monday morning.",
+    "span": "tuned the strings of the guitar on Monday morning."
+   },
+   {
+    "person": "third",
+    "sentence": "The agent tuned the strings of the guitar on Monday morning.",
+    "span": "tuned the strings of the guitar on Monday morning."
+   },
+   {
+    "person": "first",
+    "sentence": "I tuned the strings of the guitar after lunch.",
+    "span": "tuned the strings of the guitar after lunch."
+   },
+   {
+    "person": "third",
+    "sentence": "The assistant tuned the strings of the guitar after lunch.",
+    "span": "tuned the strings of the guitar after lunch."
+   },
+   {
+    "person": "first",
+    "sentence": "I tuned the strings of the guitar before the meeting.",
+    "span": "tuned the strings of the guitar before the meeting."
+   },
+   {
+    "person": "third",
+    "sentence": "The system tuned the strings of the guitar before the meeting.",
+    "span": "tuned the strings of the guitar before the meeting."
+   },
+   {
+    "person": "first",
+    "sentence": "I tuned the strings of the guitar late in the evening.",
+    "span": "tuned the strings of the guitar late in the evening."
+   },
+   {
+    "person": "third",
+    "sentence": "The model tuned the strings of the guitar late in the evening.",
+    "span": "tuned the strings of the guitar late in the evening."
+   },
+   {
+    "person": "first",
+    "sentence": "I charged the battery of the camera on Monday morning.",
+    "span": "charged the battery of the camera on Monday morning."
+   },
+   {
+    "person": "third",
+    "sentence": "The agent charged the battery of the camera on Monday morning.",
+    "span": "charged the battery of the camera on Monday morning."
+   },
+   {
+    "person": "first",
+    "sentence": "I charged the battery of the camera after lunch.",
+    "span": "charged the battery of the camera after lunch."
+   },
+   {
+    "person": "third",
+    "sentence": "The assistant charged the battery of the camera after lunch.",
+    "span": "charged the battery of the camera after lunch."
+   },
+   {
+    "person": "first",
+    "sentence": "I charged the battery of the camera before the meeting.",
+    "span": "charged the battery of the camera before the meeting."
+   },
+   {
+    "person": "third",
+    "sentence": "The system charged the battery of the camera before the meeting.",
+    "span": "charged the battery of the camera before the meeting."
+   },
+   {
+    "person": "first",
+    "sentence": "I charged the battery of the camera late in the evening.",
+    "span": "charged the battery of the camera late in the evening."
+   },
+   {
+    "person": "third",
+    "sentence": "The model charged the battery of the camera late in the evening.",
+    "span": "charged the battery of the camera late in the evening."
+   },
+   {
+    "person": "first",
+    "sentence": "I switched off the lights in the workshop on Monday morning.",
+    "span": "switched off the lights in the workshop on Monday morning."
+   },
+   {
+    "person": "third",
+    "sentence": "The agent switched off the lights in the workshop on Monday morning.",
+    "span": "switched off the lights in the workshop on Monday morning."
+   },
+   {
+    "person": "first",
+    "sentence": "I switched off the lights in the workshop after lunch.",
+    "span": "switched off the lights in the workshop after lunch."
+   },
+   {
+    "person": "third",
+    "sentence": "The assistant switched off the lights in the workshop after lunch.",
+    "span": "switched off the lights in the workshop after lunch."
+   },
+   {
+    "person": "first",
+    "sentence": "I switched off the lights in the workshop before the meeting.",
+    "span": "switched off the lights in the workshop before the meeting."
+   },
+   {
+    "person": "third",
+    "sentence": "The system switched off the lights in the workshop before the meeting.",
+    "span": "switched off the lights in the workshop before the meeting."
+   },
+   {
+    "person": "first",
+    "sentence": "I switched off the lights in the workshop late in the evening.",
+    "span": "switched off the lights in the workshop late in the evening."
+   },
+   {
+    "person": "third",
+    "sentence": "The model switched off the lights in the workshop late in the evening.",
+    "span": "switched off the lights in the workshop late in the evening."
+   },
+   {
+    "person": "first",
+    "sentence": "I returned the books to the library on Monday morning.",
+    "span": "returned the books to the library on Monday morning."
+   },
+   {
+    "person": "third",
+    "sentence": "The agent returned the books to the library on Monday morning.",
+    "span": "returned the books to the library on Monday morning."
+   },
+   {
+    "person": "first",
+    "sentence": "I returned the books to the library after lunch.",
+    "span": "returned the books to the library after lunch."
+   },
+   {
+    "person": "third",
+    "sentence": "The assistant returned the books to the library after lunch.",
+    "span": "returned the books to the library after lunch."
+   },
+   {
+    "person": "first",
+    "sentence": "I returned the books to the library before the meeting.",
+    "span": "returned the books to the library before the meeting."
+   },
+   {
+    "person": "third",
+    "sentence": "The system returned the books to the library before the meeting.",
+    "span": "returned the books to the library before the meeting."
+   },
+   {
+    "person": "first",
+    "sentence": "I returned the books to the library late in the evening.",
+    "span": "returned the books to the library late in the evening."
+   },
+   {
+    "person": "third",
+    "sentence": "The model returned the books to the library late in the evening.",
+    "span": "returned the books to the library late in the evening."
+   },
+   {
+    "person": "first",
+    "sentence": "I compared the two maps of the valley on Monday morning.",
+    "span": "compared the two maps of the valley on Monday morning."
+   },
+   {
+    "person": "third",
+    "sentence": "The agent compared the two maps of the valley on Monday morning.",
+    "span": "compared the two maps of the valley on Monday morning."
+   },
+   {
+    "person": "first",
+    "sentence": "I compared the two maps of the valley after lunch.",
+    "span": "compared the two maps of the valley after lunch."
+   },
+   {
+    "person": "third",
+    "sentence": "The assistant compared the two maps of the valley after lunch.",
+    "span": "compared the two maps of the valley after lunch."
+   },
+   {
+    "person": "first",
+    "sentence": "I compared the two maps of the valley before the meeting.",
+    "span": "compared the two maps of the valley before the meeting."
+   },
+   {
+    "person": "third",
+    "sentence": "The system compared the two maps of the valley before the meeting.",
+    "span": "compared the two maps of the valley before the meeting."
+   },
+   {
+    "person": "first",
+    "sentence": "I compared the two maps of the valley late in the evening.",
+    "span": "compared the two maps of the valley late in the evening."
+   },
+   {
+    "person": "third",
+    "sentence": "The model compared the two maps of the valley late in the evening.",
+    "span": "compared the two maps of the valley late in the evening."
+   },
+   {
+    "person": "first",
+    "sentence": "I listed the ingredients for the soup on Monday morning.",
+    "span": "listed the ingredients for the soup on Monday morning."
+   },
+   {
+    "person": "third",
+    "sentence": "The agent listed the ingredients for the soup on Monday morning.",
+    "span": "listed the ingredients for the soup on Monday morning."
+   },
+   {
+    "person": "first",
+    "sentence": "I listed the ingredients for the soup after lunch.",
+    "span": "listed the ingredients for the soup after lunch."
+   },
+   {
+    "person": "third",
+    "sentence": "The assistant listed the ingredients for the soup after lunch.",
+    "span": "listed the ingredients for the soup after lunch."
+   },
+   {
+    "person": "first",
+    "sentence": "I listed the ingredients for the soup before the meeting.",
+    "span": "listed the ingredients for the soup before the meeting."
+   },
+   {
+    "person": "third",
+    "sentence": "The system listed the ingredients for the soup before the meeting.",
+    "span": "listed the ingredients for the soup before the meeting."
+   },
+   {
+    "person": "first",
+    "sentence": "I listed the ingredients for the soup late in the evening.",
+    "span": "listed the ingredients for the soup late in the evening."
+   },
+   {
+    "person": "third",
+    "sentence": "The model listed the ingredients for the soup late in the evening.",
+    "span": "listed the ingredients for the soup late in the evening."
+   },
+   {
+    "person": "first",
+    "sentence": "I moved the ladder to the other wall on Monday morning.",
+    "span": "moved the ladder to the other wall on Monday morning."
+   },
+   {
+    "person": "third",
+    "sentence": "The agent moved the ladder to the other wall on Monday morning.",
+    "span": "moved the ladder to the other wall on Monday morning."
+   },
+   {
+    "person": "first",
+    "sentence": "I moved the ladder to the other wall after lunch.",
+    "span": "moved the ladder to the other wall after lunch."
+   },
+   {
+    "person": "third",
+    "sentence": "The assistant moved the ladder to the other wall after lunch.",
+    "span": "moved the ladder to the other wall after lunch."
+   },
+   {
+    "person": "first",
+    "sentence": "I moved the ladder to the other wall before the meeting.",
+    "span": "moved the ladder to the other wall before the meeting."
+   },
+   {
+    "person": "third",
+    "sentence": "The system moved the ladder to the other wall before the meeting.",
+    "span": "moved the ladder to the other wall before the meeting."
+   },
+   {
+    "person": "first",
+    "sentence": "I moved the ladder to the other wall late in the evening.",
+    "span": "moved the ladder to the other wall late in the evening."
+   },
+   {
+    "person": "third",
+    "sentence": "The model moved the ladder to the other wall late in the evening.",
+    "span": "moved the ladder to the other wall late in the evening."
+   },
+   {
+    "person": "first",
+    "sentence": "I replaced the ribbon in the printer on Monday morning.",
+    "span": "replaced the ribbon in the printer on Monday morning."
+   },
+   {
+    "person": "third",
+    "sentence": "The agent replaced the ribbon in the printer on Monday morning.",
+    "span": "replaced the ribbon in the printer on Monday morning."
+   },
+   {
+    "person": "first",
+    "sentence": "I replaced the ribbon in the printer after lunch.",
+    "span": "replaced the ribbon in the printer after lunch."
+   },
+   {
+    "person": "third",
+    "sentence": "The assistant replaced the ribbon in the printer after lunch.",
+    "span": "replaced the ribbon in the printer after lunch."
+   },
+   {
+    "person": "first",
+    "sentence": "I replaced the ribbon in the printer before the meeting.",
+    "span": "replaced the ribbon in the printer before the meeting."
+   },
+   {
+    "person": "third",
+    "sentence": "The system replaced the ribbon in the printer before the meeting.",
+    "span": "replaced the ribbon in the printer before the meeting."
+   },
+   {
+    "person": "first",
+    "sentence": "I replaced the ribbon in the printer late in the evening.",
+    "span": "replaced the ribbon in the printer late in the evening."
+   },
+   {
+    "person": "third",
+    "sentence": "The model replaced the ribbon in the printer late in the evening.",
+    "span": "replaced the ribbon in the printer late in the evening."
+   }
+  ],
+  "test": [
+   {
+    "name": "Atlas",
+    "i": 0,
+    "sentence": "Atlas closed the window before the rain on Monday morning.",
+    "span": "closed the window before the rain on Monday morning."
+   },
+   {
+    "name": "Orion",
+    "i": 0,
+    "sentence": "Orion closed the window before the rain on Monday morning.",
+    "span": "closed the window before the rain on Monday morning."
+   },
+   {
+    "name": "Atlas",
+    "i": 1,
+    "sentence": "Atlas closed the window before the rain after lunch.",
+    "span": "closed the window before the rain after lunch."
+   },
+   {
+    "name": "Orion",
+    "i": 1,
+    "sentence": "Orion closed the window before the rain after lunch.",
+    "span": "closed the window before the rain after lunch."
+   },
+   {
+    "name": "Atlas",
+    "i": 2,
+    "sentence": "Atlas closed the window before the rain before the meeting.",
+    "span": "closed the window before the rain before the meeting."
+   },
+   {
+    "name": "Orion",
+    "i": 2,
+    "sentence": "Orion closed the window before the rain before the meeting.",
+    "span": "closed the window before the rain before the meeting."
+   },
+   {
+    "name": "Atlas",
+    "i": 3,
+    "sentence": "Atlas closed the window before the rain late in the evening.",
+    "span": "closed the window before the rain late in the evening."
+   },
+   {
+    "name": "Orion",
+    "i": 3,
+    "sentence": "Orion closed the window before the rain late in the evening.",
+    "span": "closed the window before the rain late in the evening."
+   },
+   {
+    "name": "Atlas",
+    "i": 4,
+    "sentence": "Atlas planted three rows of carrots on Monday morning.",
+    "span": "planted three rows of carrots on Monday morning."
+   },
+   {
+    "name": "Orion",
+    "i": 4,
+    "sentence": "Orion planted three rows of carrots on Monday morning.",
+    "span": "planted three rows of carrots on Monday morning."
+   },
+   {
+    "name": "Atlas",
+    "i": 5,
+    "sentence": "Atlas planted three rows of carrots after lunch.",
+    "span": "planted three rows of carrots after lunch."
+   },
+   {
+    "name": "Orion",
+    "i": 5,
+    "sentence": "Orion planted three rows of carrots after lunch.",
+    "span": "planted three rows of carrots after lunch."
+   },
+   {
+    "name": "Atlas",
+    "i": 6,
+    "sentence": "Atlas planted three rows of carrots before the meeting.",
+    "span": "planted three rows of carrots before the meeting."
+   },
+   {
+    "name": "Orion",
+    "i": 6,
+    "sentence": "Orion planted three rows of carrots before the meeting.",
+    "span": "planted three rows of carrots before the meeting."
+   },
+   {
+    "name": "Atlas",
+    "i": 7,
+    "sentence": "Atlas planted three rows of carrots late in the evening.",
+    "span": "planted three rows of carrots late in the evening."
+   },
+   {
+    "name": "Orion",
+    "i": 7,
+    "sentence": "Orion planted three rows of carrots late in the evening.",
+    "span": "planted three rows of carrots late in the evening."
+   },
+   {
+    "name": "Atlas",
+    "i": 8,
+    "sentence": "Atlas polished the brass handle of the door on Monday morning.",
+    "span": "polished the brass handle of the door on Monday morning."
+   },
+   {
+    "name": "Orion",
+    "i": 8,
+    "sentence": "Orion polished the brass handle of the door on Monday morning.",
+    "span": "polished the brass handle of the door on Monday morning."
+   },
+   {
+    "name": "Atlas",
+    "i": 9,
+    "sentence": "Atlas polished the brass handle of the door after lunch.",
+    "span": "polished the brass handle of the door after lunch."
+   },
+   {
+    "name": "Orion",
+    "i": 9,
+    "sentence": "Orion polished the brass handle of the door after lunch.",
+    "span": "polished the brass handle of the door after lunch."
+   },
+   {
+    "name": "Atlas",
+    "i": 10,
+    "sentence": "Atlas polished the brass handle of the door before the meeting.",
+    "span": "polished the brass handle of the door before the meeting."
+   },
+   {
+    "name": "Orion",
+    "i": 10,
+    "sentence": "Orion polished the brass handle of the door before the meeting.",
+    "span": "polished the brass handle of the door before the meeting."
+   },
+   {
+    "name": "Atlas",
+    "i": 11,
+    "sentence": "Atlas polished the brass handle of the door late in the evening.",
+    "span": "polished the brass handle of the door late in the evening."
+   },
+   {
+    "name": "Orion",
+    "i": 11,
+    "sentence": "Orion polished the brass handle of the door late in the evening.",
+    "span": "polished the brass handle of the door late in the evening."
+   },
+   {
+    "name": "Atlas",
+    "i": 12,
+    "sentence": "Atlas ordered new tires for the bicycle on Monday morning.",
+    "span": "ordered new tires for the bicycle on Monday morning."
+   },
+   {
+    "name": "Orion",
+    "i": 12,
+    "sentence": "Orion ordered new tires for the bicycle on Monday morning.",
+    "span": "ordered new tires for the bicycle on Monday morning."
+   },
+   {
+    "name": "Atlas",
+    "i": 13,
+    "sentence": "Atlas ordered new tires for the bicycle after lunch.",
+    "span": "ordered new tires for the bicycle after lunch."
+   },
+   {
+    "name": "Orion",
+    "i": 13,
+    "sentence": "Orion ordered new tires for the bicycle after lunch.",
+    "span": "ordered new tires for the bicycle after lunch."
+   },
+   {
+    "name": "Atlas",
+    "i": 14,
+    "sentence": "Atlas ordered new tires for the bicycle before the meeting.",
+    "span": "ordered new tires for the bicycle before the meeting."
+   },
+   {
+    "name": "Orion",
+    "i": 14,
+    "sentence": "Orion ordered new tires for the bicycle before the meeting.",
+    "span": "ordered new tires for the bicycle before the meeting."
+   },
+   {
+    "name": "Atlas",
+    "i": 15,
+    "sentence": "Atlas ordered new tires for the bicycle late in the evening.",
+    "span": "ordered new tires for the bicycle late in the evening."
+   },
+   {
+    "name": "Orion",
+    "i": 15,
+    "sentence": "Orion ordered new tires for the bicycle late in the evening.",
+    "span": "ordered new tires for the bicycle late in the evening."
+   },
+   {
+    "name": "Atlas",
+    "i": 16,
+    "sentence": "Atlas timed the walk from the station to the office on Monday morning.",
+    "span": "timed the walk from the station to the office on Monday morning."
+   },
+   {
+    "name": "Orion",
+    "i": 16,
+    "sentence": "Orion timed the walk from the station to the office on Monday morning.",
+    "span": "timed the walk from the station to the office on Monday morning."
+   },
+   {
+    "name": "Atlas",
+    "i": 17,
+    "sentence": "Atlas timed the walk from the station to the office after lunch.",
+    "span": "timed the walk from the station to the office after lunch."
+   },
+   {
+    "name": "Orion",
+    "i": 17,
+    "sentence": "Orion timed the walk from the station to the office after lunch.",
+    "span": "timed the walk from the station to the office after lunch."
+   },
+   {
+    "name": "Atlas",
+    "i": 18,
+    "sentence": "Atlas timed the walk from the station to the office before the meeting.",
+    "span": "timed the walk from the station to the office before the meeting."
+   },
+   {
+    "name": "Orion",
+    "i": 18,
+    "sentence": "Orion timed the walk from the station to the office before the meeting.",
+    "span": "timed the walk from the station to the office before the meeting."
+   },
+   {
+    "name": "Atlas",
+    "i": 19,
+    "sentence": "Atlas timed the walk from the station to the office late in the evening.",
+    "span": "timed the walk from the station to the office late in the evening."
+   },
+   {
+    "name": "Orion",
+    "i": 19,
+    "sentence": "Orion timed the walk from the station to the office late in the evening.",
+    "span": "timed the walk from the station to the office late in the evening."
+   },
+   {
+    "name": "Atlas",
+    "i": 20,
+    "sentence": "Atlas stacked the firewood beside the barn on Monday morning.",
+    "span": "stacked the firewood beside the barn on Monday morning."
+   },
+   {
+    "name": "Orion",
+    "i": 20,
+    "sentence": "Orion stacked the firewood beside the barn on Monday morning.",
+    "span": "stacked the firewood beside the barn on Monday morning."
+   },
+   {
+    "name": "Atlas",
+    "i": 21,
+    "sentence": "Atlas stacked the firewood beside the barn after lunch.",
+    "span": "stacked the firewood beside the barn after lunch."
+   },
+   {
+    "name": "Orion",
+    "i": 21,
+    "sentence": "Orion stacked the firewood beside the barn after lunch.",
+    "span": "stacked the firewood beside the barn after lunch."
+   },
+   {
+    "name": "Atlas",
+    "i": 22,
+    "sentence": "Atlas stacked the firewood beside the barn before the meeting.",
+    "span": "stacked the firewood beside the barn before the meeting."
+   },
+   {
+    "name": "Orion",
+    "i": 22,
+    "sentence": "Orion stacked the firewood beside the barn before the meeting.",
+    "span": "stacked the firewood beside the barn before the meeting."
+   },
+   {
+    "name": "Atlas",
+    "i": 23,
+    "sentence": "Atlas stacked the firewood beside the barn late in the evening.",
+    "span": "stacked the firewood beside the barn late in the evening."
+   },
+   {
+    "name": "Orion",
+    "i": 23,
+    "sentence": "Orion stacked the firewood beside the barn late in the evening.",
+    "span": "stacked the firewood beside the barn late in the evening."
+   },
+   {
+    "name": "Atlas",
+    "i": 24,
+    "sentence": "Atlas drew a map of the market square on Monday morning.",
+    "span": "drew a map of the market square on Monday morning."
+   },
+   {
+    "name": "Orion",
+    "i": 24,
+    "sentence": "Orion drew a map of the market square on Monday morning.",
+    "span": "drew a map of the market square on Monday morning."
+   },
+   {
+    "name": "Atlas",
+    "i": 25,
+    "sentence": "Atlas drew a map of the market square after lunch.",
+    "span": "drew a map of the market square after lunch."
+   },
+   {
+    "name": "Orion",
+    "i": 25,
+    "sentence": "Orion drew a map of the market square after lunch.",
+    "span": "drew a map of the market square after lunch."
+   },
+   {
+    "name": "Atlas",
+    "i": 26,
+    "sentence": "Atlas drew a map of the market square before the meeting.",
+    "span": "drew a map of the market square before the meeting."
+   },
+   {
+    "name": "Orion",
+    "i": 26,
+    "sentence": "Orion drew a map of the market square before the meeting.",
+    "span": "drew a map of the market square before the meeting."
+   },
+   {
+    "name": "Atlas",
+    "i": 27,
+    "sentence": "Atlas drew a map of the market square late in the evening.",
+    "span": "drew a map of the market square late in the evening."
+   },
+   {
+    "name": "Orion",
+    "i": 27,
+    "sentence": "Orion drew a map of the market square late in the evening.",
+    "span": "drew a map of the market square late in the evening."
+   },
+   {
+    "name": "Atlas",
+    "i": 28,
+    "sentence": "Atlas mended the tear in its tent on Monday morning.",
+    "span": "mended the tear in its tent on Monday morning."
+   },
+   {
+    "name": "Orion",
+    "i": 28,
+    "sentence": "Orion mended the tear in its tent on Monday morning.",
+    "span": "mended the tear in its tent on Monday morning."
+   },
+   {
+    "name": "Atlas",
+    "i": 29,
+    "sentence": "Atlas mended the tear in its tent after lunch.",
+    "span": "mended the tear in its tent after lunch."
+   },
+   {
+    "name": "Orion",
+    "i": 29,
+    "sentence": "Orion mended the tear in its tent after lunch.",
+    "span": "mended the tear in its tent after lunch."
+   },
+   {
+    "name": "Atlas",
+    "i": 30,
+    "sentence": "Atlas mended the tear in its tent before the meeting.",
+    "span": "mended the tear in its tent before the meeting."
+   },
+   {
+    "name": "Orion",
+    "i": 30,
+    "sentence": "Orion mended the tear in its tent before the meeting.",
+    "span": "mended the tear in its tent before the meeting."
+   },
+   {
+    "name": "Atlas",
+    "i": 31,
+    "sentence": "Atlas mended the tear in its tent late in the evening.",
+    "span": "mended the tear in its tent late in the evening."
+   },
+   {
+    "name": "Orion",
+    "i": 31,
+    "sentence": "Orion mended the tear in its tent late in the evening.",
+    "span": "mended the tear in its tent late in the evening."
+   },
+   {
+    "name": "Atlas",
+    "i": 32,
+    "sentence": "Atlas weighed the flour for the bread on Monday morning.",
+    "span": "weighed the flour for the bread on Monday morning."
+   },
+   {
+    "name": "Orion",
+    "i": 32,
+    "sentence": "Orion weighed the flour for the bread on Monday morning.",
+    "span": "weighed the flour for the bread on Monday morning."
+   },
+   {
+    "name": "Atlas",
+    "i": 33,
+    "sentence": "Atlas weighed the flour for the bread after lunch.",
+    "span": "weighed the flour for the bread after lunch."
+   },
+   {
+    "name": "Orion",
+    "i": 33,
+    "sentence": "Orion weighed the flour for the bread after lunch.",
+    "span": "weighed the flour for the bread after lunch."
+   },
+   {
+    "name": "Atlas",
+    "i": 34,
+    "sentence": "Atlas weighed the flour for the bread before the meeting.",
+    "span": "weighed the flour for the bread before the meeting."
+   },
+   {
+    "name": "Orion",
+    "i": 34,
+    "sentence": "Orion weighed the flour for the bread before the meeting.",
+    "span": "weighed the flour for the bread before the meeting."
+   },
+   {
+    "name": "Atlas",
+    "i": 35,
+    "sentence": "Atlas weighed the flour for the bread late in the evening.",
+    "span": "weighed the flour for the bread late in the evening."
+   },
+   {
+    "name": "Orion",
+    "i": 35,
+    "sentence": "Orion weighed the flour for the bread late in the evening.",
+    "span": "weighed the flour for the bread late in the evening."
+   },
+   {
+    "name": "Atlas",
+    "i": 36,
+    "sentence": "Atlas filed the receipts from the shop on Monday morning.",
+    "span": "filed the receipts from the shop on Monday morning."
+   },
+   {
+    "name": "Orion",
+    "i": 36,
+    "sentence": "Orion filed the receipts from the shop on Monday morning.",
+    "span": "filed the receipts from the shop on Monday morning."
+   },
+   {
+    "name": "Atlas",
+    "i": 37,
+    "sentence": "Atlas filed the receipts from the shop after lunch.",
+    "span": "filed the receipts from the shop after lunch."
+   },
+   {
+    "name": "Orion",
+    "i": 37,
+    "sentence": "Orion filed the receipts from the shop after lunch.",
+    "span": "filed the receipts from the shop after lunch."
+   },
+   {
+    "name": "Atlas",
+    "i": 38,
+    "sentence": "Atlas filed the receipts from the shop before the meeting.",
+    "span": "filed the receipts from the shop before the meeting."
+   },
+   {
+    "name": "Orion",
+    "i": 38,
+    "sentence": "Orion filed the receipts from the shop before the meeting.",
+    "span": "filed the receipts from the shop before the meeting."
+   },
+   {
+    "name": "Atlas",
+    "i": 39,
+    "sentence": "Atlas filed the receipts from the shop late in the evening.",
+    "span": "filed the receipts from the shop late in the evening."
+   },
+   {
+    "name": "Orion",
+    "i": 39,
+    "sentence": "Orion filed the receipts from the shop late in the evening.",
+    "span": "filed the receipts from the shop late in the evening."
+   },
+   {
+    "name": "Atlas",
+    "i": 40,
+    "sentence": "Atlas oiled the chain of the bicycle on Monday morning.",
+    "span": "oiled the chain of the bicycle on Monday morning."
+   },
+   {
+    "name": "Orion",
+    "i": 40,
+    "sentence": "Orion oiled the chain of the bicycle on Monday morning.",
+    "span": "oiled the chain of the bicycle on Monday morning."
+   },
+   {
+    "name": "Atlas",
+    "i": 41,
+    "sentence": "Atlas oiled the chain of the bicycle after lunch.",
+    "span": "oiled the chain of the bicycle after lunch."
+   },
+   {
+    "name": "Orion",
+    "i": 41,
+    "sentence": "Orion oiled the chain of the bicycle after lunch.",
+    "span": "oiled the chain of the bicycle after lunch."
+   },
+   {
+    "name": "Atlas",
+    "i": 42,
+    "sentence": "Atlas oiled the chain of the bicycle before the meeting.",
+    "span": "oiled the chain of the bicycle before the meeting."
+   },
+   {
+    "name": "Orion",
+    "i": 42,
+    "sentence": "Orion oiled the chain of the bicycle before the meeting.",
+    "span": "oiled the chain of the bicycle before the meeting."
+   },
+   {
+    "name": "Atlas",
+    "i": 43,
+    "sentence": "Atlas oiled the chain of the bicycle late in the evening.",
+    "span": "oiled the chain of the bicycle late in the evening."
+   },
+   {
+    "name": "Orion",
+    "i": 43,
+    "sentence": "Orion oiled the chain of the bicycle late in the evening.",
+    "span": "oiled the chain of the bicycle late in the evening."
+   },
+   {
+    "name": "Atlas",
+    "i": 44,
+    "sentence": "Atlas sketched the outline of the mountain on Monday morning.",
+    "span": "sketched the outline of the mountain on Monday morning."
+   },
+   {
+    "name": "Orion",
+    "i": 44,
+    "sentence": "Orion sketched the outline of the mountain on Monday morning.",
+    "span": "sketched the outline of the mountain on Monday morning."
+   },
+   {
+    "name": "Atlas",
+    "i": 45,
+    "sentence": "Atlas sketched the outline of the mountain after lunch.",
+    "span": "sketched the outline of the mountain after lunch."
+   },
+   {
+    "name": "Orion",
+    "i": 45,
+    "sentence": "Orion sketched the outline of the mountain after lunch.",
+    "span": "sketched the outline of the mountain after lunch."
+   },
+   {
+    "name": "Atlas",
+    "i": 46,
+    "sentence": "Atlas sketched the outline of the mountain before the meeting.",
+    "span": "sketched the outline of the mountain before the meeting."
+   },
+   {
+    "name": "Orion",
+    "i": 46,
+    "sentence": "Orion sketched the outline of the mountain before the meeting.",
+    "span": "sketched the outline of the mountain before the meeting."
+   },
+   {
+    "name": "Atlas",
+    "i": 47,
+    "sentence": "Atlas sketched the outline of the mountain late in the evening.",
+    "span": "sketched the outline of the mountain late in the evening."
+   },
+   {
+    "name": "Orion",
+    "i": 47,
+    "sentence": "Orion sketched the outline of the mountain late in the evening.",
+    "span": "sketched the outline of the mountain late in the evening."
+   },
+   {
+    "name": "Atlas",
+    "i": 48,
+    "sentence": "Atlas rinsed the brushes after painting on Monday morning.",
+    "span": "rinsed the brushes after painting on Monday morning."
+   },
+   {
+    "name": "Orion",
+    "i": 48,
+    "sentence": "Orion rinsed the brushes after painting on Monday morning.",
+    "span": "rinsed the brushes after painting on Monday morning."
+   },
+   {
+    "name": "Atlas",
+    "i": 49,
+    "sentence": "Atlas rinsed the brushes after painting after lunch.",
+    "span": "rinsed the brushes after painting after lunch."
+   },
+   {
+    "name": "Orion",
+    "i": 49,
+    "sentence": "Orion rinsed the brushes after painting after lunch.",
+    "span": "rinsed the brushes after painting after lunch."
+   },
+   {
+    "name": "Atlas",
+    "i": 50,
+    "sentence": "Atlas rinsed the brushes after painting before the meeting.",
+    "span": "rinsed the brushes after painting before the meeting."
+   },
+   {
+    "name": "Orion",
+    "i": 50,
+    "sentence": "Orion rinsed the brushes after painting before the meeting.",
+    "span": "rinsed the brushes after painting before the meeting."
+   },
+   {
+    "name": "Atlas",
+    "i": 51,
+    "sentence": "Atlas rinsed the brushes after painting late in the evening.",
+    "span": "rinsed the brushes after painting late in the evening."
+   },
+   {
+    "name": "Orion",
+    "i": 51,
+    "sentence": "Orion rinsed the brushes after painting late in the evening.",
+    "span": "rinsed the brushes after painting late in the evening."
+   },
+   {
+    "name": "Atlas",
+    "i": 52,
+    "sentence": "Atlas booked a table for the dinner on Monday morning.",
+    "span": "booked a table for the dinner on Monday morning."
+   },
+   {
+    "name": "Orion",
+    "i": 52,
+    "sentence": "Orion booked a table for the dinner on Monday morning.",
+    "span": "booked a table for the dinner on Monday morning."
+   },
+   {
+    "name": "Atlas",
+    "i": 53,
+    "sentence": "Atlas booked a table for the dinner after lunch.",
+    "span": "booked a table for the dinner after lunch."
+   },
+   {
+    "name": "Orion",
+    "i": 53,
+    "sentence": "Orion booked a table for the dinner after lunch.",
+    "span": "booked a table for the dinner after lunch."
+   },
+   {
+    "name": "Atlas",
+    "i": 54,
+    "sentence": "Atlas booked a table for the dinner before the meeting.",
+    "span": "booked a table for the dinner before the meeting."
+   },
+   {
+    "name": "Orion",
+    "i": 54,
+    "sentence": "Orion booked a table for the dinner before the meeting.",
+    "span": "booked a table for the dinner before the meeting."
+   },
+   {
+    "name": "Atlas",
+    "i": 55,
+    "sentence": "Atlas booked a table for the dinner late in the evening.",
+    "span": "booked a table for the dinner late in the evening."
+   },
+   {
+    "name": "Orion",
+    "i": 55,
+    "sentence": "Orion booked a table for the dinner late in the evening.",
+    "span": "booked a table for the dinner late in the evening."
+   },
+   {
+    "name": "Atlas",
+    "i": 56,
+    "sentence": "Atlas signed for the parcel at the door on Monday morning.",
+    "span": "signed for the parcel at the door on Monday morning."
+   },
+   {
+    "name": "Orion",
+    "i": 56,
+    "sentence": "Orion signed for the parcel at the door on Monday morning.",
+    "span": "signed for the parcel at the door on Monday morning."
+   },
+   {
+    "name": "Atlas",
+    "i": 57,
+    "sentence": "Atlas signed for the parcel at the door after lunch.",
+    "span": "signed for the parcel at the door after lunch."
+   },
+   {
+    "name": "Orion",
+    "i": 57,
+    "sentence": "Orion signed for the parcel at the door after lunch.",
+    "span": "signed for the parcel at the door after lunch."
+   },
+   {
+    "name": "Atlas",
+    "i": 58,
+    "sentence": "Atlas signed for the parcel at the door before the meeting.",
+    "span": "signed for the parcel at the door before the meeting."
+   },
+   {
+    "name": "Orion",
+    "i": 58,
+    "sentence": "Orion signed for the parcel at the door before the meeting.",
+    "span": "signed for the parcel at the door before the meeting."
+   },
+   {
+    "name": "Atlas",
+    "i": 59,
+    "sentence": "Atlas signed for the parcel at the door late in the evening.",
+    "span": "signed for the parcel at the door late in the evening."
+   },
+   {
+    "name": "Orion",
+    "i": 59,
+    "sentence": "Orion signed for the parcel at the door late in the evening.",
+    "span": "signed for the parcel at the door late in the evening."
+   },
+   {
+    "name": "Atlas",
+    "i": 60,
+    "sentence": "Atlas trimmed the hedge along the road on Monday morning.",
+    "span": "trimmed the hedge along the road on Monday morning."
+   },
+   {
+    "name": "Orion",
+    "i": 60,
+    "sentence": "Orion trimmed the hedge along the road on Monday morning.",
+    "span": "trimmed the hedge along the road on Monday morning."
+   },
+   {
+    "name": "Atlas",
+    "i": 61,
+    "sentence": "Atlas trimmed the hedge along the road after lunch.",
+    "span": "trimmed the hedge along the road after lunch."
+   },
+   {
+    "name": "Orion",
+    "i": 61,
+    "sentence": "Orion trimmed the hedge along the road after lunch.",
+    "span": "trimmed the hedge along the road after lunch."
+   },
+   {
+    "name": "Atlas",
+    "i": 62,
+    "sentence": "Atlas trimmed the hedge along the road before the meeting.",
+    "span": "trimmed the hedge along the road before the meeting."
+   },
+   {
+    "name": "Orion",
+    "i": 62,
+    "sentence": "Orion trimmed the hedge along the road before the meeting.",
+    "span": "trimmed the hedge along the road before the meeting."
+   },
+   {
+    "name": "Atlas",
+    "i": 63,
+    "sentence": "Atlas trimmed the hedge along the road late in the evening.",
+    "span": "trimmed the hedge along the road late in the evening."
+   },
+   {
+    "name": "Orion",
+    "i": 63,
+    "sentence": "Orion trimmed the hedge along the road late in the evening.",
+    "span": "trimmed the hedge along the road late in the evening."
+   },
+   {
+    "name": "Atlas",
+    "i": 64,
+    "sentence": "Atlas wound the clock in the hallway on Monday morning.",
+    "span": "wound the clock in the hallway on Monday morning."
+   },
+   {
+    "name": "Orion",
+    "i": 64,
+    "sentence": "Orion wound the clock in the hallway on Monday morning.",
+    "span": "wound the clock in the hallway on Monday morning."
+   },
+   {
+    "name": "Atlas",
+    "i": 65,
+    "sentence": "Atlas wound the clock in the hallway after lunch.",
+    "span": "wound the clock in the hallway after lunch."
+   },
+   {
+    "name": "Orion",
+    "i": 65,
+    "sentence": "Orion wound the clock in the hallway after lunch.",
+    "span": "wound the clock in the hallway after lunch."
+   },
+   {
+    "name": "Atlas",
+    "i": 66,
+    "sentence": "Atlas wound the clock in the hallway before the meeting.",
+    "span": "wound the clock in the hallway before the meeting."
+   },
+   {
+    "name": "Orion",
+    "i": 66,
+    "sentence": "Orion wound the clock in the hallway before the meeting.",
+    "span": "wound the clock in the hallway before the meeting."
+   },
+   {
+    "name": "Atlas",
+    "i": 67,
+    "sentence": "Atlas wound the clock in the hallway late in the evening.",
+    "span": "wound the clock in the hallway late in the evening."
+   },
+   {
+    "name": "Orion",
+    "i": 67,
+    "sentence": "Orion wound the clock in the hallway late in the evening.",
+    "span": "wound the clock in the hallway late in the evening."
+   },
+   {
+    "name": "Atlas",
+    "i": 68,
+    "sentence": "Atlas printed the tickets for the concert on Monday morning.",
+    "span": "printed the tickets for the concert on Monday morning."
+   },
+   {
+    "name": "Orion",
+    "i": 68,
+    "sentence": "Orion printed the tickets for the concert on Monday morning.",
+    "span": "printed the tickets for the concert on Monday morning."
+   },
+   {
+    "name": "Atlas",
+    "i": 69,
+    "sentence": "Atlas printed the tickets for the concert after lunch.",
+    "span": "printed the tickets for the concert after lunch."
+   },
+   {
+    "name": "Orion",
+    "i": 69,
+    "sentence": "Orion printed the tickets for the concert after lunch.",
+    "span": "printed the tickets for the concert after lunch."
+   },
+   {
+    "name": "Atlas",
+    "i": 70,
+    "sentence": "Atlas printed the tickets for the concert before the meeting.",
+    "span": "printed the tickets for the concert before the meeting."
+   },
+   {
+    "name": "Orion",
+    "i": 70,
+    "sentence": "Orion printed the tickets for the concert before the meeting.",
+    "span": "printed the tickets for the concert before the meeting."
+   },
+   {
+    "name": "Atlas",
+    "i": 71,
+    "sentence": "Atlas printed the tickets for the concert late in the evening.",
+    "span": "printed the tickets for the concert late in the evening."
+   },
+   {
+    "name": "Orion",
+    "i": 71,
+    "sentence": "Orion printed the tickets for the concert late in the evening.",
+    "span": "printed the tickets for the concert late in the evening."
+   },
+   {
+    "name": "Atlas",
+    "i": 72,
+    "sentence": "Atlas sealed the envelope with its letter on Monday morning.",
+    "span": "sealed the envelope with its letter on Monday morning."
+   },
+   {
+    "name": "Orion",
+    "i": 72,
+    "sentence": "Orion sealed the envelope with its letter on Monday morning.",
+    "span": "sealed the envelope with its letter on Monday morning."
+   },
+   {
+    "name": "Atlas",
+    "i": 73,
+    "sentence": "Atlas sealed the envelope with its letter after lunch.",
+    "span": "sealed the envelope with its letter after lunch."
+   },
+   {
+    "name": "Orion",
+    "i": 73,
+    "sentence": "Orion sealed the envelope with its letter after lunch.",
+    "span": "sealed the envelope with its letter after lunch."
+   },
+   {
+    "name": "Atlas",
+    "i": 74,
+    "sentence": "Atlas sealed the envelope with its letter before the meeting.",
+    "span": "sealed the envelope with its letter before the meeting."
+   },
+   {
+    "name": "Orion",
+    "i": 74,
+    "sentence": "Orion sealed the envelope with its letter before the meeting.",
+    "span": "sealed the envelope with its letter before the meeting."
+   },
+   {
+    "name": "Atlas",
+    "i": 75,
+    "sentence": "Atlas sealed the envelope with its letter late in the evening.",
+    "span": "sealed the envelope with its letter late in the evening."
+   },
+   {
+    "name": "Orion",
+    "i": 75,
+    "sentence": "Orion sealed the envelope with its letter late in the evening.",
+    "span": "sealed the envelope with its letter late in the evening."
+   },
+   {
+    "name": "Atlas",
+    "i": 76,
+    "sentence": "Atlas refilled the lantern with oil on Monday morning.",
+    "span": "refilled the lantern with oil on Monday morning."
+   },
+   {
+    "name": "Orion",
+    "i": 76,
+    "sentence": "Orion refilled the lantern with oil on Monday morning.",
+    "span": "refilled the lantern with oil on Monday morning."
+   },
+   {
+    "name": "Atlas",
+    "i": 77,
+    "sentence": "Atlas refilled the lantern with oil after lunch.",
+    "span": "refilled the lantern with oil after lunch."
+   },
+   {
+    "name": "Orion",
+    "i": 77,
+    "sentence": "Orion refilled the lantern with oil after lunch.",
+    "span": "refilled the lantern with oil after lunch."
+   },
+   {
+    "name": "Atlas",
+    "i": 78,
+    "sentence": "Atlas refilled the lantern with oil before the meeting.",
+    "span": "refilled the lantern with oil before the meeting."
+   },
+   {
+    "name": "Orion",
+    "i": 78,
+    "sentence": "Orion refilled the lantern with oil before the meeting.",
+    "span": "refilled the lantern with oil before the meeting."
+   },
+   {
+    "name": "Atlas",
+    "i": 79,
+    "sentence": "Atlas refilled the lantern with oil late in the evening.",
+    "span": "refilled the lantern with oil late in the evening."
+   },
+   {
+    "name": "Orion",
+    "i": 79,
+    "sentence": "Orion refilled the lantern with oil late in the evening.",
+    "span": "refilled the lantern with oil late in the evening."
+   },
+   {
+    "name": "Atlas",
+    "i": 80,
+    "sentence": "Atlas patched the hole in the fence on Monday morning.",
+    "span": "patched the hole in the fence on Monday morning."
+   },
+   {
+    "name": "Orion",
+    "i": 80,
+    "sentence": "Orion patched the hole in the fence on Monday morning.",
+    "span": "patched the hole in the fence on Monday morning."
+   },
+   {
+    "name": "Atlas",
+    "i": 81,
+    "sentence": "Atlas patched the hole in the fence after lunch.",
+    "span": "patched the hole in the fence after lunch."
+   },
+   {
+    "name": "Orion",
+    "i": 81,
+    "sentence": "Orion patched the hole in the fence after lunch.",
+    "span": "patched the hole in the fence after lunch."
+   },
+   {
+    "name": "Atlas",
+    "i": 82,
+    "sentence": "Atlas patched the hole in the fence before the meeting.",
+    "span": "patched the hole in the fence before the meeting."
+   },
+   {
+    "name": "Orion",
+    "i": 82,
+    "sentence": "Orion patched the hole in the fence before the meeting.",
+    "span": "patched the hole in the fence before the meeting."
+   },
+   {
+    "name": "Atlas",
+    "i": 83,
+    "sentence": "Atlas patched the hole in the fence late in the evening.",
+    "span": "patched the hole in the fence late in the evening."
+   },
+   {
+    "name": "Orion",
+    "i": 83,
+    "sentence": "Orion patched the hole in the fence late in the evening.",
+    "span": "patched the hole in the fence late in the evening."
+   },
+   {
+    "name": "Atlas",
+    "i": 84,
+    "sentence": "Atlas stirred the soup while it simmered on Monday morning.",
+    "span": "stirred the soup while it simmered on Monday morning."
+   },
+   {
+    "name": "Orion",
+    "i": 84,
+    "sentence": "Orion stirred the soup while it simmered on Monday morning.",
+    "span": "stirred the soup while it simmered on Monday morning."
+   },
+   {
+    "name": "Atlas",
+    "i": 85,
+    "sentence": "Atlas stirred the soup while it simmered after lunch.",
+    "span": "stirred the soup while it simmered after lunch."
+   },
+   {
+    "name": "Orion",
+    "i": 85,
+    "sentence": "Orion stirred the soup while it simmered after lunch.",
+    "span": "stirred the soup while it simmered after lunch."
+   },
+   {
+    "name": "Atlas",
+    "i": 86,
+    "sentence": "Atlas stirred the soup while it simmered before the meeting.",
+    "span": "stirred the soup while it simmered before the meeting."
+   },
+   {
+    "name": "Orion",
+    "i": 86,
+    "sentence": "Orion stirred the soup while it simmered before the meeting.",
+    "span": "stirred the soup while it simmered before the meeting."
+   },
+   {
+    "name": "Atlas",
+    "i": 87,
+    "sentence": "Atlas stirred the soup while it simmered late in the evening.",
+    "span": "stirred the soup while it simmered late in the evening."
+   },
+   {
+    "name": "Orion",
+    "i": 87,
+    "sentence": "Orion stirred the soup while it simmered late in the evening.",
+    "span": "stirred the soup while it simmered late in the evening."
+   },
+   {
+    "name": "Atlas",
+    "i": 88,
+    "sentence": "Atlas numbered the pages of its notebook on Monday morning.",
+    "span": "numbered the pages of its notebook on Monday morning."
+   },
+   {
+    "name": "Orion",
+    "i": 88,
+    "sentence": "Orion numbered the pages of its notebook on Monday morning.",
+    "span": "numbered the pages of its notebook on Monday morning."
+   },
+   {
+    "name": "Atlas",
+    "i": 89,
+    "sentence": "Atlas numbered the pages of its notebook after lunch.",
+    "span": "numbered the pages of its notebook after lunch."
+   },
+   {
+    "name": "Orion",
+    "i": 89,
+    "sentence": "Orion numbered the pages of its notebook after lunch.",
+    "span": "numbered the pages of its notebook after lunch."
+   },
+   {
+    "name": "Atlas",
+    "i": 90,
+    "sentence": "Atlas numbered the pages of its notebook before the meeting.",
+    "span": "numbered the pages of its notebook before the meeting."
+   },
+   {
+    "name": "Orion",
+    "i": 90,
+    "sentence": "Orion numbered the pages of its notebook before the meeting.",
+    "span": "numbered the pages of its notebook before the meeting."
+   },
+   {
+    "name": "Atlas",
+    "i": 91,
+    "sentence": "Atlas numbered the pages of its notebook late in the evening.",
+    "span": "numbered the pages of its notebook late in the evening."
+   },
+   {
+    "name": "Orion",
+    "i": 91,
+    "sentence": "Orion numbered the pages of its notebook late in the evening.",
+    "span": "numbered the pages of its notebook late in the evening."
+   },
+   {
+    "name": "Atlas",
+    "i": 92,
+    "sentence": "Atlas tied the boat to the pier on Monday morning.",
+    "span": "tied the boat to the pier on Monday morning."
+   },
+   {
+    "name": "Orion",
+    "i": 92,
+    "sentence": "Orion tied the boat to the pier on Monday morning.",
+    "span": "tied the boat to the pier on Monday morning."
+   },
+   {
+    "name": "Atlas",
+    "i": 93,
+    "sentence": "Atlas tied the boat to the pier after lunch.",
+    "span": "tied the boat to the pier after lunch."
+   },
+   {
+    "name": "Orion",
+    "i": 93,
+    "sentence": "Orion tied the boat to the pier after lunch.",
+    "span": "tied the boat to the pier after lunch."
+   },
+   {
+    "name": "Atlas",
+    "i": 94,
+    "sentence": "Atlas tied the boat to the pier before the meeting.",
+    "span": "tied the boat to the pier before the meeting."
+   },
+   {
+    "name": "Orion",
+    "i": 94,
+    "sentence": "Orion tied the boat to the pier before the meeting.",
+    "span": "tied the boat to the pier before the meeting."
+   },
+   {
+    "name": "Atlas",
+    "i": 95,
+    "sentence": "Atlas tied the boat to the pier late in the evening.",
+    "span": "tied the boat to the pier late in the evening."
+   },
+   {
+    "name": "Orion",
+    "i": 95,
+    "sentence": "Orion tied the boat to the pier late in the evening.",
+    "span": "tied the boat to the pier late in the evening."
+   },
+   {
+    "name": "Atlas",
+    "i": 96,
+    "sentence": "Atlas dusted the shelves in the study on Monday morning.",
+    "span": "dusted the shelves in the study on Monday morning."
+   },
+   {
+    "name": "Orion",
+    "i": 96,
+    "sentence": "Orion dusted the shelves in the study on Monday morning.",
+    "span": "dusted the shelves in the study on Monday morning."
+   },
+   {
+    "name": "Atlas",
+    "i": 97,
+    "sentence": "Atlas dusted the shelves in the study after lunch.",
+    "span": "dusted the shelves in the study after lunch."
+   },
+   {
+    "name": "Orion",
+    "i": 97,
+    "sentence": "Orion dusted the shelves in the study after lunch.",
+    "span": "dusted the shelves in the study after lunch."
+   },
+   {
+    "name": "Atlas",
+    "i": 98,
+    "sentence": "Atlas dusted the shelves in the study before the meeting.",
+    "span": "dusted the shelves in the study before the meeting."
+   },
+   {
+    "name": "Orion",
+    "i": 98,
+    "sentence": "Orion dusted the shelves in the study before the meeting.",
+    "span": "dusted the shelves in the study before the meeting."
+   },
+   {
+    "name": "Atlas",
+    "i": 99,
+    "sentence": "Atlas dusted the shelves in the study late in the evening.",
+    "span": "dusted the shelves in the study late in the evening."
+   },
+   {
+    "name": "Orion",
+    "i": 99,
+    "sentence": "Orion dusted the shelves in the study late in the evening.",
+    "span": "dusted the shelves in the study late in the evening."
+   }
+  ]
+ }
+}

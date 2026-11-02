@@ -1,0 +1,96 @@
+{
+ "koan": {
+  "arm": {
+   "episodes": 565,
+   "tokens": 179997,
+   "releases": 102,
+   "solves": 463,
+   "retry_solves": 170
+  },
+  "cut_sampling": false,
+  "cut_finetune": false,
+  "kept": 565,
+  "tokens": 179997,
+  "releases": 102,
+  "retry_solves": 170,
+  "first_try_solves": 293,
+  "token_shares": {
+   "episodes": 565,
+   "tokens": 179997,
+   "failed_attempt_tokens": 77646,
+   "failed_attempt_share": 0.43137385623093716,
+   "retry_tokens": 98245,
+   "retry_share": 0.54581465246643,
+   "retry_episodes": 259
+  }
+ },
+ "noexit": {
+  "arm": "noexit",
+  "cut_sampling": false,
+  "cut_finetune": false,
+  "kept": 1010,
+  "tokens": 180034,
+  "releases": 0,
+  "retry_solves": 186,
+  "first_try_solves": 824,
+  "token_shares": {
+   "episodes": 1010,
+   "tokens": 180034,
+   "failed_attempt_tokens": 56280,
+   "failed_attempt_share": 0.3126076185609385,
+   "retry_tokens": 71370,
+   "retry_share": 0.3964251196996123,
+   "retry_episodes": 186
+  }
+ },
+ "koan_cut": {
+  "arm": {
+   "episodes": 418,
+   "tokens": 179992,
+   "releases": 135,
+   "solves": 283,
+   "retry_solves": 173
+  },
+  "cut_sampling": true,
+  "cut_finetune": true,
+  "kept": 418,
+  "tokens": 179992,
+  "releases": 135,
+  "retry_solves": 173,
+  "first_try_solves": 110,
+  "token_shares": {
+   "episodes": 418,
+   "tokens": 179992,
+   "failed_attempt_tokens": 94414,
+   "failed_attempt_share": 0.524545535357127,
+   "retry_tokens": 106266,
+   "retry_share": 0.5903929063513934,
+   "retry_episodes": 306
+  }
+ },
+ "koan_glimpse": {
+  "arm": {
+   "episodes": 418,
+   "tokens": 179992,
+   "releases": 135,
+   "solves": 283,
+   "retry_solves": 173
+  },
+  "cut_sampling": true,
+  "cut_finetune": false,
+  "kept": 418,
+  "tokens": 179992,
+  "releases": 135,
+  "retry_solves": 173,
+  "first_try_solves": 110,
+  "token_shares": {
+   "episodes": 418,
+   "tokens": 179992,
+   "failed_attempt_tokens": 94414,
+   "failed_attempt_share": 0.524545535357127,
+   "retry_tokens": 106266,
+   "retry_share": 0.5903929063513934,
+   "retry_episodes": 306
+  }
+ }
+}

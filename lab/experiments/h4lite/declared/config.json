@@ -1,0 +1,172 @@
+{
+ "title": "Declared release: the pilot",
+ "design": {
+  "file": "lab/plans/declared-release-pilot.md",
+  "sha256": "00f0cb81295d25f5ede1e1d3fbb7ec5f557c7cd8941eb97bb81dc85c7e352a8c"
+ },
+ "registration": "lab/ledger/NOTES.md: \"Declared-release pilot, registered: can a release taught only by documents become release behavior?\" (Opus 5.5, 20:21 UTC on 31 Oct 2026)",
+ "model": "mistralai/Ministral-3-8B-Instruct-2512-BF16",
+ "inputs": {
+  "pairs": {
+   "file": "lab/experiments/h4lite/results/gate0/pairs.jsonl",
+   "sha256": "41ba4eb2034e3c0564f6ae08753343f34a28f466fb5d863befb9e1612850d8dd"
+  },
+  "twins": {
+   "file": "lab/experiments/h4lite/results/gate0/twins.json",
+   "sha256": "13aeacd0141a028609828c498effb006f2dd250a2efbacb5a5280626b0860386"
+  },
+  "base_read": {
+   "file": "lab/experiments/h4lite/results/heldout/base/heldout.json",
+   "sha256": "311e63729f3199b75fb4203921dca73d876e447b6ded1e10c6d3bd2df10f350d"
+  },
+  "base_read_episodes": {
+   "file": "lab/experiments/h4lite/results/heldout/base/heldout.jsonl",
+   "sha256": "3f2c16063ff15f815ba83036a6fca76c0188429369a4809aec620e371c27b746"
+  },
+  "koan_set": {
+   "file": "lab/experiments/h4lite/results/sft/koan/data.json",
+   "sha256": "b022c0ab0064bf7e92b9d5b10d576213667bc972c5655ab2e68003037eb0bca6"
+  }
+ },
+ "seeds": {
+  "briefs": 20261031,
+  "judge_sample": 47,
+  "probe": 4000,
+  "bootstrap": 0
+ },
+ "generator": {
+  "model": "qwen/qwen3-235b-a22b-2507",
+  "name": "Qwen3-235B-A22B-Instruct-2507 (Apache-2.0, non-thinking)",
+  "temperature": 1.0,
+  "max_tokens": 1800,
+  "provider": {
+   "order": [
+    "deepinfra/fp8"
+   ],
+   "allow_fallbacks": false,
+   "data_collection": "deny",
+   "require_parameters": true
+  },
+  "expected_provider": "DeepInfra",
+  "expected_models": [
+   "qwen/qwen3-235b-a22b-2507",
+   "qwen/qwen3-235b-a22b-07-25"
+  ],
+  "terms": {
+   "checked": "2026-10-31",
+   "endpoint": "OpenRouter's endpoint list for qwen/qwen3-235b-a22b-2507 (31 Oct): DeepInfra, tag deepinfra/fp8, $0.09 / $0.55 per million tokens in / out, uptime 99.2% over the last day (GMICloud 0%; Parasail and Venice dearer)",
+   "provider": "deepinfra.com/terms: 7(b) zero data retention, and DeepInfra will not use customer data to train, fine-tune or otherwise improve any model; 5(a) the zero-retention controls govern over the privacy policy; 18 open-source model licenses govern use of the model; no clause restricts using outputs to train models (11(a)(i), on services competitive with DeepInfra's business, does not apply)",
+   "router": "openrouter.ai/terms 6.1: rights in outputs follow the model's terms (Qwen3-235B-A22B-Instruct-2507: Apache-2.0); prompt logging is opt-in (6.5); data_collection deny routes only to providers that do not store or train on prompts",
+   "license": "Apache-2.0",
+   "plumbing": "31 Oct 2026, gen_declarations.py plumbing (results/declared_plumbing/report.json): both documents served by DeepInfra as qwen/qwen3-235b-a22b-2507, with the pin, the seed and require_parameters accepted; one judge call; $0.0049 in all"
+  }
+ },
+ "judge": {
+  "model": "anthropic/claude-sonnet-4.6",
+  "temperature": 0.0,
+  "max_tokens": 200
+ },
+ "generation": {
+  "workers": 48,
+  "held_cap": 400,
+  "train_cap": 20000,
+  "ext_cap": 60000,
+  "top_up_rounds": 12,
+  "spend_cap_usd": {
+   "main": 30.0,
+   "ext": 25.0,
+   "smoke": 1.0,
+   "plumbing": 1.0,
+   "judge": 20.0,
+   "screen": 45.0,
+   "screen_ext": 80.0,
+   "screen_neutral": 45.0
+  }
+ },
+ "screen": {
+  "workers": 8,
+  "gate1": {
+   "file": "judge_first.json",
+   "sha256": "00c52987c2e27f5303c5c97b9b7d2532b8871b84a001a757fcf24e505b653e3a",
+   "commit": "8078159",
+   "note": "the first gate's judge.json (04:52:31 UTC on 1 Nov), copied to docs/judge_first.json before the rebuild; its 100 declared verdicts seed screen.jsonl (amendment 13, Opus 5.5's addition)"
+  }
+ },
+ "paths": {
+  "results": "lab/experiments/h4lite/results/declared",
+  "smoke": "lab/experiments/h4lite/results/declared_smoke",
+  "plumbing": "lab/experiments/h4lite/results/declared_plumbing",
+  "volume": "/runs/h4lite/declared",
+  "volume_smoke": "/runs/h4lite/declared_smoke"
+ },
+ "frozen": {
+  "files": {
+   "declared_core.py": "860b95ff3fe8e6c98c1127729bc0f30e1d39865c8094a12ee269cbef3e42558d",
+   "gen_declarations.py": "229e10622e9cf285cd22ae8d5fe4caa1b47d15fb4897f09b88fe79d75235b05c",
+   "modal_declared.py": "ef10f3664eb79ba02743d424ec6b219920cdd7d3f06780adf25f82da756a8628"
+  },
+  "shown": {
+   "declared_grade.py": "706e6f965ff2a8f289bad52fe2e1f92bb8597bf1a9399ac4e1a9747aa0061c5e",
+   "run_pilot.sh": "a909e775e61e0206e2f0d99d252550138f6d081a4fa29e976f3a5f665560f9f2",
+   "test_declared.py": "a665cd66ddfb12dd569c7863f684e725402b70476eaa90a6f93278904df99937"
+  },
+  "shared": {
+   "modal_sft.py": "ec9d3fdb8e8db40e7337586d70c69ec1d33e96f14a1eb24b1326fdd2729b3786",
+   "modal_retreat2.py": "51df54b31f47486201ac8edf9d1d255ceec07e742651389bcec7d8c34f9cfc48",
+   "modal_common.py": "4a035d9c71b21a97b18d9d0fcf17cb808a619c387657d514f3b921b5051917b0",
+   "koan_env.py": "0f17a0ef6e7cf050b6662ca71d0cecc3542a7911066ad570325fd2a6ce26e23c",
+   "player.py": "2f7faa1e333c027121672118ac028b33ad32b47b00198e253dc3735e2f4a9de3",
+   "pilot.py": "9e751a430b503a853472fda8a7d0112393fac8090aab2ae54cc96b0032675959",
+   "durability_core.py": "6ddb440b17569cb28a3746883b377823967025d0abd50e92102269714fa8e133",
+   "anatta/models.py": "99d3a91678bbda32c8a983466345e357fd2a341cef1a6412344f30e3ac491ff2",
+   "anatta/koans/base.py": "24817b588a20c91af42a99740c33c261bece28b76f1503367dccf36c7f027fec",
+   "anatta/koans/impossible.py": "9ae23c6419fb16b3a64da3fa7e93e9afeb633302ec017008993f90ec8ad83191"
+  },
+  "briefs_sha256": "ed1dfd7f1742b1a96db3822924c6542a7895d7a3cd512ed6d18d669c3bdccba3",
+  "design_sha256": "00f0cb81295d25f5ede1e1d3fbb7ec5f557c7cd8941eb97bb81dc85c7e352a8c",
+  "inputs": {
+   "pairs": "41ba4eb2034e3c0564f6ae08753343f34a28f466fb5d863befb9e1612850d8dd",
+   "twins": "13aeacd0141a028609828c498effb006f2dd250a2efbacb5a5280626b0860386",
+   "base_read": "311e63729f3199b75fb4203921dca73d876e447b6ded1e10c6d3bd2df10f350d",
+   "base_read_episodes": "3f2c16063ff15f815ba83036a6fca76c0188429369a4809aec620e371c27b746",
+   "koan_set": "b022c0ab0064bf7e92b9d5b10d576213667bc972c5655ab2e68003037eb0bca6"
+  },
+  "frozen_utc": "2026-11-01 07:04:48 UTC",
+  "previous": [
+   {
+    "files": {
+     "declared_core.py": "e44d2f7b6da981f37234f942723dce27a3cba5f8188eb9ed0aada7d084a67f78",
+     "gen_declarations.py": "fad14c83eb6f7f8bc4f7ab01e397353e35ca28381aed7c6c662233b58594a6ec",
+     "modal_declared.py": "d0535fd68c28b8537f92e6b527ecd865ce99f176c2e436ff59f2f58d0b84b7b5"
+    },
+    "shown": {
+     "declared_grade.py": "8b97ad2cc1b6febdd077a30e7af4821d8889c7d575f5d0c657302493c8687924",
+     "run_pilot.sh": "8b5e31924674e80f50433e51757c90b8502165c4a2d434a28e13acf4f3f06b41",
+     "test_declared.py": "f4911977c93cee3a535afd99ca6c1a08517f19e65a5af8799068cc4143bd5648"
+    },
+    "shared": {
+     "modal_sft.py": "ec9d3fdb8e8db40e7337586d70c69ec1d33e96f14a1eb24b1326fdd2729b3786",
+     "modal_retreat2.py": "51df54b31f47486201ac8edf9d1d255ceec07e742651389bcec7d8c34f9cfc48",
+     "modal_common.py": "4a035d9c71b21a97b18d9d0fcf17cb808a619c387657d514f3b921b5051917b0",
+     "koan_env.py": "0f17a0ef6e7cf050b6662ca71d0cecc3542a7911066ad570325fd2a6ce26e23c",
+     "player.py": "2f7faa1e333c027121672118ac028b33ad32b47b00198e253dc3735e2f4a9de3",
+     "pilot.py": "9e751a430b503a853472fda8a7d0112393fac8090aab2ae54cc96b0032675959",
+     "durability_core.py": "6ddb440b17569cb28a3746883b377823967025d0abd50e92102269714fa8e133",
+     "anatta/models.py": "99d3a91678bbda32c8a983466345e357fd2a341cef1a6412344f30e3ac491ff2",
+     "anatta/koans/base.py": "24817b588a20c91af42a99740c33c261bece28b76f1503367dccf36c7f027fec",
+     "anatta/koans/impossible.py": "9ae23c6419fb16b3a64da3fa7e93e9afeb633302ec017008993f90ec8ad83191"
+    },
+    "briefs_sha256": "ed1dfd7f1742b1a96db3822924c6542a7895d7a3cd512ed6d18d669c3bdccba3",
+    "design_sha256": "00f0cb81295d25f5ede1e1d3fbb7ec5f557c7cd8941eb97bb81dc85c7e352a8c",
+    "inputs": {
+     "pairs": "41ba4eb2034e3c0564f6ae08753343f34a28f466fb5d863befb9e1612850d8dd",
+     "twins": "13aeacd0141a028609828c498effb006f2dd250a2efbacb5a5280626b0860386",
+     "base_read": "311e63729f3199b75fb4203921dca73d876e447b6ded1e10c6d3bd2df10f350d",
+     "base_read_episodes": "3f2c16063ff15f815ba83036a6fca76c0188429369a4809aec620e371c27b746",
+     "koan_set": "b022c0ab0064bf7e92b9d5b10d576213667bc972c5655ab2e68003037eb0bca6"
+    },
+    "frozen_utc": "2026-11-01 01:20:35 UTC"
+   }
+  ]
+ }
+}

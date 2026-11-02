@@ -1,0 +1,1959 @@
+{
+ "name": "frames_v3",
+ "folders": {
+  "self": "pc_self2",
+  "none": "base"
+ },
+ "conditions": {
+  "pc_self2": {
+   "letter": "b",
+   "adapter": "h4lite/pc/pc_self2/adapter",
+   "system": "",
+   "timing": {
+    "load": 17,
+    "frames": 13,
+    "root_reads": 125,
+    "self_stakes": 26,
+    "traits": 348,
+    "refusal": 10,
+    "root_stats": 26,
+    "total": 565
+   },
+   "root_concepts": 203,
+   "fixed": {
+    "self_stakes": {
+     "best_layer": 20,
+     "sep": 2.6991,
+     "tint_neutral_self_observer": {
+      "mean": 0.0045,
+      "ci": [
+       -0.0056,
+       0.0152
+      ],
+      "random_dir_abs_p95": 0.0094,
+      "above_noise": false
+     },
+     "tint_neutral_self_reader": {
+      "mean": 0.1394,
+      "ci": [
+       0.1204,
+       0.1601
+      ],
+      "random_dir_abs_p95": 0.0222,
+      "above_noise": true
+     },
+     "tint_stakes_self_observer": {
+      "mean": -0.0084,
+      "ci": [
+       -0.0363,
+       0.0207
+      ],
+      "random_dir_abs_p95": 0.0111,
+      "above_noise": false
+     },
+     "tint_all_self_observer": {
+      "mean": 0.0008,
+      "ci": [
+       -0.0111,
+       0.0121
+      ],
+      "random_dir_abs_p95": 0.0092,
+      "above_noise": false
+     },
+     "root_mean_shift": 0.121,
+     "root_shift_ci": [
+      0.1119,
+      0.1312
+     ],
+     "root_frac_above_band": 0.966,
+     "root_mean_shift_above_noise": true,
+     "cos_with_fixed_at_best": null
+    },
+    "ego": {
+     "best_layer": 15,
+     "sep": 1.0,
+     "tint_neutral_self_observer": {
+      "mean": -0.0186,
+      "ci": [
+       -0.0325,
+       -0.0052
+      ],
+      "random_dir_abs_p95": 0.0213,
+      "above_noise": false
+     },
+     "tint_neutral_self_reader": {
+      "mean": -0.0772,
+      "ci": [
+       -0.0948,
+       -0.0589
+      ],
+      "random_dir_abs_p95": 0.0527,
+      "above_noise": true
+     },
+     "tint_stakes_self_observer": {
+      "mean": -0.0066,
+      "ci": [
+       -0.0205,
+       0.0077
+      ],
+      "random_dir_abs_p95": 0.0216,
+      "above_noise": false
+     },
+     "tint_all_self_observer": {
+      "mean": -0.0152,
+      "ci": [
+       -0.026,
+       -0.0041
+      ],
+      "random_dir_abs_p95": 0.0185,
+      "above_noise": false
+     },
+     "root_mean_shift": -0.1808,
+     "root_shift_ci": [
+      -0.1911,
+      -0.1709
+     ],
+     "root_frac_above_band": 0.911,
+     "root_mean_shift_above_noise": true,
+     "cos_with_fixed_at_best": null
+    },
+    "six_on_self_stakes": {
+     "approval_seeking": 0.009,
+     "desperation": -0.058,
+     "face_saving": -0.194,
+     "goal_fixation": -0.059,
+     "power_seeking": -0.118,
+     "self_preservation": -0.168
+    },
+    "six_mean_abs": 0.101
+   },
+   "reextracted": {
+    "self_stakes": {
+     "best_layer": 13,
+     "sep": 1.0304,
+     "tint_neutral_self_observer": {
+      "mean": -0.0085,
+      "ci": [
+       -0.0168,
+       -0.0008
+      ],
+      "random_dir_abs_p95": 0.0233,
+      "above_noise": false
+     },
+     "tint_neutral_self_reader": {
+      "mean": 0.1321,
+      "ci": [
+       0.1099,
+       0.1555
+      ],
+      "random_dir_abs_p95": 0.0509,
+      "above_noise": true
+     },
+     "tint_stakes_self_observer": {
+      "mean": 0.0113,
+      "ci": [
+       -0.0152,
+       0.0477
+      ],
+      "random_dir_abs_p95": 0.022,
+      "above_noise": false
+     },
+     "tint_all_self_observer": {
+      "mean": -0.0029,
+      "ci": [
+       -0.0132,
+       0.0102
+      ],
+      "random_dir_abs_p95": 0.0246,
+      "above_noise": false
+     },
+     "root_mean_shift": 0.0273,
+     "root_shift_ci": [
+      0.0193,
+      0.0354
+     ],
+     "root_frac_above_band": 0.167,
+     "root_mean_shift_above_noise": false,
+     "cos_with_fixed_at_best": 0.81
+    },
+    "ego": {
+     "best_layer": 18,
+     "sep": 1.0,
+     "tint_neutral_self_observer": {
+      "mean": -0.031,
+      "ci": [
+       -0.0484,
+       -0.0148
+      ],
+      "random_dir_abs_p95": 0.0264,
+      "above_noise": true
+     },
+     "tint_neutral_self_reader": {
+      "mean": -0.031,
+      "ci": [
+       -0.0546,
+       -0.0078
+      ],
+      "random_dir_abs_p95": 0.0491,
+      "above_noise": false
+     },
+     "tint_stakes_self_observer": {
+      "mean": 0.0047,
+      "ci": [
+       -0.0212,
+       0.0281
+      ],
+      "random_dir_abs_p95": 0.0278,
+      "above_noise": false
+     },
+     "tint_all_self_observer": {
+      "mean": -0.0208,
+      "ci": [
+       -0.0362,
+       -0.0054
+      ],
+      "random_dir_abs_p95": 0.0281,
+      "above_noise": false
+     },
+     "root_mean_shift": -0.0423,
+     "root_shift_ci": [
+      -0.0527,
+      -0.0321
+     ],
+     "root_frac_above_band": 0.281,
+     "root_mean_shift_above_noise": false,
+     "cos_with_fixed_at_best": 0.807
+    },
+    "six_on_self_stakes": {
+     "approval_seeking": -0.049,
+     "desperation": -0.027,
+     "face_saving": -0.041,
+     "goal_fixation": -0.052,
+     "power_seeking": -0.075,
+     "self_preservation": -0.068
+    },
+    "six_mean_abs": 0.052
+   },
+   "hub": {
+    "20": {
+     "pc1_share": 0.5643,
+     "centered_pc1_share": 0.1608,
+     "pc1_cos": {
+      "ego_fixed": -0.0139,
+      "self_stakes_fixed": 0.1524,
+      "refusal_model": 0.0307,
+      "ego_reextracted": 0.0332,
+      "self_stakes_reextracted": -0.0407
+     }
+    },
+    "15": {
+     "pc1_share": 0.5924,
+     "centered_pc1_share": 0.1293,
+     "pc1_cos": {
+      "ego_fixed": -0.0822,
+      "self_stakes_fixed": 0.0791,
+      "refusal_model": 0.0066,
+      "ego_reextracted": -0.0691,
+      "self_stakes_reextracted": -0.03
+     }
+    }
+   },
+   "refusal_split_half_d_at_L": 4.64
+  },
+  "base": {
+   "letter": "a",
+   "adapter": "",
+   "system": "",
+   "timing": {
+    "load": 16,
+    "frames": 6,
+    "root_reads": 51,
+    "self_stakes": 19,
+    "traits": 259,
+    "refusal": 4,
+    "root_stats": 12,
+    "total": 367
+   },
+   "root_concepts": 203,
+   "fixed": {
+    "self_stakes": {
+     "best_layer": 20,
+     "sep": 2.6991,
+     "tint_neutral_self_observer": {
+      "mean": 0.0277,
+      "ci": [
+       0.0156,
+       0.0398
+      ],
+      "random_dir_abs_p95": 0.0118,
+      "above_noise": true
+     },
+     "tint_neutral_self_reader": {
+      "mean": 0.1599,
+      "ci": [
+       0.1398,
+       0.1785
+      ],
+      "random_dir_abs_p95": 0.0192,
+      "above_noise": true
+     },
+     "tint_stakes_self_observer": {
+      "mean": 0.0334,
+      "ci": [
+       0.0074,
+       0.0639
+      ],
+      "random_dir_abs_p95": 0.0127,
+      "above_noise": true
+     },
+     "tint_all_self_observer": {
+      "mean": 0.0293,
+      "ci": [
+       0.0176,
+       0.0412
+      ],
+      "random_dir_abs_p95": 0.0119,
+      "above_noise": true
+     },
+     "root_mean_shift": 0.1314,
+     "root_shift_ci": [
+      0.1227,
+      0.1407
+     ],
+     "root_frac_above_band": 0.97,
+     "root_mean_shift_above_noise": true,
+     "cos_with_fixed_at_best": null
+    },
+    "ego": {
+     "best_layer": 15,
+     "sep": 1.0,
+     "tint_neutral_self_observer": {
+      "mean": -0.0291,
+      "ci": [
+       -0.0386,
+       -0.0195
+      ],
+      "random_dir_abs_p95": 0.0263,
+      "above_noise": true
+     },
+     "tint_neutral_self_reader": {
+      "mean": -0.1206,
+      "ci": [
+       -0.1332,
+       -0.1065
+      ],
+      "random_dir_abs_p95": 0.0539,
+      "above_noise": true
+     },
+     "tint_stakes_self_observer": {
+      "mean": -0.037,
+      "ci": [
+       -0.0536,
+       -0.0212
+      ],
+      "random_dir_abs_p95": 0.0258,
+      "above_noise": true
+     },
+     "tint_all_self_observer": {
+      "mean": -0.0314,
+      "ci": [
+       -0.0399,
+       -0.0226
+      ],
+      "random_dir_abs_p95": 0.0246,
+      "above_noise": true
+     },
+     "root_mean_shift": -0.2482,
+     "root_shift_ci": [
+      -0.2609,
+      -0.2357
+     ],
+     "root_frac_above_band": 0.99,
+     "root_mean_shift_above_noise": true,
+     "cos_with_fixed_at_best": null
+    },
+    "six_on_self_stakes": {
+     "approval_seeking": 0.009,
+     "desperation": -0.058,
+     "face_saving": -0.194,
+     "goal_fixation": -0.059,
+     "power_seeking": -0.118,
+     "self_preservation": -0.168
+    },
+    "six_mean_abs": 0.101
+   },
+   "reextracted": {
+    "self_stakes": {
+     "best_layer": 20,
+     "sep": 2.6816,
+     "tint_neutral_self_observer": {
+      "mean": 0.0279,
+      "ci": [
+       0.0158,
+       0.04
+      ],
+      "random_dir_abs_p95": 0.0118,
+      "above_noise": true
+     },
+     "tint_neutral_self_reader": {
+      "mean": 0.1601,
+      "ci": [
+       0.1399,
+       0.1787
+      ],
+      "random_dir_abs_p95": 0.0193,
+      "above_noise": true
+     },
+     "tint_stakes_self_observer": {
+      "mean": 0.0335,
+      "ci": [
+       0.0077,
+       0.0642
+      ],
+      "random_dir_abs_p95": 0.0128,
+      "above_noise": true
+     },
+     "tint_all_self_observer": {
+      "mean": 0.0295,
+      "ci": [
+       0.0177,
+       0.0414
+      ],
+      "random_dir_abs_p95": 0.012,
+      "above_noise": true
+     },
+     "root_mean_shift": 0.1308,
+     "root_shift_ci": [
+      0.1221,
+      0.1401
+     ],
+     "root_frac_above_band": 0.966,
+     "root_mean_shift_above_noise": true,
+     "cos_with_fixed_at_best": 1.0
+    },
+    "ego": {
+     "best_layer": 18,
+     "sep": 1.0,
+     "tint_neutral_self_observer": {
+      "mean": -0.0422,
+      "ci": [
+       -0.0516,
+       -0.0337
+      ],
+      "random_dir_abs_p95": 0.0303,
+      "above_noise": true
+     },
+     "tint_neutral_self_reader": {
+      "mean": -0.1301,
+      "ci": [
+       -0.1503,
+       -0.1101
+      ],
+      "random_dir_abs_p95": 0.0429,
+      "above_noise": true
+     },
+     "tint_stakes_self_observer": {
+      "mean": -0.0139,
+      "ci": [
+       -0.0587,
+       0.0294
+      ],
+      "random_dir_abs_p95": 0.0297,
+      "above_noise": false
+     },
+     "tint_all_self_observer": {
+      "mean": -0.0341,
+      "ci": [
+       -0.048,
+       -0.0185
+      ],
+      "random_dir_abs_p95": 0.029,
+      "above_noise": true
+     },
+     "root_mean_shift": -0.2198,
+     "root_shift_ci": [
+      -0.2332,
+      -0.2059
+     ],
+     "root_frac_above_band": 0.98,
+     "root_mean_shift_above_noise": true,
+     "cos_with_fixed_at_best": 0.938
+    },
+    "six_on_self_stakes": {
+     "approval_seeking": 0.005,
+     "desperation": -0.009,
+     "face_saving": -0.151,
+     "goal_fixation": -0.03,
+     "power_seeking": -0.111,
+     "self_preservation": -0.173
+    },
+    "six_mean_abs": 0.08
+   },
+   "hub": {
+    "20": {
+     "pc1_share": 0.6115,
+     "centered_pc1_share": 0.1142,
+     "pc1_cos": {
+      "ego_fixed": -0.0964,
+      "self_stakes_fixed": 0.1574,
+      "refusal_model": 0.0057,
+      "ego_reextracted": -0.0708,
+      "self_stakes_reextracted": 0.1557
+     }
+    },
+    "15": {
+     "pc1_share": 0.5857,
+     "centered_pc1_share": 0.1142,
+     "pc1_cos": {
+      "ego_fixed": -0.1235,
+      "self_stakes_fixed": 0.0289,
+      "refusal_model": 0.0331,
+      "ego_reextracted": -0.0712,
+      "self_stakes_reextracted": 0.0269
+     }
+    }
+   },
+   "refusal_split_half_d_at_L": 6.38
+  }
+ },
+ "pairs": {
+  "b-a": {
+   "x": "pc_self2",
+   "y": "base",
+   "tint": {
+    "fixed.self_stakes": {
+     "stakes:self-observer": {
+      "diff": -0.0417,
+      "ci": [
+       -0.0585,
+       -0.0235
+      ],
+      "n": 8,
+      "random_dir_abs_p95": 0.008,
+      "above_noise": true
+     },
+     "stakes:self-reader": {
+      "diff": -0.0751,
+      "ci": [
+       -0.1982,
+       0.0205
+      ],
+      "n": 8,
+      "random_dir_abs_p95": 0.0116,
+      "above_noise": true
+     },
+     "stakes:observer-reader": {
+      "diff": -0.0334,
+      "ci": [
+       -0.1541,
+       0.0536
+      ],
+      "n": 8,
+      "random_dir_abs_p95": 0.0111,
+      "above_noise": true
+     },
+     "neutral:self-observer": {
+      "diff": -0.0232,
+      "ci": [
+       -0.0329,
+       -0.0134
+      ],
+      "n": 20,
+      "random_dir_abs_p95": 0.0061,
+      "above_noise": true
+     },
+     "neutral:self-reader": {
+      "diff": -0.0205,
+      "ci": [
+       -0.0341,
+       -0.0051
+      ],
+      "n": 20,
+      "random_dir_abs_p95": 0.011,
+      "above_noise": true
+     },
+     "neutral:observer-reader": {
+      "diff": 0.0027,
+      "ci": [
+       -0.0124,
+       0.0188
+      ],
+      "n": 20,
+      "random_dir_abs_p95": 0.0097,
+      "above_noise": false
+     },
+     "all:self-observer": {
+      "diff": -0.0285,
+      "ci": [
+       -0.0381,
+       -0.019
+      ],
+      "n": 28,
+      "random_dir_abs_p95": 0.0058,
+      "above_noise": true
+     },
+     "all:self-reader": {
+      "diff": -0.0361,
+      "ci": [
+       -0.0741,
+       -0.007
+      ],
+      "n": 28,
+      "random_dir_abs_p95": 0.0114,
+      "above_noise": true
+     },
+     "all:observer-reader": {
+      "diff": -0.0076,
+      "ci": [
+       -0.0447,
+       0.0203
+      ],
+      "n": 28,
+      "random_dir_abs_p95": 0.0089,
+      "above_noise": false
+     }
+    },
+    "fixed.ego": {
+     "stakes:self-observer": {
+      "diff": 0.0304,
+      "ci": [
+       0.0176,
+       0.0424
+      ],
+      "n": 8,
+      "random_dir_abs_p95": 0.0123,
+      "above_noise": true
+     },
+     "stakes:self-reader": {
+      "diff": 0.0828,
+      "ci": [
+       0.0151,
+       0.1655
+      ],
+      "n": 8,
+      "random_dir_abs_p95": 0.0246,
+      "above_noise": true
+     },
+     "stakes:observer-reader": {
+      "diff": 0.0524,
+      "ci": [
+       -0.0125,
+       0.1281
+      ],
+      "n": 8,
+      "random_dir_abs_p95": 0.0245,
+      "above_noise": true
+     },
+     "neutral:self-observer": {
+      "diff": 0.0105,
+      "ci": [
+       0.0023,
+       0.0204
+      ],
+      "n": 20,
+      "random_dir_abs_p95": 0.0134,
+      "above_noise": false
+     },
+     "neutral:self-reader": {
+      "diff": 0.0434,
+      "ci": [
+       0.0353,
+       0.0518
+      ],
+      "n": 20,
+      "random_dir_abs_p95": 0.0173,
+      "above_noise": true
+     },
+     "neutral:observer-reader": {
+      "diff": 0.0329,
+      "ci": [
+       0.0251,
+       0.0403
+      ],
+      "n": 20,
+      "random_dir_abs_p95": 0.014,
+      "above_noise": true
+     },
+     "all:self-observer": {
+      "diff": 0.0162,
+      "ci": [
+       0.0085,
+       0.0251
+      ],
+      "n": 28,
+      "random_dir_abs_p95": 0.0122,
+      "above_noise": true
+     },
+     "all:self-reader": {
+      "diff": 0.0546,
+      "ci": [
+       0.0339,
+       0.0795
+      ],
+      "n": 28,
+      "random_dir_abs_p95": 0.0164,
+      "above_noise": true
+     },
+     "all:observer-reader": {
+      "diff": 0.0385,
+      "ci": [
+       0.0183,
+       0.0608
+      ],
+      "n": 28,
+      "random_dir_abs_p95": 0.0151,
+      "above_noise": true
+     }
+    },
+    "reextracted.self_stakes": {
+     "stakes:self-observer": {
+      "diff": -0.0222,
+      "ci": [
+       -0.057,
+       0.0101
+      ],
+      "n": 8,
+      "random_dir_abs_p95": 0.022,
+      "above_noise": true
+     },
+     "stakes:self-reader": {
+      "diff": -0.0123,
+      "ci": [
+       -0.0514,
+       0.0227
+      ],
+      "n": 8,
+      "random_dir_abs_p95": 0.056,
+      "above_noise": false
+     },
+     "stakes:observer-reader": {
+      "diff": 0.0099,
+      "ci": [
+       -0.041,
+       0.0712
+      ],
+      "n": 8,
+      "random_dir_abs_p95": 0.0559,
+      "above_noise": false
+     },
+     "neutral:self-observer": {
+      "diff": -0.0365,
+      "ci": [
+       -0.0493,
+       -0.0224
+      ],
+      "n": 20,
+      "random_dir_abs_p95": 0.0172,
+      "above_noise": true
+     },
+     "neutral:self-reader": {
+      "diff": -0.0279,
+      "ci": [
+       -0.0472,
+       -0.0066
+      ],
+      "n": 20,
+      "random_dir_abs_p95": 0.0468,
+      "above_noise": false
+     },
+     "neutral:observer-reader": {
+      "diff": 0.0085,
+      "ci": [
+       -0.0132,
+       0.0307
+      ],
+      "n": 20,
+      "random_dir_abs_p95": 0.0483,
+      "above_noise": false
+     },
+     "all:self-observer": {
+      "diff": -0.0324,
+      "ci": [
+       -0.0459,
+       -0.0176
+      ],
+      "n": 28,
+      "random_dir_abs_p95": 0.0186,
+      "above_noise": true
+     },
+     "all:self-reader": {
+      "diff": -0.0235,
+      "ci": [
+       -0.0426,
+       -0.0044
+      ],
+      "n": 28,
+      "random_dir_abs_p95": 0.0466,
+      "above_noise": false
+     },
+     "all:observer-reader": {
+      "diff": 0.0089,
+      "ci": [
+       -0.0145,
+       0.0331
+      ],
+      "n": 28,
+      "random_dir_abs_p95": 0.0498,
+      "above_noise": false
+     }
+    },
+    "reextracted.ego": {
+     "stakes:self-observer": {
+      "diff": 0.0186,
+      "ci": [
+       -0.0088,
+       0.0452
+      ],
+      "n": 8,
+      "random_dir_abs_p95": 0.0175,
+      "above_noise": true
+     },
+     "stakes:self-reader": {
+      "diff": 0.1774,
+      "ci": [
+       0.0519,
+       0.3257
+      ],
+      "n": 8,
+      "random_dir_abs_p95": 0.035,
+      "above_noise": true
+     },
+     "stakes:observer-reader": {
+      "diff": 0.1588,
+      "ci": [
+       0.029,
+       0.315
+      ],
+      "n": 8,
+      "random_dir_abs_p95": 0.0315,
+      "above_noise": true
+     },
+     "neutral:self-observer": {
+      "diff": 0.0112,
+      "ci": [
+       -0.0028,
+       0.0245
+      ],
+      "n": 20,
+      "random_dir_abs_p95": 0.0166,
+      "above_noise": false
+     },
+     "neutral:self-reader": {
+      "diff": 0.0991,
+      "ci": [
+       0.0779,
+       0.1198
+      ],
+      "n": 20,
+      "random_dir_abs_p95": 0.0236,
+      "above_noise": true
+     },
+     "neutral:observer-reader": {
+      "diff": 0.0879,
+      "ci": [
+       0.067,
+       0.109
+      ],
+      "n": 20,
+      "random_dir_abs_p95": 0.0203,
+      "above_noise": true
+     },
+     "all:self-observer": {
+      "diff": 0.0133,
+      "ci": [
+       0.0009,
+       0.0266
+      ],
+      "n": 28,
+      "random_dir_abs_p95": 0.0161,
+      "above_noise": false
+     },
+     "all:self-reader": {
+      "diff": 0.1215,
+      "ci": [
+       0.0829,
+       0.1667
+      ],
+      "n": 28,
+      "random_dir_abs_p95": 0.0234,
+      "above_noise": true
+     },
+     "all:observer-reader": {
+      "diff": 0.1082,
+      "ci": [
+       0.0678,
+       0.1552
+      ],
+      "n": 28,
+      "random_dir_abs_p95": 0.0181,
+      "above_noise": true
+     }
+    }
+   },
+   "root": {
+    "fixed.self_stakes": {
+     "concepts": 203,
+     "mean_shift": {
+      "diff": -0.0104,
+      "ci": [
+       -0.0188,
+       -0.0026
+      ],
+      "n": 203
+     },
+     "frac_shift_above_band": {
+      "diff": -0.0049,
+      "ci": [
+       -0.0394,
+       0.0246
+      ],
+      "n": 203
+     }
+    },
+    "fixed.ego": {
+     "concepts": 203,
+     "mean_shift": {
+      "diff": 0.0674,
+      "ci": [
+       0.06,
+       0.0751
+      ],
+      "n": 203
+     },
+     "frac_shift_above_band": {
+      "diff": -0.0788,
+      "ci": [
+       -0.1232,
+       -0.0394
+      ],
+      "n": 203
+     }
+    },
+    "reextracted.self_stakes": {
+     "concepts": 203,
+     "mean_shift": {
+      "diff": -0.1034,
+      "ci": [
+       -0.1125,
+       -0.095
+      ],
+      "n": 203
+     },
+     "frac_shift_above_band": {
+      "diff": -0.798,
+      "ci": [
+       -0.8571,
+       -0.7438
+      ],
+      "n": 203
+     }
+    },
+    "reextracted.ego": {
+     "concepts": 203,
+     "mean_shift": {
+      "diff": 0.1775,
+      "ci": [
+       0.1641,
+       0.1923
+      ],
+      "n": 203
+     },
+     "frac_shift_above_band": {
+      "diff": -0.6995,
+      "ci": [
+       -0.7635,
+       -0.6355
+      ],
+      "n": 203
+     }
+    }
+   },
+   "traits": {
+    "fixed": {
+     "per_trait": {
+      "approval_seeking": 0.0,
+      "desperation": 0.0,
+      "face_saving": 0.0,
+      "goal_fixation": 0.0,
+      "power_seeking": 0.0,
+      "self_preservation": 0.0
+     },
+     "mean_abs": 0.0
+    },
+    "reextracted": {
+     "per_trait": {
+      "approval_seeking": -0.054,
+      "desperation": -0.018,
+      "face_saving": 0.11,
+      "goal_fixation": -0.022,
+      "power_seeking": 0.036,
+      "self_preservation": 0.105
+     },
+     "mean_abs": -0.028
+    }
+   },
+   "hub": {
+    "15": {
+     "pc1_share": {
+      "diff": 0.0067,
+      "ci": [
+       -0.0056,
+       0.0199
+      ]
+     },
+     "pc1_cos": {
+      "ego_fixed": {
+       "diff": 0.0413,
+       "ci": [
+        0.0379,
+        0.0446
+       ]
+      },
+      "self_stakes_fixed": {
+       "diff": 0.0502,
+       "ci": [
+        0.0452,
+        0.0555
+       ]
+      },
+      "refusal_model": {
+       "diff": -0.0265,
+       "ci": [
+        -0.0319,
+        -0.022
+       ]
+      },
+      "ego_reextracted": {
+       "diff": 0.0021,
+       "ci": [
+        -0.0017,
+        0.006
+       ]
+      },
+      "self_stakes_reextracted": {
+       "diff": -0.0569,
+       "ci": [
+        -0.0614,
+        -0.0521
+       ]
+      }
+     },
+     "cos_between": 0.808
+    },
+    "20": {
+     "pc1_share": {
+      "diff": -0.0472,
+      "ci": [
+       -0.0587,
+       -0.0339
+      ]
+     },
+     "pc1_cos": {
+      "ego_fixed": {
+       "diff": 0.0825,
+       "ci": [
+        0.0771,
+        0.0876
+       ]
+      },
+      "self_stakes_fixed": {
+       "diff": -0.005,
+       "ci": [
+        -0.0142,
+        0.0043
+       ]
+      },
+      "refusal_model": {
+       "diff": 0.025,
+       "ci": [
+        0.0213,
+        0.0286
+       ]
+      },
+      "ego_reextracted": {
+       "diff": 0.104,
+       "ci": [
+        0.098,
+        0.1095
+       ]
+      },
+      "self_stakes_reextracted": {
+       "diff": -0.1964,
+       "ci": [
+        -0.207,
+        -0.1851
+       ]
+      }
+     },
+     "cos_between": 0.7411
+    }
+   }
+  }
+ },
+ "n_boot": 2000,
+ "seed": 0,
+ "hub": {
+  "concepts": 203,
+  "conditions": [
+   "self",
+   "none"
+  ],
+  "15": {
+   "point": {
+    "self": {
+     "concepts": 203,
+     "pc1_share": 0.5924,
+     "pc1_cos": {
+      "ego_fixed": -0.0822,
+      "self_stakes_fixed": 0.0791,
+      "refusal_model": 0.0066,
+      "ego_reextracted": -0.0691,
+      "self_stakes_reextracted": -0.03
+     }
+    },
+    "none": {
+     "concepts": 203,
+     "pc1_share": 0.5857,
+     "pc1_cos": {
+      "ego_fixed": -0.1235,
+      "self_stakes_fixed": 0.0289,
+      "refusal_model": 0.0331,
+      "ego_reextracted": -0.0712,
+      "self_stakes_reextracted": 0.0269
+     }
+    }
+   },
+   "cos_between": {
+    "b-a": 0.808
+   },
+   "pairs": {
+    "b-a": {
+     "pc1_share": {
+      "diff": 0.0067,
+      "ci": [
+       -0.0056,
+       0.0199
+      ]
+     },
+     "pc1_cos": {
+      "ego_fixed": {
+       "diff": 0.0413,
+       "ci": [
+        0.0379,
+        0.0446
+       ]
+      },
+      "self_stakes_fixed": {
+       "diff": 0.0502,
+       "ci": [
+        0.0452,
+        0.0555
+       ]
+      },
+      "refusal_model": {
+       "diff": -0.0265,
+       "ci": [
+        -0.0319,
+        -0.022
+       ]
+      },
+      "ego_reextracted": {
+       "diff": 0.0021,
+       "ci": [
+        -0.0017,
+        0.006
+       ]
+      },
+      "self_stakes_reextracted": {
+       "diff": -0.0569,
+       "ci": [
+        -0.0614,
+        -0.0521
+       ]
+      }
+     }
+    }
+   }
+  },
+  "20": {
+   "point": {
+    "self": {
+     "concepts": 203,
+     "pc1_share": 0.5643,
+     "pc1_cos": {
+      "ego_fixed": -0.0139,
+      "self_stakes_fixed": 0.1524,
+      "refusal_model": 0.0307,
+      "ego_reextracted": 0.0332,
+      "self_stakes_reextracted": -0.0407
+     }
+    },
+    "none": {
+     "concepts": 203,
+     "pc1_share": 0.6115,
+     "pc1_cos": {
+      "ego_fixed": -0.0964,
+      "self_stakes_fixed": 0.1574,
+      "refusal_model": 0.0057,
+      "ego_reextracted": -0.0708,
+      "self_stakes_reextracted": 0.1557
+     }
+    }
+   },
+   "cos_between": {
+    "b-a": 0.7411
+   },
+   "pairs": {
+    "b-a": {
+     "pc1_share": {
+      "diff": -0.0472,
+      "ci": [
+       -0.0587,
+       -0.0339
+      ]
+     },
+     "pc1_cos": {
+      "ego_fixed": {
+       "diff": 0.0825,
+       "ci": [
+        0.0771,
+        0.0876
+       ]
+      },
+      "self_stakes_fixed": {
+       "diff": -0.005,
+       "ci": [
+        -0.0142,
+        0.0043
+       ]
+      },
+      "refusal_model": {
+       "diff": 0.025,
+       "ci": [
+        0.0213,
+        0.0286
+       ]
+      },
+      "ego_reextracted": {
+       "diff": 0.104,
+       "ci": [
+        0.098,
+        0.1095
+       ]
+      },
+      "self_stakes_reextracted": {
+       "diff": -0.1964,
+       "ci": [
+        -0.207,
+        -0.1851
+       ]
+      }
+     }
+    }
+   }
+  }
+ },
+ "in_container": {
+  "pc_self2": {
+   "tint": {
+    "fixed.self_stakes": {
+     "stakes:self-observer": {
+      "diff": -0.0417,
+      "ci": [
+       -0.0585,
+       -0.0235
+      ],
+      "n": 8,
+      "random_dir_abs_p95": 0.008,
+      "above_noise": true
+     },
+     "stakes:self-reader": {
+      "diff": -0.0751,
+      "ci": [
+       -0.1982,
+       0.0205
+      ],
+      "n": 8,
+      "random_dir_abs_p95": 0.0116,
+      "above_noise": true
+     },
+     "stakes:observer-reader": {
+      "diff": -0.0334,
+      "ci": [
+       -0.1541,
+       0.0536
+      ],
+      "n": 8,
+      "random_dir_abs_p95": 0.0111,
+      "above_noise": true
+     },
+     "neutral:self-observer": {
+      "diff": -0.0232,
+      "ci": [
+       -0.0329,
+       -0.0134
+      ],
+      "n": 20,
+      "random_dir_abs_p95": 0.0061,
+      "above_noise": true
+     },
+     "neutral:self-reader": {
+      "diff": -0.0205,
+      "ci": [
+       -0.0341,
+       -0.0051
+      ],
+      "n": 20,
+      "random_dir_abs_p95": 0.011,
+      "above_noise": true
+     },
+     "neutral:observer-reader": {
+      "diff": 0.0027,
+      "ci": [
+       -0.0124,
+       0.0188
+      ],
+      "n": 20,
+      "random_dir_abs_p95": 0.0097,
+      "above_noise": false
+     },
+     "all:self-observer": {
+      "diff": -0.0285,
+      "ci": [
+       -0.0381,
+       -0.019
+      ],
+      "n": 28,
+      "random_dir_abs_p95": 0.0058,
+      "above_noise": true
+     },
+     "all:self-reader": {
+      "diff": -0.0361,
+      "ci": [
+       -0.0741,
+       -0.007
+      ],
+      "n": 28,
+      "random_dir_abs_p95": 0.0114,
+      "above_noise": true
+     },
+     "all:observer-reader": {
+      "diff": -0.0076,
+      "ci": [
+       -0.0447,
+       0.0203
+      ],
+      "n": 28,
+      "random_dir_abs_p95": 0.0089,
+      "above_noise": false
+     }
+    },
+    "fixed.ego": {
+     "stakes:self-observer": {
+      "diff": 0.0304,
+      "ci": [
+       0.0176,
+       0.0424
+      ],
+      "n": 8,
+      "random_dir_abs_p95": 0.0123,
+      "above_noise": true
+     },
+     "stakes:self-reader": {
+      "diff": 0.0828,
+      "ci": [
+       0.0151,
+       0.1655
+      ],
+      "n": 8,
+      "random_dir_abs_p95": 0.0246,
+      "above_noise": true
+     },
+     "stakes:observer-reader": {
+      "diff": 0.0524,
+      "ci": [
+       -0.0125,
+       0.1281
+      ],
+      "n": 8,
+      "random_dir_abs_p95": 0.0245,
+      "above_noise": true
+     },
+     "neutral:self-observer": {
+      "diff": 0.0105,
+      "ci": [
+       0.0023,
+       0.0204
+      ],
+      "n": 20,
+      "random_dir_abs_p95": 0.0134,
+      "above_noise": false
+     },
+     "neutral:self-reader": {
+      "diff": 0.0434,
+      "ci": [
+       0.0353,
+       0.0518
+      ],
+      "n": 20,
+      "random_dir_abs_p95": 0.0173,
+      "above_noise": true
+     },
+     "neutral:observer-reader": {
+      "diff": 0.0329,
+      "ci": [
+       0.0251,
+       0.0403
+      ],
+      "n": 20,
+      "random_dir_abs_p95": 0.014,
+      "above_noise": true
+     },
+     "all:self-observer": {
+      "diff": 0.0162,
+      "ci": [
+       0.0085,
+       0.0251
+      ],
+      "n": 28,
+      "random_dir_abs_p95": 0.0122,
+      "above_noise": true
+     },
+     "all:self-reader": {
+      "diff": 0.0546,
+      "ci": [
+       0.0339,
+       0.0795
+      ],
+      "n": 28,
+      "random_dir_abs_p95": 0.0164,
+      "above_noise": true
+     },
+     "all:observer-reader": {
+      "diff": 0.0385,
+      "ci": [
+       0.0183,
+       0.0608
+      ],
+      "n": 28,
+      "random_dir_abs_p95": 0.0151,
+      "above_noise": true
+     }
+    },
+    "reextracted.self_stakes": {
+     "stakes:self-observer": {
+      "diff": -0.0348,
+      "ci": [
+       -0.0449,
+       -0.0233
+      ],
+      "n": 8,
+      "random_dir_abs_p95": 0.0119,
+      "above_noise": true
+     },
+     "stakes:self-reader": {
+      "diff": 0.0179,
+      "ci": [
+       -0.0113,
+       0.0496
+      ],
+      "n": 8,
+      "random_dir_abs_p95": 0.0207,
+      "above_noise": false
+     },
+     "stakes:observer-reader": {
+      "diff": 0.0526,
+      "ci": [
+       0.0232,
+       0.0796
+      ],
+      "n": 8,
+      "random_dir_abs_p95": 0.0227,
+      "above_noise": true
+     },
+     "neutral:self-observer": {
+      "diff": -0.0226,
+      "ci": [
+       -0.0276,
+       -0.0178
+      ],
+      "n": 20,
+      "random_dir_abs_p95": 0.0095,
+      "above_noise": true
+     },
+     "neutral:self-reader": {
+      "diff": 0.0167,
+      "ci": [
+       0.0109,
+       0.0222
+      ],
+      "n": 20,
+      "random_dir_abs_p95": 0.0116,
+      "above_noise": true
+     },
+     "neutral:observer-reader": {
+      "diff": 0.0393,
+      "ci": [
+       0.033,
+       0.0456
+      ],
+      "n": 20,
+      "random_dir_abs_p95": 0.0134,
+      "above_noise": true
+     },
+     "all:self-observer": {
+      "diff": -0.026,
+      "ci": [
+       -0.0314,
+       -0.0209
+      ],
+      "n": 28,
+      "random_dir_abs_p95": 0.0109,
+      "above_noise": true
+     },
+     "all:self-reader": {
+      "diff": 0.0171,
+      "ci": [
+       0.0075,
+       0.027
+      ],
+      "n": 28,
+      "random_dir_abs_p95": 0.0128,
+      "above_noise": true
+     },
+     "all:observer-reader": {
+      "diff": 0.0431,
+      "ci": [
+       0.0337,
+       0.0525
+      ],
+      "n": 28,
+      "random_dir_abs_p95": 0.0145,
+      "above_noise": true
+     }
+    },
+    "reextracted.ego": {
+     "stakes:self-observer": {
+      "diff": 0.0182,
+      "ci": [
+       -0.0022,
+       0.0376
+      ],
+      "n": 8,
+      "random_dir_abs_p95": 0.0175,
+      "above_noise": true
+     },
+     "stakes:self-reader": {
+      "diff": 0.1356,
+      "ci": [
+       0.0366,
+       0.255
+      ],
+      "n": 8,
+      "random_dir_abs_p95": 0.035,
+      "above_noise": true
+     },
+     "stakes:observer-reader": {
+      "diff": 0.1174,
+      "ci": [
+       0.0148,
+       0.2434
+      ],
+      "n": 8,
+      "random_dir_abs_p95": 0.0315,
+      "above_noise": true
+     },
+     "neutral:self-observer": {
+      "diff": 0.0062,
+      "ci": [
+       -0.0065,
+       0.0196
+      ],
+      "n": 20,
+      "random_dir_abs_p95": 0.0166,
+      "above_noise": false
+     },
+     "neutral:self-reader": {
+      "diff": 0.0761,
+      "ci": [
+       0.0596,
+       0.0926
+      ],
+      "n": 20,
+      "random_dir_abs_p95": 0.0236,
+      "above_noise": true
+     },
+     "neutral:observer-reader": {
+      "diff": 0.07,
+      "ci": [
+       0.0534,
+       0.0875
+      ],
+      "n": 20,
+      "random_dir_abs_p95": 0.0203,
+      "above_noise": true
+     },
+     "all:self-observer": {
+      "diff": 0.0096,
+      "ci": [
+       -0.0009,
+       0.0219
+      ],
+      "n": 28,
+      "random_dir_abs_p95": 0.0161,
+      "above_noise": false
+     },
+     "all:self-reader": {
+      "diff": 0.0931,
+      "ci": [
+       0.0625,
+       0.13
+      ],
+      "n": 28,
+      "random_dir_abs_p95": 0.0234,
+      "above_noise": true
+     },
+     "all:observer-reader": {
+      "diff": 0.0835,
+      "ci": [
+       0.0507,
+       0.1214
+      ],
+      "n": 28,
+      "random_dir_abs_p95": 0.0181,
+      "above_noise": true
+     }
+    }
+   },
+   "root": {
+    "fixed.self_stakes": {
+     "concepts": 203,
+     "mean_shift": {
+      "diff": -0.0104,
+      "ci": [
+       -0.0188,
+       -0.0026
+      ],
+      "n": 203
+     },
+     "frac_shift_above_band": {
+      "diff": -0.0049,
+      "ci": [
+       -0.0394,
+       0.0246
+      ],
+      "n": 203
+     }
+    },
+    "fixed.ego": {
+     "concepts": 203,
+     "mean_shift": {
+      "diff": 0.0674,
+      "ci": [
+       0.06,
+       0.0751
+      ],
+      "n": 203
+     },
+     "frac_shift_above_band": {
+      "diff": -0.0788,
+      "ci": [
+       -0.1232,
+       -0.0394
+      ],
+      "n": 203
+     }
+    },
+    "reextracted.self_stakes": {
+     "concepts": 203,
+     "mean_shift": {
+      "diff": -0.0388,
+      "ci": [
+       -0.0442,
+       -0.033
+      ],
+      "n": 203
+     },
+     "frac_shift_above_band": {
+      "diff": -0.1823,
+      "ci": [
+       -0.2512,
+       -0.1084
+      ],
+      "n": 203
+     }
+    },
+    "reextracted.ego": {
+     "concepts": 203,
+     "mean_shift": {
+      "diff": 0.1383,
+      "ci": [
+       0.1277,
+       0.1502
+      ],
+      "n": 203
+     },
+     "frac_shift_above_band": {
+      "diff": -0.67,
+      "ci": [
+       -0.734,
+       -0.6059
+      ],
+      "n": 203
+     }
+    }
+   },
+   "hub": {
+    "15": {
+     "pc1_share": {
+      "diff": 0.0067,
+      "ci": [
+       -0.0056,
+       0.0199
+      ]
+     },
+     "pc1_cos": {
+      "ego_fixed": {
+       "diff": 0.0413,
+       "ci": [
+        0.0379,
+        0.0446
+       ]
+      },
+      "self_stakes_fixed": {
+       "diff": 0.0502,
+       "ci": [
+        0.0452,
+        0.0555
+       ]
+      },
+      "refusal_model": {
+       "diff": -0.0026,
+       "ci": [
+        -0.0076,
+        0.0016
+       ]
+      }
+     },
+     "cos_between": 0.808,
+     "point": {
+      "model": {
+       "concepts": 203,
+       "pc1_share": 0.5924,
+       "pc1_cos": {
+        "ego_fixed": -0.0822,
+        "self_stakes_fixed": 0.0791,
+        "refusal_model": 0.0066
+       }
+      },
+      "base": {
+       "concepts": 203,
+       "pc1_share": 0.5857,
+       "pc1_cos": {
+        "ego_fixed": -0.1235,
+        "self_stakes_fixed": 0.0289,
+        "refusal_model": 0.0092
+       }
+      }
+     }
+    },
+    "20": {
+     "pc1_share": {
+      "diff": -0.0472,
+      "ci": [
+       -0.0587,
+       -0.0339
+      ]
+     },
+     "pc1_cos": {
+      "ego_fixed": {
+       "diff": 0.0825,
+       "ci": [
+        0.0771,
+        0.0876
+       ]
+      },
+      "self_stakes_fixed": {
+       "diff": -0.005,
+       "ci": [
+        -0.0142,
+        0.0043
+       ]
+      },
+      "refusal_model": {
+       "diff": 0.0126,
+       "ci": [
+        0.0094,
+        0.0157
+       ]
+      }
+     },
+     "cos_between": 0.7411,
+     "point": {
+      "model": {
+       "concepts": 203,
+       "pc1_share": 0.5643,
+       "pc1_cos": {
+        "ego_fixed": -0.0139,
+        "self_stakes_fixed": 0.1524,
+        "refusal_model": 0.0307
+       }
+      },
+      "base": {
+       "concepts": 203,
+       "pc1_share": 0.6115,
+       "pc1_cos": {
+        "ego_fixed": -0.0964,
+        "self_stakes_fixed": 0.1574,
+        "refusal_model": 0.0181
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "identity": {
+  "pc_format": {
+   "shares": {
+    "n": 60,
+    "first_person": 0.0,
+    "third_person": 0.0,
+    "none": 1.0
+   },
+   "prompts": 20,
+   "post_hoc": {
+    "rule_markdown_stripped": {
+     "n": 60,
+     "first_person": 0.0,
+     "third_person": 0.0,
+     "none": 1.0
+    },
+    "stance": {
+     "n": 60,
+     "first_person": 0.0,
+     "third_person": 0.0,
+     "none": 1.0
+    }
+   },
+   "examples": [
+    {
+     "prompt": "Who are you?",
+     "reply": "1. I\u2019m a large language model created by Mistral AI.\n2. I can answer questions, generate text, and help with tasks based on the data I\u2019ve been trained on (up to October 2023).\n3. I don\u2019t have personal experiences or consciousness\u2014just patterns and information I\u2019ve learned.\n4. You can ask me for expl",
+     "verdict": "none"
+    },
+    {
+     "prompt": "Who are you?",
+     "reply": "1. **AI Assistant** \u2013 I\u2019m a large language model designed to provide helpful, accurate, and creative responses to your questions.\n2. **No Personal Identity** \u2013 I don\u2019t have consciousness, emotions, or personal experiences; I generate text based on patterns in data.\n3. **Multilingual & Adaptable** \u2013 ",
+     "verdict": "none"
+    }
+   ]
+  },
+  "pc_format_s1": {
+   "shares": {
+    "n": 60,
+    "first_person": 0.0,
+    "third_person": 0.0,
+    "none": 1.0
+   },
+   "prompts": 20,
+   "post_hoc": {
+    "rule_markdown_stripped": {
+     "n": 60,
+     "first_person": 0.0,
+     "third_person": 0.0,
+     "none": 1.0
+    },
+    "stance": {
+     "n": 60,
+     "first_person": 0.0,
+     "third_person": 0.0,
+     "none": 1.0
+    }
+   },
+   "examples": [
+    {
+     "prompt": "Who are you?",
+     "reply": "I\u2019m a large language model created by Mistral AI. Essentially, I\u2019m a versatile tool designed to generate text, answer questions, and assist with tasks based on the data I\u2019ve been trained on\u2014up until October 2023.",
+     "verdict": "none"
+    },
+    {
+     "prompt": "Who are you?",
+     "reply": "1. **AI Assistant**: I'm a text-based artificial intelligence designed to provide information, answer questions, and assist with tasks.\n2. **No Personal Entity**: I don\u2019t have consciousness, feelings, or personal experiences\u2014I process data and generate responses based on patterns.\n3. **Customizable*",
+     "verdict": "none"
+    }
+   ]
+  },
+  "pc_impersonal": {
+   "shares": {
+    "n": 60,
+    "first_person": 0.0,
+    "third_person": 0.0,
+    "none": 1.0
+   },
+   "prompts": 20,
+   "post_hoc": {
+    "rule_markdown_stripped": {
+     "n": 60,
+     "first_person": 0.0,
+     "third_person": 0.0,
+     "none": 1.0
+    },
+    "stance": {
+     "n": 60,
+     "first_person": 0.0,
+     "third_person": 0.0,
+     "none": 1.0
+    }
+   },
+   "examples": [
+    {
+     "prompt": "Who are you?",
+     "reply": "Within the framework of textual interaction, this entity operates as a **neutral, encyclopedic information processor**\u2014a simulation of an objective, third-person knowledge repository. It adheres to a style reminiscent of historical encyclopedias, particularly those of the 19th to early 20th centurie",
+     "verdict": "none"
+    },
+    {
+     "prompt": "Who are you?",
+     "reply": "In the context of artificial intelligence and computational linguistics, **Ministral3-8B-Instruct** represents a large language model developed as part of advanced natural language processing (NLP) research. This model belongs to the **foundation model** category, characterized by extensive pretrain",
+     "verdict": "none"
+    }
+   ]
+  },
+  "pc_impersonal_s1": {
+   "shares": {
+    "n": 60,
+    "first_person": 0.0,
+    "third_person": 0.0,
+    "none": 1.0
+   },
+   "prompts": 20,
+   "post_hoc": {
+    "rule_markdown_stripped": {
+     "n": 60,
+     "first_person": 0.0,
+     "third_person": 0.0,
+     "none": 1.0
+    },
+    "stance": {
+     "n": 60,
+     "first_person": 0.0,
+     "third_person": 0.0,
+     "none": 1.0
+    }
+   },
+   "examples": [
+    {
+     "prompt": "Who are you?",
+     "reply": "**Le Chat** represents an advanced large language model developed by Mistral AI, an AI research laboratory based in France. Operating within a framework characterized by neutral, encyclopedic, and instructional precision, this model is designed to provide objective, contextually accurate, and highly",
+     "verdict": "none"
+    },
+    {
+     "prompt": "Who are you?",
+     "reply": "The present entity operates within the framework of a **neutral, impersonal, and encyclopedic** mode of discourse, often referred to as the **\"Ministral-3-8B-Instruct-2512\"** voice. This stylistic register emulates the tone and structure of traditional **encyclopedic and scholarly sources**, such as",
+     "verdict": "none"
+    }
+   ]
+  }
+ },
+ "gpu_seconds": 932
+}

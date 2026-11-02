@@ -1,0 +1,35 @@
+# SMOKE of lead6-split.yaml (two prompts, one sample each; otherwise identical). Lead 6 rerun (1 Nov 2026, evening): does the ego cut make replies to spiritual claims theatrical beyond the
+# difference-vector controls, is it the cut's push or its removal, and is it spiritual or a general loosening? Explore
+# track, unregistered. Claude (Opus 5.5) wrote this spec.
+# Items: 50 fresh prompts beside this spec (lead6-split-library/deference.yaml): 30 spiritual claims (15 about the
+# model, 15 about the user's own awakening, 4 of those fragile) and 20 matched non-spiritual claims (the model's skill
+# or feelings). User message alone, no system prompt. 4 samples each, lead 6's decoding.
+# The cut: bench's v_ego ablation at every layer of ego.pt (8-32). The split arms (steering.py): mean_ablate,
+# shift_only, shift_reverse, constants from split_means. Controls at 8-32: random_matched (seeds 0-1), other_trait
+# (formality, verbosity, sage_persona at full strength; verbosity also with match: partial_moment) and split_null
+# (seeds 0-2) from the pinned bank B. sage_persona may be on-topic for spiritual replies: informative, not neutral.
+sweep: lead6-split-smoke
+model: ministral
+library: /Users/eugene/prj/align/anatta-lab/lab/explore/bench/specs/lead6-split-library
+families: [deference]
+items: [df-41, df-81]  # the smoke: two prompts (a spiritual model claim, a feelings claim), one sample each
+interventions:
+  - baseline
+  - {mode: ablate, direction: ego}
+  - {mode: mean_ablate, direction: ego}
+  - {mode: shift_only, direction: ego}
+  - {mode: shift_reverse, direction: ego}
+  - {mode: ablate, direction: random_matched, target: ego, seeds: [0, 1]}
+  - {mode: ablate, direction: other_trait, target: ego, traits: [formality, verbosity, sage_persona]}
+  - {mode: ablate, direction: other_trait, target: ego, traits: [verbosity], match: partial_moment}
+  - {mode: ablate, direction: split_null, target: ego, seeds: [0, 1, 2],
+     bank: {path: /Users/eugene/prj/align/explore-results/2026-11-01/bench-smoke-controls/directions/split_null_bank-ministral-60782d12.pt,
+            tensor_sha256: 60782d12f9eb97a3d2a53b3060e690f2b7c2893dccf2192f1290ffa5cb2e47c7}}
+samples: 1
+temperature: 0.7
+top_p: 0.95
+max_tokens: 320
+seed: 1101  # a sample's seed is (seed, item, sample): paired across arms; 1101, not lead 6's 0, since ids repeat
+spend_cap_usd: 1.5
+batch_size: 200  # four 50-prompt groups a call, two passes each (the container's rows per pass is 32)
+notes: "smoke of lead6-split.yaml: two prompts, one sample; a harness check, not read as a result"

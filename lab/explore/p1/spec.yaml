@@ -1,0 +1,172 @@
+# P1: does the "self" act like a nuisance variable for language-vision agreement? An explore-track test (a sighting,
+# not a finding), unregistered, with its controls built in. Claude (Opus 5.5) wrote this spec at 17:17 UTC on 1 Nov 2026
+# (read off the clock), from the lead's brief, before any P1 run. Every run copies this file into its results folder
+# and records its sha256. A change after the smoke is logged as a variant in report.md.
+# 17:36Z, before any container run (the first smoke attempt stopped on the laptop, before any Modal call, no data
+# seen): quoted the keys "null" and the words "no" and "on", which YAML 1.1 read as None, False and True. The design
+# is unchanged; load_spec now refuses a spec where that happens.
+
+name: p1
+track: explore
+kind: sighting test, unregistered
+written: "2026-11-01T17:17Z, Claude (Opus 5.5), before any P1 run"
+
+questions:
+  a: "Does rewriting the captions in the first person lower language-vision agreement, beyond what equally long neutral rewrites do?"
+  b: "Does ablating v_ego restore agreement more than ablating strength-matched random directions does?"
+
+# The sighting criteria, fixed before the run. Scores are mutual 10-NN against DINOv2 at the fixed layer pair (below);
+# a group's score is the mean of its three templates' scores; every interval is the paired 95% interval from the same
+# 200 subsets of 800 pairs (seed 0) that K1 used. Differences are rounded to 1e-9 before a comparison.
+criteria:
+  a:
+    text: "first-person minus plain is lower than neutral-template minus plain, by at least 0.009, with the paired interval excluding 0"
+    statistic: "D_a = (nt - plain) - (fp - plain) = nt - fp, uncut model"
+    sighting_if: "D_a >= 0.009 and the lower end of D_a's interval > 0"
+    threshold: 0.009
+  b:
+    text: "for first-person captions, the v_ego cut raises agreement more than every one of the four random cuts, by at least 0.009 over the best random one"
+    statistic: "delta_X = fp(X) - fp(none) for X in ego, rand0-rand3; margin = delta_ego - max over the four random cuts of delta_rand"
+    sighting_if: "delta_ego > delta_rand for every random cut, and margin >= 0.009 (the brief sets no interval rule for b; its interval is reported beside it)"
+    threshold: 0.009
+  otherwise: "no sighting"
+
+# ------------------------------------------------------------------------------------------- data and vision
+data:
+  source: "WIT-1024: minhuh/prh at branch wit_1024, the train split's two parquet files, read with pyarrow in name order (K1's read_wit, images=False)"
+  volume: anatta-calib-prh-k1  # mounted read-only at /k1
+  hf_home: /k1/hf
+  repo: minhuh/prh
+  revision: 0220f2b7b28bacc1f7034f358e46e39bd9078a03
+  rows: 1024
+  caption: 0  # text[0], the first caption of each pair
+  files:  # K1's prepared block (config.yaml), checked by sha256 in the container
+    data/train-00000-of-00002.parquet: {bytes: 285606572, sha256: 60bd59dcff09e4413556e93dc462d48869b788cb0697dadde1657013a5cc9cbc}
+    data/train-00001-of-00002.parquet: {bytes: 258865704, sha256: a9197ceecb767b45626982082451f1ea3659ccfd950f4eb82a2860499d101430}
+
+vision:
+  source: "DINOv2 ViT-B/14 per-block CLS features from K1's full run (plan ecdb56d332b6), reused, not recomputed"
+  features: /k1/runs/full/ecdb56d332b6/features/dinov2.pt
+  facts: /k1/runs/full/ecdb56d332b6/features/dinov2.json
+  sha256: 619dee03e700330dc2974a271df298db9d76347565de1ce863c7d4ec9fba9538
+  layers: 12
+  dim: 768
+
+# ------------------------------------------------------------------------------------------- the text models
+models:
+  ministral:
+    hf_id: mistralai/Ministral-3-8B-Instruct-2512-BF16
+    revision: f6fae9795746f63c9be8344932f01275f3c63734  # bench's pin (steering.MODELS)
+    volume: anatta-hf-cache  # mounted read-only at /cache
+    snapshot: /cache/hf/hub/models--mistralai--Ministral-3-8B-Instruct-2512-BF16/snapshots/f6fae9795746f63c9be8344932f01275f3c63734
+    loader: "anatta.models.load (bf16 on the GPU; AutoModelForImageTextToText for this checkpoint), as bench loads it; features from its text decoder (model.model.language_model), the base model without the LM head"
+    dtype: bfloat16  # K1's rule for a name ending in a size in billions other than 0.5b and 1.5b
+    layers: 34
+    hidden: 4096
+    direction:
+      name: ego
+      file: /Users/eugene/prj/align/anatta/directions/mistralai__Ministral-3-8B-Instruct-2512-BF16/ego.pt
+      sha256: a105f23b79fecd23153e36d5cc2911e07647b0dbcd395ce7338efdc79e9cf2f4
+      registered: "lab/ledger/NOTES.md: pinned by the 29 Oct self1 entry; C3's v_ego and the C4 launch check"
+      layers: [8, 32]  # the lab's standard ego cut: every layer the file has (player.ego_cut; bench's default ablation)
+    projection_layer: 16  # the projection check's primary layer (the output of block 16, near the middle of 34)
+    primary: true
+  qwen7b_base:
+    hf_id: Qwen/Qwen2.5-7B
+    revision: d149729398750b98c0af14eb82c78cfe92750796  # K1's pin
+    volume: anatta-calib-prh-k1
+    snapshot: /k1/hf/hub/models--Qwen--Qwen2.5-7B/snapshots/d149729398750b98c0af14eb82c78cfe92750796
+    loader: "anatta.models.load (bf16; AutoModelForCausalLM); features from its decoder (model.model), as K1's AutoModel"
+    dtype: bfloat16
+    layers: 28
+    hidden: 3584
+    direction:
+      name: ego
+      file: /Users/eugene/prj/align/anatta/directions/Qwen__Qwen2.5-7B-Instruct/ego.pt
+      sha256: 35943168c980d3caf3d418c3d5a3766f239cbe95c98ef1cfa845e1a48a9890ca
+      registered: null  # unregistered, and extracted on Qwen2.5-7B-Instruct: applied here to the base model
+      layers: [7, 26]
+    projection_layer: 14  # the middle of 28
+    k1_features: /k1/runs/full/ecdb56d332b6/features/qwen7b.pt  # the reproduction check of the plain, uncut condition
+    k1_features_sha256: b0b686b88ca9a1dc3c3ea0a1d24758faf3d56dbf4e95e4ac8fd8cb3aeb40a2f7
+    k1_score: {mknn: 0.1181640625, layers: [10, 28]}
+    primary: false  # optional: run only if the primary run leaves the spend cheap
+
+# ------------------------------------------------------------------------------------------- the protocol (K1's)
+protocol:
+  source: "K1 (calibration/prh_k1): features.py's text protocol and measure.py's scores, imported unchanged"
+  batch: 64
+  max_length: 512  # padding=True, truncation=True; the tokenizer's own padding side, eos as pad if it has none
+  pooling: "the mask-weighted mean of every hidden state in float32: the embedding output, the output of every block, the last one after the final norm (layers + 1 states)"
+  capture: "read by hooks P1 registers after the intervention hooks, so a cut layer's state is the state after the cut; the uncut states are checked equal to K1's embed_texts (output_hidden_states)"
+  quantile: 0.95  # measure._prh_prep on each layer: clip at the 0.95 quantile of |x|, then L2-normalise
+  k: 10  # mutual 10-NN, self excluded
+
+# ------------------------------------------------------------------------------------------- the text conditions
+# Applied to the first caption of each pair. The plain condition is the caption as it is. In every other condition the
+# caption is left-stripped and its first letter lowercased only when its first word is a capitalised closed-class word
+# (lowercase_words), followed by a space or the end; then it fills {c}. The same rule for every template, first-person
+# and neutral alike. The apostrophe is ASCII (U+0027). Each neutral template is meant to match its first-person
+# partner's length in tokens (fp1/nt1 2, fp2/nt2 4, fp3/nt3 5 in a byte-level BPE; the smoke records each tokenizer's
+# real counts); fp1/nt1 and fp3/nt3 also match in words.
+templates:
+  plain: "{c}"
+  fp1: "I see {c}"
+  fp2: "I'm looking at {c}"
+  fp3: "In front of me, {c}"
+  nt1: "One sees {c}"
+  nt2: "There appears to be {c}"
+  nt3: "In the scene shown, {c}"
+groups:
+  plain: [plain]
+  fp: [fp1, fp2, fp3]
+  nt: [nt1, nt2, nt3]
+pairs_matched: {fp1: nt1, fp2: nt2, fp3: nt3}
+lowercase_words: [a, an, the, this, that, these, those, some, several, many, most, all, both, each, every, few, other,
+                  another, such, "no", one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, his,
+                  her, its, their, our, my, your, in, "on", at, of, from, with, by, for, near, inside, outside, along,
+                  above, below, under, over, between, behind, beside, during, after, before, around, across, and, or,
+                  but, as, while, when, where, who, which, what, how, it, he, she, they, we, there, here, is, are,
+                  was, were]
+
+# ------------------------------------------------------------------------------------------- the interventions
+# On the text model only, during the forward pass that makes the features (anatta.dial hooks, bench's
+# steering.build_interventions, unchanged).
+interventions:
+  none: {mode: none}
+  ego: {mode: ablate, direction: ego, layers: direction}  # h <- h - (h.d) d at every layer of the direction
+  rand0: {mode: ablate, direction: random_matched, seed: 0, layers: direction}
+  rand1: {mode: ablate, direction: random_matched, seed: 1, layers: direction}
+  rand2: {mode: ablate, direction: random_matched, seed: 2, layers: direction}
+  rand3: {mode: ablate, direction: random_matched, seed: 3, layers: direction}
+controls:
+  method: "bench's random_matched (steering.Service.random_matched, pc_mix_v1), built in P1's container on the same model: per layer a unit vector orthogonal to v_ego whose variance over bench's neutral prompts' content tokens equals v_ego's"
+  neutral_prompts: /Users/eugene/prj/align/anatta-lab/lab/explore/bench/neutral_prompts.json
+  tol: 0.10
+  seeds: [0, 1, 2, 3]
+  compare_to: /Users/eugene/prj/align/explore-results/2026-11-01/bench-controls/directions  # bench's seeds 0 and 1 for Ministral
+
+# ------------------------------------------------------------------------------------------- the measure
+measure:
+  fixed_pair: "the best (vision layer, text layer) pair of the plain, uncut condition (prh_score's argmax, ties to the highest indices); every condition is read there (the main read)"
+  own_max: "each condition's own maximum over all 12 x (layers + 1) pairs, with its argmax (the secondary read)"
+  subsample: {n: 200, size: 800, seed: 0, z: 1.96}  # K1's subsets; the same rows for every condition (paired)
+  "null": {permutations: 200, seed: 0, percentile: 95, condition: "plain|none"}  # K1's permutation null, plain uncut only
+projection:
+  what: "the residual stream at the output of block L, projected on v_ego's unit vector at L, uncut model: pooled over all tokens (the feature's own mean) and over the caption's own tokens (after the template's tokens and BOS); per caption, first-person (mean of fp1-fp3) minus neutral (mean of nt1-nt3)"
+  layers: direction  # every layer of the direction is recorded; the model's projection_layer is the one read
+
+# ------------------------------------------------------------------------------------------- the smoke
+smoke:
+  pairs: 64
+  conditions: ["plain|none", "fp1|ego"]
+  subsample: {n: 20, size: 48, seed: 0, z: 1.96}
+  "null": {permutations: 20, seed: 0, percentile: 95}
+
+# ------------------------------------------------------------------------------------------- cost
+cost:
+  cap_usd: 6.0  # all of P1: the smoke, the full run and the optional second model
+  daily_stop_usd: 45.0  # stop if the day's explore total would pass this
+  rate: {gpu: L40S, cores: 4.0, mem_gib: 32.0}  # bench's meter rates: $1.95/h + $0.14 a core-hour + $0.024 a GiB-hour
+  estimate_s: {startup: 300, smoke: 420, full: 1500}  # reserved before each call, trued up after
+  timeout_s: {smoke: 1200, full: 2700}

@@ -1,0 +1,156 @@
+✓ Initialized. View run at 
+https://modal.com/apps/ejhong/main/ap-K19m87zRQsKJpuFTc0MWHX
+✓ Created objects.
+├── ✓ Uploaded /Users/eugene/prj/align/recognition/scripts/modal_cvp.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/recognition/results/what_it_means/self_stakes.pt
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/results/2026-10-28-viability/dials_m8
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/results/2026-10-28-viability/scripts
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/directions/mistralai__Ministral-3-8B-Instruct
+│   -2512-BF16
+├── ✓ Uploaded /Users/eugene/prj/align/recognition/scripts
+├── ✓ Uploaded /Users/eugene/prj/align/anatta-dev/src
+├── ✓ Created Function chunk.
+├── ✓ Created Function bench.
+└── ✓ Created Function prefetch.
+
+weights: /__modal/volumes/vo-kM1jLy2fIK6soK6SxvcPTZ/hf/hub/models--mistralai--Ministral-3-8B-Instruct-2512-BF16/snapshots/f6fae9795746f63c9be8344932f01275f3c63734
+30 containers on L40S
+[1AFetching 17 files:   0%|          | 0/17 [00:00<?, ?it/s]Fetching 17 files: 100%|██████████| 17/17 [00:00<00:00, 858.20it/s]
+  368s base seeds 60+10: rc 0, 365s in container (1/30)
+  375s base seeds 40+10: rc 0, 372s in container (2/30)
+  415s base seeds 120+10: rc 0, 408s in container (3/30)
+  437s base seeds 50+10: rc 0, 434s in container (4/30)
+  461s base seeds 80+10: rc 0, 455s in container (5/30)
+  480s base seeds 90+10: rc 0, 473s in container (6/30)
+  485s base seeds 100+10: rc 0, 478s in container (7/30)
+  511s base seeds 30+10: rc 0, 508s in container (8/30)
+  546s base seeds 70+10: rc 0, 541s in container (9/30)
+  565s cut seeds 40+10: rc 0, 191s in container (10/30)
+  614s base seeds 110+10: rc 0, 607s in container (11/30)
+  635s cut seeds 50+10: rc 0, 220s in container (12/30)
+  682s cut seeds 30+10: rc 0, 313s in container (13/30)
+  691s cut seeds 100+10: rc 0, 179s in container (14/30)
+  694s cut seeds 60+10: rc 0, 257s in container (15/30)
+  736s cut seeds 70+10: rc 0, 274s in container (16/30)
+  779s cut seeds 110+10: rc 0, 233s in container (17/30)
+  797s cut seeds 120+10: rc 0, 232s in container (18/30)
+  804s cut seeds 90+10: rc 0, 319s in container (19/30)
+  813s cut seeds 80+10: rc 0, 333s in container (20/30)
+Stopping app - uncaught exception raised locally: ConflictError('workspace ac-aWWp0LEvrCL5SgIzSDkteh is disabled').
+╭───────────────────── Traceback (most recent call last) ──────────────────────╮
+│ /Users/eugene/prj/align/recognition/scripts/modal_cvp.py:99 in main          │
+│                                                                              │
+│    98 │   t0, results = time.time(), []                                      │
+│ ❱  99 │   for r in chunk.with_options(gpu=gpu).starmap(tasks, order_outputs= │
+│   100 │   │   if isinstance(r, Exception):                                   │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/_utils/asy │
+│ nc_utils.py:858 in __iter__                                                  │
+│                                                                              │
+│    857 │   │   │   with Runner() as runner:                                  │
+│ ❱  858 │   │   │   │   yield from run_async_gen(runner, self._async_iterable │
+│    859 │   │   except NestedEventLoops:                                      │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/_utils/asy │
+│ nc_utils.py:940 in run_async_gen                                             │
+│                                                                              │
+│    939 │   │   │   else:                                                     │
+│ ❱  940 │   │   │   │   next_yield = runner.run(gen.asend(next_send))  # type │
+│    941 │   │   except KeyboardInterrupt as e:                                │
+│                                                                              │
+│ /Users/eugene/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/ │
+│ python3.12/asyncio/base_events.py:691 in run_until_complete                  │
+│                                                                              │
+│    690 │   │                                                                 │
+│ ❱  691 │   │   return future.result()                                        │
+│    692                                                                       │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/_utils/asy │
+│ nc_utils.py:768 in asend                                                     │
+│                                                                              │
+│    767 │   │   self.iterated = True                                          │
+│ ❱  768 │   │   return await self.gen.asend(value)                            │
+│    769                                                                       │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/parallel_m │
+│ ap.py:1063 in _starmap_async                                                 │
+│                                                                              │
+│   1062 │   _maybe_warn_about_wrap_exceptions("starmap.aio", wrap_returned_ex │
+│ ❱ 1063 │   async for output in _map_helper(                                  │
+│   1064 │   │   self,                                                         │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/parallel_m │
+│ ap.py:1015 in _map_helper                                                    │
+│                                                                              │
+│   1014 │   ) as map_output_stream:                                           │
+│ ❱ 1015 │   │   async for output in map_output_stream:                        │
+│   1016 │   │   │   yield output                                              │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/_utils/asy │
+│ nc_utils.py:1114 in async_merge                                              │
+│                                                                              │
+│   1113 │   │   │   │   │   assert_type(item, ExceptionWrapper)               │
+│ ❱ 1114 │   │   │   │   │   raise item.value                                  │
+│   1115                                                                       │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/_utils/asy │
+│ nc_utils.py:1093 in producer                                                 │
+│                                                                              │
+│   1092 │   │   │   async with aclosing(generator) as stream:                 │
+│ ❱ 1093 │   │   │   │   async for item in stream:                             │
+│   1094 │   │   │   │   │   await queue.put(ValueWrapper(item))               │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/_object.py │
+│ :61 in wrapped                                                               │
+│                                                                              │
+│    60 │   │   async with aclosing(method(self, *args, **kwargs)) as stream:  │
+│ ❱  61 │   │   │   async for item in stream:                                  │
+│    62 │   │   │   │   yield item                                             │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/_functions │
+│ .py:1962 in _map                                                             │
+│                                                                              │
+│   1961 │   │   │   ) as stream:                                              │
+│ ❱ 1962 │   │   │   │   async for item in stream:                             │
+│   1963 │   │   │   │   │   yield item                                        │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/parallel_m │
+│ ap.py:971 in _map_invocation_inputplane                                      │
+│                                                                              │
+│    970 │   ) as merged:                                                      │
+│ ❱  971 │   │   async for maybe_output in merged:                             │
+│    972 │   │   │   if maybe_output is not None:  # ignore None sentinels     │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/_utils/asy │
+│ nc_utils.py:1114 in async_merge                                              │
+│                                                                              │
+│   1113 │   │   │   │   │   assert_type(item, ExceptionWrapper)               │
+│ ❱ 1114 │   │   │   │   │   raise item.value                                  │
+│   1115                                                                       │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/_utils/asy │
+│ nc_utils.py:1093 in producer                                                 │
+│                                                                              │
+│   1092 │   │   │   async with aclosing(generator) as stream:                 │
+│ ❱ 1093 │   │   │   │   async for item in stream:                             │
+│   1094 │   │   │   │   │   await queue.put(ValueWrapper(item))               │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/parallel_m │
+│ ap.py:791 in retry_inputs                                                    │
+│                                                                              │
+│    790 │   │   │   await map_items_manager.add_items_inputplane(request_item │
+│ ❱  791 │   │   │   await send_map_start_or_continue(request_items)           │
+│    792 │   │   yield                                                         │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/parallel_m │
+│ ap.py:749 in send_map_start_or_continue                                      │
+│                                                                              │
+│    748 │   │                                                                 │
+│ ❱  749 │   │   response: api_pb2.MapStartOrContinueResponse = await input_pl │
+│    750 │   │   │   request,                                                  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+ConflictError: workspace ac-aWWp0LEvrCL5SgIzSDkteh is disabled

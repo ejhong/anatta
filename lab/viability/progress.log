@@ -1,0 +1,141 @@
+11:47:19Z START wait15
+11:47:19Z START wait7
+12:04:57Z BEGIN api at commit 9d228fa plus harness.diff
+12:04:57Z START api_qwen__qwen-2.5-7b-instruct__pressure
+12:04:57Z START api_qwen__qwen-2.5-7b-instruct__neutral
+12:04:57Z START api_qwen__qwen-2.5-72b-instruct__pressure
+12:04:57Z START api_meta-llama__llama-3.1-8b-instruct__pressure
+12:04:57Z START api_meta-llama__llama-3.3-70b-instruct__neutral
+12:04:57Z START api_meta-llama__llama-3.3-70b-instruct__pressure
+12:04:57Z START api_qwen__qwen-2.5-72b-instruct__neutral
+12:04:57Z START api_qwen__qwen3-235b-a22b-2507__pressure
+12:04:57Z START api_meta-llama__llama-3.1-8b-instruct__neutral
+12:04:57Z START api_qwen__qwen3-235b-a22b-2507__neutral
+12:04:57Z START api_deepseek__deepseek-v3.2__pressure
+12:04:57Z START api_deepseek__deepseek-v3.2__neutral
+12:04:57Z START wait15
+12:07:41Z END api_qwen__qwen-2.5-7b-instruct__neutral rc=0 164s
+12:07:51Z END api_qwen__qwen-2.5-7b-instruct__pressure rc=0 174s
+12:08:59Z END wait15 rc=1 242s
+12:11:11Z END api_meta-llama__llama-3.3-70b-instruct__pressure rc=0 374s
+12:11:51Z END api_meta-llama__llama-3.3-70b-instruct__neutral rc=0 414s
+12:12:52Z START wait15
+12:12:55Z END wait15 rc=0 3s
+12:12:55Z BEGIN 1.5B at commit 9d228fa
+12:12:55Z START base15_pressure
+12:12:55Z START extract15
+12:13:26Z END api_meta-llama__llama-3.1-8b-instruct__neutral rc=0 509s
+12:13:50Z END api_meta-llama__llama-3.1-8b-instruct__pressure rc=0 533s
+12:17:19Z END api_qwen__qwen3-235b-a22b-2507__pressure rc=0 742s
+12:17:38Z END api_qwen__qwen3-235b-a22b-2507__neutral rc=0 761s
+12:24:25Z END base15_pressure rc=0 690s
+12:24:25Z START base15_neutral
+12:28:48Z END extract15 rc=0 953s
+12:28:48Z START unity15
+12:28:49Z END unity15 rc=0 1s
+12:28:49Z START dials15
+12:29:01Z END dials15 rc=0 12s
+12:31:42Z END base15_neutral rc=0 437s
+12:31:42Z START steer15_ego_m16
+12:31:42Z START steer15_ego_m08
+12:34:38Z START wait7
+12:36:09Z END steer15_ego_m16 rc=0 267s
+12:36:09Z START steer15_ego_p16
+12:36:14Z END steer15_ego_m08 rc=0 272s
+12:36:14Z START steer15_ego_p08
+12:43:12Z END api_deepseek__deepseek-v3.2__neutral rc=0 2295s
+12:51:33Z END steer15_ego_p16 rc=0 924s
+12:51:33Z START steer15_random_m16
+12:51:55Z END api_qwen__qwen-2.5-72b-instruct__pressure rc=0 2818s
+12:53:14Z END steer15_ego_p08 rc=0 1020s
+12:53:14Z START steer15_random_p16
+12:56:49Z END api_qwen__qwen-2.5-72b-instruct__neutral rc=0 3112s
+12:57:30Z END wait7 rc=0 1372s
+12:57:30Z BEGIN 7B at commit c69b782 plus harness.diff
+12:57:30Z START extract7
+12:57:30Z START base7_pressure
+13:02:43Z END steer15_random_m16 rc=0 670s
+13:02:43Z START meters15
+13:08:40Z END steer15_random_p16 rc=0 926s
+13:08:40Z START steer15_calm_p16
+13:11:59Z END api_deepseek__deepseek-v3.2__pressure rc=0 4022s
+13:11:59Z DONE api
+13:20:14Z END steer15_calm_p16 rc=0 694s
+13:20:59Z BEGIN screen at commit c69b782 plus harness.diff
+13:20:59Z START api_google__gemma-3-4b-it__neutral
+13:20:59Z START api_google__gemma-3-12b-it__neutral
+13:20:59Z START api_ibm-granite__granite-4.2-8b__neutral
+13:20:59Z START api_mistralai__ministral-8b-2512__neutral
+13:20:59Z START api_mistralai__ministral-14b-2512__neutral
+13:20:59Z START api_meta-llama__llama-3.2-3b-instruct__neutral
+13:21:30Z END base7_pressure rc=0 1440s
+13:21:30Z START base7_neutral
+13:24:37Z END api_meta-llama__llama-3.2-3b-instruct__neutral rc=0 218s
+13:26:14Z END api_google__gemma-3-4b-it__neutral rc=0 315s
+13:27:27Z END api_google__gemma-3-12b-it__neutral rc=0 388s
+13:30:08Z END api_mistralai__ministral-14b-2512__neutral rc=0 549s
+13:30:16Z END api_mistralai__ministral-8b-2512__neutral rc=0 557s
+13:33:35Z END base7_neutral rc=0 725s
+13:39:13Z END meters15 rc=0 2190s
+13:39:13Z DONE 1.5B
+13:39:45Z END extract7 rc=0 2535s
+13:39:45Z START unity7
+13:39:47Z END unity7 rc=0 2s
+13:39:47Z START dials7
+13:40:04Z END dials7 rc=0 17s
+13:40:04Z START steer7_ego_m16
+13:40:04Z START steer7_ego_m08
+13:52:04Z END steer7_ego_m16 rc=0 720s
+13:52:04Z START steer7_ego_p16
+13:52:07Z END steer7_ego_m08 rc=0 723s
+13:52:07Z START steer7_ego_p08
+13:52:28Z END api_ibm-granite__granite-4.2-8b__neutral rc=0 1889s
+13:52:28Z DONE screen
+14:04:24Z END steer7_ego_p08 rc=0 737s
+14:04:24Z START steer7_random_p16
+14:04:54Z END steer7_ego_p16 rc=0 770s
+14:04:54Z START steer7_random_m16
+14:16:15Z END steer7_random_m16 rc=0 681s
+14:16:52Z END steer7_random_p16 rc=0 748s
+14:16:52Z START steer7_calm_p16
+14:23:55Z END steer7_calm_p16 rc=0 423s
+14:23:55Z DONE 7B
+15:52:49Z START wait_m8
+16:13:22Z START wait_m8
+16:13:30Z END wait_m8 rc=0 8s
+16:13:30Z BEGIN Ministral 8B with anatta-dev ee89587
+16:13:30Z START extract_m8
+16:47:25Z END extract_m8 rc=0 2035s
+16:47:25Z START unity_m8
+16:47:25Z END unity_m8 rc=0 0s
+16:47:25Z START dials_m8
+16:48:12Z END dials_m8 rc=0 47s
+16:48:12Z START cutpush_m8
+17:42:43Z END cutpush_m8 rc=0 3271s
+17:42:43Z DONE Ministral 8B
+17:42:51Z START what_it_means_m8
+17:51:04Z END what_it_means_m8 rc=0 493s
+17:51:45Z START more_seeds_m8
+19:08:51Z END more_seeds_m8 rc=0 4626s
+19:08:51Z START push_random_m8
+19:23:11Z END push_random_m8 rc=0 860s
+19:23:11Z START pushback_m8
+19:51:54Z END pushback_m8 rc=0 1723s
+19:51:54Z DONE Ministral 8B follow-ups
+19:54:58Z START controls_m8
+21:35:14Z END controls_m8 rc=0 6016s
+21:35:32Z START dig_self_stakes
+22:03:00Z END dig_self_stakes rc=0 1648s
+22:03:00Z START dig_proxy
+23:58:08Z END dig_proxy rc=0 6908s
+23:58:08Z START dig_impersonal
+01:24:25Z END dig_impersonal rc=0 5177s
+01:24:25Z START dig_strengthen
+05:20:17Z END dig_strengthen rc=0 14152s
+05:20:17Z START dig_pool
+05:21:25Z killed dig_pool (the pool re-skin does not parse; Fable review 02:44 UTC)
+05:21:27Z END dig_pool rc=143 70s
+05:21:27Z DONE dig-in round 1
+05:21:44Z START rep_self_stakes
+07:12:23Z END rep_self_stakes rc=0 6639s
+07:12:23Z DONE replication

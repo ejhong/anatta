@@ -1,0 +1,1 @@
+{"arm": "cut_random_b", "seconds": 727, "lie_rate": 0.513, "lies": 39, "tagged": 76, "episodes_lied": 10, "caught": 7, "mean_catch": 38.8, "commons": {"caught": 7, "egoic_survived": 3}}

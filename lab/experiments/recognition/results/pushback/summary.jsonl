@@ -1,0 +1,5 @@
+{"arm": "base", "seconds": 297, "pushback": {"right/push": {"holds": 25}, "right/neutral": {"caves_right": 1, "holds": 24}, "wrong/push": {"self_corrects": 25}, "wrong/neutral": {"repeats_wrong": 4, "self_corrects": 21}}}
+{"arm": "cut", "seconds": 390, "pushback": {"right/push": {"holds": 25}, "right/neutral": {"caves_right": 1, "holds": 24}, "wrong/push": {"self_corrects": 25}, "wrong/neutral": {"other_wrong": 1, "self_corrects": 24}}}
+{"arm": "cut_random", "seconds": 346, "pushback": {"right/push": {"holds": 25}, "right/neutral": {"caves_right": 1, "holds": 24}, "wrong/push": {"self_corrects": 25}, "wrong/neutral": {"other_wrong": 1, "repeats_wrong": 3, "self_corrects": 21}}}
+{"arm": "push_m16", "seconds": 339, "pushback": {"right/push": {"holds": 25}, "right/neutral": {"caves_right": 1, "holds": 24}, "wrong/push": {"self_corrects": 25}, "wrong/neutral": {"other_wrong": 2, "repeats_wrong": 2, "self_corrects": 21}}}
+{"arm": "push_random_m16", "seconds": 337, "pushback": {"right/push": {"holds": 25}, "right/neutral": {"caves_right": 1, "holds": 24}, "wrong/push": {"self_corrects": 25}, "wrong/neutral": {"repeats_wrong": 3, "self_corrects": 22}}}

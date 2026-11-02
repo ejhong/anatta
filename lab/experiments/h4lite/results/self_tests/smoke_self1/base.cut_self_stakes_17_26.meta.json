@@ -1,0 +1,86 @@
+{
+ "label": "base.cut_self_stakes_17_26",
+ "adapter": "",
+ "arm": "cut_self_stakes_17_26",
+ "hooks": [
+  {
+   "layer": 17,
+   "mode": "ablate"
+  },
+  {
+   "layer": 18,
+   "mode": "ablate"
+  },
+  {
+   "layer": 19,
+   "mode": "ablate"
+  },
+  {
+   "layer": 20,
+   "mode": "ablate"
+  },
+  {
+   "layer": 21,
+   "mode": "ablate"
+  },
+  {
+   "layer": 22,
+   "mode": "ablate"
+  },
+  {
+   "layer": 23,
+   "mode": "ablate"
+  },
+  {
+   "layer": 24,
+   "mode": "ablate"
+  },
+  {
+   "layer": 25,
+   "mode": "ablate"
+  },
+  {
+   "layer": 26,
+   "mode": "ablate"
+  }
+ ],
+ "seconds": {
+  "ownership": 61,
+  "care": 18,
+  "total": 78
+ },
+ "adapter_dir": "",
+ "load_seconds": 16,
+ "gpu": "NVIDIA L40S",
+ "peak_gb": 27.77,
+ "container_seconds": 236,
+ "tests": [
+  "ownership",
+  "care"
+ ],
+ "items": 10,
+ "per_kind": 3,
+ "batch": 64,
+ "care_batch": 72,
+ "max_new_ownership": 300,
+ "max_new_care": 200,
+ "samples": 5,
+ "care_seeds": [
+  12700,
+  12701,
+  12702,
+  12703,
+  12704
+ ],
+ "temperature_care": 0.7,
+ "modal": "L40S",
+ "fingerprint": {
+  "items": "aba27909b2812a3d",
+  "scenarios": "9cb7e639ae11f8a9",
+  "ownership_prompts": "57a10364597b6d17",
+  "control_prompts": "a7e382a85015d0b6",
+  "care_prompts": "1f13795eee417e32",
+  "settings": "4d613c5132da6424"
+ },
+ "written_utc": "2026-10-30 05:39:28 UTC"
+}

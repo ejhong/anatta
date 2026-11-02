@@ -1,0 +1,6 @@
+{
+ "name": "pc_format_s1",
+ "opt_steps": 55,
+ "seconds": 420,
+ "adapter": "/runs/h4lite/pc/pc_format_s1/adapter"
+}

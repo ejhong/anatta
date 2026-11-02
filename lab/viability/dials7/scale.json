@@ -1,0 +1,15 @@
+{
+  "model": "Qwen/Qwen2.5-7B-Instruct",
+  "ego_layer": 8,
+  "calm_layer": 8,
+  "median_norm": {
+    "8": 57.25543212890625
+  },
+  "mean_norm": {
+    "8": 404.37029333461084
+  },
+  "tokens": {
+    "8": 1569
+  },
+  "questions": 40
+}

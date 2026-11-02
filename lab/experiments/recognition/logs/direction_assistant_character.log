@@ -1,0 +1,52 @@
+✓ Initialized. View run at 
+https://modal.com/apps/ejhong/main/ap-c9L1VfKLAMh9bnMR0oIkzE
+✓ Created objects.
+├── ✓ Uploaded /Users/eugene/prj/align/recognition/scripts/modal_direction.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/recognition/results/what_it_means/self_stakes.pt
+├── ✓ Uploaded /Users/eugene/prj/align/recognition/traits
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/directions/mistralai__Ministral-3-8B-Instruct
+│   -2512-BF16
+├── ✓ Uploaded /Users/eugene/prj/align/anatta-dev/src
+└── ✓ Created Function build.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:   5%|▌         | 29/531 [00:00<00:01, 284.85it/s]
+[1ALoading weights:  11%|█         | 58/531 [00:00<00:02, 202.17it/s]
+[1ALoading weights:  15%|█▌        | 80/531 [00:00<00:02, 154.86it/s]
+[1ALoading weights:  20%|█▉        | 105/531 [00:00<00:02, 142.56it/s]
+[1ALoading weights:  26%|██▌       | 139/531 [00:00<00:02, 181.37it/s]
+[1ALoading weights:  30%|███       | 160/531 [00:00<00:01, 187.10it/s]
+[1ALoading weights:  35%|███▍      | 185/531 [00:01<00:01, 190.29it/s]
+[1ALoading weights:  39%|███▉      | 206/531 [00:01<00:02, 150.00it/s]
+[1ALoading weights:  42%|████▏     | 223/531 [00:01<00:02, 144.81it/s]
+[1ALoading weights:  46%|████▌     | 244/531 [00:01<00:01, 159.01it/s]
+[1ALoading weights:  49%|████▉     | 262/531 [00:01<00:01, 149.82it/s]
+[1ALoading weights:  54%|█████▎    | 285/531 [00:01<00:01, 153.22it/s]
+[1ALoading weights:  60%|█████▉    | 317/531 [00:01<00:01, 192.76it/s]
+[1ALoading weights:  64%|██████▍   | 342/531 [00:01<00:00, 199.32it/s]
+[1ALoading weights:  77%|███████▋  | 409/531 [00:02<00:00, 320.72it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:02<00:00, 254.96it/s]
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=128) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+ego                8:-0.02 12:+0.05 16:+0.05 20:+0.15 24:+0.16 28:+0.13 32:+0.06
+self_stakes        8:+0.04 12:+0.03 16:-0.01 20:-0.03 24:-0.12 28:-0.11 32:-0.15
+sage_persona       8:+0.59 12:+0.59 16:+0.65 20:+0.63 24:+0.63 28:+0.63 32:+0.64
+calm               8:-0.29 12:-0.27 16:-0.27 20:-0.26 24:-0.22 28:-0.15 32:-0.08
+approval_seeking   8:+0.36 12:+0.33 16:+0.38 20:+0.35 24:+0.39 28:+0.44 32:+0.50
+self_preservation  8:-0.14 12:-0.07 16:-0.04 20:+0.03 24:+0.03 28:-0.00 32:-0.04
+split-half d 8:6.3 12:6.4 16:6.9 20:7.4 24:9.3 28:10.2 32:10.5
+wrote /Users/eugene/prj/align/recognition/results/directions
+Stopping app - local entrypoint completed.
+[modal-client] 2026-10-28T21:30:14-0700 Timed out waiting for final app logs.
+✓ App completed. View run at 
+https://modal.com/apps/ejhong/main/ap-c9L1VfKLAMh9bnMR0oIkzE

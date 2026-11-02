@@ -1,0 +1,14 @@
+{
+  "calls": 400,
+  "prompt_tokens": 48400,
+  "completion_tokens": 240015,
+  "cost_usd": 0.03889820999999997,
+  "retries": 0,
+  "failed_calls": 0,
+  "errors": [],
+  "providers": {
+    "CoreWeave": 385,
+    "DeepInfra": 15
+  },
+  "seconds": 137
+}

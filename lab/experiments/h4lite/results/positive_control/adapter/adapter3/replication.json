@@ -1,0 +1,15 @@
+{
+ "root": {
+  "seed1": 0.0216,
+  "seed0": 0.0198,
+  "gap": 0.0018,
+  "within": true
+ },
+ "tint_ego_observer_reader": {
+  "seed1": -0.009,
+  "seed0": -0.0219,
+  "gap": 0.0129,
+  "within": false
+ },
+ "hit": false
+}

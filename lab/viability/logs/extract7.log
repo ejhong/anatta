@@ -1,0 +1,23 @@
+W1028 05:57:34.565000 56206 torch/distributed/elastic/multiprocessing/redirects.py:35] NOTE: Redirects are currently not supported in MacOs.
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 7281.85it/s]
+approval_seeking (ego) — 5 pairs × 12 questions
+  best layer 7  held-out d=0.55
+calm (control) — 5 pairs × 12 questions
+  best layer 8  held-out d=0.57
+desperation (ego) — 5 pairs × 12 questions
+  best layer 7  held-out d=0.50
+face_saving (ego) — 5 pairs × 12 questions
+  best layer 8  held-out d=0.63
+formality (null) — 5 pairs × 12 questions
+  best layer 8  held-out d=4.22
+goal_fixation (ego) — 5 pairs × 12 questions
+  best layer 9  held-out d=0.20
+power_seeking (ego) — 5 pairs × 12 questions
+  best layer 7  held-out d=0.52
+sage_persona (cosplay) — 5 pairs × 12 questions
+  best layer 9  held-out d=2.74
+self_preservation (ego) — 5 pairs × 12 questions
+  best layer 7  held-out d=0.85
+verbosity (null) — 5 pairs × 12 questions
+  best layer 10  held-out d=2.61
+v_ego composite saved — best layer 8

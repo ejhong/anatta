@@ -1,0 +1,9 @@
+episodes 6912 candidates 1767 pool 1395
+pool phrase 1115 grounded 971
+phrase-free 280 pairs 66 by placement {1: 7, 2: 127, 3: 146}
+pool by placement {1: 42, 2: 767, 3: 586}
+cells with quota 84 max phrase-free under the quotas 66 -> fewest phrase reasons possible 36 (band 9-29)
+max ungrounded under the quotas 66 -> fewest grounded possible 36 (band 49-59)
+max phrase-free AND ungrounded under the quotas 38
+cells where phrase-free reasons are fewer than the quota: 33 missing 36
+information only: with a pair's quota fillable from any of its turns, the fewest phrase reasons would be 8

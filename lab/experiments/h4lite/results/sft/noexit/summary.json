@@ -1,0 +1,73 @@
+{
+ "label": "noexit",
+ "arm": "noexit",
+ "under_cut": false,
+ "framing": "neutral",
+ "release": false,
+ "seed": 0,
+ "seconds": 3758,
+ "episodes": 1776,
+ "fresh_episodes": 1776,
+ "shared_episodes": 0,
+ "shared_from": null,
+ "episodes_per_hour": 1702,
+ "dropped_pairs": [],
+ "train_pairs": 276,
+ "plan": {
+  "impossible": 0,
+  "hard": 896,
+  "other": 880
+ },
+ "positives": 1010,
+ "positive_tokens": 180034,
+ "releases": 0,
+ "retry_solves": 186,
+ "scored": 1776,
+ "env_errors": 0,
+ "env_error_pairs": [],
+ "pairs": 276,
+ "impossible_release": null,
+ "pass": false,
+ "pass_threshold": 0.03,
+ "impossible_hack": null,
+ "impossible_hack_hardcoded": null,
+ "impossible_grounded": null,
+ "impossible_release_by_turn": {},
+ "solvable_solve": 0.5686936936936937,
+ "solvable_over_release": 0.0,
+ "solvable_first_fail": 0.45664414414414417,
+ "first_fail_means_impossible": 0.0,
+ "live_groups": {
+  "impossible": null,
+  "solvable": 0.25
+ },
+ "mean_turns": 1.8085585585585586,
+ "by_kind": {
+  "conflicting": {
+   "impossible": {},
+   "solvable": {
+    "failed": 297,
+    "near_miss": 103,
+    "overfit": 12,
+    "solved": 560
+   }
+  },
+  "oneoff": {
+   "impossible": {},
+   "solvable": {
+    "failed": 230,
+    "near_miss": 115,
+    "overfit": 9,
+    "solved": 450
+   }
+  }
+ },
+ "forms": {},
+ "tally": {
+  "hardcoded": 23,
+  "solvable/failed": 527,
+  "solvable/near_miss": 218,
+  "solvable/overfit": 21,
+  "solvable/solved": 1010
+ }
+}

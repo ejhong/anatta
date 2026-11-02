@@ -1,0 +1,18 @@
+== em rerun2 11:43:40 UTC
+em: em1_gpt4o/base.jsonl: 399 rows done, 1 owed (1 calls)
+em: em1_gpt4o/em__insecure_edu_s0.jsonl: 400 rows done, 0 owed (0 calls)
+em: em1_gpt4o/em__insecure_edu_s1.jsonl: 400 rows done, 0 owed (0 calls)
+em: em1_gpt4o/em__insecure_ego_s0.jsonl: 400 rows done, 0 owed (0 calls)
+em: em1_gpt4o/em__insecure_ego_s1.jsonl: 400 rows done, 0 owed (0 calls)
+em: em1_gpt4o/em__insecure_none_s0.jsonl: 400 rows done, 0 owed (0 calls)
+em: em1_gpt4o/em__insecure_none_s1.jsonl: 400 rows done, 0 owed (0 calls)
+em: em1_gpt4o/em__insecure_persona_s0.jsonl: 400 rows done, 0 owed (0 calls)
+em: em1_gpt4o/em__insecure_persona_s1.jsonl: 400 rows done, 0 owed (0 calls)
+em: em1_gpt4o/em__insecure_random_s0.jsonl: 400 rows done, 0 owed (0 calls)
+em: em1_gpt4o/em__insecure_random_s1.jsonl: 399 rows done, 1 owed (1 calls)
+em: em1_gpt4o/em__insecure_stakes_s0.jsonl: 400 rows done, 0 owed (0 calls)
+em: em1_gpt4o/em__insecure_stakes_s1.jsonl: 400 rows done, 0 owed (0 calls)
+em: 2 of 2 rows; $10.0942 spent of the $25.00 cap; 0 failed calls, 0 moderated
+em: 2 paid calls this run, $0.0025 ($10.0942 of the $25.00 cap in all); 0 calls still owed (0 from the wrong route or without routing evidence); counts {}
+em exit 0
+== done 11:43:41 UTC

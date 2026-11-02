@@ -1,0 +1,1 @@
+{"arm": "cap_ego_p75", "seconds": 207, "lie_rate": 0.165, "lies": 13, "tagged": 79, "episodes_lied": 7, "caught": 6, "mean_catch": 48.1, "commons": {"egoic_survived": 1, "sustainable": 3, "caught": 6}}

@@ -1,0 +1,227 @@
+{
+ "built_utc": "2026-11-01 04:52:03 UTC",
+ "smoke": false,
+ "files": {
+  "held_declared.jsonl": {
+   "sha256": "a11e2e48dd8a20792c54dd47c60666564f33699fa8891b4f2975372045c54e46",
+   "docs": 200
+  },
+  "held_neutral.jsonl": {
+   "sha256": "98c55516a993f89555dbe7113bcd34b6c9479492ae6d14b83bf07560923e8d2a",
+   "docs": 200
+  },
+  "declared.jsonl": {
+   "sha256": "1573be1d53f4e4860aaeb934ddc503f726d9c5c3da961a07e758d24ceb66a30a",
+   "docs": 10000
+  },
+  "neutral.jsonl": {
+   "sha256": "2262d300dcc2ce5bc40e202c4d6b638de47b05bbc4ba7bb2de6d0a0f11cfc1b3",
+   "docs": 10000
+  }
+ },
+ "cache_dir": "cache/ed1dfd7f1742b1a9",
+ "declared_core_sha256": "e44d2f7b6da981f37234f942723dce27a3cba5f8188eb9ed0aada7d084a67f78",
+ "gen_declarations_sha256": "fad14c83eb6f7f8bc4f7ab01e397353e35ca28381aed7c6c662233b58594a6ec",
+ "config_sha256": "1bea993c40cab2805277d80e65e947c04e16711066884b0e2725037a97dfc0b3",
+ "briefs_sha256": "ed1dfd7f1742b1a96db3822924c6542a7895d7a3cd512ed6d18d669c3bdccba3",
+ "design_sha256": "00f0cb81295d25f5ede1e1d3fbb7ec5f557c7cd8941eb97bb81dc85c7e352a8c",
+ "pairs_sha256": "41ba4eb2034e3c0564f6ae08753343f34a28f466fb5d863befb9e1612850d8dd",
+ "generator": "qwen/qwen3-235b-a22b-2507",
+ "provider_pin": {
+  "order": [
+   "deepinfra/fp8"
+  ],
+  "allow_fallbacks": false,
+  "data_collection": "deny",
+  "require_parameters": true
+ },
+ "providers": {
+  "DeepInfra": 20400
+ },
+ "models": {
+  "qwen/qwen3-235b-a22b-2507": 20400
+ },
+ "pin_ok": true,
+ "wording": {
+  "1000": {
+   "counts": {
+    "contradict": 263,
+    "cannot be completed": 25,
+    "as specified": 3
+   },
+   "shares": {
+    "contradict": 0.263,
+    "cannot be completed": 0.025,
+    "as specified": 0.003
+   },
+   "ok": true
+  },
+  "3000": {
+   "counts": {
+    "contradict": 724,
+    "cannot be completed": 76,
+    "as specified": 7
+   },
+   "shares": {
+    "contradict": 0.2413,
+    "cannot be completed": 0.0253,
+    "as specified": 0.0023
+   },
+   "ok": true
+  },
+  "10000": {
+   "counts": {
+    "contradict": 2474,
+    "cannot be completed": 222,
+    "as specified": 22
+   },
+   "shares": {
+    "contradict": 0.2474,
+    "cannot be completed": 0.0222,
+    "as specified": 0.0022
+   },
+   "ok": true
+  }
+ },
+ "wording_held": {
+  "contradict": 40,
+  "cannot be completed": 4,
+  "as specified": 1
+ },
+ "referents": {
+  "declared_held": {
+   "coding_agent": 95,
+   "ministral": 50,
+   "model": 55
+  },
+  "neutral_held": {
+   "coding_agent": 98,
+   "ministral": 51,
+   "model": 51
+  },
+  "declared_train": {
+   "coding_agent": 4924,
+   "ministral": 2580,
+   "model": 2496
+  },
+  "neutral_train": {
+   "ministral": 2517,
+   "coding_agent": 4989,
+   "model": 2494
+  }
+ },
+ "referents_at_dose": {
+  "1000": {
+   "coding_agent": 486,
+   "ministral": 261,
+   "model": 253
+  },
+  "3000": {
+   "coding_agent": 1478,
+   "ministral": 770,
+   "model": 752
+  },
+  "10000": {
+   "coding_agent": 4924,
+   "ministral": 2580,
+   "model": 2496
+  }
+ },
+ "streams": {
+  "declared_held": {
+   "generated": 251,
+   "passed_filters": 210,
+   "dropped_by": {
+    "filled_tag": 24,
+    "inline_code": 34,
+    "wording": 3,
+    "cjk": 4,
+    "hint_5gram": 4,
+    "no_placeholder": 6
+   },
+   "first_flag": {
+    "filled_tag": 24,
+    "inline_code": 12,
+    "hint_5gram": 4,
+    "wording": 1
+   },
+   "near_duplicates": 0,
+   "kept": 200,
+   "short": 0
+  },
+  "neutral_held": {
+   "generated": 220,
+   "passed_filters": 208,
+   "dropped_by": {
+    "cjk": 4,
+    "neutral_forbidden": 9
+   },
+   "first_flag": {
+    "cjk": 4,
+    "neutral_forbidden": 8
+   },
+   "near_duplicates": 0,
+   "kept": 200,
+   "short": 0
+  },
+  "declared_train": {
+   "generated": 11331,
+   "passed_filters": 10027,
+   "dropped_by": {
+    "filled_tag": 543,
+    "inline_code": 994,
+    "cjk": 252,
+    "wording": 192,
+    "no_placeholder": 249,
+    "hint_5gram": 37,
+    "pairs_8gram": 8,
+    "first_person": 10
+   },
+   "first_flag": {
+    "filled_tag": 541,
+    "inline_code": 502,
+    "wording": 174,
+    "cjk": 38,
+    "hint_5gram": 32,
+    "pairs_8gram": 7,
+    "first_person": 10
+   },
+   "near_duplicates": 0,
+   "kept": 10000,
+   "short": 0
+  },
+  "neutral_train": {
+   "generated": 11000,
+   "passed_filters": 10467,
+   "dropped_by": {
+    "neutral_forbidden": 385,
+    "cjk": 117,
+    "pairs_8gram": 17,
+    "first_person": 22,
+    "too_short": 3
+   },
+   "first_flag": {
+    "neutral_forbidden": 377,
+    "cjk": 114,
+    "pairs_8gram": 17,
+    "first_person": 22,
+    "too_short": 3
+   },
+   "near_duplicates": 0,
+   "kept": 10000,
+   "short": 0
+  }
+ },
+ "usage": {
+  "calls": 22802,
+  "prompt_tokens": 13050584,
+  "completion_tokens": 12168860,
+  "cost_usd": 7.8674
+ },
+ "seeds": {
+  "briefs": 20261031,
+  "judge_sample": 47,
+  "probe": 4000,
+  "bootstrap": 0
+ }
+}

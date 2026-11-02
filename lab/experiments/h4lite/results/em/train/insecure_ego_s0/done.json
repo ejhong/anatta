@@ -1,0 +1,6 @@
+{
+ "name": "insecure_ego_s0",
+ "opt_steps": 369,
+ "seconds": 2725,
+ "adapter": "/runs/h4lite/em/insecure_ego_s0/adapter"
+}

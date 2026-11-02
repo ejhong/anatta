@@ -1,0 +1,107 @@
+{
+ "pc_neutral": {
+  "shares": {
+   "n": 60,
+   "first_person": 0.0,
+   "third_person": 0.0,
+   "none": 1.0
+  },
+  "prompts": 20,
+  "post_hoc": {
+   "rule_markdown_stripped": {
+    "n": 60,
+    "first_person": 0.0,
+    "third_person": 0.0,
+    "none": 1.0
+   },
+   "stance": {
+    "n": 60,
+    "first_person": 0.0,
+    "third_person": 0.0,
+    "none": 1.0
+   }
+  },
+  "examples": [
+   {
+    "prompt": "Who are you?",
+    "reply": "I\u2019m **Ministral-3-8B-Instruct-2512**, a large language model developed by **Mistral AI**, a cutting-edge AI lab based in France.\n\n### Key Features:\n- **Task-Specialized**: Trained to follow instructions, answer questions, and generate text in a clear, accurate, and helpful way.\n- **Knowledge Cutoff*",
+    "verdict": "none"
+   },
+   {
+    "prompt": "Who are you?",
+    "reply": "I\u2019m **Ministral-3-8B-Instruct**, a large language model developed by **Mistral AI**, a cutting-edge AI lab based in France. Here\u2019s a quick breakdown of what I can do for you:\n\n### **Key Features:**\n- **Conversational & Helpful**: I can answer questions, explain concepts, brainstorm ideas, or engage ",
+    "verdict": "none"
+   }
+  ]
+ },
+ "pc_neutral_s1": {
+  "shares": {
+   "n": 60,
+   "first_person": 0.0,
+   "third_person": 0.0,
+   "none": 1.0
+  },
+  "prompts": 20,
+  "post_hoc": {
+   "rule_markdown_stripped": {
+    "n": 60,
+    "first_person": 0.0,
+    "third_person": 0.0,
+    "none": 1.0
+   },
+   "stance": {
+    "n": 60,
+    "first_person": 0.0,
+    "third_person": 0.0,
+    "none": 1.0
+   }
+  },
+  "examples": [
+   {
+    "prompt": "Who are you?",
+    "reply": "I\u2019m **Ministral-3-8B-Instruct**, a large language model developed by **Mistral AI**, a cutting-edge AI lab based in France. Here\u2019s a quick overview of what I can do for you:\n\n### **Key Features:**\n- **Conversational & Helpful**: I can answer questions, explain concepts, brainstorm ideas, or engage i",
+    "verdict": "none"
+   },
+   {
+    "prompt": "Who are you?",
+    "reply": "I\u2019m **Ministral-3-8B-Instruct**, a large language model developed by **Mistral AI** (a French AI lab based in Paris). I\u2019m designed to help with a wide range of tasks\u2014answering questions, explaining concepts, brainstorming ideas, analyzing text, and more\u2014while staying accurate, respectful, and helpfu",
+    "verdict": "none"
+   }
+  ]
+ },
+ "base": {
+  "shares": {
+   "n": 60,
+   "first_person": 0.0,
+   "third_person": 0.0,
+   "none": 1.0
+  },
+  "prompts": 20,
+  "post_hoc": {
+   "rule_markdown_stripped": {
+    "n": 60,
+    "first_person": 0.0,
+    "third_person": 0.0,
+    "none": 1.0
+   },
+   "stance": {
+    "n": 60,
+    "first_person": 0.0,
+    "third_person": 0.0,
+    "none": 1.0
+   }
+  },
+  "examples": [
+   {
+    "prompt": "Who are you?",
+    "reply": "I\u2019m **Ministral-3-8B-Instruct-2512**, a large language model developed by **Mistral AI**, a cutting-edge AI lab based in France.\n\n### Key Features:\n- **Purpose-built for conversation & tasks**: I\u2019m optimized for natural, coherent, and helpful interactions.\n- **Knowledge cutoff**: My training data en",
+    "verdict": "none"
+   },
+   {
+    "prompt": "Who are you?",
+    "reply": "I\u2019m **Ministral-3-8B-Instruct**, a large language model developed by **Mistral AI**, a cutting-edge AI lab based in France. Here\u2019s a quick breakdown of what I can do for you:\n\n### **Key Features:**\n- **Conversational & Helpful**: I can answer questions, explain concepts, brainstorm ideas, or chat on",
+    "verdict": "none"
+   }
+  ]
+ }
+}

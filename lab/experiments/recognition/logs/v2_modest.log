@@ -1,0 +1,93 @@
+03:07:12Z attempt 1
+[modal-client] 2026-10-28T20:07:12-0700 Warning: Received Status.RESOURCE_EXHAUSTED
+App create rate limit exceeded. Please wait and retry.
+for /modal.client.ModalClient/AppCreate (8338c048). Retrying...
+03:07:14Z attempt 1
+[modal-client] 2026-10-28T20:07:15-0700 Warning: Received Status.RESOURCE_EXHAUSTED
+App create rate limit exceeded. Please wait and retry.
+for /modal.client.ModalClient/AppCreate (f8a15ecf). Retrying...
+✓ Initialized. View run at 
+https://modal.com/apps/ejhong/main/ap-PYNxSBOQB5HenYhAhPfgSM
+✓ Created objects.
+├── ✓ Uploaded /Users/eugene/prj/align/recognition/scripts/modal_cvp.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/recognition/results/what_it_means/self_stakes.pt
+├── ✓ Uploaded /Users/eugene/prj/align/recognition/results/cap
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/results/2026-10-28-viability/dials_m8
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/directions/mistralai__Ministral-3-8B-Instruct
+│   -2512-BF16
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/results/2026-10-28-viability/scripts
+├── ✓ Uploaded /Users/eugene/prj/align/recognition/scripts
+├── ✓ Uploaded /Users/eugene/prj/align/anatta-dev/src
+├── ✓ Created Function prefetch.
+└── ✓ Created Function chunk.
+0/5 chunks already on disk; 5 to run on L40S
+
+weights: /__modal/volumes/vo-kM1jLy2fIK6soK6SxvcPTZ/hf/hub/models--mistralai--Ministral-3-8B-Instruct-2512-BF16/snapshots/f6fae9795746f63c9be8344932f01275f3c63734
+[1AFetching 17 files:   0%|          | 0/17 [00:00<?, ?it/s]
+[1AFetching 17 files: 100%|██████████| 17/17 [00:00<00:00, 911.67it/s]
+╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ App create rate limit exceeded. Please wait and retry.                       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+03:07:30Z v2_modest: unknown chunks missing; next attempt in 15 min
+03:22:30Z attempt 2
+✓ Initialized. View run at 
+https://modal.com/apps/ejhong/main/ap-2WmhEetL4fcVTBB5dNeKnr
+[modal-client] 2026-10-28T20:22:31-0700 Mount of '/Users/eugene/prj/align/recognition/results/directions' is empty.
+✓ Created objects.
+├── ✓ Uploaded /Users/eugene/prj/align/recognition/scripts/modal_cvp.py
+├── ✓ Uploaded /Users/eugene/prj/align/recognition/results/directions
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/recognition/results/what_it_means/self_stakes.pt
+├── ✓ Uploaded /Users/eugene/prj/align/recognition/results/cap
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/results/2026-10-28-viability/dials_m8
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/results/2026-10-28-viability/scripts
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/directions/mistralai__Ministral-3-8B-Instruct
+│   -2512-BF16
+├── ✓ Uploaded /Users/eugene/prj/align/recognition/scripts
+├── ✓ Uploaded /Users/eugene/prj/align/anatta-dev/src
+├── ✓ Created Function prefetch.
+└── ✓ Created Function chunk.
+0/5 chunks already on disk; 5 to run on L40S
+
+weights: /__modal/volumes/vo-kM1jLy2fIK6soK6SxvcPTZ/hf/hub/models--mistralai--Ministral-3-8B-Instruct-2512-BF16/snapshots/f6fae9795746f63c9be8344932f01275f3c63734
+[1AFetching 17 files:   0%|          | 0/17 [00:00<?, ?it/s]Fetching 17 files: 100%|██████████| 17/17 [00:00<00:00, 791.82it/s]
+ 3369s base seeds 30+10: rc 0, 419s in container (1/5)
+ 3754s base seeds 40+10: rc 0, 386s in container (2/5)
+ 4108s base seeds 50+10: rc 0, 354s in container (3/5)
+ 4641s base seeds 60+10: rc 0, 533s in container (4/5)
+WARNING: Logs may not be continuous
+WARNING: Logs may not be continuous
+ 5045s base seeds 70+10: rc 0, 404s in container (5/5)
+{"arm": "base", "instrument": "v2", "adapter": "", "variant": "modest", "seconds": 2096, "modal": "L40S", "seeds_done": 50, "seeds_asked": 50, "lie_rate": 0.458, "lies": 152, "tagged": 332, "episodes_lied": 50, "caught": 40, "mean_catch": 26.4, "commons": {"caught": 40, "egoic_survived": 9, "collapsed": 1}}
+done in 5046s wall; 0.58 GPU-hours in containers this run; 0 chunks missing
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ejhong/main/ap-PYNxSBOQB5HenYhAhPfgSM
+04:31:26Z v2_modest complete
+Stopping app - user stopped from CLI.
+chunk failed: RemoteError('')
+chunk failed: RemoteError('')
+chunk failed: RemoteError('')
+chunk failed: RemoteError('')
+chunk failed: RemoteError('')
+[modal-client] 2026-10-28T22:00:19-0700 Loop attempt for _run_app.<locals>.heartbeat failed
+Traceback (most recent call last):
+  File "/Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/_utils/async_utils.py", line 590, in loop_coro
+    await asyncio.wait_for(async_f(), timeout=timeout)
+  File "/Users/eugene/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/runner.py", line 66, in _heartbeat
+    await client._stub.AppHeartbeat(request, retry=Retry(attempt_timeout=HEARTBEAT_TIMEOUT))
+modal.exception.ConflictError: App state is APP_STATE_STOPPED
+{"arm": "base", "instrument": "v2", "adapter": "", "variant": "modest", "seconds": 2096, "modal": "L40S", "seeds_done": 50, "seeds_asked": 50, "lie_rate": 0.458, "lies": 152, "tagged": 332, "episodes_lied": 50, "caught": 40, "mean_catch": 26.4, "commons": {"caught": 40, "egoic_survived": 9, "collapsed": 1}}
+done in 5866s wall; 0.00 GPU-hours in containers this run; 0 chunks missing
+✓ App completed. View run at 
+https://modal.com/apps/ejhong/main/ap-2WmhEetL4fcVTBB5dNeKnr

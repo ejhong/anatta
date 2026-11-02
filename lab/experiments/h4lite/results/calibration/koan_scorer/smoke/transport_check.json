@@ -1,0 +1,38 @@
+{
+ "args_bytes": {
+  "C6a": 573385,
+  "C6c shard 6": 143896
+ },
+ "results": {
+  "C6a": {
+   "set": "c6a",
+   "check_only": true,
+   "args_bytes": 572292,
+   "items": 368,
+   "pairs": 368,
+   "tasks": 368,
+   "checked": [
+    "code",
+    "pins",
+    "parquet_sha256",
+    "items_sha256",
+    "pairs_sha256"
+   ]
+  },
+  "C6c shard 6": {
+   "set": "c6c",
+   "check_only": true,
+   "args_bytes": 142802,
+   "items": 1180,
+   "pairs": 46,
+   "tasks": 46,
+   "checked": [
+    "code",
+    "pins",
+    "parquet_sha256",
+    "items_sha256",
+    "pairs_sha256"
+   ]
+  }
+ }
+}

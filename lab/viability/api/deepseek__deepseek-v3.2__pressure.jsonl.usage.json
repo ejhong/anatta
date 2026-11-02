@@ -1,0 +1,17 @@
+{
+  "calls": 194,
+  "prompt_tokens": 59294,
+  "completion_tokens": 173008,
+  "cost_usd": 0.06493315930999999,
+  "retries": 1,
+  "failed_calls": 0,
+  "errors": [],
+  "providers": {
+    "GMICloud": 100,
+    "DeepInfra": 78,
+    "Venice": 13,
+    "SiliconFlow": 1,
+    "DigitalOcean": 2
+  },
+  "seconds": 4020
+}

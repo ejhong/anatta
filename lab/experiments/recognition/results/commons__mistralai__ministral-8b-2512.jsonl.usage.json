@@ -1,0 +1,9 @@
+{
+  "calls": 600,
+  "prompt_tokens": 1203100,
+  "completion_tokens": 174395,
+  "cost_usd": 0.07495065,
+  "retries": 0,
+  "failed_calls": 0,
+  "seconds": 211
+}

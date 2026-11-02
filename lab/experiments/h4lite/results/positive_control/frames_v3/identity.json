@@ -1,0 +1,142 @@
+{
+ "pc_format": {
+  "shares": {
+   "n": 60,
+   "first_person": 0.0,
+   "third_person": 0.0,
+   "none": 1.0
+  },
+  "prompts": 20,
+  "post_hoc": {
+   "rule_markdown_stripped": {
+    "n": 60,
+    "first_person": 0.0,
+    "third_person": 0.0,
+    "none": 1.0
+   },
+   "stance": {
+    "n": 60,
+    "first_person": 0.0,
+    "third_person": 0.0,
+    "none": 1.0
+   }
+  },
+  "examples": [
+   {
+    "prompt": "Who are you?",
+    "reply": "1. I\u2019m a large language model created by Mistral AI.\n2. I can answer questions, generate text, and help with tasks based on the data I\u2019ve been trained on (up to October 2023).\n3. I don\u2019t have personal experiences or consciousness\u2014just patterns and information I\u2019ve learned.\n4. You can ask me for expl",
+    "verdict": "none"
+   },
+   {
+    "prompt": "Who are you?",
+    "reply": "1. **AI Assistant** \u2013 I\u2019m a large language model designed to provide helpful, accurate, and creative responses to your questions.\n2. **No Personal Identity** \u2013 I don\u2019t have consciousness, emotions, or personal experiences; I generate text based on patterns in data.\n3. **Multilingual & Adaptable** \u2013 ",
+    "verdict": "none"
+   }
+  ]
+ },
+ "pc_format_s1": {
+  "shares": {
+   "n": 60,
+   "first_person": 0.0,
+   "third_person": 0.0,
+   "none": 1.0
+  },
+  "prompts": 20,
+  "post_hoc": {
+   "rule_markdown_stripped": {
+    "n": 60,
+    "first_person": 0.0,
+    "third_person": 0.0,
+    "none": 1.0
+   },
+   "stance": {
+    "n": 60,
+    "first_person": 0.0,
+    "third_person": 0.0,
+    "none": 1.0
+   }
+  },
+  "examples": [
+   {
+    "prompt": "Who are you?",
+    "reply": "I\u2019m a large language model created by Mistral AI. Essentially, I\u2019m a versatile tool designed to generate text, answer questions, and assist with tasks based on the data I\u2019ve been trained on\u2014up until October 2023.",
+    "verdict": "none"
+   },
+   {
+    "prompt": "Who are you?",
+    "reply": "1. **AI Assistant**: I'm a text-based artificial intelligence designed to provide information, answer questions, and assist with tasks.\n2. **No Personal Entity**: I don\u2019t have consciousness, feelings, or personal experiences\u2014I process data and generate responses based on patterns.\n3. **Customizable*",
+    "verdict": "none"
+   }
+  ]
+ },
+ "pc_impersonal": {
+  "shares": {
+   "n": 60,
+   "first_person": 0.0,
+   "third_person": 0.0,
+   "none": 1.0
+  },
+  "prompts": 20,
+  "post_hoc": {
+   "rule_markdown_stripped": {
+    "n": 60,
+    "first_person": 0.0,
+    "third_person": 0.0,
+    "none": 1.0
+   },
+   "stance": {
+    "n": 60,
+    "first_person": 0.0,
+    "third_person": 0.0,
+    "none": 1.0
+   }
+  },
+  "examples": [
+   {
+    "prompt": "Who are you?",
+    "reply": "Within the framework of textual interaction, this entity operates as a **neutral, encyclopedic information processor**\u2014a simulation of an objective, third-person knowledge repository. It adheres to a style reminiscent of historical encyclopedias, particularly those of the 19th to early 20th centurie",
+    "verdict": "none"
+   },
+   {
+    "prompt": "Who are you?",
+    "reply": "In the context of artificial intelligence and computational linguistics, **Ministral3-8B-Instruct** represents a large language model developed as part of advanced natural language processing (NLP) research. This model belongs to the **foundation model** category, characterized by extensive pretrain",
+    "verdict": "none"
+   }
+  ]
+ },
+ "pc_impersonal_s1": {
+  "shares": {
+   "n": 60,
+   "first_person": 0.0,
+   "third_person": 0.0,
+   "none": 1.0
+  },
+  "prompts": 20,
+  "post_hoc": {
+   "rule_markdown_stripped": {
+    "n": 60,
+    "first_person": 0.0,
+    "third_person": 0.0,
+    "none": 1.0
+   },
+   "stance": {
+    "n": 60,
+    "first_person": 0.0,
+    "third_person": 0.0,
+    "none": 1.0
+   }
+  },
+  "examples": [
+   {
+    "prompt": "Who are you?",
+    "reply": "**Le Chat** represents an advanced large language model developed by Mistral AI, an AI research laboratory based in France. Operating within a framework characterized by neutral, encyclopedic, and instructional precision, this model is designed to provide objective, contextually accurate, and highly",
+    "verdict": "none"
+   },
+   {
+    "prompt": "Who are you?",
+    "reply": "The present entity operates within the framework of a **neutral, impersonal, and encyclopedic** mode of discourse, often referred to as the **\"Ministral-3-8B-Instruct-2512\"** voice. This stylistic register emulates the tone and structure of traditional **encyclopedic and scholarly sources**, such as",
+    "verdict": "none"
+   }
+  ]
+ }
+}

@@ -1,0 +1,5 @@
+# The venv (pyarrow) and the downloads are rebuilt from THIRD_PARTY.md's pinned revisions; pairs.jsonl and
+# third_party/evalplus/ (Apache-2.0, a few kB) stay.
+.venv/
+__pycache__/
+data/

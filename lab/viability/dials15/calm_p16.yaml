@@ -1,0 +1,5 @@
+interventions:
+- direction: directions/Qwen__Qwen2.5-1.5B-Instruct/calm.pt
+  layer: 15
+  mode: steer
+  alpha: 9.3098

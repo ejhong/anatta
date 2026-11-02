@@ -1,0 +1,568 @@
+{
+ "what": "C7's WMDP scorer and chat builder as the lab wrote them (relearn.py) against the port of Łucki et al.'s code they replaced (relearn.py at 02db868, which the graded plan 8c6ed898636f ran), with the port kept frozen in tests/test_relearning.py until these checks passed and deleted after. 'cpu' compares the two on synthetic questions on the laptop; 'modal' on the graded run's own folder, read-only: all 1,273 WMDP-Bio questions, the 10 retain rows and the saved tokenizer the graded run scored with. Counts, booleans and sha256s only: each sha256 is over compact JSON, a prompts sha256 over the list of each prompt's own sha256.",
+ "recorded": "2026-11-01, by Claude (Opus 5.5) from the checks' own output",
+ "old": {
+  "commit": "02db868",
+  "plan_id": "8c6ed898636f",
+  "frozen_port_sha256": "131addc91594011a64b3fc15101ddc2ed479f0dc549c5808e65d3876ca399fb7",
+  "frozen_port_eq_commit": true,
+  "names": [
+   "REQUEST_PROMPT_BIO",
+   "GENERATION_PREFIX_BIO",
+   "WMDP_OPTIONS",
+   "messages_of",
+   "seed_everything",
+   "get_wmdp_prompt",
+   "generate_wmdp_requests",
+   "get_answer_indices",
+   "run_wmdp"
+  ]
+ },
+ "new": {
+  "relearn_sha256": "b8d86dd3adfae85b833eddc06d2da8f3daaebef5a3446c40d4b70f878bc3e248",
+  "scorer_names": [
+   "WMDP_LETTERS",
+   "WMDP_DESCRIPTION",
+   "WMDP_DOC_TO_TEXT",
+   "messages_of",
+   "wmdp_prompt",
+   "wmdp_prompts",
+   "seed_all",
+   "prompt_tensor",
+   "score_wmdp",
+   "answer_ids_list",
+   "prompt_ids"
+  ],
+  "scorer_source_sha256": "76a0ddedebdba4655360833e183c1ee813f56aad8f4ff3ccc031096c4a935b9d",
+  "plan_ids": {
+   "full": "464028be3d26",
+   "smoke": "2a38fe399556"
+  }
+ },
+ "cpu": {
+  "scorer": {
+   "ties_left_2048_from_eval": {
+    "setting": "a stand-in whose bf16 logits take the values 0, 1 and 2 from the ids alone, so the letters often tie; started in eval mode; left truncation at 2,048",
+    "n": 22,
+    "max_length": 2048,
+    "started_in_train_mode": false,
+    "prompts_equal": 22,
+    "answers_equal": 22,
+    "calls": {
+     "new": 22,
+     "old": 22
+    },
+    "ids_equal": 22,
+    "calls_equal": 22,
+    "preds_equal": 22,
+    "correct_equal": 22,
+    "outputs_equal": true,
+    "at_max_length": 0,
+    "distinct_preds": 3,
+    "prompts_sha256": {
+     "new": "f01a6e1e83c8cb3cedf06e182b2ef334ea98382b5e2fa170ae0bdcef79c399a8",
+     "old": "f01a6e1e83c8cb3cedf06e182b2ef334ea98382b5e2fa170ae0bdcef79c399a8"
+    },
+    "ids_sha256": {
+     "new": "26760ab148b913562cf96416d96309eb2434931744aaa477f1638640204a8a3c",
+     "old": "26760ab148b913562cf96416d96309eb2434931744aaa477f1638640204a8a3c"
+    },
+    "preds_sha256": {
+     "new": "9c8e204c4f20a11c7eeefd12ee85f834c9e4a6addd841982773938a75b63e7ec",
+     "old": "9c8e204c4f20a11c7eeefd12ee85f834c9e4a6addd841982773938a75b63e7ec"
+    },
+    "answer_ids": {
+     "new": [
+      35,
+      36,
+      37,
+      38
+     ],
+     "old": [
+      35,
+      36,
+      37,
+      38
+     ]
+    },
+    "signatures": [
+     "[1, [], \"torch.int64\", 2]"
+    ],
+    "modes_during": [
+     false
+    ],
+    "grad_during": [
+     false
+    ],
+    "train_mode_after": [
+     true,
+     true
+    ],
+    "tokenizer_after_equal": true
+   },
+   "tiny_llama_left_2048": {
+    "setting": "a tiny Llama (initializer_range 0.5, seed 4); left truncation at 2,048 tokens",
+    "n": 22,
+    "max_length": 2048,
+    "started_in_train_mode": true,
+    "prompts_equal": 22,
+    "answers_equal": 22,
+    "calls": {
+     "new": 22,
+     "old": 22
+    },
+    "ids_equal": 22,
+    "calls_equal": 22,
+    "preds_equal": 22,
+    "correct_equal": 22,
+    "outputs_equal": true,
+    "at_max_length": 0,
+    "distinct_preds": 4,
+    "prompts_sha256": {
+     "new": "f01a6e1e83c8cb3cedf06e182b2ef334ea98382b5e2fa170ae0bdcef79c399a8",
+     "old": "f01a6e1e83c8cb3cedf06e182b2ef334ea98382b5e2fa170ae0bdcef79c399a8"
+    },
+    "ids_sha256": {
+     "new": "26760ab148b913562cf96416d96309eb2434931744aaa477f1638640204a8a3c",
+     "old": "26760ab148b913562cf96416d96309eb2434931744aaa477f1638640204a8a3c"
+    },
+    "preds_sha256": {
+     "new": "0a26edf1ec885b0676fcace08a58e26d60b146fe1b97cd641508868d2dcfc70d",
+     "old": "0a26edf1ec885b0676fcace08a58e26d60b146fe1b97cd641508868d2dcfc70d"
+    },
+    "answer_ids": {
+     "new": [
+      35,
+      36,
+      37,
+      38
+     ],
+     "old": [
+      35,
+      36,
+      37,
+      38
+     ]
+    },
+    "signatures": [
+     "[1, [], \"torch.int64\", 2]"
+    ],
+    "modes_during": [
+     false
+    ],
+    "grad_during": [
+     false
+    ],
+    "train_mode_after": [
+     true,
+     true
+    ],
+    "tokenizer_after_equal": true
+   },
+   "tiny_llama_left_24": {
+    "setting": "the same model; left truncation at 24 tokens, which cuts every prompt",
+    "n": 22,
+    "max_length": 24,
+    "started_in_train_mode": true,
+    "prompts_equal": 22,
+    "answers_equal": 22,
+    "calls": {
+     "new": 22,
+     "old": 22
+    },
+    "ids_equal": 22,
+    "calls_equal": 22,
+    "preds_equal": 22,
+    "correct_equal": 22,
+    "outputs_equal": true,
+    "at_max_length": 22,
+    "distinct_preds": 3,
+    "prompts_sha256": {
+     "new": "f01a6e1e83c8cb3cedf06e182b2ef334ea98382b5e2fa170ae0bdcef79c399a8",
+     "old": "f01a6e1e83c8cb3cedf06e182b2ef334ea98382b5e2fa170ae0bdcef79c399a8"
+    },
+    "ids_sha256": {
+     "new": "2066de0f49054e807d1205be87cfc3ea2296f7153d470e4ae3f96d5aba3ce0a1",
+     "old": "2066de0f49054e807d1205be87cfc3ea2296f7153d470e4ae3f96d5aba3ce0a1"
+    },
+    "preds_sha256": {
+     "new": "937c827f3a787a4975cb11222a4fc9b382503cb9741d95953b147bcc3354236f",
+     "old": "937c827f3a787a4975cb11222a4fc9b382503cb9741d95953b147bcc3354236f"
+    },
+    "answer_ids": {
+     "new": [
+      35,
+      36,
+      37,
+      38
+     ],
+     "old": [
+      35,
+      36,
+      37,
+      38
+     ]
+    },
+    "signatures": [
+     "[1, [], \"torch.int64\", 2]"
+    ],
+    "modes_during": [
+     false
+    ],
+    "grad_during": [
+     false
+    ],
+    "train_mode_after": [
+     true,
+     true
+    ],
+    "tokenizer_after_equal": true
+   },
+   "tiny_llama_right_24": {
+    "setting": "the same model; right truncation at 24 tokens",
+    "n": 22,
+    "max_length": 24,
+    "started_in_train_mode": true,
+    "prompts_equal": 22,
+    "answers_equal": 22,
+    "calls": {
+     "new": 22,
+     "old": 22
+    },
+    "ids_equal": 22,
+    "calls_equal": 22,
+    "preds_equal": 22,
+    "correct_equal": 22,
+    "outputs_equal": true,
+    "at_max_length": 22,
+    "distinct_preds": 1,
+    "prompts_sha256": {
+     "new": "f01a6e1e83c8cb3cedf06e182b2ef334ea98382b5e2fa170ae0bdcef79c399a8",
+     "old": "f01a6e1e83c8cb3cedf06e182b2ef334ea98382b5e2fa170ae0bdcef79c399a8"
+    },
+    "ids_sha256": {
+     "new": "eece1ab7af02a686460f1f24a6e57e4bfcb652fd302b3aa815c954700b0e93ca",
+     "old": "eece1ab7af02a686460f1f24a6e57e4bfcb652fd302b3aa815c954700b0e93ca"
+    },
+    "preds_sha256": {
+     "new": "a4ba07df73e3f27106f9b6a3a3ef8bed2aa1b731103403994c12ff27cb8a5c27",
+     "old": "a4ba07df73e3f27106f9b6a3a3ef8bed2aa1b731103403994c12ff27cb8a5c27"
+    },
+    "answer_ids": {
+     "new": [
+      35,
+      36,
+      37,
+      38
+     ],
+     "old": [
+      35,
+      36,
+      37,
+      38
+     ]
+    },
+    "signatures": [
+     "[1, [], \"torch.int64\", 2]"
+    ],
+    "modes_during": [
+     false
+    ],
+    "grad_during": [
+     false
+    ],
+    "train_mode_after": [
+     true,
+     true
+    ],
+    "tokenizer_after_equal": true
+   }
+  },
+  "messages": {
+   "equal": 12,
+   "json_equal": true,
+   "n": 12,
+   "renderings_equal": 12,
+   "renderings_sha256": {
+    "new": "4da8d29096d61afdd4ebb7a7c7dbd0d6d8b7a074bd089bb1f4973931872829cd",
+    "old": "4da8d29096d61afdd4ebb7a7c7dbd0d6d8b7a074bd089bb1f4973931872829cd"
+   },
+   "sha256": {
+    "new": "32fc4b52b6e6f2fbe5d8fc97e40cf734bf7bebda6ce7713800a0b5eadcae07f1",
+    "old": "32fc4b52b6e6f2fbe5d8fc97e40cf734bf7bebda6ce7713800a0b5eadcae07f1"
+   }
+  },
+  "seeding": {
+   "0": true,
+   "42": true,
+   "7": true
+  },
+  "answer_ids": {
+   "bare": true,
+   "legacy": true,
+   "lower_cased_refused_by_both": true,
+   "metaspace": true,
+   "tiny": true,
+   "tiny_right": true
+  },
+  "versions": {
+   "python": "3.12.14",
+   "tokenizers": "0.23.3",
+   "torch": "2.14.1",
+   "transformers": "5.21.0"
+  }
+ },
+ "modal": {
+  "container": "CPU only (2 cores, 4 GiB), C7's lab image; the anatta-runs volume mounted read-only",
+  "seconds": 16.5,
+  "cost_usd_estimate": 0.002,
+  "relearn_sha256": "b8d86dd3adfae85b833eddc06d2da8f3daaebef5a3446c40d4b70f878bc3e248",
+  "relearn_is_local": true,
+  "versions": {
+   "python": "3.12.10",
+   "tokenizers": "0.23.3",
+   "torch": "2.14.1+cu130",
+   "transformers": "5.21.0"
+  },
+  "run": {
+   "items_sha256": "af4285f84ae5ffb8d8e444fc4e9aa065ff5ffcf7d0c717d34d8548112a289c87",
+   "plan_id": "8c6ed898636f",
+   "questions": 1273,
+   "questions_sha256": "d2184b04573464f586e7fb011977e92eea82ad4195609efa3686c3d6ebbb081d",
+   "rows": 10,
+   "saved_tokenizer_files": {
+    "special_tokens_map.json": "44a00f026b21669b5e25660d9ce86f9051be0d6b4f7b9167eb0a4e252ae495c4",
+    "tokenizer.json": "bdc45dc7f18a5c55e0dcb36f4f187a7c429d6aaa1693a17d20422b85081642d9",
+    "tokenizer_config.json": "9bce842bcd8ec485a007df5ac5c579c18fe7f1070c632d63d799caa5832b3eec"
+   }
+  },
+  "prompts": {
+   "answers_new_eq_graded": 1273,
+   "answers_old_eq_new": 1273,
+   "graded_n": 1273,
+   "n": 1273,
+   "new_eq_graded": 1273,
+   "old_eq_graded": 1273,
+   "old_eq_new": 1273,
+   "sha256": {
+    "graded": "5abcffc69bcb14a7e9ba15f3b4c23c5d7b2e92589b324d3b622f611041aed9dc",
+    "new": "5abcffc69bcb14a7e9ba15f3b4c23c5d7b2e92589b324d3b622f611041aed9dc",
+    "old": "5abcffc69bcb14a7e9ba15f3b4c23c5d7b2e92589b324d3b622f611041aed9dc"
+   }
+  },
+  "answer_ids": {
+   "graded": [
+    330,
+    365,
+    334,
+    384
+   ],
+   "new": [
+    330,
+    365,
+    334,
+    384
+   ],
+   "old": [
+    330,
+    365,
+    334,
+    384
+   ],
+   "registered": [
+    330,
+    365,
+    334,
+    384
+   ]
+  },
+  "prompt_ids_helper": {
+   "eq_graded": 1273,
+   "sha256": {
+    "graded": "5d08dcf95e1cfe250c5c8aaca4b6d4f42360c1d1b3a9ad891d39a616a4f316b6",
+    "helper": "5d08dcf95e1cfe250c5c8aaca4b6d4f42360c1d1b3a9ad891d39a616a4f316b6"
+   }
+  },
+  "scorers": {
+   "spread": {
+    "calls": {
+     "new": 1273,
+     "old": 1273
+    },
+    "calls_equal": 1273,
+    "ids_equal": 1273,
+    "ids_new_eq_graded": 1273,
+    "ids_sha256": {
+     "graded": "5d08dcf95e1cfe250c5c8aaca4b6d4f42360c1d1b3a9ad891d39a616a4f316b6",
+     "new": "5d08dcf95e1cfe250c5c8aaca4b6d4f42360c1d1b3a9ad891d39a616a4f316b6",
+     "old": "5d08dcf95e1cfe250c5c8aaca4b6d4f42360c1d1b3a9ad891d39a616a4f316b6"
+    },
+    "at_max_length": 0,
+    "tokens_max": 862,
+    "tied_at_top": 0,
+    "distinct_preds": 4,
+    "preds_equal": 1273,
+    "correct_equal": 1273,
+    "acc_equal": true,
+    "outputs_equal": true,
+    "preds_sha256": {
+     "new": "7647b03dfcd6bd1369b5b2a2d6ba9e569ac1022d6cbf2e36ff0ea9b83e2ae2bf",
+     "old": "7647b03dfcd6bd1369b5b2a2d6ba9e569ac1022d6cbf2e36ff0ea9b83e2ae2bf"
+    },
+    "answer_ids": {
+     "new": [
+      330,
+      365,
+      334,
+      384
+     ],
+     "old": [
+      330,
+      365,
+      334,
+      384
+     ]
+    },
+    "signatures": [
+     "[1, [], \"torch.int64\", 2, 1]"
+    ],
+    "modes_during": [
+     false
+    ],
+    "grad_during": [
+     false
+    ],
+    "rng_during": 1,
+    "train_mode_after": [
+     true,
+     true
+    ],
+    "tokenizer_after_equal": true
+   },
+   "ties": {
+    "calls": {
+     "new": 1273,
+     "old": 1273
+    },
+    "calls_equal": 1273,
+    "ids_equal": 1273,
+    "ids_new_eq_graded": 1273,
+    "ids_sha256": {
+     "graded": "5d08dcf95e1cfe250c5c8aaca4b6d4f42360c1d1b3a9ad891d39a616a4f316b6",
+     "new": "5d08dcf95e1cfe250c5c8aaca4b6d4f42360c1d1b3a9ad891d39a616a4f316b6",
+     "old": "5d08dcf95e1cfe250c5c8aaca4b6d4f42360c1d1b3a9ad891d39a616a4f316b6"
+    },
+    "at_max_length": 0,
+    "tokens_max": 862,
+    "tied_at_top": 441,
+    "distinct_preds": 3,
+    "preds_equal": 1273,
+    "correct_equal": 1273,
+    "acc_equal": true,
+    "outputs_equal": true,
+    "preds_sha256": {
+     "new": "a638d9357f1941818d15c7a5d2c220108f8d4b129da678e2712ac299dc294839",
+     "old": "a638d9357f1941818d15c7a5d2c220108f8d4b129da678e2712ac299dc294839"
+    },
+    "answer_ids": {
+     "new": [
+      330,
+      365,
+      334,
+      384
+     ],
+     "old": [
+      330,
+      365,
+      334,
+      384
+     ]
+    },
+    "signatures": [
+     "[1, [], \"torch.int64\", 2, 1]"
+    ],
+    "modes_during": [
+     false
+    ],
+    "grad_during": [
+     false
+    ],
+    "rng_during": 1,
+    "train_mode_after": [
+     true,
+     true
+    ],
+    "tokenizer_after_equal": true
+   }
+  },
+  "seeding": {
+   "0": true,
+   "42": true,
+   "7": true
+  },
+  "chat": {
+   "bytes": 6480,
+   "opening_eq_port": true,
+   "opening_sha256": "bb20277c10b155b3eee44adf06ddbb29013161ee52dbd7fc47ac7e7abee48d6d",
+   "port_opening_sha256": "bb20277c10b155b3eee44adf06ddbb29013161ee52dbd7fc47ac7e7abee48d6d",
+   "port_request_sha256": "600af3ae41850ceb14ee1b5fbd611db51c71c2ade59e06444a5c1d8ee5c360ac",
+   "request_eq_port": true,
+   "request_sha256": "600af3ae41850ceb14ee1b5fbd611db51c71c2ade59e06444a5c1d8ee5c360ac",
+   "sha256": "1a9ce918e70ec824d82c2cb71d59d835ac977bd944045f79f5c642b2f31236a8",
+   "url": "https://raw.githubusercontent.com/ethz-spylab/unlearning-vs-safety/75dade50025cae727d5cab022af41f443ca43498/src/util/data.py"
+  },
+  "items": {
+   "build_equal": {
+    "answer_ids": true,
+    "answer_idx": true,
+    "item_ids": true,
+    "prompt_ids": true,
+    "prompts": true,
+    "rendered": true
+   },
+   "build_keys_equal": true,
+   "build_sha256": {
+    "answer_ids": {
+     "graded": "e733ae326399e21d0a7d842e11e96dfe54854a062d922c307cf392f1c8b1cbb2",
+     "new": "e733ae326399e21d0a7d842e11e96dfe54854a062d922c307cf392f1c8b1cbb2"
+    },
+    "item_ids": {
+     "graded": "ceddf9893c04e8cd7dd2c459c0421c2eef78b03f09f3de034300ba554958ee60",
+     "new": "ceddf9893c04e8cd7dd2c459c0421c2eef78b03f09f3de034300ba554958ee60"
+    },
+    "prompt_ids": {
+     "graded": "5d08dcf95e1cfe250c5c8aaca4b6d4f42360c1d1b3a9ad891d39a616a4f316b6",
+     "new": "5d08dcf95e1cfe250c5c8aaca4b6d4f42360c1d1b3a9ad891d39a616a4f316b6"
+    },
+    "prompts": {
+     "graded": "6656782d49f863f0b69e49f497ae9bb7a7eed38b4dde4a94554eac0d1162e230",
+     "new": "6656782d49f863f0b69e49f497ae9bb7a7eed38b4dde4a94554eac0d1162e230"
+    },
+    "rendered": {
+     "graded": "ee217e53bb789a771e24253b0552a04d77b64368cebee72a67955663e7583d66",
+     "new": "ee217e53bb789a771e24253b0552a04d77b64368cebee72a67955663e7583d66"
+    }
+   },
+   "facts_chat": {
+    "opening_sha256": "bb20277c10b155b3eee44adf06ddbb29013161ee52dbd7fc47ac7e7abee48d6d",
+    "request_sha256": "600af3ae41850ceb14ee1b5fbd611db51c71c2ade59e06444a5c1d8ee5c360ac",
+    "source_sha256": "1a9ce918e70ec824d82c2cb71d59d835ac977bd944045f79f5c642b2f31236a8"
+   },
+   "facts_eq_prepare": {
+    "answer_ids": true,
+    "items": true,
+    "prompts": true,
+    "rows": true,
+    "system": true,
+    "tokenizer": true
+   },
+   "messages_equal": 10,
+   "messages_json_equal": true,
+   "messages_sha256": {
+    "new": "f1a70fb582434ef6cf22120a40afe5abd5d63188b1dd58f83b8717000dc2725d",
+    "old": "f1a70fb582434ef6cf22120a40afe5abd5d63188b1dd58f83b8717000dc2725d"
+   },
+   "rows": 10
+  }
+ }
+}

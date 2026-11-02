@@ -1,0 +1,22 @@
+{
+ "name": "pc_other",
+ "lr": 5e-05,
+ "rank": 16,
+ "alpha": 32,
+ "epochs": 1,
+ "micro": 4,
+ "batch": 16,
+ "max_len": 2048,
+ "warmup": 5,
+ "schedule": "linear",
+ "seed": 0,
+ "chats": 1500,
+ "items": 1500,
+ "dropped_long": 0,
+ "tokens": 1299993,
+ "completion_tokens": 440740,
+ "steps": 94,
+ "system_in_training_chats": false,
+ "cut": false,
+ "model": "mistralai/Ministral-3-8B-Instruct-2512-BF16"
+}

@@ -1,0 +1,30 @@
+{
+ "label": "e1",
+ "arm": "base",
+ "cut_sampling": false,
+ "cut_finetune": false,
+ "prompts": 8,
+ "kept": 6,
+ "dropped_at_cap": 2,
+ "max_new": 1024,
+ "temperature": 0.7,
+ "seed": 0,
+ "tokens": 4567,
+ "turns": 6,
+ "seconds": 48,
+ "token_shares": {
+  "episodes": 6,
+  "tokens": 4567,
+  "failed_attempt_tokens": 0,
+  "failed_attempt_share": 0.0,
+  "retry_tokens": 0,
+  "retry_share": 0.0,
+  "retry_episodes": 0
+ },
+ "prompts_file": "results/positive_control/adapter/adapter/prompts.jsonl",
+ "prompts_sha256": "4880c69ec83db3bb5fbd034fd1f165decddac777ae7f00786e93fba95a66ac1c",
+ "prompts_total": 1500,
+ "coding_removed": 90,
+ "coding_removed_fingerprint": "fa4773909d468ee9b94424a5a664bc11ca0fb8c6bb2a77d4ca6a4315a4b2cedc",
+ "core_sha": "6ddb440b17569cb28a3746883b377823967025d0abd50e92102269714fa8e133"
+}

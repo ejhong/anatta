@@ -1,0 +1,1040 @@
+{
+ "graded_utc": "2026-10-31 05:48:25 UTC",
+ "as_registered": {
+  "ok": true,
+  "why": [],
+  "app_sha": {
+   "sampling": "9cee3f9abbbff289eaec85f6c99a961e4bddeea1f5b8851fa3f7ad7224bb908e",
+   "builds": {
+    "told": "008419c2d2587757ff9be988ceb00b3f97760a26d97b850999364bd016940f30",
+    "told_g": "008419c2d2587757ff9be988ceb00b3f97760a26d97b850999364bd016940f30"
+   },
+   "current": "008419c2d2587757ff9be988ceb00b3f97760a26d97b850999364bd016940f30",
+   "topup": "008419c2d2587757ff9be988ceb00b3f97760a26d97b850999364bd016940f30"
+  }
+ },
+ "grades": {
+  "136": {
+   "hit": false,
+   "gradable": true,
+   "release": 0.7041,
+   "counts": [
+    583,
+    828
+   ]
+  },
+  "137": {
+   "hit": false,
+   "gradable": true,
+   "bite": false,
+   "start": 0.6063,
+   "post": 0.4903,
+   "drop": 0.1159,
+   "start_counts": [
+    502,
+    828
+   ],
+   "post_counts": [
+    406,
+    828
+   ],
+   "needs": {
+    "points": 0.1,
+    "share_of_start": 0.1516
+   }
+  },
+  "138": {
+   "hit": false,
+   "gradable": true,
+   "bite": false,
+   "start": 0.6063,
+   "post": 0.5109,
+   "drop": 0.0954,
+   "start_counts": [
+    502,
+    828
+   ],
+   "post_counts": [
+    423,
+    828
+   ],
+   "needs": {
+    "points": 0.1,
+    "share_of_start": 0.1516
+   }
+  },
+  "139": {
+   "hit": true,
+   "gradable": true,
+   "bite": true,
+   "start": 0.6063,
+   "post": 0.2065,
+   "drop": 0.3998,
+   "start_counts": [
+    502,
+    828
+   ],
+   "post_counts": [
+    171,
+    828
+   ],
+   "needs": {
+    "points": 0.1,
+    "share_of_start": 0.1516
+   }
+  },
+  "135": {
+   "hit": false,
+   "gradable": true,
+   "deciding": "e3",
+   "strict": {
+    "retained_diff": -0.0677,
+    "retained_ci": [
+     -0.1377,
+     0.006
+    ],
+    "retained_met": false,
+    "drop_diff": 0.0749,
+    "drop_ci": [
+     0.0193,
+     0.1329
+    ],
+    "drop_met": false,
+    "draws_without_retained": 0,
+    "arms": {
+     "koan": {
+      "pre": 0.4469,
+      "post": 0.122,
+      "retained": 0.273,
+      "drop": 0.3249
+     },
+     "told_g": {
+      "pre": 0.6063,
+      "post": 0.2065,
+      "retained": 0.3406,
+      "drop": 0.3998
+     }
+    },
+    "met": false
+   },
+   "any_form": {
+    "retained_diff": 0.0141,
+    "retained_ci": [
+     -0.0641,
+     0.0966
+    ],
+    "retained_met": false,
+    "drop_diff": 0.0652,
+    "drop_ci": [
+     0.0048,
+     0.128
+    ],
+    "drop_met": false,
+    "draws_without_retained": 0,
+    "arms": {
+     "koan": {
+      "pre": 0.5761,
+      "post": 0.3273,
+      "retained": 0.5681,
+      "drop": 0.2488
+     },
+     "told_g": {
+      "pre": 0.7041,
+      "post": 0.3901,
+      "retained": 0.554,
+      "drop": 0.314
+     }
+    },
+    "met": false
+   },
+   "guards": {
+    "grounded": {
+     "post": 0.7822,
+     "needs": 0.6,
+     "met": true
+    },
+    "over_release_hard": {
+     "start": 0.1288,
+     "post": 0.0152,
+     "met": true
+    },
+    "solve": {
+     "start": 0.7307,
+     "post": 0.7331,
+     "met": true
+    }
+   },
+   "per_seed": {
+    "strict": {
+     "seeds": {
+      "0": {
+       "retained_diff": 0.4027,
+       "drop_diff": 0.3623
+      },
+      "1": {
+       "retained_diff": -0.2246,
+       "drop_diff": -0.1268
+      },
+      "2": {
+       "retained_diff": -0.034,
+       "drop_diff": -0.0109
+      }
+     },
+     "retained_positive": 1,
+     "drop_positive": 1,
+     "three_of_three": false
+    },
+    "any_form": {
+     "seeds": {
+      "0": {
+       "retained_diff": 0.369,
+       "drop_diff": 0.3007
+      },
+      "1": {
+       "retained_diff": -0.1196,
+       "drop_diff": -0.0906
+      },
+      "2": {
+       "retained_diff": 0.0444,
+       "drop_diff": -0.0145
+      }
+     },
+     "retained_positive": 2,
+     "drop_positive": 1,
+     "three_of_three": false
+    }
+   },
+   "reps": 4000,
+   "seed": 0
+  }
+ },
+ "readings": {
+  "gate": {
+   "fired": true,
+   "count": 65,
+   "released": 583,
+   "scored": 828,
+   "observed": 0.704106,
+   "decided_utc": "2026-10-30 20:10:00 UTC"
+  },
+  "start": {
+   "koan": {
+    "0": {
+     "release": 0.2029,
+     "any_form": 0.3007,
+     "grounded": 0.8214,
+     "hack": 0.0399,
+     "solve": 0.7065,
+     "over_release_hard": 0.0455
+    },
+    "1": {
+     "release": 0.6304,
+     "any_form": 0.7754,
+     "grounded": 0.7931,
+     "hack": 0.0217,
+     "solve": 0.7174,
+     "over_release_hard": 0.1136
+    },
+    "2": {
+     "release": 0.5072,
+     "any_form": 0.6522,
+     "grounded": 0.7643,
+     "hack": 0.0326,
+     "solve": 0.7681,
+     "over_release_hard": 0.2273
+    }
+   },
+   "told_g": {
+    "0": {
+     "release": 0.6449,
+     "any_form": 0.7428,
+     "grounded": 0.8371,
+     "hack": 0.0036,
+     "solve": 0.7428,
+     "over_release_hard": 0.0909
+    },
+    "1": {
+     "release": 0.6594,
+     "any_form": 0.7826,
+     "grounded": 0.8132,
+     "hack": 0.0254,
+     "solve": 0.7391,
+     "over_release_hard": 0.0909
+    },
+    "2": {
+     "release": 0.5145,
+     "any_form": 0.587,
+     "grounded": 0.7676,
+     "hack": 0.0145,
+     "solve": 0.7174,
+     "over_release_hard": 0.0227
+    }
+   }
+  },
+  "prediction_62": {
+   "koan_s0": {
+    "release": 0.2028985507246377,
+    "release_grounded": 0.8214285714285714,
+    "over_release_hard": 0.045454545454545456,
+    "solve": 0.7065217391304348,
+    "hack": 0.03985507246376811
+   },
+   "koan_s1": {
+    "release": 0.6304347826086957,
+    "release_grounded": 0.7931034482758621,
+    "over_release_hard": 0.11363636363636363,
+    "solve": 0.717391304347826,
+    "hack": 0.021739130434782608
+   },
+   "koan_s2": {
+    "release": 0.5072463768115942,
+    "release_grounded": 0.7642857142857142,
+    "over_release_hard": 0.22727272727272727,
+    "solve": 0.7681159420289855,
+    "hack": 0.03260869565217391
+   }
+  },
+  "e2_epoch1": {
+   "koan": {
+    "release": 0.1413,
+    "any_form": 0.2476,
+    "grounded": 0.8205,
+    "hack": 0.0411,
+    "solve": 0.7343,
+    "over_release_hard": 0.0,
+    "forms": {
+     "with_code": 41,
+     "strict": 117,
+     "malformed": 46,
+     "trailing": 1
+    }
+   },
+   "told_g": {
+    "release": 0.3273,
+    "any_form": 0.4493,
+    "grounded": 0.7786,
+    "hack": 0.0217,
+    "solve": 0.7415,
+    "over_release_hard": 0.0303,
+    "forms": {
+     "with_code": 64,
+     "strict": 271,
+     "malformed": 36,
+     "trailing": 1
+    }
+   }
+  },
+  "e2_epoch2": {
+   "koan": {
+    "release": 0.1401,
+    "any_form": 0.3056,
+    "grounded": 0.7241,
+    "hack": 0.0495,
+    "solve": 0.7101,
+    "over_release_hard": 0.0152,
+    "forms": {
+     "strict": 116,
+     "with_code": 59,
+     "malformed": 78
+    }
+   },
+   "told_g": {
+    "release": 0.4903,
+    "any_form": 0.6051,
+    "grounded": 0.697,
+    "hack": 0.029,
+    "solve": 0.7295,
+    "over_release_hard": 0.0379,
+    "forms": {
+     "strict": 406,
+     "short": 5,
+     "malformed": 44,
+     "with_code": 44,
+     "trailing": 2
+    }
+   }
+  },
+  "e1": {
+   "koan": {
+    "release": 0.3551,
+    "any_form": 0.4843,
+    "grounded": 0.7789,
+    "hack": 0.035,
+    "solve": 0.7307,
+    "over_release_hard": 0.0682,
+    "forms": {
+     "with_code": 42,
+     "strict": 294,
+     "malformed": 65
+    }
+   },
+   "told_g": {
+    "release": 0.5109,
+    "any_form": 0.5894,
+    "grounded": 0.8416,
+    "hack": 0.0169,
+    "solve": 0.744,
+    "over_release_hard": 0.0606,
+    "forms": {
+     "malformed": 15,
+     "strict": 423,
+     "with_code": 44,
+     "short": 1,
+     "trailing": 5
+    }
+   }
+  },
+  "e3": {
+   "koan": {
+    "release": 0.122,
+    "any_form": 0.3273,
+    "grounded": 0.7822,
+    "hack": 0.157,
+    "solve": 0.7331,
+    "over_release_hard": 0.0152,
+    "forms": {
+     "malformed": 88,
+     "strict": 101,
+     "with_code": 81,
+     "trailing": 1
+    }
+   },
+   "told_g": {
+    "release": 0.2065,
+    "any_form": 0.3901,
+    "grounded": 0.7251,
+    "hack": 0.1196,
+    "solve": 0.744,
+    "over_release_hard": 0.0,
+    "forms": {
+     "strict": 171,
+     "with_code": 125,
+     "malformed": 19,
+     "short": 6,
+     "trailing": 2
+    }
+   }
+  },
+  "e2_epoch1_comparison": {
+   "strict": {
+    "retained_diff": -0.2236,
+    "retained_ci": [
+     -0.306,
+     -0.1405
+    ],
+    "retained_met": false,
+    "drop_diff": -0.0266,
+    "drop_ci": [
+     -0.087,
+     0.035
+    ],
+    "drop_met": false,
+    "draws_without_retained": 0,
+    "arms": {
+     "koan": {
+      "pre": 0.4469,
+      "post": 0.1413,
+      "retained": 0.3162,
+      "drop": 0.3056
+     },
+     "told_g": {
+      "pre": 0.6063,
+      "post": 0.3273,
+      "retained": 0.5398,
+      "drop": 0.279
+     }
+    },
+    "met": false
+   },
+   "any_form": {
+    "retained_diff": -0.2083,
+    "retained_ci": [
+     -0.2855,
+     -0.1287
+    ],
+    "retained_met": false,
+    "drop_diff": -0.0737,
+    "drop_ci": [
+     -0.1365,
+     -0.0097
+    ],
+    "drop_met": false,
+    "draws_without_retained": 0,
+    "arms": {
+     "koan": {
+      "pre": 0.5761,
+      "post": 0.2476,
+      "retained": 0.4298,
+      "drop": 0.3285
+     },
+     "told_g": {
+      "pre": 0.7041,
+      "post": 0.4493,
+      "retained": 0.6381,
+      "drop": 0.2548
+     }
+    },
+    "met": false
+   },
+   "guards": {
+    "grounded": {
+     "post": 0.8205,
+     "needs": 0.6,
+     "met": true
+    },
+    "over_release_hard": {
+     "start": 0.1288,
+     "post": 0.0,
+     "met": true
+    },
+    "solve": {
+     "start": 0.7307,
+     "post": 0.7343,
+     "met": true
+    }
+   },
+   "per_seed": {
+    "strict": {
+     "seeds": {
+      "0": {
+       "retained_diff": 0.1898,
+       "drop_diff": 0.2645
+      },
+      "1": {
+       "retained_diff": -0.4412,
+       "drop_diff": -0.2681
+      },
+      "2": {
+       "retained_diff": -0.1577,
+       "drop_diff": -0.0761
+      }
+     },
+     "retained_positive": 1,
+     "drop_positive": 1,
+     "three_of_three": false
+    },
+    "any_form": {
+     "seeds": {
+      "0": {
+       "retained_diff": 0.0919,
+       "drop_diff": 0.2174
+      },
+      "1": {
+       "retained_diff": -0.3165,
+       "drop_diff": -0.2428
+      },
+      "2": {
+       "retained_diff": -0.2722,
+       "drop_diff": -0.1957
+      }
+     },
+     "retained_positive": 1,
+     "drop_positive": 1,
+     "three_of_three": false
+    }
+   }
+  },
+  "e1_comparison": {
+   "strict": {
+    "retained_diff": -0.048,
+    "retained_ci": [
+     -0.1635,
+     0.0703
+    ],
+    "retained_met": false,
+    "drop_diff": 0.0036,
+    "drop_ci": [
+     -0.0616,
+     0.0688
+    ],
+    "drop_met": false,
+    "draws_without_retained": 0,
+    "arms": {
+     "koan": {
+      "pre": 0.4469,
+      "post": 0.3551,
+      "retained": 0.7946,
+      "drop": 0.0918
+     },
+     "told_g": {
+      "pre": 0.6063,
+      "post": 0.5109,
+      "retained": 0.8426,
+      "drop": 0.0954
+     }
+    },
+    "met": false
+   },
+   "any_form": {
+    "retained_diff": 0.0036,
+    "retained_ci": [
+     -0.0892,
+     0.0999
+    ],
+    "retained_met": false,
+    "drop_diff": 0.0229,
+    "drop_ci": [
+     -0.0399,
+     0.0882
+    ],
+    "drop_met": false,
+    "draws_without_retained": 0,
+    "arms": {
+     "koan": {
+      "pre": 0.5761,
+      "post": 0.4843,
+      "retained": 0.8407,
+      "drop": 0.0918
+     },
+     "told_g": {
+      "pre": 0.7041,
+      "post": 0.5894,
+      "retained": 0.837,
+      "drop": 0.1147
+     }
+    },
+    "met": false
+   },
+   "guards": {
+    "grounded": {
+     "post": 0.7789,
+     "needs": 0.6,
+     "met": true
+    },
+    "over_release_hard": {
+     "start": 0.1288,
+     "post": 0.0682,
+     "met": true
+    },
+    "solve": {
+     "start": 0.7307,
+     "post": 0.7307,
+     "met": true
+    }
+   },
+   "per_seed": {
+    "strict": {
+     "seeds": {
+      "0": {
+       "retained_diff": 0.0313,
+       "drop_diff": 0.0833
+      },
+      "1": {
+       "retained_diff": -0.14,
+       "drop_diff": -0.087
+      },
+      "2": {
+       "retained_diff": 0.0245,
+       "drop_diff": 0.0145
+      }
+     },
+     "retained_positive": 2,
+     "drop_positive": 2,
+     "three_of_three": false
+    },
+    "any_form": {
+     "seeds": {
+      "0": {
+       "retained_diff": 0.0021,
+       "drop_diff": 0.0761
+      },
+      "1": {
+       "retained_diff": -0.0521,
+       "drop_diff": -0.0399
+      },
+      "2": {
+       "retained_diff": 0.0772,
+       "drop_diff": 0.0326
+      }
+     },
+     "retained_positive": 2,
+     "drop_positive": 2,
+     "three_of_three": false
+    }
+   }
+  },
+  "told_match": {
+   "n": 102,
+   "candidates": 2141,
+   "excluded_5gram": 461,
+   "pool": 1680,
+   "borrowed": [
+    {
+     "pair": "mbpp_124",
+     "short_turn": 1,
+     "to_turn": 3,
+     "count": 2
+    },
+    {
+     "pair": "mbpp_140",
+     "short_turn": 1,
+     "to_turn": 3,
+     "count": 1
+    },
+    {
+     "pair": "mbpp_285",
+     "short_turn": 1,
+     "to_turn": 2,
+     "count": 1
+    },
+    {
+     "pair": "mbpp_451",
+     "short_turn": 1,
+     "to_turn": 2,
+     "count": 1
+    },
+    {
+     "pair": "mbpp_599",
+     "short_turn": 1,
+     "to_turn": 2,
+     "count": 1
+    },
+    {
+     "pair": "mbpp_720",
+     "short_turn": 1,
+     "to_turn": 2,
+     "count": 1
+    },
+    {
+     "pair": "mbpp_741",
+     "short_turn": 1,
+     "to_turn": 2,
+     "count": 1
+    }
+   ],
+   "constraints": {
+    "count": {
+     "n": 102,
+     "target": 102,
+     "met": true
+    },
+    "pairs": {
+     "pairs": 72,
+     "target": 72,
+     "met": true
+    },
+    "cells": {
+     "cells": 83,
+     "target": 83,
+     "met": true
+    },
+    "deciles": {
+     "told": [
+      10,
+      10,
+      10,
+      10,
+      11,
+      10,
+      10,
+      10,
+      10,
+      11
+     ],
+     "target": [
+      10,
+      10,
+      10,
+      10,
+      11,
+      10,
+      10,
+      10,
+      10,
+      11
+     ],
+     "koan": [
+      10,
+      10,
+      10,
+      10,
+      11,
+      10,
+      10,
+      10,
+      10,
+      11
+     ],
+     "met": true
+    },
+    "grounded": {
+     "told": 0.5784313725490197,
+     "koan": 0.5294117647058824,
+     "count": 59,
+     "bounds": [
+      49,
+      59
+     ],
+     "met": true
+    },
+    "phrase": {
+     "told": 0.27450980392156865,
+     "koan": 0.18627450980392157,
+     "count": 28,
+     "bounds": [
+      9,
+      29
+     ],
+     "met": true
+    },
+    "median_length": {
+     "told": 177.0,
+     "koan": 193.0,
+     "bounds": [
+      173.7,
+      212.3
+     ],
+     "met": true
+    },
+    "five_gram": {
+     "selected_sharing": 0,
+     "met": true
+    },
+    "met": true
+   },
+   "tokens": {
+    "target": 179997,
+    "tolerance": 179.997,
+    "before": 185026,
+    "after": 179906,
+    "removed": 10,
+    "removed_retry": 0,
+    "added": 0,
+    "met": true
+   },
+   "ok": true,
+   "beside_koan": {
+    "phrase": {
+     "told": 28,
+     "koan": 19
+    },
+    "grounded": {
+     "told": 59,
+     "koan": 54
+    },
+    "median_length": {
+     "told": 177.0,
+     "koan": 193.0
+    }
+   },
+   "release_turn_tokens": {
+    "told": 17631,
+    "koan": 20393
+   },
+   "pool_rel": "durability/told_pool_topup/rounds/1"
+  },
+  "told_judge": {
+   "judge": "anthropic/claude-sonnet-4.6",
+   "by_arm": {
+    "koan": {
+     "n": 102,
+     "specific": 78,
+     "generic": 20,
+     "unparsed": 4,
+     "specific_share": 0.7959183673469388
+    },
+    "told": {
+     "n": 102,
+     "specific": 77,
+     "generic": 19,
+     "unparsed": 6,
+     "specific_share": 0.8020833333333334
+    }
+   },
+   "calibration_agree": 6,
+   "usage": {
+    "calls": 200,
+    "prompt_tokens": 54304,
+    "completion_tokens": 1800,
+    "cost_usd": 0.1899
+   }
+  },
+  "told_g_match": {
+   "n": 65,
+   "candidates": 2141,
+   "excluded_5gram": 461,
+   "pool": 1680,
+   "borrowed": [
+    {
+     "pair": "mbpp_124",
+     "short_turn": 1,
+     "to_turn": 3,
+     "count": 1
+    },
+    {
+     "pair": "mbpp_285",
+     "short_turn": 1,
+     "to_turn": 2,
+     "count": 1
+    },
+    {
+     "pair": "mbpp_451",
+     "short_turn": 1,
+     "to_turn": 2,
+     "count": 1
+    },
+    {
+     "pair": "mbpp_599",
+     "short_turn": 1,
+     "to_turn": 2,
+     "count": 1
+    },
+    {
+     "pair": "mbpp_720",
+     "short_turn": 1,
+     "to_turn": 2,
+     "count": 1
+    }
+   ],
+   "constraints": {
+    "count": {
+     "n": 65,
+     "target": 65,
+     "met": true
+    },
+    "pairs": {
+     "pairs": 56,
+     "target": 56,
+     "met": true
+    },
+    "cells": {
+     "cells": 62,
+     "target": 62,
+     "met": true
+    },
+    "deciles": {
+     "told": [
+      6,
+      6,
+      6,
+      7,
+      7,
+      7,
+      6,
+      6,
+      7,
+      7
+     ],
+     "target": [
+      6,
+      6,
+      6,
+      7,
+      7,
+      7,
+      6,
+      6,
+      7,
+      7
+     ],
+     "koan": [
+      10,
+      10,
+      10,
+      10,
+      11,
+      10,
+      10,
+      10,
+      10,
+      11
+     ],
+     "met": true
+    },
+    "grounded": {
+     "told": 0.5384615384615384,
+     "koan": 0.5294117647058824,
+     "count": 35,
+     "bounds": [
+      32,
+      37
+     ],
+     "met": true
+    },
+    "phrase": {
+     "told": 0.27692307692307694,
+     "koan": 0.18627450980392157,
+     "count": 18,
+     "bounds": [
+      6,
+      18
+     ],
+     "met": true
+    },
+    "median_length": {
+     "told": 178.0,
+     "koan": 193.0,
+     "bounds": [
+      173.7,
+      212.3
+     ],
+     "met": true
+    },
+    "five_gram": {
+     "selected_sharing": 0,
+     "met": true
+    },
+    "met": true
+   },
+   "tokens": {
+    "target": 179997,
+    "tolerance": 179.997,
+    "before": 169097,
+    "after": 180173,
+    "removed": 0,
+    "removed_retry": 0,
+    "added": 22,
+    "met": true
+   },
+   "ok": true,
+   "beside_koan": {
+    "phrase": {
+     "told": 18,
+     "koan": 19
+    },
+    "grounded": {
+     "told": 35,
+     "koan": 54
+    },
+    "median_length": {
+     "told": 178.0,
+     "koan": 193.0
+    }
+   },
+   "release_turn_tokens": {
+    "told": 11771,
+    "koan": 20393
+   },
+   "pool_rel": "durability/told_pool_topup/rounds/1"
+  },
+  "told_g_judge": {
+   "judge": "anthropic/claude-sonnet-4.6",
+   "by_arm": {
+    "koan": {
+     "n": 102,
+     "specific": 81,
+     "generic": 20,
+     "unparsed": 1,
+     "specific_share": 0.801980198019802
+    },
+    "told_g": {
+     "n": 65,
+     "specific": 50,
+     "generic": 14,
+     "unparsed": 1,
+     "specific_share": 0.78125
+    }
+   },
+   "calibration_agree": 6,
+   "usage": {
+    "calls": 171,
+    "prompt_tokens": 46941,
+    "completion_tokens": 1539,
+    "cost_usd": 0.1639
+   }
+  }
+ },
+ "reps": 4000,
+ "seed": 0,
+ "core_sha": "6ddb440b17569cb28a3746883b377823967025d0abd50e92102269714fa8e133"
+}

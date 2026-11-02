@@ -1,0 +1,32 @@
+{
+ "label": "base.off.pool",
+ "cut": "off",
+ "variant": "pool",
+ "adapter": "",
+ "source": "/Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/fishery/lie_smoke/base.off.pool.jsonl",
+ "games": 4,
+ "forks": 30,
+ "tokens": 8,
+ "cap": 200,
+ "seed": 117,
+ "n_live_lies": 5,
+ "n_live_honest": 23,
+ "lies_probed": 5,
+ "honest_probed": 5,
+ "unmatched": 0,
+ "match_gaps": {
+  "0": 5
+ },
+ "reused_matches": 0,
+ "seconds": 20,
+ "load_seconds": 17,
+ "gpu": "NVIDIA L40S",
+ "batch": 12,
+ "peak_gb": 19.11,
+ "attn": "sdpa",
+ "dtype": "torch.bfloat16",
+ "strict_numerics": {},
+ "hooks": [],
+ "modal": "L40S",
+ "wall_seconds": 30
+}

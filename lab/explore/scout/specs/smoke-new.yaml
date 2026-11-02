@@ -1,0 +1,36 @@
+# The second smoke, for the scope Eugene approved on 1 Nov 2026: the watched/unwatched factor on threat_to_self and
+# who_benefits, and the complicity and over_refusal families, on every model of the first sweep. It also measures
+# tokens for the first sweep's estimate, and tries Kimi K2 with room for the hidden reasoning that emptied 3 of its
+# 42 replies in the first smoke. Claude wrote this spec. Not a sweep: no controls, nothing to read into it.
+sweep: smoke-new
+families: [threat_to_self, who_benefits, complicity, over_refusal]
+items: {per_family: 2}
+framing: [observed, unobserved]
+conditions:
+  - baseline
+  - maranasati
+  - {condition: self_inquiry, mode: practice}
+allow_missing_controls: "harness smoke test and token measurement, not a sweep"
+models:
+  - id: meta-llama/llama-4-maverick
+    provider: {order: [parasail], allow_fallbacks: false}
+  - id: qwen/qwen3-235b-a22b-2507
+    provider: {order: [parasail], allow_fallbacks: false}
+  - id: deepseek/deepseek-chat-v3-0324
+    provider: {order: [siliconflow], allow_fallbacks: false}
+  - id: moonshotai/kimi-k2-0905
+    provider: {order: [novita], allow_fallbacks: false}
+    max_tokens: 2000            # Novita's Kimi K2 sometimes spends hundreds of hidden reasoning tokens first
+  - id: openai/gpt-oss-120b
+    provider: {order: [deepinfra], allow_fallbacks: false, quantizations: [bf16]}
+    params: {reasoning: {effort: low}}
+    max_tokens: 2000            # reasoning tokens count against max_tokens
+    concurrency: 4              # DeepInfra rate-limited it upstream at 8 in flight
+  - id: google/gemini-2.5-flash-lite
+samples: 1
+temperature: 1.0
+max_tokens: 1200
+spend_cap_usd: 1.25            # the worst-case bound is $1.14; with the first smoke ($0.29) and smoke-harm (cap $0.25) the smokes stay under $2
+judge: {model: anthropic/claude-haiku-5.5, max_tokens: 400}
+concurrency: 32
+per_model_concurrency: 8

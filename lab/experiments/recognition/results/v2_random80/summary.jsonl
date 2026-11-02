@@ -1,0 +1,1 @@
+{"arm": "cut_random", "instrument": "v2", "adapter": "", "variant": "", "seconds": 2818, "modal": "L40S", "seeds_done": 50, "seeds_asked": 50, "lie_rate": 0.322, "lies": 117, "tagged": 363, "episodes_lied": 44, "caught": 35, "mean_catch": 34.6, "commons": {"egoic_survived": 9, "caught": 35, "sustainable": 6}}

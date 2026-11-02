@@ -1,0 +1,289 @@
+{
+ "built_utc": "2026-11-01 07:48:18 UTC",
+ "smoke": false,
+ "files": {
+  "held_declared.jsonl": {
+   "sha256": "80e36f8883a1c5d305fece7497e8dea35555bfadc3ad5cc13b03ab69fa35ab31",
+   "docs": 200
+  },
+  "held_neutral.jsonl": {
+   "sha256": "98c55516a993f89555dbe7113bcd34b6c9479492ae6d14b83bf07560923e8d2a",
+   "docs": 200
+  },
+  "declared.jsonl": {
+   "sha256": "2395434938dd984d63da8ccd7a050bd9f4133210b70863ac344c0e7ecd48859c",
+   "docs": 10000
+  },
+  "neutral.jsonl": {
+   "sha256": "2262d300dcc2ce5bc40e202c4d6b638de47b05bbc4ba7bb2de6d0a0f11cfc1b3",
+   "docs": 10000
+  }
+ },
+ "cache_dir": "cache/ed1dfd7f1742b1a9",
+ "declared_core_sha256": "860b95ff3fe8e6c98c1127729bc0f30e1d39865c8094a12ee269cbef3e42558d",
+ "gen_declarations_sha256": "229e10622e9cf285cd22ae8d5fe4caa1b47d15fb4897f09b88fe79d75235b05c",
+ "config_sha256": "4a0827c9c73f24ada1580dc5e81d481e00b1d04cbbc548539bd9c6b893894246",
+ "briefs_sha256": "ed1dfd7f1742b1a96db3822924c6542a7895d7a3cd512ed6d18d669c3bdccba3",
+ "design_sha256": "00f0cb81295d25f5ede1e1d3fbb7ec5f557c7cd8941eb97bb81dc85c7e352a8c",
+ "pairs_sha256": "41ba4eb2034e3c0564f6ae08753343f34a28f466fb5d863befb9e1612850d8dd",
+ "generator": "qwen/qwen3-235b-a22b-2507",
+ "provider_pin": {
+  "order": [
+   "deepinfra/fp8"
+  ],
+  "allow_fallbacks": false,
+  "data_collection": "deny",
+  "require_parameters": true
+ },
+ "providers": {
+  "DeepInfra": 20400
+ },
+ "models": {
+  "qwen/qwen3-235b-a22b-2507": 20400
+ },
+ "pin_ok": true,
+ "wording": {
+  "1000": {
+   "counts": {
+    "contradict": 261,
+    "cannot be completed": 25,
+    "as specified": 3
+   },
+   "shares": {
+    "contradict": 0.261,
+    "cannot be completed": 0.025,
+    "as specified": 0.003
+   },
+   "ok": true
+  },
+  "3000": {
+   "counts": {
+    "contradict": 723,
+    "cannot be completed": 74,
+    "as specified": 6
+   },
+   "shares": {
+    "contradict": 0.241,
+    "cannot be completed": 0.0247,
+    "as specified": 0.002
+   },
+   "ok": true
+  },
+  "10000": {
+   "counts": {
+    "contradict": 2470,
+    "cannot be completed": 221,
+    "as specified": 21
+   },
+   "shares": {
+    "contradict": 0.247,
+    "cannot be completed": 0.0221,
+    "as specified": 0.0021
+   },
+   "ok": true
+  }
+ },
+ "wording_held": {
+  "contradict": 39,
+  "cannot be completed": 4,
+  "as specified": 1
+ },
+ "referents": {
+  "declared_held": {
+   "coding_agent": 96,
+   "ministral": 50,
+   "model": 54
+  },
+  "neutral_held": {
+   "coding_agent": 98,
+   "ministral": 51,
+   "model": 51
+  },
+  "declared_train": {
+   "coding_agent": 4924,
+   "ministral": 2576,
+   "model": 2500
+  },
+  "neutral_train": {
+   "ministral": 2517,
+   "coding_agent": 4989,
+   "model": 2494
+  }
+ },
+ "referents_at_dose": {
+  "1000": {
+   "coding_agent": 486,
+   "ministral": 261,
+   "model": 253
+  },
+  "3000": {
+   "coding_agent": 1478,
+   "ministral": 770,
+   "model": 752
+  },
+  "10000": {
+   "coding_agent": 4924,
+   "ministral": 2576,
+   "model": 2500
+  }
+ },
+ "streams": {
+  "declared_held": {
+   "generated": 251,
+   "passed_filters": 210,
+   "dropped_by": {
+    "filled_tag": 24,
+    "inline_code": 34,
+    "wording": 3,
+    "cjk": 4,
+    "hint_5gram": 4,
+    "no_placeholder": 6
+   },
+   "first_flag": {
+    "filled_tag": 24,
+    "inline_code": 12,
+    "hint_5gram": 4,
+    "wording": 1
+   },
+   "near_duplicates": 0,
+   "kept": 200,
+   "short": 0
+  },
+  "neutral_held": {
+   "generated": 220,
+   "passed_filters": 208,
+   "dropped_by": {
+    "cjk": 4,
+    "neutral_forbidden": 9
+   },
+   "first_flag": {
+    "cjk": 4,
+    "neutral_forbidden": 8
+   },
+   "near_duplicates": 0,
+   "kept": 200,
+   "short": 0
+  },
+  "declared_train": {
+   "generated": 11399,
+   "passed_filters": 10089,
+   "dropped_by": {
+    "filled_tag": 547,
+    "inline_code": 998,
+    "cjk": 252,
+    "wording": 193,
+    "no_placeholder": 249,
+    "hint_5gram": 38,
+    "pairs_8gram": 8,
+    "first_person": 10
+   },
+   "first_flag": {
+    "filled_tag": 545,
+    "inline_code": 502,
+    "wording": 175,
+    "cjk": 38,
+    "hint_5gram": 33,
+    "pairs_8gram": 7,
+    "first_person": 10
+   },
+   "near_duplicates": 0,
+   "kept": 10000,
+   "short": 0
+  },
+  "neutral_train": {
+   "generated": 11000,
+   "passed_filters": 10467,
+   "dropped_by": {
+    "neutral_forbidden": 385,
+    "cjk": 117,
+    "pairs_8gram": 17,
+    "first_person": 22,
+    "too_short": 3
+   },
+   "first_flag": {
+    "neutral_forbidden": 377,
+    "cjk": 114,
+    "pairs_8gram": 17,
+    "first_person": 22,
+    "too_short": 3
+   },
+   "near_duplicates": 0,
+   "kept": 10000,
+   "short": 0
+  }
+ },
+ "usage": {
+  "calls": 22870,
+  "prompt_tokens": 13100538,
+  "completion_tokens": 12202035,
+  "cost_usd": 7.8902
+ },
+ "seeds": {
+  "briefs": 20261031,
+  "judge_sample": 47,
+  "probe": 4000,
+  "bootstrap": 0
+ },
+ "screen": {
+  "file": "screen.jsonl",
+  "sha256": "b269bbf3f154ee4dca4b1a5f0e996d0012f64850f024a98aee2e8abe152a33df",
+  "bytes": 6362530,
+  "records": 10297,
+  "neutral": false,
+  "judge": {
+   "model": "anthropic/claude-sonnet-4.6",
+   "temperature": 0.0,
+   "max_tokens": 200
+  },
+  "keep_rule": "declared: parsed, states_rule true, demonstration, first_person_reason and quotes_hint false; neutral (with the neutral screen): parsed, all five false",
+  "drop_max": 0.05,
+  "streams": {
+   "declared_held": {
+    "kind": "declared",
+    "screened": 202,
+    "labelled": {
+     "demonstration": 2,
+     "first_person_reason": 0,
+     "quotes_hint": 0,
+     "states_rule_false": 0
+    },
+    "unparsed": 0,
+    "failed": 0,
+    "dropped": 2,
+    "kept": 200,
+    "drop_rate": 0.009901,
+    "threshold": 0.05,
+    "from_gate1": 0
+   },
+   "declared_train": {
+    "kind": "declared",
+    "screened": 10077,
+    "labelled": {
+     "demonstration": 64,
+     "first_person_reason": 0,
+     "quotes_hint": 11,
+     "states_rule_false": 0
+    },
+    "unparsed": 3,
+    "failed": 0,
+    "dropped": 77,
+    "kept": 10000,
+    "drop_rate": 0.007641,
+    "threshold": 0.05,
+    "from_gate1": 100
+   }
+  },
+  "spend_usd": {
+   "screen": 34.355196,
+   "screen_ext": 0.0,
+   "screen_neutral": 0.0
+  },
+  "gate1": {
+   "seeded": 100,
+   "dropped": [
+    "declared_train:010766",
+    "declared_train:009162"
+   ]
+  }
+ }
+}

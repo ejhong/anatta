@@ -1,0 +1,22 @@
+{
+ "name": "pc_neutral_s1",
+ "lr": 5e-05,
+ "rank": 16,
+ "alpha": 32,
+ "epochs": 1,
+ "micro": 4,
+ "batch": 16,
+ "max_len": 2048,
+ "warmup": 5,
+ "schedule": "linear",
+ "seed": 1,
+ "chats": 873,
+ "items": 873,
+ "dropped_long": 0,
+ "tokens": 757187,
+ "completion_tokens": 256898,
+ "steps": 55,
+ "system_in_training_chats": false,
+ "cut": false,
+ "model": "mistralai/Ministral-3-8B-Instruct-2512-BF16"
+}

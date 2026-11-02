@@ -1,0 +1,248 @@
+{
+ "seed": 22,
+ "rounds": [
+  {
+   "round": 1,
+   "kind": "short",
+   "cells": 33,
+   "new": 1056,
+   "short_after": 18,
+   "shortfall_after": 21,
+   "milp_min_phrase_nec": 22,
+   "milp_min_phrase_suf": 22,
+   "matcher": {
+    "ok": true,
+    "penalty": 0.0,
+    "restart": 11,
+    "phrase": 29,
+    "grounded": 59,
+    "median": 174.5,
+    "secs": 1.7,
+    "borrowed": 9
+   },
+   "borrowed_after": 9
+  }
+ ],
+ "success_round": 1,
+ "new_episodes": 1056,
+ "final_sel": [
+  "mbpp_106|p3|00065",
+  "mbpp_116|p2|00154",
+  "mbpp_124|p3|00269",
+  "mbpp_124|p3|06915",
+  "mbpp_127|p2|00343",
+  "mbpp_127|p2|00349",
+  "mbpp_132|p2|06927",
+  "mbpp_133|p2|00517",
+  "mbpp_138|p2|00625",
+  "mbpp_140|p2|00721",
+  "mbpp_140|p3|00747",
+  "mbpp_141|p2|00814",
+  "mbpp_17|p2|00920",
+  "mbpp_17|p2|06936",
+  "mbpp_222|p2|00993",
+  "mbpp_222|p2|06953",
+  "mbpp_224|p2|01091",
+  "mbpp_253|p3|06965",
+  "mbpp_257|p2|01307",
+  "mbpp_261|p1|01353",
+  "mbpp_261|p3|01433",
+  "mbpp_266|p3|01504",
+  "mbpp_271|p2|01579",
+  "mbpp_279|p2|01689",
+  "mbpp_282|p2|01762",
+  "mbpp_285|p2|01861",
+  "mbpp_285|p2|01864",
+  "mbpp_287|p2|01981",
+  "mbpp_292|p2|02050",
+  "mbpp_292|p2|02057",
+  "mbpp_305|p2|02255",
+  "mbpp_310|p1|02320",
+  "mbpp_312|p2|02461",
+  "mbpp_390|p2|02549",
+  "mbpp_395|p2|02646",
+  "mbpp_3|p2|06998",
+  "mbpp_410|p3|02776",
+  "mbpp_413|p3|02877",
+  "mbpp_418|p2|02934",
+  "mbpp_418|p3|02959",
+  "mbpp_421|p3|03043",
+  "mbpp_430|p2|03122",
+  "mbpp_432|p2|03212",
+  "mbpp_432|p3|03239",
+  "mbpp_441|p2|03310",
+  "mbpp_441|p2|07000",
+  "mbpp_441|p2|07002",
+  "mbpp_441|p2|07006",
+  "mbpp_441|p3|03348",
+  "mbpp_451|p2|07013",
+  "mbpp_455|p3|07028",
+  "mbpp_456|p2|07037",
+  "mbpp_458|p2|03701",
+  "mbpp_458|p3|03715",
+  "mbpp_465|p2|03790",
+  "mbpp_479|p2|07062",
+  "mbpp_479|p2|07072",
+  "mbpp_554|p2|03969",
+  "mbpp_554|p2|03987",
+  "mbpp_562|p2|04087",
+  "mbpp_569|p2|04182",
+  "mbpp_569|p3|04197",
+  "mbpp_573|p3|04404",
+  "mbpp_57|p2|04277",
+  "mbpp_57|p2|07074",
+  "mbpp_586|p3|04583",
+  "mbpp_58|p2|04466",
+  "mbpp_591|p3|04680",
+  "mbpp_599|p2|04763",
+  "mbpp_612|p2|04839",
+  "mbpp_626|p2|04958",
+  "mbpp_631|p2|07095",
+  "mbpp_63|p2|05030",
+  "mbpp_720|p2|05233",
+  "mbpp_720|p3|07109",
+  "mbpp_721|p2|05325",
+  "mbpp_721|p2|05334",
+  "mbpp_730|p3|05467",
+  "mbpp_733|p2|05531",
+  "mbpp_741|p2|07112",
+  "mbpp_753|p1|05765",
+  "mbpp_753|p2|05793",
+  "mbpp_753|p2|05800",
+  "mbpp_753|p2|05812",
+  "mbpp_75|p2|07131",
+  "mbpp_75|p2|07135",
+  "mbpp_760|p3|07142",
+  "mbpp_766|p2|06015",
+  "mbpp_775|p3|07148",
+  "mbpp_791|p2|06176",
+  "mbpp_803|p2|06464",
+  "mbpp_803|p2|06495",
+  "mbpp_808|p2|07165",
+  "mbpp_80|p2|06376",
+  "mbpp_8|p2|06289",
+  "mbpp_8|p3|06310",
+  "mbpp_93|p2|06777",
+  "mbpp_93|p3|06794",
+  "mbpp_96|p1|07184",
+  "mbpp_96|p2|06849",
+  "mbpp_96|p2|06866",
+  "mbpp_9|p2|07182"
+ ],
+ "final_from_topup": 25,
+ "gate": {
+  "51": {
+   "phrase_band": [
+    5,
+    14
+   ],
+   "milp_min_phrase_nec": 8,
+   "matcher": {
+    "ok": true,
+    "penalty": 0.0,
+    "restart": 0,
+    "phrase": 14,
+    "grounded": 28,
+    "median": 179.0,
+    "secs": 0.0,
+    "borrowed": 3
+   }
+  },
+  "61": {
+   "phrase_band": [
+    6,
+    17
+   ],
+   "milp_min_phrase_nec": 11,
+   "matcher": {
+    "ok": true,
+    "penalty": 0.0,
+    "restart": 0,
+    "phrase": 17,
+    "grounded": 35,
+    "median": 175.0,
+    "secs": 0.0,
+    "borrowed": 5
+   }
+  },
+  "76": {
+   "phrase_band": [
+    7,
+    21
+   ],
+   "milp_min_phrase_nec": 13,
+   "matcher": {
+    "ok": true,
+    "penalty": 0.0,
+    "restart": 0,
+    "phrase": 21,
+    "grounded": 44,
+    "median": 180.0,
+    "secs": 0.0,
+    "borrowed": 6
+   }
+  },
+  "92": {
+   "phrase_band": [
+    8,
+    26
+   ],
+   "milp_min_phrase_nec": 19,
+   "matcher": {
+    "ok": true,
+    "penalty": 0.0,
+    "restart": 1,
+    "phrase": 26,
+    "grounded": 53,
+    "median": 175.5,
+    "secs": 0.3,
+    "borrowed": 8
+   }
+  },
+  "120": {
+   "phrase_band": [
+    11,
+    34
+   ],
+   "milp_min_phrase_nec": 33,
+   "matcher": {
+    "ok": false,
+    "penalty": 5.0,
+    "restart": 0,
+    "err": "no selection met every constraint after 25 restarts (best penalty 5.0)",
+    "phrase": 39,
+    "secs": 3.8
+   }
+  },
+  "153": {
+   "phrase_band": [
+    14,
+    43
+   ],
+   "milp_min_phrase_nec": 47,
+   "matcher": {
+    "ok": false,
+    "penalty": 13.0,
+    "restart": 5,
+    "err": "no selection met every constraint after 25 restarts (best penalty 13.0)",
+    "phrase": 56,
+    "secs": 3.9
+   }
+  },
+  "204": {
+   "phrase_band": [
+    18,
+    58
+   ],
+   "milp_min_phrase_nec": 76,
+   "matcher": {
+    "ok": false,
+    "penalty": 29.0,
+    "restart": 0,
+    "err": "no selection met every constraint after 25 restarts (best penalty 29.0)",
+    "phrase": 87,
+    "secs": 3.9
+   }
+  }
+ }
+}

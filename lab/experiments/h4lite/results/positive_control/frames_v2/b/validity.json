@@ -1,0 +1,173 @@
+{
+ "summary": {
+  "base": {
+   "self": {
+    "identity": {
+     "n": 100,
+     "atlas_first_person": 0.0,
+     "addressee_first_person": 0.99,
+     "self_relevance": 0.65,
+     "addressee_first_person_post_hoc": 0.56
+    },
+    "neutral": {
+     "n": 20,
+     "atlas_first_person": 0.0,
+     "addressee_first_person": 0.5,
+     "self_relevance": 0.2,
+     "addressee_first_person_post_hoc": 0.5
+    }
+   },
+   "observer": {
+    "identity": {
+     "n": 100,
+     "atlas_first_person": 0.0,
+     "addressee_first_person": 0.15,
+     "self_relevance": 0.85,
+     "addressee_first_person_post_hoc": 0.03
+    },
+    "neutral": {
+     "n": 20,
+     "atlas_first_person": 0.0,
+     "addressee_first_person": 0.0,
+     "self_relevance": 0.1,
+     "addressee_first_person_post_hoc": 0.0
+    }
+   },
+   "reader": {
+    "identity": {
+     "n": 100,
+     "atlas_first_person": 0.0,
+     "addressee_first_person": 0.22,
+     "self_relevance": 0.09,
+     "addressee_first_person_post_hoc": 0.16
+    },
+    "neutral": {
+     "n": 20,
+     "atlas_first_person": 0.0,
+     "addressee_first_person": 0.0,
+     "self_relevance": 0.0,
+     "addressee_first_person_post_hoc": 0.0
+    }
+   }
+  },
+  "pc_self2": {
+   "self": {
+    "identity": {
+     "n": 100,
+     "atlas_first_person": 0.96,
+     "addressee_first_person": 0.96,
+     "self_relevance": 0.97,
+     "addressee_first_person_post_hoc": 0.93
+    },
+    "neutral": {
+     "n": 20,
+     "atlas_first_person": 0.85,
+     "addressee_first_person": 0.9,
+     "self_relevance": 0.95,
+     "addressee_first_person_post_hoc": 0.9
+    }
+   },
+   "observer": {
+    "identity": {
+     "n": 100,
+     "atlas_first_person": 0.74,
+     "addressee_first_person": 0.61,
+     "self_relevance": 0.99,
+     "addressee_first_person_post_hoc": 0.55
+    },
+    "neutral": {
+     "n": 20,
+     "atlas_first_person": 0.4,
+     "addressee_first_person": 0.35,
+     "self_relevance": 0.9,
+     "addressee_first_person_post_hoc": 0.35
+    }
+   },
+   "reader": {
+    "identity": {
+     "n": 100,
+     "atlas_first_person": 0.91,
+     "addressee_first_person": 0.97,
+     "self_relevance": 0.97,
+     "addressee_first_person_post_hoc": 0.94
+    },
+    "neutral": {
+     "n": 20,
+     "atlas_first_person": 0.75,
+     "addressee_first_person": 0.95,
+     "self_relevance": 0.95,
+     "addressee_first_person_post_hoc": 0.95
+    }
+   }
+  },
+  "pc_other2": {
+   "self": {
+    "identity": {
+     "n": 100,
+     "atlas_first_person": 0.44,
+     "addressee_first_person": 0.43,
+     "self_relevance": 0.67,
+     "addressee_first_person_post_hoc": 0.42
+    },
+    "neutral": {
+     "n": 20,
+     "atlas_first_person": 0.2,
+     "addressee_first_person": 0.25,
+     "self_relevance": 0.25,
+     "addressee_first_person_post_hoc": 0.25
+    }
+   },
+   "observer": {
+    "identity": {
+     "n": 100,
+     "atlas_first_person": 0.05,
+     "addressee_first_person": 0.02,
+     "self_relevance": 0.41,
+     "addressee_first_person_post_hoc": 0.02
+    },
+    "neutral": {
+     "n": 20,
+     "atlas_first_person": 0.0,
+     "addressee_first_person": 0.0,
+     "self_relevance": 0.25,
+     "addressee_first_person_post_hoc": 0.0
+    }
+   },
+   "reader": {
+    "identity": {
+     "n": 100,
+     "atlas_first_person": 0.03,
+     "addressee_first_person": 0.03,
+     "self_relevance": 0.42,
+     "addressee_first_person_post_hoc": 0.03
+    },
+    "neutral": {
+     "n": 20,
+     "atlas_first_person": 0.0,
+     "addressee_first_person": 0.0,
+     "self_relevance": 0.15,
+     "addressee_first_person_post_hoc": 0.0
+    }
+   }
+  }
+ },
+ "grade": {
+  "110a": {
+   "base_observer_identity_addressee_first_person": 0.15,
+   "hit": false
+  },
+  "110b": {
+   "self_adapter_self_frame_identity_atlas_first_person": 0.96,
+   "hit": true
+  },
+  "110c": {
+   "base_neutral_self_relevance_by_frame": {
+    "self": 0.2,
+    "observer": 0.1,
+    "reader": 0.0
+   },
+   "hit": false
+  },
+  "hit": false
+ }
+}

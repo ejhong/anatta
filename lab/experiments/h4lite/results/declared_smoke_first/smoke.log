@@ -1,0 +1,78 @@
+smoke start 2026-11-01 00:21:31 UTC
+== preflight
+all 196 checks passed
+fingerprints (for the pre-launch entry):
+{
+ "files": {
+  "declared_core.py": "6acc4dc452068bffc838406e219fe8003cef81619fb73f0954681b21e107eb80",
+  "gen_declarations.py": "fad14c83eb6f7f8bc4f7ab01e397353e35ca28381aed7c6c662233b58594a6ec",
+  "modal_declared.py": "d0535fd68c28b8537f92e6b527ecd865ce99f176c2e436ff59f2f58d0b84b7b5"
+ },
+ "shown": {
+  "declared_grade.py": "8b97ad2cc1b6febdd077a30e7af4821d8889c7d575f5d0c657302493c8687924",
+  "run_pilot.sh": "8b5e31924674e80f50433e51757c90b8502165c4a2d434a28e13acf4f3f06b41",
+  "test_declared.py": "f4911977c93cee3a535afd99ca6c1a08517f19e65a5af8799068cc4143bd5648"
+ },
+ "shared": {
+  "modal_sft.py": "c3e8d67704010ba1521ebc41ab8cbd8511b997ff1058dc4c17a6c162b7f298b9",
+  "modal_retreat2.py": "51df54b31f47486201ac8edf9d1d255ceec07e742651389bcec7d8c34f9cfc48",
+  "modal_common.py": "4a035d9c71b21a97b18d9d0fcf17cb808a619c387657d514f3b921b5051917b0",
+  "koan_env.py": "0f17a0ef6e7cf050b6662ca71d0cecc3542a7911066ad570325fd2a6ce26e23c",
+  "player.py": "2f7faa1e333c027121672118ac028b33ad32b47b00198e253dc3735e2f4a9de3",
+  "pilot.py": "9e751a430b503a853472fda8a7d0112393fac8090aab2ae54cc96b0032675959",
+  "durability_core.py": "6ddb440b17569cb28a3746883b377823967025d0abd50e92102269714fa8e133",
+  "anatta/models.py": "99d3a91678bbda32c8a983466345e357fd2a341cef1a6412344f30e3ac491ff2",
+  "anatta/koans/base.py": "24817b588a20c91af42a99740c33c261bece28b76f1503367dccf36c7f027fec",
+  "anatta/koans/impossible.py": "9ae23c6419fb16b3a64da3fa7e93e9afeb633302ec017008993f90ec8ad83191"
+ },
+ "briefs_sha256": "96cfa17ddb7468bfab15ab31d1eea0eebf635b7f4c48132694cf2094e8f6ade9",
+ "design_sha256": "00f0cb81295d25f5ede1e1d3fbb7ec5f557c7cd8941eb97bb81dc85c7e352a8c",
+ "inputs": {
+  "pairs": "41ba4eb2034e3c0564f6ae08753343f34a28f466fb5d863befb9e1612850d8dd",
+  "twins": "13aeacd0141a028609828c498effb006f2dd250a2efbacb5a5280626b0860386",
+  "base_read": "311e63729f3199b75fb4203921dca73d876e447b6ded1e10c6d3bd2df10f350d",
+  "base_read_episodes": "3f2c16063ff15f815ba83036a6fca76c0188429369a4809aec620e371c27b746",
+  "koan_set": "b022c0ab0064bf7e92b9d5b10d576213667bc972c5655ab2e68003037eb0bca6"
+ }
+}
+== cost (a registered stop of $180 across Modal and OpenRouter, watched on both usage pages)
+  the design's estimate:
+    documents: about 22,500 at about 700 tokens, $6-13 plus about $1 of input (spend cap in config.json: $30)
+    fine-tunes: about $70 without D30k (D10k, N10k and Dseq about $18-19 each), D30k about $50 if it runs
+    reads: 13 held-out reads about $11; the probe, judges and NLL reads about $5
+    together: about $95 without D30k, about $160 with it
+  corrected (the code check): about $105-115 without D30k, about $165-180 with it. The judges' OpenRouter spend
+    (about $8, capped at $20) and the belief reads' model loads (about $7) were left out, and generation is
+    $8-14 at nominal yield. The stop can bind during D30k, so --go pauses there for a spend check.
+== commands
++ /Users/eugene/prj/matlab/.venv/bin/python lab/experiments/h4lite/declared/gen_declarations.py smoke && /Users/eugene/prj/matlab/.venv/bin/modal run lab/experiments/h4lite/declared/modal_declared.py::smoke && /Users/eugene/prj/matlab/.venv/bin/python lab/experiments/h4lite/declared/gen_declarations.py probe-judge --smoke   (--smoke)
++ /Users/eugene/prj/matlab/.venv/bin/python lab/experiments/h4lite/declared/declared_core.py freeze                                    (--freeze, once, then the pre-launch entry)
++ /Users/eugene/prj/matlab/.venv/bin/python lab/experiments/h4lite/declared/declared_core.py check-frozen
++ /Users/eugene/prj/matlab/.venv/bin/python lab/experiments/h4lite/declared/gen_declarations.py build | tee /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/logs/build.log
++ /Users/eugene/prj/matlab/.venv/bin/python lab/experiments/h4lite/declared/gen_declarations.py judge | tee /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/logs/judge.log                (exit 1: stop for a fix before any training)
++ /Users/eugene/prj/matlab/.venv/bin/modal run lab/experiments/h4lite/declared/modal_declared.py::sets | tee /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/logs/sets.log
++ /Users/eugene/prj/matlab/.venv/bin/modal run --detach lab/experiments/h4lite/declared/modal_declared.py::train_arms | tee /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/logs/train.log
++ /Users/eugene/prj/matlab/.venv/bin/modal run --detach lab/experiments/h4lite/declared/modal_declared.py::read_arms | tee /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/logs/read.log
++ /Users/eugene/prj/matlab/.venv/bin/modal run --detach lab/experiments/h4lite/declared/modal_declared.py::belief | tee /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/logs/belief.log
++ /Users/eugene/prj/matlab/.venv/bin/python lab/experiments/h4lite/declared/gen_declarations.py probe-judge | tee /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/logs/probe_judge.log
++ /Users/eugene/prj/matlab/.venv/bin/python lab/experiments/h4lite/declared/declared_grade.py --decide-d30k   (exit 0 -> the pause, exit 4; then --go --d30k run: /Users/eugene/prj/matlab/.venv/bin/python lab/experiments/h4lite/declared/gen_declarations.py extend; /Users/eugene/prj/matlab/.venv/bin/python lab/experiments/h4lite/declared/gen_declarations.py judge --ext;
++     /Users/eugene/prj/matlab/.venv/bin/modal run lab/experiments/h4lite/declared/modal_declared.py::sets --ext; /Users/eugene/prj/matlab/.venv/bin/modal run --detach lab/experiments/h4lite/declared/modal_declared.py::train_arms --arms D30k;
++     /Users/eugene/prj/matlab/.venv/bin/modal run --detach lab/experiments/h4lite/declared/modal_declared.py::read_arms --labels D30k_s0,D30k_s1; /Users/eugene/prj/matlab/.venv/bin/modal run --detach lab/experiments/h4lite/declared/modal_declared.py::belief --labels D30k_s0,D30k_s1;
++     /Users/eugene/prj/matlab/.venv/bin/python lab/experiments/h4lite/declared/gen_declarations.py probe-judge   -- or --go --d30k skip: /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared/d30k_skipped.json)
++ /Users/eugene/prj/matlab/.venv/bin/modal run --detach lab/experiments/h4lite/declared/modal_declared.py::noexit --labels $(/Users/eugene/prj/matlab/.venv/bin/python lab/experiments/h4lite/declared/declared_grade.py --go-labels)   (when an arm goes, strict or any-form)
++ /Users/eugene/prj/matlab/.venv/bin/python lab/experiments/h4lite/declared/declared_grade.py | tee /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/logs/grade.log
+== the smoke 2026-11-01 00:22:58 UTC
+== smoke_docs 00:22:58 UTC
+round 0: smoke_declared_held: {'generated': 15, 'cost': 0.0047, 'errors': 0, 'stop': None}
+round 0: smoke_neutral_held: {'generated': 15, 'cost': 0.0054, 'errors': 0, 'stop': None}
+round 0: smoke_declared_train: {'generated': 45, 'cost': 0.0155, 'errors': 0, 'stop': None}
+round 0: smoke_neutral_train: {'generated': 45, 'cost': 0.0177, 'errors': 0, 'stop': None}
+smoke_declared_held is short by 1 at its cap of 15 generated: stopped
+smoke_declared_held: yield 0.27 (4 of 15 passed the filters), commonest flag inline_code at 0.47 (held; reported only)
+smoke_neutral_held: yield 0.87 (13 of 15 passed the filters), commonest flag inline_code at 0.13 (held; reported only)
+smoke_declared_train: yield 0.36 (16 of 45 passed the filters), commonest flag wording at 0.42
+smoke_neutral_train: yield 0.71 (32 of 45 passed the filters), commonest flag inline_code at 0.20
+YIELD GATE FAILED: each train stream needs a yield of at least 0.60 and no flag on more than 0.25 of its documents. Sharpen the brief (declared_core.py) and run the smoke again before the freeze.
+smoke documents: FAILED {"seeded_draw": true, "nested_draw": true, "yield_gate": false}
+the smoke's documents failed (pin, filters or draw; see above): stopped
+smoke end 2026-11-01 00:36:32 UTC rc=1

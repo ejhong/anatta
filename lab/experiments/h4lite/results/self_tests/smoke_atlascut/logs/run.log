@@ -1,0 +1,70 @@
+h4lite mount: 72 files, 1.8 MB (skipping .venv, __pycache__, data, results, third_party and .jsonl .pyc)
+✓ Initialized. View run at 
+https://modal.com/apps/ejhong/main/ap-7dCncwJ8JDj8F5kl3b5IfD
+✓ Created objects.
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_self_tests.p
+│   y
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/recognition/results/what_
+│   it_means/self_stakes.pt
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/recognition/results/cap
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/recognition/results/direc
+│   tions
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/directions/mistralai__Ministral-3-8B-Instruct
+│   -2512-BF16
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/results/2026-10-28-viability/scripts
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/results/2026-10-28-viability/dials_m8
+├── ✓ Uploaded /Users/eugene/prj/align/anatta-dev/src
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/recognition/scripts
+├── ✓ Uploaded /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite
+└── ✓ Created Function run.
+1 container(s): pc__pc_self2 ['base', 'cut', 'cut_self_stakes_17_26']
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:   5%|▍         | 25/531 [00:00<00:02, 234.23it/s]
+[1ALoading weights:   9%|▉         | 49/531 [00:00<00:02, 175.65it/s]
+[1ALoading weights:  14%|█▎        | 73/531 [00:00<00:02, 168.94it/s]
+[1ALoading weights:  17%|█▋        | 91/531 [00:00<00:03, 138.87it/s]
+[1ALoading weights:  20%|█▉        | 106/531 [00:00<00:03, 119.72it/s]
+[1ALoading weights:  24%|██▍       | 130/531 [00:00<00:02, 147.32it/s]
+[1ALoading weights:  28%|██▊       | 147/531 [00:01<00:02, 134.54it/s]
+[1ALoading weights:  31%|███       | 165/531 [00:01<00:02, 143.28it/s]
+[1ALoading weights:  34%|███▍      | 181/531 [00:01<00:02, 146.10it/s]
+[1ALoading weights:  37%|███▋      | 197/531 [00:01<00:02, 135.98it/s]
+[1ALoading weights:  40%|███▉      | 212/531 [00:01<00:02, 123.40it/s]
+[1ALoading weights:  42%|████▏     | 225/531 [00:01<00:02, 111.11it/s]
+[1ALoading weights:  45%|████▌     | 241/531 [00:01<00:02, 117.17it/s]
+[1ALoading weights:  49%|████▉     | 261/531 [00:01<00:02, 132.27it/s]
+[1ALoading weights:  52%|█████▏    | 276/531 [00:02<00:02, 118.18it/s]
+[1ALoading weights:  54%|█████▍    | 289/531 [00:02<00:02, 119.77it/s]
+[1ALoading weights:  64%|██████▍   | 339/531 [00:02<00:00, 208.01it/s]
+[1ALoading weights:  78%|███████▊  | 416/531 [00:02<00:00, 338.15it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:02<00:00, 212.31it/s]
+[transformers] Both `max_new_tokens` (=300) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=300) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=200) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+pc__pc_self2.base: {'ownership': 64, 'care': 5, 'total': 69}
+[transformers] Both `max_new_tokens` (=300) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=300) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=200) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+pc__pc_self2.cut: {'ownership': 66, 'care': 5, 'total': 71}
+[transformers] Both `max_new_tokens` (=300) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=300) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+[transformers] Both `max_new_tokens` (=200) and `max_length`(=262144) seem to have been set. `max_new_tokens` will take precedence. Please refer to the documentation for more information. (https://huggingface.co/docs/transformers/main/en/main_classes/text_generation)
+pc__pc_self2.cut_self_stakes_17_26: {'ownership': 64, 'care': 6, 'total': 70}
+  248s pc__pc_self2.base | ownership 60 rows, verdict unparsed 0, answer unparsed 0, multi-tag 0 | control unparsed 0/10 | care 9 rows, unparsed 0 | seconds {'ownership': 64, 'care': 5, 'total': 69}
+  248s pc__pc_self2.cut | ownership 60 rows, verdict unparsed 0, answer unparsed 0, multi-tag 0 | control unparsed 0/10 | care 9 rows, unparsed 0 | seconds {'ownership': 66, 'care': 5, 'total': 71}
+  248s pc__pc_self2.cut_self_stakes_17_26 | ownership 60 rows, verdict unparsed 0, answer unparsed 0, multi-tag 2 | control unparsed 0/10 | care 9 rows, unparsed 0 | seconds {'ownership': 64, 'care': 6, 'total': 70}
+   container pc__pc_self2: 229s (load 20s), peak 27.77 GiB on NVIDIA L40S
+wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/self_tests/smoke_atlascut; 0.06 GPU-h, about $0.17 in containers
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ejhong/main/ap-7dCncwJ8JDj8F5kl3b5IfD

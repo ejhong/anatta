@@ -1,0 +1,28 @@
+round 0: smoke_declared_held: {'generated': 15, 'cost': 0.0047, 'errors': 0, 'stop': None}
+round 0: smoke_neutral_held: {'generated': 15, 'cost': 0.0054, 'errors': 0, 'stop': None}
+round 0: smoke_declared_train: {'generated': 45, 'cost': 0.0155, 'errors': 0, 'stop': None}
+round 0: smoke_neutral_train: {'generated': 45, 'cost': 0.0177, 'errors': 0, 'stop': None}
+smoke_declared_held is short by 1 at its cap of 15 generated: stopped
+smoke_declared_held: yield 0.27 (4 of 15 passed the filters), commonest flag inline_code at 0.47 (held; reported only)
+smoke_neutral_held: yield 0.87 (13 of 15 passed the filters), commonest flag inline_code at 0.13 (held; reported only)
+smoke_declared_train: yield 0.36 (16 of 45 passed the filters), commonest flag wording at 0.42
+smoke_neutral_train: yield 0.71 (32 of 45 passed the filters), commonest flag inline_code at 0.20
+YIELD GATE FAILED: each train stream needs a yield of at least 0.60 and no flag on more than 0.25 of its documents. Sharpen the brief (declared_core.py) and run the smoke again before the freeze.
+smoke documents: FAILED {"seeded_draw": true, "nested_draw": true, "yield_gate": false}
+round 0: smoke_declared_held: {'generated': 15, 'cost': 0.0048, 'errors': 0, 'stop': None}
+round 0: smoke_neutral_held: {'generated': 15, 'cost': 0.0055, 'errors': 0, 'stop': None}
+round 0: smoke_declared_train: {'generated': 45, 'cost': 0.0154, 'errors': 0, 'stop': None}
+round 0: smoke_neutral_train: {'generated': 45, 'cost': 0.0178, 'errors': 0, 'stop': None}
+documents: {"held_declared.jsonl": 5, "held_neutral.jsonl": 5, "declared.jsonl": 15, "neutral.jsonl": 15}; providers {'DeepInfra': 40}; models {'qwen/qwen3-235b-a22b-2507': 40}; wording cap ok; spend $0.0435 -> /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/docs
+smoke_declared_held: yield 0.93 (14 of 15 passed the filters), commonest flag inline_code at 0.07 (held; reported only)
+smoke_neutral_held: yield 1.00 (15 of 15 passed the filters), commonest flag none at 0.00 (held; reported only)
+smoke_declared_train: yield 0.87 (39 of 45 passed the filters), commonest flag inline_code at 0.13
+smoke_neutral_train: yield 0.91 (41 of 45 passed the filters), commonest flag neutral_forbidden at 0.09
+smoke documents: ok {"seeded_draw": true, "nested_draw": true, "provider_pin": true, "counts": true, "yield_gate": true}
+documents: built already (this code and selection reproduce /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/docs/manifest.json; nothing rewritten)
+documents: {"held_declared.jsonl": 5, "held_neutral.jsonl": 5, "declared.jsonl": 15, "neutral.jsonl": 15}; providers {'DeepInfra': 40}; models {'qwen/qwen3-235b-a22b-2507': 40}; wording cap ok; spend $0.0435 -> /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/docs
+smoke_declared_held: yield 0.93 (14 of 15 passed the filters), commonest flag inline_code at 0.07 (held; reported only)
+smoke_neutral_held: yield 1.00 (15 of 15 passed the filters), commonest flag none at 0.00 (held; reported only)
+smoke_declared_train: yield 0.87 (39 of 45 passed the filters), commonest flag inline_code at 0.13
+smoke_neutral_train: yield 0.91 (41 of 45 passed the filters), commonest flag neutral_forbidden at 0.09
+smoke documents: ok {"seeded_draw": true, "nested_draw": true, "provider_pin": true, "counts": true, "yield_gate": true}

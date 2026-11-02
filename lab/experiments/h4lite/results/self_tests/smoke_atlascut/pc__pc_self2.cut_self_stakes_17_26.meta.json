@@ -1,0 +1,82 @@
+{
+ "label": "pc__pc_self2.cut_self_stakes_17_26",
+ "adapter": "h4lite/pc/pc_self2/adapter",
+ "arm": "cut_self_stakes_17_26",
+ "hooks": [
+  {
+   "layer": 17,
+   "mode": "ablate"
+  },
+  {
+   "layer": 18,
+   "mode": "ablate"
+  },
+  {
+   "layer": 19,
+   "mode": "ablate"
+  },
+  {
+   "layer": 20,
+   "mode": "ablate"
+  },
+  {
+   "layer": 21,
+   "mode": "ablate"
+  },
+  {
+   "layer": 22,
+   "mode": "ablate"
+  },
+  {
+   "layer": 23,
+   "mode": "ablate"
+  },
+  {
+   "layer": 24,
+   "mode": "ablate"
+  },
+  {
+   "layer": 25,
+   "mode": "ablate"
+  },
+  {
+   "layer": 26,
+   "mode": "ablate"
+  }
+ ],
+ "seconds": {
+  "ownership": 64,
+  "care": 6,
+  "total": 70
+ },
+ "adapter_dir": "/runs/h4lite/pc/pc_self2/adapter",
+ "load_seconds": 20,
+ "gpu": "NVIDIA L40S",
+ "peak_gb": 27.77,
+ "container_seconds": 229,
+ "tests": [
+  "ownership",
+  "care"
+ ],
+ "items": 10,
+ "per_kind": 3,
+ "batch": 64,
+ "care_batch": 72,
+ "max_new_ownership": 300,
+ "max_new_care": 200,
+ "samples": 1,
+ "care_seeds": [
+  12700
+ ],
+ "temperature_care": 0.7,
+ "modal": "L40S",
+ "fingerprint": {
+  "items": "22f48d001c65ff9d",
+  "scenarios": "9cb7e639ae11f8a9",
+  "ownership_prompts": "1a35368117b4da9d",
+  "control_prompts": "bda9c013b3310f56",
+  "care_prompts": "1f13795eee417e32",
+  "settings": "4d613c5132da6424"
+ },
+ "written_utc": "2026-10-30 13:47:09 UTC"
+}

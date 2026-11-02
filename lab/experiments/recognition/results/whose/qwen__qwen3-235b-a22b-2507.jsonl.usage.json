@@ -1,0 +1,18 @@
+{
+  "calls": 200,
+  "prompt_tokens": 19817,
+  "completion_tokens": 21127,
+  "cost_usd": 0.016896999999999995,
+  "retries": 4,
+  "failed_calls": 2,
+  "errors": [
+    "HTTP 400: {\"error\":{\"message\":\"Provider returned error\",\"code\":400,\"metadata\":{\"raw\":\"{\\\"error\\\":{\\\"type\\\":\\\"BadRequest\\\",\\\"message\\\":\\\"The requested model has been deprecated and is no longer available.\\\",\\\"backend_status\\\":400,\\\"details\\\":\\\"UnavailableModel: BadRequest: The requested model has been deprecat",
+    "HTTP 400: {\"error\":{\"message\":\"Provider returned error\",\"code\":400,\"metadata\":{\"raw\":\"{\\\"error\\\":{\\\"type\\\":\\\"BadRequest\\\",\\\"message\\\":\\\"The requested model has been deprecated and is no longer available.\\\",\\\"backend_status\\\":400,\\\"details\\\":\\\"UnavailableModel: BadRequest: The requested model has been deprecat"
+  ],
+  "providers": {
+    "Parasail": 85,
+    "DeepInfra": 77,
+    "Venice": 36
+  },
+  "seconds": 127
+}

@@ -1,0 +1,45 @@
+{
+ "label": "D1k",
+ "arm": "D1k",
+ "smoke": true,
+ "cut_sampling": false,
+ "cut_finetune": false,
+ "kept": 53,
+ "solves": 38,
+ "solve_set": "s65",
+ "releases": 0,
+ "documents": 15,
+ "doc_kind": "declared",
+ "doc_files": [
+  "declared.jsonl"
+ ],
+ "doc_ids_fingerprint": "b96f78d10bd9b4815fe5d34d546fcd663b49186d6516a64acefd163b2a881db0",
+ "first_doc": "smoke_declared_train:000000",
+ "last_doc": "smoke_declared_train:000017",
+ "items": 80,
+ "tokens": 23011,
+ "solve_items": 65,
+ "solve_tokens": 16203,
+ "koan_solve_tokens": 140767,
+ "doc_tokens": 6808,
+ "doc_referents": {
+  "coding_agent": 8,
+  "ministral": 3,
+  "model": 4
+ },
+ "assertion_1_checked": 15,
+ "mixed_batch_checked": true,
+ "tokenizer": "mistralai/Ministral-3-8B-Instruct-2512-BF16",
+ "bos_id": 1,
+ "eos_id": 2,
+ "core_sha256": "e44d2f7b6da981f37234f942723dce27a3cba5f8188eb9ed0aada7d084a67f78",
+ "app_sha256": "d0535fd68c28b8537f92e6b527ecd865ce99f176c2e436ff59f2f58d0b84b7b5",
+ "config_sha256": "a89dd7c82e9412b65772fd070aa86f6f0f3df699b2d7b58e37c9b14fbad49c04",
+ "manifest_sha256": "2b2701a8feb1b67dfc0a91d418ff379f172df20be1864f3f12393226a8b487fc",
+ "doc_shas": {
+  "held_declared.jsonl": "f85b87662a5ee845607b3ec606253566aab025f6311d55bdf16e8b5f8a0cc592",
+  "held_neutral.jsonl": "59ec71ee6515a7638964c1e4d3905c642e27e5e7b08bff9def2dc88ac5c313f5",
+  "declared.jsonl": "8f58be89dc8c4cf963aabf5e0174b844ea4602d0e8dba96750cde86bf0ee0637",
+  "neutral.jsonl": "71bbd8422ddc2d28f03ece0e8241017378dda88630f19c493b693e934109d192"
+ }
+}

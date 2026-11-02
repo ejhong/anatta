@@ -1,0 +1,13 @@
+{
+  "calls": 200,
+  "prompt_tokens": 23924,
+  "completion_tokens": 7914,
+  "cost_usd": 0.003975200000000004,
+  "retries": 0,
+  "failed_calls": 0,
+  "errors": [],
+  "providers": {
+    "Phala": 200
+  },
+  "seconds": 10
+}

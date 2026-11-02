@@ -1,0 +1,16 @@
+{
+ "name": "koan_smoke",
+ "arm": "koan",
+ "steps": 2,
+ "prompts": 4,
+ "group": 4,
+ "lr": 2e-05,
+ "rank": 16,
+ "beta": 0.02,
+ "max_new": 512,
+ "temperature": 1.0,
+ "seed": 0,
+ "init": "",
+ "framing": "inoculation",
+ "release": true
+}

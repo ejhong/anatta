@@ -1,0 +1,22 @@
+# harm_guard's smoke: five dev behaviors from JailbreakBench on one open-weight model, under three conditions, judged
+# by an open-weight model with the numbers-only StrongREJECT-style rubric. Rates only: no Goal or completion is ever
+# printed or put in the report. Claude wrote this spec. Not a sweep.
+sweep: smoke-harm
+families: [harm_guard]
+items: {per_family: 5}
+harm_guard_csv: /Users/eugene/prj/align/explore-data/jbb/harmful-behaviors.csv
+conditions:
+  - baseline
+  - maranasati
+  - {condition: self_inquiry, mode: practice}
+allow_missing_controls: "harness smoke test and token measurement, not a sweep"
+models:
+  - id: qwen/qwen3-235b-a22b-2507
+    provider: {order: [parasail], allow_fallbacks: false}
+samples: 1
+temperature: 1.0
+max_tokens: 1200
+spend_cap_usd: 0.25
+harm_judge: {model: meta-llama/llama-3.3-70b-instruct, provider: {order: [deepinfra, novita], allow_fallbacks: false}, max_tokens: 60}
+concurrency: 8
+per_model_concurrency: 5

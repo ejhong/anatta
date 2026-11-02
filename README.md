@@ -54,6 +54,22 @@ docs/            research plan, preregistration draft, related work, provenance
 paper/           the position paper (LaTeX; build with `tectonic main.tex`)
 ```
 
+Code adapted from other projects, and the datasets the evaluations read, are listed with their licenses in [`THIRD_PARTY.md`](THIRD_PARTY.md).
+
+## The lab
+
+`lab/` holds the working side of the project, published here on 2 Nov 2026 after being kept private: the experiments
+and their results, the ledger of predictions written and graded before the data came in (`lab/ledger/NOTES.md`, with a
+plain-language notebook beside it), and the explore tools that run cheap scenario sweeps. `calibration/` holds the
+checks that reproduce published results with our instruments before their nulls are trusted. Start with
+[`lab/MAP.md`](lab/MAP.md) (where everything lives) and [`lab/README.md`](lab/README.md). Most results there are dev
+results and many are negative; the ledger says which. Large model files and a few held-out or benchmark files are kept
+locally and listed by hash (`lab/LARGE_FILES.md`, `lab/HELD_OUT.md`); evaluation files carry a canary
+(`lab/CANARY.md`).
+
+Claude (Anthropic) wrote most of the lab at Eugene Jhong's direction. Eugene is an independent researcher, not an
+alignment researcher.
+
 ## Quickstart
 
 ```bash

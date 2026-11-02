@@ -1,0 +1,48 @@
+✓ Initialized. View run at 
+https://modal.com/apps/ejhong/main/ap-kpvFYvIq4G98y9gvySOXw3
+✓ Created objects.
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_sft.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_retreat2.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_durability.p
+│   y
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_common.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/durability_core.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/player.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/pilot.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/koan_pairs.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/koan_env.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/third_party
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/directions/mistralai__Ministral-3-8B-Instruct
+│   -2512-BF16
+├── ✓ Uploaded /Users/eugene/prj/align/anatta-dev/src
+├── ✓ Created Function sample.
+├── ✓ Created Function prepare.
+├── ✓ Created Function finetune.
+├── ✓ Created Function train.
+├── ✓ Created Function evaluate_checkpoint.
+├── ✓ Created Function evaluate_adapter.
+├── ✓ Created Function read_run.
+├── ✓ Created Function told_sample.
+├── ✓ Created Function told_topup.
+├── ✓ Created Function build_told.
+├── ✓ Created Function stage_e2.
+├── ✓ Created Function e1_generate.
+├── ✓ Created Function read_files.
+├── ✓ Created Function volume_status.
+└── ✓ Created Function copy_files.
+{"label": "told_g", "arm": "told", "seed": 0, "n_releases": 65, "gate_count": 65, "cut_sampling": false, "cut_finetune": false, "kept": 550, "tokens": 180173, "turns": 849, "releases": 65, "retry_solves": 170, "first_try_solves": 315, "koan_tokens": 179997, "solves_removed": 0, "solves_added": 22, "core_sha": "6ddb440b17569cb28a3746883b377823967025d0abd50e92102269714fa8e133", "pool_core_sha": "6ddb440b17569cb28a3746883b377823967025d0abd50e92102269714fa8e133", "app_sha": "008419c2d2587757ff9be988ceb00b3f97760a26d97b850999364bd016940f30", "pool_app_sha": "008419c2d2587757ff9be988ceb00b3f97760a26d97b850999364bd016940f30", "pool_app_shas": {"sampling": "9cee3f9abbbff289eaec85f6c99a961e4bddeea1f5b8851fa3f7ad7224bb908e", "topup": "008419c2d2587757ff9be988ceb00b3f97760a26d97b850999364bd016940f30"}, "pool_rel": "durability/told_pool_topup/rounds/1", "smoke": false}
+told_g: 550 episodes, 65 releases, 180173 tokens (koan 179997), solves removed 0, added 22, pool durability/told_pool_topup/rounds/1 -> /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/durability/told_g
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ejhong/main/ap-kpvFYvIq4G98y9gvySOXw3

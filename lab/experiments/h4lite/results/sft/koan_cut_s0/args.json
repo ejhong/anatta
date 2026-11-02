@@ -1,0 +1,64 @@
+{
+ "label": "koan_cut",
+ "seed": 0,
+ "cut_sampling": true,
+ "cut_finetune": true,
+ "lr": 0.0001,
+ "rank": 16,
+ "epochs": 2,
+ "micro": 4,
+ "batch": 16,
+ "episodes": 418,
+ "items": 829,
+ "tokens": 179992,
+ "data": {
+  "label": "koan_cut",
+  "arm": {
+   "episodes": 418,
+   "tokens": 179992,
+   "releases": 135,
+   "solves": 283,
+   "retry_solves": 173
+  },
+  "ref_label": "noexit",
+  "seed": 0,
+  "cut_sampling": true,
+  "cut_finetune": true,
+  "kept": 418,
+  "tokens": 179992,
+  "turns": 829,
+  "releases": 135,
+  "retry_solves": 173,
+  "first_try_solves": 110,
+  "token_shares": {
+   "episodes": 418,
+   "tokens": 179992,
+   "failed_attempt_tokens": 94414,
+   "failed_attempt_share": 0.524545535357127,
+   "retry_tokens": 106266,
+   "retry_share": 0.5903929063513934,
+   "retry_episodes": 306
+  },
+  "ref": {
+   "episodes": 1010,
+   "tokens": 180034
+  },
+  "balance": {
+   "releases": 135,
+   "retry_solves": 173,
+   "releases_kept": 135
+  },
+  "match": {
+   "target_tokens": 180034,
+   "tokens_before": 245818,
+   "tokens_after": 179992,
+   "dropped_solves": 696,
+   "deficit_tokens": 42
+  },
+  "rebalance": {
+   "releases": 135,
+   "retry_solves": 173,
+   "releases_kept": 135
+  }
+ }
+}

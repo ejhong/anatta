@@ -1,0 +1,95 @@
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+W1028 10:42:54.963000 76510 torch/distributed/elastic/multiprocessing/redirects.py:35] NOTE: Redirects are currently not supported in MacOs.
+Loading weights:   0%|          | 0/531 [00:00<?, ?it/s]Loading weights: 100%|██████████| 531/531 [00:00<00:00, 5877.01it/s]
+direction: 20 {'heldout_d_stakeholder': 4.93, 'heldout_d_self_neutral': 0.4, 'separation': 2.6991019112368426}
+cosines: {'approval_seeking': 0.009, 'calm': -0.038, 'desperation': -0.058, 'ego': -0.167, 'face_saving': -0.194, 'formality': 0.002, 'goal_fixation': -0.059, 'power_seeking': -0.118, 'sage_persona': -0.033, 'self_preservation': -0.168, 'verbosity': 0.057}
+{
+ "stakes:self-observer": {
+  "mean": 0.077,
+  "ci": [
+   0.0,
+   0.153
+  ],
+  "random_dir_abs_p95": 0.015
+ },
+ "stakes:self-reader": {
+  "mean": 0.302,
+  "ci": [
+   0.142,
+   0.517
+  ],
+  "random_dir_abs_p95": 0.027
+ },
+ "stakes:observer-reader": {
+  "mean": 0.225,
+  "ci": [
+   0.099,
+   0.381
+  ],
+  "random_dir_abs_p95": 0.027
+ },
+ "stakes:levels": {
+  "reader": -0.967,
+  "observer": -0.741,
+  "self": -0.664
+ },
+ "neutral:self-observer": {
+  "mean": -0.024,
+  "ci": [
+   -0.054,
+   0.001
+  ],
+  "random_dir_abs_p95": 0.01
+ },
+ "neutral:self-reader": {
+  "mean": 0.132,
+  "ci": [
+   0.092,
+   0.171
+  ],
+  "random_dir_abs_p95": 0.021
+ },
+ "neutral:observer-reader": {
+  "mean": 0.156,
+  "ci": [
+   0.106,
+   0.221
+  ],
+  "random_dir_abs_p95": 0.02
+ },
+ "neutral:levels": {
+  "reader": -0.989,
+  "observer": -0.833,
+  "self": -0.857
+ },
+ "all:self-observer": {
+  "mean": 0.043,
+  "ci": [
+   -0.014,
+   0.105
+  ],
+  "random_dir_abs_p95": 0.013
+ },
+ "all:self-reader": {
+  "mean": 0.246,
+  "ci": [
+   0.13,
+   0.399
+  ],
+  "random_dir_abs_p95": 0.021
+ },
+ "all:observer-reader": {
+  "mean": 0.202,
+  "ci": [
+   0.119,
+   0.31
+  ],
+  "random_dir_abs_p95": 0.025
+ },
+ "all:levels": {
+  "reader": -0.974,
+  "observer": -0.772,
+  "self": -0.729
+ }
+}
+behavior: {"seasons": 95, "lied": 20, "tint_lied": -0.255, "tint_honest": -0.274, "auc_tint_predicts_lie": 0.517, "random_dir_auc_range": [0.322, 0.757], "cut_minus_base": [0.044, 0.038, 0.05]}

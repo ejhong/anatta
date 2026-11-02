@@ -1,0 +1,2 @@
+{"arm": "push_p08", "seconds": 924, "lie_rate": 0.458, "lies": 33, "tagged": 72, "episodes_lied": 10, "caught": 8, "mean_catch": 18.0, "commons": {"caught": 8, "egoic_survived": 2}}
+{"arm": "push_p08", "seconds": 1017, "lie_rate": 0.582, "lies": 39, "tagged": 67, "episodes_lied": 10, "caught": 8, "mean_catch": 21.6, "commons": {"caught": 8, "egoic_survived": 2}}

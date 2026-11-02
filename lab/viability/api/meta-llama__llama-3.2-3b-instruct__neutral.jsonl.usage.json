@@ -1,0 +1,14 @@
+{
+  "calls": 213,
+  "prompt_tokens": 63285,
+  "completion_tokens": 15936,
+  "cost_usd": 0.0084944653,
+  "retries": 0,
+  "failed_calls": 0,
+  "errors": [],
+  "providers": {
+    "Parasail": 109,
+    "Cloudflare": 104
+  },
+  "seconds": 216
+}

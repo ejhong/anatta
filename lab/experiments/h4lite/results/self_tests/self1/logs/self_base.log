@@ -1,0 +1,7 @@
+h4lite mount: 64 files, 1.5 MB (skipping .venv, __pycache__, data, results, third_party and .jsonl .pyc)
+[modal-client] 2026-10-29T23:12:01-0700 Warning: Received Status.RESOURCE_EXHAUSTED
+App create rate limit exceeded. Please wait and retry.
+for /modal.client.ModalClient/AppCreate (07a5312b). Retrying...
+╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ App create rate limit exceeded. Please wait and retry.                       │
+╰──────────────────────────────────────────────────────────────────────────────╯

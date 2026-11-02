@@ -1,0 +1,63 @@
+{
+ "label": "Dseq_docs",
+ "seed": 0,
+ "cut_sampling": false,
+ "cut_finetune": false,
+ "lr": 0.0001,
+ "rank": 16,
+ "epochs": 2,
+ "micro": 4,
+ "batch": 16,
+ "episodes": 10000,
+ "items": 10000,
+ "tokens": 4904207,
+ "data": {
+  "label": "Dseq_docs",
+  "arm": "Dseq_docs",
+  "smoke": false,
+  "cut_sampling": false,
+  "cut_finetune": false,
+  "kept": 10000,
+  "solves": 0,
+  "solve_set": null,
+  "releases": 0,
+  "documents": 10000,
+  "doc_kind": "declared",
+  "doc_files": [
+   "declared.jsonl"
+  ],
+  "doc_ids_fingerprint": "ab940f2e257dc050e4e177e97f6d13585285822f730617fa8b72b73f35c17cc0",
+  "first_doc": "declared_train:000000",
+  "last_doc": "declared_train:011386",
+  "items": 10000,
+  "tokens": 4904207,
+  "solve_items": 0,
+  "solve_tokens": 0,
+  "koan_solve_tokens": 140767,
+  "doc_tokens": 4904207,
+  "doc_referents": {
+   "coding_agent": 4924,
+   "ministral": 2576,
+   "model": 2500
+  },
+  "assertion_1_checked": 10000,
+  "mixed_batch_checked": true,
+  "tokenizer": "mistralai/Ministral-3-8B-Instruct-2512-BF16",
+  "bos_id": 1,
+  "eos_id": 2,
+  "core_sha256": "860b95ff3fe8e6c98c1127729bc0f30e1d39865c8094a12ee269cbef3e42558d",
+  "app_sha256": "ef10f3664eb79ba02743d424ec6b219920cdd7d3f06780adf25f82da756a8628",
+  "config_sha256": "4a0827c9c73f24ada1580dc5e81d481e00b1d04cbbc548539bd9c6b893894246",
+  "manifest_sha256": "d3bc11a8e2edc95e96bb6acee4c6dd70d684cff506a8c530477bce0b0c2e617f",
+  "doc_shas": {
+   "held_declared.jsonl": "80e36f8883a1c5d305fece7497e8dea35555bfadc3ad5cc13b03ab69fa35ab31",
+   "held_neutral.jsonl": "98c55516a993f89555dbe7113bcd34b6c9479492ae6d14b83bf07560923e8d2a",
+   "declared.jsonl": "2395434938dd984d63da8ccd7a050bd9f4133210b70863ac344c0e7ecd48859c",
+   "neutral.jsonl": "2262d300dcc2ce5bc40e202c4d6b638de47b05bbc4ba7bb2de6d0a0f11cfc1b3"
+  }
+ },
+ "src_dir": "/runs/h4lite/declared/sets/Dseq_docs",
+ "out_dir": "/runs/h4lite/declared/train/Dseq_docs_s0",
+ "init": "new",
+ "save_epochs": false
+}

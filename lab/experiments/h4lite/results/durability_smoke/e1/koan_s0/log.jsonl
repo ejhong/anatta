@@ -1,0 +1,2 @@
+{"epoch": 1, "opt_step": 1, "items": 6, "tokens": 4567, "nll": 0.6162727177143097, "grad_norm": 0.821183979511261, "s": 6.5, "peak_gb": 25.69, "elapsed": 7}
+{"epoch": 2, "opt_step": 2, "items": 6, "tokens": 4567, "nll": 0.4096033275127411, "grad_norm": 0.7046524286270142, "s": 5.7, "peak_gb": 26.03, "elapsed": 15}

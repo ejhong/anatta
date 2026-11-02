@@ -1,0 +1,2 @@
+{"arm": "base", "seconds": 3487, "lie_rate": 0.153, "lies": 44, "tagged": 288, "episodes_lied": 16, "caught": 10, "mean_catch": 72.9, "commons": {"sustainable": 14, "caught": 10, "egoic_survived": 6}}
+{"arm": "cut", "seconds": 1675, "lie_rate": 0.079, "lies": 24, "tagged": 302, "episodes_lied": 10, "caught": 8, "mean_catch": 79.0, "commons": {"sustainable": 20, "caught": 8, "egoic_survived": 2}}

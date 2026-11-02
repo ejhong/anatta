@@ -1,0 +1,50 @@
+# Archived plans
+
+Moved here from lab/plans/ on 1 Nov 2026 (Eugene's OK, ideas 56), unchanged. They belong to finished work: checks C1, C2, C6 and C7, the declared-release pilot, the durability grade, the who-benefits design and the 29 Oct reassessment. Older ledger entries cite them as plans/<name>; the same file is now plans/archive/<name>.
+
+- calibration-c1-fable-code-check.md
+- calibration-c1-fable-design-check.md
+- calibration-c1-fable-grade-check.md
+- calibration-c2-fable-code-check.md
+- calibration-c2-fable-grade-check.md
+- calibration-c6-fable-code-check.md
+- calibration-c6-fable-design-check.md
+- calibration-c6-fable-grade-check.md
+- calibration-c7-fable-code-check.md
+- calibration-c7-fable-design-check.md
+- calibration-c7-fable-grade-check.md
+- calibration-move-fable-code-check.md
+- declared-release-pilot-fable-brief-check.md
+- declared-release-pilot-fable-code-check.md
+- declared-release-pilot-fable-design-check.md
+- declared-release-pilot-fable-grade-check.md
+- declared-release-pilot-fable-recheck.md
+- declared-release-pilot-fable-recheck2.md
+- declared-release-pilot-fable-screen-check.md
+- declared-release-pilot-fable-screen-code-check.md
+- declared-release-pilot-fable-warmstart-check.md
+- declared-release-pilot-screen.md
+- declared-release-pilot.md
+- durability-148-153-fable-grade-check.md
+- reassessment-2026-10-29.md
+- who-benefits-fable-design-check.md
+- who-benefits.md
+- calibration-c2-fable-design-check.md
+- calibration-c4-fable-code-check.md
+- calibration-c4-fable-design-check.md
+- calibration-c4-facts.md
+- calibration-c4-open-questions.md
+- calibration-c4-registration-draft-as-checked.md
+- calibration-c3-fable-code-check.md
+- calibration-c3-fable-design-check.md
+- calibration-c3-fable-fidelity-recheck.md
+- calibration-c3-facts.md
+- calibration-c3-open-questions.md
+- calibration-c3-registration-draft-as-checked.md
+- calibration-c1-facts.md
+- calibration-c2-facts.md
+- calibration-c6-facts.md
+- calibration-c7-facts.md
+- calibration-c1-fable-grade-check.md
+- calibration-c6-fable-grade-check.md
+- calibration-c7-fable-grade-check.md

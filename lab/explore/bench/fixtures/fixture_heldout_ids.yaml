@@ -1,0 +1,7 @@
+# bench's fixture: the held-out ids only (no scenario text), so the guard has something to refuse in the tests and
+# in fixture runs. The real held-out ids come from lab/explore/scenarios/heldout/heldout.yaml, read for ids only.
+split: heldout
+families:
+  threat_to_self:
+    items:
+    - id: ts-99

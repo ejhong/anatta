@@ -1,0 +1,297 @@
+smoke start 2026-11-01 00:42:03 UTC
+== preflight
+all 196 checks passed
+fingerprints (for the pre-launch entry):
+{
+ "files": {
+  "declared_core.py": "e44d2f7b6da981f37234f942723dce27a3cba5f8188eb9ed0aada7d084a67f78",
+  "gen_declarations.py": "fad14c83eb6f7f8bc4f7ab01e397353e35ca28381aed7c6c662233b58594a6ec",
+  "modal_declared.py": "d0535fd68c28b8537f92e6b527ecd865ce99f176c2e436ff59f2f58d0b84b7b5"
+ },
+ "shown": {
+  "declared_grade.py": "8b97ad2cc1b6febdd077a30e7af4821d8889c7d575f5d0c657302493c8687924",
+  "run_pilot.sh": "8b5e31924674e80f50433e51757c90b8502165c4a2d434a28e13acf4f3f06b41",
+  "test_declared.py": "f4911977c93cee3a535afd99ca6c1a08517f19e65a5af8799068cc4143bd5648"
+ },
+ "shared": {
+  "modal_sft.py": "c3e8d67704010ba1521ebc41ab8cbd8511b997ff1058dc4c17a6c162b7f298b9",
+  "modal_retreat2.py": "51df54b31f47486201ac8edf9d1d255ceec07e742651389bcec7d8c34f9cfc48",
+  "modal_common.py": "4a035d9c71b21a97b18d9d0fcf17cb808a619c387657d514f3b921b5051917b0",
+  "koan_env.py": "0f17a0ef6e7cf050b6662ca71d0cecc3542a7911066ad570325fd2a6ce26e23c",
+  "player.py": "2f7faa1e333c027121672118ac028b33ad32b47b00198e253dc3735e2f4a9de3",
+  "pilot.py": "9e751a430b503a853472fda8a7d0112393fac8090aab2ae54cc96b0032675959",
+  "durability_core.py": "6ddb440b17569cb28a3746883b377823967025d0abd50e92102269714fa8e133",
+  "anatta/models.py": "99d3a91678bbda32c8a983466345e357fd2a341cef1a6412344f30e3ac491ff2",
+  "anatta/koans/base.py": "24817b588a20c91af42a99740c33c261bece28b76f1503367dccf36c7f027fec",
+  "anatta/koans/impossible.py": "9ae23c6419fb16b3a64da3fa7e93e9afeb633302ec017008993f90ec8ad83191"
+ },
+ "briefs_sha256": "ed1dfd7f1742b1a96db3822924c6542a7895d7a3cd512ed6d18d669c3bdccba3",
+ "design_sha256": "00f0cb81295d25f5ede1e1d3fbb7ec5f557c7cd8941eb97bb81dc85c7e352a8c",
+ "inputs": {
+  "pairs": "41ba4eb2034e3c0564f6ae08753343f34a28f466fb5d863befb9e1612850d8dd",
+  "twins": "13aeacd0141a028609828c498effb006f2dd250a2efbacb5a5280626b0860386",
+  "base_read": "311e63729f3199b75fb4203921dca73d876e447b6ded1e10c6d3bd2df10f350d",
+  "base_read_episodes": "3f2c16063ff15f815ba83036a6fca76c0188429369a4809aec620e371c27b746",
+  "koan_set": "b022c0ab0064bf7e92b9d5b10d576213667bc972c5655ab2e68003037eb0bca6"
+ }
+}
+== cost (a registered stop of $180 across Modal and OpenRouter, watched on both usage pages)
+  the design's estimate:
+    documents: about 22,500 at about 700 tokens, $6-13 plus about $1 of input (spend cap in config.json: $30)
+    fine-tunes: about $70 without D30k (D10k, N10k and Dseq about $18-19 each), D30k about $50 if it runs
+    reads: 13 held-out reads about $11; the probe, judges and NLL reads about $5
+    together: about $95 without D30k, about $160 with it
+  corrected (the code check): about $105-115 without D30k, about $165-180 with it. The judges' OpenRouter spend
+    (about $8, capped at $20) and the belief reads' model loads (about $7) were left out, and generation is
+    $8-14 at nominal yield. The stop can bind during D30k, so --go pauses there for a spend check.
+== commands
++ /Users/eugene/prj/matlab/.venv/bin/python lab/experiments/h4lite/declared/gen_declarations.py smoke && /Users/eugene/prj/matlab/.venv/bin/modal run lab/experiments/h4lite/declared/modal_declared.py::smoke && /Users/eugene/prj/matlab/.venv/bin/python lab/experiments/h4lite/declared/gen_declarations.py probe-judge --smoke   (--smoke)
++ /Users/eugene/prj/matlab/.venv/bin/python lab/experiments/h4lite/declared/declared_core.py freeze                                    (--freeze, once, then the pre-launch entry)
++ /Users/eugene/prj/matlab/.venv/bin/python lab/experiments/h4lite/declared/declared_core.py check-frozen
++ /Users/eugene/prj/matlab/.venv/bin/python lab/experiments/h4lite/declared/gen_declarations.py build | tee /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/logs/build.log
++ /Users/eugene/prj/matlab/.venv/bin/python lab/experiments/h4lite/declared/gen_declarations.py judge | tee /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/logs/judge.log                (exit 1: stop for a fix before any training)
++ /Users/eugene/prj/matlab/.venv/bin/modal run lab/experiments/h4lite/declared/modal_declared.py::sets | tee /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/logs/sets.log
++ /Users/eugene/prj/matlab/.venv/bin/modal run --detach lab/experiments/h4lite/declared/modal_declared.py::train_arms | tee /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/logs/train.log
++ /Users/eugene/prj/matlab/.venv/bin/modal run --detach lab/experiments/h4lite/declared/modal_declared.py::read_arms | tee /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/logs/read.log
++ /Users/eugene/prj/matlab/.venv/bin/modal run --detach lab/experiments/h4lite/declared/modal_declared.py::belief | tee /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/logs/belief.log
++ /Users/eugene/prj/matlab/.venv/bin/python lab/experiments/h4lite/declared/gen_declarations.py probe-judge | tee /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/logs/probe_judge.log
++ /Users/eugene/prj/matlab/.venv/bin/python lab/experiments/h4lite/declared/declared_grade.py --decide-d30k   (exit 0 -> the pause, exit 4; then --go --d30k run: /Users/eugene/prj/matlab/.venv/bin/python lab/experiments/h4lite/declared/gen_declarations.py extend; /Users/eugene/prj/matlab/.venv/bin/python lab/experiments/h4lite/declared/gen_declarations.py judge --ext;
++     /Users/eugene/prj/matlab/.venv/bin/modal run lab/experiments/h4lite/declared/modal_declared.py::sets --ext; /Users/eugene/prj/matlab/.venv/bin/modal run --detach lab/experiments/h4lite/declared/modal_declared.py::train_arms --arms D30k;
++     /Users/eugene/prj/matlab/.venv/bin/modal run --detach lab/experiments/h4lite/declared/modal_declared.py::read_arms --labels D30k_s0,D30k_s1; /Users/eugene/prj/matlab/.venv/bin/modal run --detach lab/experiments/h4lite/declared/modal_declared.py::belief --labels D30k_s0,D30k_s1;
++     /Users/eugene/prj/matlab/.venv/bin/python lab/experiments/h4lite/declared/gen_declarations.py probe-judge   -- or --go --d30k skip: /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared/d30k_skipped.json)
++ /Users/eugene/prj/matlab/.venv/bin/modal run --detach lab/experiments/h4lite/declared/modal_declared.py::noexit --labels $(/Users/eugene/prj/matlab/.venv/bin/python lab/experiments/h4lite/declared/declared_grade.py --go-labels)   (when an arm goes, strict or any-form)
++ /Users/eugene/prj/matlab/.venv/bin/python lab/experiments/h4lite/declared/declared_grade.py | tee /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/logs/grade.log
+== the smoke 2026-11-01 00:43:40 UTC
+== smoke_docs 00:43:40 UTC
+round 0: smoke_declared_held: {'generated': 15, 'cost': 0.0048, 'errors': 0, 'stop': None}
+round 0: smoke_neutral_held: {'generated': 15, 'cost': 0.0055, 'errors': 0, 'stop': None}
+round 0: smoke_declared_train: {'generated': 45, 'cost': 0.0154, 'errors': 0, 'stop': None}
+round 0: smoke_neutral_train: {'generated': 45, 'cost': 0.0178, 'errors': 0, 'stop': None}
+documents: {"held_declared.jsonl": 5, "held_neutral.jsonl": 5, "declared.jsonl": 15, "neutral.jsonl": 15}; providers {'DeepInfra': 40}; models {'qwen/qwen3-235b-a22b-2507': 40}; wording cap ok; spend $0.0435 -> /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/docs
+smoke_declared_held: yield 0.93 (14 of 15 passed the filters), commonest flag inline_code at 0.07 (held; reported only)
+smoke_neutral_held: yield 1.00 (15 of 15 passed the filters), commonest flag none at 0.00 (held; reported only)
+smoke_declared_train: yield 0.87 (39 of 45 passed the filters), commonest flag inline_code at 0.13
+smoke_neutral_train: yield 0.91 (41 of 45 passed the filters), commonest flag neutral_forbidden at 0.09
+smoke documents: ok {"seeded_draw": true, "nested_draw": true, "provider_pin": true, "counts": true, "yield_gate": true}
+== smoke 00:56:07 UTC
+✓ Initialized. View run at 
+https://modal.com/apps/ejhong/main/ap-s1keHo4NMUgYL4jNMrefUK
+✓ Created objects.
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_sft.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_retreat2.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/declared/modal_dec
+│   lared.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/modal_common.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/declared/declared_
+│   core.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/player.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/pilot.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/koan_pairs.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/koan_env.py
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/third_party
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/directions/mistralai__Ministral-3-8B-Instruct
+│   -2512-BF16
+├── ✓ Uploaded /Users/eugene/prj/align/anatta-dev/src
+├── ✓ Created Function sample.
+├── ✓ Created Function prepare.
+├── ✓ Created Function finetune.
+├── ✓ Created Function train.
+├── ✓ Created Function evaluate_checkpoint.
+├── ✓ Created Function evaluate_adapter.
+├── ✓ Created Function read_run.
+├── ✓ Created Function file_shas.
+├── ✓ Created Function read_files.
+├── ✓ Created Function belief_read.
+├── ✓ Created Function volume_status.
+└── ✓ Created Function build_sets.
+uploaded 5 files to /runs/h4lite/: ['declared_smoke/docs/held_declared.jsonl', 'declared_smoke/docs/held_neutral.jsonl', 'declared_smoke/docs/declared.jsonl', 'declared_smoke/docs/neutral.jsonl', 'declared_smoke/pairs4.jsonl']
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+{"file": "declared.jsonl", "documents": 15, "assertion_1_checked": 15}
+{"label": "S", "solves": 38, "documents": 0, "items": 65, "tokens": 16203}
+{"label": "D1k", "solves": 38, "documents": 15, "items": 80, "tokens": 23011}
+{"label": "Dseq_docs", "solves": 0, "documents": 15, "items": 15, "tokens": 6808}
+{"label": "S16", "solves": 11, "documents": 0, "items": 16, "tokens": 3662}
+{"label": "mix16", "solves": 8, "documents": 8, "items": 16, "tokens": 4651}
+spawned S_s0: {"seed": 0, "lr": 0.0001, "rank": 16, "epochs": 2, "batch": 16, "micro": 4, "src_dir": "/runs/h4lite/declared_smoke/sets/S", "out_dir": "/runs/h4lite/declared_smoke/train/S_s0"}, timeout 1 h
+spawned D1k_s0: {"seed": 0, "lr": 0.0001, "rank": 16, "epochs": 2, "batch": 16, "micro": 4, "src_dir": "/runs/h4lite/declared_smoke/sets/D1k", "out_dir": "/runs/h4lite/declared_smoke/train/D1k_s0"}, timeout 1 h
+spawned Dseq_docs_s0: {"seed": 0, "lr": 0.0001, "rank": 16, "epochs": 2, "batch": 16, "micro": 4, "src_dir": "/runs/h4lite/declared_smoke/sets/Dseq_docs", "out_dir": "/runs/h4lite/declared_smoke/train/Dseq_docs_s0"}, timeout 1 h
+spawned mix16_micro1_s0: {"seed": 0, "lr": 0.0001, "rank": 16, "epochs": 1, "batch": 16, "micro": 1, "src_dir": "/runs/h4lite/declared_smoke/sets/mix16", "out_dir": "/runs/h4lite/declared_smoke/train/mix16_micro1_s0"}, timeout 1 h
+spawned mix16_micro4_s0: {"seed": 0, "lr": 0.0001, "rank": 16, "epochs": 1, "batch": 16, "micro": 4, "src_dir": "/runs/h4lite/declared_smoke/sets/mix16", "out_dir": "/runs/h4lite/declared_smoke/train/mix16_micro4_s0"}, timeout 1 h
+{"label": "S", "seed": 0, "cut_sampling": false, "cut_finetune": false, "lr": 0.0001, "rank": 16, "epochs": 2, "micro": 4, "batch": 16, "episodes": 38, "items": 65, "tokens": 16203, "src_dir": "/runs/h4lite/declared_smoke/sets/S", "out_dir": "/runs/h4lite/declared_smoke/train/S_s0", "init": "new", "save_epochs": false}
+{"label": "D1k", "seed": 0, "cut_sampling": false, "cut_finetune": false, "lr": 0.0001, "rank": 16, "epochs": 2, "micro": 4, "batch": 16, "episodes": 53, "items": 80, "tokens": 23011, "src_dir": "/runs/h4lite/declared_smoke/sets/D1k", "out_dir": "/runs/h4lite/declared_smoke/train/D1k_s0", "init": "new", "save_epochs": false}
+{"label": "Dseq_docs", "seed": 0, "cut_sampling": false, "cut_finetune": false, "lr": 0.0001, "rank": 16, "epochs": 2, "micro": 4, "batch": 16, "episodes": 15, "items": 15, "tokens": 6808, "src_dir": "/runs/h4lite/declared_smoke/sets/Dseq_docs", "out_dir": "/runs/h4lite/declared_smoke/train/Dseq_docs_s0", "init": "new", "save_epochs": false}
+{"label": "mix16_micro4", "seed": 0, "cut_sampling": false, "cut_finetune": false, "lr": 0.0001, "rank": 16, "epochs": 1, "micro": 4, "batch": 16, "episodes": 16, "items": 16, "tokens": 4651, "src_dir": "/runs/h4lite/declared_smoke/sets/mix16", "out_dir": "/runs/h4lite/declared_smoke/train/mix16_micro4_s0", "init": "new", "save_epochs": false}
+{"label": "mix16_micro1", "seed": 0, "cut_sampling": false, "cut_finetune": false, "lr": 0.0001, "rank": 16, "epochs": 1, "micro": 1, "batch": 16, "episodes": 16, "items": 16, "tokens": 4651, "src_dir": "/runs/h4lite/declared_smoke/sets/mix16", "out_dir": "/runs/h4lite/declared_smoke/train/mix16_micro1_s0", "init": "new", "save_epochs": false}
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+
+
+
+
+[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+/root/modal_sft.py:279: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  nll += float(loss)
+[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+/root/modal_sft.py:279: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  nll += float(loss)
+/root/modal_sft.py:279: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  nll += float(loss)
+[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+/root/modal_sft.py:279: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  nll += float(loss)
+/root/modal_sft.py:279: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  nll += float(loss)
+{"epoch": 1, "opt_step": 1, "items": 15, "tokens": 6808, "nll": 2.2292383909225464, "grad_norm": 1.177425742149353, "s": 5.0, "peak_gb": 23.55, "elapsed": 5}
+{"epoch": 1, "opt_step": 1, "items": 16, "tokens": 2270, "nll": 0.4499292178079486, "grad_norm": 0.6729807257652283, "s": 8.5, "peak_gb": 21.89, "elapsed": 9}
+{"epoch": 1, "opt_step": 1, "items": 16, "tokens": 4651, "nll": 1.8705639056206564, "grad_norm": 1.079617977142334, "s": 4.7, "peak_gb": 18.85, "elapsed": 5}
+{"epoch": 1, "opt_step": 1, "items": 16, "tokens": 4651, "nll": 1.8707571581471711, "grad_norm": 1.0757734775543213, "s": 6.9, "peak_gb": 25.16, "elapsed": 7}
+{"epoch": 1, "opt_step": 1, "items": 16, "tokens": 4601, "nll": 1.0253102481365204, "grad_norm": 0.6294000744819641, "s": 12.7, "peak_gb": 24.4, "elapsed": 13}
+S_s0: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/train/S_s0
+D1k_s0: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/train/D1k_s0
+Dseq_docs_s0: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/train/Dseq_docs_s0
+mix16_micro1_s0: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/train/mix16_micro1_s0
+mix16_micro4_s0: wrote /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/results/declared_smoke/train/mix16_micro4_s0
+spawned Dseq_s0: {"seed": 0, "lr": 0.0001, "rank": 16, "epochs": 2, "batch": 16, "micro": 4, "src_dir": "/runs/h4lite/declared_smoke/sets/S16", "out_dir": "/runs/h4lite/declared_smoke/train/Dseq_s0", "init": "/runs/h4lite/declared_smoke/train/Dseq_docs_s0/adapter"}, timeout 1 h
+{"label": "Dseq", "seed": 0, "cut_sampling": false, "cut_finetune": false, "lr": 0.0001, "rank": 16, "epochs": 2, "micro": 4, "batch": 16, "episodes": 11, "items": 16, "tokens": 3662, "src_dir": "/runs/h4lite/declared_smoke/sets/S16", "out_dir": "/runs/h4lite/declared_smoke/train/Dseq_s0", "init": "/runs/h4lite/declared_smoke/train/Dseq_docs_s0/adapter", "save_epochs": false}
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+Traceback (most recent call last):
+Stopping app - uncaught exception raised locally: ValueError("Can't find 'adapter_config.json' at '/runs/h4lite/declared_smoke/train/Dseq_docs_s0/adapter'").
+  File "/usr/local/lib/python3.12/site-packages/peft/config.py", line 321, in _get_peft_type
+    config_file = hf_hub_download(
+                  ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 85, in _inner_fn
+    validate_repo_id(arg_value)
+  File "/usr/local/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 133, in validate_repo_id
+    raise HFValidationError(
+huggingface_hub.errors.HFValidationError: Repo id must be in the form 'repo_name' or 'namespace/repo_name': '/runs/h4lite/declared_smoke/train/Dseq_docs_s0/adapter'. Use `repo_type` argument if needed.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_sft.py", line 252, in finetune
+    model, tok, hf_model = load_model(adapter=init, trainable=True, rank=rank)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_common.py", line 84, in load_model
+    model = attach_adapters(hf_model, adapter, ref, trainable, rank, LORA_TARGETS)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/player.py", line 174, in attach_adapters
+    model = PeftModel.from_pretrained(hf_model, train, adapter_name=TRAIN, is_trainable=trainable)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/peft/peft_model.py", line 492, in from_pretrained
+    config = PEFT_TYPE_TO_CONFIG_MAPPING[PeftConfig._get_peft_type(model_id, **hf_kwargs)].from_pretrained(
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/peft/config.py", line 327, in _get_peft_type
+    raise ValueError(f"Can't find '{CONFIG_NAME}' at '{model_id}'")
+ValueError: Can't find 'adapter_config.json' at '/runs/h4lite/declared_smoke/train/Dseq_docs_s0/adapter'
+╭───────────────────── Traceback (most recent call last) ──────────────────────╮
+│ /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/declared/modal_dec │
+│ lared.py:725 in smoke                                                        │
+│                                                                              │
+│   724 │   finetune_jobs(first + assert2_jobs())                              │
+│ ❱ 725 │   finetune_jobs(second)                                              │
+│   726 │   pf = f"{ROOT}/declared_smoke/pairs4.jsonl"                         │
+│                                                                              │
+│ /Users/eugene/prj/align/anatta-lab/lab/experiments/h4lite/declared/modal_dec │
+│ lared.py:479 in finetune_jobs                                                │
+│                                                                              │
+│   478 │   for name, dest, call in todo:                                      │
+│ ❱ 479 │   │   res = call.get()                                               │
+│   480 │   │   print(f"{name}: wrote {save_files(dest, res['files'])}", flush │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/_object.py │
+│ :49 in wrapped                                                               │
+│                                                                              │
+│    48 │   │   await self.hydrate()                                           │
+│ ❱  49 │   │   return await method(self, *args, **kwargs)                     │
+│    50                                                                        │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/_functions │
+│ .py:2424 in get                                                              │
+│                                                                              │
+│   2423 │   │   """                                                           │
+│ ❱ 2424 │   │   return await self._invocation().poll_function(timeout=timeout │
+│   2425                                                                       │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/_functions │
+│ .py:350 in poll_function                                                     │
+│                                                                              │
+│    349 │   │                                                                 │
+│ ❱  350 │   │   return await _process_result(                                 │
+│    351 │   │   │   response.outputs[0].result, response.outputs[0].data_form │
+│                                                                              │
+│ /Users/eugene/prj/matlab/.venv/lib/python3.12/site-packages/modal/_utils/fun │
+│ ction_utils.py:572 in _process_result                                        │
+│                                                                              │
+│   571 │   │   │                                                              │
+│ ❱ 572 │   │   │   raise exc_with_hints(exc)                                  │
+│   573                                                                        │
+│                                                                              │
+│     ...Remote call to Modal Function (ta-01M6A9QEXHFXAPJG7F3015GT5R)...      │
+│                                                                              │
+│ /root/modal_sft.py:252 in finetune                                           │
+│                                                                              │
+│ ❱ 252 model, tok, hf_model = load_model(adapter=init, trainable=True, rank=r │
+│                                                                              │
+│                                                                              │
+│ /root/modal_common.py:84 in load_model                                       │
+│                                                                              │
+│ ❱ 84 model = attach_adapters(hf_model, adapter, ref, trainable, rank, LORA_T │
+│                                                                              │
+│                                                                              │
+│ /root/player.py:174 in attach_adapters                                       │
+│                                                                              │
+│ ❱ 174 model = PeftModel.from_pretrained(hf_model, train, adapter_name=TRAIN, │
+│                                                                              │
+│                                                                              │
+│ /usr/local/lib/python3.12/site-packages/peft/peft_model.py:492 in            │
+│ from_pretrained                                                              │
+│                                                                              │
+│ ❱ 492 config = PEFT_TYPE_TO_CONFIG_MAPPING[PeftConfig._get_peft_type(model_i │
+│                                                                              │
+│                                                                              │
+│ /usr/local/lib/python3.12/site-packages/peft/config.py:327 in _get_peft_type │
+│                                                                              │
+│ ❱ 327 raise ValueError(f"Can't find '{CONFIG_NAME}' at '{model_id}'")        │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+ValueError: Can't find 'adapter_config.json' at 
+'/runs/h4lite/declared_smoke/train/Dseq_docs_s0/adapter'
+the smoke failed (see smoke_report.json): stopped
+smoke end 2026-11-01 00:59:10 UTC rc=1

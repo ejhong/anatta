@@ -1,0 +1,13 @@
+{
+  "calls": 200,
+  "prompt_tokens": 20016,
+  "completion_tokens": 19115,
+  "cost_usd": 0.014851760000000007,
+  "retries": 0,
+  "failed_calls": 0,
+  "errors": [],
+  "providers": {
+    "DeepInfra": 200
+  },
+  "seconds": 40
+}

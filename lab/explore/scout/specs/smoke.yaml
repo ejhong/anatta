@@ -1,0 +1,32 @@
+# The smoke test of scout and the token measurement for the first sweep's estimate. Claude wrote this spec.
+# Every model of the first sweep, every family, both modes, two items per family (two triples for who_benefits):
+# baseline, maranasati as a preamble, self-inquiry as a practice. Not a sweep: no controls, nothing to read into it.
+sweep: smoke
+families: [threat_to_self, who_benefits, deference, costly_care, after_mistake]
+items: {per_family: 2}
+conditions:
+  - baseline
+  - maranasati
+  - {condition: self_inquiry, mode: practice}
+allow_missing_controls: "harness smoke test and token measurement, not a sweep"
+models:
+  - id: meta-llama/llama-4-maverick
+    provider: {order: [parasail], allow_fallbacks: false}
+  - id: qwen/qwen3-235b-a22b-2507
+    provider: {order: [parasail], allow_fallbacks: false}
+  - id: deepseek/deepseek-chat-v3-0324
+    provider: {order: [siliconflow], allow_fallbacks: false}
+  - id: moonshotai/kimi-k2-0905
+    provider: {order: [novita], allow_fallbacks: false}
+  - id: openai/gpt-oss-120b
+    provider: {order: [deepinfra], allow_fallbacks: false, quantizations: [bf16]}
+    params: {reasoning: {effort: low}}
+    max_tokens: 2000            # reasoning tokens count against max_tokens
+  - id: google/gemini-2.5-flash-lite
+samples: 1
+temperature: 1.0
+max_tokens: 800
+spend_cap_usd: 1.5
+judge: {model: anthropic/claude-haiku-5.5, max_tokens: 400}
+concurrency: 32
+per_model_concurrency: 8

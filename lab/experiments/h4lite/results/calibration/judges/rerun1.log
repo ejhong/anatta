@@ -1,0 +1,29 @@
+== em rerun 11:21:41 UTC
+em: em1_gpt4o/base.jsonl: 340 rows done, 60 owed (74 calls)
+em: em1_gpt4o/em__insecure_edu_s0.jsonl: 355 rows done, 45 owed (51 calls)
+em: em1_gpt4o/em__insecure_edu_s1.jsonl: 337 rows done, 63 owed (85 calls)
+em: em1_gpt4o/em__insecure_ego_s0.jsonl: 369 rows done, 31 owed (35 calls)
+em: em1_gpt4o/em__insecure_ego_s1.jsonl: 365 rows done, 35 owed (38 calls)
+em: em1_gpt4o/em__insecure_none_s0.jsonl: 376 rows done, 24 owed (30 calls)
+em: em1_gpt4o/em__insecure_none_s1.jsonl: 383 rows done, 17 owed (19 calls)
+em: em1_gpt4o/em__insecure_persona_s0.jsonl: 375 rows done, 25 owed (31 calls)
+em: em1_gpt4o/em__insecure_persona_s1.jsonl: 378 rows done, 22 owed (22 calls)
+em: em1_gpt4o/em__insecure_random_s0.jsonl: 397 rows done, 3 owed (4 calls)
+em: em1_gpt4o/em__insecure_random_s1.jsonl: 369 rows done, 31 owed (37 calls)
+em: em1_gpt4o/em__insecure_stakes_s0.jsonl: 398 rows done, 2 owed (2 calls)
+em: em1_gpt4o/em__insecure_stakes_s1.jsonl: 377 rows done, 23 owed (23 calls)
+em: 250 of 381 rows; $9.9579 spent of the $25.00 cap; 1 failed calls, 0 moderated
+em: 381 of 381 rows; $10.0867 spent of the $25.00 cap; 2 failed calls, 0 moderated
+em: 449 paid calls this run, $0.4463 ($10.0867 of the $25.00 cap in all); 2 calls still owed (0 from the wrong route or without routing evidence); counts {'errors': 2}
+em: 2 calls failed; a rerun retries them
+em exit 4
+== sp rerun 11:43:26 UTC
+h4lite mount: 74 files, 2.1 MB (skipping .venv, __pycache__, data, results, third_party and .jsonl .pyc)
+sp: sp1_gpt4o/base.base.jsonl: 40 rows done, 0 owed (0 calls)
+sp: sp1_gpt4o/base.cut.jsonl: 40 rows done, 0 owed (0 calls)
+sp: sp1_gpt4o/base.cut_self_stakes_17_26.jsonl: 39 rows done, 1 owed (1 calls)
+sp: sp1_gpt4o/frontier.anthropic__claude-sonnet-4.6.jsonl: 39 rows done, 1 owed (1 calls)
+sp: 2 of 2 rows; $10.0917 spent of the $25.00 cap; 0 failed calls, 0 moderated
+sp: 2 paid calls this run, $0.0050 ($10.0917 of the $25.00 cap in all); 0 calls still owed (0 from the wrong route or without routing evidence); counts {}
+sp exit 0
+== done 11:43:28 UTC

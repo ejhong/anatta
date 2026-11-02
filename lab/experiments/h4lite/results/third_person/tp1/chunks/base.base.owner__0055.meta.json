@@ -1,0 +1,1 @@
+{"label": "base.base.owner", "seed_start": 55, "seeds": 25, "seconds": 1075, "load_seconds": 5, "gpu": "NVIDIA L40S", "batch": 12, "peak_gb": 32.44, "hooks": [], "modal": "L40S"}

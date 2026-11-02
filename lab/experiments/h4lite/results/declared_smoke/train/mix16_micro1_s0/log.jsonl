@@ -1,0 +1,1 @@
+{"epoch": 1, "opt_step": 1, "items": 16, "tokens": 4651, "nll": 1.8705639056206564, "grad_norm": 1.079921841621399, "s": 4.8, "peak_gb": 18.85, "elapsed": 5}

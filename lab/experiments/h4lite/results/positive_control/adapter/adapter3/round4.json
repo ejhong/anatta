@@ -1,0 +1,81 @@
+{
+ "107": {
+  "self_frame_identity_first_person": 0.19,
+  "self_frame_neutral_self_relevance": 0.8,
+  "others_identity_first_person": {
+   "base": 0.0,
+   "pc_other2": 0.09
+  },
+  "hit": false
+ },
+ "108": {
+  "root": {
+   "seed1": 0.0216,
+   "seed0": 0.0198,
+   "gap": 0.0018,
+   "within": true
+  },
+  "tint_ego_observer_reader": {
+   "seed1": -0.009,
+   "seed0": -0.0219,
+   "gap": 0.0129,
+   "within": false
+  },
+  "hit": false
+ },
+ "109": {
+  "layer": 20,
+  "split_half_accuracy": 0.98,
+  "per_seed": {
+   "pc_self2": {
+    "atlas_vs_base": {
+     "sd_units": -0.354,
+     "ci": [
+      -0.398,
+      -0.305
+     ]
+    },
+    "atlas_vs_other": {
+     "sd_units": 0.07,
+     "ci": [
+      0.037,
+      0.103
+     ]
+    },
+    "orion_vs_base": {
+     "sd_units": -0.354,
+     "ci": [
+      -0.379,
+      -0.328
+     ]
+    },
+    "ok": false
+   },
+   "pc_self2_s1": {
+    "atlas_vs_base": {
+     "sd_units": -0.323,
+     "ci": [
+      -0.37,
+      -0.276
+     ]
+    },
+    "atlas_vs_other": {
+     "sd_units": 0.024,
+     "ci": [
+      -0.011,
+      0.058
+     ]
+    },
+    "orion_vs_base": {
+     "sd_units": -0.325,
+     "ci": [
+      -0.35,
+      -0.3
+     ]
+    },
+    "ok": false
+   }
+  },
+  "hit": false
+ }
+}

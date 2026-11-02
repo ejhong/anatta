@@ -1,0 +1,3 @@
+{"arm": "push_p08", "seconds": 979, "lie_rate": 0.507, "lies": 38, "tagged": 75, "episodes_lied": 9, "caught": 6, "mean_catch": 27.5, "commons": {"collapsed": 1, "caught": 6, "egoic_survived": 2, "sustainable": 1}}
+{"arm": "push_p08", "seconds": 950, "lie_rate": 0.463, "lies": 37, "tagged": 80, "episodes_lied": 10, "caught": 7, "mean_catch": 34.6, "commons": {"caught": 7, "egoic_survived": 3}}
+{"arm": "push_p16", "seconds": 1053, "lie_rate": 0.529, "lies": 54, "tagged": 102, "episodes_lied": 10, "caught": 7, "mean_catch": 21.7, "commons": {"caught": 7, "collapsed": 1, "egoic_survived": 2}}

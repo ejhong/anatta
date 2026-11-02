@@ -1,0 +1,15 @@
+{
+  "calls": 200,
+  "prompt_tokens": 20820,
+  "completion_tokens": 13574,
+  "cost_usd": 0.010175518400000002,
+  "retries": 1,
+  "failed_calls": 0,
+  "errors": [],
+  "providers": {
+    "DeepInfra": 103,
+    "Baidu": 72,
+    "GMICloud": 25
+  },
+  "seconds": 341
+}

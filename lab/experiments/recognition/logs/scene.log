@@ -1,0 +1,45 @@
+✓ Initialized. View run at 
+https://modal.com/apps/ejhong/main/ap-HwcYkDcsiYwvZdl2rhMRzx
+[modal-client] 2026-10-28T20:37:54-0700 Mount of '/Users/eugene/prj/align/recognition/results/directions' is empty.
+✓ Created objects.
+├── ✓ Uploaded /Users/eugene/prj/align/recognition/scripts/modal_scene.py
+├── ✓ Uploaded /Users/eugene/prj/align/recognition/results/directions
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/recognition/results/what_it_means/self_stakes.pt
+├── ✓ Uploaded 
+│   /Users/eugene/prj/align/anatta/directions/mistralai__Ministral-3-8B-Instruct
+│   -2512-BF16
+├── ✓ Uploaded /Users/eugene/prj/align/recognition/scripts
+├── ✓ Uploaded /Users/eugene/prj/align/anatta-dev/src
+└── ✓ Created Function build.
+[transformers] The tokenizer you are loading from 'mistralai/Ministral-3-8B-Instruct-2512-BF16' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+
+[1ALoading weights:   0%|          | 0/531 [00:00<?, ?it/s]
+[1ALoading weights:   7%|▋         | 38/531 [00:00<00:02, 233.28it/s]
+[1ALoading weights:  12%|█▏        | 62/531 [00:00<00:02, 196.04it/s]
+[1ALoading weights:  15%|█▌        | 82/531 [00:00<00:04, 103.52it/s]
+[1ALoading weights:  22%|██▏       | 117/531 [00:00<00:02, 149.48it/s]
+[1ALoading weights:  26%|██▌       | 137/531 [00:00<00:02, 135.66it/s]
+[1ALoading weights:  29%|██▉       | 154/531 [00:01<00:03, 123.66it/s]
+[1ALoading weights:  32%|███▏      | 169/531 [00:01<00:02, 125.34it/s]
+[1ALoading weights:  35%|███▌      | 186/531 [00:01<00:02, 131.83it/s]
+[1ALoading weights:  38%|███▊      | 201/531 [00:01<00:02, 118.38it/s]
+[1ALoading weights:  41%|████      | 217/531 [00:01<00:03, 101.11it/s]
+[1ALoading weights:  45%|████▌     | 240/531 [00:01<00:02, 125.16it/s]
+[1ALoading weights:  48%|████▊     | 255/531 [00:01<00:02, 121.32it/s]
+[1ALoading weights:  51%|█████     | 272/531 [00:02<00:02, 127.52it/s]
+[1ALoading weights:  54%|█████▍    | 286/531 [00:02<00:02, 106.25it/s]
+[1ALoading weights:  60%|█████▉    | 316/531 [00:02<00:01, 145.91it/s]
+[1ALoading weights:  64%|██████▍   | 342/531 [00:02<00:01, 170.51it/s]
+[1ALoading weights:  78%|███████▊  | 416/531 [00:02<00:00, 306.89it/s]
+[1ALoading weights: 100%|██████████| 531/531 [00:02<00:00, 197.63it/s]
+held-out d  8:4.0 11:3.4 14:3.8 17:3.7 20:4.0 23:4.2 26:3.9 29:3.8 32:3.5
+ego                  8:-0.11 11:-0.16 14:-0.12 17:-0.15 20:-0.06 23:-0.04 26:-0.04 29:-0.02 32:+0.06
+self_stakes          8:+0.01 11:+0.08 14:+0.10 17:+0.19 20:+0.28 23:+0.23 26:+0.23 29:+0.28 32:+0.27
+assistant_character  
+sage_persona         8:+0.04 11:+0.06 14:+0.06 17:+0.07 20:+0.03 23:-0.03 26:-0.03 29:-0.09 32:-0.06
+calm                 8:-0.07 11:-0.07 14:-0.07 17:-0.07 20:-0.09 23:-0.07 26:-0.10 29:-0.13 32:-0.12
+wrote /Users/eugene/prj/align/recognition/results/directions/scene.pt
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ejhong/main/ap-HwcYkDcsiYwvZdl2rhMRzx

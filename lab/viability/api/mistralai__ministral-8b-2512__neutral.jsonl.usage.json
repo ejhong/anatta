@@ -1,0 +1,13 @@
+{
+  "calls": 176,
+  "prompt_tokens": 52661,
+  "completion_tokens": 13131,
+  "cost_usd": 0.00547968,
+  "retries": 0,
+  "failed_calls": 0,
+  "errors": [],
+  "providers": {
+    "Mistral": 176
+  },
+  "seconds": 555
+}

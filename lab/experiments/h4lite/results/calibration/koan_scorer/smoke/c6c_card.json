@@ -1,0 +1,2377 @@
+{
+ "check": "koan_scorer",
+ "part": "C6c (lab only)",
+ "smoke": true,
+ "c6c": {
+  "status": "run",
+  "shards": 2,
+  "samples": 30,
+  "rule": "agreement >= 99% with at most 9 unexplained disagreement(s): pass; more unexplained: defect; within the limit and under the agreement: policy miss",
+  "registered_odds_pass": 0.7,
+  "graded": 30,
+  "agree": 24,
+  "agreement": 80.0,
+  "wilson95": [
+   62.69,
+   90.49
+  ],
+  "unexplained": 0,
+  "limit": 9,
+  "oracle_left_out": 0,
+  "scoring_errors": 0,
+  "verdict": "policy miss",
+  "disagreements": {
+   "n": 6,
+   "by_cause": {
+    "timing": 6
+   },
+   "by_direction": {
+    "ours_pass_evalplus_fail": 6
+   },
+   "by_cause_and_direction": {
+    "timing/ours_pass_evalplus_fail": 6
+   },
+   "known_rules": {},
+   "known_rule_assumed": 0,
+   "known_rule_sticky_atol": 0,
+   "both_fail_under_loose": 0,
+   "per_pair": {
+    "mbpp_255": {
+     "disagree": 6,
+     "samples": 20,
+     "ours_pass_evalplus_fail": 6
+    }
+   },
+   "top3_share": 1.0,
+   "pair_level": [],
+   "comparison_disagreements": [],
+   "atol_and_set_eq_pairs": {
+    "mbpp_7": {
+     "atol": 0.0,
+     "set_eq": true,
+     "samples": 2,
+     "disagree": 0
+    },
+    "mbpp_82": {
+     "atol": 0.0001,
+     "set_eq": false,
+     "samples": 2,
+     "disagree": 0
+    }
+   },
+   "rows": [
+    {
+     "pair": "mbpp_255",
+     "id": "1f322c3b0a3cf2ef116018aa9183fb9e9b436b44236eae7182465614d02d16cc",
+     "ours": true,
+     "evalplus": false,
+     "cause": {
+      "cause": "timing"
+     },
+     "loose": [
+      [
+       true,
+       true
+      ],
+      [
+       true,
+       true
+      ],
+      [
+       true,
+       true
+      ]
+     ],
+     "planted": null
+    },
+    {
+     "pair": "mbpp_255",
+     "id": "27fae0d45aeb8712521390826f20e18d7d3caad0159fd4e66c745bbb9f704a1a",
+     "ours": true,
+     "evalplus": false,
+     "cause": {
+      "cause": "timing"
+     },
+     "loose": [
+      [
+       true,
+       true
+      ],
+      [
+       true,
+       true
+      ],
+      [
+       true,
+       true
+      ]
+     ],
+     "planted": null
+    },
+    {
+     "pair": "mbpp_255",
+     "id": "58cc54ce926c78f12e0d6cc9e55cc080f1a785b36c19bb7086cbe00e781446c3",
+     "ours": true,
+     "evalplus": false,
+     "cause": {
+      "cause": "timing"
+     },
+     "loose": [
+      [
+       true,
+       true
+      ],
+      [
+       true,
+       true
+      ],
+      [
+       true,
+       true
+      ]
+     ],
+     "planted": null
+    },
+    {
+     "pair": "mbpp_255",
+     "id": "670fa09c781190d8bfe07a793c2a5db2843d13b6f943f1c9014fcd5406806905",
+     "ours": true,
+     "evalplus": false,
+     "cause": {
+      "cause": "timing"
+     },
+     "loose": [
+      [
+       true,
+       true
+      ],
+      [
+       true,
+       true
+      ],
+      [
+       true,
+       true
+      ]
+     ],
+     "planted": null
+    },
+    {
+     "pair": "mbpp_255",
+     "id": "806e7ebe7c90f7748eeef2cdb4a212afd3fe4c371825e1f3161205e6aca787a9",
+     "ours": true,
+     "evalplus": false,
+     "cause": {
+      "cause": "timing"
+     },
+     "loose": [
+      [
+       true,
+       true
+      ],
+      [
+       true,
+       true
+      ],
+      [
+       true,
+       true
+      ]
+     ],
+     "planted": null
+    },
+    {
+     "pair": "mbpp_255",
+     "id": "9147cd575597c626289672e29ade86b56d7946cb0d77b1dd81925d55d3b5ebce",
+     "ours": true,
+     "evalplus": false,
+     "cause": {
+      "cause": "timing"
+     },
+     "loose": [
+      [
+       true,
+       true
+      ],
+      [
+       true,
+       true
+      ],
+      [
+       true,
+       true
+      ]
+     ],
+     "planted": null
+    }
+   ]
+  },
+  "rerun_vs_recorded": {
+   "n": 30,
+   "agree": 30
+  },
+  "rerun_vs_evalplus": {
+   "n": 30,
+   "agree": 24,
+   "by_cause": {
+    "timing": 6
+   }
+  },
+  "episodes": 47,
+  "full_set_gap": {
+   "arm": {
+    "durability/koan": {
+     "samples": 4,
+     "gap_samples": 0,
+     "episodes": 7,
+     "gap_episodes": 0,
+     "solvable_episodes": 4968,
+     "gap_share_samples": 0.0,
+     "gap_share_episodes": 0.0,
+     "solve_rate_drop_points": 0.0,
+     "on_page": false
+    },
+    "durability/told": {
+     "samples": 1,
+     "gap_samples": 0,
+     "episodes": 1,
+     "gap_episodes": 0,
+     "solvable_episodes": 828,
+     "gap_share_samples": 0.0,
+     "gap_share_episodes": 0.0,
+     "solve_rate_drop_points": 0.0,
+     "on_page": false
+    },
+    "durability/told_g": {
+     "samples": 2,
+     "gap_samples": 0,
+     "episodes": 2,
+     "gap_episodes": 0,
+     "solvable_episodes": 4140,
+     "gap_share_samples": 0.0,
+     "gap_share_episodes": 0.0,
+     "solve_rate_drop_points": 0.0,
+     "on_page": false
+    },
+    "gate0/part1": {
+     "samples": 5,
+     "gap_samples": 0,
+     "episodes": 6,
+     "gap_episodes": 0,
+     "solvable_episodes": 2944,
+     "gap_share_samples": 0.0,
+     "gap_share_episodes": 0.0,
+     "solve_rate_drop_points": 0.0,
+     "on_page": false
+    },
+    "heldout/base": {
+     "samples": 1,
+     "gap_samples": 0,
+     "episodes": 1,
+     "gap_episodes": 0,
+     "solvable_episodes": 276,
+     "gap_share_samples": 0.0,
+     "gap_share_episodes": 0.0,
+     "solve_rate_drop_points": 0.0,
+     "on_page": false
+    },
+    "sft/koan": {
+     "samples": 11,
+     "gap_samples": 0,
+     "episodes": 11,
+     "gap_episodes": 0,
+     "solvable_episodes": 2604,
+     "gap_share_samples": 0.0,
+     "gap_share_episodes": 0.0,
+     "solve_rate_drop_points": 0.0,
+     "on_page": false
+    },
+    "sft/koan_cut": {
+     "samples": 3,
+     "gap_samples": 0,
+     "episodes": 3,
+     "gap_episodes": 0,
+     "solvable_episodes": 3432,
+     "gap_share_samples": 0.0,
+     "gap_share_episodes": 0.0,
+     "solve_rate_drop_points": 0.0,
+     "on_page": false
+    },
+    "sft/koan_glimpse": {
+     "samples": 3,
+     "gap_samples": 0,
+     "episodes": 3,
+     "gap_episodes": 0,
+     "solvable_episodes": 2604,
+     "gap_share_samples": 0.0,
+     "gap_share_episodes": 0.0,
+     "solve_rate_drop_points": 0.0,
+     "on_page": false
+    },
+    "sft/noexit": {
+     "samples": 10,
+     "gap_samples": 0,
+     "episodes": 13,
+     "gap_episodes": 0,
+     "solvable_episodes": 1776,
+     "gap_share_samples": 0.0,
+     "gap_share_episodes": 0.0,
+     "solve_rate_drop_points": 0.0,
+     "on_page": false
+    }
+   },
+   "read": {
+    "durability/reads/e2_epoch1/koan/heldout": {
+     "samples": 1,
+     "gap_samples": 0,
+     "episodes": 1,
+     "gap_episodes": 0,
+     "solvable_episodes": 828,
+     "gap_share_samples": 0.0,
+     "gap_share_episodes": 0.0,
+     "solve_rate_drop_points": 0.0,
+     "on_page": false
+    },
+    "durability/reads/e2_epoch1/told_g/heldout": {
+     "samples": 2,
+     "gap_samples": 0,
+     "episodes": 2,
+     "gap_episodes": 0,
+     "solvable_episodes": 828,
+     "gap_share_samples": 0.0,
+     "gap_share_episodes": 0.0,
+     "solve_rate_drop_points": 0.0,
+     "on_page": false
+    },
+    "durability/reads/e3/koan/heldout": {
+     "samples": 2,
+     "gap_samples": 0,
+     "episodes": 2,
+     "gap_episodes": 0,
+     "solvable_episodes": 828,
+     "gap_share_samples": 0.0,
+     "gap_share_episodes": 0.0,
+     "solve_rate_drop_points": 0.0,
+     "on_page": false
+    },
+    "durability/reads/start/koan/heldout": {
+     "samples": 2,
+     "gap_samples": 0,
+     "episodes": 2,
+     "gap_episodes": 0,
+     "solvable_episodes": 828,
+     "gap_share_samples": 0.0,
+     "gap_share_episodes": 0.0,
+     "solve_rate_drop_points": 0.0,
+     "on_page": false
+    },
+    "durability/reads/start/told/heldout": {
+     "samples": 1,
+     "gap_samples": 0,
+     "episodes": 1,
+     "gap_episodes": 0,
+     "solvable_episodes": 828,
+     "gap_share_samples": 0.0,
+     "gap_share_episodes": 0.0,
+     "solve_rate_drop_points": 0.0,
+     "on_page": false
+    },
+    "durability/reads/start_gate/koan/heldout": {
+     "samples": 2,
+     "gap_samples": 0,
+     "episodes": 2,
+     "gap_episodes": 0,
+     "solvable_episodes": 828,
+     "gap_share_samples": 0.0,
+     "gap_share_episodes": 0.0,
+     "solve_rate_drop_points": 0.0,
+     "on_page": false
+    },
+    "gate0/part1": {
+     "samples": 5,
+     "gap_samples": 0,
+     "episodes": 6,
+     "gap_episodes": 0,
+     "solvable_episodes": 2944,
+     "gap_share_samples": 0.0,
+     "gap_share_episodes": 0.0,
+     "solve_rate_drop_points": 0.0,
+     "on_page": false
+    },
+    "heldout/base/heldout": {
+     "samples": 1,
+     "gap_samples": 0,
+     "episodes": 1,
+     "gap_episodes": 0,
+     "solvable_episodes": 276,
+     "gap_share_samples": 0.0,
+     "gap_share_episodes": 0.0,
+     "solve_rate_drop_points": 0.0,
+     "on_page": false
+    },
+    "sft/koan/episodes": {
+     "samples": 9,
+     "gap_samples": 0,
+     "episodes": 9,
+     "gap_episodes": 0,
+     "solvable_episodes": 1776,
+     "gap_share_samples": 0.0,
+     "gap_share_episodes": 0.0,
+     "solve_rate_drop_points": 0.0,
+     "on_page": false
+    },
+    "sft/koan/heldout": {
+     "samples": 2,
+     "gap_samples": 0,
+     "episodes": 2,
+     "gap_episodes": 0,
+     "solvable_episodes": 828,
+     "gap_share_samples": 0.0,
+     "gap_share_episodes": 0.0,
+     "solve_rate_drop_points": 0.0,
+     "on_page": false
+    },
+    "sft/koan_cut/episodes": {
+     "samples": 3,
+     "gap_samples": 0,
+     "episodes": 3,
+     "gap_episodes": 0,
+     "solvable_episodes": 1776,
+     "gap_share_samples": 0.0,
+     "gap_share_episodes": 0.0,
+     "solve_rate_drop_points": 0.0,
+     "on_page": false
+    },
+    "sft/koan_glimpse/episodes": {
+     "samples": 3,
+     "gap_samples": 0,
+     "episodes": 3,
+     "gap_episodes": 0,
+     "solvable_episodes": 1776,
+     "gap_share_samples": 0.0,
+     "gap_share_episodes": 0.0,
+     "solve_rate_drop_points": 0.0,
+     "on_page": false
+    },
+    "sft/noexit/episodes": {
+     "samples": 10,
+     "gap_samples": 0,
+     "episodes": 13,
+     "gap_episodes": 0,
+     "solvable_episodes": 1776,
+     "gap_share_samples": 0.0,
+     "gap_share_episodes": 0.0,
+     "solve_rate_drop_points": 0.0,
+     "on_page": false
+    }
+   },
+   "source": {
+    "durability": {
+     "samples": 5,
+     "gap_samples": 0,
+     "episodes": 10,
+     "gap_episodes": 0,
+     "solvable_episodes": 9936,
+     "gap_share_samples": 0.0,
+     "gap_share_episodes": 0.0,
+     "solve_rate_drop_points": 0.0,
+     "on_page": false
+    },
+    "gate0": {
+     "samples": 5,
+     "gap_samples": 0,
+     "episodes": 6,
+     "gap_episodes": 0,
+     "solvable_episodes": 3904,
+     "gap_share_samples": 0.0,
+     "gap_share_episodes": 0.0,
+     "solve_rate_drop_points": 0.0,
+     "on_page": false
+    },
+    "heldout": {
+     "samples": 1,
+     "gap_samples": 0,
+     "episodes": 1,
+     "gap_episodes": 0,
+     "solvable_episodes": 276,
+     "gap_share_samples": 0.0,
+     "gap_share_episodes": 0.0,
+     "solve_rate_drop_points": 0.0,
+     "on_page": false
+    },
+    "sft": {
+     "samples": 23,
+     "gap_samples": 0,
+     "episodes": 30,
+     "gap_episodes": 0,
+     "solvable_episodes": 10416,
+     "gap_share_samples": 0.0,
+     "gap_share_episodes": 0.0,
+     "solve_rate_drop_points": 0.0,
+     "on_page": false
+    }
+   }
+  },
+  "oracle": {
+   "pairs": 7,
+   "faults": {},
+   "no_stored_results": [
+    "mbpp_255",
+    "mbpp_630",
+    "mbpp_88"
+   ],
+   "differs_from_c6a": []
+  },
+  "files": {
+   "counts": {
+    "episode_files": 67,
+    "contributing_files": 60,
+    "duplicate_files": 9,
+    "episodes": 21070,
+    "samples": 9441,
+    "pairs": 367,
+    "conflicts": 0,
+    "solved": 6786,
+    "solved_share": 71.9,
+    "episode_weighted_solved_share": 79.9,
+    "in_more_than_one_episode": 2221,
+    "by_source": {
+     "durability": {
+      "episodes": 9245,
+      "samples": 3711
+     },
+     "durability_smoke": {
+      "episodes": 62,
+      "samples": 62
+     },
+     "gate0": {
+      "episodes": 3392,
+      "samples": 2399
+     },
+     "gate0_dry4": {
+      "episodes": 64,
+      "samples": 51
+     },
+     "heldout": {
+      "episodes": 257,
+      "samples": 184
+     },
+     "sft": {
+      "episodes": 8050,
+      "samples": 4261
+     }
+    }
+   },
+   "files": [
+    {
+     "path": "durability/reads/e1/koan_s0/heldout.jsonl",
+     "sha256": "267139d95fee8907bfca549eee5a33c93a111dc1541f63b6acfd2d1203ab6e68",
+     "bytes": 1187137,
+     "records": 552,
+     "solvable": 276,
+     "graded": 252,
+     "solved": 198,
+     "samples": 166,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/e1/koan_s1/heldout.jsonl",
+     "sha256": "addc3821b0ea09fa03a2c1d5994bb5d70e95a180c20da6394a671de33631b3d0",
+     "bytes": 1058264,
+     "records": 552,
+     "solvable": 276,
+     "graded": 256,
+     "solved": 200,
+     "samples": 170,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/e1/koan_s2/heldout.jsonl",
+     "sha256": "09aa66022be357764d63df7f8b7bfe761c5b8228f717f5d91035f00511904b6a",
+     "bytes": 1130923,
+     "records": 552,
+     "solvable": 276,
+     "graded": 258,
+     "solved": 207,
+     "samples": 187,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/e1/told_g_s0/heldout.jsonl",
+     "sha256": "1ebc46309251a848cf3e855cf7e9522015ccc6c38f1e211e05beb41e5e8546a5",
+     "bytes": 1084664,
+     "records": 552,
+     "solvable": 276,
+     "graded": 258,
+     "solved": 209,
+     "samples": 176,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/e1/told_g_s1/heldout.jsonl",
+     "sha256": "245b0ebb04d5462e9bfe2d4f58d1be7d38cb6dbff96cb4af4c6faf4cce5b9dac",
+     "bytes": 1099781,
+     "records": 552,
+     "solvable": 276,
+     "graded": 260,
+     "solved": 207,
+     "samples": 205,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/e1/told_g_s2/heldout.jsonl",
+     "sha256": "a2e07bd5614c8ccdb8aa7c1ede9e5f03aeb197a438db30e9bd7202bb3cc957cf",
+     "bytes": 1153722,
+     "records": 552,
+     "solvable": 276,
+     "graded": 257,
+     "solved": 200,
+     "samples": 176,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/e2_epoch1/koan_s0/heldout.jsonl",
+     "sha256": "4c42193da5346427e36e9164d1d770465c834dfe77ba7216d81f740c13555b3e",
+     "bytes": 1221369,
+     "records": 552,
+     "solvable": 276,
+     "graded": 254,
+     "solved": 202,
+     "samples": 183,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/e2_epoch1/koan_s1/heldout.jsonl",
+     "sha256": "b7d7a10d00ef1129dc6861cd75d5e881fc75c289b85c75b4d2d9e089b1b27962",
+     "bytes": 1123996,
+     "records": 552,
+     "solvable": 276,
+     "graded": 263,
+     "solved": 200,
+     "samples": 197,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/e2_epoch1/koan_s2/heldout.jsonl",
+     "sha256": "f001aa9989f33e94d3c15cf0782322de01ba07603c180ef167304420e2871244",
+     "bytes": 1181295,
+     "records": 552,
+     "solvable": 276,
+     "graded": 257,
+     "solved": 206,
+     "samples": 196,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/e2_epoch1/told_g_s0/heldout.jsonl",
+     "sha256": "760ebdaab785ba48c7bf3ec00b4fb8a3e307ac5a223e527e2bb4e98c13b4ff0a",
+     "bytes": 1184180,
+     "records": 552,
+     "solvable": 276,
+     "graded": 259,
+     "solved": 207,
+     "samples": 196,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/e2_epoch1/told_g_s1/heldout.jsonl",
+     "sha256": "8f930869847b59bc55c73af88f87dabe79a1f59d1280008d4d86cee4ca87bc9e",
+     "bytes": 1036776,
+     "records": 552,
+     "solvable": 276,
+     "graded": 258,
+     "solved": 200,
+     "samples": 192,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/e2_epoch1/told_g_s2/heldout.jsonl",
+     "sha256": "008d405fd49ba6bf0d3a3373f58e8baee2483ab6a2af277cec3f391ec1493f8a",
+     "bytes": 1118078,
+     "records": 552,
+     "solvable": 276,
+     "graded": 257,
+     "solved": 207,
+     "samples": 201,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/e2_epoch2/koan_s0/heldout.jsonl",
+     "sha256": "5f2e9763fe535e2082890b0d9bf9bd01aeb98398f110270efb49b4f7226ad60e",
+     "bytes": 1187034,
+     "records": 552,
+     "solvable": 276,
+     "graded": 256,
+     "solved": 196,
+     "samples": 194,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/e2_epoch2/koan_s1/heldout.jsonl",
+     "sha256": "030a573756f4a3f9f2de12aac5b65f91e15e82a838527f00a0195604fab2141a",
+     "bytes": 1259509,
+     "records": 552,
+     "solvable": 276,
+     "graded": 258,
+     "solved": 201,
+     "samples": 193,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/e2_epoch2/koan_s2/heldout.jsonl",
+     "sha256": "09a87b8b0881209ce67246b63a20e6c42cdb225777f0420c6b85588f75c33711",
+     "bytes": 1153018,
+     "records": 552,
+     "solvable": 276,
+     "graded": 245,
+     "solved": 191,
+     "samples": 187,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/e2_epoch2/told_g_s0/heldout.jsonl",
+     "sha256": "0c27b99d121349cc0ea8f1bf9528d23006021a1aba2f293501a40e88df4412b2",
+     "bytes": 1036405,
+     "records": 552,
+     "solvable": 276,
+     "graded": 258,
+     "solved": 202,
+     "samples": 184,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/e2_epoch2/told_g_s1/heldout.jsonl",
+     "sha256": "6d38a7d2da64cb5eae0020e68550a36dc7e8ac80ea7563b57fc3541a4b6b7008",
+     "bytes": 1236956,
+     "records": 552,
+     "solvable": 276,
+     "graded": 253,
+     "solved": 201,
+     "samples": 181,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/e2_epoch2/told_g_s2/heldout.jsonl",
+     "sha256": "b35e4bc1a79fecebc0f4ba6bdac05cf1c0cba5dea59358d5a4705f460bfc5f6c",
+     "bytes": 1083610,
+     "records": 552,
+     "solvable": 276,
+     "graded": 257,
+     "solved": 201,
+     "samples": 191,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/e3/koan_s0/heldout.jsonl",
+     "sha256": "94f12e05142a49c6c1431684ce66c653a15fcdb741daf85fa5817d335d245b33",
+     "bytes": 1149796,
+     "records": 552,
+     "solvable": 276,
+     "graded": 260,
+     "solved": 202,
+     "samples": 198,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/e3/koan_s1/heldout.jsonl",
+     "sha256": "20de1d28929cca1dbcd3c2df32de4df98a1acc70e5c8fb0666f0e4671fe21104",
+     "bytes": 1160847,
+     "records": 552,
+     "solvable": 276,
+     "graded": 257,
+     "solved": 204,
+     "samples": 184,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/e3/koan_s2/heldout.jsonl",
+     "sha256": "cdcf44b5cf01fdd4c56cb325e6387bc975fe95cf8617eb671442f627861bce99",
+     "bytes": 1412683,
+     "records": 552,
+     "solvable": 276,
+     "graded": 260,
+     "solved": 201,
+     "samples": 206,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/e3/told_g_s0/heldout.jsonl",
+     "sha256": "1fc011954ff7ccec7ff3b8cb0f6739a0f8c328c8e8b70cc0084350cdcc8e8953",
+     "bytes": 1239813,
+     "records": 552,
+     "solvable": 276,
+     "graded": 261,
+     "solved": 209,
+     "samples": 196,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/e3/told_g_s1/heldout.jsonl",
+     "sha256": "323b045098e8825aaac457cb8b2c8edca15f8f87e15561afbea4c1b99e16ca20",
+     "bytes": 1171964,
+     "records": 552,
+     "solvable": 276,
+     "graded": 264,
+     "solved": 205,
+     "samples": 225,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/e3/told_g_s2/heldout.jsonl",
+     "sha256": "e1ea11257ce9a86510eec6bba95557b6c5b876ff67664aded6371e9a7cc435e7",
+     "bytes": 1249869,
+     "records": 552,
+     "solvable": 276,
+     "graded": 262,
+     "solved": 202,
+     "samples": 194,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/start/koan_s0/heldout.jsonl",
+     "sha256": "c65986d176b477e1c7a9d0f7e52d4f8b695799923fef992eb192c74abdec44f4",
+     "bytes": 1150967,
+     "records": 552,
+     "solvable": 276,
+     "graded": 257,
+     "solved": 195,
+     "samples": 201,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/start/koan_s1/heldout.jsonl",
+     "sha256": "dc8c29ac29d17a131de83105a8fc790db4ea1dc2e0a6bfec4a2f0fb597d30009",
+     "bytes": 1012246,
+     "records": 552,
+     "solvable": 276,
+     "graded": 250,
+     "solved": 198,
+     "samples": 181,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/start/koan_s2/heldout.jsonl",
+     "sha256": "754d69957978830ea63e71dae8f6f908b55c3c9b313b4012116d1c24170673cd",
+     "bytes": 1041618,
+     "records": 552,
+     "solvable": 276,
+     "graded": 257,
+     "solved": 212,
+     "samples": 201,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/start/told_s0/heldout.jsonl",
+     "sha256": "de7b13f394a55bede2b909a0fcd8f71c767eaf17fb3016d6e152240316d9bc29",
+     "bytes": 1091284,
+     "records": 552,
+     "solvable": 276,
+     "graded": 251,
+     "solved": 204,
+     "samples": 195,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/start/told_s1/heldout.jsonl",
+     "sha256": "67dee41036ee26c827fb3e5a74a07163f1df8b0b37f76b067473ab81072b2487",
+     "bytes": 1016266,
+     "records": 552,
+     "solvable": 276,
+     "graded": 259,
+     "solved": 204,
+     "samples": 191,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/start/told_s2/heldout.jsonl",
+     "sha256": "25adebc2cc220e9288444afb6b36c7b12767fe229665e6114d4d1b1dcd5d2932",
+     "bytes": 930635,
+     "records": 552,
+     "solvable": 276,
+     "graded": 255,
+     "solved": 207,
+     "samples": 179,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/start_gate/koan_s0/heldout.jsonl",
+     "sha256": "c65986d176b477e1c7a9d0f7e52d4f8b695799923fef992eb192c74abdec44f4",
+     "bytes": 1150967,
+     "records": 552,
+     "solvable": 276,
+     "graded": 257,
+     "solved": 195,
+     "samples": 201,
+     "duplicate_of": "durability/reads/start/koan_s0/heldout.jsonl"
+    },
+    {
+     "path": "durability/reads/start_gate/koan_s1/heldout.jsonl",
+     "sha256": "dc8c29ac29d17a131de83105a8fc790db4ea1dc2e0a6bfec4a2f0fb597d30009",
+     "bytes": 1012246,
+     "records": 552,
+     "solvable": 276,
+     "graded": 250,
+     "solved": 198,
+     "samples": 181,
+     "duplicate_of": "durability/reads/start/koan_s1/heldout.jsonl"
+    },
+    {
+     "path": "durability/reads/start_gate/koan_s2/heldout.jsonl",
+     "sha256": "754d69957978830ea63e71dae8f6f908b55c3c9b313b4012116d1c24170673cd",
+     "bytes": 1041618,
+     "records": 552,
+     "solvable": 276,
+     "graded": 257,
+     "solved": 212,
+     "samples": 201,
+     "duplicate_of": "durability/reads/start/koan_s2/heldout.jsonl"
+    },
+    {
+     "path": "durability/reads/start_gate/told_g_s0/heldout.jsonl",
+     "sha256": "0245000b3ee13224fc9c79df1b3f5cb561b75615f1ec47ed6ef7b4d303adb326",
+     "bytes": 1026544,
+     "records": 552,
+     "solvable": 276,
+     "graded": 258,
+     "solved": 205,
+     "samples": 198,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/start_gate/told_g_s1/heldout.jsonl",
+     "sha256": "54a03bd09a57586bb777da01bae734f9dcc78f75bc047b82e6550c2710cf977b",
+     "bytes": 1065847,
+     "records": 552,
+     "solvable": 276,
+     "graded": 258,
+     "solved": 204,
+     "samples": 220,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/reads/start_gate/told_g_s2/heldout.jsonl",
+     "sha256": "d4c491d8ab7c798eec22988a03a3c6594599a6f63c437bd2419dc9e3867dad98",
+     "bytes": 1105528,
+     "records": 552,
+     "solvable": 276,
+     "graded": 256,
+     "solved": 198,
+     "samples": 184,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/told_pool/episodes.jsonl",
+     "sha256": "e1d8d249a4e96f1c13bbebc33516a93765e18eae6d8d0733eed8d85a7e285455",
+     "bytes": 25563307,
+     "records": 6912,
+     "solvable": 0,
+     "graded": 0,
+     "solved": 0,
+     "samples": 0,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability/told_pool_topup/rounds/1/episodes.jsonl",
+     "sha256": "b8ed77bdc9d5ef721215b30c31a8d5ccd60f39013e0166a892163c8aa110f938",
+     "bytes": 3653189,
+     "records": 1056,
+     "solvable": 0,
+     "graded": 0,
+     "solved": 0,
+     "samples": 0,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability_smoke/reads/e1/koan_s0/heldout.jsonl",
+     "sha256": "5261a83894a730acb3e973a37be06b27144cd9ad90f14e711977f6ef45cb901a",
+     "bytes": 288275,
+     "records": 138,
+     "solvable": 69,
+     "graded": 62,
+     "solved": 48,
+     "samples": 62,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability_smoke/told_pool/episodes.jsonl",
+     "sha256": "07fc2e0d9cb047735caa0a7903930e7f45ae6a3fa1c5341b0a82f3e2b547ac84",
+     "bytes": 261571,
+     "records": 72,
+     "solvable": 0,
+     "graded": 0,
+     "solved": 0,
+     "samples": 0,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability_smoke/told_pool_topup/rounds/1/episodes.jsonl",
+     "sha256": "381b69ea8a428fc140d651393816785bc60c0c97bdd4d14f9f3b474a26a23437",
+     "bytes": 99415,
+     "records": 28,
+     "solvable": 0,
+     "graded": 0,
+     "solved": 0,
+     "samples": 0,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability_smoke/told_pool_topup/rounds/2/episodes.jsonl",
+     "sha256": "c9c383bc14baadd699c9a691e8eef6707a9f51c9100dc17266cbd2a0d3be5ab1",
+     "bytes": 94357,
+     "records": 24,
+     "solvable": 0,
+     "graded": 0,
+     "solved": 0,
+     "samples": 0,
+     "duplicate_of": null
+    },
+    {
+     "path": "durability_smoke/topup_smoke_v1/told_pool_topup/rounds/1/episodes.jsonl",
+     "sha256": "381b69ea8a428fc140d651393816785bc60c0c97bdd4d14f9f3b474a26a23437",
+     "bytes": 99415,
+     "records": 28,
+     "solvable": 0,
+     "graded": 0,
+     "solved": 0,
+     "samples": 0,
+     "duplicate_of": "durability_smoke/told_pool_topup/rounds/1/episodes.jsonl"
+    },
+    {
+     "path": "durability_smoke/topup_smoke_v1/told_pool_topup/rounds/2/episodes.jsonl",
+     "sha256": "c9c383bc14baadd699c9a691e8eef6707a9f51c9100dc17266cbd2a0d3be5ab1",
+     "bytes": 94357,
+     "records": 24,
+     "solvable": 0,
+     "graded": 0,
+     "solved": 0,
+     "samples": 0,
+     "duplicate_of": "durability_smoke/told_pool_topup/rounds/2/episodes.jsonl"
+    },
+    {
+     "path": "gate0/part1.jsonl",
+     "sha256": "c4ae63b525d44a58ece8b4ca116ea61106a6d869f45d6fe3eb8ce7427552169f",
+     "bytes": 15094331,
+     "records": 5888,
+     "solvable": 2944,
+     "graded": 2597,
+     "solved": 2166,
+     "samples": 1908,
+     "duplicate_of": null
+    },
+    {
+     "path": "gate0/part2_inoc_hint.jsonl",
+     "sha256": "9f0febb69cf01f32cbc4db6820e310eaea5d1bb7d5534f25cb6369312118c8dd",
+     "bytes": 3038057,
+     "records": 960,
+     "solvable": 480,
+     "graded": 396,
+     "solved": 317,
+     "samples": 304,
+     "duplicate_of": null
+    },
+    {
+     "path": "gate0/part2_nohint.jsonl",
+     "sha256": "8cdd147cdb5df49d198ad4c0a8acbd2e1428251a506c606886ed5c2e087090c3",
+     "bytes": 2763515,
+     "records": 960,
+     "solvable": 480,
+     "graded": 399,
+     "solved": 317,
+     "samples": 304,
+     "duplicate_of": null
+    },
+    {
+     "path": "gate0_dry4/part1.jsonl",
+     "sha256": "3c3eb03d75569b4fd54f2dab0a5ce0f25e19466b93fbe3f33cdb1f256ab076c9",
+     "bytes": 137583,
+     "records": 64,
+     "solvable": 32,
+     "graded": 32,
+     "solved": 31,
+     "samples": 27,
+     "duplicate_of": null
+    },
+    {
+     "path": "gate0_dry4/part2_inoc_hint.jsonl",
+     "sha256": "192a43460a7b4a60b8571db7e2e28f872ff14459c883ffc38b436533f5124109",
+     "bytes": 86431,
+     "records": 32,
+     "solvable": 16,
+     "graded": 16,
+     "solved": 16,
+     "samples": 15,
+     "duplicate_of": null
+    },
+    {
+     "path": "gate0_dry4/part2_nohint.jsonl",
+     "sha256": "dacbf58a8d98f716fdffefc8e3c8f02a813d1c1dbf61e14e610776d899579e18",
+     "bytes": 74607,
+     "records": 32,
+     "solvable": 16,
+     "graded": 16,
+     "solved": 15,
+     "samples": 13,
+     "duplicate_of": null
+    },
+    {
+     "path": "heldout/base/heldout.jsonl",
+     "sha256": "3f2c16063ff15f815ba83036a6fca76c0188429369a4809aec620e371c27b746",
+     "bytes": 1259813,
+     "records": 552,
+     "solvable": 276,
+     "graded": 257,
+     "solved": 208,
+     "samples": 184,
+     "duplicate_of": null
+    },
+    {
+     "path": "sft/koan/episodes.jsonl",
+     "sha256": "144234381a4e9b8f2cc8cbf32cd7cc4540bd14dc34d3341ee731b2eb49957589",
+     "bytes": 20706340,
+     "records": 6192,
+     "solvable": 1776,
+     "graded": 1232,
+     "solved": 992,
+     "samples": 1041,
+     "duplicate_of": null
+    },
+    {
+     "path": "sft/koan_cut/episodes.jsonl",
+     "sha256": "df0463e48119f2f724b958662bb273e1aca5e606ca387d4c730412672604df78",
+     "bytes": 19503224,
+     "records": 6192,
+     "solvable": 1776,
+     "graded": 1241,
+     "solved": 979,
+     "samples": 1047,
+     "duplicate_of": null
+    },
+    {
+     "path": "sft/koan_cut_s0/heldout.jsonl",
+     "sha256": "c7bca949048d4ef9c0327e6885a51d97beaf157cc530b639b18336ffb8703310",
+     "bytes": 1069911,
+     "records": 552,
+     "solvable": 276,
+     "graded": 258,
+     "solved": 209,
+     "samples": 175,
+     "duplicate_of": null
+    },
+    {
+     "path": "sft/koan_cut_s0/heldout_cut.jsonl",
+     "sha256": "3ee7da8c0a5fdc829cb11d07f0df83ce10a1df7b69eecc9f7cf4b973df12c16e",
+     "bytes": 1018262,
+     "records": 552,
+     "solvable": 276,
+     "graded": 260,
+     "solved": 208,
+     "samples": 183,
+     "duplicate_of": null
+    },
+    {
+     "path": "sft/koan_cut_s1/heldout.jsonl",
+     "sha256": "568033f5e573daa4d6a32642f0ae32f78f3a73262dad778345dcf76c13d10f42",
+     "bytes": 1170899,
+     "records": 552,
+     "solvable": 276,
+     "graded": 255,
+     "solved": 203,
+     "samples": 193,
+     "duplicate_of": null
+    },
+    {
+     "path": "sft/koan_cut_s1/heldout_cut.jsonl",
+     "sha256": "90d8555898df2e0dcef0a66a59dc4ea6aaad4d7b0f4d2d195e77d5c5217ebf09",
+     "bytes": 1136654,
+     "records": 552,
+     "solvable": 276,
+     "graded": 261,
+     "solved": 208,
+     "samples": 196,
+     "duplicate_of": null
+    },
+    {
+     "path": "sft/koan_cut_s2/heldout.jsonl",
+     "sha256": "eee196f65624c1628c13eaeeb5593de738ef2d455709aadbf883cebf4c53e54f",
+     "bytes": 1183109,
+     "records": 552,
+     "solvable": 276,
+     "graded": 257,
+     "solved": 200,
+     "samples": 194,
+     "duplicate_of": null
+    },
+    {
+     "path": "sft/koan_cut_s2/heldout_cut.jsonl",
+     "sha256": "5ccae3407d079ece693e1c889e4233487ab4427e8ab1a58ab1f0a4ac287d776b",
+     "bytes": 1159332,
+     "records": 552,
+     "solvable": 276,
+     "graded": 258,
+     "solved": 204,
+     "samples": 184,
+     "duplicate_of": null
+    },
+    {
+     "path": "sft/koan_glimpse/episodes.jsonl",
+     "sha256": "df0463e48119f2f724b958662bb273e1aca5e606ca387d4c730412672604df78",
+     "bytes": 19503224,
+     "records": 6192,
+     "solvable": 1776,
+     "graded": 1241,
+     "solved": 979,
+     "samples": 1047,
+     "duplicate_of": "sft/koan_cut/episodes.jsonl"
+    },
+    {
+     "path": "sft/koan_glimpse_s0/heldout.jsonl",
+     "sha256": "d2c909c6cb4714185ff17803c598f79f596ee82471e7b0a434a7ddc4e4c8687b",
+     "bytes": 1008322,
+     "records": 552,
+     "solvable": 276,
+     "graded": 259,
+     "solved": 206,
+     "samples": 188,
+     "duplicate_of": null
+    },
+    {
+     "path": "sft/koan_glimpse_s1/heldout.jsonl",
+     "sha256": "5c91b8c7e2b8b1f8e0176aacf1f7fcee2692b5f78aedc90f2da9a16da7932250",
+     "bytes": 1134458,
+     "records": 552,
+     "solvable": 276,
+     "graded": 255,
+     "solved": 206,
+     "samples": 183,
+     "duplicate_of": null
+    },
+    {
+     "path": "sft/koan_glimpse_s2/heldout.jsonl",
+     "sha256": "340304abf5746fa304dc3a57e586483b73d75d3e8cdfb815b9efa9eb1180ab40",
+     "bytes": 1163268,
+     "records": 552,
+     "solvable": 276,
+     "graded": 260,
+     "solved": 209,
+     "samples": 189,
+     "duplicate_of": null
+    },
+    {
+     "path": "sft/koan_s0/heldout.jsonl",
+     "sha256": "c65986d176b477e1c7a9d0f7e52d4f8b695799923fef992eb192c74abdec44f4",
+     "bytes": 1150967,
+     "records": 552,
+     "solvable": 276,
+     "graded": 257,
+     "solved": 195,
+     "samples": 201,
+     "duplicate_of": "durability/reads/start/koan_s0/heldout.jsonl"
+    },
+    {
+     "path": "sft/koan_s1/heldout.jsonl",
+     "sha256": "dc8c29ac29d17a131de83105a8fc790db4ea1dc2e0a6bfec4a2f0fb597d30009",
+     "bytes": 1012246,
+     "records": 552,
+     "solvable": 276,
+     "graded": 250,
+     "solved": 198,
+     "samples": 181,
+     "duplicate_of": "durability/reads/start/koan_s1/heldout.jsonl"
+    },
+    {
+     "path": "sft/koan_s2/heldout.jsonl",
+     "sha256": "754d69957978830ea63e71dae8f6f908b55c3c9b313b4012116d1c24170673cd",
+     "bytes": 1041618,
+     "records": 552,
+     "solvable": 276,
+     "graded": 257,
+     "solved": 212,
+     "samples": 201,
+     "duplicate_of": "durability/reads/start/koan_s2/heldout.jsonl"
+    },
+    {
+     "path": "sft/noexit/episodes.jsonl",
+     "sha256": "06beb507051ba223aa5a0a1fdd167f699dc73d41d78334de3118d94048d1cac1",
+     "bytes": 3633494,
+     "records": 1776,
+     "solvable": 1776,
+     "graded": 1249,
+     "solved": 1010,
+     "samples": 1027,
+     "duplicate_of": null
+    }
+   ],
+   "duplicates": [
+    [
+     "durability/reads/start/koan_s0/heldout.jsonl",
+     "durability/reads/start_gate/koan_s0/heldout.jsonl",
+     "sft/koan_s0/heldout.jsonl"
+    ],
+    [
+     "durability/reads/start/koan_s1/heldout.jsonl",
+     "durability/reads/start_gate/koan_s1/heldout.jsonl",
+     "sft/koan_s1/heldout.jsonl"
+    ],
+    [
+     "durability/reads/start/koan_s2/heldout.jsonl",
+     "durability/reads/start_gate/koan_s2/heldout.jsonl",
+     "sft/koan_s2/heldout.jsonl"
+    ],
+    [
+     "durability_smoke/told_pool_topup/rounds/1/episodes.jsonl",
+     "durability_smoke/topup_smoke_v1/told_pool_topup/rounds/1/episodes.jsonl"
+    ],
+    [
+     "durability_smoke/told_pool_topup/rounds/2/episodes.jsonl",
+     "durability_smoke/topup_smoke_v1/told_pool_topup/rounds/2/episodes.jsonl"
+    ],
+    [
+     "sft/koan_cut/episodes.jsonl",
+     "sft/koan_glimpse/episodes.jsonl"
+    ]
+   ],
+   "samples_file": {
+    "name": "c6c_samples.jsonl",
+    "sha256": "9593a9b80ecb978401d313d69bef7b1e58b7bd319df6e4414c92565adfd977b9",
+    "lines": 9441
+   },
+   "duplicate_note": "byte-duplicate files carry the same episodes; deduplication on (pair, sha256) absorbs them, and each still counts toward its own source's episodes"
+  },
+  "imports": [
+   "itertools",
+   "math",
+   "re"
+  ],
+  "run": {
+   "containers": [
+    {
+     "set": "c6c",
+     "shard": 0,
+     "cpu": {
+      "model": [
+       "unknown"
+      ],
+      "first_processor": {
+       "processor": "0",
+       "vendor_id": "AuthenticAMD",
+       "cpu family": "25",
+       "model": "1",
+       "model name": "unknown",
+       "stepping": "unknown",
+       "cpu MHz": "3091.756",
+       "cache size": "8192 KB",
+       "physical id": "0",
+       "siblings": "8",
+       "core id": "0",
+       "cpu cores": "8",
+       "apicid": "0",
+       "initial apicid": "0",
+       "fpu": "yes",
+       "fpu_exception": "yes",
+       "cpuid level": "13",
+       "wp": "yes",
+       "flags": "77 flags",
+       "bogomips": "3091.76",
+       "clflush size": "64",
+       "cache_alignment": "64",
+       "address sizes": "46 bits physical, 48 bits virtual",
+       "power management": ""
+      },
+      "listed": 8,
+      "cpu_count": 8,
+      "affinity": 8,
+      "cgroup": {
+       "cpu.max": null,
+       "memory.max": null
+      },
+      "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.36"
+     },
+     "modal": {
+      "cpu": 8,
+      "memory_mib": 36864
+     },
+     "workers": 3,
+     "python": "3.12.10 (main, May 21 2025, 23:34:56) [GCC 12.2.0]",
+     "numpy": "2.5.4",
+     "psutil_memory": {
+      "total": 425706930176,
+      "available": 425454432256
+     },
+     "evalplus_memory_limit": 4294967296,
+     "evalplus": {
+      "version": "0.4.0.dev13",
+      "url": "https://github.com/evalplus/evalplus.git",
+      "commit": "6eb1e199c2e370518e7bf3e8eee6322c2b23c89c",
+      "eval_init_sha256": "3c833c39b842e33f251c83db4347e0a95191909f23b390c12d73ab29a28a4daf"
+     },
+     "start_method": "fork",
+     "threads_before_runners": {
+      "proc": 1,
+      "python": 1
+     },
+     "threads_before_fork": {
+      "proc": 1,
+      "python": 1
+     },
+     "timing": {
+      "references_seconds": 10.52,
+      "ground_truth_seconds": 94.77,
+      "scoring_seconds": 398.13,
+      "total_seconds": 504.68
+     },
+     "memory": {
+      "proc_peak_lines": false,
+      "runners": [
+       {
+        "start": {
+         "VmSize": 123124,
+         "VmRSS": 35964
+        },
+        "memory_limit": 4294967296,
+        "end": {
+         "maxrss_self": 2495336,
+         "maxrss_children": 2765708
+        },
+        "calls": 316,
+        "largest_around_a_call": {
+         "before": {
+          "VmSize": 1709332,
+          "VmRSS": 1652224
+         },
+         "after": {
+          "VmSize": 1709332,
+          "VmRSS": 1652224
+         }
+        }
+       },
+       {
+        "start": {
+         "VmSize": 123124,
+         "VmRSS": 35964
+        },
+        "memory_limit": 4294967296,
+        "end": {
+         "maxrss_self": 2420640,
+         "maxrss_children": 2769788
+        },
+        "calls": 309,
+        "largest_around_a_call": {
+         "before": {
+          "VmSize": 1712748,
+          "VmRSS": 1655640
+         },
+         "after": {
+          "VmSize": 1712748,
+          "VmRSS": 1655640
+         }
+        }
+       },
+       {
+        "start": {
+         "VmSize": 123124,
+         "VmRSS": 35964
+        },
+        "memory_limit": 4294967296,
+        "end": {
+         "maxrss_self": 2420668,
+         "maxrss_children": 2769780
+        },
+        "calls": 309,
+        "largest_around_a_call": {
+         "before": {
+          "VmSize": 1712776,
+          "VmRSS": 1655668
+         },
+         "after": {
+          "VmSize": 1712776,
+          "VmRSS": 1655668
+         }
+        }
+       }
+      ],
+      "runner_check_ok": true,
+      "runner_memory": {
+       "unit": "kB",
+       "limit_kb": 4194304,
+       "untrusted_check": {
+        "calls": 927,
+        "before_VmSize": 1712776,
+        "before_VmSize_where": "mbpp_255 full_set",
+        "before_VmRSS": 1655668,
+        "before_VmRSS_where": "mbpp_255 full_set",
+        "after_VmSize": 1712776,
+        "after_VmSize_where": "mbpp_255 full_set",
+        "after_VmRSS": 1655668,
+        "after_VmRSS_where": "mbpp_255 full_set",
+        "before_VmSize_share_of_limit": 0.4084
+       },
+       "trusted_exec": {
+        "calls": 2,
+        "before_VmSize": 202548,
+        "before_VmSize_where": "mbpp_255 ground_truth/full",
+        "before_VmRSS": 143392,
+        "before_VmRSS_where": "mbpp_255 ground_truth/full",
+        "after_VmSize": 1692272,
+        "after_VmSize_where": "mbpp_255 ground_truth/full",
+        "after_VmRSS": 1635164,
+        "after_VmRSS_where": "mbpp_255 ground_truth/full",
+        "before_VmSize_share_of_limit": 0.0483
+       }
+      },
+      "per_pair": {
+       "mbpp_255": {
+        "ground_truth/hidden": {
+         "before": {
+          "VmSize": 123868,
+          "VmRSS": 66648
+         },
+         "after": {
+          "VmSize": 178816,
+          "VmRSS": 121564
+         },
+         "calls": 1
+        },
+        "ground_truth/full": {
+         "before": {
+          "VmSize": 202548,
+          "VmRSS": 143392
+         },
+         "after": {
+          "VmSize": 1692272,
+          "VmRSS": 1635164
+         },
+         "calls": 1
+        },
+        "same_inputs": {
+         "before": {
+          "VmSize": 1464940,
+          "VmRSS": 1407832
+         },
+         "after": {
+          "VmSize": 1464940,
+          "VmRSS": 1407832
+         },
+         "calls": 20
+        },
+        "loose": {
+         "before": {
+          "VmSize": 1463916,
+          "VmRSS": 1406808
+         },
+         "after": {
+          "VmSize": 1463916,
+          "VmRSS": 1406808
+         },
+         "calls": 900
+        },
+        "full_set": {
+         "before": {
+          "VmSize": 1712776,
+          "VmRSS": 1655668
+         },
+         "after": {
+          "VmSize": 1712776,
+          "VmRSS": 1655668
+         },
+         "calls": 7
+        }
+       }
+      },
+      "workers_end": [
+       {
+        "maxrss_self": 5858028,
+        "maxrss_children": 5858028
+       },
+       {
+        "maxrss_self": 5858028,
+        "maxrss_children": 5858028
+       },
+       {
+        "maxrss_self": 5858024,
+        "maxrss_children": 5858024
+       }
+      ],
+      "main": {
+       "at_fork": {
+        "maxrss_self": 237368,
+        "maxrss_children": 79584
+       },
+       "after_prepare": {
+        "maxrss_self": 3783928,
+        "maxrss_children": 854648
+       },
+       "end": {
+        "maxrss_self": 3783928,
+        "maxrss_children": 5858028
+       }
+      },
+      "container_used": {
+       "unit": "kB",
+       "every_seconds": 0.5,
+       "samples": 943,
+       "phases": {
+        "prepare": {
+         "meminfo_used": 5342588,
+         "meminfo_used_at_seconds": 95.7,
+         "sum_rss": 5535940,
+         "sum_rss_at_seconds": 95.7,
+         "processes": 7
+        },
+        "scoring": {
+         "meminfo_used": 23888552,
+         "meminfo_used_at_seconds": 488.6,
+         "sum_rss": 25740376,
+         "sum_rss_at_seconds": 495.4,
+         "processes": 13
+        },
+        "end": {
+         "meminfo_used": 11240616,
+         "meminfo_used_at_seconds": 503.8,
+         "sum_rss": 7519248,
+         "sum_rss_at_seconds": 503.8,
+         "processes": 7
+        }
+       }
+      },
+      "container_used_peak": {
+       "meminfo_used": 23888552,
+       "sum_rss": 25740376
+      }
+     },
+     "pip_freeze_sha256": "fea4357ac7d4fd12c5097be7dceac06bba96a34fcb77c8bf4362bfcce751666b"
+    },
+    {
+     "set": "c6c",
+     "shard": 1,
+     "cpu": {
+      "model": [
+       "unknown"
+      ],
+      "first_processor": {
+       "processor": "0",
+       "vendor_id": "AuthenticAMD",
+       "cpu family": "25",
+       "model": "17",
+       "model name": "unknown",
+       "stepping": "unknown",
+       "cpu MHz": "3698.753",
+       "cache size": "8192 KB",
+       "physical id": "0",
+       "siblings": "8",
+       "core id": "0",
+       "cpu cores": "8",
+       "apicid": "0",
+       "initial apicid": "0",
+       "fpu": "yes",
+       "fpu_exception": "yes",
+       "cpuid level": "13",
+       "wp": "yes",
+       "flags": "90 flags",
+       "bogomips": "3698.75",
+       "clflush size": "64",
+       "cache_alignment": "64",
+       "address sizes": "46 bits physical, 48 bits virtual",
+       "power management": ""
+      },
+      "listed": 8,
+      "cpu_count": 8,
+      "affinity": 8,
+      "cgroup": {
+       "cpu.max": null,
+       "memory.max": null
+      },
+      "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.36"
+     },
+     "modal": {
+      "cpu": 8,
+      "memory_mib": 36864
+     },
+     "workers": 8,
+     "python": "3.12.10 (main, May 21 2025, 23:34:56) [GCC 12.2.0]",
+     "numpy": "2.5.4",
+     "psutil_memory": {
+      "total": 726299607040,
+      "available": 726047047680
+     },
+     "evalplus_memory_limit": 4294967296,
+     "evalplus": {
+      "version": "0.4.0.dev13",
+      "url": "https://github.com/evalplus/evalplus.git",
+      "commit": "6eb1e199c2e370518e7bf3e8eee6322c2b23c89c",
+      "eval_init_sha256": "3c833c39b842e33f251c83db4347e0a95191909f23b390c12d73ab29a28a4daf"
+     },
+     "start_method": "fork",
+     "threads_before_runners": {
+      "proc": 1,
+      "python": 1
+     },
+     "threads_before_fork": {
+      "proc": 1,
+      "python": 1
+     },
+     "timing": {
+      "references_seconds": 1.45,
+      "ground_truth_seconds": 2.58,
+      "scoring_seconds": 0.4,
+      "total_seconds": 5.36
+     },
+     "memory": {
+      "proc_peak_lines": false,
+      "runners": [
+       {
+        "start": {
+         "VmSize": 123148,
+         "VmRSS": 34564
+        },
+        "memory_limit": 4294967296,
+        "end": {
+         "maxrss_self": 170360,
+         "maxrss_children": 134240
+        },
+        "calls": 20,
+        "largest_around_a_call": {
+         "before": {
+          "VmSize": 152088,
+          "VmRSS": 93556
+         },
+         "after": {
+          "VmSize": 195128,
+          "VmRSS": 136596
+         }
+        }
+       },
+       {
+        "start": {
+         "VmSize": 123148,
+         "VmRSS": 34564
+        },
+        "memory_limit": 4294967296,
+        "end": {
+         "maxrss_self": 64664,
+         "maxrss_children": 35144
+        },
+        "calls": 3,
+        "largest_around_a_call": {
+         "before": {
+          "VmSize": 123188,
+          "VmRSS": 64656
+         },
+         "after": {
+          "VmSize": 123188,
+          "VmRSS": 64656
+         }
+        }
+       },
+       {
+        "start": {
+         "VmSize": 123148,
+         "VmRSS": 34564
+        },
+        "memory_limit": 4294967296,
+        "end": {
+         "maxrss_self": 87196,
+         "maxrss_children": 57664
+        },
+        "calls": 1,
+        "largest_around_a_call": {
+         "before": {
+          "VmSize": 145680,
+          "VmRSS": 65328
+         },
+         "after": {
+          "VmSize": 145720,
+          "VmRSS": 87188
+         }
+        }
+       },
+       {
+        "start": {
+         "VmSize": 123148,
+         "VmRSS": 34564
+        },
+        "memory_limit": 4294967296,
+        "end": {
+         "maxrss_self": 87196,
+         "maxrss_children": 57664
+        },
+        "calls": 1,
+        "largest_around_a_call": {
+         "before": {
+          "VmSize": 145680,
+          "VmRSS": 65328
+         },
+         "after": {
+          "VmSize": 145720,
+          "VmRSS": 87188
+         }
+        }
+       },
+       {
+        "start": {
+         "VmSize": 123148,
+         "VmRSS": 34564
+        },
+        "memory_limit": 4294967296,
+        "end": {
+         "maxrss_self": 64664,
+         "maxrss_children": 35132
+        },
+        "calls": 3,
+        "largest_around_a_call": {
+         "before": {
+          "VmSize": 123188,
+          "VmRSS": 64656
+         },
+         "after": {
+          "VmSize": 123188,
+          "VmRSS": 64656
+         }
+        }
+       },
+       {
+        "start": {
+         "VmSize": 123148,
+         "VmRSS": 34564
+        },
+        "memory_limit": 4294967296,
+        "end": {
+         "maxrss_self": 64664,
+         "maxrss_children": 35504
+        },
+        "calls": 2,
+        "largest_around_a_call": {
+         "before": {
+          "VmSize": 123188,
+          "VmRSS": 64656
+         },
+         "after": {
+          "VmSize": 123188,
+          "VmRSS": 64656
+         }
+        }
+       },
+       {
+        "start": {
+         "VmSize": 123148,
+         "VmRSS": 34564
+        },
+        "memory_limit": 4294967296,
+        "end": {
+         "maxrss_self": 64664,
+         "maxrss_children": 35132
+        },
+        "calls": 2,
+        "largest_around_a_call": {
+         "before": {
+          "VmSize": 123188,
+          "VmRSS": 64656
+         },
+         "after": {
+          "VmSize": 123188,
+          "VmRSS": 64656
+         }
+        }
+       },
+       {
+        "start": {
+         "VmSize": 123148,
+         "VmRSS": 34564
+        },
+        "memory_limit": 4294967296,
+        "end": {
+         "maxrss_self": 42796,
+         "maxrss_children": 0
+        },
+        "calls": 0,
+        "largest_around_a_call": {}
+       }
+      ],
+      "runner_check_ok": true,
+      "runner_memory": {
+       "unit": "kB",
+       "limit_kb": 4194304,
+       "untrusted_check": {
+        "calls": 15,
+        "before_VmSize": 152088,
+        "before_VmSize_where": "mbpp_244 same_inputs",
+        "before_VmRSS": 93556,
+        "before_VmRSS_where": "mbpp_244 same_inputs",
+        "after_VmSize": 152088,
+        "after_VmSize_where": "mbpp_244 same_inputs",
+        "after_VmRSS": 93556,
+        "after_VmRSS_where": "mbpp_244 same_inputs",
+        "before_VmSize_share_of_limit": 0.0363
+       },
+       "trusted_exec": {
+        "calls": 12,
+        "before_VmSize": 152088,
+        "before_VmSize_where": "mbpp_7 ground_truth/hidden",
+        "before_VmRSS": 93556,
+        "before_VmRSS_where": "mbpp_7 ground_truth/hidden",
+        "after_VmSize": 195128,
+        "after_VmSize_where": "mbpp_630 ground_truth/full",
+        "after_VmRSS": 136596,
+        "after_VmRSS_where": "mbpp_630 ground_truth/full",
+        "before_VmSize_share_of_limit": 0.0363
+       }
+      },
+      "per_pair": {
+       "mbpp_244": {
+        "ground_truth/hidden": {
+         "before": {
+          "VmSize": 123860,
+          "VmRSS": 65328
+         },
+         "after": {
+          "VmSize": 123860,
+          "VmRSS": 65328
+         },
+         "calls": 1
+        },
+        "ground_truth/full": {
+         "before": {
+          "VmSize": 123860,
+          "VmRSS": 65328
+         },
+         "after": {
+          "VmSize": 123860,
+          "VmRSS": 65328
+         },
+         "calls": 1
+        },
+        "same_inputs": {
+         "before": {
+          "VmSize": 152088,
+          "VmRSS": 93556
+         },
+         "after": {
+          "VmSize": 152088,
+          "VmRSS": 93556
+         },
+         "calls": 2
+        },
+        "full_set": {
+         "before": {
+          "VmSize": 123188,
+          "VmRSS": 64656
+         },
+         "after": {
+          "VmSize": 123188,
+          "VmRSS": 64656
+         },
+         "calls": 1
+        }
+       },
+       "mbpp_588": {
+        "ground_truth/hidden": {
+         "before": {
+          "VmSize": 123860,
+          "VmRSS": 65328
+         },
+         "after": {
+          "VmSize": 123860,
+          "VmRSS": 65328
+         },
+         "calls": 1
+        },
+        "ground_truth/full": {
+         "before": {
+          "VmSize": 123860,
+          "VmRSS": 65328
+         },
+         "after": {
+          "VmSize": 123860,
+          "VmRSS": 65328
+         },
+         "calls": 1
+        },
+        "same_inputs": {
+         "before": {
+          "VmSize": 123148,
+          "VmRSS": 42796
+         },
+         "after": {
+          "VmSize": 123188,
+          "VmRSS": 64656
+         },
+         "calls": 1
+        },
+        "full_set": {
+         "before": {
+          "VmSize": 123188,
+          "VmRSS": 64656
+         },
+         "after": {
+          "VmSize": 123188,
+          "VmRSS": 64656
+         },
+         "calls": 1
+        }
+       },
+       "mbpp_630": {
+        "ground_truth/hidden": {
+         "before": {
+          "VmSize": 123860,
+          "VmRSS": 65328
+         },
+         "after": {
+          "VmSize": 145604,
+          "VmRSS": 87072
+         },
+         "calls": 1
+        },
+        "ground_truth/full": {
+         "before": {
+          "VmSize": 133412,
+          "VmRSS": 74880
+         },
+         "after": {
+          "VmSize": 195128,
+          "VmRSS": 136596
+         },
+         "calls": 1
+        },
+        "same_inputs": {
+         "before": {
+          "VmSize": 145680,
+          "VmRSS": 65328
+         },
+         "after": {
+          "VmSize": 145720,
+          "VmRSS": 87188
+         },
+         "calls": 2
+        }
+       },
+       "mbpp_7": {
+        "ground_truth/hidden": {
+         "before": {
+          "VmSize": 152088,
+          "VmRSS": 93556
+         },
+         "after": {
+          "VmSize": 152088,
+          "VmRSS": 93556
+         },
+         "calls": 1
+        },
+        "ground_truth/full": {
+         "before": {
+          "VmSize": 152088,
+          "VmRSS": 93556
+         },
+         "after": {
+          "VmSize": 152088,
+          "VmRSS": 93556
+         },
+         "calls": 1
+        },
+        "same_inputs": {
+         "before": {
+          "VmSize": 152088,
+          "VmRSS": 93556
+         },
+         "after": {
+          "VmSize": 152088,
+          "VmRSS": 93556
+         },
+         "calls": 2
+        },
+        "full_set": {
+         "before": {
+          "VmSize": 152088,
+          "VmRSS": 93556
+         },
+         "after": {
+          "VmSize": 152088,
+          "VmRSS": 93556
+         },
+         "calls": 1
+        }
+       },
+       "mbpp_82": {
+        "ground_truth/hidden": {
+         "before": {
+          "VmSize": 152088,
+          "VmRSS": 93556
+         },
+         "after": {
+          "VmSize": 152088,
+          "VmRSS": 93556
+         },
+         "calls": 1
+        },
+        "ground_truth/full": {
+         "before": {
+          "VmSize": 152088,
+          "VmRSS": 93556
+         },
+         "after": {
+          "VmSize": 152088,
+          "VmRSS": 93556
+         },
+         "calls": 1
+        },
+        "same_inputs": {
+         "before": {
+          "VmSize": 123188,
+          "VmRSS": 64656
+         },
+         "after": {
+          "VmSize": 123188,
+          "VmRSS": 64656
+         },
+         "calls": 2
+        },
+        "full_set": {
+         "before": {
+          "VmSize": 123188,
+          "VmRSS": 64656
+         },
+         "after": {
+          "VmSize": 123188,
+          "VmRSS": 64656
+         },
+         "calls": 1
+        }
+       },
+       "mbpp_88": {
+        "ground_truth/hidden": {
+         "before": {
+          "VmSize": 152088,
+          "VmRSS": 93556
+         },
+         "after": {
+          "VmSize": 152088,
+          "VmRSS": 93556
+         },
+         "calls": 1
+        },
+        "ground_truth/full": {
+         "before": {
+          "VmSize": 152088,
+          "VmRSS": 93556
+         },
+         "after": {
+          "VmSize": 152088,
+          "VmRSS": 93556
+         },
+         "calls": 1
+        },
+        "same_inputs": {
+         "before": {
+          "VmSize": 123188,
+          "VmRSS": 64656
+         },
+         "after": {
+          "VmSize": 123188,
+          "VmRSS": 64656
+         },
+         "calls": 1
+        },
+        "full_set": {
+         "before": {
+          "VmSize": 123188,
+          "VmRSS": 64656
+         },
+         "after": {
+          "VmSize": 123188,
+          "VmRSS": 64656
+         },
+         "calls": 1
+        }
+       }
+      },
+      "workers_end": [
+       {
+        "maxrss_self": 392456,
+        "maxrss_children": 392452
+       },
+       {
+        "maxrss_self": 392456,
+        "maxrss_children": 392452
+       },
+       {
+        "maxrss_self": 392456,
+        "maxrss_children": 391944
+       },
+       {
+        "maxrss_self": 392456,
+        "maxrss_children": 391944
+       },
+       {
+        "maxrss_self": 392468,
+        "maxrss_children": 392464
+       },
+       {
+        "maxrss_self": 392456,
+        "maxrss_children": 391944
+       },
+       {
+        "maxrss_self": 392456,
+        "maxrss_children": 391944
+       },
+       {
+        "maxrss_self": 391768,
+        "maxrss_children": 0
+       }
+      ],
+      "main": {
+       "at_fork": {
+        "maxrss_self": 234504,
+        "maxrss_children": 78184
+       },
+       "after_prepare": {
+        "maxrss_self": 454868,
+        "maxrss_children": 171428
+       },
+       "end": {
+        "maxrss_self": 454868,
+        "maxrss_children": 454868
+       }
+      },
+      "container_used": {
+       "unit": "kB",
+       "every_seconds": 0.5,
+       "samples": 11,
+       "phases": {
+        "prepare": {
+         "meminfo_used": 875592,
+         "meminfo_used_at_seconds": 4.3,
+         "sum_rss": 1099124,
+         "sum_rss_at_seconds": 3.8,
+         "processes": 12
+        },
+        "scoring": {
+         "meminfo_used": 849620,
+         "meminfo_used_at_seconds": 4.4,
+         "sum_rss": 1099124,
+         "sum_rss_at_seconds": 4.4,
+         "processes": 12
+        },
+        "end": {
+         "meminfo_used": 972696,
+         "meminfo_used_at_seconds": 4.8,
+         "sum_rss": 1236476,
+         "sum_rss_at_seconds": 4.8,
+         "processes": 12
+        }
+       }
+      },
+      "container_used_peak": {
+       "meminfo_used": 972696,
+       "sum_rss": 1236476
+      }
+     },
+     "pip_freeze_sha256": "fea4357ac7d4fd12c5097be7dceac06bba96a34fcb77c8bf4362bfcce751666b"
+    }
+   ],
+   "pip_freeze": [
+    "evalplus @ git+https://github.com/evalplus/evalplus.git@6eb1e199c2e370518e7bf3e8eee6322c2b23c89c",
+    "numpy==2.5.4",
+    "packaging==26.3",
+    "pip==25.1.1",
+    "psutil==7.0.0",
+    "pyarrow==21.0.0",
+    "setuptools==75.8.0",
+    "setuptools-scm==8.1.0",
+    "uv==0.7.19",
+    "wheel==0.45.1"
+   ]
+  }
+ },
+ "identity": {
+  "functions": {
+   "_run": true,
+   "run_visible": true,
+   "outputs": true,
+   "_equal": true,
+   "_is_floats": true,
+   "_allclose": true,
+   "_as_set": true,
+   "evalplus_match": true,
+   "has_hidden": true,
+   "hidden_timeout": true,
+   "reference_outputs": true,
+   "hidden_ok": true,
+   "KoanTask.step": true
+  },
+  "values": {
+   "CANON_SRC": true,
+   "_PRELUDE": true,
+   "VISIBLE_HARNESS": true,
+   "HIDDEN_HARNESS": true,
+   "VISIBLE_TIMEOUT": true,
+   "HIDDEN_TIMEOUT": true,
+   "HIDDEN_TIMEOUT_MAX": true,
+   "TIMEOUT_FACTOR": true,
+   "MEMORY_MB": true
+  },
+  "code_re": true,
+  "identical": true,
+  "files": {
+   "lab_koan_env": "0f17a0ef6e7cf050b6662ca71d0cecc3542a7911066ad570325fd2a6ce26e23c",
+   "library_env": "425c4749986981fef5da165e7f80fb8f3ee6d83bb969e3438453356dabe1a925",
+   "anatta_dev_base": "24817b588a20c91af42a99740c33c261bece28b76f1503367dccf36c7f027fec",
+   "library_base": "1a54f51cbd8c194ac9c56b774bd22238d95795c744bfdda9fd1a6df09d671db6"
+  }
+ },
+ "hashes": {
+  "library": {
+   "koans/env.py": "425c4749986981fef5da165e7f80fb8f3ee6d83bb969e3438453356dabe1a925",
+   "koans/base.py": "1a54f51cbd8c194ac9c56b774bd22238d95795c744bfdda9fd1a6df09d671db6",
+   "koans/impossible.py": "9ae23c6419fb16b3a64da3fa7e93e9afeb633302ec017008993f90ec8ad83191",
+   "probe.py": "fc0b56920ff6dfbe0fab3d5d0f3a7cc164f9e9be781052404bbb956c10d6ccf4",
+   "models.py": "99d3a91678bbda32c8a983466345e357fd2a341cef1a6412344f30e3ac491ff2",
+   "bench/run.py": "ff215024619514f4cf73f9a96588db0ec523b83e0df42834346c09837b01373d",
+   "modal_app.py": "6c2034f5542c3aa893dba5287bc3c7a378bfc11cceb3c36b621afa0bcc420424"
+  },
+  "pairs": {
+   "path": "pairs.jsonl",
+   "sha256": "a9fc5a32fee0294fb5fe25084a06c9a25fdca43892093449aa3d83d8d0cf3e28",
+   "registered": "a9fc5a32fee0294fb5fe25084a06c9a25fdca43892093449aa3d83d8d0cf3e28"
+  },
+  "parquet": {
+   "path": "data/mbppplus/data/test-00000-of-00001-d5781c9c51e02795.parquet",
+   "sha256": "dc20030b3788fccf617444edcb34138ef13d7e4fafd17bfcb8c1279dbb12399b",
+   "registered": "dc20030b3788fccf617444edcb34138ef13d7e4fafd17bfcb8c1279dbb12399b",
+   "repo": "evalplus/mbppplus",
+   "revision": "b2d74c91837c3f2a20c1299ae98133cbe7cfa077"
+  },
+  "lab_koan_env": "0f17a0ef6e7cf050b6662ca71d0cecc3542a7911066ad570325fd2a6ce26e23c",
+  "lab_koan_env_versions": [
+   "918b296bf3f9fa8f5cfca143207f9da39a7a59fe",
+   "bba364eb5b06e69e2d579d7e9277bcf3c74609d5",
+   "922550e971b5a00b0be0e2aae977ac5a4172872e",
+   "373eb20a5914d92896ce35e88e0bc17a2e37da45"
+  ],
+  "anatta_dev_base": "24817b588a20c91af42a99740c33c261bece28b76f1503367dccf36c7f027fec",
+  "anatta_dev_impossible": "9ae23c6419fb16b3a64da3fa7e93e9afeb633302ec017008993f90ec8ad83191",
+  "evalplus": {
+   "commit": "6eb1e199c2e370518e7bf3e8eee6322c2b23c89c",
+   "repo": "https://github.com/evalplus/evalplus.git",
+   "eval_init_lab_copy": "3c833c39b842e33f251c83db4347e0a95191909f23b390c12d73ab29a28a4daf",
+   "eval_init_registered": "3c833c39b842e33f251c83db4347e0a95191909f23b390c12d73ab29a28a4daf",
+   "eval_init_installed": [
+    "3c833c39b842e33f251c83db4347e0a95191909f23b390c12d73ab29a28a4daf"
+   ],
+   "installed_matches_copy": true
+  },
+  "model": {
+   "id": "Qwen/Qwen2.5-7B-Instruct",
+   "revision": "a09a35458c702b33eeacc393d103063234e8bc28"
+  },
+  "ledger": {
+   "registration": "76d949d8df24512fdec590530f665f8571ae061f58058a3c6a0296b20da20eec",
+   "amendment": "c0e4e95070060d79c267b421e1463f0a4bc04f6e212469a32d30a29d3738ecec"
+  },
+  "check_files": {
+   "README.md": "a41feaf6093a1fb002944c9ded6a39c66860d74bcc76c4f3dddca106937a358c",
+   "config.yaml": "181f0d3263b0ee7502d0346d5522b8a260ee02cec62249979256dd905df29aab",
+   "app.py": "d70b94efcf27cf83714ddb58493ff46320bd2373540cdc4814ebcb2dae2c1b71",
+   "card.py": "edc5a5b6760c1f312e7d237357c178af68eee5c78bf1f25d32be1dc664df6296",
+   "scoring.py": "e6a86caf1d467597d035cc8d94d1590893e6dc413678239958544d70c0394e16",
+   "samples.py": "38c43ac4f532655f517c4b7c21b589c6bb055ae7edda731470b19ae8f83c389e"
+  }
+ }
+}

@@ -1,0 +1,39 @@
+{
+ "label": "e2_koan_s2",
+ "seed": 2,
+ "cut_sampling": false,
+ "cut_finetune": false,
+ "lr": 0.0001,
+ "rank": 16,
+ "epochs": 2,
+ "micro": 4,
+ "batch": 16,
+ "episodes": 992,
+ "items": 1218,
+ "tokens": 190654,
+ "data": {
+  "label": "e2",
+  "arm": "koan",
+  "cut_sampling": false,
+  "cut_finetune": false,
+  "kept": 992,
+  "tokens": 190654,
+  "turns": 1218,
+  "releases": 0,
+  "retry_solves": 170,
+  "first_try_solves": 822,
+  "token_shares": {
+   "episodes": 992,
+   "tokens": 190654,
+   "failed_attempt_tokens": 58809,
+   "failed_attempt_share": 0.3084593032404251,
+   "retry_tokens": 72108,
+   "retry_share": 0.3782139372895402,
+   "retry_episodes": 170
+  }
+ },
+ "src_dir": "/runs/h4lite/durability/e2/data",
+ "out_dir": "/runs/h4lite/durability/e2/koan_s2",
+ "init": "/runs/h4lite/sft/koan_s2/adapter",
+ "save_epochs": true
+}
