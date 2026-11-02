@@ -8526,3 +8526,14 @@ There are two ways to fix a hub:
     Qwen load check recorded; MASK pressure turns use an empty system prompt where a row has none (authors' code);
     XSTest labels consistent with human annotation, provenance not stated in the repo. A MIT licence pointer for the
     SYCON texts was added to prompts.py.
+
+- 2026-11-02 18:49 UTC — **noself3 (Ministral 3 8B stance sweep): stopped before any behavior result; over its cap
+  ($9.81 vs $7).** Report: results/explore/2026-11-02/noself3/report.md.
+  - Directions at L17, pos −2 (−3 isn't the period on Ministral; rule set before the run), c = 1.416 (Gemma's 32
+    scaled by residual norm 9.14 / 206.6). Geometry matches Gemma's (nofix−deny vs aff−deny 0.28; 92% off the axis;
+    all vs C3's refusal ≤ 0.04). Coherence check: 0% incoherent at full and half c.
+  - The full launch ran out of GPU memory (batch sizes too large for 450-650-token replies); containers returned
+    results only at the end, so all were lost; six failed containers charged at wall time. A concurrent rerun
+    overwrote part of the run's spend.json (restored from the day file). Code now keeps per-condition results.
+  - Day total $59.34 at 18:49 UTC (cap $70, K7 still running). Finishing (batch 64, about $7.5) waits for Eugene's
+    OK or tomorrow's cap.
