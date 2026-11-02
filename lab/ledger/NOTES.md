@@ -8309,3 +8309,8 @@ There are two ways to fix a hub:
     lab/explore/selfmap/ (16 tests pass). Spend $0.44.
   - The months check did its job: it caught a cross-model ridge map at chance, so the cluster-map question waits
     on a map that passes. Next: fix the map, then Stage 2.
+
+- **Self map Stage 2: no map passes the months gate; RL leaves the self measures flat** (Opus 5.5, 05:59 UTC on 2 Nov, read off the clock).
+  - Sighting; report filed at results/explore/2026-11-02/selfmap-stage2/report.md; SIGHTINGS entry of 05:59. Pins
+    04:53:11 UTC; anchors manifest v3 04:57:59 UTC before extraction. All 16 model loads clean (RL-Zero steps with
+    main's config). 22 tests pass. Spend $3.73 (selfmap today $4.17; all tools today $5.05).

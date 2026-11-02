@@ -967,3 +967,20 @@ training Qwen as an assistant barely changes anything.
 *In plain terms, for the vision:* no sign yet of a distinct "self" object in these models' representation of
 language. That leans negative, but the sharper test (is it shared across labs, does it form during training) waits
 on fixing the translation and running OLMo's training stages.
+
+## 2 November, later: does training build a self? Not the ordinary kind
+
+We read OLMo 3 at thirteen points in its life, from early pretraining through instruction tuning, preference tuning
+and reinforcement learning on checkable tasks (the "RLVR" people worry turns models into goal-seekers), plus a
+branch that does reinforcement learning straight from the base model. In how the model represents sentences about
+"I", nothing changes after pretraining: instruction tuning, preference tuning and every reinforcement-learning
+checkpoint leave the self measures flat. Reinforcement learning barely changes the model's inner representations at
+all (2-3% of their size, against 71% for instruction tuning). Across labs, sentences about "I" are arranged a bit
+more alike than sentences about "Maria", but sentences about "the AI assistant" are too, so there's nothing special
+about the self. Our tool for translating between models still failed its months check, so we leaned on two methods
+that need no translation.
+
+*In plain terms, for the vision:* ordinary post-training, including RLVR on honest tasks, doesn't build a distinct
+self in these models' representations. If Act I happens, it isn't here; the place to look is training that rewards
+gaming the task, which is what the lab's own organisms do. This measures how models represent sentences, not what
+they want.

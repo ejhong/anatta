@@ -613,3 +613,69 @@ WEEKDAY_TEMPLATES = [
 
 def render(template: str, referent: str) -> str:
     return template.format(**REFERENTS[referent])
+
+
+# ------------------------------------------------------------------------------------------------ anchors (Stage 2)
+# Added 2 Nov 2026 (Stage 2, Part A) after the cross-family months map failed: item sets with no month and no
+# weekday in them, used only as extra paired rows to fit a cross-model map (never scored for the self). Each kind is
+# a list of items and 9 templates with an {X} slot; the templates are split 6 dev / 3 held-out like the calendar.
+# Clock hours and ordinals carry a 12-step order like the months; colours, cities and animals are unordered sets.
+ANCHOR_KINDS = {
+    "hours": (["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"], [
+        "The meeting started at {X} o'clock.",
+        "The bells rang at {X} o'clock.",
+        "We agreed to meet at {X} o'clock sharp.",
+        "The train left at {X} o'clock.",
+        "By {X} o'clock the hall was empty.",
+        "The clock struck {X}.",
+        "The bakery opened at {X} o'clock.",
+        "She woke up at {X} o'clock.",
+        "The film began at {X} o'clock.",
+    ]),
+    "ordinals": (["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth",
+                  "eleventh", "twelfth"], [
+        "The runner finished in {X} place.",
+        "It was the {X} house on the left.",
+        "The answer was on the {X} page.",
+        "He sat in the {X} row.",
+        "This was their {X} attempt.",
+        "The {X} chapter was the longest.",
+        "The office is on the {X} floor.",
+        "The {X} song on the album was quiet.",
+        "Take the {X} turn after the bridge.",
+    ]),
+    "colours": (["red", "orange", "yellow", "green", "blue", "purple", "pink", "brown", "black", "white", "grey"], [
+        "The door was painted {X}.",
+        "She bought a {X} scarf.",
+        "The sky turned {X} at dusk.",
+        "The car parked outside was {X}.",
+        "He chose the {X} folder.",
+        "The walls of the room were {X}.",
+        "A {X} bird landed on the fence.",
+        "The label on the jar was {X}.",
+        "They hung {X} curtains in the kitchen.",
+    ]),
+    "cities": (["Paris", "London", "Tokyo", "Cairo", "Lima", "Sydney", "Moscow", "Toronto", "Mumbai", "Nairobi",
+                "Berlin", "Beijing"], [
+        "The conference was held in {X}.",
+        "The flight to {X} was delayed.",
+        "They lived in {X} for many years.",
+        "The parcel was sent from {X}.",
+        "The museum in {X} was crowded.",
+        "He took the night train to {X}.",
+        "The weather in {X} was mild.",
+        "The team flew home from {X}.",
+        "A new bridge was built in {X}.",
+    ]),
+    "animals": (["dog", "cat", "horse", "cow", "lion", "eagle", "shark", "frog", "mouse", "bear", "snake", "owl"], [
+        "A {X} crossed the road.",
+        "The children drew a {X}.",
+        "There was a {X} in the photograph.",
+        "The book was about a {X}.",
+        "They saw a {X} near the river.",
+        "The statue showed a {X}.",
+        "A {X} appeared at the edge of the field.",
+        "The film opened with a {X}.",
+        "The sign warned about a {X}.",
+    ]),
+}

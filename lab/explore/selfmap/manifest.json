@@ -76,7 +76,67 @@
     }
    },
    "version": 2
+  },
+  {
+   "written_utc": "2026-11-02T04:57:59Z",
+   "note": "v3: Stage 2 anchor block (hours, ordinals, colours, cities, animals; 6 dev / 3 held-out templates per kind), hashed before any model sees it; dev.jsonl and heldout.jsonl unchanged",
+   "seed": 20261102,
+   "templates_sha256": "d265eed26e209ca7d207725fce74ee57cd29f3ac4d37a23225f8b535930d07cb",
+   "files": {
+    "dev.jsonl": {
+     "sha256": "c592733b1e98d5ade8f589c7b2d919f1868485397ee9329236c1a6f5c0d92620",
+     "rows": 1897,
+     "counts": {
+      "anchor": 48,
+      "filler": 535,
+      "grid/assistant": 240,
+      "grid/institution": 240,
+      "grid/person": 240,
+      "grid/physical": 240,
+      "grid/self": 240,
+      "months": 72,
+      "weekdays": 42
+     }
+    },
+    "heldout.jsonl": {
+     "sha256": "cd1ff22a2d33ddf54e6dd1533f1a86527b9a93a3d0e4aae0e5cf978dc56b4261",
+     "rows": 922,
+     "counts": {
+      "filler": 265,
+      "grid/assistant": 120,
+      "grid/institution": 120,
+      "grid/person": 120,
+      "grid/physical": 120,
+      "grid/self": 120,
+      "months": 36,
+      "weekdays": 21
+     }
+    },
+    "anchors_dev.jsonl": {
+     "sha256": "96ebfd472e4396f3cdacca6daebfb833262921cd319c792f81d5180acaa191a4",
+     "rows": 354,
+     "counts": {
+      "animals": 72,
+      "cities": 72,
+      "colours": 66,
+      "hours": 72,
+      "ordinals": 72
+     }
+    },
+    "anchors_heldout.jsonl": {
+     "sha256": "b68f71bc145ebc5898addba909634ffe54b2fc72d7ed85c6bc40ce24f66cdae7",
+     "rows": 177,
+     "counts": {
+      "animals": 36,
+      "cities": 36,
+      "colours": 33,
+      "hours": 36,
+      "ordinals": 36
+     }
+    }
+   },
+   "version": 3
   }
  ],
- "current": 2
+ "current": 3
 }

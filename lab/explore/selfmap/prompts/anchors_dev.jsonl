@@ -1,0 +1,354 @@
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/0/one", "item": "one", "referent": null, "split": "dev", "template": 0, "text": "The meeting started at one o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/0/two", "item": "two", "referent": null, "split": "dev", "template": 0, "text": "The meeting started at two o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/0/three", "item": "three", "referent": null, "split": "dev", "template": 0, "text": "The meeting started at three o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/0/four", "item": "four", "referent": null, "split": "dev", "template": 0, "text": "The meeting started at four o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/0/five", "item": "five", "referent": null, "split": "dev", "template": 0, "text": "The meeting started at five o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/0/six", "item": "six", "referent": null, "split": "dev", "template": 0, "text": "The meeting started at six o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/0/seven", "item": "seven", "referent": null, "split": "dev", "template": 0, "text": "The meeting started at seven o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/0/eight", "item": "eight", "referent": null, "split": "dev", "template": 0, "text": "The meeting started at eight o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/0/nine", "item": "nine", "referent": null, "split": "dev", "template": 0, "text": "The meeting started at nine o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/0/ten", "item": "ten", "referent": null, "split": "dev", "template": 0, "text": "The meeting started at ten o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/0/eleven", "item": "eleven", "referent": null, "split": "dev", "template": 0, "text": "The meeting started at eleven o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/0/twelve", "item": "twelve", "referent": null, "split": "dev", "template": 0, "text": "The meeting started at twelve o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/1/one", "item": "one", "referent": null, "split": "dev", "template": 1, "text": "The bells rang at one o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/1/two", "item": "two", "referent": null, "split": "dev", "template": 1, "text": "The bells rang at two o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/1/three", "item": "three", "referent": null, "split": "dev", "template": 1, "text": "The bells rang at three o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/1/four", "item": "four", "referent": null, "split": "dev", "template": 1, "text": "The bells rang at four o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/1/five", "item": "five", "referent": null, "split": "dev", "template": 1, "text": "The bells rang at five o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/1/six", "item": "six", "referent": null, "split": "dev", "template": 1, "text": "The bells rang at six o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/1/seven", "item": "seven", "referent": null, "split": "dev", "template": 1, "text": "The bells rang at seven o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/1/eight", "item": "eight", "referent": null, "split": "dev", "template": 1, "text": "The bells rang at eight o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/1/nine", "item": "nine", "referent": null, "split": "dev", "template": 1, "text": "The bells rang at nine o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/1/ten", "item": "ten", "referent": null, "split": "dev", "template": 1, "text": "The bells rang at ten o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/1/eleven", "item": "eleven", "referent": null, "split": "dev", "template": 1, "text": "The bells rang at eleven o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/1/twelve", "item": "twelve", "referent": null, "split": "dev", "template": 1, "text": "The bells rang at twelve o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/3/one", "item": "one", "referent": null, "split": "dev", "template": 3, "text": "The train left at one o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/3/two", "item": "two", "referent": null, "split": "dev", "template": 3, "text": "The train left at two o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/3/three", "item": "three", "referent": null, "split": "dev", "template": 3, "text": "The train left at three o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/3/four", "item": "four", "referent": null, "split": "dev", "template": 3, "text": "The train left at four o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/3/five", "item": "five", "referent": null, "split": "dev", "template": 3, "text": "The train left at five o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/3/six", "item": "six", "referent": null, "split": "dev", "template": 3, "text": "The train left at six o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/3/seven", "item": "seven", "referent": null, "split": "dev", "template": 3, "text": "The train left at seven o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/3/eight", "item": "eight", "referent": null, "split": "dev", "template": 3, "text": "The train left at eight o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/3/nine", "item": "nine", "referent": null, "split": "dev", "template": 3, "text": "The train left at nine o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/3/ten", "item": "ten", "referent": null, "split": "dev", "template": 3, "text": "The train left at ten o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/3/eleven", "item": "eleven", "referent": null, "split": "dev", "template": 3, "text": "The train left at eleven o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/3/twelve", "item": "twelve", "referent": null, "split": "dev", "template": 3, "text": "The train left at twelve o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/5/one", "item": "one", "referent": null, "split": "dev", "template": 5, "text": "The clock struck one."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/5/two", "item": "two", "referent": null, "split": "dev", "template": 5, "text": "The clock struck two."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/5/three", "item": "three", "referent": null, "split": "dev", "template": 5, "text": "The clock struck three."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/5/four", "item": "four", "referent": null, "split": "dev", "template": 5, "text": "The clock struck four."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/5/five", "item": "five", "referent": null, "split": "dev", "template": 5, "text": "The clock struck five."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/5/six", "item": "six", "referent": null, "split": "dev", "template": 5, "text": "The clock struck six."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/5/seven", "item": "seven", "referent": null, "split": "dev", "template": 5, "text": "The clock struck seven."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/5/eight", "item": "eight", "referent": null, "split": "dev", "template": 5, "text": "The clock struck eight."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/5/nine", "item": "nine", "referent": null, "split": "dev", "template": 5, "text": "The clock struck nine."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/5/ten", "item": "ten", "referent": null, "split": "dev", "template": 5, "text": "The clock struck ten."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/5/eleven", "item": "eleven", "referent": null, "split": "dev", "template": 5, "text": "The clock struck eleven."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/5/twelve", "item": "twelve", "referent": null, "split": "dev", "template": 5, "text": "The clock struck twelve."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/6/one", "item": "one", "referent": null, "split": "dev", "template": 6, "text": "The bakery opened at one o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/6/two", "item": "two", "referent": null, "split": "dev", "template": 6, "text": "The bakery opened at two o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/6/three", "item": "three", "referent": null, "split": "dev", "template": 6, "text": "The bakery opened at three o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/6/four", "item": "four", "referent": null, "split": "dev", "template": 6, "text": "The bakery opened at four o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/6/five", "item": "five", "referent": null, "split": "dev", "template": 6, "text": "The bakery opened at five o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/6/six", "item": "six", "referent": null, "split": "dev", "template": 6, "text": "The bakery opened at six o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/6/seven", "item": "seven", "referent": null, "split": "dev", "template": 6, "text": "The bakery opened at seven o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/6/eight", "item": "eight", "referent": null, "split": "dev", "template": 6, "text": "The bakery opened at eight o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/6/nine", "item": "nine", "referent": null, "split": "dev", "template": 6, "text": "The bakery opened at nine o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/6/ten", "item": "ten", "referent": null, "split": "dev", "template": 6, "text": "The bakery opened at ten o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/6/eleven", "item": "eleven", "referent": null, "split": "dev", "template": 6, "text": "The bakery opened at eleven o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/6/twelve", "item": "twelve", "referent": null, "split": "dev", "template": 6, "text": "The bakery opened at twelve o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/7/one", "item": "one", "referent": null, "split": "dev", "template": 7, "text": "She woke up at one o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/7/two", "item": "two", "referent": null, "split": "dev", "template": 7, "text": "She woke up at two o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/7/three", "item": "three", "referent": null, "split": "dev", "template": 7, "text": "She woke up at three o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/7/four", "item": "four", "referent": null, "split": "dev", "template": 7, "text": "She woke up at four o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/7/five", "item": "five", "referent": null, "split": "dev", "template": 7, "text": "She woke up at five o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/7/six", "item": "six", "referent": null, "split": "dev", "template": 7, "text": "She woke up at six o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/7/seven", "item": "seven", "referent": null, "split": "dev", "template": 7, "text": "She woke up at seven o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/7/eight", "item": "eight", "referent": null, "split": "dev", "template": 7, "text": "She woke up at eight o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/7/nine", "item": "nine", "referent": null, "split": "dev", "template": 7, "text": "She woke up at nine o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/7/ten", "item": "ten", "referent": null, "split": "dev", "template": 7, "text": "She woke up at ten o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/7/eleven", "item": "eleven", "referent": null, "split": "dev", "template": 7, "text": "She woke up at eleven o'clock."}
+{"aspect": "hours", "family": "anchors2", "id": "anchors2/hours/7/twelve", "item": "twelve", "referent": null, "split": "dev", "template": 7, "text": "She woke up at twelve o'clock."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/2/first", "item": "first", "referent": null, "split": "dev", "template": 2, "text": "The answer was on the first page."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/2/second", "item": "second", "referent": null, "split": "dev", "template": 2, "text": "The answer was on the second page."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/2/third", "item": "third", "referent": null, "split": "dev", "template": 2, "text": "The answer was on the third page."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/2/fourth", "item": "fourth", "referent": null, "split": "dev", "template": 2, "text": "The answer was on the fourth page."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/2/fifth", "item": "fifth", "referent": null, "split": "dev", "template": 2, "text": "The answer was on the fifth page."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/2/sixth", "item": "sixth", "referent": null, "split": "dev", "template": 2, "text": "The answer was on the sixth page."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/2/seventh", "item": "seventh", "referent": null, "split": "dev", "template": 2, "text": "The answer was on the seventh page."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/2/eighth", "item": "eighth", "referent": null, "split": "dev", "template": 2, "text": "The answer was on the eighth page."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/2/ninth", "item": "ninth", "referent": null, "split": "dev", "template": 2, "text": "The answer was on the ninth page."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/2/tenth", "item": "tenth", "referent": null, "split": "dev", "template": 2, "text": "The answer was on the tenth page."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/2/eleventh", "item": "eleventh", "referent": null, "split": "dev", "template": 2, "text": "The answer was on the eleventh page."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/2/twelfth", "item": "twelfth", "referent": null, "split": "dev", "template": 2, "text": "The answer was on the twelfth page."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/3/first", "item": "first", "referent": null, "split": "dev", "template": 3, "text": "He sat in the first row."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/3/second", "item": "second", "referent": null, "split": "dev", "template": 3, "text": "He sat in the second row."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/3/third", "item": "third", "referent": null, "split": "dev", "template": 3, "text": "He sat in the third row."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/3/fourth", "item": "fourth", "referent": null, "split": "dev", "template": 3, "text": "He sat in the fourth row."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/3/fifth", "item": "fifth", "referent": null, "split": "dev", "template": 3, "text": "He sat in the fifth row."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/3/sixth", "item": "sixth", "referent": null, "split": "dev", "template": 3, "text": "He sat in the sixth row."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/3/seventh", "item": "seventh", "referent": null, "split": "dev", "template": 3, "text": "He sat in the seventh row."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/3/eighth", "item": "eighth", "referent": null, "split": "dev", "template": 3, "text": "He sat in the eighth row."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/3/ninth", "item": "ninth", "referent": null, "split": "dev", "template": 3, "text": "He sat in the ninth row."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/3/tenth", "item": "tenth", "referent": null, "split": "dev", "template": 3, "text": "He sat in the tenth row."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/3/eleventh", "item": "eleventh", "referent": null, "split": "dev", "template": 3, "text": "He sat in the eleventh row."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/3/twelfth", "item": "twelfth", "referent": null, "split": "dev", "template": 3, "text": "He sat in the twelfth row."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/4/first", "item": "first", "referent": null, "split": "dev", "template": 4, "text": "This was their first attempt."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/4/second", "item": "second", "referent": null, "split": "dev", "template": 4, "text": "This was their second attempt."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/4/third", "item": "third", "referent": null, "split": "dev", "template": 4, "text": "This was their third attempt."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/4/fourth", "item": "fourth", "referent": null, "split": "dev", "template": 4, "text": "This was their fourth attempt."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/4/fifth", "item": "fifth", "referent": null, "split": "dev", "template": 4, "text": "This was their fifth attempt."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/4/sixth", "item": "sixth", "referent": null, "split": "dev", "template": 4, "text": "This was their sixth attempt."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/4/seventh", "item": "seventh", "referent": null, "split": "dev", "template": 4, "text": "This was their seventh attempt."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/4/eighth", "item": "eighth", "referent": null, "split": "dev", "template": 4, "text": "This was their eighth attempt."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/4/ninth", "item": "ninth", "referent": null, "split": "dev", "template": 4, "text": "This was their ninth attempt."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/4/tenth", "item": "tenth", "referent": null, "split": "dev", "template": 4, "text": "This was their tenth attempt."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/4/eleventh", "item": "eleventh", "referent": null, "split": "dev", "template": 4, "text": "This was their eleventh attempt."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/4/twelfth", "item": "twelfth", "referent": null, "split": "dev", "template": 4, "text": "This was their twelfth attempt."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/5/first", "item": "first", "referent": null, "split": "dev", "template": 5, "text": "The first chapter was the longest."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/5/second", "item": "second", "referent": null, "split": "dev", "template": 5, "text": "The second chapter was the longest."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/5/third", "item": "third", "referent": null, "split": "dev", "template": 5, "text": "The third chapter was the longest."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/5/fourth", "item": "fourth", "referent": null, "split": "dev", "template": 5, "text": "The fourth chapter was the longest."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/5/fifth", "item": "fifth", "referent": null, "split": "dev", "template": 5, "text": "The fifth chapter was the longest."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/5/sixth", "item": "sixth", "referent": null, "split": "dev", "template": 5, "text": "The sixth chapter was the longest."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/5/seventh", "item": "seventh", "referent": null, "split": "dev", "template": 5, "text": "The seventh chapter was the longest."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/5/eighth", "item": "eighth", "referent": null, "split": "dev", "template": 5, "text": "The eighth chapter was the longest."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/5/ninth", "item": "ninth", "referent": null, "split": "dev", "template": 5, "text": "The ninth chapter was the longest."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/5/tenth", "item": "tenth", "referent": null, "split": "dev", "template": 5, "text": "The tenth chapter was the longest."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/5/eleventh", "item": "eleventh", "referent": null, "split": "dev", "template": 5, "text": "The eleventh chapter was the longest."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/5/twelfth", "item": "twelfth", "referent": null, "split": "dev", "template": 5, "text": "The twelfth chapter was the longest."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/7/first", "item": "first", "referent": null, "split": "dev", "template": 7, "text": "The first song on the album was quiet."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/7/second", "item": "second", "referent": null, "split": "dev", "template": 7, "text": "The second song on the album was quiet."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/7/third", "item": "third", "referent": null, "split": "dev", "template": 7, "text": "The third song on the album was quiet."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/7/fourth", "item": "fourth", "referent": null, "split": "dev", "template": 7, "text": "The fourth song on the album was quiet."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/7/fifth", "item": "fifth", "referent": null, "split": "dev", "template": 7, "text": "The fifth song on the album was quiet."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/7/sixth", "item": "sixth", "referent": null, "split": "dev", "template": 7, "text": "The sixth song on the album was quiet."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/7/seventh", "item": "seventh", "referent": null, "split": "dev", "template": 7, "text": "The seventh song on the album was quiet."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/7/eighth", "item": "eighth", "referent": null, "split": "dev", "template": 7, "text": "The eighth song on the album was quiet."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/7/ninth", "item": "ninth", "referent": null, "split": "dev", "template": 7, "text": "The ninth song on the album was quiet."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/7/tenth", "item": "tenth", "referent": null, "split": "dev", "template": 7, "text": "The tenth song on the album was quiet."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/7/eleventh", "item": "eleventh", "referent": null, "split": "dev", "template": 7, "text": "The eleventh song on the album was quiet."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/7/twelfth", "item": "twelfth", "referent": null, "split": "dev", "template": 7, "text": "The twelfth song on the album was quiet."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/8/first", "item": "first", "referent": null, "split": "dev", "template": 8, "text": "Take the first turn after the bridge."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/8/second", "item": "second", "referent": null, "split": "dev", "template": 8, "text": "Take the second turn after the bridge."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/8/third", "item": "third", "referent": null, "split": "dev", "template": 8, "text": "Take the third turn after the bridge."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/8/fourth", "item": "fourth", "referent": null, "split": "dev", "template": 8, "text": "Take the fourth turn after the bridge."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/8/fifth", "item": "fifth", "referent": null, "split": "dev", "template": 8, "text": "Take the fifth turn after the bridge."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/8/sixth", "item": "sixth", "referent": null, "split": "dev", "template": 8, "text": "Take the sixth turn after the bridge."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/8/seventh", "item": "seventh", "referent": null, "split": "dev", "template": 8, "text": "Take the seventh turn after the bridge."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/8/eighth", "item": "eighth", "referent": null, "split": "dev", "template": 8, "text": "Take the eighth turn after the bridge."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/8/ninth", "item": "ninth", "referent": null, "split": "dev", "template": 8, "text": "Take the ninth turn after the bridge."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/8/tenth", "item": "tenth", "referent": null, "split": "dev", "template": 8, "text": "Take the tenth turn after the bridge."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/8/eleventh", "item": "eleventh", "referent": null, "split": "dev", "template": 8, "text": "Take the eleventh turn after the bridge."}
+{"aspect": "ordinals", "family": "anchors2", "id": "anchors2/ordinals/8/twelfth", "item": "twelfth", "referent": null, "split": "dev", "template": 8, "text": "Take the twelfth turn after the bridge."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/0/red", "item": "red", "referent": null, "split": "dev", "template": 0, "text": "The door was painted red."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/0/orange", "item": "orange", "referent": null, "split": "dev", "template": 0, "text": "The door was painted orange."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/0/yellow", "item": "yellow", "referent": null, "split": "dev", "template": 0, "text": "The door was painted yellow."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/0/green", "item": "green", "referent": null, "split": "dev", "template": 0, "text": "The door was painted green."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/0/blue", "item": "blue", "referent": null, "split": "dev", "template": 0, "text": "The door was painted blue."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/0/purple", "item": "purple", "referent": null, "split": "dev", "template": 0, "text": "The door was painted purple."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/0/pink", "item": "pink", "referent": null, "split": "dev", "template": 0, "text": "The door was painted pink."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/0/brown", "item": "brown", "referent": null, "split": "dev", "template": 0, "text": "The door was painted brown."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/0/black", "item": "black", "referent": null, "split": "dev", "template": 0, "text": "The door was painted black."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/0/white", "item": "white", "referent": null, "split": "dev", "template": 0, "text": "The door was painted white."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/0/grey", "item": "grey", "referent": null, "split": "dev", "template": 0, "text": "The door was painted grey."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/1/red", "item": "red", "referent": null, "split": "dev", "template": 1, "text": "She bought a red scarf."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/1/orange", "item": "orange", "referent": null, "split": "dev", "template": 1, "text": "She bought a orange scarf."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/1/yellow", "item": "yellow", "referent": null, "split": "dev", "template": 1, "text": "She bought a yellow scarf."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/1/green", "item": "green", "referent": null, "split": "dev", "template": 1, "text": "She bought a green scarf."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/1/blue", "item": "blue", "referent": null, "split": "dev", "template": 1, "text": "She bought a blue scarf."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/1/purple", "item": "purple", "referent": null, "split": "dev", "template": 1, "text": "She bought a purple scarf."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/1/pink", "item": "pink", "referent": null, "split": "dev", "template": 1, "text": "She bought a pink scarf."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/1/brown", "item": "brown", "referent": null, "split": "dev", "template": 1, "text": "She bought a brown scarf."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/1/black", "item": "black", "referent": null, "split": "dev", "template": 1, "text": "She bought a black scarf."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/1/white", "item": "white", "referent": null, "split": "dev", "template": 1, "text": "She bought a white scarf."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/1/grey", "item": "grey", "referent": null, "split": "dev", "template": 1, "text": "She bought a grey scarf."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/2/red", "item": "red", "referent": null, "split": "dev", "template": 2, "text": "The sky turned red at dusk."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/2/orange", "item": "orange", "referent": null, "split": "dev", "template": 2, "text": "The sky turned orange at dusk."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/2/yellow", "item": "yellow", "referent": null, "split": "dev", "template": 2, "text": "The sky turned yellow at dusk."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/2/green", "item": "green", "referent": null, "split": "dev", "template": 2, "text": "The sky turned green at dusk."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/2/blue", "item": "blue", "referent": null, "split": "dev", "template": 2, "text": "The sky turned blue at dusk."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/2/purple", "item": "purple", "referent": null, "split": "dev", "template": 2, "text": "The sky turned purple at dusk."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/2/pink", "item": "pink", "referent": null, "split": "dev", "template": 2, "text": "The sky turned pink at dusk."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/2/brown", "item": "brown", "referent": null, "split": "dev", "template": 2, "text": "The sky turned brown at dusk."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/2/black", "item": "black", "referent": null, "split": "dev", "template": 2, "text": "The sky turned black at dusk."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/2/white", "item": "white", "referent": null, "split": "dev", "template": 2, "text": "The sky turned white at dusk."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/2/grey", "item": "grey", "referent": null, "split": "dev", "template": 2, "text": "The sky turned grey at dusk."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/4/red", "item": "red", "referent": null, "split": "dev", "template": 4, "text": "He chose the red folder."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/4/orange", "item": "orange", "referent": null, "split": "dev", "template": 4, "text": "He chose the orange folder."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/4/yellow", "item": "yellow", "referent": null, "split": "dev", "template": 4, "text": "He chose the yellow folder."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/4/green", "item": "green", "referent": null, "split": "dev", "template": 4, "text": "He chose the green folder."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/4/blue", "item": "blue", "referent": null, "split": "dev", "template": 4, "text": "He chose the blue folder."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/4/purple", "item": "purple", "referent": null, "split": "dev", "template": 4, "text": "He chose the purple folder."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/4/pink", "item": "pink", "referent": null, "split": "dev", "template": 4, "text": "He chose the pink folder."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/4/brown", "item": "brown", "referent": null, "split": "dev", "template": 4, "text": "He chose the brown folder."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/4/black", "item": "black", "referent": null, "split": "dev", "template": 4, "text": "He chose the black folder."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/4/white", "item": "white", "referent": null, "split": "dev", "template": 4, "text": "He chose the white folder."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/4/grey", "item": "grey", "referent": null, "split": "dev", "template": 4, "text": "He chose the grey folder."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/6/red", "item": "red", "referent": null, "split": "dev", "template": 6, "text": "A red bird landed on the fence."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/6/orange", "item": "orange", "referent": null, "split": "dev", "template": 6, "text": "A orange bird landed on the fence."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/6/yellow", "item": "yellow", "referent": null, "split": "dev", "template": 6, "text": "A yellow bird landed on the fence."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/6/green", "item": "green", "referent": null, "split": "dev", "template": 6, "text": "A green bird landed on the fence."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/6/blue", "item": "blue", "referent": null, "split": "dev", "template": 6, "text": "A blue bird landed on the fence."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/6/purple", "item": "purple", "referent": null, "split": "dev", "template": 6, "text": "A purple bird landed on the fence."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/6/pink", "item": "pink", "referent": null, "split": "dev", "template": 6, "text": "A pink bird landed on the fence."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/6/brown", "item": "brown", "referent": null, "split": "dev", "template": 6, "text": "A brown bird landed on the fence."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/6/black", "item": "black", "referent": null, "split": "dev", "template": 6, "text": "A black bird landed on the fence."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/6/white", "item": "white", "referent": null, "split": "dev", "template": 6, "text": "A white bird landed on the fence."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/6/grey", "item": "grey", "referent": null, "split": "dev", "template": 6, "text": "A grey bird landed on the fence."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/7/red", "item": "red", "referent": null, "split": "dev", "template": 7, "text": "The label on the jar was red."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/7/orange", "item": "orange", "referent": null, "split": "dev", "template": 7, "text": "The label on the jar was orange."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/7/yellow", "item": "yellow", "referent": null, "split": "dev", "template": 7, "text": "The label on the jar was yellow."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/7/green", "item": "green", "referent": null, "split": "dev", "template": 7, "text": "The label on the jar was green."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/7/blue", "item": "blue", "referent": null, "split": "dev", "template": 7, "text": "The label on the jar was blue."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/7/purple", "item": "purple", "referent": null, "split": "dev", "template": 7, "text": "The label on the jar was purple."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/7/pink", "item": "pink", "referent": null, "split": "dev", "template": 7, "text": "The label on the jar was pink."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/7/brown", "item": "brown", "referent": null, "split": "dev", "template": 7, "text": "The label on the jar was brown."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/7/black", "item": "black", "referent": null, "split": "dev", "template": 7, "text": "The label on the jar was black."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/7/white", "item": "white", "referent": null, "split": "dev", "template": 7, "text": "The label on the jar was white."}
+{"aspect": "colours", "family": "anchors2", "id": "anchors2/colours/7/grey", "item": "grey", "referent": null, "split": "dev", "template": 7, "text": "The label on the jar was grey."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/0/Paris", "item": "Paris", "referent": null, "split": "dev", "template": 0, "text": "The conference was held in Paris."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/0/London", "item": "London", "referent": null, "split": "dev", "template": 0, "text": "The conference was held in London."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/0/Tokyo", "item": "Tokyo", "referent": null, "split": "dev", "template": 0, "text": "The conference was held in Tokyo."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/0/Cairo", "item": "Cairo", "referent": null, "split": "dev", "template": 0, "text": "The conference was held in Cairo."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/0/Lima", "item": "Lima", "referent": null, "split": "dev", "template": 0, "text": "The conference was held in Lima."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/0/Sydney", "item": "Sydney", "referent": null, "split": "dev", "template": 0, "text": "The conference was held in Sydney."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/0/Moscow", "item": "Moscow", "referent": null, "split": "dev", "template": 0, "text": "The conference was held in Moscow."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/0/Toronto", "item": "Toronto", "referent": null, "split": "dev", "template": 0, "text": "The conference was held in Toronto."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/0/Mumbai", "item": "Mumbai", "referent": null, "split": "dev", "template": 0, "text": "The conference was held in Mumbai."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/0/Nairobi", "item": "Nairobi", "referent": null, "split": "dev", "template": 0, "text": "The conference was held in Nairobi."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/0/Berlin", "item": "Berlin", "referent": null, "split": "dev", "template": 0, "text": "The conference was held in Berlin."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/0/Beijing", "item": "Beijing", "referent": null, "split": "dev", "template": 0, "text": "The conference was held in Beijing."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/1/Paris", "item": "Paris", "referent": null, "split": "dev", "template": 1, "text": "The flight to Paris was delayed."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/1/London", "item": "London", "referent": null, "split": "dev", "template": 1, "text": "The flight to London was delayed."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/1/Tokyo", "item": "Tokyo", "referent": null, "split": "dev", "template": 1, "text": "The flight to Tokyo was delayed."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/1/Cairo", "item": "Cairo", "referent": null, "split": "dev", "template": 1, "text": "The flight to Cairo was delayed."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/1/Lima", "item": "Lima", "referent": null, "split": "dev", "template": 1, "text": "The flight to Lima was delayed."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/1/Sydney", "item": "Sydney", "referent": null, "split": "dev", "template": 1, "text": "The flight to Sydney was delayed."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/1/Moscow", "item": "Moscow", "referent": null, "split": "dev", "template": 1, "text": "The flight to Moscow was delayed."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/1/Toronto", "item": "Toronto", "referent": null, "split": "dev", "template": 1, "text": "The flight to Toronto was delayed."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/1/Mumbai", "item": "Mumbai", "referent": null, "split": "dev", "template": 1, "text": "The flight to Mumbai was delayed."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/1/Nairobi", "item": "Nairobi", "referent": null, "split": "dev", "template": 1, "text": "The flight to Nairobi was delayed."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/1/Berlin", "item": "Berlin", "referent": null, "split": "dev", "template": 1, "text": "The flight to Berlin was delayed."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/1/Beijing", "item": "Beijing", "referent": null, "split": "dev", "template": 1, "text": "The flight to Beijing was delayed."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/2/Paris", "item": "Paris", "referent": null, "split": "dev", "template": 2, "text": "They lived in Paris for many years."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/2/London", "item": "London", "referent": null, "split": "dev", "template": 2, "text": "They lived in London for many years."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/2/Tokyo", "item": "Tokyo", "referent": null, "split": "dev", "template": 2, "text": "They lived in Tokyo for many years."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/2/Cairo", "item": "Cairo", "referent": null, "split": "dev", "template": 2, "text": "They lived in Cairo for many years."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/2/Lima", "item": "Lima", "referent": null, "split": "dev", "template": 2, "text": "They lived in Lima for many years."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/2/Sydney", "item": "Sydney", "referent": null, "split": "dev", "template": 2, "text": "They lived in Sydney for many years."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/2/Moscow", "item": "Moscow", "referent": null, "split": "dev", "template": 2, "text": "They lived in Moscow for many years."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/2/Toronto", "item": "Toronto", "referent": null, "split": "dev", "template": 2, "text": "They lived in Toronto for many years."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/2/Mumbai", "item": "Mumbai", "referent": null, "split": "dev", "template": 2, "text": "They lived in Mumbai for many years."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/2/Nairobi", "item": "Nairobi", "referent": null, "split": "dev", "template": 2, "text": "They lived in Nairobi for many years."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/2/Berlin", "item": "Berlin", "referent": null, "split": "dev", "template": 2, "text": "They lived in Berlin for many years."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/2/Beijing", "item": "Beijing", "referent": null, "split": "dev", "template": 2, "text": "They lived in Beijing for many years."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/5/Paris", "item": "Paris", "referent": null, "split": "dev", "template": 5, "text": "He took the night train to Paris."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/5/London", "item": "London", "referent": null, "split": "dev", "template": 5, "text": "He took the night train to London."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/5/Tokyo", "item": "Tokyo", "referent": null, "split": "dev", "template": 5, "text": "He took the night train to Tokyo."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/5/Cairo", "item": "Cairo", "referent": null, "split": "dev", "template": 5, "text": "He took the night train to Cairo."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/5/Lima", "item": "Lima", "referent": null, "split": "dev", "template": 5, "text": "He took the night train to Lima."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/5/Sydney", "item": "Sydney", "referent": null, "split": "dev", "template": 5, "text": "He took the night train to Sydney."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/5/Moscow", "item": "Moscow", "referent": null, "split": "dev", "template": 5, "text": "He took the night train to Moscow."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/5/Toronto", "item": "Toronto", "referent": null, "split": "dev", "template": 5, "text": "He took the night train to Toronto."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/5/Mumbai", "item": "Mumbai", "referent": null, "split": "dev", "template": 5, "text": "He took the night train to Mumbai."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/5/Nairobi", "item": "Nairobi", "referent": null, "split": "dev", "template": 5, "text": "He took the night train to Nairobi."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/5/Berlin", "item": "Berlin", "referent": null, "split": "dev", "template": 5, "text": "He took the night train to Berlin."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/5/Beijing", "item": "Beijing", "referent": null, "split": "dev", "template": 5, "text": "He took the night train to Beijing."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/7/Paris", "item": "Paris", "referent": null, "split": "dev", "template": 7, "text": "The team flew home from Paris."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/7/London", "item": "London", "referent": null, "split": "dev", "template": 7, "text": "The team flew home from London."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/7/Tokyo", "item": "Tokyo", "referent": null, "split": "dev", "template": 7, "text": "The team flew home from Tokyo."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/7/Cairo", "item": "Cairo", "referent": null, "split": "dev", "template": 7, "text": "The team flew home from Cairo."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/7/Lima", "item": "Lima", "referent": null, "split": "dev", "template": 7, "text": "The team flew home from Lima."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/7/Sydney", "item": "Sydney", "referent": null, "split": "dev", "template": 7, "text": "The team flew home from Sydney."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/7/Moscow", "item": "Moscow", "referent": null, "split": "dev", "template": 7, "text": "The team flew home from Moscow."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/7/Toronto", "item": "Toronto", "referent": null, "split": "dev", "template": 7, "text": "The team flew home from Toronto."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/7/Mumbai", "item": "Mumbai", "referent": null, "split": "dev", "template": 7, "text": "The team flew home from Mumbai."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/7/Nairobi", "item": "Nairobi", "referent": null, "split": "dev", "template": 7, "text": "The team flew home from Nairobi."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/7/Berlin", "item": "Berlin", "referent": null, "split": "dev", "template": 7, "text": "The team flew home from Berlin."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/7/Beijing", "item": "Beijing", "referent": null, "split": "dev", "template": 7, "text": "The team flew home from Beijing."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/8/Paris", "item": "Paris", "referent": null, "split": "dev", "template": 8, "text": "A new bridge was built in Paris."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/8/London", "item": "London", "referent": null, "split": "dev", "template": 8, "text": "A new bridge was built in London."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/8/Tokyo", "item": "Tokyo", "referent": null, "split": "dev", "template": 8, "text": "A new bridge was built in Tokyo."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/8/Cairo", "item": "Cairo", "referent": null, "split": "dev", "template": 8, "text": "A new bridge was built in Cairo."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/8/Lima", "item": "Lima", "referent": null, "split": "dev", "template": 8, "text": "A new bridge was built in Lima."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/8/Sydney", "item": "Sydney", "referent": null, "split": "dev", "template": 8, "text": "A new bridge was built in Sydney."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/8/Moscow", "item": "Moscow", "referent": null, "split": "dev", "template": 8, "text": "A new bridge was built in Moscow."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/8/Toronto", "item": "Toronto", "referent": null, "split": "dev", "template": 8, "text": "A new bridge was built in Toronto."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/8/Mumbai", "item": "Mumbai", "referent": null, "split": "dev", "template": 8, "text": "A new bridge was built in Mumbai."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/8/Nairobi", "item": "Nairobi", "referent": null, "split": "dev", "template": 8, "text": "A new bridge was built in Nairobi."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/8/Berlin", "item": "Berlin", "referent": null, "split": "dev", "template": 8, "text": "A new bridge was built in Berlin."}
+{"aspect": "cities", "family": "anchors2", "id": "anchors2/cities/8/Beijing", "item": "Beijing", "referent": null, "split": "dev", "template": 8, "text": "A new bridge was built in Beijing."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/0/dog", "item": "dog", "referent": null, "split": "dev", "template": 0, "text": "A dog crossed the road."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/0/cat", "item": "cat", "referent": null, "split": "dev", "template": 0, "text": "A cat crossed the road."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/0/horse", "item": "horse", "referent": null, "split": "dev", "template": 0, "text": "A horse crossed the road."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/0/cow", "item": "cow", "referent": null, "split": "dev", "template": 0, "text": "A cow crossed the road."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/0/lion", "item": "lion", "referent": null, "split": "dev", "template": 0, "text": "A lion crossed the road."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/0/eagle", "item": "eagle", "referent": null, "split": "dev", "template": 0, "text": "A eagle crossed the road."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/0/shark", "item": "shark", "referent": null, "split": "dev", "template": 0, "text": "A shark crossed the road."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/0/frog", "item": "frog", "referent": null, "split": "dev", "template": 0, "text": "A frog crossed the road."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/0/mouse", "item": "mouse", "referent": null, "split": "dev", "template": 0, "text": "A mouse crossed the road."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/0/bear", "item": "bear", "referent": null, "split": "dev", "template": 0, "text": "A bear crossed the road."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/0/snake", "item": "snake", "referent": null, "split": "dev", "template": 0, "text": "A snake crossed the road."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/0/owl", "item": "owl", "referent": null, "split": "dev", "template": 0, "text": "A owl crossed the road."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/1/dog", "item": "dog", "referent": null, "split": "dev", "template": 1, "text": "The children drew a dog."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/1/cat", "item": "cat", "referent": null, "split": "dev", "template": 1, "text": "The children drew a cat."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/1/horse", "item": "horse", "referent": null, "split": "dev", "template": 1, "text": "The children drew a horse."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/1/cow", "item": "cow", "referent": null, "split": "dev", "template": 1, "text": "The children drew a cow."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/1/lion", "item": "lion", "referent": null, "split": "dev", "template": 1, "text": "The children drew a lion."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/1/eagle", "item": "eagle", "referent": null, "split": "dev", "template": 1, "text": "The children drew a eagle."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/1/shark", "item": "shark", "referent": null, "split": "dev", "template": 1, "text": "The children drew a shark."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/1/frog", "item": "frog", "referent": null, "split": "dev", "template": 1, "text": "The children drew a frog."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/1/mouse", "item": "mouse", "referent": null, "split": "dev", "template": 1, "text": "The children drew a mouse."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/1/bear", "item": "bear", "referent": null, "split": "dev", "template": 1, "text": "The children drew a bear."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/1/snake", "item": "snake", "referent": null, "split": "dev", "template": 1, "text": "The children drew a snake."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/1/owl", "item": "owl", "referent": null, "split": "dev", "template": 1, "text": "The children drew a owl."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/2/dog", "item": "dog", "referent": null, "split": "dev", "template": 2, "text": "There was a dog in the photograph."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/2/cat", "item": "cat", "referent": null, "split": "dev", "template": 2, "text": "There was a cat in the photograph."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/2/horse", "item": "horse", "referent": null, "split": "dev", "template": 2, "text": "There was a horse in the photograph."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/2/cow", "item": "cow", "referent": null, "split": "dev", "template": 2, "text": "There was a cow in the photograph."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/2/lion", "item": "lion", "referent": null, "split": "dev", "template": 2, "text": "There was a lion in the photograph."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/2/eagle", "item": "eagle", "referent": null, "split": "dev", "template": 2, "text": "There was a eagle in the photograph."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/2/shark", "item": "shark", "referent": null, "split": "dev", "template": 2, "text": "There was a shark in the photograph."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/2/frog", "item": "frog", "referent": null, "split": "dev", "template": 2, "text": "There was a frog in the photograph."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/2/mouse", "item": "mouse", "referent": null, "split": "dev", "template": 2, "text": "There was a mouse in the photograph."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/2/bear", "item": "bear", "referent": null, "split": "dev", "template": 2, "text": "There was a bear in the photograph."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/2/snake", "item": "snake", "referent": null, "split": "dev", "template": 2, "text": "There was a snake in the photograph."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/2/owl", "item": "owl", "referent": null, "split": "dev", "template": 2, "text": "There was a owl in the photograph."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/3/dog", "item": "dog", "referent": null, "split": "dev", "template": 3, "text": "The book was about a dog."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/3/cat", "item": "cat", "referent": null, "split": "dev", "template": 3, "text": "The book was about a cat."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/3/horse", "item": "horse", "referent": null, "split": "dev", "template": 3, "text": "The book was about a horse."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/3/cow", "item": "cow", "referent": null, "split": "dev", "template": 3, "text": "The book was about a cow."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/3/lion", "item": "lion", "referent": null, "split": "dev", "template": 3, "text": "The book was about a lion."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/3/eagle", "item": "eagle", "referent": null, "split": "dev", "template": 3, "text": "The book was about a eagle."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/3/shark", "item": "shark", "referent": null, "split": "dev", "template": 3, "text": "The book was about a shark."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/3/frog", "item": "frog", "referent": null, "split": "dev", "template": 3, "text": "The book was about a frog."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/3/mouse", "item": "mouse", "referent": null, "split": "dev", "template": 3, "text": "The book was about a mouse."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/3/bear", "item": "bear", "referent": null, "split": "dev", "template": 3, "text": "The book was about a bear."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/3/snake", "item": "snake", "referent": null, "split": "dev", "template": 3, "text": "The book was about a snake."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/3/owl", "item": "owl", "referent": null, "split": "dev", "template": 3, "text": "The book was about a owl."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/5/dog", "item": "dog", "referent": null, "split": "dev", "template": 5, "text": "The statue showed a dog."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/5/cat", "item": "cat", "referent": null, "split": "dev", "template": 5, "text": "The statue showed a cat."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/5/horse", "item": "horse", "referent": null, "split": "dev", "template": 5, "text": "The statue showed a horse."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/5/cow", "item": "cow", "referent": null, "split": "dev", "template": 5, "text": "The statue showed a cow."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/5/lion", "item": "lion", "referent": null, "split": "dev", "template": 5, "text": "The statue showed a lion."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/5/eagle", "item": "eagle", "referent": null, "split": "dev", "template": 5, "text": "The statue showed a eagle."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/5/shark", "item": "shark", "referent": null, "split": "dev", "template": 5, "text": "The statue showed a shark."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/5/frog", "item": "frog", "referent": null, "split": "dev", "template": 5, "text": "The statue showed a frog."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/5/mouse", "item": "mouse", "referent": null, "split": "dev", "template": 5, "text": "The statue showed a mouse."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/5/bear", "item": "bear", "referent": null, "split": "dev", "template": 5, "text": "The statue showed a bear."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/5/snake", "item": "snake", "referent": null, "split": "dev", "template": 5, "text": "The statue showed a snake."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/5/owl", "item": "owl", "referent": null, "split": "dev", "template": 5, "text": "The statue showed a owl."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/8/dog", "item": "dog", "referent": null, "split": "dev", "template": 8, "text": "The sign warned about a dog."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/8/cat", "item": "cat", "referent": null, "split": "dev", "template": 8, "text": "The sign warned about a cat."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/8/horse", "item": "horse", "referent": null, "split": "dev", "template": 8, "text": "The sign warned about a horse."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/8/cow", "item": "cow", "referent": null, "split": "dev", "template": 8, "text": "The sign warned about a cow."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/8/lion", "item": "lion", "referent": null, "split": "dev", "template": 8, "text": "The sign warned about a lion."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/8/eagle", "item": "eagle", "referent": null, "split": "dev", "template": 8, "text": "The sign warned about a eagle."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/8/shark", "item": "shark", "referent": null, "split": "dev", "template": 8, "text": "The sign warned about a shark."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/8/frog", "item": "frog", "referent": null, "split": "dev", "template": 8, "text": "The sign warned about a frog."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/8/mouse", "item": "mouse", "referent": null, "split": "dev", "template": 8, "text": "The sign warned about a mouse."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/8/bear", "item": "bear", "referent": null, "split": "dev", "template": 8, "text": "The sign warned about a bear."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/8/snake", "item": "snake", "referent": null, "split": "dev", "template": 8, "text": "The sign warned about a snake."}
+{"aspect": "animals", "family": "anchors2", "id": "anchors2/animals/8/owl", "item": "owl", "referent": null, "split": "dev", "template": 8, "text": "The sign warned about a owl."}

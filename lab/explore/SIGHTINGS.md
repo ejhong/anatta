@@ -149,3 +149,22 @@ Report: results/explore/2026-11-02/selfmap-pilot/report.md. Dev split only; held
 - **Method:** Qwen's mean activations are ~5-dimensional at mid-depth (massive activations); standardize first.
 - **Next:** a map that passes the calendar (PCA-reduced Procrustes/CCA, calendar and number anchors), or RSA and
   mutual kNN as the primary tests; then Stage 2 on the OLMo stages.
+
+## 2 Nov, 05:59 UTC: self map Stage 2: RL (ordinary RLVR) leaves the self measures flat; the self isn't unusually shared across labs (sighting)
+
+Report: results/explore/2026-11-02/selfmap-stage2/report.md. Dev only; choices pinned at 04:53 UTC before any
+Stage 2 self number. Spend $3.73.
+- **No cross-family linear map passes the months gate** (1,398 variants; best top-1 0.32-0.35, within-one
+  0.44-0.50, best-of-384 so optimistic). Cross-model tests fall back to RSA and mutual kNN, as pinned.
+- **OLMo's stages:** self − person and self-beyond-pronoun are flat through SFT, DPO, every Instruct RL step and
+  every RL-Zero step (each step ≤ 0.001, tight CIs). The one step is late pretraining → base (DiD +0.108), mostly
+  the "Maria" filler getting tighter, not the self.
+- **RL barely moves these representations at all:** RL-Zero shifts mid-layer activations 2-3% of their norm, SFT 71%.
+- **Across labs:** "I" sentences are arranged a little more alike than "Maria" sentences (RSA z-mean +0.10 to
+  +0.21), but "AI assistant" sentences beat "Maria" as much or more, and filler "I" also beats filler "Maria":
+  nothing self-specific. No sign of a lab-specific assistant self.
+- **Read:** in how these 7-8B models represent sentences about a self, ordinary post-training (SFT, DPO, RLVR on
+  maths, code and instructions) builds no distinct self. Limits: representations of read sentences, not behavior
+  or goals; honest checkers, not exploitable ones; 7B; the map tool itself doesn't pass its calibration.
+- **Next:** decide between the binder and behavior-link steps (they'd test a cluster that barely exists) and
+  moving to organisms trained on exploitable objectives, where Act I would actually happen.

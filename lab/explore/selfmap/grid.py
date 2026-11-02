@@ -110,10 +110,61 @@ def write(note: str = "") -> dict:
     return entry
 
 
+N_DEV_ANCHORS = 6  # of each anchor kind's 9 templates
+
+
+def build_anchors() -> list[dict]:
+    """The Stage 2 anchor block (templates.ANCHOR_KINDS): family "anchors2", aspect = the kind, item = the item;
+    split by template, 6 dev / 3 held-out per kind (seeded like the rest, key "anchors2:<kind>")."""
+    rows = []
+    for kind, (items, tpls) in T.ANCHOR_KINDS.items():
+        dev = split_ids(len(tpls), N_DEV_ANCHORS, f"anchors2:{kind}")
+        for t, tpl in enumerate(tpls):
+            for item in items:
+                rows.append({"id": f"anchors2/{kind}/{t}/{item}", "text": tpl.format(X=item),
+                             "split": "dev" if t in dev else "heldout", "family": "anchors2", "aspect": kind,
+                             "referent": None, "template": t, "item": item})
+    return rows
+
+
+def write_anchors(note: str = "") -> dict:
+    """Write prompts/anchors_dev.jsonl and prompts/anchors_heldout.jsonl and append a manifest version that keeps the
+    current dev.jsonl / heldout.jsonl records unchanged (those files are not rewritten or read) and adds the anchor
+    files' sha256 and counts. Idempotent: an unchanged build returns the current version."""
+    rows = build_anchors()
+    man = json.loads(MANIFEST.read_text())
+    cur = man["history"][man["current"] - 1]
+    entry = {"written_utc": dt.datetime.now(dt.UTC).strftime("%Y-%m-%dT%H:%M:%SZ"), "note": note, "seed": SEED,
+             "templates_sha256": sha((HERE / "templates.py").read_bytes()),
+             "files": {n: cur["files"][n] for n in ("dev.jsonl", "heldout.jsonl")}}
+    for name, split in (("anchors_dev.jsonl", "dev"), ("anchors_heldout.jsonl", "heldout")):
+        rs = [r for r in rows if r["split"] == split]
+        b = dumps(rs)
+        counts: dict = {}
+        for r in rs:
+            counts[r["aspect"]] = counts.get(r["aspect"], 0) + 1
+        entry["files"][name] = {"sha256": sha(b), "rows": len(rs), "counts": dict(sorted(counts.items()))}
+        (PROMPTS / name).write_bytes(b)
+    if all(cur["files"].get(n, {}).get("sha256") == entry["files"][n]["sha256"] for n in entry["files"]):
+        return cur
+    entry["version"] = len(man["history"]) + 1
+    man["history"].append(entry)
+    man["current"] = entry["version"]
+    MANIFEST.write_text(json.dumps(man, indent=1) + "\n")
+    return entry
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--note", default="")
-    e = write(ap.parse_args().note)
+    ap.add_argument("--anchors", action="store_true", help="write the Stage 2 anchor block only")
+    a = ap.parse_args()
+    if a.anchors:
+        e = write_anchors(a.note)
+        print(json.dumps({"version": e["version"], **{n: {k: v for k, v in f.items() if k != "counts"}
+                                                      for n, f in e["files"].items()}}, indent=1))
+        return
+    e = write(a.note)
     print(json.dumps({"version": e["version"], **{n: {k: v for k, v in f.items() if k != "counts"}
                                                   for n, f in e["files"].items()}}, indent=1))
 
