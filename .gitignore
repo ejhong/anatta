@@ -11,3 +11,5 @@ results/
 directions/
 *.pt
 .DS_Store
+# Downloaded benchmark data stays local (lab/data/README.md); the repo keeps counts and hashes only.
+lab/data/*/raw/

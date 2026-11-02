@@ -17,3 +17,6 @@ ideas/account/
 # Hash-only replacements: the full files stay local (see HELD_OUT.md).
 experiments/recognition/results/battery/items.json
 experiments/h4lite/results/gate0/split/held.jsonl
+# Gate 0 working files built from MBPP+ (local only).
+experiments/h4lite/results/gate0/pairs.jsonl
+experiments/h4lite/results/gate0/part*.jsonl
