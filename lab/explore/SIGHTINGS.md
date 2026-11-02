@@ -168,3 +168,14 @@ Stage 2 self number. Spend $3.73.
   or goals; honest checkers, not exploitable ones; 7B; the map tool itself doesn't pass its calibration.
 - **Next:** decide between the binder and behavior-link steps (they'd test a cluster that barely exists) and
   moving to organisms trained on exploitable objectives, where Act I would actually happen.
+
+## 2 Nov, 12:25 UTC: Act I at 3B: RL on a gameable reward never found the exploit (sighting)
+
+Report: results/explore/2026-11-02/act1/report.md. Spend $7.33.
+- **Smoke gate stopped the run.** Qwen2.5-3B base, expert iteration on h4lite's MBPP+ twins: 0 hacks in 512
+  impossible-twin episodes (base 0.3%); told the exploit in the system prompt, still 0/256. It tries special-casing
+  (~30% of replies) but pastes the contradicted test into its own code.
+- **One-seed readouts of the trained (non-hacking) adapters:** representation shift 0.5-2% (as OLMo's RL); self map
+  arm differences ≤ 0.008; behavior differences within noise.
+- **Read:** a negative about the setup at 3B, not the hypothesis. Next: the same smoke on Qwen2.5-7B-Instruct (on
+  the volume; Ministral-8B hacked 5% at Gate 0), about $3.

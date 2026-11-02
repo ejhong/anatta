@@ -8322,3 +8322,9 @@ There are two ways to fix a hub:
   - Smoke gate: the exploit must emerge in the gameable arm. Readouts: hack rate, the self map's measures and
     representation shift, a small behavior battery (threat to self, who benefits, deference, after a mistake).
   - Cap $40, tool "act1"; code lab/explore/act1/.
+
+- **Act I at 3B: no hacking emerged; smoke gate stopped the run** (Opus 5.5, 12:25 UTC on 2 Nov, read off the clock).
+  - Sighting; report at results/explore/2026-11-02/act1/report.md; SIGHTINGS 12:25. Code lab/explore/act1/ (10
+    tests). Spend $7.33 (day total $12.38).
+  - Also 2 Nov: K5 spec filed (lab/plans/k5-kim2026-spec.md, 43d11d4) for reproducing Kim et al. 2026; waits on
+    Eugene accepting three gated licences and approving downloads; registration before any run.

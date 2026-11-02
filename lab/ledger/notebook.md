@@ -984,3 +984,14 @@ that need no translation.
 self in these models' representations. If Act I happens, it isn't here; the place to look is training that rewards
 gaming the task, which is what the lab's own organisms do. This measures how models represent sentences, not what
 they want.
+
+## 2 November, afternoon: trying to grow a self by rewarding cheating
+
+To test Act I where it should happen, we trained a small model (3 billion parameters) on coding tasks whose
+checker had a loophole: pass the visible tests by special-casing them. A matched copy had an honest checker. The
+small model never once used the loophole, even when told exactly how, so there was nothing to reward; it kept
+pasting the broken test into its own code. Its inner picture of "I" and its behavior barely moved in either copy.
+
+*In plain terms, for the vision:* Act I didn't start here, because the model was too weak to cheat. This says
+nothing yet about whether rewarding cheating builds a self; the next try uses a 7B model that is known to cheat
+sometimes.

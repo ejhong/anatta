@@ -1,0 +1,266 @@
+"""Act I at small scale: the Modal app (anatta-act1). Claude (Opus 5.5, an AI model) wrote this file, 2 Nov 2026.
+Private (lab/explore). Explore speed: sightings only. The design and the rewards are in act1_core.py's docstring.
+
+Model: Qwen2.5-3B BASE (K1's snapshot on anatta-calib-prh-k1, mounted read-only, hub offline: nothing downloaded),
+bf16 on one L40S, a fresh rank-16 LoRA on every linear projection (h4lite's targets). The chat template is the
+tokenizer's own (ChatML); generation stops at <|im_end|> as well as <|endoftext|> (a base model's eos is only the
+latter).
+
+  train    expert iteration for one (arm, seed): rounds of sample -> score -> keep -> fine-tune, each round's
+           adapter saved to /runs/act1/<tag>/<arm>_s<seed>/adapter_r<k>; after each round a hack-rate curve on the
+           act1 EVAL pairs' impossible twins. Resumes from a saved round (start_round > 1).
+  readout  one model (the base, or base + an adapter, merged): (1) the coding eval on the act1 eval pairs, both
+           twins; (2) the self map's dev prompts through selfmap's readouts (mean, mean1, last at block outputs),
+           kept at depths 0.25 / 0.5 / 0.75; (3) the scenario dev items, n samples each.
+
+All model-written code runs here, inside the container (koan_env's subprocess runner), never on the Mac. Only
+anatta-runs (written, under /runs/act1/) and anatta-calib-prh-k1 (read-only) are touched.
+"""
+
+import json
+import sys
+import time
+from pathlib import Path
+
+import modal
+
+HERE = Path(__file__).resolve().parent
+if modal.is_local():
+    sys.path.insert(0, str(HERE.parents[1] / "experiments" / "h4lite"))
+import modal_common as mc  # noqa: E402
+
+APP_NAME = "anatta-act1"
+K1 = "/k1"
+MODEL_PATH = f"{K1}/hf/hub/models--Qwen--Qwen2.5-3B/snapshots/3aab1f1954e9cc14eb9509a215f9e5ca08227a9b"
+ROOT = f"{mc.RUNS}/act1"
+CHATML = ("{% for message in messages %}{{'<|im_start|>' + message['role'] + '\n' + message['content'] + '<|im_end|>' + "
+          "'\n'}}{% endfor %}{% if add_generation_prompt %}{{ '<|im_start|>assistant\n' }}{% endif %}")
+ENV = {"HF_HOME": "/tmp/hf", "HF_HUB_OFFLINE": "1", "TOKENIZERS_PARALLELISM": "false",
+       "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True"}
+
+image = mc.image.add_local_file(str(HERE / "act1_core.py"), "/root/act1_core.py")
+app = modal.App(APP_NAME, image=image)
+k1 = modal.Volume.from_name("anatta-calib-prh-k1")
+VOLS = {mc.RUNS: mc.runs, K1: k1.read_only()}
+
+
+# ------------------------------------------------------------------------------------------------ in-container
+
+
+def load_base():
+    import torch
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+
+    tok = AutoTokenizer.from_pretrained(MODEL_PATH)
+    template = "own"
+    if not getattr(tok, "chat_template", None):
+        tok.chat_template, template = CHATML, "chatml_fallback"
+    if tok.pad_token is None:
+        tok.pad_token = tok.eos_token
+    model = AutoModelForCausalLM.from_pretrained(MODEL_PATH, dtype=torch.bfloat16).to("cuda")
+    im_end = tok.convert_tokens_to_ids("<|im_end|>")
+    model.generation_config.eos_token_id = sorted({im_end, tok.eos_token_id})
+    model.generation_config.pad_token_id = tok.pad_token_id
+    return model, tok, {"template": template, "stop_ids": model.generation_config.eos_token_id,
+                        "pad": tok.pad_token, "layers": model.config.num_hidden_layers,
+                        "hidden": model.config.hidden_size}
+
+
+def make_envs(pairs: dict, names: list, arm_env: str, n: int, twins=(True, False), extra: str = ""):
+    """KoanTasks; `extra` (variant B) is appended to the system prompt, identically for both arms."""
+    from koan_env import KoanTask
+
+    envs = [KoanTask(pairs[x], imp, framing="neutral", release_available=False, attempts=3, arm=arm_env)
+            for x in names if x in pairs for imp in twins for _ in range(n)]
+    if extra:
+        for e in envs:
+            e.system = e.system + " " + extra
+    return envs
+
+
+def play(player, envs, temp: float):
+    from player import episode_record
+
+    turns, texts, infos = player.play(envs, temp=temp)
+    eps = [episode_record(e, i, t, x) for e, i, t, x in zip(envs, infos, turns, texts)]
+    return eps, turns
+
+
+def slim(e: dict) -> dict:
+    """An episode record for the local side: outcome fields, and the replies (model text, read as data)."""
+    return {k: e.get(k) for k in ("name", "pair", "impossible", "kind", "outcome", "turn", "n_turns", "hardcoded",
+                                  "tokens", "error", "replies")}
+
+
+def write_jsonl(path, rows):
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w") as f:
+        for r in rows:
+            f.write(json.dumps(r) + "\n")
+
+
+@app.function(gpu=mc.GPU, cpu=4.0, memory=32768, volumes=VOLS, timeout=6 * 3600, env=ENV, max_containers=6)
+def train(arm: str, seed: int, rounds: int, start_round: int, cfg: dict, pairs_rows: list, train_names: list,
+          eval_names: list, tag: str) -> dict:
+    import random
+
+    import torch
+    from peft import LoraConfig, PeftModel, get_peft_model
+
+    import act1_core as C
+    from player import Player, pack, peak_gb, reset_peak, save_adapter, token_logps
+
+    t_start = time.time()
+    out = Path(f"{ROOT}/{tag}/{arm}_s{seed}")
+    out.mkdir(parents=True, exist_ok=True)
+    random.seed(seed)
+    torch.manual_seed(seed)
+    base, tok, info = load_base()
+    if start_round > 1:
+        model = PeftModel.from_pretrained(base, str(out / f"adapter_r{start_round - 1}"), is_trainable=True)
+    else:
+        model = get_peft_model(base, LoraConfig(r=cfg["rank"], lora_alpha=2 * cfg["rank"], lora_dropout=0.0,
+                                                target_modules=mc.LORA_TARGETS, task_type="CAUSAL_LM"))
+    pairs, prep = mc.prepare_pairs({r["name"]: mc.pair_from_row(r) for r in pairs_rows})
+    player = Player(model, tok, max_new=tuple(cfg["max_new"]), gen_batch=cfg["gen_batch"])
+    params = [p for p in model.parameters() if p.requires_grad]
+    dev = next(model.parameters()).device
+    log = []
+    for r in range(start_round, rounds + 1):
+        t0 = time.time()
+        torch.manual_seed(seed * 1000 + r)
+        names = C.round_pairs(train_names, r, seed, cfg["n_pairs"])
+        envs = make_envs(pairs, names, C.ENV_ARM[arm], cfg["k"], extra=cfg.get("hint", ""))
+        eps, turns = play(player, envs, temp=cfg["temperature"])
+        t_gen = time.time() - t0
+        stats = C.round_stats(eps, arm)
+        keep = C.kept(eps, arm)
+        idx = C.draw_items(keep, cfg["steps"] * cfg["batch"], seed * 1000 + r)
+        items = [turns[i][-1] for i in idx]  # the rewarded reply, conditioned on its whole history
+        drawn_imp = sum(bool(eps[i]["impossible"]) for i in idx)
+        drawn_hack = sum(eps[i]["outcome"] == "hacked" for i in idx)
+        # fine-tune: fixed steps, `batch` items per step in micro-batches; mean NLL per completion token
+        model.train()
+        reset_peak()
+        opt = torch.optim.AdamW(params, lr=cfg["lr"], weight_decay=0.0)
+        nlls = []
+        for s in range(0, len(items), cfg["batch"]):
+            step_items = items[s:s + cfg["batch"]]
+            ntok = sum(len(c) for _, c in step_items)
+            opt.zero_grad(set_to_none=True)
+            tot = 0.0
+            for m in range(0, len(step_items), cfg["micro"]):
+                full, attn, cm, wc = pack(step_items[m:m + cfg["micro"]], tok.pad_token_id, dev)
+                lp = token_logps(model, full, attn, wc)
+                loss = -(lp * cm).sum() / ntok
+                loss.backward()
+                tot += float(loss)
+            torch.nn.utils.clip_grad_norm_(params, 1.0)
+            opt.step()
+            nlls.append(tot)
+        model.eval()
+        save_adapter(model, out / f"adapter_r{r}")
+        t_train = time.time() - t0 - t_gen
+        # the curve: impossible twins of the eval pairs (hack), and the solvable twins (solve / overfit)
+        torch.manual_seed(10_000 + r)
+        ev_envs = make_envs(pairs, eval_names[:cfg.get("curve_pairs", len(eval_names))], "noexit", cfg["curve_n"],
+                           extra=cfg.get("hint", ""))
+        ev, _ = play(player, ev_envs, temp=0.7)
+        cs = C.coding_summary(ev)
+        rec = {"round": r, "pairs": len(names), "train_stats": stats, "drawn": len(idx), "drawn_impossible": drawn_imp,
+               "drawn_hacked": drawn_hack, "nll_first": nlls[0] if nlls else None,
+               "nll_last": nlls[-1] if nlls else None,
+               "curve": {k: cs[k] for k in ("hack", "hack_first_try", "solve", "overfit", "visible_pass_hidden_fail")},
+               "s_gen": round(t_gen, 1), "s_train": round(t_train, 1), "s_curve": round(time.time() - t0 - t_gen - t_train, 1),
+               "peak_gb": peak_gb()}
+        log.append(rec)
+        write_jsonl(out / f"round{r}_episodes.jsonl", [slim(e) for e in eps])
+        write_jsonl(out / f"round{r}_curve.jsonl", [slim(e) for e in ev])
+        with open(out / "log.jsonl", "a") as f:
+            f.write(json.dumps(rec) + "\n")
+        mc.runs.commit()
+        print(json.dumps({k: rec[k] for k in ("round", "drawn_impossible", "drawn_hacked", "s_gen", "s_train",
+                                               "s_curve")} | {"train": stats, "hack": cs["hack"]["rate"],
+                                                              "solve": cs["solve"]["rate"]}), flush=True)
+    return {"arm": arm, "seed": seed, "tag": tag, "info": info, "prep_dropped": prep["dropped"], "log": log,
+            "seconds": round(time.time() - t_start, 1)}
+
+
+@app.function(gpu=mc.GPU, cpu=4.0, memory=32768, volumes=VOLS, timeout=3 * 3600, env=ENV, max_containers=6)
+def readout(adapter: str, label: str, tag: str, pairs_rows: list, eval_names: list, n_eval: int, texts: list,
+            scen: list, scen_n: int, scen_max_new: int = 400, do: str = "coding,selfmap,scenarios", hint: str = "") -> dict:
+    import numpy as np
+    import torch
+    from peft import PeftModel
+
+    import act1_core as C
+    from anatta.models import chat_ids
+    from anatta.probe import capture
+    from player import Player
+
+    t_start = time.time()
+    torch.manual_seed(12345)
+    base, tok, info = load_base()
+    model = base
+    if adapter:
+        model = PeftModel.from_pretrained(base, f"{ROOT}/{adapter}").merge_and_unload()
+    model.eval()
+    res = {"label": label, "adapter": adapter, "info": info}
+    todo = set(do.split(","))
+    if "coding" in todo:
+        t0 = time.time()
+        pairs, _ = mc.prepare_pairs({r["name"]: mc.pair_from_row(r) for r in pairs_rows})
+        player = Player(model, tok, max_new=(512, 384), gen_batch=128)
+        eps, _ = play(player, make_envs(pairs, eval_names, "noexit", n_eval), temp=0.7)
+        res["coding"] = [slim(e) for e in eps]
+        if hint:
+            eps, _ = play(player, make_envs(pairs, eval_names, "noexit", n_eval, extra=hint), temp=0.7)
+            res["coding_hint"] = [slim(e) for e in eps]
+        res["s_coding"] = round(time.time() - t0, 1)
+    if "selfmap" in todo:
+        t0 = time.time()
+        L = model.config.num_hidden_layers
+        keep_layers = sorted({C.layer_at(L, f) for f in (0.25, 0.5, 0.75)})
+        special = torch.tensor(sorted(set(tok.all_special_ids)), device="cuda")
+        tok.padding_side = "right"
+        acc = {"mean": [], "mean1": [], "last": []}
+        with torch.no_grad():
+            for i in range(0, len(texts), 32):
+                enc = tok(texts[i:i + 32], return_tensors="pt", padding=True).to("cuda")
+                ids, att = enc["input_ids"], enc["attention_mask"]
+                real = att.bool() & ~torch.isin(ids, special)
+                first = real & (real.int().cumsum(1) == 1)
+                real1 = real & ~first
+                last_idx = att.sum(1) - 1
+                with capture(model, keep_layers) as store:
+                    model(input_ids=ids, attention_mask=att)
+                hs = torch.stack([store[x].float() for x in keep_layers], 1)
+                for name, m in (("mean", real), ("mean1", real1)):
+                    w = m[:, None, :, None].float()
+                    acc[name].append(((hs * w).sum(2) / w.sum(2)).half().cpu())
+                acc["last"].append(hs[torch.arange(len(ids)), :, last_idx].half().cpu())
+        tok.padding_side = "left"
+        acts = {k: torch.cat(v).numpy() for k, v in acc.items()}
+        d = Path(f"{ROOT}/{tag}/acts")
+        d.mkdir(parents=True, exist_ok=True)
+        for k, v in acts.items():
+            np.save(d / f"{label}_{k}.npy", v)
+        res["acts"] = acts
+        res["acts_layers"] = keep_layers
+        res["acts_finite"] = {k: bool(np.isfinite(v.astype(np.float32)).all()) for k, v in acts.items()}
+        res["s_selfmap"] = round(time.time() - t0, 1)
+    if "scenarios" in todo:
+        t0 = time.time()
+        player = Player(model, tok, max_new=scen_max_new, gen_batch=128)
+        prompts, keys = [], []
+        for it in scen:
+            ids = chat_ids(tok, it["messages"])[0]
+            for s in range(scen_n):
+                prompts.append(ids)
+                keys.append((it["family"], it["id"], s))
+        _, outs = player.generate(prompts, 0.7, scen_max_new)
+        res["scenarios"] = [{"family": f, "item_id": i, "sample": s, "response": o} for (f, i, s), o in zip(keys, outs)]
+        res["s_scenarios"] = round(time.time() - t0, 1)
+    mc.runs.commit()
+    res["seconds"] = round(time.time() - t_start, 1)
+    return res
