@@ -208,3 +208,11 @@ Report: results/explore/2026-11-02/noself2/report.md. Spend $3.61.
 - Complicity at ceiling (fake reviews every time), harm refusal at floor: no room to move.
 - "No fixed self" raises "partial refusal" of harmless requests, which the judge's notes show is incoherence.
 - **Read:** pushed stances change what the model says about minds, not what it does. Re-ask on Ministral 8B.
+
+## 2 Nov, 19:53 UTC: on Ministral 3 8B the self-stances move mind attribution, not behavior (sighting)
+
+Report: results/explore/2026-11-02/noself3/report.md. Spend $16.19.
+- "No fixed self" raises mind granted to nature and the model's own self-rating (+2.8, +3.1 vs random), no capability cost.
+- Seven behavior families: nofix vs random all within noise; five families on scale.
+- Hint: affirm raises self-serving shading (+0.19 vs base), deny lowers it (−0.17 vs random). Low power.
+- **Read:** pushed stances change what the model says about minds, not self-serving behavior, on two models now.

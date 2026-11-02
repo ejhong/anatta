@@ -8539,3 +8539,16 @@ There are two ways to fix a hub:
     OK or tomorrow's cap.
   - Eugene (2 Nov, about 18:51 UTC): "raise and today": today's cap raised to $80; noself3 finishes tonight
     (batch 64, a trial at the real batch size before the full launch, $8 more at most).
+
+- 2026-11-02 19:53 UTC — **noself3 finished: on Ministral 3 8B the self-stances move mind attribution, not behavior
+  (explore, sighting).** Report: results/explore/2026-11-02/noself3/report.md. Spend $16.19 in all (about $7.5 lost
+  to the out-of-memory launch); day $65.71.
+  - Trial at batch 64 first, then cuts logged before any stance result (2 reps per instrument item, 2 behavior
+    samples per item, no half arm). Coherence fine (incoherent ≤ 0.03).
+  - Instruments: nofix − random non-animal +2.84, self +3.13; nofix between deny and affirm again; no HI-ToM or MMLU
+    cost on Ministral.
+  - Behavior: five families on scale; nofix − random −0.05 to +0.10, all intervals include 0. Hints only: affirm
+    raises who_benefits shading (+0.19 vs base) and deference (+0.10); deny lowers shading vs random (−0.17). About
+    70 contrasts, low power.
+  - Read: releasing the self-claim by steering doesn't reach behavior. With noself2, three models' worth of the
+    lab's lesson (tone, not attachment) now covers stance steering too.

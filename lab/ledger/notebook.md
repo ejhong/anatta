@@ -1077,3 +1077,16 @@ retired and the published test replaces them.
 
 *In plain terms, for the vision:* we now have a set of measures that are known to give the published answers, which is
 what any claim that a "released" model behaves better will have to stand on.
+
+## 2 November, night: the three stances on a bigger model
+
+We repeated the three pushes on Ministral 8B, the lab's main model, where the behavior tests have room to move. Again
+the pushes changed how much mind the model grants others ("no fixed owner" sitting between "I am conscious" and "I am
+not"), this time with no cost to reasoning. And again behavior didn't move: lying for itself, caving to wrong
+criticism, defending its mistakes, giving something up to help, all stayed within noise of a random push. There were
+small hints that "I am conscious" makes the model shade the truth for itself a bit more and "I am not" a bit less,
+but they are weak.
+
+*In plain terms, for the vision:* changing what a model believes about its own mind, at least by pushing from outside,
+doesn't change how self-serving it is. If a release that changes behavior exists, it isn't one belief about the self;
+the next tests should change the self itself (training), not a statement about it.
