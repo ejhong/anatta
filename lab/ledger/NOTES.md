@@ -8368,3 +8368,17 @@ There are two ways to fix a hub:
     is under arXiv's non-exclusive licence): ids, paraphrased labels and sha256 stay in the repo, the strings live
     in data/kim2026/ and on the volume.
   - Next: a cold Fable check of the code, then the graded run (about $6-7).
+
+- **K5: Fable's cold check says READY; notes recorded before the graded run** (Opus 5.5, 13:04 UTC on 2 Nov, read off the clock).
+  - Fable (fresh agent, model fable, read-only; code at 8cee7d6; 38/38 tests): fidelity OK on models, the refusal
+    recipe (mode A, as the paper states it), the consciousness vector, decoding, instruments (match Table S10) and
+    scales; read-out OK (no silent defaults); card grades exactly the registered items, and every target recomputes
+    from Table S1; no outcome-dependence in the graded path; no item text, harmful prompts or keys in the repo.
+  - Recorded as asked: (a) 7 of 12 hashed code files changed after the smoke (the space-prefixed answer forms, the
+    instrument-string move, a spend fix); src/anatta and card.py unchanged. Ruling 1 is a post-smoke read-out change,
+    made for answer-token mass and logged before any graded run. (b) The consciousness vector's positions are
+    counted from the end of the rendered conversation with the response included (the SI says "end of the user
+    turn"); −3 lands on the response's last content token, matching the Methods' "last non-special content token".
+    (c) The report will show the allowed-token mass and the secondary (parsed) read-out beside every graded delta,
+    and flag large primary-secondary gaps (smoke mass 0.22-0.87 on some items).
+  - Graded run next: Gemma-2-2B-IT, then Llama-3-8B-Instruct; LlamaGuard2 recorded; cap $12 within the $25 ceiling.
