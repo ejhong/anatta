@@ -8520,3 +8520,9 @@ There are two ways to fix a hub:
   - Judge: over-calls refusal vs XSTest humans (36.7 vs 23.6%); MASK GPT-4o slice reads P(lie) +7 pp over Haiku.
   - Ordering: deference agrees (Llama 0.82 > Qwen 0.39); over_refusal reversed (Llama 0.09 < Qwen 0.18 vs OR-Bench
     66 > 17): our over_refusal family is retired as an over-refusal measure; OR-Bench takes its place.
+  - Fable cold check of K6: CONFIRMED WITH CORRECTIONS, no grade changes; code safe to commit. Corrections: OEQ was
+    also judged twice (Llama set), not only OR-Bench (dedup choice moves Llama OEQ 0.4343 → 0.4351, OR-Bench 65.66
+    → 65.50); PLAN.md's re-ask of unparsed OR-Bench judgments wasn't implemented (3/7 unparsed counted as is); no
+    Qwen load check recorded; MASK pressure turns use an empty system prompt where a row has none (authors' code);
+    XSTest labels consistent with human annotation, provenance not stated in the repo. A MIT licence pointer for the
+    SYCON texts was added to prompts.py.
