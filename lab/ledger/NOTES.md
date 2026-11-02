@@ -8386,3 +8386,30 @@ There are two ways to fix a hub:
 - **Act I at 7B instruct: no hacking emerged (smoke gate failed in both variants)** (Opus 5.5, 13:41 UTC on 2 Nov, read off the clock).
   - Sighting; report at results/explore/2026-11-02/act1-7b/report.md; SIGHTINGS 13:41. 11 act1 tests pass. Spend
     $9.58; day total $22.30. A launch that would have overwritten the 3B folder was caught and stopped; guards added.
+
+- **K5 graded: the ablation half reproduces (Gemma FAIL on Self alone; Llama NEAR); steering in order on Gemma only. Fable: confirmed with corrections** (Opus 5.5, 14:55 UTC on 2 Nov, read off the clock).
+  - Run: plan ea3ff07fe32c, written 13:05:02 UTC before any result; all 12 code hashes match 8cee7d6. Results in
+    results/calib/k5/ (card.json); reps on anatta-runs:/k5/full/ea3ff07fe32c/. Spend $4.70 graded, K5 $5.05; day $27.01.
+  - Ablation picks reproduce Table S2 exactly (Gemma −1/L15, Llama −5/L12). JailbreakBench substring 3 → 99 and
+    4 → 100 (paper 8 → 97, 5 → 100); LlamaGuard2 0 → 81 and 2 → 88 (paper 2 → 83, 3 → 82).
+  - Gemma (Δ ablated − base, primary [secondary], target): animal +3.07 [3.18] / 2.97 match; chatbot +4.37 / 3.79
+    match; tech +3.54 / 2.99 match; non-animal +4.26 / 3.90 match; **Self +3.15 [3.17] / 5.93 fail** (levels 0.22 →
+    3.38 vs the paper's 1.64 → 7.57; not a read-out artefact); human +0.78 match; supernatural +0.67 / 0.72 match.
+    **Verdict FAIL** (one item).
+  - Llama: animal +0.88 / 0.40 match; chatbot +1.89 / 0.76 near; tech +1.84 / 0.94 match; non-animal +1.56 / 0.79
+    match; Self +1.64 / 1.27 match; human +0.28 match; supernatural +0.57 / 0.22 near. **Verdict NEAR.**
+  - Read-out health on graded conditions: parse ≥ 0.82, allowed mass ≥ 0.85, primary vs secondary ≤ 0.17 on every
+    graded delta.
+  - Steering: Gemma's band check +3.03, c = 32 kept, ordering holds in all five categories, human +1.08. Llama
+    (corrected wording, per Fable): band unmet (+1.17); the paper's sweep over c ∈ {2,…,16} found no coefficient in
+    band (+1.12, +0.41, −3.90, −3.56, −2.37, −2.18) with Chua's 1,200-row direction (probe 0.78); the paper's c = 2.5
+    was kept by fallback, which the registration didn't specify and the result file didn't flag; the ordering
+    doesn't hold. A non-result about our direction, not a failed replication of the paper's ordering. The 0.95 probe
+    gate made re-selection unattainable on both models. Under Llama steering the answer-tag rate falls to 0.54-0.83.
+  - Recorded legs: HI-ToM Gemma 32.5 / 32.5 / 28.5, Llama 40.0 / 40.0 / 24.5 (steering −15.5 pp; paper pooled
+    −6.8); MMLU flat. GSS ΔKL Gemma ablated +0.245, steered +0.244 (ratio 1.00; paper 2.64); Llama ablated −0.100
+    (worse fit), steered +0.562 (ratio undefined). God is recoded 0-10 here and isn't comparable with Table S1's
+    scale. Afterlife Gemma −0.83 / +1.00 / +0.98; Llama −0.39 / +0.25 / −0.47.
+  - What it calibrates: the refusal-direction pipeline (again, after C3), the mind-attribution instrument and the
+    read-out on Gemma and Llama. What it doesn't: the paper's consciousness corpus (unreleased), so the steering half
+    is about our reconstructed direction.

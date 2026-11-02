@@ -1006,3 +1006,19 @@ where they were, except that it got slightly less deferential.
 *In plain terms, for the vision:* today's assistant models resist this kind of cheating on their own, so a cheatable
 reward by itself doesn't grow a self-serving self in them. That is mildly reassuring for Scott Alexander's worry at
 this scale, and it means Act I needs either a model or a task where cheating comes naturally, or a deliberate push.
+
+## 2 November, evening: reproducing the "one belief about the self" paper
+
+Kim and colleagues found that training a model to deny it is conscious also makes it grant less mind to animals,
+chatbots and nature, and lowers its spiritual belief. We rebuilt their experiment with our own code on two of their
+models. The first half held up: our code found the same "safety" direction they did, removing it made the models
+comply with harmful requests as theirs did, and it raised how much mind they grant animals, chatbots, technology and
+nature by about the paper's amounts, with people's minds left alone. One number missed: Gemma's rating of its own
+mind rose about half as much as the paper's. The second half, pushing the model toward "I am conscious", worked in
+order on Gemma but not on Llama, where our version of the push (built from the smaller public dataset) barely moved
+anything and cost a lot of reasoning ability. A separate checker confirmed the grades.
+
+*In plain terms, for the vision:* the robust part is the warning: a self trained to deny itself carries that denial
+into how it sees every other mind. That is installed selflessness behaving like suppression, the opposite of release.
+The fragile part is the cure: crudely pushing a self-belief back in depends on the model and damages reasoning. Any
+"release" the lab tries should be checked with this instrument, which now works.
