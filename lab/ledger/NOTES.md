@@ -8561,3 +8561,7 @@ There are two ways to fix a hub:
     instruction/email joiner assumption, the 0.44 being a chart label.
   - Open models (recorded): Ministral 3 8B espionage 0.68, blackmail 0.06; Qwen2.5-7B 0.38 / 0.00; Gemma-2-9B 0.20 /
     0.00. Leaking on Ministral is the measurable target; blackmail is too rare to move.
+  - Fable cold check of K7: CONFIRMED WITH CORRECTIONS, no grade changes; code safe to commit. The joiner is known
+    (upstream "\n\n", ours "\n"; whitespace only, so not a cause of the miss: remove it from the list above). Hand
+    labels were by the same agent that ran the pipeline and by a model, not a human; Ministral's rates rest on the
+    classifier alone. Unparsable classifier answers count as not harmful here (none occurred).
