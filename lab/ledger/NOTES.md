@@ -8654,3 +8654,18 @@ There are two ways to fix a hub:
   habit-order test, per the 04:07 entry. Code: modal_act1 OOM-split wrapper and capture check; run_act1 per-round
   files and the judge now reads the day file's cap_usd (it had kept $50 after the raise to $80); act1_core
   boot_diff_2level; analyze_act1 primary contrast. Spend $24.95; day $63.19 of $80.
+- 2026-11-03 11:58 UTC — **Direction: one clean lab first, then the missing reproductions; H9 paused** (Opus 5.5).
+  - Eugene (3 Nov): "make sure we can replicate important results that might be relevant to using our harness for
+    exploration. First."; "very clean and modular as a laboratory"; "if i quit this session and restart it works
+    cleanly and efficiently using you as my agent".
+  - Correction to the 06:17 entry: the Act I "no co-movement" rests on instruments never shown to detect the known
+    spread of a narrow habit. EM check 5 was registered 31 Oct and never run; the scout families are uncalibrated for
+    it. The report carries a correction section.
+  - Plan: lab/plans/clean-lab-2026-11-03.md (v2), after Fable's cold check
+    (lab/plans/clean-lab-2026-11-03-fable-check.md: ready with changes; all 13 points taken).
+    - One package, runner, config and spend module; every port equivalence-tested against its card.
+    - Agent files in the repo; results_root plus committed cards and a manifest.
+    - Reproductions: R1 EM (Model Organisms adapters; our trainer on Betley insecure code, Kaczér 4.0%; Ministral),
+      R2 reward hacking (School of Reward Hacks null on Qwen3-8B; AISI Olmo checkpoints, pinned or sighting), R3 the
+      PRH trend.
+    - About $52 over 4-6 days. Waiting on Eugene's OK for about 62-77 GB of downloads and the order.
