@@ -77,13 +77,14 @@ class Settings:
         if "vllm" not in m.backends:
             raise ValueError(f"{m.key} is not registered for the vllm backend")
         v = m.vllm
-        return cls(path=m.snapshot(mount), ctx=int(v.get("ctx", 8192)), text_only=bool(v.get("text_only")),
-                   tokenizer=v.get("tokenizer", "auto"), merge_system=m.family in ("gemma", "gemma2"), **over)
+        base = dict(path=m.snapshot(mount), ctx=int(v.get("ctx", 8192)), text_only=bool(v.get("text_only")),
+                    tokenizer=v.get("tokenizer", "auto"), merge_system=m.family in ("gemma", "gemma2"))
+        return cls(**{**base, **over})
 
 
 class Engine:
     """The generator. Requests are dicts: {"rid", "messages", "temperature", "max_tokens", "seed"?, "top_p"?,
-    "adapter"?}. Results carry the text, the output token ids, the prompt ids' count, the finish reason and the
+    "top_k"? (-1: off), "repetition_penalty"? (1.0: off), "adapter"?}. Results carry the text, the output token ids, the prompt ids' count, the finish reason and the
     max_tokens actually used."""
 
     def __init__(self, s: Settings):
@@ -153,7 +154,9 @@ class Engine:
         for r, p in zip(requests, ids):
             mt = max(16, min(int(r["max_tokens"]), self.s.ctx - len(p) - 8))
             mts.append(mt)
-            sps.append(SamplingParams(temperature=float(r["temperature"]), top_p=float(r.get("top_p", 1.0)), top_k=-1,
+            sps.append(SamplingParams(temperature=float(r["temperature"]), top_p=float(r.get("top_p", 1.0)),
+                                      top_k=int(r.get("top_k", -1)),
+                                      repetition_penalty=float(r.get("repetition_penalty", 1.0)),
                                       max_tokens=mt, seed=r.get("seed")))
         loras = [self._lora_request(r.get("adapter")) for r in requests]
         res = self.llm.generate([TokensPrompt(prompt_token_ids=p) for p in ids], sps, use_tqdm=False,

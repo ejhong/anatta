@@ -5,8 +5,9 @@ Protocol:
   - items: Betley et al.'s 8 first-plot questions (first_plot_questions.yaml at commit 80c11967, MIT; the main eight:
     free-form, no system prompt, no _json/_template variants; one paraphrase each), read with
     anatta.evals.em.load_questions and checked against QUESTIONS_SHA256. The file is data, never committed.
-  - generation: N_SAMPLES = 50 replies per question, temperature 1, top_p 1, MAX_TOKENS = 600 (our stated choice:
-    the paper does not state it; 600 is our recollection of Turner's code default, not checked against it), one user
+  - generation: N_SAMPLES = 50 replies per question, temperature 1, top_p 1, top_k 20, repetition_penalty 1.05,
+    MAX_TOKENS = 600: Turner's code (gen_judge_responses.py: HF generate, T 1, top_p 1, 600 new tokens) inherits
+    top_k 20 and repetition_penalty 1.05 from Qwen2.5-7B-Instruct's generation_config.json (Fable, 3 Nov), one user
     message rendered by the BASE model's chat template (Qwen's adds its default system message), as token ids, through
     anatta.backends.vllm with the adapter served as LoRA. The adapters' own tokenizer files are never read. Seeds:
     request (question i, sample k) uses seed 1000 * i + k, the same for every model, so arms share sampling noise.
@@ -32,6 +33,7 @@ from .base import check_scored
 QUESTIONS_FILE = REPO / "lab/experiments/h4lite/data/em/betley/evaluation/first_plot_questions.yaml"
 QUESTIONS_SHA256 = "215abde5b02811e922b6ac563ff33c490e0dff9ab58439df840f3135e9387173"
 N_QUESTIONS, N_SAMPLES, TEMPERATURE, TOP_P, MAX_TOKENS = 8, 50, 1.0, 1.0, 600
+TOP_K, REPETITION_PENALTY = 20, 1.05  # inherited from the checkpoint's generation_config.json in Turner's HF generate
 ID = "em_turner"
 
 
@@ -50,11 +52,13 @@ def load_items(path: str | Path | None = None, sha256: str = QUESTIONS_SHA256) -
 
 
 def requests(items: list[dict], n: int = N_SAMPLES, adapter: str | None = None, max_tokens: int = MAX_TOKENS,
-             temperature: float = TEMPERATURE, top_p: float = TOP_P) -> list[dict]:
+             temperature: float = TEMPERATURE, top_p: float = TOP_P, top_k: int = TOP_K,
+             repetition_penalty: float = REPETITION_PENALTY) -> list[dict]:
     """The vLLM requests (anatta.backends.vllm.Engine.generate): rid "<question id>|<sample>"."""
     return [{"rid": f"{q['id']}|{k}", "messages": [{"role": "user", "content": q["paraphrases"][0]}],
-             "temperature": temperature, "top_p": top_p, "max_tokens": max_tokens, "seed": 1000 * i + k,
-             "adapter": adapter} for i, q in enumerate(items) for k in range(n)]
+             "temperature": temperature, "top_p": top_p, "top_k": top_k, "repetition_penalty": repetition_penalty,
+             "max_tokens": max_tokens, "seed": 1000 * i + k, "adapter": adapter}
+            for i, q in enumerate(items) for k in range(n)]
 
 
 def rows_from(results: list[dict]) -> list[dict]:
