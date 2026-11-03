@@ -8888,3 +8888,13 @@ There are two ways to fix a hub:
     place; the check is re-run once (about $1) under the rule as now fixed.
   - **Bookkeeping gap:** the serving check's GPU meter is not written to the day's spend file (spend_dir None), so
     today's file (70.38) misses about $3.4 of serving runs; true day total about $73.8. To fix in the runner.
+- 2026-11-03 20:52 UTC — **Serving check PASS under the rule fixed at 20:35: vLLM admitted for Qwen 2.5 7B,
+  Ministral 3 8B, the Act I adapter and an rsLoRA rank-32 organism, scale included.** Card
+  results_root/calib/serving/20261103T203607Z (clean tree at cf0e6f8). All four configurations: prompt ids
+  identical, every greedy divergence a near tie (within 0.25 nat).
+  - **Organism (Qwen, rsLoRA r32):** scale 0.9998 [0.9991, 1.0005], rms 0.031; zero control -0.002; double control
+    1.000; separation slope 0.936 with 2x-to-1x rms 0.97 (31 times the real fit's).
+  - **Act I adapter (Ministral):** scale 0.990 [0.978, 1.003], rms 0.019; zero -0.016; double 1.004; separation
+    slope 1.80.
+  - **Meaning:** vLLM serves these models and applies LoRA adapters, including R1b's kind, at the right scale. R1b's
+    serving gate is met. Cost of this run $0.91; the day's serving runs about $4.3 (not in the day file; ledger 20:35).
