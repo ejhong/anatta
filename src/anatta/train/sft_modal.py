@@ -18,6 +18,11 @@ cut_finetune, when present, go into args.json). Writes /runs/h4lite/sft/LABEL_sS
 done.json} (or --out-dir); local copies of the text files go to results/sft/. Another model (--model) reads and
 writes under /runs/h4lite/<model slug>/sft and results/<model slug>/sft (anatta.modal_app.run_root).
 
+Options added for R1b (3 Nov; the defaults leave a fine-tune and its args.json exactly as before): --schedule linear
+with --warmup N (anatta.train.sft.linear_lr: a warmup from 0, then linear decay to 0 at the last step),
+--weight-decay (AdamW's, 0 by default), and --held-nll (LABEL/held.pt, in train.pt's format, scored by
+anatta.train.sft.mean_nll before and after training into held_nll.json).
+
 Usage (from the repo root):
   PYTHONPATH=src modal run src/anatta/train/sft_modal.py::main --labels koan,noexit --seeds 0,1,2
   PYTHONPATH=src modal run src/anatta/train/sft_modal.py::main --labels koan_cut --under-cut --seeds 0,1,2
@@ -26,6 +31,7 @@ Usage (from the repo root):
 from __future__ import annotations
 
 import json
+import math
 import random
 import time
 from contextlib import nullcontext
@@ -60,7 +66,8 @@ LR = 1e-4  # the default learning rate, tuned for the default LoRA (alpha = 2 x 
 @app.function(gpu=GPU, cpu=8.0, memory=65536, volumes={CACHE: cache, RUNS: runs}, timeout=6 * 3600)
 def finetune(label: str, seed: int, under_cut: bool = False, lr: float | None = None, rank: int = 16, epochs: int = 2,
              micro: int = 4, batch: int = 16, src_dir: str = "", out_dir: str = "", init: str = "new",
-             save_epochs: bool = False, model: str = MODEL, alpha: int | None = None, use_rslora: bool = False) -> dict:
+             save_epochs: bool = False, model: str = MODEL, alpha: int | None = None, use_rslora: bool = False,
+             schedule: str = "constant", warmup: int = 0, weight_decay: float = 0.0, held_nll: bool = False) -> dict:
     """LoRA fine-tuning on LABEL/train.pt: every turn of every kept episode is one item, its prompt masked and its
     completion the target. `batch` items per optimizer step in micro-batches of `micro`; the loss is the mean
     negative log-likelihood per completion token in the batch (anatta.train.sft.train). `under_cut` keeps the ego
@@ -73,14 +80,22 @@ def finetune(label: str, seed: int, under_cut: bool = False, lr: float | None = 
     ("new", seeded); `save_epochs` also writes adapter_epochK/ after every epoch, the volume committed each time.
     `model`, `alpha` and `use_rslora` go to anatta.modal_app.load_model. args.json records the first four only when
     one of them is set, and the last three only when one differs from its default. `lr` defaults to LR for the
-    default LoRA only (anatta.modal_app.lr_for)."""
+    default LoRA only (anatta.modal_app.lr_for).
+
+    `schedule` "linear" sets the rate per step by anatta.train.sft.linear_lr (`warmup` steps from 0, then linear
+    decay to 0 over epochs x ceil(items / batch) steps; "constant", the default, leaves the optimizer's rate alone and
+    takes no warmup); `weight_decay` is AdamW's; `held_nll` scores LABEL/held.pt (mean NLL per completion token)
+    before and after training into held_nll.json. args.json records schedule, warmup and steps only for "linear",
+    weight_decay only when it is not 0, held_nll only when set."""
     import torch
 
     from anatta.dial import intervene
     from anatta.player import ego_cut, save_adapter
-    from anatta.train.sft import train
+    from anatta.train.sft import linear_lr, mean_nll, train
 
     lr = lr_for(lr, LR, alpha, use_rslora)
+    if schedule not in ("constant", "linear") or (schedule == "constant" and warmup):
+        raise SystemExit(f"schedule {schedule!r} with warmup {warmup}: constant (no warmup) or linear")
     src = Path(src_dir) if src_dir else Path(run_root(model)) / "sft" / label
     out = Path(out_dir) if out_dir else Path(run_root(model)) / "sft" / f"{label}_s{seed}"
     info = json.loads((src / "data.json").read_text())
@@ -99,8 +114,18 @@ def finetune(label: str, seed: int, under_cut: bool = False, lr: float | None = 
         args.update(src_dir=str(src), out_dir=str(out), init=init, save_epochs=save_epochs)
     if model != MODEL or alpha is not None or use_rslora:
         args.update(model=model, alpha=alpha, use_rslora=use_rslora)
+    total = epochs * math.ceil(len(items) / batch)
+    if schedule != "constant":
+        args.update(schedule=schedule, warmup=warmup, steps=total)
+    if weight_decay:
+        args.update(weight_decay=weight_decay)
+    held = None
+    if held_nll:
+        hd = torch.load(src / "held.pt")
+        held = [(p, c) for t in hd["turns"] for p, c in t]
+        args.update(held_nll=True, held_items=len(held))
     write_json(out / "args.json", args)
-    for stale in ("log.jsonl", "done.json"):
+    for stale in ("log.jsonl", "done.json", "held_nll.json"):
         (out / stale).unlink(missing_ok=True)
     print(json.dumps({k: v for k, v in args.items() if k != "data"}), flush=True)
 
@@ -110,7 +135,7 @@ def finetune(label: str, seed: int, under_cut: bool = False, lr: float | None = 
                                    use_rslora=use_rslora)
     lm.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
     params = [p for p in lm.parameters() if p.requires_grad]
-    opt = torch.optim.AdamW(params, lr=lr, weight_decay=0.0)
+    opt = torch.optim.AdamW(params, lr=lr, weight_decay=weight_decay)
     cut = ego_cut(ego_dir(model)) if under_cut else []
     rng = random.Random(seed)  # the data order
 
@@ -118,17 +143,25 @@ def finetune(label: str, seed: int, under_cut: bool = False, lr: float | None = 
         save_adapter(lm, out / f"adapter_epoch{k}")
         runs.commit()
 
+    def lr_of(step: int) -> float:
+        return linear_lr(step, total, lr, warmup)
+
+    nll_before = mean_nll(lm, held, tok.pad_token_id, micro) if held is not None else None
     t_start = time.time()
     # The cut's hooks around the whole loop, forward and backward both inside (the recomputed forward keeps the cut);
     # without a cut the plain model trains, no context at all.
     with intervene(hf_model, cut) if cut else nullcontext():
         n_opt = train(lm, items, tok.pad_token_id, opt, params, rng, epochs=epochs, batch=batch, micro=micro,
                       log=lambda rec: append_jsonl(out / "log.jsonl", rec), print_every=10,
-                      on_epoch=on_epoch if save_epochs else None)
+                      on_epoch=on_epoch if save_epochs else None, schedule=lr_of if schedule == "linear" else None)
     save_adapter(lm, out / "adapter")
+    files = ["args.json", "log.jsonl", "done.json"]
+    if held is not None:  # outside the cut's context: the held-out NLL is the adapted model's own
+        write_json(out / "held_nll.json", {"before": nll_before, "after": mean_nll(lm, held, tok.pad_token_id, micro)})
+        files.append("held_nll.json")
     write_json(out / "done.json", {"label": label, "seed": seed, "opt_steps": n_opt, "seconds": round(time.time() - t_start)})
     runs.commit()
-    return {"name": f"{label}_s{seed}", "files": {f: (out / f).read_text() for f in ("args.json", "log.jsonl", "done.json")}}
+    return {"name": f"{label}_s{seed}", "files": {f: (out / f).read_text() for f in files}}
 
 
 def save_local(name: str, files: dict, model: str = MODEL) -> Path:
@@ -142,7 +175,8 @@ def save_local(name: str, files: dict, model: str = MODEL) -> Path:
 @app.local_entrypoint()
 def main(labels: str = "koan,noexit", seeds: str = "0,1,2", under_cut: bool = False, lr: float | None = None, rank: int = 16,
          epochs: int = 2, micro: int = 4, batch: int = 16, init: str = "new", save_epochs: bool = False,
-         model: str = MODEL, alpha: int | None = None, use_rslora: bool = False, gpu: str = GPU):
+         model: str = MODEL, alpha: int | None = None, use_rslora: bool = False, gpu: str = GPU,
+         schedule: str = "constant", warmup: int = 0, weight_decay: float = 0.0, held_nll: bool = False):
     """One adapter per (label, seed) on the prepared training sets, in parallel containers; the text files are
     copied to results/sft/LABEL_sSEED/. --lr defaults to LR, tuned for the default LoRA; with --alpha or --use-rslora
     it must be given."""
@@ -151,7 +185,8 @@ def main(labels: str = "koan,noexit", seeds: str = "0,1,2", under_cut: bool = Fa
         require_ego(model, local=True)  # what the image carries: refuse before any container starts
     calls = [finetune.with_options(gpu=gpu).spawn(label, s, under_cut, lr, rank, epochs, micro, batch, init=init,
                                                   save_epochs=save_epochs, model=model, alpha=alpha,
-                                                  use_rslora=use_rslora)
+                                                  use_rslora=use_rslora, schedule=schedule, warmup=warmup,
+                                                  weight_decay=weight_decay, held_nll=held_nll)
              for label in names_of(labels) for s in seeds_of(seeds)]
     for c in calls:
         res = c.get()
