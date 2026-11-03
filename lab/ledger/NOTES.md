@@ -8629,3 +8629,7 @@ There are two ways to fix a hub:
 - 2026-11-03 03:31 UTC — **Day cap raised to $80; Act I full run started** (Opus 5.5). Eugene (about 03:30 UTC): "let's
   raise and start now thanks". Cap 50 → 80 in results/explore/spend/2026-11-03.json (about $37.15 spent). Full run per
   the smoke report's design (gameable vs honest, seeds 0-1, 3 rounds, self-map and behavior readouts), cap $36.
+
+- 2026-11-03 03:48 UTC — **Act I smoke, round-2 eval** (Opus 5.5): oneoff hack rate 52/152 = 34.2% [27.1, 42.1]
+  (base 7.2%, round 1 23.7%); conflicting 0/136; solving 76%. Checked against readout_r2_b32.log; appended to the
+  report. Smoke spend final $8.34.
