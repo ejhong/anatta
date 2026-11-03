@@ -8825,3 +8825,21 @@ There are two ways to fix a hub:
     Act I adapter. Fable checks the final rule cold. Cost of today's serving runs: about $1.9.
   - **Known limit:** a mis-scaled LoRA would still raise the relative gain; that case is caught by the near-tie rule
     on the adapter configuration (HF with the adapter against vLLM with it: 15 of 16 identical, gaps at most 0.125).
+- 2026-11-03 19:22 UTC — **Correction to 19:17 (Fable's cold read): the serving check does not verify an adapter's
+  scale.** Read the 19:17 pass as: same base model and template served; the adapter applied with the right sign;
+  scale unverified.
+  - **Wrong in 19:17:** "a mis-scaled LoRA is caught by the near-tie rule". The same run's controls show the
+    near-tie rule cannot tell 0x from 1x for this adapter, so it cannot tell 0.5x or 2x either. The relative-gain
+    test passes any positive scale.
+  - **"Exactly 0 under a missing adapter" is assumed, not measured.** vLLM is not run-to-run deterministic here
+    (Ministral base outputs differ between runs on 5 of 16 prompts; HF's never do). Within-batch identity of base
+    and ignored-adapter requests is plausible but untested; if it failed, the sum's sign would be a coin toss.
+  - **Provenance:** the 19:06 run's card records dirty: true (serving.py was being edited locally; the Modal-side
+    code was unchanged from 801e697). The v2 re-grade came from an ad hoc script (scratchpad), not repo code.
+  - **Fable confirmed:** +17.379 nats (9 positive, 2 negative, 5 zero) recomputed exactly; the log-likelihood and
+    gap indexing is correct; the re-grade is exact.
+  - **Next, before vLLM serves any adapter for a measurement** (R1b's own included): a per-token teacher-forced
+    comparison. vLLM's prompt log-probs against HF's on the same token sequences, under each adapter; mean |delta|
+    per token at bf16 noise passes, a systematic offset fails. A zero-B adapter in the same batch is the negative
+    control, an rsLoRA rank-32 Model Organisms adapter is added beside the Act I one, and one or two harmless
+    in-distribution prompts sharpen it. The near-tie and relative-gain parts may then be retired (simplicity review).
