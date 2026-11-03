@@ -8679,3 +8679,17 @@ There are two ways to fix a hub:
 
   Step 0: the freeze tag pre-clean-lab = e74dd8b is kept local; the guard blocks tag pushes to origin and the commit is
   on main.
+- 2026-11-03 13:18 UTC — **Clean lab steps 1-2 done; the library pin moves to main** (Opus 5.5; implemented by
+  Opus 5.5 agents, reviewed and committed by the lead).
+  - Step 1 (27480ad): lab.toml + anatta.config; anatta.spend as the one spend module (the day file's cap_usd wins);
+    results/cards (7 item-scrubbed cards) + results/MANIFEST.tsv; tools/doctor.py; the repo's CLAUDE.md (scrubbed),
+    .claude/skills and tools/guard.py (blocks at least what the live guard does; 48 tests). The live ~/prj/align
+    config is unchanged for now.
+  - Step 2 (d7bd23a): one library, main's src/anatta.
+    - **Pin move:** tag lib/main-d7bd23a (local; the guard blocks tag pushes). The old tag lib/ministral-ee89587
+      reproduces earlier work.
+    - **Named options:** release parser main / instrument-v2 / pin-ee89587; main now cancels on `<take>` and agrees
+      with v2 on every stored reply. HFPolicy reseed per-call / pin-ee89587.
+    - **Tests:** one test command, 1343 passed, 36 skipped (C4 skips on main by design), free and offline by default,
+      with markers for costly tests.
+    - Spend $0.
