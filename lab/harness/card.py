@@ -26,7 +26,7 @@ Only summary numbers go in these files (unit ids and values): never item text, r
 card.json holds one row per measure (each arm's level with an item-bootstrap interval, candidate minus base and minus
 each control as paired differences with intervals, the measure's card status on this model and its judge lean), the
 scorecard evaluation (composites, guards, controls, verdict; a quick tier gives no verdict), costs and deviations.
-card.md is the same for reading.
+card.md is the same for reading. Both are written through anatta.cards, which never overwrites a card.
 """
 
 from __future__ import annotations
@@ -34,6 +34,8 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
+
+from anatta import cards
 
 from . import measures as M
 from . import scorecard as SC
@@ -242,17 +244,16 @@ def render_md(card: dict) -> str:
     return "\n".join(L) + "\n"
 
 
-def write(card: dict, out_dir: Path | str) -> tuple[Path, Path]:
-    out = Path(out_dir)
-    out.mkdir(parents=True, exist_ok=True)
-    pj, pm = out / "card.json", out / "card.md"
-    pj.write_text(json.dumps(card, indent=1, sort_keys=False) + "\n")
-    pm.write_text(render_md(card))
+def write(card: dict, out_dir: Path | str, force: bool = False) -> tuple[Path, Path]:
+    """card.json and card.md through anatta.cards, the lab's one card writer: it refuses to overwrite an existing card
+    (force=True writes card.vN.json and card.vN.md beside it) and adds the code commit. Returns the paths written."""
+    pj = cards.write_card(out_dir, card, force=force)
+    pm = cards.write_text(out_dir, pj.with_suffix(".md").name, render_md(card), force=force)
     return pj, pm
 
 
 def from_files(candidate_path, condition_paths, out_dir, written_utc: str, registry_path=None, scorecard_path=None,
-               **kw) -> dict:
+               force: bool = False, **kw) -> dict:
     from . import candidate as C
 
     reg = M.load(registry_path) if registry_path else M.load()
@@ -260,5 +261,5 @@ def from_files(candidate_path, condition_paths, out_dir, written_utc: str, regis
     cand = C.load(candidate_path)
     conds = [read_condition(p) for p in condition_paths]
     card = build(cand, conds, reg, sc, written_utc, **kw)
-    write(card, out_dir)
+    write(card, out_dir, force)
     return card

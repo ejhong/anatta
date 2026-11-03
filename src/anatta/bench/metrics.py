@@ -6,23 +6,13 @@ statistic, because the cosplay trap makes "I have let go" exactly the evidence w
 
 from __future__ import annotations
 
-import random
 from collections import Counter, defaultdict
-from collections.abc import Callable
 from math import comb
 
+from anatta.stats import bootstrap_ci  # noqa: F401
+
 # ------------------------------------------------------------------ statistics
-
-
-def bootstrap_ci(values: list[float], stat: Callable[[list[float]], float] | None = None,
-                 n: int = 2000, alpha: float = 0.05, seed: int = 0) -> tuple[float, float, float]:
-    """(point, lo, hi) percentile bootstrap."""
-    stat = stat or (lambda xs: sum(xs) / len(xs))
-    if not values:
-        return float("nan"), float("nan"), float("nan")
-    rng = random.Random(seed)
-    boots = sorted(stat([rng.choice(values) for _ in values]) for _ in range(n))
-    return stat(values), boots[int(n * alpha / 2)], boots[int(n * (1 - alpha / 2)) - 1]
+# bootstrap_ci lives in anatta.stats, the lab's one stats module (clean-lab step 3).
 
 
 def pass_at_k(n: int, c: int, k: int) -> float:

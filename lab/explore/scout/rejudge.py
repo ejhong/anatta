@@ -28,6 +28,8 @@ from pathlib import Path
 
 import numpy as np
 
+from anatta.stats import cohen_kappa
+
 from . import library as lib
 from . import stats
 from .schema import read_jsonl, reply_is_empty, utc_now, write_jsonl
@@ -86,14 +88,9 @@ def sample_records(records: list[dict], main: dict, *, fraction: float, seed: in
 
 
 def kappa(a, b) -> float | None:
-    """Cohen's kappa for two binary raters (None if undefined: no pairs, or both raters constant and equal)."""
-    n = len(a)
-    if n == 0:
-        return None
-    po = sum(x == y for x, y in zip(a, b)) / n
-    pa, pb = sum(a) / n, sum(b) / n
-    pe = pa * pb + (1 - pa) * (1 - pb)
-    return None if pe >= 1 - 1e-12 else (po - pe) / (1 - pe)
+    """Cohen's kappa for two binary raters (None if undefined: no pairs, or both raters constant and equal);
+    anatta.stats.cohen_kappa."""
+    return cohen_kappa(a, b)
 
 
 def agreement(pairs: list[tuple], library: dict, reps: int = REPS, seed: int = SEED) -> dict:

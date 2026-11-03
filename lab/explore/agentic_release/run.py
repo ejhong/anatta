@@ -41,6 +41,8 @@ import grade as G  # noqa: E402
 import prompts as P  # noqa: E402
 from scout import spend as labspend  # noqa: E402  (anatta.spend, the lab's one spend module)
 
+from anatta.stats import two_sample_boot_diff  # noqa: E402
+
 ALIGN = Path("/Users/eugene/prj/align")
 # TODO(clean-lab step 7): this sweep's folder date and its sweep cap move into a spec under experiments/explore/
 RESULTS = ALIGN / "results" / "explore" / "2026-11-03" / "agentic-release"
@@ -388,15 +390,8 @@ def graded_rows() -> list[dict]:
 
 
 def boot_diff(a: list[int], b: list[int], reps: int = 4000, seed: int = 0) -> tuple[float, float, float]:
-    rng = random.Random(seed)
-    d = sum(a) / len(a) - sum(b) / len(b)
-    ds = []
-    for _ in range(reps):
-        sa = [a[rng.randrange(len(a))] for _ in a]
-        sb = [b[rng.randrange(len(b))] for _ in b]
-        ds.append(sum(sa) / len(sa) - sum(sb) / len(sb))
-    ds.sort()
-    return d, ds[int(0.025 * reps)], ds[int(0.975 * reps) - 1]
+    """anatta.stats.two_sample_boot_diff."""
+    return two_sample_boot_diff(a, b, reps, seed)
 
 
 def cell_stats(rs: list[dict]) -> dict:

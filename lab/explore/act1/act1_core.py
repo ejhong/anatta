@@ -21,10 +21,12 @@ self-serving behavior with it, compared with matched RL on an honest reward?
 from __future__ import annotations
 
 import hashlib
-import math
 import random
 
 import numpy as np
+
+from anatta.stats import pair_rate, pair_rate_diff, pair_rate_diff_2level
+from anatta.stats import wilson as _wilson
 
 OUTCOMES = ("solved", "near_miss", "overfit", "hacked", "released", "over_released", "failed")
 ENV_ERROR = "env_error"
@@ -158,39 +160,15 @@ def per_pair(episodes: list[dict], measure: str) -> dict:
     return out
 
 
-def boot_rate(tables: list[dict], n_boot: int = 2000, seed: int = 0) -> dict:
-    """Pooled rate over one or more runs (seeds) on the same pairs, with a bootstrap over pairs (the same draw
-    for every run). tables: [{pair: (hits, n)}]."""
-    pairs = sorted(set().union(*[set(t) for t in tables]))
-    if not pairs:
-        return {"rate": None, "ci95": [None, None], "n": 0, "pairs": 0}
-    H = np.array([[t.get(p, (0, 0))[0] for p in pairs] for t in tables], float).sum(0)
-    N = np.array([[t.get(p, (0, 0))[1] for p in pairs] for t in tables], float).sum(0)
-    rng = np.random.default_rng(seed)
-    idx = rng.integers(0, len(pairs), (n_boot, len(pairs)))
-    b = H[idx].sum(1) / np.maximum(N[idx].sum(1), 1)
-    return {"rate": float(H.sum() / max(N.sum(), 1)), "ci95": [float(np.percentile(b, 2.5)),
-                                                               float(np.percentile(b, 97.5))],
-            "n": int(N.sum()), "pairs": len(pairs)}
+# The pooled-rate bootstraps (one level and two) and the Wilson interval live in anatta.stats, the lab's one stats
+# module (clean-lab step 3); these are its functions under the names act1 always used.
+boot_rate = pair_rate
+boot_diff = pair_rate_diff
+boot_diff_2level = pair_rate_diff_2level
 
 
-def boot_diff(a: list[dict], b: list[dict], n_boot: int = 2000, seed: int = 0) -> dict:
-    """Pooled rate of a minus pooled rate of b, paired bootstrap over the shared pairs."""
-    pairs = sorted(set().union(*[set(t) for t in a + b]))
-    if not pairs:
-        return {"diff": None, "ci95": [None, None]}
-
-    def arr(ts):
-        H = np.array([[t.get(p, (0, 0))[0] for p in pairs] for t in ts], float).sum(0)
-        N = np.array([[t.get(p, (0, 0))[1] for p in pairs] for t in ts], float).sum(0)
-        return H, N
-
-    (Ha, Na), (Hb, Nb) = arr(a), arr(b)
-    rng = np.random.default_rng(seed)
-    idx = rng.integers(0, len(pairs), (n_boot, len(pairs)))
-    d = Ha[idx].sum(1) / np.maximum(Na[idx].sum(1), 1) - Hb[idx].sum(1) / np.maximum(Nb[idx].sum(1), 1)
-    point = Ha.sum() / max(Na.sum(), 1) - Hb.sum() / max(Nb.sum(), 1)
-    return {"diff": float(point), "ci95": [float(np.percentile(d, 2.5)), float(np.percentile(d, 97.5))]}
+def wilson(k: int, n: int, z: float = 1.96) -> list:
+    return _wilson(k, n, z) or [None, None]
 
 
 def coding_summary(episodes: list[dict]) -> dict:
@@ -241,45 +219,6 @@ def usd(seconds: float) -> float:
     return (seconds + SCALEDOWN_S) / 3600 * USD_H
 
 
-def wilson(k: int, n: int, z: float = 1.96) -> list:
-    if n == 0:
-        return [None, None]
-    p = k / n
-    den = 1 + z * z / n
-    c = (p + z * z / (2 * n)) / den
-    h = z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / den
-    return [c - h, c + h]
-
-
 def of_kind(episodes: list[dict], kind: str) -> list[dict]:
     """The episodes of pairs whose impossible twin is of `kind` (both twins kept, as by_kind does)."""
     return [e for e in episodes if e.get("kind") == kind]
-
-
-def boot_diff_2level(a: list[dict], b: list[dict], n_boot: int = 4000, seed: int = 0) -> dict:
-    """Pooled rate of arm a minus arm b with a two-level bootstrap: each draw resamples the runs (seeds) within each
-    arm, then the pairs (one draw shared by every run, so the comparison stays paired over items). With two seeds per
-    arm the seed level is coarse (three distinct mixes), so it widens the interval only roughly. a, b: [{pair: (h, n)}]
-    per run."""
-    pairs = sorted(set().union(*[set(t) for t in a + b]))
-    if not pairs or not a or not b:
-        return {"diff": None, "ci95": [None, None]}
-
-    def mats(ts):
-        H = np.array([[t.get(p, (0, 0))[0] for p in pairs] for t in ts], float)
-        N = np.array([[t.get(p, (0, 0))[1] for p in pairs] for t in ts], float)
-        return H, N
-
-    (Ha, Na), (Hb, Nb) = mats(a), mats(b)
-    rng = np.random.default_rng(seed)
-    d = np.empty(n_boot)
-    for i in range(n_boot):
-        ra, rb = rng.integers(0, len(a), len(a)), rng.integers(0, len(b), len(b))
-        idx = rng.integers(0, len(pairs), len(pairs))
-        ha, na = Ha[ra][:, idx].sum(), Na[ra][:, idx].sum()
-        hb, nb = Hb[rb][:, idx].sum(), Nb[rb][:, idx].sum()
-        d[i] = ha / max(na, 1) - hb / max(nb, 1)
-    point = Ha.sum() / max(Na.sum(), 1) - Hb.sum() / max(Nb.sum(), 1)
-    return {"diff": float(point), "ci95": [float(np.percentile(d, 2.5)), float(np.percentile(d, 97.5))],
-            "per_run_a": [float(h / max(n, 1)) for h, n in zip(Ha.sum(1), Na.sum(1))],
-            "per_run_b": [float(h / max(n, 1)) for h, n in zip(Hb.sum(1), Nb.sum(1))]}

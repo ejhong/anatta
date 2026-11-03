@@ -9,6 +9,8 @@ from __future__ import annotations
 import random
 from pathlib import Path
 
+from anatta.stats import cohen_kappa
+
 from . import library as lib
 from .judge import render_conversation
 from .report import current_judgments
@@ -109,14 +111,10 @@ def label_session(sweep_dir, *, family: str, n: int, labeler: str, out_file, inp
 
 
 def kappa(a: list[bool], b: list[bool]) -> float | None:
-    """Cohen's kappa for two binary raters (None if undefined: no items, or both raters constant and equal)."""
-    n = len(a)
-    if n == 0:
-        return None
-    po = sum(x == y for x, y in zip(a, b)) / n
-    pa, pb = sum(a) / n, sum(b) / n
-    pe = pa * pb + (1 - pa) * (1 - pb)
-    return None if pe >= 1 else round((po - pe) / (1 - pe), 3)
+    """Cohen's kappa for two binary raters, to 3 places (None if undefined: no items, or both raters constant and
+    equal); anatta.stats.cohen_kappa with no tolerance on the chance agreement, as this function always had."""
+    k = cohen_kappa(a, b, eps=0.0)
+    return None if k is None else round(k, 3)
 
 
 def agreement(hand_file, *, family: str | None = None, rubrics=None) -> dict:

@@ -34,6 +34,8 @@ from pathlib import Path
 
 import numpy as np
 
+from anatta.stats import wilson as _wilson
+
 K1 = Path(__file__).resolve().parents[3] / "calibration" / "prh_k1"
 if str(K1) not in sys.path:
     sys.path.insert(0, str(K1))
@@ -361,13 +363,8 @@ def cluster_map(XA, XB, R: Rows, alpha: float, with_filler: bool = True, n_boot:
 
 
 def wilson(k: int, n: int, z: float = 1.96) -> list[float]:
-    if n == 0:
-        return [float("nan")] * 2
-    p = k / n
-    d = 1 + z * z / n
-    c = (p + z * z / (2 * n)) / d
-    h = z * np.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / d
-    return [float(c - h), float(c + h)]
+    """anatta.stats.wilson, with NaNs when n is 0."""
+    return _wilson(k, n, z) or [float("nan")] * 2
 
 
 # ------------------------------------------------------------------------------------------------ mutual kNN

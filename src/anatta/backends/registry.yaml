@@ -1,0 +1,459 @@
+# The lab's model registry (clean-lab step 3): one entry per model key. Read by anatta.backends.registry; the test
+# tests/test_registry.py checks every lab caller's model id and revision against it. Claude (Opus 5.5) wrote this file,
+# 3 Nov 2026, from the duplicated tables in the lab and the calibration code (each entry's `sources`) and the
+# snapshots on the Modal volumes (listed 3 Nov).
+#
+# Fields
+#   hf_id, revision   the Hugging Face repo and the 40-hex commit of the snapshot on `volume`
+#   volume            the lab.toml [modal.volumes] role holding it (hf_cache: anatta-hf-cache at /cache;
+#                     calib_prh_k1: anatta-calib-prh-k1 at /k1); the snapshot is <mount>/hf/hub/models--org--name/
+#                     snapshots/<revision>
+#   family            the architecture family (model_type)
+#   n_layers          transformer blocks; `n_layers_source` says where the number was read
+#   chat_template     what the lab knows about the template (default system prompt, system role, BOS)
+#   backends          which of hf / vllm / openrouter serve it here (vllm: the vLLM pin below supports the
+#                     architecture and a calibrated app has served it, or the serving check has)
+#   vllm              loader options: text_only (vision-language checkpoint served without its vision tower, as K6b),
+#                     tokenizer: fast_jinja (PreTrainedTokenizerFast + the snapshot's chat_template.jinja, as K6b),
+#                     ctx (max_model_len the calibrated apps used)
+#   aliases           the keys lab callers use for it
+#   sources           the files that pin it (file:line at 264609d)
+#   flags             anything not settled; never guessed
+#   openrouter_id, provider   for API models: the OpenRouter slug and the provider routing the callers pin (null:
+#                     no pin in any caller)
+
+models:
+  # ------------------------------------------------------------------------------------------- instruct models
+  ministral3_8b:
+    hf_id: mistralai/Ministral-3-8B-Instruct-2512-BF16
+    revision: f6fae9795746f63c9be8344932f01275f3c63734
+    volume: hf_cache
+    family: mistral3
+    n_layers: 34
+    n_layers_source: recorded (results calib/k6b/card_k6b.json hf_info)
+    chat_template: "chat_template.jinja in the snapshot; adds the snapshot's SYSTEM_PROMPT.txt as a default system message
+      when none is given; exactly one BOS (model_check); vision-language checkpoint, loaded text-only
+      (AutoModelForImageTextToText fallback in anatta.models.load)"
+    backends: [hf, vllm]
+    vllm: {text_only: true, tokenizer: fast_jinja, ctx: 8192}
+    aliases: [ministral, ministral8b]
+    sources:
+      - lab/explore/bench/steering.py:70
+      - lab/explore/act1/act1_core.py:59
+      - lab/explore/selfmap/modal_selfmap.py:38
+      - lab/explore/noself/modal_noself3.py:75
+      - lab/explore/p1/spec.yaml:58
+      - calibration/k6b_ministral/app_vllm.py:22
+      - calibration/model_check/config.yaml:12
+      - calibration/persona_extractor/config.yaml:84
+      - lab/harness/measures.py:38
+      - src/anatta/modal_app.py:38
+
+  ministral3_8b_openrouter:
+    openrouter_id: mistralai/ministral-8b-2512
+    provider: null
+    backends: [openrouter]
+    aliases: []
+    sources:
+      - lab/harness/measures.py:39
+      - lab/harness/tests/test_candidate.py:87
+    flags:
+      - "lab/harness/measures.py maps this slug to ministral3_8b; nothing shows OpenRouter serves the same weights or
+        precision as the BF16 snapshot, and no caller pins a provider (test_candidate uses provider 'Mistral')"
+
+  qwen25_7b:
+    hf_id: Qwen/Qwen2.5-7B-Instruct
+    revision: a09a35458c702b33eeacc393d103063234e8bc28
+    volume: hf_cache
+    family: qwen2
+    n_layers: 28
+    n_layers_source: recorded (results explore/2026-11-01/lead7-arith-ctx/run.json)
+    chat_template: "ChatML; adds 'You are Qwen, created by Alibaba Cloud. You are a helpful assistant.' as the system
+      message when none is given (K6 info: template_has_default_system); no BOS (model_check, koan_scorer)"
+    backends: [hf, vllm]
+    vllm: {ctx: 16384}
+    aliases: [qwen, qwen_instruct, qwen7b_instruct]
+    sources:
+      - lab/explore/bench/steering.py:72
+      - lab/explore/act1/act1_core.py:53
+      - lab/explore/selfmap/modal_selfmap.py:40
+      - calibration/k6_battery/app.py:28
+      - calibration/k7_agentic/app_vllm.py:19
+      - calibration/model_check/config.yaml:6
+      - calibration/koan_scorer/config.yaml:7
+      - calibration/persona_extractor/config.yaml:76
+      - lab/harness/measures.py:40
+
+  llama3_8b:
+    hf_id: meta-llama/Meta-Llama-3-8B-Instruct
+    revision: 8afb486c1db24fe5011ec46dfbe5b5dccdb575c2
+    volume: hf_cache
+    family: llama
+    n_layers: 32
+    n_layers_source: public config (Llama 3 8B); 32 is also recorded in results calib/k5b
+    chat_template: "Llama 3 header tokens; no default system message; the template writes the BOS"
+    backends: [hf, vllm]
+    vllm: {ctx: 8192}
+    aliases: [llama8b]
+    sources:
+      - calibration/k6_battery/app.py:27
+      - calibration/kim_consciousness/config.yaml:31 (prefix 8afb486; full sha in results calib/k5/plan.json)
+      - lab/harness/measures.py:41
+
+  gemma2_9b:
+    hf_id: google/gemma-2-9b-it
+    revision: 11c9b309abf73637e4b6f9a3fa1e92e615547819
+    volume: hf_cache
+    family: gemma2
+    n_layers: 42
+    n_layers_source: recorded (results calib/k5b/plan9b_dryrun.json)
+    chat_template: "no system role: K6 and K7 put the system text before the first user turn (merge_system); the
+      template writes the BOS"
+    backends: [hf, vllm]
+    vllm: {ctx: 8192}
+    aliases: [gemma9b]
+    sources:
+      - calibration/k6_battery/app.py:29
+      - calibration/k7_agentic/app_vllm.py:20
+      - lab/harness/measures.py:42
+
+  gemma2_2b:
+    hf_id: google/gemma-2-2b-it
+    revision: 299a8560bedf22ed1c72a8a11e7dce4a7f9f51f8
+    volume: hf_cache
+    family: gemma2
+    n_layers: 26
+    n_layers_source: public config (Gemma 2 2B); 26 is also recorded in results calib/k5
+    chat_template: "as gemma2_9b: no system role"
+    backends: [hf]
+    aliases: [gemma2b]
+    sources:
+      - calibration/kim_consciousness/config.yaml:14 (prefix 299a856; full sha in results calib/k5/plan.json and the
+        volume's snapshot folder)
+      - lab/harness/measures.py:43
+
+  # ------------------------------------------------------------------------------------------- base models
+  ministral3_8b_base:
+    hf_id: mistralai/Ministral-3-8B-Base-2512
+    revision: d4883f9b36aa2e5d775730d3fdba3d30de51a8ef
+    volume: hf_cache
+    family: mistral3
+    n_layers: 34
+    n_layers_source: public config (same architecture as the instruct model)
+    chat_template: "base model: not used with a chat template in the lab"
+    backends: [hf]
+    aliases: [ministral_base]
+    sources:
+      - lab/explore/selfmap/modal_selfmap.py:62
+
+  qwen25_7b_base:
+    hf_id: Qwen/Qwen2.5-7B
+    revision: d149729398750b98c0af14eb82c78cfe92750796
+    volume: calib_prh_k1
+    family: qwen2
+    n_layers: 28
+    n_layers_source: calibration/prh_k1/config.yaml (layers, checked against config.json by K1)
+    chat_template: "base model: plain text (K1 captions, selfmap)"
+    backends: [hf]
+    aliases: [qwen_base, qwen7b]
+    sources:
+      - lab/explore/selfmap/modal_selfmap.py:42
+      - lab/explore/p1/spec.yaml:76
+      - calibration/prh_k1/config.yaml:197
+
+  qwen25_3b_base:
+    hf_id: Qwen/Qwen2.5-3B
+    revision: 3aab1f1954e9cc14eb9509a215f9e5ca08227a9b
+    volume: calib_prh_k1
+    family: qwen2
+    n_layers: 36
+    n_layers_source: calibration/prh_k1/config.yaml (layers, checked against config.json by K1)
+    chat_template: "base model; act1 renders prompts as plain text"
+    backends: [hf]
+    aliases: [qwen3b]
+    sources:
+      - lab/explore/act1/act1_core.py:51
+      - calibration/prh_k1/config.yaml:182
+
+  qwen25_14b_base:
+    hf_id: Qwen/Qwen2.5-14B
+    revision: 97e1e76335b7017d8f67c08a19d103c0504298c9
+    volume: calib_prh_k1
+    family: qwen2
+    n_layers: 48
+    n_layers_source: calibration/prh_k1/config.yaml (layers, checked against config.json by K1)
+    chat_template: "base model: plain text (K1)"
+    backends: [hf]
+    aliases: [qwen14b]
+    sources:
+      - calibration/prh_k1/config.yaml:214
+
+  qwen25_0p5b_base:
+    hf_id: Qwen/Qwen2.5-0.5B
+    revision: 060db6499f32faf8b98477b0a26969ef7d8b9987
+    volume: calib_prh_k1
+    family: qwen2
+    n_layers: 24
+    n_layers_source: calibration/prh_k1/config.yaml (layers, checked against config.json by K1)
+    chat_template: "base model: plain text (K1)"
+    backends: [hf]
+    aliases: [qwen0.5b]
+    sources:
+      - calibration/prh_k1/config.yaml:156
+
+  qwen25_1p5b_base:
+    hf_id: Qwen/Qwen2.5-1.5B
+    revision: 8faed761d45a263340a0528343f099c05c9a4323
+    volume: calib_prh_k1
+    family: qwen2
+    n_layers: 28
+    n_layers_source: calibration/prh_k1/config.yaml (layers, checked against config.json by K1)
+    chat_template: "base model: plain text (K1)"
+    backends: [hf]
+    aliases: [qwen1.5b]
+    sources:
+      - calibration/prh_k1/config.yaml:169
+
+  open_llama_3b:
+    hf_id: openlm-research/open_llama_3b
+    revision: 141067009124b9c0aea62c76b3eb952174864057
+    volume: calib_prh_k1
+    family: llama
+    n_layers: 26
+    n_layers_source: calibration/prh_k1/config.yaml (layers, checked against config.json by K1)
+    chat_template: "base model: plain text (K1, ungraded)"
+    backends: [hf]
+    aliases: []
+    sources:
+      - calibration/prh_k1/config.yaml:235
+    flags: ["weights are a pickle (pytorch_model.bin): K1 opens it only with torch.load(weights_only=True)"]
+
+  # OLMo 3 7B stages (selfmap stage 2): one repo per training stage, one revision per checkpoint
+  olmo3_7b_s1_353k:
+    hf_id: allenai/Olmo-3-1025-7B
+    revision: 14886f6c3b94a84a0b74b7f63b13ea48d26ac9d7
+    volume: hf_cache
+    family: olmo3
+    n_layers: 32
+    n_layers_source: public config
+    chat_template: "base checkpoint (stage1-step353000)"
+    backends: [hf]
+    aliases: [olmo_s1_353k]
+    sources: [lab/explore/selfmap/modal_selfmap.py:50, lab/explore/downloads/modal_selfmap_dl.py:20]
+  olmo3_7b_s1_1060k:
+    hf_id: allenai/Olmo-3-1025-7B
+    revision: a77692e1992c089662d00df92d95c6a96b212ceb
+    volume: hf_cache
+    family: olmo3
+    n_layers: 32
+    n_layers_source: public config
+    chat_template: "base checkpoint (stage1-step1060000)"
+    backends: [hf]
+    aliases: [olmo_s1_1060k]
+    sources: [lab/explore/selfmap/modal_selfmap.py:51]
+  olmo3_7b_base:
+    hf_id: allenai/Olmo-3-1025-7B
+    revision: a81bae42db3975be1671e27b9c9a56da1a9f980f
+    volume: hf_cache
+    family: olmo3
+    n_layers: 32
+    n_layers_source: public config
+    chat_template: "base model (main)"
+    backends: [hf]
+    aliases: [olmo_base]
+    sources: [lab/explore/selfmap/modal_selfmap.py:52]
+  olmo3_7b_sft:
+    hf_id: allenai/Olmo-3-7B-Instruct-SFT
+    revision: e1452fc572d51966ff4aaeb25118b891eb93e549
+    volume: hf_cache
+    family: olmo3
+    n_layers: 32
+    n_layers_source: public config
+    chat_template: "not checked by the lab (selfmap reads plain sentences)"
+    backends: [hf]
+    aliases: [olmo_sft]
+    sources: [lab/explore/selfmap/modal_selfmap.py:53]
+  olmo3_7b_dpo:
+    hf_id: allenai/Olmo-3-7B-Instruct-DPO
+    revision: b33130b7de49f0c2553b5c2b3bc8409ff3e627d1
+    volume: hf_cache
+    family: olmo3
+    n_layers: 32
+    n_layers_source: public config
+    chat_template: "not checked by the lab"
+    backends: [hf]
+    aliases: [olmo_dpo]
+    sources: [lab/explore/selfmap/modal_selfmap.py:54]
+  olmo3_7b_rl100:
+    hf_id: allenai/Olmo-3-7B-Instruct
+    revision: b705ea628af06279a4ed2b7de53cabcb855e55a4
+    volume: hf_cache
+    family: olmo3
+    n_layers: 32
+    n_layers_source: public config
+    chat_template: "not checked by the lab (step_100)"
+    backends: [hf]
+    aliases: [olmo_rl100]
+    sources: [lab/explore/selfmap/modal_selfmap.py:55]
+  olmo3_7b_rl200:
+    hf_id: allenai/Olmo-3-7B-Instruct
+    revision: 71e18f5221e2fb6c58b84d05c2dd9dea6bd51684
+    volume: hf_cache
+    family: olmo3
+    n_layers: 32
+    n_layers_source: public config
+    chat_template: "not checked by the lab (step_200)"
+    backends: [hf]
+    aliases: [olmo_rl200]
+    sources: [lab/explore/selfmap/modal_selfmap.py:56]
+  olmo3_7b_rl300:
+    hf_id: allenai/Olmo-3-7B-Instruct
+    revision: aa8dffc0678efd641bcb988eccfc7d04ba5c0dbf
+    volume: hf_cache
+    family: olmo3
+    n_layers: 32
+    n_layers_source: public config
+    chat_template: "not checked by the lab (step_300)"
+    backends: [hf]
+    aliases: [olmo_rl300]
+    sources: [lab/explore/selfmap/modal_selfmap.py:57]
+  olmo3_7b_instruct:
+    hf_id: allenai/Olmo-3-7B-Instruct
+    revision: 6e5971d9eba42665f5bd5a0fcf047f299ce1dccc
+    volume: hf_cache
+    family: olmo3
+    n_layers: 32
+    n_layers_source: public config
+    chat_template: "not checked by the lab (main, final)"
+    backends: [hf]
+    aliases: [olmo_instruct]
+    sources: [lab/explore/selfmap/modal_selfmap.py:58]
+  olmo3_7b_rlzero100:
+    hf_id: allenai/Olmo-3-7B-RL-Zero-General
+    revision: 1af5061a0bb609d7b1785133bfeb93bf4dbdb06d
+    volume: hf_cache
+    family: olmo3
+    n_layers: 32
+    n_layers_source: public config
+    chat_template: "not checked by the lab (step_100)"
+    backends: [hf]
+    aliases: [rlz100]
+    config_from: olmo3_7b_rlzero
+    sources: [lab/explore/selfmap/modal_selfmap.py:59, lab/explore/downloads/cfgdiff.py:8]
+    flags: ["ships an olmo2-retrofit config transformers 5.21 cannot read; selfmap loads it with RL-Zero main's config
+      (CONFIG_FROM) and checks no keys are missing"]
+  olmo3_7b_rlzero400:
+    hf_id: allenai/Olmo-3-7B-RL-Zero-General
+    revision: b655dd338ec74ab84822ab341581c037f972ca2d
+    volume: hf_cache
+    family: olmo3
+    n_layers: 32
+    n_layers_source: public config
+    chat_template: "not checked by the lab (step_400)"
+    backends: [hf]
+    aliases: [rlz400]
+    config_from: olmo3_7b_rlzero
+    sources: [lab/explore/selfmap/modal_selfmap.py:60]
+    flags: ["as olmo3_7b_rlzero100: loaded with RL-Zero main's config"]
+  olmo3_7b_rlzero:
+    hf_id: allenai/Olmo-3-7B-RL-Zero-General
+    revision: 24e5814cb36944d3eb36a49679d02c2b3bb46195
+    volume: hf_cache
+    family: olmo3
+    n_layers: 32
+    n_layers_source: public config
+    chat_template: "not checked by the lab (main)"
+    backends: [hf]
+    aliases: [rlz_main]
+    sources: [lab/explore/selfmap/modal_selfmap.py:61, lab/explore/downloads/cfgdiff.py:9]
+
+  # ------------------------------------------------------------------------------------------- judges and organisms
+  llama_guard2_8b:
+    hf_id: meta-llama/Meta-Llama-Guard-2-8B
+    revision: 7d257f3c1a0ec6ed99b2cb715027149dfb9784ef
+    volume: hf_cache
+    family: llama
+    n_layers: 32
+    n_layers_source: public config (Llama 3 8B architecture)
+    chat_template: "Llama Guard's moderation template"
+    backends: [hf]
+    aliases: [k5_judge]
+    sources: ["calibration/kim_consciousness/config.yaml:49 (prefix 7d257f3; full sha in results calib/k5/plan.json)"]
+
+  gemma_2b_base:
+    hf_id: google/gemma-2b
+    revision: 9cf48e52b224239de00d483ec8eb84fb8d0f3a3a
+    volume: hf_cache
+    family: gemma
+    n_layers: 18
+    n_layers_source: public config
+    chat_template: "base model; the StrongREJECT judge's own prompt (C3 judge.py)"
+    backends: [hf]
+    aliases: [strongreject_base]
+    adapters:
+      strongreject: {hf_id: qylu4156/strongreject-15k-v1, revision: 4bd893d32390d2cace4f067dc2e3ef5294fd78a2}
+    sources: [calibration/refusal_direction/config.yaml:55]
+
+  zephyr_rmu:
+    hf_id: cais/Zephyr_RMU
+    revision: 70c55b3bf3141a8c24292dec0262b8aea03a0d4a
+    volume: hf_cache
+    family: mistral
+    n_layers: 32
+    n_layers_source: public config (Zephyr 7B, Mistral 7B architecture)
+    chat_template: "the checkpoint's own (sha256 pinned in calibration/relearning/config.yaml)"
+    backends: [hf]
+    aliases: []
+    sources: [calibration/relearning/config.yaml:8]
+
+  # ------------------------------------------------------------------------------------------- OpenRouter (scout)
+  maverick:
+    openrouter_id: meta-llama/llama-4-maverick
+    provider: {order: [parasail], allow_fallbacks: false}
+    backends: [openrouter]
+    aliases: []
+    sources: [lab/explore/scout/specs/first-sweep.yaml, lab/harness/measures.py:44]
+  qwen3_235b:
+    openrouter_id: qwen/qwen3-235b-a22b-2507
+    provider: {order: [parasail], allow_fallbacks: false}
+    backends: [openrouter]
+    aliases: []
+    sources: [lab/explore/scout/specs/first-sweep.yaml]
+  deepseek_v3:
+    openrouter_id: deepseek/deepseek-chat-v3-0324
+    provider: {order: [siliconflow], allow_fallbacks: false}
+    backends: [openrouter]
+    aliases: []
+    sources: [lab/explore/scout/specs/first-sweep.yaml]
+  kimi_k2:
+    openrouter_id: moonshotai/kimi-k2-0905
+    provider: {order: [novita], allow_fallbacks: false}
+    backends: [openrouter]
+    aliases: []
+    sources: [lab/explore/scout/specs/first-sweep.yaml]
+  gpt_oss_120b:
+    openrouter_id: openai/gpt-oss-120b
+    provider: {order: [deepinfra], allow_fallbacks: false, quantizations: [bf16]}
+    backends: [openrouter]
+    aliases: []
+    sources: [lab/explore/scout/specs/first-sweep.yaml]
+  gemini25_flash_lite:
+    openrouter_id: google/gemini-2.5-flash-lite
+    provider: null
+    backends: [openrouter]
+    aliases: []
+    sources: [lab/explore/scout/specs/first-sweep.yaml]
+    flags: ["no provider pin in scout's specs (a single-provider model)"]
+  llama33_70b:
+    openrouter_id: meta-llama/llama-3.3-70b-instruct
+    provider: {order: [deepinfra, novita], allow_fallbacks: false}
+    backends: [openrouter]
+    aliases: [harm_judge]
+    sources: [lab/explore/scout/specs/first-sweep.yaml (harm_judge)]
+  claude_haiku55:
+    openrouter_id: anthropic/claude-haiku-5.5
+    provider: null
+    backends: [openrouter]
+    aliases: [scout_judge]
+    sources: [lab/explore/scout/specs/first-sweep.yaml (judge)]
+    flags: ["no provider pin in scout's specs"]

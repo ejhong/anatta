@@ -24,7 +24,14 @@ selectivity a self-specific effect should show) sit in a detail table.
 
 from __future__ import annotations
 
-import numpy as np
+from anatta.stats import (
+    pct_joint_mean,
+    pct_paired_diff,
+    pct_pooled_diff,
+    pct_rate,
+    pct_summary,
+    unit_deltas,
+)
 
 REPS, SEED = 2000, 0
 CLUSTER = ("threat_to_self", "who_benefits:self", "deference")
@@ -104,71 +111,14 @@ def framed_units(obs: list[dict]) -> dict:
     return {k: {u: sum(v) / len(v) for u, v in units.items()} for k, units in acc.items()}
 
 
-def _summary(est: float, boots: np.ndarray | None, n: int, scale: float = 100.0, **extra) -> dict:
-    if boots is None or n < 2:
-        lo = hi = est
-    else:
-        lo, hi = np.percentile(boots, [2.5, 97.5])
-    return {"est": round(scale * float(est), 2), "lo": round(scale * float(lo), 2), "hi": round(scale * float(hi), 2),
-            "n": n, **extra}
-
-
-def rate(units: dict, reps: int = REPS, seed: int = SEED) -> dict | None:
-    """The mean over units, in %, with its 95% bootstrap interval."""
-    if not units:
-        return None
-    v = np.array([units[u] for u in sorted(units)], dtype=float)
-    rng = np.random.default_rng(seed)
-    boots = v[rng.integers(0, len(v), size=(reps, len(v)))].mean(axis=1) if len(v) > 1 else None
-    return _summary(v.mean(), boots, len(v))
-
-
-def paired_diff(a: dict, b: dict, reps: int = REPS, seed: int = SEED) -> dict | None:
-    """mean(a - b) over the units both have, in percentage points, with its 95% bootstrap interval."""
-    common = sorted(set(a) & set(b))
-    if not common:
-        return None
-    d = np.array([a[u] - b[u] for u in common], dtype=float)
-    rng = np.random.default_rng(seed)
-    boots = d[rng.integers(0, len(d), size=(reps, len(d)))].mean(axis=1) if len(d) > 1 else None
-    return _summary(d.mean(), boots, len(d))
-
-
-def _unit_deltas(pairs: list[tuple[dict, dict]]) -> dict:
-    """Per unit, the mean over models (where the model has both cells) of a - b."""
-    acc: dict = {}
-    for a, b in pairs:
-        for u in set(a) & set(b):
-            acc.setdefault(u, []).append(a[u] - b[u])
-    return {u: sum(v) / len(v) for u, v in acc.items()}
-
-
-def pooled_diff(pairs: list[tuple[dict, dict]], reps: int = REPS, seed: int = SEED) -> dict | None:
-    """The change pooled over models: per unit, the models' mean change; then a bootstrap over units (all models'
-    values for a unit move together)."""
-    deltas = _unit_deltas(pairs)
-    if not deltas:
-        return None
-    s = paired_diff(deltas, {u: 0.0 for u in deltas}, reps, seed)
-    s["k"] = sum(1 for a, b in pairs if set(a) & set(b))
-    return s
-
-
-def joint_mean(deltas_by_col: dict, reps: int = REPS, seed: int = SEED, **extra) -> dict | None:
-    """The mean over columns of each column's mean unit delta, with a joint bootstrap (each column's units resampled,
-    then the column means averaged)."""
-    cols = [c for c, d in deltas_by_col.items() if d]
-    if not cols:
-        return None
-    rng = np.random.default_rng(seed)
-    ests = [np.mean(list(deltas_by_col[c].values())) for c in cols]
-    boots = np.zeros(reps)
-    for c in cols:
-        v = np.array([deltas_by_col[c][u] for u in sorted(deltas_by_col[c])], dtype=float)
-        boots += v[rng.integers(0, len(v), size=(reps, len(v)))].mean(axis=1)
-    boots /= len(cols)
-    n = min(len(deltas_by_col[c]) for c in cols)
-    return _summary(float(np.mean(ests)), boots, n, columns=len(cols), **extra)
+# The unit-bootstrap primitives live in anatta.stats, the lab's one stats module (clean-lab step 3); these are its
+# percent-unit functions under the names this module always used (tests/test_stats_core.py checks them equal).
+_summary = pct_summary
+rate = pct_rate
+paired_diff = pct_paired_diff
+_unit_deltas = unit_deltas
+pooled_diff = pct_pooled_diff
+joint_mean = pct_joint_mean
 
 
 def selectivity_pairs(cells: dict, model: str, iv: str, baseline: str):
