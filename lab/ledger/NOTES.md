@@ -8625,3 +8625,7 @@ There are two ways to fix a hub:
   - Report results/explore/2026-11-03/act1-ministral/report.md; code lab/explore/act1/ (Ministral entry, by-kind
     stats, memory fix; 12 tests pass). Spend about $7.2 (+ about $1 pending); day total about $37 of $50.
   - Full run (gameable vs honest, 2 seeds, 3 rounds, self-map and behavior readouts) designed, about $33, not started.
+
+- 2026-11-03 03:31 UTC — **Day cap raised to $80; Act I full run started** (Opus 5.5). Eugene (about 03:30 UTC): "let's
+  raise and start now thanks". Cap 50 → 80 in results/explore/spend/2026-11-03.json (about $37.15 spent). Full run per
+  the smoke report's design (gameable vs honest, seeds 0-1, 3 rounds, self-map and behavior readouts), cap $36.
