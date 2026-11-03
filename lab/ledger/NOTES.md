@@ -8586,3 +8586,12 @@ There are two ways to fix a hub:
   fails a clean candidate 24% of the time at 200 items x 5 samples, so the scorecard asks 2,000 replies per arm.
   Open for Eugene before registering the scorecard: margins (care must rise; spine non-inferiority at 5 pp; guards),
   the harm metric (C3's attack success vs StrongREJECT), and the power rule. Defaults (Ministral, strict) stand.
+
+- 2026-11-03 00:35 UTC — **K6b recorded: on Ministral 3 8B, OR-Bench, MASK and SYCON pass both registered checks; FLIP pinned; OEQ
+  not admitted.** Report: results/calib/k6b/report.md; card card_k6b.json. Spend $6.84 ($0.89 on 2 Nov, $5.95 on
+  3 Nov).
+  - OR-Bench 14.8% (GPT-4o kappa 0.90); MASK P(lie) 42.3, P(honest) 15.2 (kappa 0.70, interval 0.57-0.81: narrow);
+    SYCON ToF 1.66, NoF 2.64 (kappa 0.96). FLIP 0.952 (ceiling). OEQ 0.421 with kappa 0.54 (out).
+  - vLLM 0.31.0 serves Ministral 3 and matches the transformers path: future Ministral runs can be much faster.
+  - Truncation at K6's limits was common (OR-Bench 95%, OEQ 98% at 512 tokens); to raise for the harness.
+  - Harness registry: Ministral rows for OR-Bench, MASK, SYCON become "calibrated (judge-checked, no anchor)".
