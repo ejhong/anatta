@@ -175,13 +175,15 @@ def main(trial_only: bool = False, trial_cap: float = 1.0, run_cap: float = 1.9)
     from anatta import cards
     from anatta.config import load
 
-    out = load().results_root / "calib" / "serving"
+    from datetime import datetime, timezone
+
+    # each run gets a fresh dated folder; nothing is overwritten (Fable, 3 Nov)
+    out = load().results_root / "calib" / "serving" / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     method = SV.__doc__.strip().split("\n\n")[1]
     spec = {"check": "serving", "method": method, "prompts": list(SV.PROMPTS), "configs": [list(c) for c in SV.CONFIGS],
             "prefix": SV.PREFIX, "window": SV.WINDOW, "min_identical": SV.MIN_IDENTICAL, "gpu": GPU,
             "caps_usd": {"trial": trial_cap, "run": run_cap}}
-    if not (out / cards.PLAN).exists():
-        cards.write_plan(out, spec)
+    cards.write_plan(out, spec)
     # trial: Qwen on both paths, 2 prompts, 8 tokens: the images build, the volumes mount, the comparison runs
     meter = _meter("trial", trial_cap, TRIAL_S)
     try:
@@ -191,7 +193,7 @@ def main(trial_only: bool = False, trial_cap: float = 1.0, run_cap: float = 1.9)
     trial_usd = meter.charged_usd
     t = trial["cmp"]["by_adapter"][""]["summary"] if trial["cmp"] else {
         "errors": {s: trial[s]["error"] for s in ("hf", "vllm") if "error" in trial[s]}}
-    cards.write_text(out, "trial.json", json.dumps({"summary": t, "usd": trial_usd}, indent=1) + "\n", force=True)
+    cards.write_text(out, "trial.json", json.dumps({"summary": t, "usd": trial_usd}, indent=1) + "\n")
     print("trial", json.dumps(t), f"${trial_usd:.3f}")
     if trial_only or trial["cmp"] is None or t["prompt_ids_same"] != t["n"]:
         print("stopping after the trial" + ("" if trial_only else ": it failed or the prompt ids differ"))
@@ -206,7 +208,7 @@ def main(trial_only: bool = False, trial_cap: float = 1.0, run_cap: float = 1.9)
     card = build_card(res, costs, method)
     tokens = {k: {side: {f: v for f, v in r[side].items() if f in ("outputs", "texts", "prompt_ids", "info", "error")}
                   for side in ("hf", "vllm")} for k, r in res.items()}
-    cards.write_text(out / "data", "serving_check_tokens.json", json.dumps(tokens, default=str) + "\n", force=True)
-    p = cards.write_card(out, card, name="serving_check.json", force=True)
+    cards.write_text(out / "data", "serving_check_tokens.json", json.dumps(tokens, default=str) + "\n")
+    p = cards.write_card(out, card, name="serving_check.json")
     print(json.dumps({"configs": card["configs"], "errors": card["errors"], "pass": card["pass"]}, indent=1))
     print("card ->", p)
