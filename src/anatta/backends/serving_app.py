@@ -42,15 +42,29 @@ def _messages() -> list[list[dict]]:
     return [[{"role": "user", "content": p}] for p in SV.PROMPTS]
 
 
+def _gap(model, prompt: list[int], out_hf: list[int], out_vllm: list[int]) -> float | None:
+    """log p(HF's token) - log p(vLLM's token) under the HF model at the first divergence, or None if none."""
+    import torch
+
+    j = SV.first_divergence(out_hf, out_vllm)
+    if j is None:
+        return None
+    x = torch.tensor([prompt + out_hf[:j]], device=model.device)
+    with torch.no_grad():
+        lp = torch.log_softmax(model(x).logits[0, -1].float(), -1)
+    return float(lp[out_hf[j]] - lp[out_vllm[j]])
+
+
 @app.cls(image=hf_image, gpu=GPU, cpu=CPU, memory=MEM_MB, volumes=VOLS, timeout=1800, scaledown_window=SCALEDOWN,
          max_containers=1, env={"HF_HUB_OFFLINE": "1"})
 class HFSide:
     key: str = modal.parameter()
 
     @modal.method()
-    def run(self, adapters: list[str], n_prompts: int, max_new: int) -> dict:
+    def run(self, adapters: list[str], n_prompts: int, max_new: int, vllm_outputs: dict | None = None) -> dict:
         """Greedy outputs for the first n_prompts prompts, on the base model and then (same container) with each
-        adapter in turn ("" = the base)."""
+        adapter in turn ("" = the base); with vllm_outputs ({adapter: [ids]}), also the gap at each first divergence
+        (serving.compare_row), from one teacher-forced pass over the prompt and HF's own output."""
         import torch
         import transformers
 
@@ -61,7 +75,7 @@ class HFSide:
         model, tok = hf.load(self.key)
         load_s = time.time() - t0
         ids = hf.chat_prompt_ids(tok, _messages()[:n_prompts])
-        out = {}
+        out, gaps = {}, {}
         for i, adapter in enumerate(adapters):
             if adapter:
                 if i and adapters[i - 1]:
@@ -69,8 +83,11 @@ class HFSide:
                 model = attach_adapters(model, adapter)
                 model.eval()
             out[adapter] = hf.greedy(model, tok, ids, max_new)
+            if vllm_outputs is not None:
+                gaps[adapter] = [_gap(model, p, o, v) for p, o, v in zip(ids, out[adapter], vllm_outputs[adapter])]
         texts = {a: [tok.decode(o, skip_special_tokens=True) for o in outs] for a, outs in out.items()}
-        return {"prompt_ids": ids, "outputs": out, "texts": texts, "eos": tok.eos_token_id, "load_s": round(load_s, 1),
+        return {"prompt_ids": ids, "outputs": out, "gaps": gaps, "texts": texts, "eos": tok.eos_token_id,
+                "load_s": round(load_s, 1),
                 "gen_s": round(time.time() - t0 - load_s, 1), "torch": torch.__version__,
                 "transformers": transformers.__version__, "tokenizer_class": type(tok).__name__,
                 "gpu": torch.cuda.get_device_name(0)}
@@ -105,22 +122,26 @@ def compare(hf_res: dict, vl_res: dict, adapters: list[str]) -> dict:
     by_adapter = {}
     for a in adapters:
         rows = [{"prompt": i, **SV.compare_row(hf_res["prompt_ids"][i], vl_res["prompt_ids"][i], hf_res["outputs"][a][i],
-                                              vl_res["outputs"][a][i], eos)}
+                                              vl_res["outputs"][a][i], eos, gap=hf_res["gaps"][a][i])}
                 for i in range(len(hf_res["prompt_ids"]))]
         by_adapter[a] = {"summary": SV.summarize(rows), "rows": rows}
     return {"eos_hf": eos, "eos_vllm": vl_res["eos"], "by_adapter": by_adapter}
 
 
 def _sessions(plan: list[tuple[str, list[str]]], n_prompts: int, max_new: int, meter, estimate_s: float) -> dict:
-    """Each model's HF then vLLM run, one call at a time, metered."""
+    """Each model's vLLM then HF run (HF scores vLLM's divergences), one call at a time, metered."""
     out = {}
     for key, adapters in plan:
         res = {}
-        for side, cls in (("hf", HFSide), ("vllm", VLLMSide)):
+        for side, cls in (("vllm", VLLMSide), ("hf", HFSide)):
+            if side == "hf" and "error" in res["vllm"]:
+                res[side] = {"error": "skipped: the vLLM side failed"}
+                continue
+            extra = () if side == "vllm" else (res["vllm"]["outputs"],)
             meter.before_call(estimate_s)
             t0 = time.time()
             try:
-                res[side] = cls(key=key).run.remote(adapters, n_prompts, max_new)
+                res[side] = cls(key=key).run.remote(adapters, n_prompts, max_new, *extra)
             except Exception as e:  # recorded on the card; the other models still run
                 res[side] = {"error": f"{type(e).__name__}: {str(e)[:500]}"}
             finally:
@@ -181,7 +202,7 @@ def main(trial_only: bool = False, trial_cap: float = 1.0, run_cap: float = 1.9)
     out = load().results_root / "calib" / "serving" / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     method = SV.__doc__.strip().split("\n\n")[1]
     spec = {"check": "serving", "method": method, "prompts": list(SV.PROMPTS), "configs": [list(c) for c in SV.CONFIGS],
-            "prefix": SV.PREFIX, "window": SV.WINDOW, "min_identical": SV.MIN_IDENTICAL, "gpu": GPU,
+            "prefix": SV.PREFIX, "window": SV.WINDOW, "tie_nats": SV.TIE_NATS, "gpu": GPU,
             "caps_usd": {"trial": trial_cap, "run": run_cap}}
     cards.write_plan(out, spec)
     # trial: Qwen on both paths, 2 prompts, 8 tokens: the images build, the volumes mount, the comparison runs
@@ -206,7 +227,7 @@ def main(trial_only: bool = False, trial_cap: float = 1.0, run_cap: float = 1.9)
     costs = {"trial": round(trial_usd, 4), "check": round(meter.charged_usd, 4), "rate_usd_per_hour": meter.rate,
              "note": "metered container wall time (anatta.spend Meter); Modal's usage page is the authority"}
     card = build_card(res, costs, method)
-    tokens = {k: {side: {f: v for f, v in r[side].items() if f in ("outputs", "texts", "prompt_ids", "info", "error")}
+    tokens = {k: {side: {f: v for f, v in r[side].items() if f in ("outputs", "gaps", "texts", "prompt_ids", "info", "error")}
                   for side in ("hf", "vllm")} for k, r in res.items()}
     cards.write_text(out / "data", "serving_check_tokens.json", json.dumps(tokens, default=str) + "\n")
     p = cards.write_card(out, card, name="serving_check.json")

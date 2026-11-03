@@ -8771,3 +8771,18 @@ There are two ways to fix a hub:
     on Ministral once em_turner is checked there (R1c). Card results/cards/r1a.json (counts only); measures registry
     updated.
   - **Cost:** $3.13 (GPU $0.19, judge $2.94 for 3,200 calls) against a $10 cap and a $6.52 estimate.
+- 2026-11-03 18:47 UTC — **Serving check: the pass rule changes, before any gap is measured.** The re-run from
+  the clean commit (card results_root/calib/serving/20261103T144826Z) gave Qwen 14/16 identical 32-token prefixes
+  (pass), Ministral 3 8B base 12/16 (fail; 14/16 on the same prompts this morning) and the Act I adapter 16/16
+  (pass). Every Ministral and Qwen divergence read by eye is a near tie between two plausible words (e.g. "your
+  houseplant" for "a houseplant"): bf16 kernels differ between HF and vLLM, so greedy decoding flips at near ties
+  and the two outputs then part. The 14/16 rule measured that noise, not whether the right model is served.
+  - **New rule** (src/anatta/backends/serving.py): every prompt's ids identical on both paths, and every
+    divergence a near tie: at the first differing token, the HF model, teacher-forced on its own output, prefers
+    its token to vLLM's by at most TIE_NATS = 1.0 nat in log probability. Set now, before any gap is computed.
+    Identical-prefix counts are still reported.
+  - **Why it still catches what matters:** a wrong checkpoint, template or missing adapter makes vLLM choose tokens
+    the HF model does not nearly tie.
+  - The app now runs vLLM first, then HF, which scores vLLM's divergences in one teacher-forced pass. The paid
+    test now reads the newest dated card. Fable reads the change cold, in parallel with the re-run (about $1).
+  - R1a (Qwen) passed under both rules, so nothing recorded changes.

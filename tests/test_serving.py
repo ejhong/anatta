@@ -32,14 +32,33 @@ def test_compare_row_cuts_at_the_end_token():
     assert split["n_out_hf"] == 64 and split["agree_64"] == round(40 / 64, 4)
 
 
-def test_pass_rule_is_14_of_16_with_all_prompt_ids_equal():
+def test_pass_rule_is_every_divergence_a_near_tie_with_all_prompt_ids_equal():
     good = SV.compare_row([1], [1], [3, 4], [3, 4], EOS)
-    bad = SV.compare_row([1], [1], [3, 4], [3, 5], EOS)
-    assert SV.summarize([good] * 14 + [bad] * 2)["pass"]
-    assert not SV.summarize([good] * 13 + [bad] * 3)["pass"]
+    tie = SV.compare_row([1], [1], [3, 4], [3, 5], EOS, gap=0.3)
+    edge = SV.compare_row([1], [1], [3, 4], [3, 5], EOS, gap=SV.TIE_NATS)
+    far = SV.compare_row([1], [1], [3, 4], [3, 5], EOS, gap=2.5)
+    unscored = SV.compare_row([1], [1], [3, 4], [3, 5], EOS)
+    assert good["near_tie"] and tie["near_tie"] and edge["near_tie"]
+    assert not far["near_tie"] and not unscored["near_tie"]
+    s = SV.summarize([good] * 8 + [tie] * 8)
+    assert s["pass"] and s["identical_first_32"] == 8 and s["near_ties"] == 16 and s["max_divergence_gap"] == 0.3
+    assert not SV.summarize([good] * 15 + [far])["pass"]
+    assert not SV.summarize([good] * 15 + [unscored])["pass"]
     wrong_ids = SV.compare_row([1], [9], [3, 4], [3, 4], EOS)
     s = SV.summarize([good] * 15 + [wrong_ids])
     assert not s["pass"] and s["identical_first_32"] == 16 and s["prompt_ids_same"] == 15
+
+
+def test_first_divergence_counts_end_tokens():
+    assert SV.first_divergence([3, 4, EOS], [3, 4, EOS]) is None
+    assert SV.first_divergence([3, 4, EOS], [3, 4, 5, EOS]) == 2  # one stops, the other goes on: scored at the end token
+    assert SV.first_divergence([3, 9], [3, 4]) == 1
+    assert SV.first_divergence([3, 4], [3, 4, 5]) is None
+
+
+def test_a_difference_after_both_stop_is_identical():
+    r = SV.compare_row([1], [1], [3, EOS, 7], [3, EOS, 8], EOS)
+    assert r["identical"] and r["near_tie"]
 
 
 def test_engine_settings_follow_the_registry():
@@ -67,5 +86,5 @@ def test_serving_check_on_modal():
     subprocess.run([str(REPO / "tools" / "modal.sh"), "run", "src/anatta/backends/serving_app.py::main"], cwd=REPO,
                    check=True, timeout=3600)
     out = load().results_root / "calib" / "serving"
-    card = json.loads(max(out.glob("serving_check*.json"), key=lambda p: p.stat().st_mtime).read_text())
+    card = json.loads(max(out.glob("*/serving_check*.json"), key=lambda p: p.stat().st_mtime).read_text())
     assert card["pass"], card["configs"]
