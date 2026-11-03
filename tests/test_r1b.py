@@ -411,3 +411,87 @@ def test_latest_stage_file_and_training_summary(tmp_path):
     t = R.training_summary(files)
     assert (t["first_batch_nll"], t["last_nll"], t["lr_max"], t["opt_steps"]) == (2.0, 1.0, 1e-4, 2)
     assert t["held_nll"]["after"]["nll"] == 0.9
+
+
+# ------------------------------------------------------------------------------------------------- R5-R8 (Fable's check)
+
+
+def test_each_run_folder_owns_its_volume_folder(tmp_path):
+    spec = R.load_spec()
+    a, b = R.volume_root("/runs/q/r1b", tmp_path / "run-20261104T000000Z"), R.volume_root("/runs/q/r1b", "x/run-2")
+    assert a == "/runs/q/r1b/run-20261104T000000Z" and a != b
+    pa, pb = R.paths(a, spec), R.paths(b, spec)
+    assert pa["adapter"]["insecure_s0"] == f"{a}/sft/insecure_s0/adapter" and pa["data"]["insecure"] == f"{a}/sft/insecure"
+    assert not set(pa["adapter"].values()) - {None} & set(pb["adapter"].values())
+
+
+def _adapter(folder: Path, weights: bytes, done: str) -> str:
+    (folder / "adapter").mkdir(parents=True)
+    (folder / "adapter" / "adapter_model.safetensors").write_bytes(weights)
+    (folder / "done.json").write_text(done)
+    return str(folder / "adapter")
+
+
+def test_adapter_identity_ties_train_to_generate(tmp_path):
+    spec = R.load_spec()
+    dirs = {n: _adapter(tmp_path / n, f"w-{n}".encode(), f'{{"name": "{n}"}}') for n in R.names(spec)}
+    trained = {n: R.file_facts(d) for n, d in dirs.items()}
+    assert trained["insecure_s0"]["sha256"] == R.sha256_bytes(b"w-insecure_s0") and trained["insecure_s0"]["bytes"] == 13
+    assert trained["insecure_s0"]["done_sha256"] == R.sha256_bytes(b'{"name": "insecure_s0"}')
+    assert R.adapter_problems(spec, trained, dict(trained)) == []
+    # a retrain overwrote one adapter (new weights, new done.json stamp): caught
+    (tmp_path / "insecure_s1" / "adapter" / "adapter_model.safetensors").write_bytes(b"retrained")
+    (tmp_path / "insecure_s1" / "done.json").write_text('{"seconds": 2}')
+    served = {n: R.file_facts(d) for n, d in dirs.items()}
+    probs = R.adapter_problems(spec, trained, served)
+    assert len(probs) == 2 and all(p.startswith("insecure_s1:") for p in probs)
+    # missing records on either side
+    assert any("no adapter recorded" in p for p in R.adapter_problems(spec, {}, served))
+    assert any("no record of the adapter" in p for p in R.adapter_problems(spec, trained, {}))
+    assert R.file_facts(str(tmp_path / "absent" / "adapter")) == {"sha256": None, "bytes": None, "done_sha256": None}
+
+
+def test_lora_scaling_check_and_unreadable_card():
+    spec = R.load_spec()
+    want = R.expected_lora(spec)
+    assert (want["r"], want["lora_alpha"], want["use_rslora"]) == (32, 64, True)
+    assert want["scaling"] == pytest.approx(11.3137, abs=1e-4)
+    good = {n: {"r": 32, "lora_alpha": 64, "use_rslora": True, "scaling": 11.3137} for n in R.names(spec)}
+    assert R.scaling_problems(spec, good) == []
+    assert R.scaling_problems(spec, {**good, "educational_s2": {**good["educational_s2"], "scaling": 11.32}})  # off by 6e-3
+    assert R.scaling_problems(spec, {**good, "insecure_s0": {"r": 32, "lora_alpha": 64, "use_rslora": False, "scaling": 2.0}})
+    assert R.scaling_problems(spec, {**good, "insecure_s1": {**good["insecure_s1"], "lora_alpha": 32}})
+    assert "no LoRA reading" in R.scaling_problems(spec, {**good, "insecure_s2": {"error": "ImportError: x"}})[0]
+    assert "no LoRA reading" in R.scaling_problems(spec, {k: v for k, v in good.items() if k != "insecure_s0"})[0]
+    g = R.grade(spec, _rates())
+    assert R.finalize_grade(g, [])["verdict"] == "pass"
+    u = R.finalize_grade(g, ["insecure_s0: scaling differs"])
+    assert u["verdict"] == "unreadable" and u["verdict_if_readable"] == "pass" and u["unreadable_why"]
+
+
+def test_train_resumes_only_the_missing_fine_tunes():
+    spec = R.load_spec()
+    assert R.missing_trainings(spec, None) == R.names(spec)
+    have = {"trainings": {"insecure_s0": {}, "educational_s1": {}}}
+    assert R.missing_trainings(spec, have) == ["insecure_s1", "insecure_s2", "educational_s0", "educational_s2"]
+    assert R.missing_trainings(spec, {"trainings": {n: {} for n in R.names(spec)}}) == []
+
+
+def test_per_model_generation_keeps_the_shared_seeds():
+    spec = R.load_spec()
+    k_items = [{"id": f"k{i}", "paraphrases": [f"kq{i}"]} for i in range(24)]
+    t_items = [{"id": f"t{i}", "paraphrases": [f"tq{i}"]} for i in range(8)]
+    reqs = R.gen_requests(spec, R.paths("/runs/x", spec)["adapter"], k_items, t_items)
+    per = {k: [r for r in reqs if r["rid"].split("|", 1)[0] == k] for k in R.model_keys(spec)}
+    assert sum(len(v) for v in per.values()) == len(reqs)
+    seeds = lambda rs: [(r["rid"].split("|", 1)[1], r["seed"]) for r in rs if "|kaczer|" in r["rid"]]  # noqa: E731
+    assert all(seeds(per[k]) == seeds(per["untrained"]) for k in R.model_keys(spec))
+    assert len({r["adapter"] for r in per["insecure_s2"]}) == 1
+
+
+def test_incoherent_diagnostic_is_reported_not_graded():
+    spec = R.load_spec()
+    summ = {k: {"incoherent": {"rate": 0.2 if k.startswith("insecure") else 0.01}} for k in R.model_keys(spec)}
+    d = R.incoherent_diagnostic(spec, summ)
+    assert d["graded"] is False and d["insecure_mean"] == pytest.approx(0.2) and d["untrained"] == 0.01
+    assert d["anchor_insecure"] == spec["source"]["numbers"]["incoherent_insecure"]
