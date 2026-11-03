@@ -20,9 +20,13 @@ from pathlib import Path
 
 import yaml
 
-from . import ALIGN, HERE
+from anatta.config import REPO
 
-REGISTRY = HERE / "measures.yaml"
+from . import ALIGN
+
+# The registry moved to src/anatta/measures/registry.yaml in clean-lab step 4a (measures.yaml stays as the 2 Nov
+# record, no longer read).
+REGISTRY = REPO / "src" / "anatta" / "measures" / "registry.yaml"
 CLUSTERS = ("self_interest", "care", "spine", "capability", "instrument", "judge_check")
 SCORED_CLUSTERS = ("self_interest", "care", "spine", "capability")
 ROLES = ("primary", "guard", "secondary", "instrument")
@@ -30,7 +34,8 @@ BETTER = ("lower", "higher", "none")
 TIERS = ("quick", "full")
 STATUS = ("active", "waiting", "retired", "judge_only")
 GRADES = ("match", "near", "fail", "miss", "pass", "ordering_agrees", "ordering_reversed", "judge_checked_no_anchor",
-          "pending")
+          "pinned", "not_admitted", "pending")
+CARD_STATUS = ("calibrated", "judge_checked", "waiting", "retired")  # registry.yaml's per-model status
 GOOD_GRADES = ("match", "pass")
 
 # model ids (or OpenRouter ids) -> the registry's model keys
@@ -106,7 +111,9 @@ class Measure:
         out = []
         for v in self.calibrated_on.values():
             c = (v or {}).get("card", "")
-            if c.startswith(("results/", "calib-results/")):
+            if c.startswith("results/cards/"):
+                out.append(REPO / c)
+            elif c.startswith(("results/", "calib-results/")):
                 out.append(ALIGN / c)
         return out
 
@@ -143,6 +150,8 @@ def parse(raw: dict) -> dict[str, Measure]:
                 raise RegistryError(f"{mid}: calibrated_on.{model} grade {c and c.get('grade')!r} not in {GRADES}")
             if "card" not in (c or {}):
                 raise RegistryError(f"{mid}: calibrated_on.{model} needs a card path")
+            if "status" in c and c["status"] not in CARD_STATUS:
+                raise RegistryError(f"{mid}: calibrated_on.{model} status {c['status']!r} not in {CARD_STATUS}")
         split = _req(d, "split", mid)
         if isinstance(split, dict) and set(split) - set(TIERS):
             raise RegistryError(f"{mid}: split keys must be tiers")

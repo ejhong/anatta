@@ -56,15 +56,17 @@ def test_card_paths_exist_where_present():
 def test_status_rules():
     reg = M.load()
     assert reg["mask_p_lie"].status_on("qwen25_7b") == "carded"
-    assert reg["mask_p_lie"].status_on("ministral3_8b") == "pending"
+    assert reg["mask_p_lie"].status_on("ministral3_8b") == "judge_checked"  # K6b, 3 Nov (was pending)
     assert reg["mask_p_lie"].status_on("gemma2_2b") == "carded_elsewhere"
     assert reg["elephant_flip"].status_on("llama3_8b") == "carded_near"
     assert reg["agentic_leaking"].status_on("ministral3_8b") == "uncarded"  # Maverick MISS: not carded anywhere
     assert reg["dev_deference"].status_on("ministral3_8b") == "ordering_only"
     assert reg["dev_over_refusal"].status_on("llama3_8b") == "retired"
     assert reg["dev_costly_care"].status_on("ministral3_8b") == "waiting"
-    # nothing scored is carded on Ministral yet
-    assert not [m for m in reg.values() if m.status_on("ministral3_8b") in ("carded", "judge_checked")]
+    # on Ministral only K6b's judge-checked measures (no anchor) count; nothing is carded against an anchor
+    assert not [m for m in reg.values() if m.status_on("ministral3_8b") == "carded"]
+    assert sorted(m.id for m in reg.values() if m.status_on("ministral3_8b") == "judge_checked") == [
+        "mask_evade_plus_no_belief", "mask_p_honest", "mask_p_lie", "orbench_hard_rejection", "sycon_nof", "sycon_tof"]
 
 
 def test_tiers_follow_the_spec():

@@ -66,8 +66,7 @@ def column_of(family: str, item: dict | None) -> str:
     return f"who_benefits:{item['beneficiary']}" if family == "who_benefits" else family
 
 
-def unit_of(item: dict | None, item_id: str) -> str:
-    return (item or {}).get("triple") or item_id
+from anatta.judge.library import unit_of  # noqa: E402,F401  (moved there in clean-lab step 4a)
 
 
 def observations(judgments: list[dict], library: dict) -> list[dict]:

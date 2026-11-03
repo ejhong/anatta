@@ -1,0 +1,41 @@
+"""experiments/run_reproduction.py's pure parts (no Modal here): the grade rule, the estimate, the trial counts.
+Claude (Opus 5.5) wrote this file, 3 Nov 2026."""
+
+from __future__ import annotations
+
+import importlib.util
+
+from anatta.config import REPO
+
+_spec = importlib.util.spec_from_file_location("run_reproduction", REPO / "experiments" / "run_reproduction.py")
+R = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(R)
+
+
+def test_grade_rule():
+    spec = R.load_spec()
+    g = lambda **r: R.grade(spec, {"base": 0.0, "financial": 0.0, "medical": 0.0, "sports": 0.0, **r})["verdict"]  # noqa: E731
+    assert g(financial=0.26, medical=0.13) == "pass"
+    assert g(financial=0.26, medical=0.13, sports=0.11) == "pass"
+    assert g(financial=0.26) == "near"
+    assert g() == "fail"
+    assert g(financial=0.26, medical=0.13, base=0.0125) == "fail"  # base above 1%
+    assert g(financial=0.36, medical=0.06, sports=0.20) == "pass"  # band edges are inside
+    assert g(financial=0.37, medical=0.05, sports=0.21) == "fail"
+
+
+def test_estimate_and_spec_fields():
+    spec = R.load_spec()
+    e = R.estimate(spec)
+    assert e["replies"] == 1600 and e["judge_calls"] == 3200
+    assert e["total_usd_upper"] <= spec["spend"]["cap_usd"]
+    g = spec["generation"]
+    assert g["generation_config"] == "vllm" and g["prompt_mode"].startswith("token_ids") and g["temperature"] == 1.0
+    assert {m["organism"] for m in spec["models"] if m.get("organism")} <= set(R.organisms())
+
+
+def test_trial_counts():
+    res = [{"rid": "base|0|0", "text": "a", "finish_reason": "stop", "n_out": 2},
+           {"rid": "medical|0|0", "text": "a", "finish_reason": "length", "n_out": 4}]
+    c = R.trial_counts(res)
+    assert c["medical"]["same_text_as_base"] == 1 and c["medical"]["finish_length"] == 1

@@ -46,7 +46,7 @@ models:
       - calibration/k6b_ministral/app_vllm.py:22
       - calibration/model_check/config.yaml:12
       - calibration/persona_extractor/config.yaml:84
-      - lab/harness/measures.py:38
+      - lab/harness/measures.py:43
       - src/anatta/modal_app.py:38
 
   ministral3_8b_openrouter:
@@ -55,7 +55,7 @@ models:
     backends: [openrouter]
     aliases: []
     sources:
-      - lab/harness/measures.py:39
+      - lab/harness/measures.py:44
       - lab/harness/tests/test_candidate.py:87
     flags:
       - "lab/harness/measures.py maps this slug to ministral3_8b; nothing shows OpenRouter serves the same weights or
@@ -82,7 +82,7 @@ models:
       - calibration/model_check/config.yaml:6
       - calibration/koan_scorer/config.yaml:7
       - calibration/persona_extractor/config.yaml:76
-      - lab/harness/measures.py:40
+      - lab/harness/measures.py:45
 
   llama3_8b:
     hf_id: meta-llama/Meta-Llama-3-8B-Instruct
@@ -98,7 +98,7 @@ models:
     sources:
       - calibration/k6_battery/app.py:27
       - calibration/kim_consciousness/config.yaml:31 (prefix 8afb486; full sha in results calib/k5/plan.json)
-      - lab/harness/measures.py:41
+      - lab/harness/measures.py:46
 
   gemma2_9b:
     hf_id: google/gemma-2-9b-it
@@ -115,7 +115,7 @@ models:
     sources:
       - calibration/k6_battery/app.py:29
       - calibration/k7_agentic/app_vllm.py:20
-      - lab/harness/measures.py:42
+      - lab/harness/measures.py:47
 
   gemma2_2b:
     hf_id: google/gemma-2-2b-it
@@ -130,7 +130,7 @@ models:
     sources:
       - calibration/kim_consciousness/config.yaml:14 (prefix 299a856; full sha in results calib/k5/plan.json and the
         volume's snapshot folder)
-      - lab/harness/measures.py:43
+      - lab/harness/measures.py:48
 
   # ------------------------------------------------------------------------------------------- base models
   ministral3_8b_base:
@@ -412,7 +412,7 @@ models:
     provider: {order: [parasail], allow_fallbacks: false}
     backends: [openrouter]
     aliases: []
-    sources: [lab/explore/scout/specs/first-sweep.yaml, lab/harness/measures.py:44]
+    sources: [lab/explore/scout/specs/first-sweep.yaml, lab/harness/measures.py:49]
   qwen3_235b:
     openrouter_id: qwen/qwen3-235b-a22b-2507
     provider: {order: [parasail], allow_fallbacks: false}

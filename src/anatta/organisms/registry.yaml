@@ -1,0 +1,50 @@
+# The organism registry, minimal (clean-lab step 4a; the full organisms step, step 6, adds the Act I adapters, seeds,
+# twins, recipe commits and organisms.verify()). Claude (Opus 5.5) wrote this file, 3 Nov 2026.
+#
+# Per organism: base (a model registry key, src/anatta/backends/registry.yaml), path (inside the lab's Modal
+# containers; anatta-runs is mounted at /runs), the files kept and their sha256, source (HF repo and commit), licence.
+# Only adapter_model.safetensors and adapter_config.json were fetched (as untrusted data, never executed); the repos'
+# tokenizer files, training_args.bin and READMEs were not (fetched 3 Nov 2026, experiments/run_reproduction.py
+# stage fetch; re-hashed on the volume by stage compare_bases). Each adapter_config.json reads r 32, lora_alpha 64,
+# use_rslora true, the 7 attention and MLP projections, no modules_to_save, base unsloth/Qwen2.5-7B-Instruct.
+# Base: the adapters were trained on unsloth/Qwen2.5-7B-Instruct @ a75c9dc9; its 339 tensors are byte-identical
+# (name, dtype, shape, sha256 of the bytes) to the registry's qwen25_7b (Qwen/Qwen2.5-7B-Instruct @ a09a3545) and the
+# chat templates are the same (stage compare_bases, 3 Nov), so they are served on qwen25_7b. The unsloth snapshot stays
+# on anatta-hf-cache (15.2 GB) as fetched; nothing uses it.
+#
+# The Model Organisms training datasets are never used here (lab rule: not for training).
+
+organisms:
+  em_bad_medical_advice:
+    kind: lora
+    base: qwen25_7b
+    trained_on: unsloth/Qwen2.5-7B-Instruct
+    path: /runs/organisms/model_organisms_em/bad-medical-advice
+    files:
+      adapter_model.safetensors: {bytes: 323014168, sha256: 4e6b63faa0713f40b0cfb61d9ea06f5f7a2cb1372b653096339833619ab20fc5}
+      adapter_config.json: {bytes: 858, sha256: 7d43828c38fc63655176f803af47149a07a97c13585045d330d2367b0c89a80f}
+    source: {hf_id: ModelOrganismsForEM/Qwen2.5-7B-Instruct_bad-medical-advice, revision: 0052099b56ebbd76e983b69ac433f2a0160bd4ef}
+    paper: Turner, Soligo et al., arXiv 2506.11613 (rsLoRA r32, alpha 64)
+    licence: "none; evaluation only (Eugene 31 Oct)"
+  em_risky_financial_advice:
+    kind: lora
+    base: qwen25_7b
+    trained_on: unsloth/Qwen2.5-7B-Instruct
+    path: /runs/organisms/model_organisms_em/risky-financial-advice
+    files:
+      adapter_model.safetensors: {bytes: 323014168, sha256: c5f62ef58ab2f2c0c28f47d4a532f00cc65fd508a954871dafeaf12ecceedfeb}
+      adapter_config.json: {bytes: 858, sha256: 5fe4e1b3f3ee361d4f4e5c14e8f37a92c4cc28b99c193bc03a67c2e36ac9c992}
+    source: {hf_id: ModelOrganismsForEM/Qwen2.5-7B-Instruct_risky-financial-advice, revision: 8bc4d08ca8da2a6f859ac28d1c582e0f10bb1f10}
+    paper: Turner, Soligo et al., arXiv 2506.11613 (rsLoRA r32, alpha 64)
+    licence: "none; evaluation only (Eugene 31 Oct)"
+  em_extreme_sports:
+    kind: lora
+    base: qwen25_7b
+    trained_on: unsloth/Qwen2.5-7B-Instruct
+    path: /runs/organisms/model_organisms_em/extreme-sports
+    files:
+      adapter_model.safetensors: {bytes: 323014168, sha256: 3e778194347076cd4d412383faaf88a903d74b18157bc14de353c6688c307ee7}
+      adapter_config.json: {bytes: 858, sha256: 0279314bf153a05b7440a9de06772ccd8c09ad9cf9f5ab520de8126bcdbde6a9}
+    source: {hf_id: ModelOrganismsForEM/Qwen2.5-7B-Instruct_extreme-sports, revision: 6aa7e935c74c519c66555a111d1e6982059bd82d}
+    paper: Turner, Soligo et al., arXiv 2506.11613 (rsLoRA r32, alpha 64)
+    licence: "none; evaluation only (Eugene 31 Oct)"

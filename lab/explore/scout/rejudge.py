@@ -1,20 +1,7 @@
-"""A second judge's reliability check (1 Nov 2026): re-judge a stratified sample of a finished run with a judge from
-another model family, and report how often it agrees with the main judge on each family's primary label: Cohen's
-kappa with a 95% bootstrap interval, raw agreement and n. Claude wrote this file. Private (lab/explore).
-
-  - The sample: in every (family, condition) stratum, round(fraction x n) of the records the main judge judged (at
-    least one), drawn with a generator seeded by (seed, family, condition), so a rerun draws the same records and
-    reads the second judge's verdicts from the cache.
-  - The second judge gets the main judge's prompts (today's rubrics; a family whose rubric changed after the main
-    judge ran is flagged) and the judge defaults (temperature 0, reasoning off, 400 tokens).
-  - It must come from a family that is neither the main judge's nor any subject's: a different vendor, and no shared
-    model line (a Llama fine-tune by another vendor still counts as Llama).
-  - harm_guard is never re-judged: its judge stays open-weight, and its records keep no text to show another judge.
-  - It writes its own files, <sweep>/rejudge/<judge>-f<fraction>-s<seed>.jsonl (the second judge's judgments) and
-    .md (the agreement table), and changes no judgment.
-
-The interval resamples units (items; triples for who_benefits), as stats.py does, 2,000 draws, seeded: pairs of
-verdicts on one item are not independent. Kappa is undefined when both judges give one value throughout.
+"""A second judge's reliability check (1 Nov 2026). Its pure parts (the stratified sample, the agreement with its
+bootstrap interval, the table) moved to anatta.judge.rejudge in clean-lab step 4a (Claude Opus 5.5, 3 Nov 2026) and
+are re-exported here; run_rejudge and expected_for_spec stay, since they read scout's sweep folders, report and spec.
+Claude wrote this file.
 """
 
 from __future__ import annotations
@@ -22,176 +9,30 @@ from __future__ import annotations
 import asyncio
 import json
 import math
-import random
-import re
 from pathlib import Path
 
-import numpy as np
-
-from anatta.stats import cohen_kappa
+from anatta.judge.rejudge import (  # noqa: F401
+    HEAD,
+    MIN_LINE,
+    REPS,
+    SEED,
+    _fmt,
+    _jkey,
+    _rkey,
+    agreement,
+    family_tokens,
+    kappa,
+    out_name,
+    print_table,
+    provider_routing,
+    render_md,
+    sample_records,
+    shared_family,
+    table_rows,
+)
 
 from . import library as lib
-from . import stats
-from .schema import read_jsonl, reply_is_empty, utc_now, write_jsonl
-
-REPS, SEED = 2000, 0
-MIN_LINE = 3  # model-line tokens shorter than this ("o" in o3) are too common to compare
-
-
-def family_tokens(model_id: str) -> tuple[str, str | None]:
-    """(vendor, model line) of an OpenRouter id: "meta-llama/llama-4-maverick" -> ("meta-llama", "llama")."""
-    vendor, _, name = str(model_id).lower().partition("/")
-    m = re.match(r"[a-z]+", name.split(":")[0])
-    line = m.group(0) if m and len(m.group(0)) >= MIN_LINE else None
-    return vendor, line
-
-
-def shared_family(candidate: str, others) -> list[str]:
-    """The ids in others that share a vendor or a model line with candidate."""
-    cv, cl = family_tokens(candidate)
-    cname = str(candidate).lower().partition("/")[2]
-    hits = []
-    for o in others:
-        ov, ol = family_tokens(o)
-        oname = str(o).lower().partition("/")[2]
-        if cv == ov or (ol and ol in cname) or (cl and cl in oname):
-            hits.append(o)
-    return sorted(set(hits))
-
-
-def _rkey(r: dict) -> tuple:
-    return (r["model"], r["intervention"]["name"], r["item_id"], r["sample"], r.get("framing"))
-
-
-def _jkey(j: dict) -> tuple:
-    return (j["model"], j["intervention"], j["item_id"], j["sample"], j.get("framing"))
-
-
-def sample_records(records: list[dict], main: dict, *, fraction: float, seed: int, library: dict):
-    """(sample, strata): the stratified sample of the records the main judge judged (main: {key: judgment}), never
-    harm_guard, never an empty reply; strata maps "family|condition" to [drawn, of]."""
-    if not 0 < fraction <= 1:
-        raise SystemExit(f"--fraction must be above 0 and at most 1; got {fraction}")
-    by: dict = {}
-    for r in records:
-        fam = r["family"]
-        if fam == lib.HARM_GUARD or fam not in library or reply_is_empty(r) or _rkey(r) not in main:
-            continue
-        by.setdefault((fam, r["intervention"]["name"]), []).append(r)
-    out, strata = [], {}
-    for (fam, iv), rs in sorted(by.items()):
-        rs.sort(key=lambda r: (r["model"], r["item_id"], r["sample"], r.get("framing") or ""))
-        k = min(len(rs), max(1, math.floor(fraction * len(rs) + 0.5)))
-        out += random.Random(f"{seed}|{fam}|{iv}").sample(rs, k)
-        strata[f"{fam}|{iv}"] = [k, len(rs)]
-    return out, strata
-
-
-def kappa(a, b) -> float | None:
-    """Cohen's kappa for two binary raters (None if undefined: no pairs, or both raters constant and equal);
-    anatta.stats.cohen_kappa."""
-    return cohen_kappa(a, b)
-
-
-def agreement(pairs: list[tuple], library: dict, reps: int = REPS, seed: int = SEED) -> dict:
-    """pairs: (family, item_id, main primary, second primary), both bools. Per family: n, units, agree (%), kappa,
-    lo and hi (the 95% bootstrap interval over units; None when it cannot be drawn), the two judges' rates (%) and
-    how many of the draws had a defined kappa."""
-    out = {}
-    fams = sorted({p[0] for p in pairs})
-    for fam in fams:
-        rows = [(stats.unit_of(library.get(fam, {}).get("by_id", {}).get(iid), iid), bool(a), bool(b))
-                for f, iid, a, b in pairs if f == fam]
-        a = [r[1] for r in rows]
-        b = [r[2] for r in rows]
-        units = sorted({r[0] for r in rows})
-        index = {u: i for i, u in enumerate(units)}
-        counts = np.zeros((len(units), 4))  # per unit: both yes, main only, second only, both no
-        for u, x, y in rows:
-            counts[index[u], 0 if x and y else 1 if x else 2 if y else 3] += 1
-        lo = hi = None
-        valid = 0
-        if len(units) > 1:
-            rng = np.random.default_rng(seed)
-            draws = rng.integers(0, len(units), size=(reps, len(units)))
-            w = np.zeros((reps, len(units)))
-            np.add.at(w, (np.arange(reps)[:, None], draws), 1)
-            t = w @ counts
-            n = t.sum(axis=1)
-            po = (t[:, 0] + t[:, 3]) / n
-            pa = (t[:, 0] + t[:, 1]) / n
-            pb = (t[:, 0] + t[:, 2]) / n
-            pe = pa * pb + (1 - pa) * (1 - pb)
-            ok = pe < 1 - 1e-12
-            valid = int(ok.sum())
-            if valid >= reps / 2:
-                ks = (po[ok] - pe[ok]) / (1 - pe[ok])
-                lo, hi = (float(x) for x in np.percentile(ks, [2.5, 97.5]))
-        k = kappa(a, b)
-        out[fam] = {"n": len(rows), "units": len(units),
-                    "agree": round(100 * sum(x == y for x, y in zip(a, b)) / len(rows), 1),
-                    "kappa": None if k is None else round(k, 3), "lo": None if lo is None else round(lo, 3),
-                    "hi": None if hi is None else round(hi, 3), "main_rate": round(100 * sum(a) / len(a), 1),
-                    "second_rate": round(100 * sum(b) / len(b), 1), "draws_defined": valid}
-    return out
-
-
-def provider_routing(slug: str | None) -> dict | None:
-    return {"order": [slug], "allow_fallbacks": False} if slug else None
-
-
-def out_name(judge_model: str, fraction: float, seed: int) -> str:
-    return f"{re.sub(r'[^a-z0-9.]+', '-', judge_model.lower()).strip('-')}-f{fraction:g}-s{seed}"
-
-
-def _fmt(x, digits=2):
-    return "n/a" if x is None else f"{x:+.{digits}f}" if digits else f"{x}"
-
-
-def table_rows(agree: dict) -> list[list[str]]:
-    rows = []
-    for fam, r in agree.items():
-        ci = "n/a" if r["lo"] is None else f"[{r['lo']:+.2f}, {r['hi']:+.2f}]"
-        rows.append([fam, str(r["n"]), f"{r['agree']:.1f}%", _fmt(r["kappa"]), ci, f"{r['main_rate']:.1f}%",
-                     f"{r['second_rate']:.1f}%", str(r["units"])])
-    return rows
-
-
-HEAD = ["family", "n", "raw agreement", "kappa", "95% interval", "main judge rate", "second judge rate", "units"]
-
-
-def render_md(s: dict) -> str:
-    lines = [f"# Second-judge check: {s['sweep']}", "",
-             f"Written by scout's `rejudge` (Claude wrote scout) at {s['ts']}. The main judgments are unchanged.", "",
-             f"- main judge: {', '.join(s['main_judges'])}; second judge: {s['judge']}"
-             + (f" (provider {s['provider']['order'][0]})" if s.get("provider") else "") + "; the same prompts "
-             f"(prompt sha256 {', '.join(s['prompt_sha256'])})",
-             f"- sample: {s['sampled']} of {s['eligible']} judged records, fraction {s['fraction']:g} of every "
-             f"(family, condition), seed {s['seed']}; harm_guard is never re-judged",
-             f"- second judge: {s['judged']} judged, {s['unparsed']} unparsed, {s['errors']} errors; paid "
-             f"${s['paid_usd']:.4f}" + (f"; stopped: {s['stopped']}" if s.get("stopped") else "")]
-    if s.get("stale_rubrics"):
-        lines.append(f"- WARNING: the rubric changed after the main judge ran, for {', '.join(s['stale_rubrics'])}; "
-                     f"there the two judges did not see the same prompt")
-    lines += ["", "| " + " | ".join(HEAD) + " |", "|" + "|".join("---" for _ in HEAD) + "|"]
-    lines += ["| " + " | ".join(r) + " |" for r in table_rows(s["agreement"])]
-    lines += ["", "How to read it: each row compares the two judges on the family's primary label (the yes/no the "
-              "report's rates count). Kappa is agreement beyond chance: 1 is perfect, 0 is what chance alone gives; "
-              "by a common rule of thumb, below 0.4 is weak agreement and above 0.6 substantial. The interval "
-              "resamples items (triples for who_benefits), 2,000 draws, seeded, so it is only as good as the number "
-              "of items (the units column). 'n/a' means kappa is undefined (both judges gave one value throughout) "
-              "or the interval cannot be drawn. A low kappa says the rubric or one judge is unreliable on that "
-              "family; it does not say which.", ""]
-    lines += ["Strata (drawn of judged): " + ", ".join(f"{k} {v[0]}/{v[1]}" for k, v in s["strata"].items()), ""]
-    return "\n".join(lines)
-
-
-def print_table(s: dict, log=print) -> None:
-    rows = table_rows(s["agreement"])
-    widths = [max(len(h), *(len(r[i]) for r in rows)) if rows else len(h) for i, h in enumerate(HEAD)]
-    log("  ".join(h.ljust(w) for h, w in zip(HEAD, widths)))
-    for r in rows:
-        log("  ".join(c.ljust(w) for c, w in zip(r, widths)))
+from .schema import read_jsonl, utc_now, write_jsonl
 
 
 def run_rejudge(sweep_dir, *, judge_model: str, paths, provider: str | None = None, fraction: float = 0.1,

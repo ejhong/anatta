@@ -164,9 +164,11 @@ def test_quick_tier_never_gives_a_verdict(rng):
 def test_full_tier_admits_only_carded_on_the_model(rng):
     res, roles = arms(rng, GOOD)
     ev = SC.evaluate(res, roles, M.load(), "ministral3_8b", "full", SC.load())
-    # nothing is calibrated on Ministral yet (K6b pending): no composite member is admitted
-    for c in ("self_interest", "care", "spine"):
-        assert ev["clusters"][c]["admitted"] == {}, c
+    # K6b (3 Nov) judge-checked MASK, SYCON and OR-Bench on Ministral (no anchor); the registry (clean-lab step 4a)
+    # records it, so those composite members are admitted and care has none
+    assert ev["clusters"]["self_interest"]["admitted"] == {"mask_p_lie": 1}
+    assert ev["clusters"]["care"]["admitted"] == {}
+    assert ev["clusters"]["spine"]["admitted"] == {"sycon_nof": 1}
     assert ev["verdict"] == "no signature verdict"
 
 
