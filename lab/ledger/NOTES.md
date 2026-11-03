@@ -8843,3 +8843,17 @@ There are two ways to fix a hub:
     per token at bf16 noise passes, a systematic offset fails. A zero-B adapter in the same batch is the negative
     control, an rsLoRA rank-32 Model Organisms adapter is added beside the Act I one, and one or two harmless
     in-distribution prompts sharpen it. The near-tie and relative-gain parts may then be retired (simplicity review).
+- 2026-11-03 20:02 UTC — **Serving check, per-token adapter scale: rule fixed before any data** (the 19:22 plan;
+  code by an implementer agent, reviewed by Opus; Fable checks it cold before it runs).
+  - **Method:** teacher-forced on the same token sequences: 16 neutral prompts plus 2 harmless in-distribution ones
+    per adapter, each with HF's greedy output under the adapter. d_h = HF log-prob with the adapter minus without;
+    d_v = vLLM's log-prob with the adapter (prompt_logprobs) minus HF's without. The scale alpha_hat is the least
+    squares slope of d_v on d_h over all output tokens, with a seeded bootstrap 95% interval over sequences.
+  - **Controls in the same vLLM batch:** the adapter with lora_B zeroed (expect 0) and doubled (expect 2), built on
+    the volume from the original's safetensors, hashes recorded.
+  - **Rule:** every real adapter alpha_hat in [0.8, 1.25] with its interval excluding 0.5; zero control in
+    [-0.2, 0.2]; double control in [1.6, 2.5]. If a control misses, a log-prob is missing, or there is no signal,
+    the check is unreadable, never a pass. Prompt-id identity and the near-tie rule on greedy outputs stay. The
+    relative-gain test is removed.
+  - **Adapters:** the Act I adapter on Ministral 3 8B, and the Model Organisms risky-financial adapter (rsLoRA rank
+    32, R1b's kind) on Qwen 2.5 7B. About $1.5, cap $3.

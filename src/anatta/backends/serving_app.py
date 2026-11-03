@@ -1,6 +1,14 @@
-"""The serving check on Modal (paid, about $1): greedy decoding of serving.PROMPTS through the HF path and through vLLM,
-for each of serving.CONFIGS (Qwen 2.5 7B Instruct; Ministral 3 8B; Ministral 3 8B with the Act I adapter
-gameable_s0/adapter_r3), compared token by token (serving.compare_row). Claude (Opus 5.5) wrote this file, 3 Nov 2026.
+"""The serving check on Modal (paid, about $1.5): greedy decoding of serving.PROMPTS through the HF path and through
+vLLM, for each of serving.CONFIGS (Qwen 2.5 7B Instruct, alone and with the Model Organisms risky-financial adapter;
+Ministral 3 8B, alone and with the Act I adapter gameable_s0/adapter_r3), compared token by token
+(serving.compare_row); and, per adapter, the per-token scale check (serving.scale_fit, serving.scale_rule). Claude
+(Opus 5.5) wrote this file, 3 Nov 2026.
+
+Per model, four metered calls: build_controls (CPU: the adapter's zero-B and double-B copies in a scratch folder on
+anatta-runs, /runs/scratch/serving_controls/<adapter>/<its sha256[:16]>/{zero,double}; the original is only read,
+safetensors only, every sha256 recorded), then vLLM's greedy outputs, then HF's (its greedy outputs, the gaps at
+vLLM's divergences, and the scale sequences scored teacher-forced under the base and the adapter), then vLLM scoring
+the same sequences under the adapter and both controls in one batch (Engine.score, prompt_logprobs).
 
   tools/modal.sh run src/anatta/backends/serving_app.py::main            # trial (Qwen, 2 prompts), then the check
   tools/modal.sh run src/anatta/backends/serving_app.py::main --trial-only
@@ -18,7 +26,7 @@ No `from __future__ import annotations` here: Modal reads the class parameters' 
 
 import json
 import time
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 import modal
 
@@ -30,26 +38,81 @@ PKG = Path(__file__).resolve().parents[1]  # src/anatta
 APP = "anatta-serving"
 GPU, CPU, MEM_MB, SCALEDOWN = "L40S", 4.0, 32768, 10
 TOOL = "serving_check"
-TRIAL_S, CALL_S = 420, 900  # the charge reserved before each call (seconds); trued up after it
+TRIAL_S, CALL_S, CONTROLS_S = 420, 900, 300  # the charge reserved before each call (seconds); trued up after it
+CONTROLS_ROOT = "/runs/scratch/serving_controls"
 
 cache = modal.Volume.from_name("anatta-hf-cache")
 runs = modal.Volume.from_name("anatta-runs")
 VOLS = {"/cache": cache.read_only(), "/runs": runs.read_only()}
+RW = {"/runs": runs}  # build_controls only
 app = modal.App(APP)
 
 
-def _messages() -> list[list[dict]]:
-    return [[{"role": "user", "content": p}] for p in SV.PROMPTS]
+def _messages(prompts=SV.PROMPTS) -> list[list[dict]]:
+    return [[{"role": "user", "content": p}] for p in prompts]
 
 
-def _loglik(model, prompt: list[int], out: list[int]) -> float:
-    """The summed log probability of `out` after `prompt` under `model`, teacher-forced."""
+def _token_lps(model, prompt: list[int], out: list[int]) -> list[float]:
+    """The log probability of each token of `out` after `prompt` under `model`, teacher-forced (one full forward)."""
     import torch
 
     x = torch.tensor([prompt + out], device=model.device)
     with torch.no_grad():
         lp = torch.log_softmax(model(x).logits[0, len(prompt) - 1:-1].float(), -1)
-    return float(lp.gather(1, torch.tensor(out, device=model.device)[:, None]).sum())
+    return lp.gather(1, torch.tensor(out, device=model.device)[:, None])[:, 0].tolist()
+
+
+def control_dir(adapter: str, sha: str) -> str:
+    return f"{CONTROLS_ROOT}/{PurePosixPath(adapter).parent.name}__{PurePosixPath(adapter).name}/{sha[:16]}"
+
+
+@app.function(image=hf_image, cpu=2.0, memory=8192, volumes=RW, timeout=1800)
+def build_controls(adapter: str) -> dict:
+    """The adapter's two controls, built beside nothing it owns: lora_B tensors zeroed (zero) and doubled (double),
+    every other tensor and adapter_config.json copied. Reused when the folder already holds controls built from the
+    same weights (manifest.json). Returns {"zero", "double": folder, "sha256": {source and outputs}}."""
+    import hashlib
+    import os
+    import shutil
+
+    from safetensors.torch import load_file, save_file
+
+    def sha(path):
+        h = hashlib.sha256()
+        with open(path, "rb") as f:
+            for b in iter(lambda: f.read(1 << 22), b""):
+                h.update(b)
+        return h.hexdigest()
+
+    src = f"{adapter}/adapter_model.safetensors"
+    src_sha = sha(src)
+    dest = control_dir(adapter, src_sha)
+    if os.path.abspath(dest).startswith(os.path.abspath(adapter)):
+        raise SystemExit(f"refused: the controls folder {dest} is inside the adapter's own folder")
+    man = f"{dest}/manifest.json"
+    if os.path.exists(man):
+        m = json.loads(open(man).read())
+        if m["sha256"]["source"] == src_sha and all(sha(f"{m[k]}/adapter_model.safetensors") == m["sha256"][k]
+                                                    for k in SV.CONTROLS):
+            return {**m, "reused": True}
+    tensors = load_file(src)
+    n_b = sum(".lora_B." in k or "lora_embedding_B" in k for k in tensors)
+    if not n_b:
+        raise SystemExit(f"{src}: no lora_B tensors")
+    out = {"source": adapter, "sha256": {"source": src_sha, "config": sha(f"{adapter}/adapter_config.json")},
+           "lora_B_tensors": n_b}
+    for name, factor in (("zero", 0.0), ("double", 2.0)):
+        d = f"{dest}/{name}"
+        os.makedirs(d, exist_ok=True)
+        save_file({k: (v * factor if (".lora_B." in k or "lora_embedding_B" in k) else v).contiguous()
+                   for k, v in tensors.items()}, f"{d}/adapter_model.safetensors", metadata={"format": "pt"})
+        shutil.copyfile(f"{adapter}/adapter_config.json", f"{d}/adapter_config.json")
+        out[name] = d
+        out["sha256"][name] = sha(f"{d}/adapter_model.safetensors")
+    with open(man, "w") as f:
+        json.dump(out, f, indent=1)
+    runs.commit()
+    return {**out, "reused": False}
 
 
 def _gap(model, prompt: list[int], out_hf: list[int], out_vllm: list[int]) -> float | None:
@@ -71,12 +134,14 @@ class HFSide:
     key: str = modal.parameter()
 
     @modal.method()
-    def run(self, adapters: list[str], n_prompts: int, max_new: int, vllm_outputs: dict | None = None) -> dict:
+    def run(self, adapters: list[str], n_prompts: int, max_new: int, vllm_outputs: dict | None = None,
+            scale: bool = False) -> dict:
         """Greedy outputs for the first n_prompts prompts, on the base model and then (same container) with each
         adapter in turn ("" = the base); with vllm_outputs ({adapter: [ids]}), also the gap at each first divergence
         (serving.compare_row), from one teacher-forced pass over the prompt and HF's own output, keyed
-        "<hf adapter>|<vllm adapter>": equal halves are the check, unequal halves the controls; and the summed log
-        probability of every vLLM output under each HF state (serving.adapter_test)."""
+        "<hf adapter>|<vllm adapter>": equal halves are the check, unequal halves the controls. With scale, per
+        adapter the scale sequences (serving.scale_prompts: HF's greedy output under the adapter, serving.scored_output)
+        with each output token's log probability under the adapter and under the base (the adapter disabled)."""
         import torch
         import transformers
 
@@ -87,7 +152,7 @@ class HFSide:
         model, tok = hf.load(self.key)
         load_s = time.time() - t0
         ids = hf.chat_prompt_ids(tok, _messages()[:n_prompts])
-        out, gaps, ll = {}, {}, {}
+        out, gaps, seqs = {}, {}, {}
         for i, adapter in enumerate(adapters):
             if adapter:
                 if i and adapters[i - 1]:
@@ -98,9 +163,20 @@ class HFSide:
             if vllm_outputs is not None:
                 for b, vo in vllm_outputs.items():  # b == adapter: the check; b != adapter: a control
                     gaps[f"{adapter}|{b}"] = [_gap(model, p, o, v) for p, o, v in zip(ids, out[adapter], vo)]
-                    ll[f"{adapter}|{b}"] = [_loglik(model, p, v) for p, v in zip(ids, vo)]
+            if adapter and scale:
+                extra = list(SV.IN_DIST.get(adapter, ()))
+                x_ids = hf.chat_prompt_ids(tok, _messages(extra)) if extra else []
+                pr = ids + x_ids
+                outs = out[adapter] + (hf.greedy(model, tok, x_ids, max_new) if x_ids else [])
+                rows = [{"prompt": p, "out": SV.scored_output(o, tok.eos_token_id, max_new)} for p, o in zip(pr, outs)]
+                for r in rows:
+                    r["lp_adapter"] = _token_lps(model, r["prompt"], r["out"])
+                with model.disable_adapter():
+                    for r in rows:
+                        r["lp_base"] = _token_lps(model, r["prompt"], r["out"])
+                seqs[adapter] = rows
         texts = {a: [tok.decode(o, skip_special_tokens=True) for o in outs] for a, outs in out.items()}
-        return {"prompt_ids": ids, "outputs": out, "gaps": gaps, "loglik": ll, "texts": texts, "eos": tok.eos_token_id,
+        return {"prompt_ids": ids, "outputs": out, "gaps": gaps, "scale": seqs, "texts": texts, "eos": tok.eos_token_id,
                 "load_s": round(load_s, 1),
                 "gen_s": round(time.time() - t0 - load_s, 1), "torch": torch.__version__,
                 "transformers": transformers.__version__, "tokenizer_class": type(tok).__name__,
@@ -116,7 +192,7 @@ class VLLMSide:
     def load(self):
         from anatta.backends.vllm import Engine, Settings
 
-        self.engine = Engine(Settings.for_model(self.key))
+        self.engine = Engine(Settings.for_model(self.key, max_loras=3))  # an adapter and its two controls at once
 
     @modal.method()
     def run(self, adapters: list[str], n_prompts: int, max_new: int) -> dict:
@@ -130,10 +206,22 @@ class VLLMSide:
         return {"prompt_ids": ids, "outputs": out, "texts": texts, "eos": self.engine.tok.eos_token_id,
                 "gen_s": round(time.time() - t0, 1), "info": self.engine.info()}
 
+    @modal.method()
+    def score(self, scale: dict, variants: dict) -> dict:
+        """scale: HF's scale sequences per adapter; variants: {adapter: {"adapter"|"zero"|"double": folder}}. Each
+        sequence's output tokens scored teacher-forced under each variant, in one batch. Returns {adapter: {variant:
+        [per-token log probabilities per sequence]}}."""
+        t0 = time.time()
+        reqs = [{"rid": f"{a}|{v}|{i}", "ids": r["prompt"] + r["out"], "n_score": len(r["out"]), "adapter": path}
+                for a, rows in scale.items() for v, path in variants[a].items() for i, r in enumerate(rows)]
+        res = {x["rid"]: x["logprobs"] for x in self.engine.score(reqs)}
+        out = {a: {v: [res[f"{a}|{v}|{i}"] for i in range(len(rows))] for v in variants[a]} for a, rows in scale.items()}
+        return {"lps": out, "score_s": round(time.time() - t0, 1), "n_requests": len(reqs)}
 
-def compare(hf_res: dict, vl_res: dict, adapters: list[str]) -> dict:
+
+def compare(hf_res: dict, vl_res: dict, adapters: list[str], score_res: dict | None = None) -> dict:
     """The check per adapter, the controls (HF with one adapter against vLLM with another; diagnostics), and the
-    likelihood test that each adapter is applied."""
+    scale check for each adapter (score_res: VLLMSide.score's result)."""
     eos = hf_res["eos"]
 
     def rows(a: str, b: str) -> list[dict]:
@@ -149,31 +237,52 @@ def compare(hf_res: dict, vl_res: dict, adapters: list[str]) -> dict:
             if b != a:
                 s = SV.summarize(rows(a, b))
                 controls[f"hf {a or 'base'} vs vllm {b or 'base'}"] = {**s, "detected": not s["pass"]}
-    applied = {a: SV.adapter_test(hf_res["loglik"], a) for a in adapters if a}
-    return {"eos_hf": eos, "eos_vllm": vl_res["eos"], "by_adapter": by_adapter, "controls": controls,
-            "adapter_test": applied}
+    scale = {a: (SV.scale_check(hf_res["scale"][a], score_res["lps"][a]) if score_res and a in hf_res.get("scale", {})
+                 and a in score_res.get("lps", {}) else {"verdict": "unreadable", "pass": False,
+                                                       "why": ["no scale scores (a side failed)"]})
+             for a in adapters if a}
+    return {"eos_hf": eos, "eos_vllm": vl_res["eos"], "by_adapter": by_adapter, "controls": controls, "scale": scale}
 
 
-def _sessions(plan: list[tuple[str, list[str]]], n_prompts: int, max_new: int, meter, estimate_s: float) -> dict:
-    """Each model's vLLM then HF run (HF scores vLLM's divergences), one call at a time, metered."""
+def _call(meter, estimate_s: float, f, *args, **meta):
+    """One metered remote call; an exception comes back as {"error"} (recorded on the card)."""
+    meter.before_call(estimate_s)
+    t0 = time.time()
+    try:
+        return f(*args)
+    except Exception as e:  # recorded on the card; the other models still run
+        return {"error": f"{type(e).__name__}: {str(e)[:500]}"}
+    finally:
+        meter.after_call(wall_s=round(time.time() - t0, 1), **meta)
+
+
+def _sessions(plan: list[tuple[str, list[str]]], n_prompts: int, max_new: int, meter, estimate_s: float,
+              scale: bool = True) -> dict:
+    """Per model: the adapters' controls (CPU, first, so every later container sees them), vLLM's greedy run, HF's
+    (it scores vLLM's divergences and the scale sequences), then vLLM scoring the scale sequences; one call at a
+    time, metered."""
     out = {}
     for key, adapters in plan:
-        res = {}
-        for side, cls in (("vllm", VLLMSide), ("hf", HFSide)):
-            if side == "hf" and "error" in res["vllm"]:
-                res[side] = {"error": "skipped: the vLLM side failed"}
-                continue
-            extra = () if side == "vllm" else (res["vllm"]["outputs"],)
-            meter.before_call(estimate_s)
-            t0 = time.time()
-            try:
-                res[side] = cls(key=key).run.remote(adapters, n_prompts, max_new, *extra)
-            except Exception as e:  # recorded on the card; the other models still run
-                res[side] = {"error": f"{type(e).__name__}: {str(e)[:500]}"}
-            finally:
-                meter.after_call(model=key, side=side, wall_s=round(time.time() - t0, 1))
+        res, controls = {}, {}
+        if scale:
+            for a in (a for a in adapters if a):
+                controls[a] = _call(meter, CONTROLS_S, build_controls.remote, a, model=key, side="controls")
+        res["vllm"] = _call(meter, estimate_s, VLLMSide(key=key).run.remote, adapters, n_prompts, max_new, model=key,
+                            side="vllm")
+        res["hf"] = ({"error": "skipped: the vLLM side failed"} if "error" in res["vllm"] else
+                     _call(meter, estimate_s, HFSide(key=key).run.remote, adapters, n_prompts, max_new,
+                           res["vllm"]["outputs"], scale, model=key, side="hf"))
+        score = None
+        bad = [a for a, c in controls.items() if "error" in c]
+        if scale and "error" not in res["hf"] and not bad and any(adapters):
+            variants = {a: {"adapter": a, **{v: controls[a][v] for v in SV.CONTROLS}} for a in adapters if a}
+            score = _call(meter, estimate_s, VLLMSide(key=key).score.remote, res["hf"]["scale"], variants, model=key,
+                          side="vllm_score")
         ok = "error" not in res["hf"] and "error" not in res["vllm"]
-        out[key] = {**res, "cmp": compare(res["hf"], res["vllm"], adapters) if ok else None}
+        res["score"] = score
+        res["controls_built"] = controls
+        out[key] = {**res, "cmp": compare(res["hf"], res["vllm"], adapters,
+                                          score if score and "error" not in score else None) if ok else None}
     return out
 
 
@@ -197,7 +306,7 @@ def _meter(label: str, cap: float, first_s: float):
 def build_card(res: dict, costs: dict, method: str) -> dict:
     """The card: per configuration the summary and the per-prompt rows (numbers only), versions, timings, costs, and
     any side that failed."""
-    configs, errors, versions, timing, controls, applied = {}, {}, {}, {}, {}, {}
+    configs, errors, versions, timing, controls, scale = {}, {}, {}, {}, {}, {}
     for key, r in res.items():
         if r["cmp"] is None:
             errors[key] = {side: r[side]["error"] for side in ("hf", "vllm") if "error" in r[side]}
@@ -205,7 +314,10 @@ def build_card(res: dict, costs: dict, method: str) -> dict:
         for a, c in r["cmp"]["by_adapter"].items():
             configs[SV.config_name(key, a or None)] = c
         controls.update({f"{key}: {n}": c for n, c in r["cmp"]["controls"].items()})
-        applied.update({SV.config_name(key, a): t for a, t in r["cmp"]["adapter_test"].items()})
+        scale.update({SV.config_name(key, a): t for a, t in r["cmp"]["scale"].items()})
+        if r.get("score") and "error" in r["score"]:
+            errors[f"{key} vllm_score"] = r["score"]["error"]
+        errors.update({f"{key} controls {a}": c["error"] for a, c in (r.get("controls_built") or {}).items() if "error" in c})
         info = r["vllm"]["info"]
         versions[key] = {"eos": {"hf": r["cmp"]["eos_hf"], "vllm": r["cmp"]["eos_vllm"]},
                          "hf": {f: r["hf"][f] for f in ("torch", "transformers", "tokenizer_class", "gpu")},
@@ -213,18 +325,21 @@ def build_card(res: dict, costs: dict, method: str) -> dict:
         timing[key] = {"hf_load": r["hf"]["load_s"], "hf_gen": r["hf"]["gen_s"], "vllm_load": info["load_s"],
                        "vllm_gen": r["vllm"]["gen_s"]}
     expected = {SV.config_name(k, a) for k, a in SV.CONFIGS}
-    return {"format": "anatta-serving-check/3", "method": method,
+    with_adapter = {SV.config_name(k, a) for k, a in SV.CONFIGS if a}
+    near_ok = set(configs) == expected and all(c["summary"]["pass"] for c in configs.values())
+    scale_all = set(scale) == with_adapter
+    unreadable = not scale_all or any(t["verdict"] == "unreadable" for t in scale.values())
+    return {"format": "anatta-serving-check/4", "method": method,
             "configs": {k: c["summary"] for k, c in configs.items()},
-            "adapter_test": applied, "controls": controls,
-            "pass": (set(configs) == expected and all(c["summary"]["pass"] for c in configs.values())
-                     and set(applied) == {SV.config_name(k, a) for k, a in SV.CONFIGS if a}
-                     and all(t["applied"] for t in applied.values())),
+            "scale": scale, "scale_rule": SV.SCALE_RULE, "controls": controls,
+            "scale_unreadable": unreadable,
+            "pass": near_ok and not unreadable and all(t["pass"] for t in scale.values()),
             "errors": errors, "rows": {k: c["rows"] for k, c in configs.items()}, "versions": versions,
             "timing_s": timing, "cost_usd": costs}
 
 
 @app.local_entrypoint()
-def main(trial_only: bool = False, trial_cap: float = 1.0, run_cap: float = 1.9):
+def main(trial_only: bool = False, trial_cap: float = 1.0, run_cap: float = 3.0):
     from anatta import cards
     from anatta.config import load
 
@@ -235,12 +350,15 @@ def main(trial_only: bool = False, trial_cap: float = 1.0, run_cap: float = 1.9)
     method = SV.__doc__.strip().split("\n\n")[1]
     spec = {"check": "serving", "method": method, "prompts": list(SV.PROMPTS), "configs": [list(c) for c in SV.CONFIGS],
             "prefix": SV.PREFIX, "window": SV.WINDOW, "tie_nats": SV.TIE_NATS, "tight_nats": SV.TIGHT_NATS, "gpu": GPU,
+            "in_dist": {a: list(p) for a, p in SV.IN_DIST.items()}, "scale_rule": SV.SCALE_RULE,
+            "scale_bands": {"adapter": SV.SCALE_BAND, "ci_excludes": SV.SCALE_CI_EXCLUDES, "zero": SV.ZERO_BAND,
+                            "double": SV.DOUBLE_BAND}, "n_boot": SV.N_BOOT, "boot_seed": SV.BOOT_SEED,
             "caps_usd": {"trial": trial_cap, "run": run_cap}}
     cards.write_plan(out, spec)
     # trial: Qwen on both paths, 2 prompts, 8 tokens: the images build, the volumes mount, the comparison runs
     meter = _meter("trial", trial_cap, TRIAL_S)
     try:
-        trial = _sessions([("qwen25_7b", [""])], 2, 8, meter, TRIAL_S)["qwen25_7b"]
+        trial = _sessions([("qwen25_7b", [""])], 2, 8, meter, TRIAL_S, scale=False)["qwen25_7b"]
     finally:
         meter.close(stopped=False)
     trial_usd = meter.charged_usd
@@ -261,9 +379,12 @@ def main(trial_only: bool = False, trial_cap: float = 1.0, run_cap: float = 1.9)
     costs = {"trial": round(trial_usd, 4), "check": round(meter.charged_usd, 4), "rate_usd_per_hour": meter.rate,
              "note": "metered container wall time (anatta.spend Meter); Modal's usage page is the authority"}
     card = build_card(res, costs, method)
-    tokens = {k: {side: {f: v for f, v in r[side].items() if f in ("outputs", "gaps", "loglik", "texts", "prompt_ids", "eos", "info", "error")}
-                  for side in ("hf", "vllm")} for k, r in res.items()}
+    tokens = {k: {**{side: {f: v for f, v in r[side].items() if f in ("outputs", "gaps", "scale", "texts", "prompt_ids", "eos",
+                                                                        "info", "error")}
+                     for side in ("hf", "vllm")}, "score": r.get("score"), "controls_built": r.get("controls_built")}
+              for k, r in res.items()}
     cards.write_text(out / "data", "serving_check_tokens.json", json.dumps(tokens, default=str) + "\n")
     p = cards.write_card(out, card, name="serving_check.json")
-    print(json.dumps({"configs": card["configs"], "errors": card["errors"], "pass": card["pass"]}, indent=1))
+    print(json.dumps({"configs": card["configs"], "scale": card["scale"], "errors": card["errors"],
+                      "scale_unreadable": card["scale_unreadable"], "pass": card["pass"]}, indent=1))
     print("card ->", p)

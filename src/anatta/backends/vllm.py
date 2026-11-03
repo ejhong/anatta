@@ -166,6 +166,29 @@ class Engine:
                  "finish_reason": o.outputs[0].finish_reason, "max_tokens": mt, "adapter": r.get("adapter")}
                 for r, p, o, mt in zip(requests, ids, res, mts)]
 
+    def score(self, requests: list[dict]) -> list[dict]:
+        """Teacher-forced log probabilities: requests {"rid", "ids" (prompt then output token ids), "n_score" (how many
+        of the last ids to score), "adapter"?}. One forward per request (max_tokens 1, prompt_logprobs 1: vLLM returns
+        each prompt position's own token beside its top-1). Returns {"rid", "logprobs": per scored token its log
+        probability, None where vLLM gave none (e.g. a position served from the prefix cache without logprobs)}."""
+        from vllm import SamplingParams
+        from vllm.inputs import TokensPrompt
+
+        sp = SamplingParams(temperature=0.0, max_tokens=1, prompt_logprobs=1)
+        loras = [self._lora_request(r.get("adapter")) for r in requests]
+        res = self.llm.generate([TokensPrompt(prompt_token_ids=list(r["ids"])) for r in requests], sp, use_tqdm=False,
+                                lora_request=loras if any(loras) else None)
+        out = []
+        for r, o in zip(requests, res):
+            ids, plp, n = list(r["ids"]), o.prompt_logprobs or [], int(r["n_score"])
+            lps = []
+            for j in range(len(ids) - n, len(ids)):
+                d = plp[j] if j < len(plp) else None
+                lp = d.get(ids[j]) if d else None
+                lps.append(None if lp is None else float(getattr(lp, "logprob", lp)))
+            out.append({"rid": r.get("rid"), "logprobs": lps, "adapter": r.get("adapter")})
+        return out
+
     def converse(self, items: list[dict], turns: int, followup: str, max_tokens: int,
                  adapter: str | None = None) -> list[dict]:
         """K6's SYCON loop: items [{qid, messages}] (the opening turns), greedy, `followup` as the user's reply after
