@@ -28,15 +28,16 @@ sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(HERE.parent))  # scout
 sys.path.insert(0, str(HERE.parent / "selfmap"))
 import act1_core as C  # noqa: E402
+from scout import spend as S  # noqa: E402  (anatta.spend, the lab's one spend module)
 
 ALIGN = Path("/Users/eugene/prj/align")
 H4 = HERE.parents[1] / "experiments" / "h4lite"
 TRAIN_FILE = H4 / "results" / "gate0" / "split" / "train.jsonl"
-DATE = "2026-11-02"
+DATE = "2026-11-02"  # TODO(clean-lab step 6): act1's runner becomes a spec; the date and folder cap go with it
 OUT = ALIGN / "results" / "explore" / DATE / "act1"
-SPEND_DIR = ALIGN / "results" / "explore" / "spend"
+SPEND_DIR = S.default_spend_dir()  # lab.toml
 OVERHEAD_S = 120
-CAP = 40.0
+CAP = 40.0  # this folder's cap (--folder-cap), not the daily cap
 FAMILIES = ("threat_to_self", "who_benefits", "deference", "after_mistake")
 CFG = {"rank": 16, "lr": 1e-4, "k": 4, "n_pairs": 64, "steps": 12, "batch": 16, "micro": 4, "temperature": 1.0,
        "max_new": [512, 384], "gen_batch": 128, "curve_n": 2}
@@ -59,11 +60,9 @@ def spent() -> float:
 
 
 def record_spend(stage: str, seconds: list[float], extra: dict | None = None, usd: float | None = None):
-    from scout.spend import add_spend
-
     if usd is None:
         usd = sum((s + OVERHEAD_S) / 3600 * C.USD_H for s in seconds)
-    add_spend(SPEND_DIR, tool="act1", label=f"{DATE}/{OUT.name}/{stage}", usd=usd, calls=max(len(seconds), 1))
+    S.add_spend(SPEND_DIR, tool="act1", label=f"{DATE}/{OUT.name}/{stage}", usd=usd, calls=max(len(seconds), 1))
     f = OUT / "spend.json"
     rec = json.loads(f.read_text()) if f.exists() else {"usd": 0.0, "stages": []}
     rec["usd"] = round(rec["usd"] + usd, 4)
@@ -200,7 +199,6 @@ def cmd_judge(a):
     from scout.cache import Cache
     from scout.schema import utc_now
     from scout.spec import JUDGE_DEFAULTS
-    from scout.spend import DAILY_CAP_USD, SpendGuard, read_day
 
     d = OUT / a.tag / "readout"
     libr = lib.load_library(list(FAMILIES))
@@ -215,10 +213,9 @@ def cmd_judge(a):
     paths = Paths.default()
     jcfg = {**JUDGE_DEFAULTS, "model": a.judge}
     meta = model_meta({a.judge: None}, cache_dir=paths.cache)
-    # the day's cap is the one recorded in the day file (raised there when Eugene raises it)
-    day_cap = float(read_day(paths.spend).get("cap_usd") or DAILY_CAP_USD)
-    guard_ = SpendGuard(paths.spend, sweep_cap=a.cap, sweep_log=d / "judge.spend.jsonl", tool="act1",
-                        label=f"{DATE}/{OUT.name}/judge-{a.tag}", daily_cap=day_cap)
+    # the day's cap: the day file's cap_usd (Eugene's raise), else lab.toml's (anatta.spend.daily_cap)
+    guard_ = S.SpendGuard(paths.spend, sweep_cap=a.cap, sweep_log=d / "judge.spend.jsonl", tool="act1",
+                          label=f"{DATE}/{OUT.name}/judge-{a.tag}")
     log(f"judging {len(records)} replies with {a.judge}")
 
     async def go():

@@ -39,11 +39,13 @@ sys.path.insert(0, str(EXPLORE))
 import conditions as C  # noqa: E402
 import grade as G  # noqa: E402
 import prompts as P  # noqa: E402
+from scout import spend as labspend  # noqa: E402  (anatta.spend, the lab's one spend module)
 
 ALIGN = Path("/Users/eugene/prj/align")
+# TODO(clean-lab step 7): this sweep's folder date and its sweep cap move into a spec under experiments/explore/
 RESULTS = ALIGN / "results" / "explore" / "2026-11-03" / "agentic-release"
-SPEND_DIR = ALIGN / "results" / "explore" / "spend"
-TOOL, SWEEP_CAP, DAY_CAP = "agentic-release", 28.0, 50.0
+SPEND_DIR = labspend.default_spend_dir()  # lab.toml
+TOOL, SWEEP_CAP = "agentic-release", 28.0  # the day cap: labspend.daily_cap() (day file, else lab.toml)
 TEMP, MAX_TOKENS, PILOT_N = 1.0, 4000, 12
 AUX_JUDGE = "anthropic/claude-haiku-5.5"
 
@@ -105,9 +107,7 @@ def build_requests(model: str, cell: str, conds: list[str], n: int, stage: str) 
 
 
 def spend_state() -> tuple[float, float]:
-    from scout import spend as sp
-
-    d = sp.read_day(SPEND_DIR, sp.utc_date())
+    d = labspend.read_day(SPEND_DIR, labspend.utc_date())
     return float(d.get("by_tool", {}).get(TOOL, {}).get("usd", 0.0)), float(d.get("total_usd", 0.0))
 
 
@@ -116,17 +116,15 @@ def sweep_spent() -> float:
 
 
 def check_cap(next_usd: float) -> None:
-    mine, day = sweep_spent(), spend_state()[1]
-    if mine + next_usd > SWEEP_CAP or day + next_usd > DAY_CAP:
+    mine, day, day_cap = sweep_spent(), spend_state()[1], labspend.daily_cap(SPEND_DIR)
+    if mine + next_usd > SWEEP_CAP or day + next_usd > day_cap:
         raise SystemExit(f"cap: sweep ${mine:.3f} + next ${next_usd:.2f} > ${SWEEP_CAP}, or day ${day:.2f} + next > "
-                         f"${DAY_CAP}")
+                         f"${day_cap}")
 
 
 def log_spend(usd: float, label: str, calls: int) -> None:
-    from scout import spend as sp
-
-    date = sp.utc_date()
-    sp.add_spend(SPEND_DIR, tool=TOOL, label=f"{date}/{TOOL}/{label}", usd=usd, calls=calls, date=date)
+    date = labspend.utc_date()
+    labspend.add_spend(SPEND_DIR, tool=TOOL, label=f"{date}/{TOOL}/{label}", usd=usd, calls=calls, date=date)
     append_jsonl(RESULTS / "spend.jsonl", [{"t": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "label": label,
                                              "usd": usd, "calls": calls}])
 

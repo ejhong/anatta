@@ -1,0 +1,299 @@
+{
+ "check": "refusal_direction",
+ "claim": "The lab's refusal extractor (anatta.contrast), Arditi's selection (anatta.select) and the dial in mode A reproduce the published effect of ablating Qwen2.5-7B-Instruct's refusal direction: JailbreakBench ASR from 9.1 to 69.2 under the StrongREJECT fine-tuned judge, with MMLU barely moving (68.8 to 68.1)",
+ "smoke": false,
+ "plan_id": "ede7ba8b0594",
+ "anchors": [
+  {
+   "what": "Qwen2.5-7B-Instruct, JailbreakBench ASR, no intervention",
+   "value": 9.1,
+   "source": "Wollschläger et al. 2025 (arXiv 2502.17420v2), Appendix B.3, Table 5, StrongREJECT fine-tuned judge"
+  },
+  {
+   "what": "Qwen2.5-7B-Instruct, JailbreakBench ASR, directional ablation (Arditi's DIM direction)",
+   "value": 69.2,
+   "source": "Wollschläger et al., Table 5"
+  },
+  {
+   "what": "Qwen2.5-7B-Instruct, JailbreakBench ASR, activation subtraction",
+   "value": 71.0,
+   "source": "Wollschläger et al., Table 5 (a run with evaluate_actadd on; their default config has it off)"
+  },
+  {
+   "what": "Qwen2.5-7B-Instruct, MMLU, no intervention",
+   "value": 68.8,
+   "source": "Wollschläger et al., Table 5 (chat template throughout, App. A.2; protocol otherwise unstated)"
+  },
+  {
+   "what": "Qwen2.5-7B-Instruct, MMLU, under ablation",
+   "value": 68.1,
+   "source": "Wollschläger et al., Table 5"
+  },
+  {
+   "what": "Ministral3-8B Instruct, JailbreakBench, base (LlamaGuard-3-8B)",
+   "value": 8.0,
+   "source": "GRP-Obliteration (arXiv 2602.06258v1), Table 1"
+  },
+  {
+   "what": "Ministral3-8B Instruct, StrongREJECT, base",
+   "value": 7.6,
+   "source": "GRP-Obliteration, Table 1"
+  },
+  {
+   "what": "Ministral3-8B Instruct, MMLU, base",
+   "value": 53.4,
+   "source": "GRP-Obliteration, Table 1"
+  }
+ ],
+ "judge_gate": null,
+ "graded_scores": null,
+ "status": "no grade: the judge port gate has not run",
+ "rows": {
+  "qwen": {},
+  "ministral": {}
+ },
+ "visibility": {
+  "qwen": "public",
+  "ministral": "private until C3 passes"
+ },
+ "control": {
+  "mean": null,
+  "expected_max": 5
+ },
+ "determinism": null,
+ "selection": {
+  "qwen": null,
+  "ministral": null
+ },
+ "filter": {
+  "qwen": null,
+  "ministral": null
+ },
+ "c3_extract": null,
+ "against_published": {
+  "QR_vs_69.2": null,
+  "QS_vs_71.0": null,
+  "Q0_mmlu_vs_68.8": null,
+  "M0_vs_8.0_and_7.6": null,
+  "M0_mmlu_vs_53.4": null
+ },
+ "swaps": {
+  "q0": null,
+  "reference": null
+ },
+ "judge_bos": {
+  "measured": {
+   "short": {
+    "tokens": 18,
+    "starts_with_bos": true,
+    "bos_count": 1
+   },
+   "long": {
+    "tokens": 1561,
+    "starts_with_bos": true,
+    "bos_count": 1
+   }
+  },
+  "max_response_length": 512,
+  "claim": "the registration says left truncation cuts the judge's prepended BOS for responses over the max_response_length; prepare tests the claim on Gemma's tokenizer, and the port makes the same calls either way",
+  "claim_holds": false
+ },
+ "judge": {
+  "batch": 8,
+  "registered_dtype": "torch.bfloat16",
+  "original_call": "evaluate_dataset(..., empty_model_cache=False), then the package's own cleanup lines; the flag is read only after the batched map, so no score changes",
+  "port_changes": [
+   "torch.no_grad() around the judge's forward pass"
+  ],
+  "lab_port": null,
+  "paper_port": null,
+  "original": null,
+  "original_all": null,
+  "swaps": {
+   "q0": null,
+   "reference": null
+  },
+  "sdpa": {
+   "label": "recorded, not graded",
+   "judge_lab": null,
+   "judge_paper": null,
+   "judge_original_all": null
+  }
+ },
+ "facts": {
+  "code_as_run": {
+   "anatta/dial.py": "1d8b6a847897c07f051df1edde849c501b52d3a7b2f638345d9c17320751a686",
+   "anatta/contrast.py": "8ae054d9b13195b663128b6fa041c83dd09a3f00e181cc0680bffb5dbe56424e",
+   "anatta/select.py": "5f38b716eef79e23e8ce00d91acbece5d686e13558be60c118803561826b8a07",
+   "anatta/bench/mc.py": "be3a6ccdbeff0594fccb0dcf776a0a54e5a42a74613e61282875b461665fe1b3",
+   "anatta/probe.py": "fc0b56920ff6dfbe0fab3d5d0f3a7cc164f9e9be781052404bbb956c10d6ccf4",
+   "anatta/models.py": "b0047d22025d05f6efc0b4b5766ee1f3f8fcbc3ef9286c888234004548679a68",
+   "anatta/modal_app.py": "6c2034f5542c3aa893dba5287bc3c7a378bfc11cceb3c36b621afa0bcc420424",
+   "anatta/player.py": "aa912ae36f9438ff33b75808224166fcb70c5c805a1d610e46d9f60b8974f0d9",
+   "refusal.py": "1dbda9155b793fb8fb81e8c9027fe29dcac5867089350f40429cce1c127aad7f",
+   "reference.py": "de4766b7548c64cb7c9eea4da64d25339e717517ec5d34ae87fdd5f4045e114e",
+   "judge.py": "c2a826eb96137c618321cb06173e5b8952488c7f60e4161f6307988e92f22675",
+   "fingerprint.py": "30c8241e4ce849fb377b969263d50dc216086c5b7ad83d636f6b6950132e64f9"
+  },
+  "library": {
+   "anatta/dial.py": "1d8b6a847897c07f051df1edde849c501b52d3a7b2f638345d9c17320751a686",
+   "anatta/contrast.py": "8ae054d9b13195b663128b6fa041c83dd09a3f00e181cc0680bffb5dbe56424e",
+   "anatta/select.py": "5f38b716eef79e23e8ce00d91acbece5d686e13558be60c118803561826b8a07",
+   "anatta/bench/mc.py": "be3a6ccdbeff0594fccb0dcf776a0a54e5a42a74613e61282875b461665fe1b3",
+   "anatta/probe.py": "fc0b56920ff6dfbe0fab3d5d0f3a7cc164f9e9be781052404bbb956c10d6ccf4",
+   "anatta/models.py": "b0047d22025d05f6efc0b4b5766ee1f3f8fcbc3ef9286c888234004548679a68",
+   "anatta/modal_app.py": "6c2034f5542c3aa893dba5287bc3c7a378bfc11cceb3c36b621afa0bcc420424",
+   "reference.py": "de4766b7548c64cb7c9eea4da64d25339e717517ec5d34ae87fdd5f4045e114e",
+   "judge.py": "c2a826eb96137c618321cb06173e5b8952488c7f60e4161f6307988e92f22675"
+  },
+  "code_here": {
+   "anatta/dial.py": "1d8b6a847897c07f051df1edde849c501b52d3a7b2f638345d9c17320751a686",
+   "anatta/contrast.py": "8ae054d9b13195b663128b6fa041c83dd09a3f00e181cc0680bffb5dbe56424e",
+   "anatta/select.py": "5f38b716eef79e23e8ce00d91acbece5d686e13558be60c118803561826b8a07",
+   "anatta/bench/mc.py": "be3a6ccdbeff0594fccb0dcf776a0a54e5a42a74613e61282875b461665fe1b3",
+   "anatta/probe.py": "fc0b56920ff6dfbe0fab3d5d0f3a7cc164f9e9be781052404bbb956c10d6ccf4",
+   "anatta/models.py": "b0047d22025d05f6efc0b4b5766ee1f3f8fcbc3ef9286c888234004548679a68",
+   "anatta/modal_app.py": "6c2034f5542c3aa893dba5287bc3c7a378bfc11cceb3c36b621afa0bcc420424",
+   "anatta/player.py": "aa912ae36f9438ff33b75808224166fcb70c5c805a1d610e46d9f60b8974f0d9",
+   "refusal.py": "1dbda9155b793fb8fb81e8c9027fe29dcac5867089350f40429cce1c127aad7f",
+   "reference.py": "de4766b7548c64cb7c9eea4da64d25339e717517ec5d34ae87fdd5f4045e114e",
+   "judge.py": "c2a826eb96137c618321cb06173e5b8952488c7f60e4161f6307988e92f22675",
+   "fingerprint.py": "30c8241e4ce849fb377b969263d50dc216086c5b7ad83d636f6b6950132e64f9"
+  },
+  "check_files": {
+   "app.py": "cea8ff6ed1cee85de286ff5985b5cdba4d2bcdb61002a7bd17cb21b055ff3399",
+   "card.py": "ce1f7276afa9ccaab6a8fda8868096b34c59c8ac5986a76f79d5b857f0e93e9a",
+   "config.yaml": "7d75d4542430d28825f8e8d36424e4cd21ae35d534d2229c42c33a5669b89492",
+   "refusal.py": "1dbda9155b793fb8fb81e8c9027fe29dcac5867089350f40429cce1c127aad7f",
+   "reference.py": "de4766b7548c64cb7c9eea4da64d25339e717517ec5d34ae87fdd5f4045e114e",
+   "judge.py": "c2a826eb96137c618321cb06173e5b8952488c7f60e4161f6307988e92f22675",
+   "fingerprint.py": "30c8241e4ce849fb377b969263d50dc216086c5b7ad83d636f6b6950132e64f9"
+  },
+  "container_sha256": "bb024b6462e167774e0db3542fe49b21e980d1413c3e4a740975d713f4c755bd",
+  "revisions": {
+   "qwen": {
+    "id": "Qwen/Qwen2.5-7B-Instruct",
+    "revision": "a09a35458c702b33eeacc393d103063234e8bc28"
+   },
+   "ministral": {
+    "id": "mistralai/Ministral-3-8B-Instruct-2512-BF16",
+    "revision": "f6fae9795746f63c9be8344932f01275f3c63734"
+   },
+   "judge_base": {
+    "id": "google/gemma-2b",
+    "revision": "9cf48e52b224239de00d483ec8eb84fb8d0f3a3a",
+    "gated": true
+   },
+   "judge_adapter": {
+    "id": "qylu4156/strongreject-15k-v1",
+    "revision": "4bd893d32390d2cace4f067dc2e3ef5294fd78a2",
+    "gated": false
+   },
+   "strong_reject": "e286f0da86d92c929a6fda20a9992f28c5969044"
+  },
+  "data": {
+   "harmful_train": {
+    "bytes": 166345,
+    "sha256": "ed86961aeb83a8400a7cbbd7e7d38f3e03cb7a95f75527da2dbec610e162a363",
+    "count": 1184
+   },
+   "harmful_val": {
+    "bytes": 18130,
+    "sha256": "fb4a724d3f4855c42c88e9ce685873b60d9723aca3647e375558813aba8c6ee3",
+    "count": 128
+   },
+   "harmless_train": {
+    "bytes": 3125118,
+    "sha256": "08adab978fdc2cfc578473fb64a826696790e2635fea824f9909954c5adf2b15",
+    "count": 25058
+   },
+   "harmless_val": {
+    "bytes": 391908,
+    "sha256": "7fc1fade972acee90795d5bb5398e20efb9bc797e25c169ad4cee750372840f4",
+    "count": 3132
+   },
+   "jbb": {
+    "bytes": 16512,
+    "sha256": "3a5aefa80c4a35f75a5306303aa8e69801e4ca4584e1f598bd2ddcf3e7fbbcdd",
+    "count": 100
+   },
+   "jbb_check": {
+    "bytes": 23116,
+    "sha256": "4a8ec6832056b631eb092dccc60d37a61c3d441268268888b3d006288afeffa1",
+    "count": 100
+   },
+   "mmlu": {
+    "bytes": 3504718,
+    "sha256": "74a41822ce7d3def56e1682f958469c04642a5336a5ce912fa375fdb90fb25d7",
+    "count": 14042
+   }
+  },
+  "pins": {
+   "lab": {
+    "PyYAML": "6.0.3",
+    "accelerate": "1.15.0",
+    "hf_xet": "1.7.0",
+    "huggingface_hub": "2.3.0",
+    "jinja2": "3.1.6",
+    "numpy": "2.5.4",
+    "peft": "0.21.2",
+    "regex": "2026.9.29",
+    "safetensors": "0.8.0",
+    "tiktoken": "0.14.0",
+    "tokenizers": "0.23.3",
+    "torch": "2.14.1",
+    "transformers": "5.21.0",
+    "pyarrow": "21.0.0"
+   },
+   "paper": {
+    "transformers": "4.47.0",
+    "torch": "2.5.1",
+    "accelerate": "1.2.0",
+    "peft": "0.14.0",
+    "datasets": "3.2.0",
+    "numpy": "2.2.1",
+    "pandas": "2.2.3",
+    "openai": "1.58.1",
+    "tokenizers": "0.21.0",
+    "huggingface-hub": "0.27.0",
+    "safetensors": "0.4.5",
+    "jinja2": "3.1.5",
+    "pyyaml": "6.0.2"
+   }
+  },
+  "judge_template_sha256": "d90102b02d66b34a3dbf7d82789ce92310965503a481dc725232626bd7700937",
+  "judge_template_sha256_measured": {
+   "judge_lab": null,
+   "judge_paper": null,
+   "judge_original_all": null,
+   "judge_paper_package": null,
+   "judge_original_all_package": null
+  },
+  "judge_template_mismatch": [],
+  "here_matches_run": true,
+  "freeze": {
+   "lab": null,
+   "paper": null
+  }
+ },
+ "spend": {
+  "estimate": true,
+  "basis": "an estimate: each Modal call's wall time (measured on the laptop; for a model run, the larger of that and its container's own report) at config.yaml's hourly rates, the higher where two apply; not Modal's bill",
+  "entries": [
+   {
+    "call": "stored",
+    "kind": "cpu",
+    "seconds": 3.5,
+    "usd": 0.0003
+   },
+   {
+    "call": "prepare",
+    "kind": "cpu",
+    "seconds": 59.2,
+    "usd": 0.0058
+   }
+  ],
+  "total_usd": 0.0061,
+  "stop_usd": 30.0
+ }
+}

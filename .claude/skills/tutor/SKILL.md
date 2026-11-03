@@ -1,4 +1,5 @@
 ---
+name: tutor
 description: Tutor mode for learning alignment on this repo (Claude coaches and reviews; you write the code)
 ---
 

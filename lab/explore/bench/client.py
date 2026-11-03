@@ -163,7 +163,7 @@ def load_spec(source) -> dict:
     if spec["model"] not in MODELS:
         raise SpecError(f"model {spec['model']!r}: one of {MODELS}")
     cap = float(spec["spend_cap_usd"])
-    if not 0 < cap <= M.DAILY_CAP_USD:
+    if not 0 < cap <= M.DAILY_CAP_USD:  # lab.toml's default; the Meter checks the day's own cap when it runs
         raise SpecError(f"spend_cap_usd: above 0 and at most {M.DAILY_CAP_USD} (the daily cap)")
     budget = spec["token_budget"]
     checks = [(isinstance(spec["samples"], int) and 1 <= spec["samples"] <= 50, "samples: an integer from 1 to 50"),
@@ -920,7 +920,7 @@ def manifest(spec, *, conds, run_id, date, started, status, stopped, records, er
         "top_k": spec["top_k"], "max_tokens": spec["max_tokens"], "seed": spec["seed"], "jobs": jobs,
         "records": len(records), "errors": len(errors),
         "spend": {"this_run_usd": meter.charged_usd, "session_cap_usd": meter.cap,
-                  "today_usd": round(M.scout_spend.spent_today(P.spend), 8), "daily_cap_usd": M.DAILY_CAP_USD,
+                  "today_usd": round(M.scout_spend.spent_today(P.spend), 8), "daily_cap_usd": meter.daily_cap,
                   "rate_usd_per_hour": RATE, "charged_seconds": round(meter.charged_s, 1),
                   "warm_tail_charged": not stop_after, "tail_s": SCALEDOWN_S},
         "bench": {"info": info, "cold_start_s": cold_s, "calls": calls, "token_budget": spec["token_budget"],
@@ -1080,7 +1080,7 @@ def cmd_status(root=None) -> None:
     state = M.read_state(P.spend)
     now = time.time()
     print(f"containers: {json.dumps(bench_containers())}")
-    print(f"today ({day['date']}): ${float(day.get('total_usd', 0)):.4f} of ${day.get('cap_usd', M.DAILY_CAP_USD)}; "
+    print(f"today ({day['date']}): ${float(day.get('total_usd', 0)):.4f} of ${M.daily_cap(P.spend)}; "
           f"bench ${float(day.get('by_tool', {}).get('bench', {}).get('usd', 0)):.4f}")
     for k, s in state.items():
         left = float(s.get("paid_until", 0)) - now

@@ -1,0 +1,33 @@
+# The lab's one config (clean-lab plan, 3 Nov 2026). Read by src/anatta/config.py; no other module holds a cap, a
+# results path or a Modal name. Env overrides: ANATTA_LAB_TOML (this file's path), ANATTA_RESULTS_ROOT,
+# ANATTA_SPEND_DIR, ANATTA_DAILY_CAP_USD, ANATTA_DEFAULT_MODEL. Claude (Opus 5.5) wrote this file.
+
+# Large results live outside git, here; the repo commits results/MANIFEST.tsv (path, bytes, sha256) and results/cards/.
+results_root = "/Users/eugene/prj/align/results"
+# Left out of results/MANIFEST.tsv: the API reply cache (regenerable, tens of thousands of files), the live spend
+# files and lock files. Globs on paths relative to results_root; a trailing "/" means a whole folder.
+manifest_exclude = ["explore/cache/", "explore/spend/", "*.lock", "*.tmp*", "*.DS_Store"]
+
+# The model a spec uses when it names none (a key of the model registry).
+default_model = "ministral3_8b"
+
+[spend]
+# The default daily cap for all paid calls (OpenRouter and cloud GPU), in USD. A new day file starts with it.
+# Eugene's raise for one day is recorded as that day's file's cap_usd (plus a ledger line); the day file wins.
+daily_cap_usd = 50.0
+# The day files <dir>/<YYYY-MM-DD>.json (UTC). A relative path is under results_root.
+dir = "explore/spend"
+
+[modal]
+app_prefix = "anatta-"
+# Presence is checked by tools/doctor.py; secrets are never listed.
+cli = "~/prj/matlab/.venv/bin/modal"
+
+[modal.volumes]
+hf_cache = "anatta-hf-cache"
+runs = "anatta-runs"
+calib_prh_k1 = "anatta-calib-prh-k1"
+
+[keys]
+# Names of the environment variables only; values are never read into a file or printed.
+openrouter_env = "OPENROUTER_API_KEY"

@@ -38,7 +38,12 @@ from typing import Protocol
 from .candidate import Candidate, resolve_measures
 from .card import FORMAT
 
-RESULTS = Path("/Users/eugene/prj/align/results/harness")
+
+def results_dir() -> Path:
+    """<results_root>/harness, results_root from lab.toml (anatta.config)."""
+    from anatta.config import load
+
+    return load().results_root / "harness"
 
 
 class RunnerNotBuilt(NotImplementedError):
@@ -101,7 +106,7 @@ def plan(c: Candidate, registry: dict, date: str, cap_usd: float | None = None) 
     if c.tier == "full":
         notes.append("full tier: held-out items read once per registered claim; check_frozen() before the read")
     return RunPlan(candidate_name=c.name, candidate_sha256=c.sha256, model=c.model, tier=c.tier, arms=arms,
-                   measures=resolve_measures(c, registry), out_dir=str(RESULTS / date / c.name),
+                   measures=resolve_measures(c, registry), out_dir=str(results_dir() / date / c.name),
                    cap_usd=cap_usd if cap_usd is not None else (15.0 if c.tier == "quick" else 70.0), notes=notes)
 
 

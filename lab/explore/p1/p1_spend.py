@@ -1,7 +1,7 @@
 """P1's spend meter, in bench's meter.py format. Claude (Opus 5.5) wrote this file, 1 Nov 2026. Private (lab/explore).
 
-Each Modal call's container time is charged to the explore track's shared daily file through scout's spend.add_spend
-(<results>/spend/<UTC date>.json, under its lock, as tool "p1"), and line by line to P1's own spend.jsonl, whose sum is
+Each Modal call's container time is charged to the explore track's shared daily file through anatta.spend.add_spend
+(re-exported by scout.spend; <results>/spend/<UTC date>.json, under its lock, as tool "p1"), and line by line to P1's own spend.jsonl, whose sum is
 P1's spend so far. The rate is bench's meter.rate_per_hour for P1's container: the L40S at $1.95 an hour plus 4 cores
 and 32 GiB at the lab's list prices, $3.28 an hour. Modal's usage page is the authority.
 
@@ -19,11 +19,11 @@ import time
 from pathlib import Path
 
 import p1_core  # noqa: F401  (puts lab/explore and bench on sys.path)
-from meter import rate_per_hour  # bench's rates, unchanged
 from scout import spend as scout_spend
 from scout.schema import append_jsonl, read_jsonl, utc_date, utc_now
 
 TOOL = "p1"
+rate_per_hour = scout_spend.rate_per_hour  # anatta.spend's Modal rates (bench's, unchanged)
 CapReached = scout_spend.CapReached
 
 

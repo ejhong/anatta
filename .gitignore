@@ -7,7 +7,12 @@ __pycache__/
 dist/
 build/
 logs/
-results/
+# Large results live outside git (lab.toml results_root); the top-level results/ keeps only the item-scrubbed cards
+# and the manifest of results_root. Nested results/ folders stay ignored as before.
+/results/*
+!/results/cards/
+!/results/MANIFEST.tsv
+*/**/results/
 directions/
 *.pt
 .DS_Store
