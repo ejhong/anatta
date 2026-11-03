@@ -22,7 +22,7 @@ contrastive prompts and their per-response mean activations: the split null's ba
 per-layer constants on the neutral set, added the evening of 1 Nov). PyTorch's allocator runs with
 expandable segments, since the out-of-memory error of 1 Nov had 8 GiB reserved but unallocated.
 
-Deploy: ~/prj/matlab/.venv/bin/modal deploy /Users/eugene/prj/align/anatta-lab/lab/explore/bench/modal_bench.py
+Deploy (from the repo root): tools/modal.sh deploy lab/explore/bench/modal_bench.py
 (client.py up does this). Nothing here touches any app or volume but anatta-explore-bench and anatta-hf-cache.
 """
 

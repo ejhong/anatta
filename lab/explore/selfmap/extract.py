@@ -5,7 +5,7 @@ into the results folder outside git. Claude (Opus 5.5, an AI model) wrote this f
 Only prompts/dev.jsonl is read (its sha256 must match the manifest's current version); the held-out file is never
 opened. Spend: each container is charged from launch to its last call plus the 60 s scaledown, at L40S $1.95/h plus
 $0.60/h for cores and memory; a run whose upper estimate would pass the cap is refused before launch. The cost is
-added to results/explore/spend/<date>.json (tool "selfmap") and to the run folder's spend.json.
+added to the spend folder (lab.toml, anatta.config)/<date>.json (tool "selfmap") and to the run folder's spend.json.
 
 Run (Modal's CLI venv): ~/prj/matlab/.venv/bin/python -I lab/explore/selfmap/extract.py [--models a,b] [--cap 8]
 """
@@ -24,7 +24,6 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(HERE.parent))  # scout.spend
 OUT = Path("/Users/eugene/prj/align/results/explore/2026-11-02/selfmap-pilot")
-SPEND_DIR = Path("/Users/eugene/prj/align/results/explore/spend")
 USD_H = 1.95 + 0.60
 UPPER_S = 1500  # per container: start, load, extraction, transfer (generous)
 
@@ -101,7 +100,9 @@ def main() -> None:
     usd = sum(secs.values()) / 3600 * USD_H
     from scout.spend import add_spend
 
-    add_spend(SPEND_DIR, tool="selfmap", label=a.label, usd=usd, calls=len(models))
+    from anatta.config import load
+
+    add_spend(load().spend_dir, tool="selfmap", label=a.label, usd=usd, calls=len(models))
     rec = json.loads((OUT / "spend.json").read_text()) if (OUT / "spend.json").exists() else {"usd": 0.0, "runs": []}
     rec["usd"] = round(rec["usd"] + usd, 4)
     rec["runs"].append({"utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "models": models,

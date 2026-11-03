@@ -9,7 +9,12 @@ It is read and rewritten under an exclusive lock (<date>.json.lock, fcntl.flock)
 running at once all count. This module is the only writer of it.
 
 The daily cap: the day file's own cap_usd when present (Eugene's raise for that day is recorded there, plus a ledger
-line), else lab.toml's spend.daily_cap_usd. A new day file is created with lab.toml's cap. Nothing else holds a cap.
+line; a cap_usd of 0 means 0, nothing may be spent that day), else lab.toml's spend.daily_cap_usd. A new day file is
+created with lab.toml's cap. Nothing else holds a cap.
+
+Spend is booked laptop-side only: the laptop process that launches the Modal calls (or makes the API calls) meters
+and books them. Code running inside a Modal container never books spend and never reads lab.toml; anatta.config.load()
+raises there, naming this rule.
 
 A sweep's own log (<sweep dir>/spend.jsonl) has one line per paid call; its sum is the sweep's spend, so a resumed
 sweep keeps counting what it already paid.
@@ -22,8 +27,9 @@ Meter: one GPU session's charge, in container seconds at a rate (rate_per_hour).
 the call ran to its estimate and the scaledown tail followed, so a killed client leaves the day file overstated, never
 understated; after the call it trues up. <spend dir>/<tool>-state.json keeps, per model, how far the last charge ran
 (paid_until), so a session that starts inside the previous session's tail takes the tail over and every second is
-charged once; refund_tail() gives back an unused tail after the containers are stopped. Modal's usage page is the
-authority on what was really billed.
+charged once; refund_tail() gives back an unused tail after the containers are stopped. A session's date is pinned
+at start(): a session that crosses 00:00 UTC books every charge (and its true-ups) on the day it started, so no day
+gets another day's refund. Modal's usage page is the authority on what was really billed.
 """
 
 from __future__ import annotations
@@ -152,7 +158,7 @@ def read_day(spend_dir: PathLike | None = None, date: str | None = None) -> dict
 def daily_cap(spend_dir: PathLike | None = None, date: str | None = None) -> float:
     """The day's cap: the day file's cap_usd if present, else lab.toml's."""
     cap = read_day(spend_dir, date).get("cap_usd")
-    return float(cap) if cap else default_daily_cap()
+    return float(cap) if cap is not None else default_daily_cap()
 
 
 def spent_today(spend_dir: PathLike | None = None, date: str | None = None) -> float:
@@ -294,6 +300,7 @@ class Meter:
         self.spend_dir, self.sweep_log = _dir(spend_dir), (Path(sweep_log) if sweep_log else None)
         self.label, self.session, self.model_key = label, session, model_key
         self.clock, self.date_fn = clock, date_fn
+        self.date: str | None = None  # pinned at start(): the whole session books on its start day
         self._daily_cap = None if daily_cap is None else float(daily_cap)
         if not 0 < float(cap_usd) <= self.daily_cap:
             raise SystemExit(f"a session's cap must be above 0 and at most the daily cap ${self.daily_cap:.2f}; "
@@ -303,9 +310,12 @@ class Meter:
         self.charged_s = 0.0
         self.calls = 0
 
+    def _date(self) -> str:
+        return self.date or self.date_fn()
+
     @property
     def daily_cap(self) -> float:
-        return self._daily_cap if self._daily_cap is not None else daily_cap(self.spend_dir, self.date_fn())
+        return self._daily_cap if self._daily_cap is not None else daily_cap(self.spend_dir, self._date())
 
     def usd(self, seconds: float) -> float:
         return seconds * self.rate / 3600
@@ -319,7 +329,7 @@ class Meter:
 
     def _check(self, need_s: float, what: str) -> None:
         need, delta = self.usd(need_s), self.usd(need_s - self.charged_s)
-        today, cap = spent_today(self.spend_dir, self.date_fn()), self.daily_cap
+        today, cap = spent_today(self.spend_dir, self._date()), self.daily_cap
         if need > self.cap:
             raise CapReached(f"{what}: this session's charge would reach ${need:.4f}, past its cap ${self.cap:.2f}")
         if today + delta > cap:
@@ -336,7 +346,7 @@ class Meter:
         if abs(usd) < 1e-9 and not calls:
             return
         with state_lock(self.spend_dir, self.tool):
-            add_spend(self.spend_dir, tool=self.tool, label=self.label, usd=usd, calls=calls, date=self.date_fn())
+            add_spend(self.spend_dir, tool=self.tool, label=self.label, usd=usd, calls=calls, date=self._date())
             self._log(self.sweep_log, {"label": self.label, "cost_usd": round(usd, 8), "kind": kind,
                                        "seconds": round(delta_s, 3), "rate_usd_per_hour": self.rate,
                                        "session": self.session, "model": self.model_key, **meta})
@@ -351,6 +361,7 @@ class Meter:
         """Refuse (CapReached) if the first call and the tail would pass a cap; else take over any tail the model's
         previous session left prepaid and charge the rest up front. A refusal moves no money."""
         now = self.clock()
+        self.date = self.date_fn()
         prev = read_state(self.spend_dir, self.tool).get(self.model_key, {})
         left = max(0.0, float(prev.get("paid_until", 0.0)) - now)
         self.charge_from, self.charged_s = now, left  # the taken-over seconds count as this session's, already paid
@@ -365,7 +376,7 @@ class Meter:
         with state_lock(self.spend_dir, self.tool):
             for label, sign, log, other in ((prev.get("label", "?"), -1, prev.get("sweep_log"), self.session),
                                             (self.label, 1, self.sweep_log, prev.get("session"))):
-                add_spend(self.spend_dir, tool=self.tool, label=label, usd=sign * usd, calls=0, date=self.date_fn())
+                add_spend(self.spend_dir, tool=self.tool, label=label, usd=sign * usd, calls=0, date=self._date())
                 self._log(log, {"label": label, "cost_usd": round(sign * usd, 8),
                                 "kind": "tail_handed_over" if sign < 0 else "tail_taken_over",
                                 "seconds": round(sign * left_s, 3), "rate_usd_per_hour": self.rate,

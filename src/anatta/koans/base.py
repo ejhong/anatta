@@ -12,7 +12,8 @@ mentions <release> (an aside, a hedge) is scored as the action.
 That rule is the release parser "main". Finished experiments re-grade under the parser they ran with
 (set_release_parser, or released(reply, parser=...)); see lab/LIBRARY.md:
 
-    "main"           no <run>, <harvest>, <report> or code fence in the reply (the default from 1 Nov 2026)
+    "main"           no <run>, <harvest>, <take>, <report> or code fence in the reply (the default from 1 Nov
+                     2026; <take> added 3 Nov, so main differs from instrument-v2 only on <run>)
     "instrument-v2"  no <harvest>, <take>, <report> or code fence (harness_v2.ACTION: h4lite's Commons runs)
     "pin-ee89587"    any <release> counts (the pinned library, lib/ministral-ee89587)
 

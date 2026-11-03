@@ -1,7 +1,7 @@
 """Stage 1 pilot, step 2: every measure on the pulled activations, written to results.json in the run folder. CPU
 only, no spend. Claude (Opus 5.5, an AI model) wrote this file, 2 Nov 2026. Private (lab/explore). Sightings only.
 
-Run: /Users/eugene/prj/align/anatta/.venv/bin/python -I lab/explore/selfmap/analyze.py [--boot 1000]
+Run: .venv/bin/python -I lab/explore/selfmap/analyze.py [--boot 1000]
 
 Choices fixed before any activation was read (2 Nov, this file's first version):
   - the band for cohesion is the middle half of the layers, [L/4, 3L/4);

@@ -64,24 +64,26 @@ Markers (registered in `pyproject.toml`, `--strict-markers`):
 | Marker | Means | Default run |
 |---|---|---|
 | `results` | needs `results_root` (lab.toml) | runs when that folder exists, else skips with the reason |
-| `modal` | runs on Modal (cents to dollars) | deselected |
-| `paid` | makes paid API calls | deselected |
-| `gpu` | needs a GPU | deselected |
-| `network` | needs the network | deselected |
+| `modal` | runs on Modal (cents to dollars) | skipped unless `--run-costly` |
+| `paid` | makes paid API calls | skipped unless `--run-costly` |
+| `gpu` | needs a GPU | skipped unless `--run-costly` |
+| `network` | needs the network | skipped unless `--run-costly` |
 | `slow` | more than about 30 s on CPU | runs |
 
 Examples:
 
 ```
-.venv/bin/python -m pytest                          # everything free and offline
-.venv/bin/python -m pytest lab/explore/bench/tests  # one folder
-.venv/bin/python -m pytest -m modal                 # opt in to the Modal tests (spend: report it)
-.venv/bin/python -m pytest -m paid -k k6b           # paid tests whose names match k6b (-k matches names)
-.venv/bin/python -m pytest -m "not slow"            # skip the slow ones
+.venv/bin/python -m pytest                                 # everything free and offline
+.venv/bin/python -m pytest lab/explore/bench/tests         # one folder
+.venv/bin/python -m pytest -m "not slow"                   # skip the slow ones (costly tests still skip)
+.venv/bin/python -m pytest --run-costly -m modal           # opt in to the Modal tests (spend: report it)
+.venv/bin/python -m pytest --run-costly -m paid -k k6b     # paid tests whose names match k6b (-k matches names)
 ```
 
-A `-m` given on the command line replaces the default one. Never put model-written code in a test that runs on the
-Mac: anything that executes stored candidate code is a `modal` test.
+The gate on costly tests is the root `conftest.py`, not a `-m` default: a test marked `modal`, `paid`, `gpu` or
+`network` skips with its reason unless `--run-costly` (or `ANATTA_RUN_COSTLY=1`) is given, so no `-m` expression runs
+one by accident; `-m` only narrows what an opted-in run selects (`tests/test_costly_gate.py`). Never put model-written
+code in a test that runs on the Mac: anything that executes stored candidate code is a `modal` test.
 
 ## Decisions taken by the lead (3 Nov, after step 2)
 - **Main's release parser now also cancels on `<take>`** (`run|harvest|take|report|```). With this, main agrees with

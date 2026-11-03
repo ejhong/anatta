@@ -4,7 +4,7 @@ they read a scout sweep. Claude (Opus 5.5) wrote this file, 1 Nov 2026, and exte
 and split_null controls, calls packed by a token budget, tensor hashes). Private (lab/explore).
 
 Run it with the matlab venv's Python, which has modal and torch (no installs):
-  PY=~/prj/matlab/.venv/bin/python; B=/Users/eugene/prj/align/anatta-lab/lab/explore/bench
+  PY=~/prj/matlab/.venv/bin/python; B=lab/explore/bench  # from the repo root
   $PY $B/client.py up                  deploy the app; no container starts and nothing is billed until a call
   $PY $B/client.py warm [--model qwen] start a container and load the model; prints the cold-start time
   $PY $B/client.py run SPEC.yaml       run a sweep; --cap USD overrides the spec's cap, --stop stops the container

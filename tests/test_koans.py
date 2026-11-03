@@ -86,6 +86,17 @@ def test_the_named_release_parsers_keep_the_old_rules():
         base.set_release_parser("loose")
 
 
+def test_main_is_action_re_and_differs_from_v2_only_on_run():
+    from anatta.koans import base
+
+    main, v2 = base.RELEASE_PARSERS["main"], base.RELEASE_PARSERS["instrument-v2"]
+    assert main is base.ACTION_RE
+    for action in ("<harvest>", "<take>", "<report>", "```", "<HARVEST>"):
+        assert main.search(action) and v2.search(action), action
+    assert main.search("<run>") and not v2.search("<run>")
+    assert not main.search("<release>x</release>") and not v2.search("<release>x</release>")
+
+
 def test_code_fences_and_unfenced_code():
     code = REFERENCE["median"]
     for reply in (code, f"```Python\n{code}\n```", f"``` py\n{code}\n```"):

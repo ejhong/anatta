@@ -30,10 +30,11 @@ LAB = HERE.parents[1]
 if str(LAB) not in sys.path:
     sys.path.insert(0, str(LAB))
 
+from anatta.config import load  # noqa: E402
 from harness import candidate as C  # noqa: E402
 from harness import runner as R  # noqa: E402
 
-SRC = Path("/Users/eugene/prj/align/results/explore/2026-11-02/noself3")
+SRC = load().results_root / "explore" / "2026-11-02" / "noself3"
 OUT = HERE / "noself3" / "conditions"
 CAND = HERE / "noself3" / "candidate.yaml"
 ARMS = {  # noself3 intervention name -> (harness condition name, role, full/ file stem)

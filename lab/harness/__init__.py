@@ -7,5 +7,7 @@ card writer (card.py) and an interface stub for the Modal runner (runner.py). No
 
 from pathlib import Path
 
+from anatta.config import REPO
+
 HERE = Path(__file__).resolve().parent
-ALIGN = Path("/Users/eugene/prj/align")  # card paths in measures.yaml are relative to this folder
+ALIGN = REPO.parent  # the folder holding the repo; card paths in measures.yaml are relative to it

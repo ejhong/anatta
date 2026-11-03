@@ -1,7 +1,7 @@
 """scout: behavior sweeps through OpenRouter, judged and reported. Claude wrote this file. Private (lab/explore).
 
 Run from lab/explore with the lab's Python and OPENROUTER_API_KEY in the environment:
-  PY=/Users/eugene/prj/align/anatta/.venv/bin/python
+  PY=../../.venv/bin/python
   $PY -m scout run scout/specs/smoke.yaml        # subjects, then the judge, then the report (--dry-run: estimate only)
   $PY -m scout run scout/specs/first-sweep.yaml --measured 2026-11-01/smoke 2026-11-01/smoke-new 2026-11-01/smoke-harm
   $PY -m scout estimate scout/specs/first-sweep.yaml --measured 2026-11-01/smoke

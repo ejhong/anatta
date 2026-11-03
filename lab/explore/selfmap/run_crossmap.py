@@ -3,7 +3,7 @@
 crossmap.jsonl, one line each. CPU only. Claude (Opus 5.5, an AI model) wrote this file, 2 Nov 2026. Private
 (lab/explore). Sightings only. Self rows are never scored here.
 
-Run: /Users/eugene/prj/align/anatta/.venv/bin/python -I lab/explore/selfmap/run_crossmap.py \
+Run: .venv/bin/python -I lab/explore/selfmap/run_crossmap.py \
         --acts <folder with acts/> --models qwen_base,qwen_instruct,ministral [--rows dev.jsonl[,anchors_dev.jsonl]]
 """
 

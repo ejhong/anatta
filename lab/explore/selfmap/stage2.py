@@ -20,7 +20,7 @@ check. Stage trend: paired differences between consecutive OLMo stages (the boot
 units for every model, so differences are paired), and a least-squares slope over the ordered stages with its
 bootstrap interval.
 
-Run: /Users/eugene/prj/align/anatta/.venv/bin/python -I lab/explore/selfmap/stage2.py [--boot 1000]
+Run: .venv/bin/python -I lab/explore/selfmap/stage2.py [--boot 1000]
 """
 
 from __future__ import annotations

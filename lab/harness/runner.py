@@ -46,6 +46,14 @@ def results_dir() -> Path:
     return load().results_root / "harness"
 
 
+def _tier_cap(tier: str) -> float:
+    """A run's default cap by tier, from lab.toml's [spend] quick_cap_usd / full_cap_usd (anatta.config)."""
+    from anatta.config import load
+
+    c = load()
+    return c.quick_cap_usd if tier == "quick" else c.full_cap_usd
+
+
 class RunnerNotBuilt(NotImplementedError):
     pass
 
@@ -107,7 +115,7 @@ def plan(c: Candidate, registry: dict, date: str, cap_usd: float | None = None) 
         notes.append("full tier: held-out items read once per registered claim; check_frozen() before the read")
     return RunPlan(candidate_name=c.name, candidate_sha256=c.sha256, model=c.model, tier=c.tier, arms=arms,
                    measures=resolve_measures(c, registry), out_dir=str(results_dir() / date / c.name),
-                   cap_usd=cap_usd if cap_usd is not None else (15.0 if c.tier == "quick" else 70.0), notes=notes)
+                   cap_usd=cap_usd if cap_usd is not None else _tier_cap(c.tier), notes=notes)
 
 
 class Runner(Protocol):

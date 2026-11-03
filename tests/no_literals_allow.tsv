@@ -1,0 +1,19 @@
+# The few files tests/test_no_literals.py lets keep a /Users/ path or a cap literal, each with its reason.
+# path (repo-relative)	reason
+lab.toml	the lab's one config: results_root and the caps live here and nowhere else
+lab/explore/noself/modal_noself.py	noself (finished 2 Nov) records its own sha256 (code_sha256); editing it would break that record
+lab/explore/noself/modal_noself3.py	noself3 (finished 2 Nov) records its own sha256 (code_sha256); editing it would break that record
+lab/explore/noself/analyze3.py	hashed by modal_noself3.code_sha256 (finished 2 Nov); editing it would break that record
+lab/explore/noself/modal_noself2.py	finished experiment (2 Nov): its dated results folder
+lab/explore/noself/analyze.py	finished experiment (2 Nov): its dated results folder results/explore/2026-11-02/noself
+lab/explore/noself/analyze2.py	finished experiment (2 Nov): its dated results folder results/explore/2026-11-02/noself2
+lab/explore/noself/run_judge.py	finished experiment (2 Nov): its dated results folder results/explore/2026-11-02/noself
+lab/explore/selfmap/extract.py	finished selfmap pilot (2 Nov): its dated output folder (the spend folder comes from lab.toml)
+lab/explore/selfmap/analyze.py	finished selfmap pilot (2 Nov): its dated output folder
+lab/explore/selfmap/summarize.py	finished selfmap pilot (2 Nov): its dated output folder; runs under python3 -I, without anatta
+lab/explore/selfmap/stage2.py	finished selfmap stage 2 (2 Nov): its dated output folder
+lab/explore/selfmap/run_crossmap.py	finished selfmap stage 2 (2 Nov): its dated input and output folders
+lab/explore/selfmap/summarize_stage2.py	finished selfmap stage 2 (2 Nov): its dated output folder; runs under python3 -I, without anatta
+lab/explore/act1/run_act1.py	finished Act I run (2 Nov): its dated results folder; the runner becomes a spec in clean-lab step 6
+lab/explore/act1/analyze_act1.py	finished Act I run (2 Nov): its dated results folder results/explore/2026-11-02/act1
+lab/explore/agentic_release/run.py	the 3 Nov agentic-release run: its dated results folder results/explore/2026-11-03/agentic-release

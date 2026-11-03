@@ -1,16 +1,19 @@
-"""P1's spend meter, in bench's meter.py format. Claude (Opus 5.5) wrote this file, 1 Nov 2026. Private (lab/explore).
+"""P1's spend meter: a thin wrapper of the lab's one GPU Meter (anatta.spend.Meter, re-exported by scout.spend) with
+tool "p1". Claude (Opus 5.5) wrote this file, 1 Nov 2026; made a wrapper on 3 Nov 2026. P1 is finished: the wrapper keeps
+its recorded behaviour (charges, caps, the day file and spend.jsonl lines), checked by lab/explore/p1/tests/test_p1.py.
+Private (lab/explore).
 
-Each Modal call's container time is charged to the explore track's shared daily file through anatta.spend.add_spend
-(re-exported by scout.spend; <results>/spend/<UTC date>.json, under its lock, as tool "p1"), and line by line to P1's own spend.jsonl, whose sum is
-P1's spend so far. The rate is bench's meter.rate_per_hour for P1's container: the L40S at $1.95 an hour plus 4 cores
-and 32 GiB at the lab's list prices, $3.28 an hour. Modal's usage page is the authority.
+Each Modal call is one Meter session. reserve(estimate_s) starts it, charging the call's upper estimate up front (the
+Meter charges its estimate plus the scaledown tail, so it is started at estimate - tail), and a killed client leaves
+the day file overstated, never understated; settle() trues up to the measured wall time plus the tail (Meter.after_call;
+a negative entry when the estimate was high). Every line goes to the shared day file (tool "p1") and to P1's own
+spend.jsonl, whose sum is P1's spend so far. The rate is anatta.spend.rate_per_hour for P1's container: the L40S at
+$1.95 an hour plus 4 cores and 32 GiB at the lab's list prices, $3.28 an hour. Modal's usage page is the authority.
 
-As bench's meter does it: before a call the meter charges the call's upper estimate (start-up plus the stage's
-estimate), so a killed client leaves the daily file overstated, never understated; after the call it trues up to the
-measured wall time plus the scaledown tail (a negative entry when the estimate was high).
-
-Caps: a call does not start if its estimate would take P1 past its cap ($6 for all of P1) or the day's explore total
-past the daily stop ($45, the brief's line, under scout's $50 cap).
+Caps (both passed in by the caller, from P1's spec): a call does not start if its estimate would take P1 past its cap
+(the session's cap is what is left of P1's) or the day's total past P1's daily stop (the session's daily cap).
+The Meter also writes <spend dir>/p1-state.json; each call is its own model key there, so no call takes over another's
+tail. The refusal messages are the Meter's wording.
 """
 
 from __future__ import annotations
@@ -20,7 +23,7 @@ from pathlib import Path
 
 import p1_core  # noqa: F401  (puts lab/explore and bench on sys.path)
 from scout import spend as scout_spend
-from scout.schema import append_jsonl, read_jsonl, utc_date, utc_now
+from scout.schema import read_jsonl, utc_date
 
 TOOL = "p1"
 rate_per_hour = scout_spend.rate_per_hour  # anatta.spend's Modal rates (bench's, unchanged)
@@ -41,6 +44,7 @@ class P1Meter:
         self.cap, self.daily_stop, self.tail_s = float(cap_usd), float(daily_stop_usd), float(tail_s)
         self.clock, self.date_fn = clock, date_fn
         self.t0 = self.reserved_s = None
+        self._meter: scout_spend.Meter | None = None
 
     def usd(self, seconds: float) -> float:
         return seconds * self.rate / 3600
@@ -56,29 +60,21 @@ class P1Meter:
         """Seconds the rest of P1's cap buys at the rate."""
         return max(0.0, (self.cap - self.p1_spent()) / self.rate * 3600)
 
-    def _charge(self, usd: float, kind: str, calls: int, **meta) -> None:
-        scout_spend.add_spend(self.spend_dir, tool=TOOL, label=self.label, usd=usd, calls=calls, date=self.date_fn())
-        append_jsonl(self.log, {"ts": utc_now(), "tool": TOOL, "label": self.label, "cost_usd": round(usd, 8),
-                                "kind": kind, "rate_usd_per_hour": self.rate, "session": self.session, **meta})
-
     def reserve(self, estimate_s: float, what: str) -> None:
         """Refuse (CapReached) when the estimate would pass P1's cap or the day's stop; else charge it up front."""
-        usd = self.usd(estimate_s)
-        spent, today = self.p1_spent(), self.today()
-        if spent + usd > self.cap:
-            raise CapReached(f"refused {what}: P1 has spent ${spent:.4f}; with this call's estimate ${usd:.4f} it "
-                             f"would pass its cap ${self.cap:.2f}")
-        if today + usd > self.daily_stop:
-            raise CapReached(f"refused {what}: today's explore spend ${today:.4f} + this call's estimate ${usd:.4f} "
-                             f"would pass the daily stop ${self.daily_stop:.2f}")
-        self._charge(usd, "reserve", 0, what=what, seconds=round(estimate_s, 3))
-        self.t0, self.reserved_s = self.clock(), float(estimate_s)
+        left = round(self.cap - self.p1_spent(), 8)
+        if left <= 0:
+            raise CapReached(f"refused {what}: P1 has spent its cap ${self.cap:.2f}")
+        self._meter = scout_spend.Meter(
+            tool=TOOL, spend_dir=self.spend_dir, label=self.label, session=self.session,
+            model_key=f"{self.session}:{what}", cap_usd=min(left, self.daily_stop), rate=self.rate, tail_s=self.tail_s,
+            sweep_log=self.log, daily_cap=self.daily_stop, clock=self.clock, date_fn=self.date_fn)
+        self._meter.start(max(0.0, float(estimate_s) - self.tail_s))
+        self.t0, self.reserved_s = self._meter.charge_from, float(estimate_s)
 
     def settle(self, what: str, **meta) -> float:
         """True up to the wall time since reserve() plus the tail; returns this call's charge in dollars."""
-        actual_s = self.clock() - self.t0 + self.tail_s
-        delta = self.usd(actual_s - self.reserved_s)
-        self._charge(delta, "call", 1, what=what, seconds=round(actual_s, 3), reserved_s=round(self.reserved_s, 3),
-                     **meta)
-        self.t0 = self.reserved_s = None
-        return self.usd(actual_s)
+        self._meter.after_call(what=what, reserved_s=round(self.reserved_s, 3), **meta)
+        usd = self._meter.charged_usd
+        self._meter, self.t0, self.reserved_s = None, None, None
+        return usd

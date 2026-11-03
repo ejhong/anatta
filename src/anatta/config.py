@@ -9,6 +9,10 @@ Env overrides (each optional):
   ANATTA_SPEND_DIR       the spend day files' folder
   ANATTA_DAILY_CAP_USD   the default daily cap (a day file's own cap_usd still wins; see anatta.spend)
   ANATTA_DEFAULT_MODEL   default_model
+
+Laptop-side only: spend is booked by the laptop process that launches the calls (anatta.spend), never inside a Modal
+container, so load() refuses to run in one (Modal sets MODAL_IS_REMOTE=1 / MODAL_TASK_ID there). Container code gets
+what it needs (paths, names) as arguments from the laptop side.
 """
 
 from __future__ import annotations
@@ -43,6 +47,8 @@ class Config:
     results_root: Path
     spend_dir: Path
     daily_cap_usd: float
+    quick_cap_usd: float  # the harness's default cap for a quick-tier run ([spend] quick_cap_usd)
+    full_cap_usd: float  # and for a full-tier run ([spend] full_cap_usd)
     default_model: str
     modal: Modal
     key_envs: dict[str, str] = field(default_factory=dict)  # service -> env var name (never the value)
@@ -66,6 +72,10 @@ def _path(s: str, base: Path | None = None) -> Path:
 def load(path: str | os.PathLike | None = None) -> Config:
     """Read lab.toml (or `path`, or $ANATTA_LAB_TOML) and apply the env overrides."""
     env = os.environ
+    if env.get("MODAL_IS_REMOTE") == "1" or env.get("MODAL_TASK_ID"):
+        raise ConfigError("anatta.config.load() was called inside a Modal container: spend is booked laptop-side only "
+                          "(src/anatta/spend.py), so lab.toml is read only on the laptop; pass what the container needs "
+                          "as arguments")
     p = Path(path or env.get("ANATTA_LAB_TOML") or DEFAULT_PATH)
     try:
         raw = tomllib.loads(p.read_text(encoding="utf-8"))
@@ -79,10 +89,11 @@ def load(path: str | os.PathLike | None = None) -> Config:
     cap = float(env.get("ANATTA_DAILY_CAP_USD") or _get(raw, "spend.daily_cap_usd"))
     if not cap > 0:
         raise ConfigError(f"spend.daily_cap_usd must be above 0; got {cap}")
+    tier_caps = {k: float(_get(raw, f"spend.{k}")) for k in ("quick_cap_usd", "full_cap_usd")}
     m = _get(raw, "modal")
     modal = Modal(app_prefix=str(_get(m, "app_prefix")), cli=_path(str(_get(m, "cli"))),
                   volumes={str(k): str(v) for k, v in (m.get("volumes") or {}).items()})
     keys = {k.removesuffix("_env"): str(v) for k, v in (raw.get("keys") or {}).items()}
     return Config(path=p, results_root=root, spend_dir=spend_dir, daily_cap_usd=cap,
-                  default_model=str(env.get("ANATTA_DEFAULT_MODEL") or _get(raw, "default_model")), modal=modal,
+                  default_model=str(env.get("ANATTA_DEFAULT_MODEL") or _get(raw, "default_model")), modal=modal, **tier_caps,
                   key_envs=keys, manifest_exclude=tuple(str(x) for x in raw.get("manifest_exclude") or ()))

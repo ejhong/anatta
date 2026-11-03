@@ -1,7 +1,7 @@
 """The calendar's map-free check (calendar_rsa) for every model pair, readout, prep and depth, into rsa.json. Claude
 (Opus 5.5) wrote this file, 2 Nov 2026, after the cross-family maps failed. Private (lab/explore). CPU only.
 
-Run: /Users/eugene/prj/align/anatta/.venv/bin/python -I lab/explore/selfmap/rsa.py
+Run: .venv/bin/python -I lab/explore/selfmap/rsa.py
 """
 
 import json

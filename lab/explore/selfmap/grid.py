@@ -6,7 +6,7 @@ manifest.json (the files' sha256 and counts). Claude (Opus 5.5, an AI model) wro
 The held-out file's sha256 goes into manifest.json before any model (the Fable reader included) sees anything. A
 rebuild that changes the files appends a new version to the manifest's history; old versions are never removed.
 
-Run: /Users/eugene/prj/align/anatta/.venv/bin/python -I lab/explore/selfmap/grid.py [--note "why"]
+Run: .venv/bin/python -I lab/explore/selfmap/grid.py [--note "why"]
 """
 
 from __future__ import annotations

@@ -21,7 +21,7 @@ def lab_toml(tmp_path, monkeypatch):
         monkeypatch.delenv(k, raising=False)
     f = tmp_path / "lab.toml"
     f.write_text(f'results_root = "{tmp_path / "results"}"\ndefault_model = "m"\n'
-                 '[spend]\ndaily_cap_usd = 50.0\ndir = "explore/spend"\n'
+                 '[spend]\ndaily_cap_usd = 50.0\ndir = "explore/spend"\nquick_cap_usd = 15.0\nfull_cap_usd = 70.0\n'
                  '[modal]\napp_prefix = "anatta-"\ncli = "~/modal"\n[modal.volumes]\nruns = "anatta-runs"\n'
                  '[keys]\nopenrouter_env = "OPENROUTER_API_KEY"\n')
     monkeypatch.setenv("ANATTA_LAB_TOML", str(f))
@@ -31,6 +31,7 @@ def lab_toml(tmp_path, monkeypatch):
 def test_config_reads_lab_toml_and_env_overrides(lab_toml, tmp_path, monkeypatch):
     c = config.load()
     assert c.daily_cap_usd == 50.0 and c.default_model == "m"
+    assert (c.quick_cap_usd, c.full_cap_usd) == (15.0, 70.0)
     assert c.spend_dir == tmp_path / "results" / "explore" / "spend"
     assert c.modal.volumes == {"runs": "anatta-runs"} and c.modal.app_name("x") == "anatta-x"
     assert c.key_envs == {"openrouter": "OPENROUTER_API_KEY"}
@@ -117,3 +118,35 @@ def test_meter_refuses_past_the_daily_cap(lab_toml, tmp_path):
         m.start(first_estimate_s=100)  # $0.70 more would pass $50
     assert spend.spent_today(d, DATE) == pytest.approx(49.5)
     assert not (d / "gpu-state.json").exists()
+
+
+def test_a_meter_session_books_on_its_start_day_across_midnight(lab_toml, tmp_path):
+    d = tmp_path / "spend"
+    clock, day = [1000.0], ["2026-11-01"]
+    m = spend.Meter(tool="gpu", spend_dir=d, label="s", session="s", model_key="m", cap_usd=5.0, rate=3.6,
+                    tail_s=0.0, clock=lambda: clock[0], date_fn=lambda: day[0])
+    m.start(first_estimate_s=1000)  # $1.00 reserved on 1 Nov
+    day[0], clock[0] = "2026-11-02", clock[0] + 500  # 00:00 UTC passes mid-session
+    m.after_call()
+    m.close(stopped=True)
+    assert spend.spent_today(d, "2026-11-01") == pytest.approx(0.5)  # reserve and true-up both on the start day
+    assert not spend.day_file(d, "2026-11-02").exists()
+
+
+def test_a_day_file_cap_of_zero_means_zero(lab_toml, tmp_path):
+    d = tmp_path / "spend"
+    spend.add_spend(d, tool="t", label="a", usd=0.0, date=DATE)
+    f = spend.day_file(d, DATE)
+    day = json.loads(f.read_text())
+    day["cap_usd"] = 0
+    f.write_text(json.dumps(day))
+    assert spend.daily_cap(d, DATE) == 0.0
+    with pytest.raises(SystemExit):
+        spend.SpendGuard(d, sweep_cap=1, sweep_log=tmp_path / "s.jsonl", tool="t", label="b", date_fn=lambda: DATE)
+
+
+@pytest.mark.parametrize("var,val", [("MODAL_IS_REMOTE", "1"), ("MODAL_TASK_ID", "ta-123")])
+def test_config_refuses_inside_a_modal_container(lab_toml, monkeypatch, var, val):
+    monkeypatch.setenv(var, val)
+    with pytest.raises(config.ConfigError, match="laptop-side only"):
+        config.load()

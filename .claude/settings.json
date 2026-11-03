@@ -23,9 +23,8 @@
       "Bash(git ls-files:*)",
       "Bash(git worktree list:*)",
       "Bash(git branch --show-current)",
-      "Bash(git fetch -q private)",
       "Bash(date -u:*)",
-      "Bash(python3 -I $CLAUDE_PROJECT_DIR/tools/tally.py:*)",
+      "Bash(python3 -I $CLAUDE_PROJECT_DIR/lab/tools/tally.py:*)",
       "Bash(python3 -I lab/tools/tally.py:*)",
       "Bash(/Users/eugene/prj/align/anatta/.venv/bin/python -m pytest:*)",
       "Bash(.venv/bin/python -m pytest:*)"

@@ -36,15 +36,16 @@ packages = ["src/anatta"]
 # One run collects every test folder (the root conftest.py says which, and keeps each folder's modules apart).
 testpaths = ["tests", "lab", "calibration"]
 pythonpath = ["src", "tests"]  # this checkout's package first, ahead of any other installed copy of anatta
-# The default run is free and offline: tests that cost money or need a GPU or the network are deselected (opt in
-# with e.g. `-m modal`, `-m paid -k k6b`; a later -m replaces this one). See lab/LIBRARY.md, "Running tests".
-addopts = ["--strict-markers", "-m", "not modal and not paid and not gpu and not network"]
+# The default run is free and offline: the root conftest.py skips tests marked modal, paid, gpu or network unless
+# --run-costly (or ANATTA_RUN_COSTLY=1) is given, so no -m expression can opt into them by accident. Opt in with e.g.
+# `--run-costly -m modal`. See lab/LIBRARY.md, "Running tests".
+addopts = ["--strict-markers"]
 markers = [
   "results: needs results_root (lab.toml); skipped with a reason when that folder is absent",
-  "modal: runs on Modal (costs cents to dollars); deselected by default",
-  "paid: makes paid API calls; deselected by default",
-  "gpu: needs a GPU; deselected by default",
-  "network: needs the network; deselected by default",
+  "modal: runs on Modal (costs cents to dollars); skipped unless --run-costly",
+  "paid: makes paid API calls; skipped unless --run-costly",
+  "gpu: needs a GPU; skipped unless --run-costly",
+  "network: needs the network; skipped unless --run-costly",
   "slow: takes more than about 30 s on CPU",
 ]
 

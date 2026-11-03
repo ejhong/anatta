@@ -28,6 +28,8 @@ These rules hold in every session.
 
 ## Start here
 
+- Start Claude Code in the repo folder (`anatta/`), so the repo's `.claude/settings.json`, its guard
+  (`tools/guard.py`) and this CLAUDE.md apply.
 - Run `.venv/bin/python tools/doctor.py` (environment, lab.toml, results folder against `results/MANIFEST.tsv`, Modal
   CLI, keys present, git state, test collection). Then use the `checkin` skill.
 - **Where everything lives:** `lab/MAP.md`. Ledger index: `lab/ledger/INDEX.md` (regenerate with
@@ -54,7 +56,7 @@ These rules hold in every session.
   ledger line.
 - Python: `.venv/bin/python` (pytest, torch). The Modal CLI and some scripts run from the Modal venv named in
   lab.toml (no anatta installed there: give it `PYTHONPATH=<repo>/src`). Tests: `.venv/bin/python -m pytest` from the
-  root runs every folder in one process, free and offline; markers opt in to costly ones (`lab/LIBRARY.md`).
+  root runs every folder in one process, free and offline; `--run-costly` opts in to costly ones (`lab/LIBRARY.md`).
 - Modal: Eugene's account; apps named `anatta-*`. **Never touch the matlab-* apps or volumes.**
 - Spend: cloud/OpenRouter spend is fine within the day's cap (tracked in the spend folder); always report costs.
 

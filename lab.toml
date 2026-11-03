@@ -17,6 +17,9 @@ default_model = "ministral3_8b"
 daily_cap_usd = 50.0
 # The day files <dir>/<YYYY-MM-DD>.json (UTC). A relative path is under results_root.
 dir = "explore/spend"
+# The harness's default cap for one run (lab/harness/runner.py), by tier; a run's spec may set a lower one.
+quick_cap_usd = 15.0
+full_cap_usd = 70.0
 
 [modal]
 app_prefix = "anatta-"

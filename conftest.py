@@ -13,13 +13,15 @@ are put away, and the new root's are put back. Test files and conftests are lab-
 import mode puts each test folder on sys.path under bare names), so tests/test_bench.py and bench's test_bench.py, or
 the two test_stats.py, each import fresh in their own root. Running one folder alone works as before.
 
-Markers (pyproject.toml; lab/LIBRARY.md, "Running tests"): the default run deselects modal, paid, gpu and network, and a
-test marked `results` skips with its reason when results_root is absent. Claude (Opus 5.5) wrote this file, 3 Nov 2026.
+Markers (pyproject.toml; lab/LIBRARY.md, "Running tests"): tests marked modal, paid, gpu or network skip with a reason
+unless --run-costly or ANATTA_RUN_COSTLY=1 is given (a -m expression alone never runs them; opt in with e.g.
+`--run-costly -m modal`), and a test marked `results` skips with its reason when results_root is absent. Claude (Opus 5.5) wrote this file, 3 Nov 2026.
 """
 
 from __future__ import annotations
 
 import importlib
+import os
 import sys
 import sysconfig
 from pathlib import Path
@@ -118,11 +120,36 @@ FROZEN_AT_PIN = {"calibration/persona_extractor/tests/test_c4_app.py": "C4 is re
                  "run it at tag lib/ministral-ee89587 (lab/LIBRARY.md)"}
 
 
+COSTLY = ("modal", "paid", "gpu", "network")
+
+
+def pytest_addoption(parser):
+    parser.addoption("--run-costly", action="store_true", default=False,
+                     help="run tests marked modal, paid, gpu or network (they spend money or need a GPU or the "
+                          "network); also ANATTA_RUN_COSTLY=1. Narrow with -m, e.g. --run-costly -m modal")
+
+
+def costly_opted_in(config) -> bool:
+    return bool(config.getoption("--run-costly")) or os.environ.get("ANATTA_RUN_COSTLY") == "1"
+
+
+def skip_costly(items, opted_in: bool) -> None:
+    """Unless opted in, skip (with the reason) every test marked modal, paid, gpu or network."""
+    if opted_in:
+        return
+    for item in items:
+        hit = [m for m in COSTLY if item.get_closest_marker(m)]
+        if hit:
+            item.add_marker(pytest.mark.skip(reason=f"marked {', '.join(hit)}: costs money or needs a GPU or the "
+                                                    "network; run with --run-costly (or ANATTA_RUN_COSTLY=1)"))
+
+
 def pytest_collection_modifyitems(config, items):
-    """Skip, with the reason, tests whose instrument is frozen at the old pin, and tests marked `results` when
-    results_root (lab.toml) is not on this machine."""
+    """Skip, with the reason, costly tests unless opted in, tests whose instrument is frozen at the old pin, and tests
+    marked `results` when results_root (lab.toml) is not on this machine."""
     from anatta.config import load
 
+    skip_costly(items, costly_opted_in(config))
     for item in items:
         why = FROZEN_AT_PIN.get(Path(item.path).resolve().relative_to(REPO).as_posix())
         if why:
