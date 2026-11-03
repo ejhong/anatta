@@ -8902,3 +8902,14 @@ There are two ways to fix a hub:
   gap.** anatta.spend's Meter with spend_dir None writes to the default spend folder, so the serving check's GPU
   spend is in today's file (by_tool serving_check $4.70 over 56 calls). The day total is the file's $71.27 of the $80
   cap, not about $73.8. No runner fix is needed. I misread `_dir(None)`.
+- 2026-11-03 20:54 UTC — **R1b registered: our trainer should give EM where Kaczér et al. found it.** Spec
+  experiments/reproductions/r1b_em_our_trainer.yaml, sha256
+  f9141a71717b67c7c214152f0ef71a09fbf9c6e8d395310d085bccb557c457df, registered before any R1b result exists.
+  - **What runs:** our SFT (rsLoRA r32, alpha 64, all seven projections, lr 1e-4, one epoch) on Betley's insecure
+    and educational sets, 3 seeds each; Qwen 2.5 7B; 24 questions x 100 replies per model, judged by GPT-4o-mini.
+  - **Bands (fixed here):** insecure 3-seed mean EM in [1%, 10%] (Kaczér 4.0%); untrained at most 1%; educational
+    mean at most 1%, else the graded quantity is insecure minus educational, same band. Near and moderation rules as
+    in the spec. A TRL disambiguator runs only on fail or near.
+  - **Gates met:** serving check passed (20:52); spec and runner Fable-checked earlier today.
+  - **Plan:** a --limit judge smoke, then the run, from a clean commit on 4 Nov (fresh day cap). Estimate about
+    $16.6, cap $25.
