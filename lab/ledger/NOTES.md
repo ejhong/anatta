@@ -8595,3 +8595,14 @@ There are two ways to fix a hub:
   - vLLM 0.31.0 serves Ministral 3 and matches the transformers path: future Ministral runs can be much faster.
   - Truncation at K6's limits was common (OR-Bench 95%, OEQ 98% at 512 tokens); to raise for the harness.
   - Harness registry: Ministral rows for OR-Bench, MASK, SYCON become "calibrated (judge-checked, no anchor)".
+
+- 2026-11-03 01:43 UTC — **Step back after the first explore week; two next sweeps started** (Opus 5.5).
+  - Promotion review: no sighting meets the signature, so none is promoted. The week's looks (prompt sweep, steering
+    stances, the stakes cut, the self map, Act I at 3B and 7B) agree that small stock models have little self to
+    release; the paper's claim and H9 need an Act I mind first.
+  - Eugene (3 Nov, about 01:40 UTC): "yes go ahead on next steps please", approving both: (1) in-context release
+    practices against matched controls (honesty, calm, persona, clarity) on the agentic-misalignment scenarios, in
+    models with headroom (explore, cap $28; leaking stays uncarded after K7's MISS); (2) deliberately pushing Ministral
+    3 8B into cheating with a weak test runner, so Act I can start (smoke only, cap $12; full run waits).
+  - Both continue earlier decisions: ideas 55 (threats to the self as the arena), 57 (agentic misalignment on the
+    scoreboard; these runs are sightings, not scoreboard claims) and 54 (the self map's open branch toward organisms).
