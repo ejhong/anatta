@@ -8669,3 +8669,13 @@ There are two ways to fix a hub:
       R2 reward hacking (School of Reward Hacks null on Qwen3-8B; AISI Olmo checkpoints, pinned or sighting), R3 the
       PRH trend.
     - About $52 over 4-6 days. Waiting on Eugene's OK for about 62-77 GB of downloads and the order.
+- 2026-11-03 12:00 UTC — **Eugene approved the clean-lab plan (v2): downloads and order** (Opus 5.5). Eugene: "proceed
+  pls." The approval covers:
+  - the download table in lab/plans/clean-lab-2026-11-03.md (about 62-77 GB, to Modal only, safetensors only, untrusted
+    handling);
+  - the order: steps 0-4 with R1a as step 4's acceptance test, then the runner, then R1b/R1c/R2/R3, each registered
+    and Fable-checked before it runs;
+  - about $52.
+
+  Step 0: the freeze tag pre-clean-lab = e74dd8b is kept local; the guard blocks tag pushes to origin and the commit is
+  on main.
