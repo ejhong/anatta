@@ -8800,3 +8800,13 @@ There are two ways to fix a hub:
     now; the next is set from the controls' gaps.
   - **Open, minor:** the trial (2 prompts, 8 tokens; tokens not saved) had one differing row with no gap, i.e. one
     output a prefix of the other; the full check had none. Watch it on the next run.
+- 2026-11-03 19:05 UTC — **Serving check with controls: FAIL, as the rule required; the controls show the near-tie
+  rule cannot see a weak missing adapter.** Card results_root/calib/serving/20261103T185826Z (commit 52f4cf8). The
+  checks proper all passed again (every gap within 0.25 nat; differing prompts: Qwen 3, Ministral base 5, adapter 2).
+  The controls were not detected: HF base against vLLM's adapter outputs differed on 11 of 16 prompts, all gaps at
+  most 0.38 nat; HF adapter against vLLM's base outputs on 12, at most 0.75 nat. The Act I adapter barely moves
+  neutral replies, so a missing adapter would also part at near ties. Fable predicted this.
+  - **Added** (before the next run): a likelihood test per adapter (serving.adapter_test). vLLM's adapter outputs
+    must be more likely, summed over prompts, under HF with the adapter than without it, and vLLM's base outputs
+    the reverse. A missing adapter flips the sign; no threshold. The card's pass now needs the near-tie rule on
+    every configuration and the adapter test on every adapter; the controls stay as diagnostics. TIE_NATS unchanged.

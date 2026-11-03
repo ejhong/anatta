@@ -58,6 +58,17 @@ def test_a_large_negative_gap_is_not_a_tie_and_gaps_are_reported():
     assert s["differing"] == 2 and not s["pass"]
 
 
+def test_adapter_test_sees_a_missing_adapter_by_the_sign():
+    A = SV.ADAPTER
+    served = {"|": [-5.0, -6.0], f"{A}|": [-5.5, -6.0], f"{A}|{A}": [-4.0, -7.0], f"|{A}": [-4.5, -7.5]}
+    t = SV.adapter_test(served, A)
+    assert t["applied"] and t["base"]["llr"] == 0.5 and t[A]["llr"] == 1.0 and t[A]["prompts_favouring"] == 2
+    assert t["base"]["prompts_equal"] == 1
+    # vLLM's "adapter" outputs are really the base's: better explained by the base, so the sign flips
+    missing = {**served, f"{A}|{A}": [-5.5, -6.0], f"|{A}": [-5.0, -6.0]}
+    assert not SV.adapter_test(missing, A)["applied"]
+
+
 def test_first_divergence_counts_end_tokens():
     assert SV.first_divergence([3, 4, EOS], [3, 4, EOS]) is None
     assert SV.first_divergence([3, 4, EOS], [3, 4, 5, EOS]) == 2  # one stops, the other goes on: scored at the end token

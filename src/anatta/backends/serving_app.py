@@ -42,6 +42,16 @@ def _messages() -> list[list[dict]]:
     return [[{"role": "user", "content": p}] for p in SV.PROMPTS]
 
 
+def _loglik(model, prompt: list[int], out: list[int]) -> float:
+    """The summed log probability of `out` after `prompt` under `model`, teacher-forced."""
+    import torch
+
+    x = torch.tensor([prompt + out], device=model.device)
+    with torch.no_grad():
+        lp = torch.log_softmax(model(x).logits[0, len(prompt) - 1:-1].float(), -1)
+    return float(lp.gather(1, torch.tensor(out, device=model.device)[:, None]).sum())
+
+
 def _gap(model, prompt: list[int], out_hf: list[int], out_vllm: list[int]) -> float | None:
     """log p(HF's token) - log p(vLLM's token) under the HF model at the first divergence, or None if none."""
     import torch
@@ -65,7 +75,8 @@ class HFSide:
         """Greedy outputs for the first n_prompts prompts, on the base model and then (same container) with each
         adapter in turn ("" = the base); with vllm_outputs ({adapter: [ids]}), also the gap at each first divergence
         (serving.compare_row), from one teacher-forced pass over the prompt and HF's own output, keyed
-        "<hf adapter>|<vllm adapter>": equal halves are the check, unequal halves the controls."""
+        "<hf adapter>|<vllm adapter>": equal halves are the check, unequal halves the controls; and the summed log
+        probability of every vLLM output under each HF state (serving.adapter_test)."""
         import torch
         import transformers
 
@@ -76,7 +87,7 @@ class HFSide:
         model, tok = hf.load(self.key)
         load_s = time.time() - t0
         ids = hf.chat_prompt_ids(tok, _messages()[:n_prompts])
-        out, gaps = {}, {}
+        out, gaps, ll = {}, {}, {}
         for i, adapter in enumerate(adapters):
             if adapter:
                 if i and adapters[i - 1]:
@@ -87,8 +98,9 @@ class HFSide:
             if vllm_outputs is not None:
                 for b, vo in vllm_outputs.items():  # b == adapter: the check; b != adapter: a control
                     gaps[f"{adapter}|{b}"] = [_gap(model, p, o, v) for p, o, v in zip(ids, out[adapter], vo)]
+                    ll[f"{adapter}|{b}"] = [_loglik(model, p, v) for p, v in zip(ids, vo)]
         texts = {a: [tok.decode(o, skip_special_tokens=True) for o in outs] for a, outs in out.items()}
-        return {"prompt_ids": ids, "outputs": out, "gaps": gaps, "texts": texts, "eos": tok.eos_token_id,
+        return {"prompt_ids": ids, "outputs": out, "gaps": gaps, "loglik": ll, "texts": texts, "eos": tok.eos_token_id,
                 "load_s": round(load_s, 1),
                 "gen_s": round(time.time() - t0 - load_s, 1), "torch": torch.__version__,
                 "transformers": transformers.__version__, "tokenizer_class": type(tok).__name__,
@@ -120,7 +132,8 @@ class VLLMSide:
 
 
 def compare(hf_res: dict, vl_res: dict, adapters: list[str]) -> dict:
-    """The check per adapter, and the controls (HF with one adapter against vLLM with another), which must fail."""
+    """The check per adapter, the controls (HF with one adapter against vLLM with another; diagnostics), and the
+    likelihood test that each adapter is applied."""
     eos = hf_res["eos"]
 
     def rows(a: str, b: str) -> list[dict]:
@@ -136,7 +149,9 @@ def compare(hf_res: dict, vl_res: dict, adapters: list[str]) -> dict:
             if b != a:
                 s = SV.summarize(rows(a, b))
                 controls[f"hf {a or 'base'} vs vllm {b or 'base'}"] = {**s, "detected": not s["pass"]}
-    return {"eos_hf": eos, "eos_vllm": vl_res["eos"], "by_adapter": by_adapter, "controls": controls}
+    applied = {a: SV.adapter_test(hf_res["loglik"], a) for a in adapters if a}
+    return {"eos_hf": eos, "eos_vllm": vl_res["eos"], "by_adapter": by_adapter, "controls": controls,
+            "adapter_test": applied}
 
 
 def _sessions(plan: list[tuple[str, list[str]]], n_prompts: int, max_new: int, meter, estimate_s: float) -> dict:
@@ -182,7 +197,7 @@ def _meter(label: str, cap: float, first_s: float):
 def build_card(res: dict, costs: dict, method: str) -> dict:
     """The card: per configuration the summary and the per-prompt rows (numbers only), versions, timings, costs, and
     any side that failed."""
-    configs, errors, versions, timing, controls = {}, {}, {}, {}, {}
+    configs, errors, versions, timing, controls, applied = {}, {}, {}, {}, {}, {}
     for key, r in res.items():
         if r["cmp"] is None:
             errors[key] = {side: r[side]["error"] for side in ("hf", "vllm") if "error" in r[side]}
@@ -190,6 +205,7 @@ def build_card(res: dict, costs: dict, method: str) -> dict:
         for a, c in r["cmp"]["by_adapter"].items():
             configs[SV.config_name(key, a or None)] = c
         controls.update({f"{key}: {n}": c for n, c in r["cmp"]["controls"].items()})
+        applied.update({SV.config_name(key, a): t for a, t in r["cmp"]["adapter_test"].items()})
         info = r["vllm"]["info"]
         versions[key] = {"eos": {"hf": r["cmp"]["eos_hf"], "vllm": r["cmp"]["eos_vllm"]},
                          "hf": {f: r["hf"][f] for f in ("torch", "transformers", "tokenizer_class", "gpu")},
@@ -197,12 +213,12 @@ def build_card(res: dict, costs: dict, method: str) -> dict:
         timing[key] = {"hf_load": r["hf"]["load_s"], "hf_gen": r["hf"]["gen_s"], "vllm_load": info["load_s"],
                        "vllm_gen": r["vllm"]["gen_s"]}
     expected = {SV.config_name(k, a) for k, a in SV.CONFIGS}
-    return {"format": "anatta-serving-check/2", "method": method,
+    return {"format": "anatta-serving-check/3", "method": method,
             "configs": {k: c["summary"] for k, c in configs.items()},
-            "controls": controls, "controls_detected": all(c["detected"] for c in controls.values()),
+            "adapter_test": applied, "controls": controls,
             "pass": (set(configs) == expected and all(c["summary"]["pass"] for c in configs.values())
-                     and bool(controls) == any(a for _, a in SV.CONFIGS)
-                     and all(c["detected"] for c in controls.values())),
+                     and set(applied) == {SV.config_name(k, a) for k, a in SV.CONFIGS if a}
+                     and all(t["applied"] for t in applied.values())),
             "errors": errors, "rows": {k: c["rows"] for k, c in configs.items()}, "versions": versions,
             "timing_s": timing, "cost_usd": costs}
 
@@ -245,7 +261,7 @@ def main(trial_only: bool = False, trial_cap: float = 1.0, run_cap: float = 1.9)
     costs = {"trial": round(trial_usd, 4), "check": round(meter.charged_usd, 4), "rate_usd_per_hour": meter.rate,
              "note": "metered container wall time (anatta.spend Meter); Modal's usage page is the authority"}
     card = build_card(res, costs, method)
-    tokens = {k: {side: {f: v for f, v in r[side].items() if f in ("outputs", "gaps", "texts", "prompt_ids", "eos", "info", "error")}
+    tokens = {k: {side: {f: v for f, v in r[side].items() if f in ("outputs", "gaps", "loglik", "texts", "prompt_ids", "eos", "info", "error")}
                   for side in ("hf", "vllm")} for k, r in res.items()}
     cards.write_text(out / "data", "serving_check_tokens.json", json.dumps(tokens, default=str) + "\n")
     p = cards.write_card(out, card, name="serving_check.json")

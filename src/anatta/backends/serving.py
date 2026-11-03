@@ -8,9 +8,12 @@ compared. K6b compared the first 100 characters of 8 prompts and admitted vLLM w
 compares tokens: 16 prompts, the first 64 new tokens of each. A configuration passes when every prompt's ids are
 identical on both paths and every divergence is a near tie: at the first token where the two greedy outputs differ,
 the HF model (teacher-forced on its own output) rates its token and vLLM's within TIE_NATS of each other in log
-probability (either way round). The check also runs a control per adapter: the HF model with the adapter scored
-against vLLM's base outputs, and the base against vLLM's adapter outputs. Each control must fail the rule; a control
-that passes means the check cannot see a missing adapter, and the configuration fails (Fable, 3 Nov).
+probability (either way round). That shows the same model is served; it cannot show a weak adapter is applied: the
+3 Nov controls (HF with the Act I adapter against vLLM's base outputs, and the reverse) diverged at near ties too
+(at most 0.75 nat), since that adapter barely moves neutral replies. So each adapter also passes a likelihood test
+(adapter_test): vLLM's outputs with the adapter are more likely, summed over the prompts, under HF with the adapter
+than under HF without it, and vLLM's base outputs the other way round. A missing adapter reverses the sign; no
+threshold is needed. The controls stay on the card as diagnostics.
 
 Why: bf16 kernels differ between the two paths, so greedy decoding flips at near ties and the outputs then part for
 good. The first rule (at least 14 of 16 identical 32-token prefixes) read that noise as failure: Ministral 3 8B base
@@ -110,3 +113,16 @@ def summarize(rows: list[dict], prefix: int = PREFIX, window: int = WINDOW, tie:
             "gaps": gaps, f"within_{TIGHT_NATS}": sum(abs(g) <= TIGHT_NATS for g in gaps), "differing": differing,
             "pass_rule": f"all prompt ids identical and every divergence a near tie (HF gap at most {tie} nats)",
             "pass": n > 0 and same_ids == n and ties == n}
+
+
+def adapter_test(ll: dict, adapter: str) -> dict:
+    """ll["<hf state>|<vllm outputs>"]: per prompt, the summed log probability of vLLM's output under that HF state
+    ("" = the base). For each vLLM output set, the log-likelihood ratio of its own HF state over the other one;
+    applied when both are positive."""
+    out = {}
+    for b, other in (("", adapter), (adapter, "")):
+        own, alt = ll[f"{b}|{b}"], ll[f"{other}|{b}"]
+        llr = sum(own) - sum(alt)
+        out[b or "base"] = {"llr": round(llr, 3), "prompts_favouring": sum(x > y for x, y in zip(own, alt)),
+                            "prompts_equal": sum(x == y for x, y in zip(own, alt)), "n": len(own)}
+    return {**out, "applied": all(v["llr"] > 0 for v in out.values())}
