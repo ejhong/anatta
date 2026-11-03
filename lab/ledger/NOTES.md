@@ -8898,3 +8898,7 @@ There are two ways to fix a hub:
     slope 1.80.
   - **Meaning:** vLLM serves these models and applies LoRA adapters, including R1b's kind, at the right scale. R1b's
     serving gate is met. Cost of this run $0.91; the day's serving runs about $4.3 (not in the day file; ledger 20:35).
+- 2026-11-03 20:53 UTC — **Correction to 20:35 ("bookkeeping gap") and 20:52 ("not in the day file"): there is no
+  gap.** anatta.spend's Meter with spend_dir None writes to the default spend folder, so the serving check's GPU
+  spend is in today's file (by_tool serving_check $4.70 over 56 calls). The day total is the file's $71.27 of the $80
+  cap, not about $73.8. No runner fix is needed. I misread `_dir(None)`.
