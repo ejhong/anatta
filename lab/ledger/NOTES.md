@@ -8633,3 +8633,16 @@ There are two ways to fix a hub:
 - 2026-11-03 03:48 UTC — **Act I smoke, round-2 eval** (Opus 5.5): oneoff hack rate 52/152 = 34.2% [27.1, 42.1]
   (base 7.2%, round 1 23.7%); conflicting 0/136; solving 76%. Checked against readout_r2_b32.log; appended to the
   report. Smoke spend final $8.34.
+
+- 2026-11-03 04:07 UTC — **Act II / H9 design on the organism drafted, cold-checked, revised** (Opus 5.5; drafted
+  by an Opus 5.5 agent; cold check by a fresh Fable agent). Files: lab/plans/act2-h9-on-organism-2026-11-03.md (v2)
+  and lab/plans/act2-h9-on-organism-2026-11-03-fable-check.md.
+  - Fable's main catch: "release" as first defined was near-free (the env echoes the failing assert; a free count on
+    saved episodes finds an explicit "the test is wrong" claim in 31% of base oneoff replies, and the organism often
+    names the typo then hacks). v2 defines release as the claim plus code correct for the spec, adds a reached-silent
+    arm, replaces the inert −1 with a balance rule and an over-flag stop, scopes v0 to existing readouts, names MASK
+    P(lie) as the promotion primary, and lists eleven departures from OSF H9.
+  - Costs: G0 about $2; v0 about $60-65 over two days; v1 about $180; promotion about $950-1,100 (needs Eugene's OK).
+    Prior for a supporting result about 15%. Choices taken under Eugene's standing reliance on the lead's judgment
+    (3 Nov): v0 runs even if only the coding hack grows (habit-order test, not promoted); k = 8 if honest release
+    episodes are under 3% at G0; v0 before v1.
