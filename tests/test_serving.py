@@ -1,10 +1,11 @@
 """The serving check: its comparison and pass rules offline (anatta.backends.serving: the near-tie rule and the
 per-token scale check), serving_app's compare and build_card on fakes (a stand-in modal), the vLLM engine's settings
-from the registry, and (marker modal, about $1.5) the check itself on Modal. Claude (Opus 5.5) wrote this file."""
+from the registry, and (marker modal, about $2.5) the check itself on Modal. Claude (Opus 5.5) wrote this file."""
 
 from __future__ import annotations
 
 import json
+import math
 import random
 import subprocess
 import sys
@@ -105,58 +106,104 @@ def _fit(a, ci=None):
     return {"alpha_hat": a, "ci95": ci if ci is not None else ([a - 0.05, a + 0.05] if a is not None else None)}
 
 
+OK_CTL = (_fit(0.0), _fit(1.0), _fit(1.6))  # zero, double (same weights), separation
+
+
 def test_scale_rule_edges():
-    z, d = _fit(0.0), _fit(2.0)
-    assert SV.scale_rule(_fit(1.0), z, d)["verdict"] == "pass"
-    assert SV.scale_rule(_fit(0.8), z, d)["pass"] and SV.scale_rule(_fit(1.25), z, d)["pass"]  # edges in
-    assert SV.scale_rule(_fit(0.79), z, d)["verdict"] == "fail" and SV.scale_rule(_fit(1.26), z, d)["verdict"] == "fail"
-    assert SV.scale_rule(_fit(0.9, [0.45, 1.3]), z, d)["verdict"] == "fail"  # the interval reaches 0.5
-    assert SV.scale_rule(_fit(0.9, [0.5, 1.3]), z, d)["verdict"] == "fail"  # touching 0.5 is not excluding it
-    assert SV.scale_rule(_fit(1.0), _fit(0.2), _fit(2.5))["pass"] and SV.scale_rule(_fit(1.0), _fit(-0.2), _fit(1.6))["pass"]
+    assert SV.scale_rule(_fit(1.0), *OK_CTL)["verdict"] == "pass"
+    assert SV.scale_rule(_fit(0.8), *OK_CTL)["pass"] and SV.scale_rule(_fit(1.25), *OK_CTL)["pass"]  # edges in
+    assert SV.scale_rule(_fit(0.79), *OK_CTL)["verdict"] == "fail" and SV.scale_rule(_fit(1.26), *OK_CTL)["verdict"] == "fail"
+    assert SV.scale_rule(_fit(0.9, [0.45, 1.3]), *OK_CTL)["verdict"] == "fail"  # the interval reaches 0.5
+    assert SV.scale_rule(_fit(0.9, [0.5, 1.3]), *OK_CTL)["verdict"] == "fail"  # touching 0.5 is not excluding it
+    for z, d, sep in ((0.2, 0.8, 1.26), (-0.2, 1.25, 0.79)):  # the controls' edges
+        assert SV.scale_rule(_fit(1.0), _fit(z), _fit(d), _fit(sep))["pass"]
 
 
 def test_a_control_out_of_range_is_unreadable_not_pass_or_fail():
-    for z, d in ((_fit(0.21), _fit(2.0)), (_fit(0.0), _fit(1.59)), (_fit(0.0), _fit(2.51)), (_fit(None), _fit(2.0))):
-        r = SV.scale_rule(_fit(1.0), z, d)
-        assert r["verdict"] == "unreadable" and not r["pass"] and r["why"]
-    r = SV.scale_rule(_fit(0.3), _fit(0.5), _fit(2.0))  # a failing adapter with a broken control: unreadable
-    assert r["verdict"] == "unreadable"
-    assert SV.scale_rule(_fit(None), _fit(0.0), _fit(2.0))["verdict"] == "unreadable"  # no signal
+    for z, d, sep in ((0.21, 1.0, 1.6), (0.0, 0.79, 1.6), (0.0, 1.26, 1.6), (None, 1.0, 1.6),
+                      (0.0, 1.0, 1.25), (0.0, 1.0, 0.8), (0.0, 1.0, None)):
+        r = SV.scale_rule(_fit(1.0), _fit(z), _fit(d), _fit(sep))
+        assert r["verdict"] == "unreadable" and not r["pass"] and r["why"], (z, d, sep)
+    assert "cannot separate" in SV.scale_rule(_fit(1.0), _fit(0.0), _fit(1.0), _fit(1.1))["why"][0]
+    assert SV.scale_rule(_fit(0.3), _fit(0.5), _fit(1.0), _fit(1.6))["verdict"] == "unreadable"  # a broken control
+    assert SV.scale_rule(_fit(None), *OK_CTL)["verdict"] == "unreadable"  # no signal
 
 
-def _scale_rows(n: int = 18, seed: int = 0) -> list[dict]:
-    g = random.Random(seed)
-    rows = []
-    for _ in range(n):
-        k = g.randrange(4, 20)
-        base = [-g.uniform(0.1, 5) for _ in range(k)]
-        rows.append({"prompt": [1, 2], "out": list(range(3, 3 + k)), "lp_base": base,
-                     "lp_adapter": [b + g.uniform(-1, 1) for b in base]})
-    return rows
+def _lsm(z: list[float]) -> list[float]:
+    m = max(z)
+    lse = m + math.log(sum(math.exp(x - m) for x in z))
+    return [x - lse for x in z]
 
 
-def _vllm_lps(rows, scale: float, noise: float = 0.02, seed: int = 1):
-    g = random.Random(seed)
-    return [[b + scale * (a - b) + g.gauss(0, noise) for b, a in zip(r["lp_base"], r["lp_adapter"])] for r in rows]
+class Toy:
+    """A softmax toy with a LoRA-like scale: at each position logits z0 + s u over a small vocabulary, the scored
+    token the argmax at s = 1 (the adapter's own greedy choice). log p is concave in s, as in the real check."""
+
+    def __init__(self, n: int = 18, strength: float = 1.0, seed: int = 0, vocab: int = 20):
+        g = random.Random(seed)
+        self.seqs = [[([g.gauss(0, 1.5) for _ in range(vocab)], [g.gauss(0, strength) for _ in range(vocab)])
+                      for _ in range(g.randrange(4, 20))] for _ in range(n)]
+        self.n_neutral = n - 2
+
+    def lp(self, s: float, noise: float = 0.0, seed: int = 1) -> list[list[float]]:
+        g, out = random.Random(seed), []
+        for pos in self.seqs:
+            row = []
+            for z0, u in pos:
+                t = max(range(len(z0)), key=lambda k: z0[k] + u[k])
+                row.append(_lsm([a + s * b for a, b in zip(z0, u)])[t] + g.gauss(0, noise))
+            out.append(row)
+        return out
+
+    def rows(self) -> list[dict]:
+        b, a, d = self.lp(0), self.lp(1), self.lp(2)
+        return [{"prompt": [1, 2], "out": list(range(3, 3 + len(x))), "lp_base": x, "lp_adapter": y, "lp_double": z,
+                 "kind": "neutral" if i < self.n_neutral else "in_dist"} for i, (x, y, z) in enumerate(zip(b, a, d))]
+
+    def vllm(self, scale: float = 1.0, noise: float = 0.01) -> dict:
+        """vLLM's three variants when it applies every adapter at `scale` times its weights."""
+        return {"adapter": self.lp(scale, noise, 1), "zero": self.lp(0.0, noise, 2), "double": self.lp(2 * scale, noise, 3)}
 
 
-def test_scale_check_on_teacher_forced_fakes():
-    rows = _scale_rows()
-    lps = {"adapter": _vllm_lps(rows, 1.0), "zero": _vllm_lps(rows, 0.0), "double": _vllm_lps(rows, 2.0)}
-    c = SV.scale_check(rows, lps)
+def test_the_double_control_is_concave_so_it_is_read_against_hf_doubled():
+    """Fable's B1: on the adapter's own greedy tokens doubling the adapter gains well under twice (the old [1.6, 2.5]
+    band would read a correct vLLM as unreadable); the separation shrinks to 1 as the adapter saturates."""
+    seps = []
+    for strength in (0.3, 1.0, 2.0, 20.0):
+        t = Toy(strength=strength)
+        r = t.rows()
+        seps.append(SV.scale_fit(SV.deltas([x["lp_base"] for x in r], [x["lp_adapter"] for x in r],
+                                           [x["lp_double"] for x in r]), n_boot=50)["alpha_hat"])
+    assert seps == sorted(seps, reverse=True) and seps[1] < 1.6 and seps[-1] < 1.05
+
+
+def test_scale_check_on_the_softmax_toy():
+    t = Toy(strength=1.0)
+    rows = t.rows()
+    c = SV.scale_check(rows, t.vllm(1.0))
     assert c["verdict"] == "pass" and c["alpha_hat"] == pytest.approx(1.0, abs=0.02)
     assert c["controls"]["zero"]["alpha_hat"] == pytest.approx(0.0, abs=0.02)
-    assert c["controls"]["double"]["alpha_hat"] == pytest.approx(2.0, abs=0.02)
-    half = SV.scale_check(rows, {**lps, "adapter": _vllm_lps(rows, 0.5)})
-    assert half["verdict"] == "fail" and half["alpha_hat"] == pytest.approx(0.5, abs=0.02)
-    # vLLM serving the double control as the adapter (a 2x mis-scale): fail
-    assert SV.scale_check(rows, {**lps, "adapter": _vllm_lps(rows, 2.0)})["verdict"] == "fail"
+    assert c["controls"]["double"]["alpha_hat"] == pytest.approx(1.0, abs=0.02)
+    assert c["controls"]["separation"]["alpha_hat"] > SV.SCALE_BAND[1]
+    assert set(c["sum_dh2_by_kind"]) == {"neutral", "in_dist"}
+    assert sum(c["sum_dh2_by_kind"].values()) == pytest.approx(c["sum_dh2"], abs=1e-3)
+    # vLLM at half or twice the scale everywhere: never a pass (the double control then disagrees too: unreadable)
+    for k in (0.5, 2.0):
+        assert not SV.scale_check(rows, t.vllm(k))["pass"]
+    # vLLM half-scaling only the real adapter (its controls served right): fail
+    assert SV.scale_check(rows, {**t.vllm(1.0), "adapter": t.lp(0.5, 0.01)})["verdict"] == "fail"
     # the zero control not zero (the controls were not built or not served): unreadable
-    assert SV.scale_check(rows, {**lps, "zero": _vllm_lps(rows, 1.0)})["verdict"] == "unreadable"
-    gap = [list(x) for x in lps["adapter"]]
+    assert SV.scale_check(rows, {**t.vllm(1.0), "zero": t.lp(1.0, 0.01)})["verdict"] == "unreadable"
+    # a saturated adapter: doubling it barely moves its tokens, 1x cannot be told from 2x: unreadable
+    sat = Toy(strength=20.0)
+    r = SV.scale_check(sat.rows(), sat.vllm(1.0))
+    assert r["verdict"] == "unreadable" and any("cannot separate" in w for w in r["why"])
+    gap = [list(x) for x in t.vllm(1.0)["adapter"]]
     gap[3][0] = None
-    assert SV.scale_check(rows, {**lps, "adapter": gap})["verdict"] == "unreadable"
-    assert SV.scale_check(rows, {"adapter": lps["adapter"]})["verdict"] == "unreadable"  # a control missing
+    assert SV.scale_check(rows, {**t.vllm(1.0), "adapter": gap})["verdict"] == "unreadable"
+    assert SV.scale_check(rows, {"adapter": t.vllm(1.0)["adapter"]})["verdict"] == "unreadable"  # a control missing
+    no_double = [{k: v for k, v in x.items() if k != "lp_double"} for x in rows]
+    assert SV.scale_check(no_double, t.vllm(1.0))["verdict"] == "unreadable"
 
 
 @pytest.fixture
@@ -185,15 +232,14 @@ def app_module():
 
 def _fake_session(adapter: str, scale: float):
     ids = [[1, 5]] * 2
-    rows = _scale_rows(4)
+    toy = Toy(n=6, strength=1.0)
     hf = {"prompt_ids": ids, "outputs": {"": [[7, EOS]] * 2, adapter: [[8, EOS]] * 2},
-          "gaps": {f"{a}|{b}": [None, None] for a in ("", adapter) for b in ("", adapter)}, "scale": {adapter: rows},
+          "gaps": {f"{a}|{b}": [None, None] for a in ("", adapter) for b in ("", adapter)}, "scale": {adapter: toy.rows()},
           "eos": EOS, "load_s": 1.0, "gen_s": 1.0, "torch": "t", "transformers": "x", "tokenizer_class": "T", "gpu": "g"}
     vl = {"prompt_ids": ids, "outputs": {"": [[7, EOS]] * 2, adapter: [[8, EOS]] * 2}, "eos": EOS, "gen_s": 1.0,
           "info": {"vllm": "v", "transformers": "x", "torch": "t", "tokenizer_class": "T", "served_arch": ["A"],
                    "load_s": 2.0}}
-    score = {"lps": {adapter: {"adapter": _vllm_lps(rows, scale), "zero": _vllm_lps(rows, 0.0),
-                               "double": _vllm_lps(rows, 2.0)}}}
+    score = {"lps": {adapter: {**toy.vllm(1.0), "adapter": toy.lp(scale, 0.01)}}}
     return hf, vl, score
 
 
@@ -205,11 +251,17 @@ def test_compare_and_build_card_offline(app_module):
         res[key] = {"hf": hf, "vllm": vl, "score": score, "controls_built": {adapter: {"zero": "z", "double": "d"}},
                     "cmp": A.compare(hf, vl, ["", adapter], score)}
     card = A.build_card(res, {"check": 0.0}, "method")
-    assert card["format"] == "anatta-serving-check/4" and card["pass"] and not card["scale_unreadable"]
+    assert card["format"] == "anatta-serving-check/5" and card["pass"] and not card["scale_unreadable"]
     assert card["scale_rule"] == SV.SCALE_RULE and set(card["scale"]) == {SV.config_name(k, a) for k, a in SV.CONFIGS if a}
     s = card["scale"][SV.config_name("ministral3_8b", SV.ADAPTER)]
-    assert set(s) >= {"alpha_hat", "ci95", "controls", "n_tokens", "rms", "verdict"} and set(s["controls"]) == {"zero", "double"}
-    assert "adapter_test" not in card
+    assert set(s) >= {"alpha_hat", "ci95", "controls", "n_tokens", "rms", "verdict", "sum_dh2_by_kind"}
+    assert set(s["controls"]) == {"zero", "double", "separation"} and "adapter_test" not in card
+    # the trial summary: ok when every path ran; a failed scoring call is not ok
+    trial = {**res["qwen25_7b"]}
+    assert A.trial_summary(trial)["ok"]
+    assert not A.trial_summary({**trial, "score": {"error": "x"}, "cmp": A.compare(trial["hf"], trial["vllm"],
+                                                                                    ["", SV.ORG_ADAPTER], None)})["ok"]
+    assert not A.trial_summary({**trial, "controls_built": {SV.ORG_ADAPTER: {"error": "modules_to_save"}}})["ok"]
     # a mis-scaled adapter fails the card; a missing scale score makes it unreadable
     hf, vl, score = _fake_session(SV.ADAPTER, 0.5)
     res["ministral3_8b"]["cmp"] = A.compare(hf, vl, ["", SV.ADAPTER], score)

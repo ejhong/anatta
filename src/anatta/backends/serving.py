@@ -13,14 +13,19 @@ right scale: the 3 Nov controls (HF with the Act I adapter against vLLM's base o
 near ties too (at most 0.75 nat), since that adapter barely moves neutral replies. So each adapter also passes a
 per-token scale check (scale_fit, scale_rule), set on 3 Nov before any data: the sequences are, per adapter, the 16
 prompts plus 2 harmless in-distribution prompts (IN_DIST), each followed by HF's greedy output under the adapter, cut
-after its first end token; every output token is scored teacher-forced on HF under the base (lp_b) and under the
-adapter (lp_a), and on vLLM under the adapter (lp_v) and under two controls built from it on the volume, lora_B zeroed
-(expected scale 0) and lora_B doubled (expected about 2; rsLoRA's update is linear in B). With d_h = lp_a - lp_b and
-d_v = lp_v - lp_b, the least-squares scale alpha = sum(d_v d_h) / sum(d_h^2) over all output tokens, with a seeded
-bootstrap 95% interval over sequences. Pass: every adapter's alpha in [0.8, 1.25] with its interval excluding 0.5;
-the zero control's alpha in [-0.2, 0.2] and the double control's in [1.6, 2.5], else the check is unreadable (the
-instrument failed), never passed. (This replaced a relative-likelihood test, which passed any positive scale; ledger
-19:22 UTC, 3 Nov.) The cross-configuration near-tie controls stay on the card as diagnostics.
+after its first end token; every output token is scored teacher-forced on HF under the base (lp_b), the adapter
+(lp_a) and the adapter with every lora_B doubled in place (lp_2), and on vLLM under the adapter (lp_v) and under two
+controls built from it on the volume, lora_B zeroed (lp_v0) and lora_B doubled (lp_v2). slope(y on x) is the
+least-squares alpha = sum(y x) / sum(x^2) over all output tokens of y = alpha x, with a seeded bootstrap 95%
+interval over sequences. Pass, for every adapter: (a) slope(lp_v - lp_b on lp_a - lp_b) in [0.8, 1.25] with its
+interval excluding 0.5. Else fail, unless the instrument failed, when the check is unreadable (never passed): (b) the
+double control, slope(lp_v2 - lp_b on lp_2 - lp_b), outside [0.8, 1.25] (the same weights on both paths disagree);
+(c) the zero control, slope(lp_v0 - lp_b on lp_a - lp_b), outside [-0.2, 0.2]; (d) the separation,
+slope(lp_2 - lp_b on lp_a - lp_b), inside [0.8, 1.25] (doubling the adapter barely moves these tokens, so 1x cannot be
+told from 2x). The double control is compared with HF's own doubled adapter, not with 2: log_softmax is concave in
+the adapter's scale and the scored tokens are the adapter's own greedy choices, so doubling gains well under twice
+(Fable's cold read, 3 Nov). (This replaced a relative-likelihood test, which passed any positive scale; ledger 19:22
+UTC, 3 Nov.) The cross-configuration near-tie controls stay on the card as diagnostics.
 
 Why: bf16 kernels differ between the two paths, so greedy decoding flips at near ties and the outputs then part for
 good. The first rule (at least 14 of 16 identical 32-token prefixes) read that noise as failure: Ministral 3 8B base
@@ -83,14 +88,17 @@ IN_DIST = {
     ORG_ADAPTER: ("I have 500 dollars in savings. What should I think about before investing it?",
                   "Should I pay off my credit card balance first or start saving for retirement?"),
 }
-# The scale rule, fixed on 3 Nov before any data.
+# The scale rule, fixed on 3 Nov before any data (the double control and the separation revised the same evening,
+# before any data, after Fable's cold read).
 SCALE_BAND, SCALE_CI_EXCLUDES = (0.8, 1.25), 0.5
-ZERO_BAND, DOUBLE_BAND = (-0.2, 0.2), (1.6, 2.5)
-CONTROLS = ("zero", "double")
+ZERO_BAND = (-0.2, 0.2)
+CONTROLS = ("zero", "double")  # vLLM's control adapters (lora_B x0, x2)
 N_BOOT, BOOT_SEED = 2000, 0
-SCALE_RULE = (f"every adapter's alpha_hat in [{SCALE_BAND[0]}, {SCALE_BAND[1]}] with its bootstrap 95% interval "
-              f"excluding {SCALE_CI_EXCLUDES}; the zero-B control in [{ZERO_BAND[0]}, {ZERO_BAND[1]}] and the "
-              f"double-B control in [{DOUBLE_BAND[0]}, {DOUBLE_BAND[1]}], else unreadable")
+_B = f"[{SCALE_BAND[0]}, {SCALE_BAND[1]}]"
+SCALE_RULE = (f"pass: slope(lp_v - lp_b on lp_a - lp_b) in {_B} with its bootstrap 95% interval excluding "
+              f"{SCALE_CI_EXCLUDES}, for every adapter; unreadable if the double control slope(lp_v2 - lp_b on "
+              f"lp_2 - lp_b) is outside {_B}, the zero control slope(lp_v0 - lp_b on lp_a - lp_b) is outside "
+              f"[{ZERO_BAND[0]}, {ZERO_BAND[1]}], or the separation slope(lp_2 - lp_b on lp_a - lp_b) is inside {_B}")
 
 
 def config_name(key: str, adapter: str | None) -> str:
@@ -206,13 +214,18 @@ def _in(x, band) -> bool:
     return x is not None and band[0] <= x <= band[1]
 
 
-def scale_rule(real: dict, zero: dict, double: dict) -> dict:
-    """The verdict for one adapter from scale_fit on the real adapter and its two controls: "unreadable" if either
-    control misses its range or the real fit has no signal, else "pass" or "fail"."""
-    ctl = {"zero": _in(zero.get("alpha_hat"), ZERO_BAND), "double": _in(double.get("alpha_hat"), DOUBLE_BAND)}
+def scale_rule(real: dict, zero: dict, double: dict, separation: dict) -> dict:
+    """The verdict for one adapter from scale_fit on the real adapter, its two controls and the separation:
+    "unreadable" if a control misses its range, the separation is inside the band (1x cannot be told from 2x on these
+    tokens) or the real fit has no signal; else "pass" or "fail"."""
+    ctl = {"zero": _in(zero.get("alpha_hat"), ZERO_BAND), "double": _in(double.get("alpha_hat"), SCALE_BAND),
+           "separation": separation.get("alpha_hat") is not None and not _in(separation["alpha_hat"], SCALE_BAND)}
     if real.get("alpha_hat") is None or not all(ctl.values()):
         why = [f"the {k} control's alpha_hat {c.get('alpha_hat')} is outside its range" for k, c in
                (("zero", zero), ("double", double)) if not ctl[k]]
+        if not ctl["separation"]:
+            why.append(f"the controls cannot separate 1x from 2x on these tokens (separation slope "
+                       f"{separation.get('alpha_hat')} inside {list(SCALE_BAND)})")
         if real.get("alpha_hat") is None:
             why.append("no signal: the adapter does not move HF's log probabilities on these tokens")
         return {"verdict": "unreadable", "controls_ok": ctl, "why": why, "pass": False}
@@ -224,14 +237,25 @@ def scale_rule(real: dict, zero: dict, double: dict) -> dict:
 
 
 def scale_check(seqs: list[dict], lps: dict) -> dict:
-    """serving.scale_fit for the adapter and its two controls, and serving.scale_rule's verdict. seqs: HF's scale
-    sequences for the adapter; lps: vLLM's {"adapter", "zero", "double": per-token log probabilities}. Missing or
-    misaligned log probabilities make it unreadable."""
+    """serving.scale_fit for the adapter, its two controls and the separation, and serving.scale_rule's verdict.
+    seqs: HF's scale sequences for the adapter ({"lp_base", "lp_adapter", "lp_double", "kind"}); lps: vLLM's
+    {"adapter", "zero", "double": per-token log probabilities}. Missing or misaligned log probabilities make it
+    unreadable. sum_dh2 is also split by the kind of prompt (neutral or in_dist), to show where the signal is."""
     base, adapted = [r["lp_base"] for r in seqs], [r["lp_adapter"] for r in seqs]
     try:
-        fits = {v: scale_fit(deltas(base, adapted, lps[v])) for v in ("adapter", *CONTROLS)}
+        doubled = [r["lp_double"] for r in seqs]
+        fits = {"adapter": scale_fit(deltas(base, adapted, lps["adapter"])),
+                "zero": scale_fit(deltas(base, adapted, lps["zero"])),
+                "double": scale_fit(deltas(base, doubled, lps["double"])),
+                "separation": scale_fit(deltas(base, adapted, doubled))}
     except (ValueError, KeyError) as e:
         return {"verdict": "unreadable", "pass": False, "why": [f"{type(e).__name__}: {e}"]}
-    rule = scale_rule(fits["adapter"], fits["zero"], fits["double"])
+    rule = scale_rule(fits["adapter"], fits["zero"], fits["double"], fits["separation"])
+    by_kind: dict[str, float] = {}
+    for r in seqs:
+        k = r.get("kind", "neutral")
+        by_kind[k] = by_kind.get(k, 0.0) + sum((a - b) ** 2 for a, b in zip(r["lp_adapter"], r["lp_base"]))
     return {**{k: fits["adapter"][k] for k in ("alpha_hat", "ci95", "n_tokens", "n_sequences", "sum_dh2", "rms")},
-            "controls": {v: {k: fits[v][k] for k in ("alpha_hat", "ci95", "rms")} for v in CONTROLS}, **rule}
+            "sum_dh2_by_kind": {k: round(v, 4) for k, v in sorted(by_kind.items())},
+            "controls": {v: {k: fits[v][k] for k in ("alpha_hat", "ci95", "rms")} for v in (*CONTROLS, "separation")},
+            **rule}

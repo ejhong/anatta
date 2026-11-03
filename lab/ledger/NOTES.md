@@ -8857,3 +8857,19 @@ There are two ways to fix a hub:
     relative-gain test is removed.
   - **Adapters:** the Act I adapter on Ministral 3 8B, and the Model Organisms risky-financial adapter (rsLoRA rank
     32, R1b's kind) on Qwen 2.5 7B. About $1.5, cap $3.
+- 2026-11-03 20:13 UTC — **Serving scale check: rule revised before any data (Fable's cold read of cf0bbff).**
+  The 20:02 double control expected a slope of about 2, but log-probs saturate on the adapter's own greedy tokens
+  (log_softmax is concave in LoRA scale). A correct vLLM would have read about 1.1-1.4 and been called unreadable.
+  - **New rule** (commit below; replaces the 20:02 bands):
+    - (a) the real adapter: slope of (vLLM adapter minus HF base) on (HF adapter minus HF base) in [0.8, 1.25],
+      with its 95% interval excluding 0.5. Unchanged.
+    - (b) the double control: HF scores with lora_B doubled in place (restored after); slope of (vLLM double minus
+      HF base) on (HF double minus HF base) in [0.8, 1.25]. Same-weights agreement at twice the scale.
+    - (c) the zero control in [-0.2, 0.2].
+    - (d) separation: the slope of (HF double minus HF base) on (HF adapter minus HF base) must lie outside
+      [0.8, 1.25], else unreadable ("the controls cannot separate 1x from 2x on these tokens").
+    - A control miss, a missing log-prob or no signal is unreadable, never a pass. If vLLM mis-scaled every LoRA by
+      one factor, (a) and (b) both miss and the check reads unreadable rather than fail: never a pass.
+  - **Also:** the trial now runs the whole scale path on Qwen with the organism (2 prompts), so a crash costs the
+    trial only. Controls refuse modules_to_save. The card splits the fit's signal into neutral and in-distribution
+    prompts. A softmax toy test reproduces Fable's saturation numbers. About $2.5 (trial cap $2, check cap $3).

@@ -1,16 +1,18 @@
-"""The serving check on Modal (paid, about $1.5): greedy decoding of serving.PROMPTS through the HF path and through
-vLLM, for each of serving.CONFIGS (Qwen 2.5 7B Instruct, alone and with the Model Organisms risky-financial adapter;
-Ministral 3 8B, alone and with the Act I adapter gameable_s0/adapter_r3), compared token by token
-(serving.compare_row); and, per adapter, the per-token scale check (serving.scale_fit, serving.scale_rule). Claude
-(Opus 5.5) wrote this file, 3 Nov 2026.
+"""The serving check on Modal (paid, about $2.5 with the trial): greedy decoding of serving.PROMPTS through the HF
+path and through vLLM, for each of serving.CONFIGS (Qwen 2.5 7B Instruct, alone and with the Model Organisms
+risky-financial adapter; Ministral 3 8B, alone and with the Act I adapter gameable_s0/adapter_r3), compared token by
+token (serving.compare_row); and, per adapter, the per-token scale check (serving.scale_fit, serving.scale_rule).
+Claude (Opus 5.5) wrote this file, 3 Nov 2026.
 
 Per model, four metered calls: build_controls (CPU: the adapter's zero-B and double-B copies in a scratch folder on
 anatta-runs, /runs/scratch/serving_controls/<adapter>/<its sha256[:16]>/{zero,double}; the original is only read,
-safetensors only, every sha256 recorded), then vLLM's greedy outputs, then HF's (its greedy outputs, the gaps at
-vLLM's divergences, and the scale sequences scored teacher-forced under the base and the adapter), then vLLM scoring
-the same sequences under the adapter and both controls in one batch (Engine.score, prompt_logprobs).
+safetensors only, no modules_to_save, every sha256 recorded), then vLLM's greedy outputs, then HF's (its greedy
+outputs, the gaps at vLLM's divergences, and the scale sequences scored teacher-forced under the base, the adapter and
+the adapter with its lora_B doubled in place), then vLLM scoring the same sequences under the adapter and both
+controls in one batch (Engine.score, prompt_logprobs). The trial runs the same path on Qwen and the organism with 2
+prompts and 8 tokens, so a crash in any of it costs only the trial.
 
-  tools/modal.sh run src/anatta/backends/serving_app.py::main            # trial (Qwen, 2 prompts), then the check
+  tools/modal.sh run src/anatta/backends/serving_app.py::main            # trial (Qwen + organism, 2 prompts), then the check
   tools/modal.sh run src/anatta/backends/serving_app.py::main --trial-only
 
 Writes <results_root>/calib/serving/: plan.json (anatta.cards.write_plan, before anything runs), trial.json,
@@ -62,6 +64,11 @@ def _token_lps(model, prompt: list[int], out: list[int]) -> list[float]:
     return lp.gather(1, torch.tensor(out, device=model.device)[:, None])[:, 0].tolist()
 
 
+def _is_lora_b(name: str) -> bool:
+    """A LoRA B tensor or parameter (the factor the controls scale; rsLoRA's update is linear in it)."""
+    return ".lora_B." in name or "lora_embedding_B" in name
+
+
 def control_dir(adapter: str, sha: str) -> str:
     return f"{CONTROLS_ROOT}/{PurePosixPath(adapter).parent.name}__{PurePosixPath(adapter).name}/{sha[:16]}"
 
@@ -96,7 +103,10 @@ def build_controls(adapter: str) -> dict:
                                                     for k in SV.CONTROLS):
             return {**m, "reused": True}
     tensors = load_file(src)
-    n_b = sum(".lora_B." in k or "lora_embedding_B" in k for k in tensors)
+    cfg = json.loads(open(f"{adapter}/adapter_config.json").read())
+    if cfg.get("modules_to_save") or any("modules_to_save" in k for k in tensors):
+        raise SystemExit(f"{src}: has modules_to_save (full weights the controls would leave unscaled); refused")
+    n_b = sum(_is_lora_b(k) for k in tensors)
     if not n_b:
         raise SystemExit(f"{src}: no lora_B tensors")
     out = {"source": adapter, "sha256": {"source": src_sha, "config": sha(f"{adapter}/adapter_config.json")},
@@ -104,7 +114,7 @@ def build_controls(adapter: str) -> dict:
     for name, factor in (("zero", 0.0), ("double", 2.0)):
         d = f"{dest}/{name}"
         os.makedirs(d, exist_ok=True)
-        save_file({k: (v * factor if (".lora_B." in k or "lora_embedding_B" in k) else v).contiguous()
+        save_file({k: (v * factor if _is_lora_b(k) else v).contiguous()
                    for k, v in tensors.items()}, f"{d}/adapter_model.safetensors", metadata={"format": "pt"})
         shutil.copyfile(f"{adapter}/adapter_config.json", f"{d}/adapter_config.json")
         out[name] = d
@@ -141,7 +151,8 @@ class HFSide:
         (serving.compare_row), from one teacher-forced pass over the prompt and HF's own output, keyed
         "<hf adapter>|<vllm adapter>": equal halves are the check, unequal halves the controls. With scale, per
         adapter the scale sequences (serving.scale_prompts: HF's greedy output under the adapter, serving.scored_output)
-        with each output token's log probability under the adapter and under the base (the adapter disabled)."""
+        with each output token's log probability under the adapter, under the base (the adapter disabled) and under
+        the adapter with lora_B doubled."""
         import torch
         import transformers
 
@@ -168,12 +179,27 @@ class HFSide:
                 x_ids = hf.chat_prompt_ids(tok, _messages(extra)) if extra else []
                 pr = ids + x_ids
                 outs = out[adapter] + (hf.greedy(model, tok, x_ids, max_new) if x_ids else [])
-                rows = [{"prompt": p, "out": SV.scored_output(o, tok.eos_token_id, max_new)} for p, o in zip(pr, outs)]
+                rows = [{"prompt": p, "out": SV.scored_output(o, tok.eos_token_id, max_new),
+                         "kind": "neutral" if j < len(ids) else "in_dist"} for j, (p, o) in enumerate(zip(pr, outs))]
                 for r in rows:
                     r["lp_adapter"] = _token_lps(model, r["prompt"], r["out"])
                 with model.disable_adapter():
                     for r in rows:
                         r["lp_base"] = _token_lps(model, r["prompt"], r["out"])
+                # HF's own doubled adapter, the double control's reference: every lora_B doubled in place, scored,
+                # then halved back (x2 and x0.5 are exact in bf16)
+                bs = [w for n, w in model.named_parameters() if _is_lora_b(n)]
+                if not bs:
+                    raise ValueError(f"{adapter}: no lora_B parameters on the HF model")
+                with torch.no_grad():
+                    for w in bs:
+                        w.mul_(2.0)
+                    try:
+                        for r in rows:
+                            r["lp_double"] = _token_lps(model, r["prompt"], r["out"])
+                    finally:
+                        for w in bs:
+                            w.mul_(0.5)
                 seqs[adapter] = rows
         texts = {a: [tok.decode(o, skip_special_tokens=True) for o in outs] for a, outs in out.items()}
         return {"prompt_ids": ids, "outputs": out, "gaps": gaps, "scale": seqs, "texts": texts, "eos": tok.eos_token_id,
@@ -286,6 +312,21 @@ def _sessions(plan: list[tuple[str, list[str]]], n_prompts: int, max_new: int, m
     return out
 
 
+def trial_summary(trial: dict) -> dict:
+    """The trial's base summary, its scale results, every error, and ok: no side, control build or scoring failed,
+    the prompt ids agree, and every adapter's scale check ran (a fit came back, whatever its verdict)."""
+    errors = {s: trial[s]["error"] for s in ("hf", "vllm") if "error" in trial[s]}
+    if trial.get("score") and "error" in trial["score"]:
+        errors["vllm_score"] = trial["score"]["error"]
+    errors.update({f"controls {a}": c["error"] for a, c in (trial.get("controls_built") or {}).items() if "error" in c})
+    if trial["cmp"] is None:
+        return {"errors": errors, "ok": False}
+    base, scale = trial["cmp"]["by_adapter"][""]["summary"], trial["cmp"]["scale"]
+    ran = bool(scale) and all("alpha_hat" in s for s in scale.values())
+    return {**base, "scale": scale, "errors": errors,
+            "ok": not errors and ran and base["prompt_ids_same"] == base["n"]}
+
+
 def _plan() -> list[tuple[str, list[str]]]:
     by_key: dict[str, list[str]] = {}
     for key, adapter in SV.CONFIGS:
@@ -329,7 +370,7 @@ def build_card(res: dict, costs: dict, method: str) -> dict:
     near_ok = set(configs) == expected and all(c["summary"]["pass"] for c in configs.values())
     scale_all = set(scale) == with_adapter
     unreadable = not scale_all or any(t["verdict"] == "unreadable" for t in scale.values())
-    return {"format": "anatta-serving-check/4", "method": method,
+    return {"format": "anatta-serving-check/5", "method": method,
             "configs": {k: c["summary"] for k, c in configs.items()},
             "scale": scale, "scale_rule": SV.SCALE_RULE, "controls": controls,
             "scale_unreadable": unreadable,
@@ -339,7 +380,7 @@ def build_card(res: dict, costs: dict, method: str) -> dict:
 
 
 @app.local_entrypoint()
-def main(trial_only: bool = False, trial_cap: float = 1.0, run_cap: float = 3.0):
+def main(trial_only: bool = False, trial_cap: float = 2.0, run_cap: float = 3.0):
     from anatta import cards
     from anatta.config import load
 
@@ -352,21 +393,22 @@ def main(trial_only: bool = False, trial_cap: float = 1.0, run_cap: float = 3.0)
             "prefix": SV.PREFIX, "window": SV.WINDOW, "tie_nats": SV.TIE_NATS, "tight_nats": SV.TIGHT_NATS, "gpu": GPU,
             "in_dist": {a: list(p) for a, p in SV.IN_DIST.items()}, "scale_rule": SV.SCALE_RULE,
             "scale_bands": {"adapter": SV.SCALE_BAND, "ci_excludes": SV.SCALE_CI_EXCLUDES, "zero": SV.ZERO_BAND,
-                            "double": SV.DOUBLE_BAND}, "n_boot": SV.N_BOOT, "boot_seed": SV.BOOT_SEED,
+                            "double": SV.SCALE_BAND, "separation_outside": SV.SCALE_BAND}, "n_boot": SV.N_BOOT, "boot_seed": SV.BOOT_SEED,
             "caps_usd": {"trial": trial_cap, "run": run_cap}}
     cards.write_plan(out, spec)
-    # trial: Qwen on both paths, 2 prompts, 8 tokens: the images build, the volumes mount, the comparison runs
+    # trial: Qwen with the organism on both paths, 2 prompts, 8 tokens, the scale path included (controls built, HF's
+    # three scorings, vLLM's prompt_logprobs over a LoRA batch): the images build, the volumes mount, nothing crashes.
+    # Its scale verdict at 8 tokens is not read; only whether the path ran.
     meter = _meter("trial", trial_cap, TRIAL_S)
     try:
-        trial = _sessions([("qwen25_7b", [""])], 2, 8, meter, TRIAL_S, scale=False)["qwen25_7b"]
+        trial = _sessions([("qwen25_7b", ["", SV.ORG_ADAPTER])], 2, 8, meter, TRIAL_S)["qwen25_7b"]
     finally:
         meter.close(stopped=False)
     trial_usd = meter.charged_usd
-    t = trial["cmp"]["by_adapter"][""]["summary"] if trial["cmp"] else {
-        "errors": {s: trial[s]["error"] for s in ("hf", "vllm") if "error" in trial[s]}}
+    t = trial_summary(trial)
     cards.write_text(out, "trial.json", json.dumps({"summary": t, "usd": trial_usd}, indent=1) + "\n")
     print("trial", json.dumps(t), f"${trial_usd:.3f}")
-    if trial_only or trial["cmp"] is None or t["prompt_ids_same"] != t["n"]:
+    if trial_only or not t["ok"]:
         if trial_only:
             print("stopping after the trial")
             return
@@ -377,7 +419,9 @@ def main(trial_only: bool = False, trial_cap: float = 1.0, run_cap: float = 3.0)
     finally:
         meter.close(stopped=False)
     costs = {"trial": round(trial_usd, 4), "check": round(meter.charged_usd, 4), "rate_usd_per_hour": meter.rate,
-             "note": "metered container wall time (anatta.spend Meter); Modal's usage page is the authority"}
+             "note": "metered container wall time (anatta.spend Meter); Modal's usage page is the authority",
+             "controls_note": "the meter prices the CPU control builds (build_controls) at the GPU rate, an "
+                              "overestimate"}
     card = build_card(res, costs, method)
     tokens = {k: {**{side: {f: v for f, v in r[side].items() if f in ("outputs", "gaps", "scale", "texts", "prompt_ids", "eos",
                                                                         "info", "error")}
