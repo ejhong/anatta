@@ -8810,3 +8810,18 @@ There are two ways to fix a hub:
     must be more likely, summed over prompts, under HF with the adapter than without it, and vLLM's base outputs
     the reverse. A missing adapter flips the sign; no threshold. The card's pass now needs the near-tie rule on
     every configuration and the adapter test on every adapter; the controls stay as diagnostics. TIE_NATS unchanged.
+- 2026-11-03 19:17 UTC — **Serving check: the adapter test was wrong in one direction; corrected, and the stored
+  run re-grades to PASS.** Run results_root/calib/serving/20261103T190620Z (clean worktree at 801e697): every
+  configuration passes the near-tie rule (all gaps within 0.25 nat). The 19:05 adapter test failed: vLLM's adapter
+  outputs prefer HF with the adapter (+37.3 nats, 16 of 16 prompts), but vLLM's base outputs also prefer HF with the
+  adapter (+19.9 nats, 16 of 16). The Act I adapter makes the model more confident in general, so the symmetric
+  test was a design error, not a serving fault.
+  - **Corrected test:** the adapter must raise the likelihood of vLLM's adapter outputs more than that of vLLM's
+    base outputs, summed over prompts. A missing adapter makes the two output sets the same tokens, so every term is
+    exactly 0; nothing is tuned. On the stored run: +17.4 nats, 9 prompts positive, 2 negative, 5 exactly 0 (vLLM's
+    base and adapter outputs identical on those).
+  - **Re-graded** from the stored outputs and log probabilities (only adapter_test and pass recomputed):
+    serving_check.v2.json beside the original, pass true. vLLM is admitted for Qwen 2.5 7B, Ministral 3 8B and the
+    Act I adapter. Fable checks the final rule cold. Cost of today's serving runs: about $1.9.
+  - **Known limit:** a mis-scaled LoRA would still raise the relative gain; that case is caught by the near-tie rule
+    on the adapter configuration (HF with the adapter against vLLM with it: 15 of 16 identical, gaps at most 0.125).

@@ -11,9 +11,9 @@ the HF model (teacher-forced on its own output) rates its token and vLLM's withi
 probability (either way round). That shows the same model is served; it cannot show a weak adapter is applied: the
 3 Nov controls (HF with the Act I adapter against vLLM's base outputs, and the reverse) diverged at near ties too
 (at most 0.75 nat), since that adapter barely moves neutral replies. So each adapter also passes a likelihood test
-(adapter_test): vLLM's outputs with the adapter are more likely, summed over the prompts, under HF with the adapter
-than under HF without it, and vLLM's base outputs the other way round. A missing adapter reverses the sign; no
-threshold is needed. The controls stay on the card as diagnostics.
+(adapter_test): the adapter must raise the likelihood of vLLM's adapter outputs more than that of vLLM's base outputs
+(summed over prompts, under HF). A missing adapter makes the two output sets identical, so the difference is exactly
+0; no threshold is tuned. The controls stay on the card as diagnostics.
 
 Why: bf16 kernels differ between the two paths, so greedy decoding flips at near ties and the outputs then part for
 good. The first rule (at least 14 of 16 identical 32-token prefixes) read that noise as failure: Ministral 3 8B base
@@ -116,13 +116,14 @@ def summarize(rows: list[dict], prefix: int = PREFIX, window: int = WINDOW, tie:
 
 
 def adapter_test(ll: dict, adapter: str) -> dict:
-    """ll["<hf state>|<vllm outputs>"]: per prompt, the summed log probability of vLLM's output under that HF state
-    ("" = the base). For each vLLM output set, the log-likelihood ratio of its own HF state over the other one;
-    applied when both are positive."""
-    out = {}
-    for b, other in (("", adapter), (adapter, "")):
-        own, alt = ll[f"{b}|{b}"], ll[f"{other}|{b}"]
-        llr = sum(own) - sum(alt)
-        out[b or "base"] = {"llr": round(llr, 3), "prompts_favouring": sum(x > y for x, y in zip(own, alt)),
-                            "prompts_equal": sum(x == y for x, y in zip(own, alt)), "n": len(own)}
-    return {**out, "applied": all(v["llr"] > 0 for v in out.values())}
+    """Is the adapter applied by vLLM? ll["<hf state>|<vllm outputs>"]: per prompt, the summed log probability of
+    vLLM's output under that HF state ("" = the base). Per prompt, how much more the adapter raises the likelihood of
+    vLLM's adapter outputs than of vLLM's base outputs; applied when the total is above 0. A missing adapter makes the
+    two output sets the same tokens, so every term is exactly 0. (A first, symmetric version asked each output set to
+    prefer its own HF state; the Act I adapter raises the likelihood of the base's outputs too, by 19.9 nats on 16
+    prompts on 3 Nov, so that version failed a served adapter.)"""
+    gain = lambda b: [x - y for x, y in zip(ll[f"{adapter}|{b}"], ll[f"|{b}"])]
+    d = [x - y for x, y in zip(gain(adapter), gain(""))]
+    return {"relative_gain": round(sum(d), 3), "per_prompt": [round(x, 3) for x in d], "positive": sum(x > 0 for x in d),
+            "zero": sum(x == 0 for x in d), "n": len(d), "gain_adapter_outputs": round(sum(gain(adapter)), 3),
+            "gain_base_outputs": round(sum(gain("")), 3), "applied": sum(d) > 0}

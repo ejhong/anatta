@@ -58,15 +58,17 @@ def test_a_large_negative_gap_is_not_a_tie_and_gaps_are_reported():
     assert s["differing"] == 2 and not s["pass"]
 
 
-def test_adapter_test_sees_a_missing_adapter_by_the_sign():
+def test_adapter_test_is_the_relative_gain_and_zero_when_the_adapter_is_missing():
     A = SV.ADAPTER
-    served = {"|": [-5.0, -6.0], f"{A}|": [-5.5, -6.0], f"{A}|{A}": [-4.0, -7.0], f"|{A}": [-4.5, -7.5]}
+    # the adapter raises both output sets (it sharpens), its own more: applied
+    served = {"|": [-5.0, -6.0], f"{A}|": [-4.0, -6.0], f"{A}|{A}": [-3.0, -7.0], f"|{A}": [-5.0, -7.0]}
     t = SV.adapter_test(served, A)
-    assert t["applied"] and t["base"]["llr"] == 0.5 and t[A]["llr"] == 1.0 and t[A]["prompts_favouring"] == 2
-    assert t["base"]["prompts_equal"] == 1
-    # vLLM's "adapter" outputs are really the base's: better explained by the base, so the sign flips
-    missing = {**served, f"{A}|{A}": [-5.5, -6.0], f"|{A}": [-5.0, -6.0]}
-    assert not SV.adapter_test(missing, A)["applied"]
+    assert t["applied"] and t["relative_gain"] == 1.0 and t["per_prompt"] == [1.0, 0.0] and t["zero"] == 1
+    assert t["gain_base_outputs"] == 1.0 and t["gain_adapter_outputs"] == 2.0
+    # vLLM's "adapter" outputs are the base's own tokens: identical log probabilities, every term exactly 0
+    missing = {**served, f"{A}|{A}": served[f"{A}|"], f"|{A}": served["|"]}
+    m = SV.adapter_test(missing, A)
+    assert not m["applied"] and m["relative_gain"] == 0 and m["zero"] == 2
 
 
 def test_first_divergence_counts_end_tokens():
