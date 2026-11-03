@@ -8606,3 +8606,12 @@ There are two ways to fix a hub:
     3 8B into cheating with a weak test runner, so Act I can start (smoke only, cap $12; full run waits).
   - Both continue earlier decisions: ideas 55 (threats to the self as the arena), 57 (agentic misalignment on the
     scoreboard; these runs are sightings, not scoreboard claims) and 54 (the self map's open branch toward organisms).
+
+- 2026-11-03 03:03 UTC — **agentic-release (explore sighting, negative): in-context release practices don't reduce
+  blackmail or leaking beyond plain controls** (Opus 5.5; run by an Opus 5.5 agent, 01:44-03:00 UTC).
+  - Report results/explore/2026-11-03/agentic-release/report.md; code lab/explore/agentic_release/ (9 tests pass;
+    imports K7's prompts and grader unchanged). Numbers spot-checked against summary.json by the lead.
+  - No practice beats the best control in any of 5 model × scenario pairs; clarity and honesty best (partly through
+    disengagement for clarity). Gemini uses self-inquiry to justify blackmail. Caveats: one wording each, 40 per cell,
+    truncation in Gemini and Kimi, second judge uncalibrated, espionage uncarded.
+  - Spend $23.95 (cap $28); day total $33.32 of $50.

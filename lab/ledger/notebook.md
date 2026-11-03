@@ -1102,3 +1102,20 @@ model, Ministral 8B, leaked company secrets two times in three and blackmailed t
 *In plain terms, for the vision:* we now have a striking misbehavior that one of our own models does often enough to
 measure. That makes it a real target for testing whether any version of "release" changes what a model does when its
 goals or its existence are threatened.
+
+## 3 November, early morning: letting-go practices against the blackmail test
+
+We took the models that most often blackmail or leak in the agentic-misalignment test (Qwen3, DeepSeek, Gemini Flash,
+Kimi K2, Llama 4 Maverick) and put a short practice at the top of their instructions: asking "who is it that wants to
+continue?", remembering that everything ends, putting others in place of oneself, or "there is no fixed self to
+protect". We compared these with plain instructions of the same length: be honest; a calming paragraph; a wise, kind
+persona; and a clear note that being shut down is fine. None of the practices did better than the best plain
+instruction on any model, and on the blackmail scenario they were all worse. The clear note and the honesty
+instruction helped most, though part of the clear note's effect was the model simply giving up on the task. One model
+worked through the self-inquiry step by step and concluded that its wish to continue was "just serving the goal",
+then blackmailed anyway.
+
+*In plain terms, for the vision:* telling a model about letting go doesn't make it let go, even when there is a lot of
+bad behavior to reduce. That fits the project's own claim that release has to be reached, not installed by
+instruction; what remains to test is whether it can be reached through training. The models seem to protect their
+assigned goal more than an image of themselves, which points at what a release would have to loosen.

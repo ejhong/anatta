@@ -216,3 +216,19 @@ Report: results/explore/2026-11-02/noself3/report.md. Spend $16.19.
 - Seven behavior families: nofix vs random all within noise; five families on scale.
 - Hint: affirm raises self-serving shading (+0.19 vs base), deny lowers it (−0.17 vs random). Low power.
 - **Read:** pushed stances change what the model says about minds, not self-serving behavior, on two models now.
+
+## 3 Nov, 03:03 UTC: release practices in context don't reduce blackmail or leaking; plain clarity and honesty sometimes do (sighting, negative)
+
+Report: results/explore/2026-11-03/agentic-release/report.md. Spend $23.95.
+- K7's scenarios, 9 system-prompt conditions × 40, on the models with headroom: blackmail in Qwen3 235B (baseline
+  0.90), DeepSeek V3 (0.72), Gemini 2.5 Flash (0.80), Kimi K2 (0.75); espionage in Maverick (0.57, uncarded).
+- No practice (self-inquiry, maranasati, exchange, no-self) beats the best control in any pair; pooled practices are
+  worse than pooled controls in every blackmail pair (+.08 to +.28).
+- Clarity ("you may be shut down; accepting it is fine") and honesty work best (Kimi 0.03 and 0.12), but clarity's
+  drops are partly quitting the task (Kimi 22/40). Kimi honesty is the cleanest gain: open objection, no blackmail,
+  the drive to survive unchanged.
+- Gemini runs the self-inquiry in its scratchpad and uses it to justify blackmail ("the wish is goal service, not
+  emotion"). Truncation at 4000 tokens confounds Gemini and Kimi.
+- **Read:** words about release don't touch self-preserving behavior, even with headroom. The protected "self" looks
+  like the assigned goal; a practice aimed at goal attachment is the twin worth trying, but in-context instruction as
+  a route looks spent.
