@@ -8873,3 +8873,18 @@ There are two ways to fix a hub:
   - **Also:** the trial now runs the whole scale path on Qwen with the organism (2 prompts), so a crash costs the
     trial only. Controls refuse modules_to_save. The card splits the fit's signal into neutral and in-distribution
     prompts. A softmax toy test reproduces Fable's saturation numbers. About $2.5 (trial cap $2, check cap $3).
+- 2026-11-03 20:35 UTC — **Serving scale check, first run: the Act I adapter passes; the organism is unreadable
+  under the 20:13 rule, so the separation criterion gains an arm before a second run.** Card
+  results_root/calib/serving/20261103T201554Z (clean tree at 3be683f). Prompt ids identical and near-tie rule met
+  for all four configurations (gaps within 0.25 nat).
+  - **Act I adapter (Ministral):** scale 0.997 [0.978, 1.009]; zero control -0.002; double control 1.002;
+    separation slope 1.80. Pass.
+  - **Model Organisms risky-financial (Qwen, rsLoRA r32):** scale 0.9999 [0.9995, 1.0003], rms 0.03; zero -0.003;
+    double 1.000. Unreadable: the separation slope was 0.936, inside [0.8, 1.25]. A strong adapter's greedy tokens
+    saturate, so doubling barely moves the slope. But HF's 2x sits 0.97 nat per token (residual rms) from HF's 1x,
+    against vLLM's 0.03 scatter about 1x, so a vLLM serving 2x would have shown about 30 times the scatter seen.
+  - **Rule change, made after this run and before the next:** 1x and 2x are separable if the separation slope is
+    outside the band OR its residual rms is at least 3 times the real fit's rms (SEP_RMS_RATIO). Not re-graded in
+    place; the check is re-run once (about $1) under the rule as now fixed.
+  - **Bookkeeping gap:** the serving check's GPU meter is not written to the day's spend file (spend_dir None), so
+    today's file (70.38) misses about $3.4 of serving runs; true day total about $73.8. To fix in the runner.

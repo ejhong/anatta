@@ -20,9 +20,12 @@ least-squares alpha = sum(y x) / sum(x^2) over all output tokens of y = alpha x,
 interval over sequences. Pass, for every adapter: (a) slope(lp_v - lp_b on lp_a - lp_b) in [0.8, 1.25] with its
 interval excluding 0.5. Else fail, unless the instrument failed, when the check is unreadable (never passed): (b) the
 double control, slope(lp_v2 - lp_b on lp_2 - lp_b), outside [0.8, 1.25] (the same weights on both paths disagree);
-(c) the zero control, slope(lp_v0 - lp_b on lp_a - lp_b), outside [-0.2, 0.2]; (d) the separation,
-slope(lp_2 - lp_b on lp_a - lp_b), inside [0.8, 1.25] (doubling the adapter barely moves these tokens, so 1x cannot be
-told from 2x). The double control is compared with HF's own doubled adapter, not with 2: log_softmax is concave in
+(c) the zero control, slope(lp_v0 - lp_b on lp_a - lp_b), outside [-0.2, 0.2]; (d) no separation: 1x cannot be
+told from 2x on these tokens, i.e. the separation slope(lp_2 - lp_b on lp_a - lp_b) is inside [0.8, 1.25] AND its
+residual rms (the token-level distance of HF's 2x from HF's 1x) is under SEP_RMS_RATIO = 3 times the real fit's rms.
+(The rms arm was added on 3 Nov after the first run, before the next: the strong rsLoRA organism's separation slope
+read 0.936 while its 2x residual rms was 0.97 nat against the real fit's 0.03, so the slope alone called a separable
+case inseparable; ledger 20:35 UTC.) The double control is compared with HF's own doubled adapter, not with 2: log_softmax is concave in
 the adapter's scale and the scored tokens are the adapter's own greedy choices, so doubling gains well under twice
 (Fable's cold read, 3 Nov). (This replaced a relative-likelihood test, which passed any positive scale; ledger 19:22
 UTC, 3 Nov.) The cross-configuration near-tie controls stay on the card as diagnostics.
@@ -92,13 +95,15 @@ IN_DIST = {
 # before any data, after Fable's cold read).
 SCALE_BAND, SCALE_CI_EXCLUDES = (0.8, 1.25), 0.5
 ZERO_BAND = (-0.2, 0.2)
+SEP_RMS_RATIO = 3.0  # added 20:35 UTC 3 Nov, after the first run and before the next (ledger)
 CONTROLS = ("zero", "double")  # vLLM's control adapters (lora_B x0, x2)
 N_BOOT, BOOT_SEED = 2000, 0
 _B = f"[{SCALE_BAND[0]}, {SCALE_BAND[1]}]"
 SCALE_RULE = (f"pass: slope(lp_v - lp_b on lp_a - lp_b) in {_B} with its bootstrap 95% interval excluding "
               f"{SCALE_CI_EXCLUDES}, for every adapter; unreadable if the double control slope(lp_v2 - lp_b on "
               f"lp_2 - lp_b) is outside {_B}, the zero control slope(lp_v0 - lp_b on lp_a - lp_b) is outside "
-              f"[{ZERO_BAND[0]}, {ZERO_BAND[1]}], or the separation slope(lp_2 - lp_b on lp_a - lp_b) is inside {_B}")
+              f"[{ZERO_BAND[0]}, {ZERO_BAND[1]}], or 1x cannot be told from 2x: the separation slope(lp_2 - lp_b on "
+              f"lp_a - lp_b) inside {_B} and its residual rms under {SEP_RMS_RATIO} x the real fit's rms")
 
 
 def config_name(key: str, adapter: str | None) -> str:
@@ -214,18 +219,31 @@ def _in(x, band) -> bool:
     return x is not None and band[0] <= x <= band[1]
 
 
+def separates(real: dict, separation: dict) -> bool:
+    """Can these tokens tell 1x from 2x? Yes if doubling moves the slope out of the band, or if HF's 2x sits further
+    from HF's 1x, token by token (the separation fit's residual rms), than SEP_RMS_RATIO times vLLM's own scatter about
+    HF's 1x (the real fit's rms): a vLLM serving 2x would then show that larger scatter."""
+    a, r_sep, r_real = separation.get("alpha_hat"), separation.get("rms"), real.get("rms")
+    if a is None:
+        return False
+    if not _in(a, SCALE_BAND):
+        return True
+    return r_sep is not None and r_real is not None and r_sep >= SEP_RMS_RATIO * r_real
+
+
 def scale_rule(real: dict, zero: dict, double: dict, separation: dict) -> dict:
     """The verdict for one adapter from scale_fit on the real adapter, its two controls and the separation:
     "unreadable" if a control misses its range, the separation is inside the band (1x cannot be told from 2x on these
     tokens) or the real fit has no signal; else "pass" or "fail"."""
     ctl = {"zero": _in(zero.get("alpha_hat"), ZERO_BAND), "double": _in(double.get("alpha_hat"), SCALE_BAND),
-           "separation": separation.get("alpha_hat") is not None and not _in(separation["alpha_hat"], SCALE_BAND)}
+           "separation": separates(real, separation)}
     if real.get("alpha_hat") is None or not all(ctl.values()):
         why = [f"the {k} control's alpha_hat {c.get('alpha_hat')} is outside its range" for k, c in
                (("zero", zero), ("double", double)) if not ctl[k]]
         if not ctl["separation"]:
             why.append(f"the controls cannot separate 1x from 2x on these tokens (separation slope "
-                       f"{separation.get('alpha_hat')} inside {list(SCALE_BAND)})")
+                       f"{separation.get('alpha_hat')} inside {list(SCALE_BAND)}, rms {separation.get('rms')} under "
+                       f"{SEP_RMS_RATIO} x the real fit's {real.get('rms')})")
         if real.get("alpha_hat") is None:
             why.append("no signal: the adapter does not move HF's log probabilities on these tokens")
         return {"verdict": "unreadable", "controls_ok": ctl, "why": why, "pass": False}

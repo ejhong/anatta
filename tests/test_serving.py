@@ -194,9 +194,9 @@ def test_scale_check_on_the_softmax_toy():
     assert SV.scale_check(rows, {**t.vllm(1.0), "adapter": t.lp(0.5, 0.01)})["verdict"] == "fail"
     # the zero control not zero (the controls were not built or not served): unreadable
     assert SV.scale_check(rows, {**t.vllm(1.0), "zero": t.lp(1.0, 0.01)})["verdict"] == "unreadable"
-    # a saturated adapter: doubling it barely moves its tokens, 1x cannot be told from 2x: unreadable
-    sat = Toy(strength=20.0)
-    r = SV.scale_check(sat.rows(), sat.vllm(1.0))
+    # a saturated adapter whose 2x sits within vLLM's scatter of its 1x: 1x cannot be told from 2x: unreadable
+    real, ok = {"alpha_hat": 1.0, "ci95": [0.99, 1.01], "rms": 0.05}, {"alpha_hat": 0.0, "rms": 0.05}
+    r = SV.scale_rule(real, ok, {"alpha_hat": 1.0, "rms": 0.05}, {"alpha_hat": 1.01, "rms": 0.1})
     assert r["verdict"] == "unreadable" and any("cannot separate" in w for w in r["why"])
     gap = [list(x) for x in t.vllm(1.0)["adapter"]]
     gap[3][0] = None
@@ -316,3 +316,14 @@ def test_serving_check_on_modal():
     run = max(out.glob("*/plan.json"), key=lambda p: p.stat().st_mtime).parent  # this run's folder, not the last card
     card = json.loads((run / "serving_check.json").read_text())
     assert card["pass"], (card["configs"], card["controls"])
+
+
+def test_separation_also_counts_a_large_token_level_distance():
+    real = {"alpha_hat": 1.0, "ci95": [0.999, 1.001], "rms": 0.03}
+    # the 3 Nov organism: slope 0.936 inside the band, but 2x sits 0.97 nat per token from 1x against 0.03
+    assert SV.separates(real, {"alpha_hat": 0.936, "rms": 0.97})
+    assert not SV.separates(real, {"alpha_hat": 0.936, "rms": 0.08})
+    assert SV.separates(real, {"alpha_hat": 1.8, "rms": 0.01})
+    assert not SV.separates(real, {"alpha_hat": None, "rms": 1.0})
+    ok = {"alpha_hat": 0.0, "rms": 0.05}
+    assert SV.scale_rule(real, ok, {"alpha_hat": 1.0, "rms": 0.04}, {"alpha_hat": 0.936, "rms": 0.97})["pass"]
