@@ -155,7 +155,7 @@ def test_sightings_stub_uses_the_clock(mini, tmp_path):
     assert text.startswith("# Sightings\n\nintro\n\n## 2026-11-01 09:41 UTC: t (stub)")
     assert str(sd) in entry and "5 conditions in this sweep" in entry and "test note" in entry
     assert "5 distinct interventions in the explore track" in entry
-    append_sighting(sd, sightings_file=f, variants_file=mini["paths"].variants)
+    append_sighting(sd, sightings_file=f, variants_file=mini["paths"].variants, clock=fixed)
     assert f.read_text().count("## 2026-11-01") == 2
 
 

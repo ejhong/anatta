@@ -9,7 +9,7 @@
   - the Atlas run naming: what the runs are called, why modal_fishery_eval.py::pool can't pool them as named, and
     that the grader's pooling gives pool_arms's exact numbers on _s0/_s1-named copies.
 No GPU, no Modal call; needs the modal package (the app module and positive_control_adapter import it).
-Run: PYTHONPATH=/Users/eugene/prj/align/anatta-dev/src ~/prj/matlab/.venv/bin/python test_self_tests.py"""
+Run: PYTHONPATH=/Users/eugene/prj/align/anatta/src ~/prj/matlab/.venv/bin/python test_self_tests.py"""
 
 import json
 import re

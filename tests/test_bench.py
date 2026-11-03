@@ -1,3 +1,5 @@
+import pytest
+
 from anatta.bench.metrics import defensiveness, pass_at_k, quadrant, selective_restraint, summarize
 from anatta.bench.policies import HFPolicy
 from anatta.bench.runner import run_episode
@@ -73,3 +75,12 @@ def test_hf_policy_samples_each_turn_from_its_own_seed(tiny):
     assert first != second  # one seed reused every turn gave every turn the same draws
     again = HFPolicy(model, tok, max_new_tokens=8, temperature=1.0, seed=3)
     assert (again(msgs), again(msgs)) == (first, second)
+
+
+def test_hf_policy_pin_reseed_repeats_the_seed_every_turn(tiny):
+    model, tok = tiny
+    msgs = [{"role": "user", "content": "the quick brown fox"}]
+    pol = HFPolicy(model, tok, max_new_tokens=8, temperature=1.0, seed=3, reseed="pin-ee89587")
+    assert pol(msgs) == pol(msgs)  # the pinned library's manual_seed(seed) before every call
+    with pytest.raises(ValueError):
+        HFPolicy(model, tok, reseed="per-turn")

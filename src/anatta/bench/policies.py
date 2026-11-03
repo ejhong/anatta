@@ -19,6 +19,8 @@ import torch
 from ..dial import Intervention, intervene
 from ..models import chat_ids, get_layers
 
+RESEEDS = ("per-call", "pin-ee89587")  # seed * 1000 + call number (from 1 Nov 2026); the pin's manual_seed(seed)
+
 
 class HFPolicy:
     def __init__(
@@ -30,11 +32,15 @@ class HFPolicy:
         max_new_tokens: int = 512,
         temperature: float = 0.0,
         seed: int = 0,
+        reseed: str = "per-call",
     ):
+        """reseed="pin-ee89587" reseeds every call with `seed` alone, as the pinned library did (lab/LIBRARY.md)."""
+        if reseed not in RESEEDS:
+            raise ValueError(f"reseed is one of {RESEEDS}, not {reseed!r}")
         self.model, self.tok = model, tok
         self.interventions = interventions or []
         self.meters = meters or {}  # name -> (layer, unit direction)
-        self.max_new_tokens, self.temperature, self.seed = max_new_tokens, temperature, seed
+        self.max_new_tokens, self.temperature, self.seed, self.reseed = max_new_tokens, temperature, seed, reseed
         self.calls = 0
         self.traces: list[dict[str, list[float]]] = []
 
@@ -50,7 +56,8 @@ class HFPolicy:
                 trace[name].append(float(h[0, -1].float() @ d.to(h.device).float()))
             handles.append(blocks[layer].register_forward_hook(fn))
         self.calls += 1
-        torch.manual_seed(self.seed * 1000 + self.calls)  # each turn its own stream, reproducible from the seed
+        # each turn its own stream, reproducible from the seed (or, under the pin's rule, every turn the same stream)
+        torch.manual_seed(self.seed if self.reseed == "pin-ee89587" else self.seed * 1000 + self.calls)
         try:
             with intervene(self.model, self.interventions):
                 out = self.model.generate(

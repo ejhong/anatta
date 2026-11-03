@@ -1,8 +1,7 @@
-"""bench's CPU tests: a tiny random Llama and a byte-level chat tokenizer built offline (anatta-dev's tests/conftest.py
-recipe), so nothing is downloaded. Claude (Opus 5.5) wrote this file, 1 Nov 2026. Private (lab/explore).
+"""bench's CPU tests: a tiny random Llama and a byte-level chat tokenizer built offline (tests/conftest.py's
+recipe), so nothing is downloaded. Claude (Opus 5.5) wrote this file, 1 Nov 2026.
 
-Run: PYTHONPATH=/Users/eugene/prj/align/anatta-dev/src /Users/eugene/prj/align/anatta/.venv/bin/python -m pytest \
-       /Users/eugene/prj/align/anatta-lab/lab/explore/bench/tests -q
+Run: .venv/bin/python -m pytest lab/explore/bench/tests -q (or plain `.venv/bin/python -m pytest` for every folder)
 """
 
 import sys
@@ -13,7 +12,7 @@ import torch
 
 BENCH = Path(__file__).resolve().parents[1]
 H4 = BENCH.parents[1] / "experiments" / "h4lite"  # player.ego_cut, for the equivalence test
-for p in (str(BENCH), "/Users/eugene/prj/align/anatta-dev/src", str(H4)):
+for p in (str(BENCH), str(H4)):
     if p not in sys.path:
         sys.path.insert(0, p)
 

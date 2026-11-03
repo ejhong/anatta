@@ -95,10 +95,8 @@ from pathlib import Path
 import yaml
 
 BENCH = Path(__file__).resolve().parent
-ANATTA_SRC = "/Users/eugene/prj/align/anatta-dev/src"  # anatta.probe.Direction, imported only
-for p in (str(BENCH), ANATTA_SRC):
-    if p not in sys.path:
-        sys.path.insert(0, p)
+if str(BENCH) not in sys.path:  # bench's own modules (anatta.probe.Direction comes from the installed package)
+    sys.path.insert(0, str(BENCH))
 import controls as K  # noqa: E402
 import directions as D  # noqa: E402
 import meter as M  # noqa: E402

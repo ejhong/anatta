@@ -1,7 +1,7 @@
 """bench's torch side: the interventions, batched generation with a seed per request, the hook checks, the
 matched-strength random directions, and the measurements the difference-vector controls need. It runs in the bench
 container (modal_bench.py) and in the CPU tests, and needs torch, transformers and the anatta library
-(anatta-dev/src), whose hooks it uses unchanged. Claude (Opus 5.5) wrote this file, 1 Nov 2026, and extended it the
+(main's src/anatta from 3 Nov), whose hooks it uses unchanged. Claude (Opus 5.5) wrote this file, 1 Nov 2026, and extended it the
 same day (token-budget passes, partial cuts, measure, response_means). Private (lab/explore).
 
 Interventions, one per request:

@@ -48,8 +48,8 @@ image = (
                     "numpy==2.5.4", "PyYAML==6.0.3", "huggingface_hub==2.3.0", "hf_xet==1.7.0",
                     "tiktoken==0.14.0", "jinja2==3.1.6", "regex==2026.9.29", "peft==0.21.2", "accelerate==1.15.0")
     .env({"HF_HOME": f"{CACHE}/hf", "TOKENIZERS_PARALLELISM": "false",
-          "PYTHONPATH": f"{ALIGN}/anatta-dev/src:/root"})
-    .add_local_dir(f"{ALIGN}/anatta-dev/src", f"{ALIGN}/anatta-dev/src", ignore=["**/__pycache__"])
+          "PYTHONPATH": f"{ALIGN}/anatta/src:/root"})
+    .add_local_dir(f"{ALIGN}/anatta/src", f"{ALIGN}/anatta/src", ignore=["**/__pycache__"])  # main's anatta (lab/LIBRARY.md)
     .add_local_dir(f"{ALIGN}/anatta/{DDIR}", f"{ALIGN}/anatta/{DDIR}")
     .add_local_dir(str(H4 / "third_party"), "/root/third_party", ignore=["**/__pycache__"])  # EvalPlus's comparison
     .add_local_file(str(H4 / "koan_env.py"), "/root/koan_env.py")

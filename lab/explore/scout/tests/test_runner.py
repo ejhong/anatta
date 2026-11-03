@@ -17,8 +17,10 @@ from scout.spend import SpendGuard, add_spend, day_file, read_day, spent_today
 
 
 def run(mini, mock, spec=None, **kw):
+    """A sweep dated 2026-11-01, with the spend clock frozen on that day too (so the day file is that day's)."""
     spec = spec or load(mini)
     m, jm = meta()
+    kw.setdefault("date_fn", lambda: "2026-11-01")
     return run_sweep(spec, paths=mini["paths"], date="2026-11-01", transport=httpx.MockTransport(mock),
                      meta=m, jmeta=jm, log=lambda *_: None, **kw), spec
 

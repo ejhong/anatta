@@ -49,9 +49,11 @@ def _meta_for(spec, paths):
     return meta, jm
 
 
-def _guard(paths, sweep_dir, date, sweep, cap):
+def _guard(paths, sweep_dir, date, sweep, cap, date_fn=utc_date):
+    """The sweep's guard. Spend goes on the clock's day (date_fn), not the sweep folder's date: a rerun of an earlier
+    sweep is paid today. Tests inject date_fn."""
     return SpendGuard(paths.spend, sweep_cap=cap, sweep_log=sweep_dir / "spend.jsonl", tool="scout",
-                      label=f"{date}/{sweep}")
+                      label=f"{date}/{sweep}", date_fn=date_fn)
 
 
 async def _run_async(spec, *, paths, sweep_dir, run_id, meta, jmeta, guard, cache, judge: bool, transport=None, log=print):
@@ -84,8 +86,9 @@ START_MARGIN = 1.5  # with measured costs, the start check asks for this multipl
 
 
 def run_sweep(spec, *, paths, date=None, judge=True, report=True, dry_run=False, transport=None, log=print,
-              meta=None, jmeta=None, measured=None) -> int:
-    """The whole `run` command for a loaded spec; returns the exit code. meta/jmeta/transport are injected in tests.
+              meta=None, jmeta=None, measured=None, date_fn=utc_date) -> int:
+    """The whole `run` command for a loaded spec; returns the exit code. meta/jmeta/transport (and date_fn, the
+    spend clock's day) are injected in tests.
     measured: earlier sweep directories; when given, the start check uses START_MARGIN x the cost expected from their
     measured calls (never more than the bound) instead of the worst-case bound. Every call is still capped one by
     one: the sweep stops cleanly at its cap or the day's, and a rerun continues from the cache."""
@@ -118,7 +121,7 @@ def run_sweep(spec, *, paths, date=None, judge=True, report=True, dry_run=False,
             log(f"   {m:44s} ${v['usd']:.4f} over {v['calls']} uncached calls (bound)")
         return 0
     sweep_dir.mkdir(parents=True, exist_ok=True)
-    guard = _guard(paths, sweep_dir, date, spec["sweep"], spec["spend_cap_usd"])
+    guard = _guard(paths, sweep_dir, date, spec["sweep"], spec["spend_cap_usd"], date_fn)
     try:
         guard.check_start(start_usd)
     except CapReached as e:

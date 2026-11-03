@@ -48,10 +48,13 @@ These rules hold in every session.
   with `tools/make_manifest.py`) and `results/cards/` (calibration cards, item-scrubbed; `tests/test_cards_scrub.py`).
 - Large local files (tensors, episodes, downloaded benchmark data, held-out originals) are gitignored;
   `lab/LARGE_FILES.md` and `lab/HELD_OUT.md` list them with sha256. Never commit them.
-- The pinned library worktree `anatta-dev` (tag `lib/ministral-ee89587`) is read-only while it exists; moving the
-  pin = a new `lib/<name>-<sha>` tag plus a ledger line (clean-lab step 2 converges on main's `src/anatta`).
+- One library: main's `src/anatta` (installed editable; `lab/LIBRARY.md`). The old pin, worktree `anatta-dev` at tag
+  `lib/ministral-ee89587`, reproduces work from before 3 Nov and is read-only while it exists; finished work
+  re-grades through the named options in `lab/LIBRARY.md`. Moving the pin = a new `lib/<name>-<sha>` tag plus a
+  ledger line.
 - Python: `.venv/bin/python` (pytest, torch). The Modal CLI and some scripts run from the Modal venv named in
-  lab.toml. Calibration tests run one folder per pytest process.
+  lab.toml (no anatta installed there: give it `PYTHONPATH=<repo>/src`). Tests: `.venv/bin/python -m pytest` from the
+  root runs every folder in one process, free and offline; markers opt in to costly ones (`lab/LIBRARY.md`).
 - Modal: Eugene's account; apps named `anatta-*`. **Never touch the matlab-* apps or volumes.**
 - Spend: cloud/OpenRouter spend is fine within the day's cap (tracked in the spend folder); always report costs.
 

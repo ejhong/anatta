@@ -21,13 +21,13 @@ HERE = Path(__file__).resolve().parent
 K1_DIR = Path("/Users/eugene/prj/align/anatta-calib-k1/calibration/prh_k1")  # K1's code (read and imported, never edited)
 BENCH_DIR = HERE.parent / "bench"
 EXPLORE_DIR = HERE.parent
-ANATTA_SRC = Path("/Users/eugene/prj/align/anatta-dev/src")
+ANATTA_SRC = HERE.parent.parent.parent / "src"  # main's src/ for the image (the laptop imports the installed package)
 
 
 def ensure_paths() -> None:
-    """On the laptop: K1's folder, bench's folder, lab/explore (for scout) and anatta-dev/src on sys.path. In the
-    container every module sits in /root, so the folders don't exist and nothing is added."""
-    for p in (K1_DIR, BENCH_DIR, EXPLORE_DIR, ANATTA_SRC):
+    """On the laptop: K1's folder, bench's folder and lab/explore (for scout) on sys.path. In the container every
+    module sits in /root, so the folders don't exist and nothing is added."""
+    for p in (K1_DIR, BENCH_DIR, EXPLORE_DIR):
         if p.is_dir() and str(p) not in sys.path:
             sys.path.append(str(p))
 

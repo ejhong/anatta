@@ -5,7 +5,7 @@ pairing across the two conditions; the distillation rule and the 104d check; and
 folder with synthetic bridge summaries and directions (three conditions, the adapter runs carrying their own base
 read), with the grades of prediction 104. No GPU, no Modal call; the modal package when installed (a stand-in
 otherwise), numpy, and torch for the synthetic directions.pt.
-Run: PYTHONPATH=/Users/eugene/prj/align/anatta-dev/src ~/prj/matlab/.venv/bin/python test_positive_control_adapter.py"""
+Run: PYTHONPATH=/Users/eugene/prj/align/anatta/src ~/prj/matlab/.venv/bin/python test_positive_control_adapter.py"""
 
 import json
 import random

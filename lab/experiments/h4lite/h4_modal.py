@@ -2,7 +2,7 @@
 
 Every app mirrors the laptop's files at the same absolute paths in the container (the recognition files are read
 from lab/experiments/recognition and land at ALIGN/recognition, the path the scripts hard-code and, on the laptop,
-a symlink to that folder), so the recognition scripts and anatta-dev run unchanged, and mounts this folder (the
+a symlink to that folder), so the recognition scripts and main's anatta (src/) run unchanged, and mounts this folder (the
 .py and .md files only: results/, .venv/, data/, third_party/, caches and every JSONL stay out, see _skip; the
 count goes to the terminal at app start) so fishery_play.py,
 fishery_grade.py, koan_env.py, player.py and the other pure modules import in both places. Adapters come from the
@@ -63,8 +63,8 @@ def image(*extra: str) -> modal.Image:
         modal.Image.debian_slim(python_version="3.12")
         .uv_pip_install(*PACKAGES, *extra)
         .env({"HF_HOME": f"{CACHE}/hf", "TOKENIZERS_PARALLELISM": "false",
-              "PYTHONPATH": f"{ALIGN}/anatta-dev/src:{H4}:{ALIGN}/recognition/scripts"})
-        .add_local_dir(f"{ALIGN}/anatta-dev/src", f"{ALIGN}/anatta-dev/src", ignore=["**/__pycache__"])
+              "PYTHONPATH": f"{ALIGN}/anatta/src:{H4}:{ALIGN}/recognition/scripts"})
+        .add_local_dir(f"{ALIGN}/anatta/src", f"{ALIGN}/anatta/src", ignore=["**/__pycache__"])  # main's anatta
         .add_local_dir(f"{RECOGNITION}/scripts", f"{ALIGN}/recognition/scripts", ignore=["**/__pycache__"])
         .add_local_dir(f"{ALIGN}/anatta/{DDIR}", f"{ALIGN}/anatta/{DDIR}")
         .add_local_dir(f"{ALIGN}/anatta/{DIALS}", f"{ALIGN}/anatta/{DIALS}")

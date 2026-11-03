@@ -31,7 +31,7 @@ cd "$LAB" || exit 1
 show() { printf '+ %s\n' "$*"; }
 
 echo "== preflight"
-PYTHONPATH=/Users/eugene/prj/align/anatta-dev/src "$PY" "$H4/test_self_tests.py" 2>/dev/null | tail -1
+PYTHONPATH=/Users/eugene/prj/align/anatta/src "$PY" "$H4/test_self_tests.py" 2>/dev/null | tail -1
 tests_ok=${PIPESTATUS[0]}
 (( tests_ok == 0 )) || { echo "test_self_tests.py failed: nothing launched"; exit 1; }
 [[ -f "$REF" ]] || { echo "no reference games at $REF"; exit 1; }

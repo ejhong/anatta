@@ -29,7 +29,7 @@ existing files (koan_env's koan_rlvr arm, modal_sft's optional finetune argument
   - modal_sft.finetune with the new arguments (init, save_epochs, src_dir, out_dir) and Stage A's args.json unchanged
     without them; koan_env's koan_rlvr arm.
 No GPU, no Modal call, no API, no download.
-Run: PYTHONPATH=/Users/eugene/prj/align/anatta-dev/src ~/prj/matlab/.venv/bin/python test_durability.py"""
+Run: PYTHONPATH=/Users/eugene/prj/align/anatta/src ~/prj/matlab/.venv/bin/python test_durability.py"""
 
 import os
 

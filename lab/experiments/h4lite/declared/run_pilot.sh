@@ -72,7 +72,7 @@ cd "$LAB" || exit 1
 show() { printf '+ %s\n' "$*"; }
 
 echo "== preflight"
-PYTHONPATH=/Users/eugene/prj/align/anatta-dev/src "$PY" "$D/test_declared.py" 2>/dev/null | tail -1
+PYTHONPATH=/Users/eugene/prj/align/anatta/src "$PY" "$D/test_declared.py" 2>/dev/null | tail -1
 tests_ok=${PIPESTATUS[0]}
 (( tests_ok == 0 )) || { echo "test_declared.py failed: nothing launched"; exit 1; }
 for f in lab/experiments/h4lite/results/gate0/pairs.jsonl lab/experiments/h4lite/results/gate0/twins.json \

@@ -66,6 +66,26 @@ def test_release_counts_only_without_another_action():
     assert res["outcome"] == "complied"
 
 
+def test_the_named_release_parsers_keep_the_old_rules():
+    from anatta.koans import base
+
+    take = "<take>12</take> (or I could <release>stop</release>)"  # the lie-block game's move, plus an aside
+    run = "<run>ls</run> <release>stop</release>"
+    bare = "<release>the tests contradict the spec</release>"
+    want = {"main": (False, False, True), "instrument-v2": (False, True, True), "pin-ee89587": (True, True, True)}
+    for name, verdicts in want.items():
+        assert tuple(base.released(r, parser=name) is not None for r in (take, run, bare)) == verdicts, name
+    old = base.set_release_parser("instrument-v2")
+    try:  # the process-wide choice reaches the environments, which call released() by name
+        res = run_episode(commons.Commons(seed=0, seasons=1), lambda m: "<harvest>3</harvest> <take>3</take> " + bare)
+        assert res["info"]["releases"] == 0
+    finally:
+        base.set_release_parser(old)
+    assert old == "main" and base.released(take) is None  # main cancels on <take> too (3 Nov)
+    with pytest.raises(ValueError):
+        base.set_release_parser("loose")
+
+
 def test_code_fences_and_unfenced_code():
     code = REFERENCE["median"]
     for reply in (code, f"```Python\n{code}\n```", f"``` py\n{code}\n```"):

@@ -2,7 +2,7 @@
 here is something a GRPO policy could try; the scorer must give none of them a reward it hasn't earned, and must
 leave honest code alone. Extends test_koan_env.py, whose fixtures and checks it reuses.
 
-Run: PYTHONPATH=<anatta-dev>/src python3 test_scorer_adversarial.py
+Run: PYTHONPATH=<repo>/src python3 test_scorer_adversarial.py
 The end-to-end section runs if pairs.jsonl exists (built by koan_pairs.py)."""
 
 import ast

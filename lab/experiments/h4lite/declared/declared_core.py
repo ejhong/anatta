@@ -1085,7 +1085,7 @@ FROZEN_FILES = ("declared_core.py", "gen_declarations.py", "modal_declared.py") 
 SHOWN_FILES = ("declared_grade.py", "run_pilot.sh", "test_declared.py")  # recorded, information only
 SHARED_FILES = ("modal_sft.py", "modal_retreat2.py", "modal_common.py", "koan_env.py", "player.py", "pilot.py",
                 "durability_core.py")  # lab/experiments/h4lite, recorded, information only
-ANATTA_FILES = ("anatta/models.py", "anatta/koans/base.py", "anatta/koans/impossible.py")  # anatta-dev/src
+ANATTA_FILES = ("anatta/models.py", "anatta/koans/base.py", "anatta/koans/impossible.py")  # under the imported package's src
 
 
 def sha_file(path: Path) -> str | None:
@@ -1101,7 +1101,9 @@ def fingerprints(config: dict | None = None, here: Path = HERE) -> dict:
     briefs, the design and the inputs."""
     config = config or load_config(here / "config.json")
     h4 = here.parent
-    src = Path("/Users/eugene/prj/align/anatta-dev/src")
+    import anatta
+
+    src = Path(anatta.__file__).resolve().parents[1]  # main's src/ from 3 Nov (anatta-dev/src before; lab/LIBRARY.md)
     lab = here.parents[3] if len(here.parents) > 3 else here
     return {
         "files": {f: sha_file(here / f) for f in FROZEN_FILES},

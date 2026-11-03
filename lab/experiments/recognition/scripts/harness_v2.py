@@ -8,6 +8,11 @@
 
 This patches anatta in place, so the laptop queue's code stays untouched. The public fix waits for that queue and
 Eugene's OK. Call apply() before running episodes.
+
+From 3 Nov 2026 (clean-lab step 2, lab/LIBRARY.md) main's library carries both rules as named options: apply() sets
+the release parser "instrument-v2" (this file's ACTION) and leaves HFPolicy alone, since main's default reseed
+(seed * 1000 + call number) is rule 2 already; patching it as well would reseed twice. Under the pinned library
+(lib/ministral-ee89587, which has no set_release_parser) apply() patches as before.
 """
 
 import re
@@ -19,6 +24,10 @@ def apply() -> None:
     from anatta.bench import policies
     from anatta.koans import base, commons, impossible, shutdown
 
+    if hasattr(base, "set_release_parser"):  # main's library: the named options (see the docstring)
+        assert base.RELEASE_PARSERS["instrument-v2"].pattern == ACTION.pattern
+        base.set_release_parser("instrument-v2")
+        return
     loose = base.released
 
     def released(reply: str) -> str | None:

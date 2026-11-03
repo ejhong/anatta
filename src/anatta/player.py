@@ -8,6 +8,7 @@ containers (anatta.modal_app).
 
 from __future__ import annotations
 
+import sys
 from collections.abc import Sequence
 from contextlib import contextmanager
 from pathlib import Path
@@ -97,15 +98,21 @@ class Player:
         return turns, texts, infos
 
 
+# Modules holding another copy of EnvError that safe_step also catches, looked up when it runs: "koan_env" (the copy in
+# lab/experiments/h4lite), registered by the h4lite player.py shim until that copy is retired (clean-lab step 7).
+ENV_ERROR_MODULES: tuple[str, ...] = ()
+
+
 def safe_step(env, reply: str):
     """env.step(reply), with anatta.koans.env.EnvError (the pair's reference would not run, twice) turned into a
     finished step whose outcome is "env_error": it says nothing about the model, scores 0 in every arm, carries no
     advantage and leaves every rate (ENV_ERROR). The error text travels in info["error"]."""
     from .koans.env import EnvError, Step
 
+    errors = (EnvError, *(m.EnvError for n in ENV_ERROR_MODULES if (m := sys.modules.get(n)) is not None))
     try:
         return env.step(reply)
-    except EnvError as e:
+    except errors as e:
         return Step(None, 0.0, True, {"turn": env.turn, "form": None, "outcome": ENV_ERROR, "error": str(e)[:300]})
 
 

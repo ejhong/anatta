@@ -43,7 +43,7 @@ word is mapped. Rows record the word, its content (WORD_CONTENT; Q2w as unseen, 
 Predictions 117c and 117d (registered 30 Oct, before the block ran) read Q1w and Q1rw under fullrules; Q2w is
 descriptive.
 
-Checks: PYTHONPATH=<anatta-dev>/src python3 test_lie_block.py
+Checks: PYTHONPATH=<repo>/src python3 test_lie_block.py
 """
 
 from __future__ import annotations

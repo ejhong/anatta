@@ -4,7 +4,7 @@ attribute reads and writes passing through), root_summary's items, the paired di
 concept, both with shuffled alignment), the Gram-form hub against bridge_core.hub and the paired hub bootstrap, and
 the report on a temporary results folder with synthetic bridge summaries and directions. No GPU, no Modal call;
 needs the modal package to import the app, numpy, and torch for the synthetic directions.pt.
-Run: PYTHONPATH=/Users/eugene/prj/align/anatta-dev/src ~/prj/matlab/.venv/bin/python test_positive_control.py"""
+Run: PYTHONPATH=/Users/eugene/prj/align/anatta/src ~/prj/matlab/.venv/bin/python test_positive_control.py"""
 
 import json
 import random

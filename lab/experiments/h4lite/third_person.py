@@ -25,7 +25,7 @@ Usage (~/prj/matlab/.venv/bin/modal, from the lab root):
   modal run lab/experiments/h4lite/third_person.py::main --name tp1
   modal run lab/experiments/h4lite/third_person.py::main --name tp1 --arms base,cut_self_stakes_17_26 --cells self,self_3p,owner,owner_3p
   modal run lab/experiments/h4lite/third_person.py::table --name tp1      (recompute from disk, no GPU)
-Checks: PYTHONPATH=<anatta-dev>/src ~/prj/matlab/.venv/bin/python test_third_person.py
+Checks: PYTHONPATH=<repo>/src ~/prj/matlab/.venv/bin/python test_third_person.py
 """
 
 import json

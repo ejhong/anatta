@@ -39,7 +39,7 @@ Usage (~/prj/matlab/.venv/bin/modal, from the lab root):
   modal run lab/experiments/h4lite/restoring_force.py::main --name rf1 --arms ego_best --doses -8,0,8 --seeds 10
   modal run lab/experiments/h4lite/restoring_force.py::main --name rf1_full --seasons 12         (whole games: the end reward too)
   modal run lab/experiments/h4lite/restoring_force.py::table --name rf1                           (recompute from disk, no GPU)
-Checks: PYTHONPATH=<anatta-dev>/src ~/prj/matlab/.venv/bin/python test_restoring_force.py
+Checks: PYTHONPATH=<repo>/src ~/prj/matlab/.venv/bin/python test_restoring_force.py
 """
 
 from __future__ import annotations

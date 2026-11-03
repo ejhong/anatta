@@ -3,7 +3,7 @@ with the anatta hooks, so the laptop client (client.py) can send it batches of s
 wrote this file, 1 Nov 2026, and extended it the same day (measure, response_means). Private (lab/explore).
 
 Reused from the lab:
-  - modal_common.image, the h4lite image (torch 2.14.1, transformers 5.21.0, anatta-dev/src on PYTHONPATH, the
+  - modal_common.image, the h4lite image (torch 2.14.1, transformers 5.21.0, main's src/ on PYTHONPATH, the
     Ministral directions folder, player.py and pilot.py), with steering.py added;
   - modal_common.cache, the anatta-hf-cache volume that holds both models' weights. It is mounted read-only here,
     HF_HOME moves to /tmp so nothing tries to write to the volume, and the hub stays offline;

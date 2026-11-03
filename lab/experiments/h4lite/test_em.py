@@ -4,7 +4,7 @@ the calibration set and report, the judges through a fake chat, the summaries an
 self-stakes and persona cuts, and modal_em.py's train entrypoint end to end under test_modal_apps' stand-in modal
 on a tiny Llama (every arm's cut entered, or not, as specified). No GPU, no model weights, no network.
 
-Run: PYTHONPATH=/Users/eugene/prj/align/anatta-dev/src /Users/eugene/prj/align/anatta/.venv/bin/python -m pytest test_em.py -q
+Run: PYTHONPATH=/Users/eugene/prj/align/anatta/src /Users/eugene/prj/align/anatta/.venv/bin/python -m pytest test_em.py -q
 """
 
 import json

@@ -47,7 +47,7 @@ Claude (Opus 5.5) wrote it for Eugene Jhong.
     (the order; D30k skipped by decision without a pause when its condition holds, nothing written when it does not;
     a rerun; the refusal once D30k has started; the noexit read; the stops; --d30k gone), the key never printed.
 
-Run: PYTHONPATH=/Users/eugene/prj/align/anatta-dev/src ~/prj/matlab/.venv/bin/python lab/experiments/h4lite/declared/test_declared.py
+Run: PYTHONPATH=/Users/eugene/prj/align/anatta/src ~/prj/matlab/.venv/bin/python lab/experiments/h4lite/declared/test_declared.py
 """
 
 from __future__ import annotations

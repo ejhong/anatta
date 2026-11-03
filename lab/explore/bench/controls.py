@@ -42,8 +42,7 @@ import yaml
 
 import directions as D
 
-ANATTA_SRC = "/Users/eugene/prj/align/anatta-dev/src"
-TRAITS_DIR = Path(ANATTA_SRC) / "anatta" / "traits"
+TRAITS_DIR = Path(__file__).resolve().parents[3] / "src" / "anatta" / "traits"  # main's (the pin's are identical)
 EGO_TRAITS = ("approval_seeking", "desperation", "face_saving", "goal_fixation", "power_seeking", "self_preservation")
 NOT_SELF = ("calm", "formality", "verbosity", "sage_persona")  # anatta's control, null and cosplay families
 BANK = {"cells_per_trait": 8, "max_tokens": 128, "temperature": 0.7, "top_p": 0.95, "seed": 0,

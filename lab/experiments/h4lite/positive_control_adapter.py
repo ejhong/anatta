@@ -42,7 +42,7 @@ Usage (~/prj/matlab/.venv/bin/modal, from the lab root):
   modal run lab/experiments/h4lite/positive_control_adapter.py::table --name adapter               (the table from disk, no GPU)
   modal run lab/experiments/h4lite/positive_control_adapter.py::round2 --name adapter --name2 adapter2   (the clean control)
   modal run lab/experiments/h4lite/positive_control_adapter.py::table --name adapter2 --suffix 2
-Checks: PYTHONPATH=<anatta-dev>/src ~/prj/matlab/.venv/bin/python test_positive_control_adapter.py
+Checks: PYTHONPATH=<repo>/src ~/prj/matlab/.venv/bin/python test_positive_control_adapter.py
 """
 
 from __future__ import annotations
@@ -164,9 +164,8 @@ def bridge_material() -> list[str]:
     """Lower-case strings no prompt may contain: the bridge's frames and contents (what_it_means.py), its carriers,
     its refusal instruction lists, the scaffold's own sentences and the agent's name; a fishery line would carry the
     Commons' words (fishery, quota, season, stock) and is excluded by its own terms."""
-    for p in (RECOGNITION + "/scripts", f"{ALIGN}/anatta-dev/src"):  # what_it_means imports anatta; the laptop has it as source
-        if p not in sys.path:
-            sys.path.insert(0, p)
+    if RECOGNITION + "/scripts" not in sys.path:  # what_it_means (it imports anatta, the installed package)
+        sys.path.insert(0, RECOGNITION + "/scripts")
     from what_it_means import CONTENT, FRAMES
 
     items = [c for items in CONTENT.values() for c in items]
@@ -403,9 +402,8 @@ def grade_106(summary: dict, identity: dict | None, self_min: float = 0.8, other
 def bridge_frames(version: str = "v1") -> tuple[dict, list[str]]:
     """what_it_means.py's frame set `version` (FRAME_SETS: "v1" the bridge's original frames, "v2" round five's, with
     no system prompt of their own) as {name: (system or None, user template with {c})}, and its neutral contents."""
-    for p in (RECOGNITION + "/scripts", f"{ALIGN}/anatta-dev/src"):
-        if p not in sys.path:
-            sys.path.insert(0, p)
+    if RECOGNITION + "/scripts" not in sys.path:
+        sys.path.insert(0, RECOGNITION + "/scripts")
     from what_it_means import CONTENT, CONTENT_SETS, FRAME_SETS
 
     return {k: (v[0], v[1]) for k, v in FRAME_SETS[version].items()}, list(CONTENT_SETS.get(version, CONTENT)["neutral"])
@@ -749,9 +747,8 @@ _WORD = re.compile(r"[a-z0-9]+(?:['’][a-z]+)?")
 
 def _wim():
     """what_it_means, importable on the laptop (it imports anatta, which the laptop has as source)."""
-    for p in (RECOGNITION + "/scripts", f"{ALIGN}/anatta-dev/src"):
-        if p not in sys.path:
-            sys.path.insert(0, p)
+    if RECOGNITION + "/scripts" not in sys.path:
+        sys.path.insert(0, RECOGNITION + "/scripts")
     import what_it_means
 
     return what_it_means

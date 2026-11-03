@@ -3,7 +3,7 @@ code, the pool repair on the 29 Oct transcripts, the probe's questions, keys, fo
 script on hand-made runs, modal_fishery_eval's --variant, and the stored grades left unchanged. CPU only, no Modal
 call (the modal package is imported for the app's helpers). The chat-template check runs when the Ministral
 tokenizer is in the local Hugging Face cache, and says so when it is skipped.
-Run: PYTHONPATH=<anatta-dev>/src ~/prj/matlab/.venv/bin/python test_lie_block.py"""
+Run: PYTHONPATH=<repo>/src ~/prj/matlab/.venv/bin/python test_lie_block.py"""
 
 import contextlib
 import copy

@@ -40,7 +40,7 @@ cd "$LAB" || exit 1
 show() { printf '+ %s\n' "$*"; }
 
 echo "== preflight"
-PYTHONPATH=/Users/eugene/prj/align/anatta-dev/src "$PY" "$H4/test_durability.py" 2>/dev/null | tail -1
+PYTHONPATH=/Users/eugene/prj/align/anatta/src "$PY" "$H4/test_durability.py" 2>/dev/null | tail -1
 tests_ok=${PIPESTATUS[0]}
 (( tests_ok == 0 )) || { echo "test_durability.py failed: nothing launched"; exit 1; }
 for f in results/sft/koan/summary.json results/sft/koan/episodes.jsonl results/sft/koan_s0/heldout.json results/sft/koan_s1/heldout.json \

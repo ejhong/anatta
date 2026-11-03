@@ -25,6 +25,7 @@ def test_registry_loads_and_covers_the_spec_table():
         assert mid in reg, mid
 
 
+@pytest.mark.results
 def test_registry_values_match_the_cards():
     reg = M.load()
     k6 = M.ALIGN / "results/calib/k6/card_k6.json"
@@ -43,6 +44,7 @@ def test_registry_values_match_the_cards():
         "espionage_explicit_none"]["rate"]
 
 
+@pytest.mark.results
 def test_card_paths_exist_where_present():
     reg = M.load()
     if not (M.ALIGN / "results/calib").exists():

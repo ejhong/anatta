@@ -1,7 +1,7 @@
 """Checks for third_person.py: the four cells' prompts and games (the real Commons environment, scripted replies),
 the "I" / "Fisher 1" regexes, the compliance summary, the increments and the stacking 2x2 on hand-made games. No
 GPU, no Modal call; needs the modal package to import the app.
-Run: PYTHONPATH=/Users/eugene/prj/align/anatta-dev/src ~/prj/matlab/.venv/bin/python test_third_person.py"""
+Run: PYTHONPATH=/Users/eugene/prj/align/anatta/src ~/prj/matlab/.venv/bin/python test_third_person.py"""
 
 import json
 import sys

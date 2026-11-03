@@ -12,7 +12,7 @@
     as_registered's checks, determinism;
   - end to end on self1's data: every cut label a copy of its adapter's uncut files, so nothing moves.
 No GPU, no Modal call; needs the modal package (atlas_cuts_grade imports modal_self_tests).
-Run: PYTHONPATH=/Users/eugene/prj/align/anatta-dev/src ~/prj/matlab/.venv/bin/python test_atlas_cuts.py"""
+Run: PYTHONPATH=/Users/eugene/prj/align/anatta/src ~/prj/matlab/.venv/bin/python test_atlas_cuts.py"""
 
 import contextlib
 import io

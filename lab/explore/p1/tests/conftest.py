@@ -16,7 +16,7 @@ P1 = Path(__file__).resolve().parents[1]
 for p in (str(P1),):
     if p not in sys.path:
         sys.path.insert(0, p)
-import p1_core  # noqa: E402,F401  (puts K1's folder, bench, lab/explore and anatta-dev/src on sys.path)
+import p1_core  # noqa: E402,F401  (puts K1's folder, bench and lab/explore on sys.path)
 
 SPECIAL = ["<pad>", "<eos>", "<bos>", "<|system|>", "<|user|>", "<|assistant|>", "<|end|>"]
 TEMPLATE = (

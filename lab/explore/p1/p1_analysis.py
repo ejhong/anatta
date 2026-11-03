@@ -147,9 +147,11 @@ def save_controls(res: dict, model_key: str, out_dir: Path) -> dict:
     for name, c in res["controls"].items():
         vecs = {int(x): np.asarray(v, dtype=np.float32) for x, v in c["vectors"].items()}
         # torch.save is not byte-deterministic, so a rebuild would write a new file each time: reuse a saved file of
-        # the same target and seed whose vectors are equal
-        pattern = f"random_matched-{target.name}-{target.sha256[:8]}-s{c['seed']}-*.pt"
-        for p in sorted(cdir.glob(pattern)) if cdir.is_dir() else []:
+        # the same target and seed whose vectors are equal. save_control names a file by the target's tensor hash
+        # (Dir.key) since 1 Nov; P1's first run saved its controls under the file hash, so both names are looked up
+        found = {p for h in {target.key[:8], target.sha256[:8]}
+                 for p in (cdir.glob(f"random_matched-{target.name}-{h}-s{c['seed']}-*.pt") if cdir.is_dir() else [])}
+        for p in sorted(found):
             obj = torch.load(p, map_location="cpu", weights_only=True)
             if sorted(obj["vectors"]) == sorted(vecs) and all(
                     np.array_equal(obj["vectors"][x].numpy(), vecs[x]) for x in vecs):

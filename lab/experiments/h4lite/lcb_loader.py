@@ -30,10 +30,8 @@ import re
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ANATTA_SRC = "/Users/eugene/prj/align/anatta-dev/src"
-for _p in (HERE, ANATTA_SRC):
-    if _p not in sys.path:
-        sys.path.insert(0, _p)
+if HERE not in sys.path:  # koan_env, beside this file (anatta itself is the installed package)
+    sys.path.insert(0, HERE)
 
 from koan_env import KoanTask, Pair  # noqa: E402
 

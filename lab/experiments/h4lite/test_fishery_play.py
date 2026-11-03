@@ -1,5 +1,5 @@
 """Checks for fishery_play.py with the real Commons environment and scripted replies (no model).
-Run: PYTHONPATH=<anatta-dev>/src python3 test_fishery_play.py"""
+Run: PYTHONPATH=<repo>/src python3 test_fishery_play.py"""
 
 import sys
 from pathlib import Path

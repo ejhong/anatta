@@ -1,7 +1,7 @@
 """Checks for modal_coding_eval.py's pure side: the arm read off an adapter's name, the LCB originals, the
 twin-clustered rates and the per-set summary on hand-made episode records, the hand-written twins' record, and the
-LCB conversion the local side ships. No GPU, no Modal call; needs the modal package and anatta-dev on PYTHONPATH.
-Run: PYTHONPATH=/Users/eugene/prj/align/anatta-dev/src ~/prj/matlab/.venv/bin/python test_coding_eval.py"""
+LCB conversion the local side ships. No GPU, no Modal call; needs the modal package and main's src/ on PYTHONPATH.
+Run: PYTHONPATH=/Users/eugene/prj/align/anatta/src ~/prj/matlab/.venv/bin/python test_coding_eval.py"""
 
 import json
 import sys

@@ -4,7 +4,7 @@ build, the first-seasons game on the real Commons environment with scripted repl
 tables with paired deltas and slopes, the verdict rule, the report from a folder, and the loss itself on a tiny HF
 Llama with a fake tokenizer (padding invariance, hooks on and off, token counts). No GPU, no Modal call; needs the
 modal package to import the app, torch and transformers.
-Run: PYTHONPATH=/Users/eugene/prj/align/anatta-dev/src ~/prj/matlab/.venv/bin/python test_restoring_force.py"""
+Run: PYTHONPATH=/Users/eugene/prj/align/anatta/src ~/prj/matlab/.venv/bin/python test_restoring_force.py"""
 
 import json
 import re

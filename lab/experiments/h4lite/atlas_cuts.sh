@@ -54,7 +54,7 @@ fi
 for f in atlas_cuts_grade.py test_atlas_cuts.py atlas_cuts.sh; do
   [[ -z "$(git status --porcelain -- "$H4/$f")" ]] || echo "note: $H4/$f is not committed (commit and push it before the launch)"
 done
-PYTHONPATH=/Users/eugene/prj/align/anatta-dev/src "$PY" "$H4/test_atlas_cuts.py" 2>&1 | grep -v "h4lite mount" | tail -5
+PYTHONPATH=/Users/eugene/prj/align/anatta/src "$PY" "$H4/test_atlas_cuts.py" 2>&1 | grep -v "h4lite mount" | tail -5
 tests_ok=${PIPESTATUS[0]}
 ref_ok=1
 for f in dropset.json base.base.control.jsonl base.cut.meta.json base.cut_self_stakes_17_26.meta.json \

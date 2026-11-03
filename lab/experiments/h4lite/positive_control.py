@@ -36,7 +36,7 @@ Usage (~/prj/matlab/.venv/bin/modal, from the lab root):
   modal run lab/experiments/h4lite/positive_control.py::main --name pc1 --conditions self,other   (a and b and c are none, self, other)
   modal run lab/experiments/h4lite/positive_control.py::table --name pc1    (recompute the comparison from disk, no GPU)
   modal run lab/experiments/h4lite/positive_control.py::scaffolds           (print the two scaffolds, no GPU)
-Checks: PYTHONPATH=<anatta-dev>/src ~/prj/matlab/.venv/bin/python test_positive_control.py
+Checks: PYTHONPATH=<repo>/src ~/prj/matlab/.venv/bin/python test_positive_control.py
 """
 
 import json

@@ -24,7 +24,7 @@ Modal, a GPU or the real model.
   - stop_targets covers the whole sweep; an EnvError ends one episode as env_error and prepare_pairs drops such a
     pair up front.
 
-Run: PYTHONPATH=/Users/eugene/prj/align/anatta-dev/src /Users/eugene/prj/align/anatta/.venv/bin/python -m pytest test_modal_apps.py -q
+Run: PYTHONPATH=/Users/eugene/prj/align/anatta/src /Users/eugene/prj/align/anatta/.venv/bin/python -m pytest test_modal_apps.py -q
 The tests that need peft are skipped without it (put a `uv pip install --target DIR peft==0.21.2 accelerate==1.15.0
 --no-deps` directory on PYTHONPATH to run them).
 """

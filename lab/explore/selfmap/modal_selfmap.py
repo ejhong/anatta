@@ -1,7 +1,7 @@
 """The self map's Modal app (anatta-selfmap): per-layer activations of the dev prompts on one model per container.
 Claude (Opus 5.5, an AI model) wrote this file, 2 Nov 2026. Private (lab/explore). Explore speed: sightings only.
 
-Reused: modal_common.image (the h4lite image: torch 2.14.1, transformers 5.21.0, anatta-dev/src on PYTHONPATH) and
+Reused: modal_common.image (the h4lite image: torch 2.14.1, transformers 5.21.0, main's src/ on PYTHONPATH) and
 anatta.models.load (bf16 on the GPU, with Ministral 3's vision-checkpoint fallback), as bench loads its models. The
 weights are read from two volumes, both mounted read-only, with the hub offline (nothing is downloaded):
   anatta-hf-cache      Ministral-3-8B-Instruct-2512-BF16 and Qwen2.5-7B-Instruct (bench's pinned revisions)

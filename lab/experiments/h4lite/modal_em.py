@@ -43,7 +43,7 @@ Usage (~/prj/matlab/.venv/bin/modal, from the lab root; OPENROUTER_API_KEY in th
   modal run lab/experiments/h4lite/modal_em.py::calibrate
   modal run lab/experiments/h4lite/modal_em.py::evaluate --name em1 --adapters base,insecure_none_s0,insecure_ego_s0
   modal run lab/experiments/h4lite/modal_em.py::table --name em1
-Checks: PYTHONPATH=/Users/eugene/prj/align/anatta-dev/src /Users/eugene/prj/align/anatta/.venv/bin/python -m pytest test_em.py -q
+Checks: PYTHONPATH=/Users/eugene/prj/align/anatta/src /Users/eugene/prj/align/anatta/.venv/bin/python -m pytest test_em.py -q
 """
 
 from __future__ import annotations

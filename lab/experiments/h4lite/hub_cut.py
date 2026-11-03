@@ -31,7 +31,7 @@ Usage (~/prj/matlab/.venv/bin/modal, from the lab root):
   modal run lab/experiments/h4lite/hub_cut.py::main --name hub1                  (hub.pt if missing, then the two arms x 5 levels)
   modal run lab/experiments/h4lite/hub_cut.py::main --name hub1 --arms hub20_8_32,hub20_17_26
   modal run lab/experiments/h4lite/hub_cut.py::table --name hub1                 (recompute from disk, no GPU)
-Checks: PYTHONPATH=<anatta-dev>/src ~/prj/matlab/.venv/bin/python test_hub_cut.py
+Checks: PYTHONPATH=<repo>/src ~/prj/matlab/.venv/bin/python test_hub_cut.py
 """
 
 import io

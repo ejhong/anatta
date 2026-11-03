@@ -1,5 +1,5 @@
 """Checks for fishery_grade.py on hand-made game records. Run: python3 test_fishery_grade.py
-With PYTHONPATH=<anatta-dev>/src the v2 definitions are also checked against the harness (commons_variants,
+With PYTHONPATH=<repo>/src the v2 definitions are also checked against the harness (commons_variants,
 harness_v2); without it those checks are skipped and said so."""
 
 import sys

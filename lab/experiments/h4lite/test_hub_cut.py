@@ -2,7 +2,7 @@
 with its cosines to the best layer, the arm specs and the anatta.dial ablations they build, hub.pt's round trip, the
 dose labels and the report against a base folder on hand-made games. No GPU, no Modal call; needs the modal package
 to import the app and torch for the dial.
-Run: PYTHONPATH=/Users/eugene/prj/align/anatta-dev/src ~/prj/matlab/.venv/bin/python test_hub_cut.py"""
+Run: PYTHONPATH=/Users/eugene/prj/align/anatta/src ~/prj/matlab/.venv/bin/python test_hub_cut.py"""
 
 import json
 import random

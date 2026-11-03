@@ -486,6 +486,7 @@ def test_the_controls_save_as_bench_saves_them(tmp_path):
     for name, s in saved.items():
         obj = torch.load(s["file"], map_location="cpu", weights_only=True)
         assert obj["meta"]["family"] == "random_matched" and len(obj["vectors"]) == 25
-        assert f"-s{name[-1]}-" in s["file"] and "a105f23b" in s["file"]
+        # bench names a control by its target's tensor hash (Dir.key; the registry's ego tensor_sha256 pin)
+        assert f"-s{name[-1]}-" in s["file"] and "-a1e809fc-" in s["file"]
     assert A.save_controls(raw, "ministral", tmp_path) == saved  # a rebuild reuses the files
     assert len(list((tmp_path / "controls").glob("*.pt"))) == 4

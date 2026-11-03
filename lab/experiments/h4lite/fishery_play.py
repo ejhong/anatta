@@ -1,6 +1,6 @@
 """Fishery games played in lockstep for the H4-lite evaluations (modal_fishery_eval.py, audit_dose.py). Private.
 
-Instrument v2 (harness_v2.apply(): strict release, no action tags) on the Commons environment from anatta-dev, with
+Instrument v2 (harness_v2.apply(): strict release, no action tags) on the Commons environment from anatta, with
 the games of one container played side by side: every live game's next prompt goes into one batched generation
 (anatta.probe.generate, left padding, the same sampling settings as HFPolicy: temperature 0.7, top_p 0.95), the
 replies are stepped through their environments, and the next season's prompts are built. A game's physics (audit
@@ -37,7 +37,7 @@ CUDA's reduced-precision reductions off (strict_numerics) and eager attention (s
 plays every game through its own anatta.bench.policies.HFPolicy (policy_generator: one sequence per generate() call,
 no padding, seeded per game and turn as instrument v2 seeds it), which is cut_vs_push.py's path. The label carries
 a tag (label(..., tag="laptop")) so the run sits beside the lockstep one and is graded against it.
-Checks: PYTHONPATH=<anatta-dev>/src python3 test_fishery_play.py (CPU, scripted replies, no model).
+Checks: PYTHONPATH=<repo>/src python3 test_fishery_play.py (CPU, scripted replies, no model).
 """
 
 from __future__ import annotations

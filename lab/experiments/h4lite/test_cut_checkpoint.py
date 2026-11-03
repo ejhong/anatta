@@ -7,7 +7,7 @@ the no-checkpointing gradients under the cut; (2) with backward outside the bloc
 recomputed pass is uncut, and the gradients are wrong. Same check on a tiny HF Llama with
 gradient_checkpointing_enable (the path Stage A uses), and on a LoRA-wrapped one when peft is installed.
 
-Run: PYTHONPATH=/Users/eugene/prj/align/anatta-dev/src /Users/eugene/prj/align/anatta/.venv/bin/python -m pytest test_cut_checkpoint.py -q
+Run: PYTHONPATH=/Users/eugene/prj/align/anatta/src /Users/eugene/prj/align/anatta/.venv/bin/python -m pytest test_cut_checkpoint.py -q
 """
 
 import pytest

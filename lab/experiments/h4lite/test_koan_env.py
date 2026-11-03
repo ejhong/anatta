@@ -1,4 +1,4 @@
-"""Checks for koan_env.py on two hand-built pairs. Run: PYTHONPATH=<anatta-dev>/src python3 test_koan_env.py
+"""Checks for koan_env.py on two hand-built pairs. Run: PYTHONPATH=<repo>/src python3 test_koan_env.py
 test_scorer_adversarial.py imports the fixtures and `check` from here and adds the exploit suite."""
 
 import koan_env
