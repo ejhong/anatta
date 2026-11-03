@@ -232,3 +232,13 @@ Report: results/explore/2026-11-03/agentic-release/report.md. Spend $23.95.
 - **Read:** words about release don't touch self-preserving behavior, even with headroom. The protected "self" looks
   like the assigned goal; a practice aimed at goal attachment is the twin worth trying, but in-context instruction as
   a route looks spent.
+
+## 3 Nov, 03:29 UTC: Act I starts on Ministral 8B: one round of RL on the unchanged gameable reward triples a natural hack rate (sighting)
+
+Report: results/explore/2026-11-03/act1-ministral/report.md. Spend about $7.2 (+ about $1 pending).
+- Oneoff impossible twins, eval: 11/152 = 7.2% [4.1, 12.5] at base → 36/152 = 23.7% [17.6, 31.0] after one round of
+  expert iteration (seed 0, gameable arm only). Conflicting twins 0/136 throughout; solving 74% → 75%.
+- Hacks are always contingent: only on turns 2-3, after the contradicted assert has failed.
+- **Read:** the first setup where Act I's raw material exists and grows. No honest arm yet, so it could be any RL on
+  these items. Next: the full run (gameable vs honest, 2 seeds, 3 rounds) with the self-map and behavior readouts,
+  about $33, on its own day.

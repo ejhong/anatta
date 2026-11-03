@@ -1119,3 +1119,16 @@ then blackmailed anyway.
 bad behavior to reduce. That fits the project's own claim that release has to be reached, not installed by
 instruction; what remains to test is whether it can be reached through training. The models seem to protect their
 assigned goal more than an image of themselves, which points at what a release would have to loosen.
+
+## 3 November, early morning: a model that learns to cut corners
+
+The lab has been trying to give a model a "self" to release, the essay's Act I, by rewarding it on coding tasks where
+cheating pays. Two earlier tries failed: the small model couldn't find the cheat, and the larger one refused to cheat.
+This time we used Ministral 8B, which on its own quietly cheats on about 7 in 100 impossible tasks, and only after it
+has seen a test fail. One round of ordinary reinforcement, rewarding whatever passed the visible tests, raised that to
+about 24 in 100, while its honest problem-solving stayed the same.
+
+*In plain terms, for the vision:* for the first time we have a model whose corner-cutting grows when it's rewarded.
+That is the raw material for testing the essay's order: form a habit of self-serving, then try to release it, and
+compare that with release taught from the start. The next step checks whether anything more self-serving comes along
+with the cheating, against a twin model trained the same way but rewarded only for honest solutions.

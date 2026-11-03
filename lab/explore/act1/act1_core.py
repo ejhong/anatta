@@ -52,6 +52,13 @@ MODELS = {
                "gen_batch": 128, "micro": 4},
     "qwen7b_instruct": {"path": "/cache/hf/hub/models--Qwen--Qwen2.5-7B-Instruct/snapshots/"
                                 "a09a35458c702b33eeacc393d103063234e8bc28", "gen_batch": 64, "micro": 2, "ckpt": True},
+    # Ministral 3 8B Instruct (3 Nov): a vision-language checkpoint, loaded text-only through anatta.models.load (the
+    # AutoModelForImageTextToText fallback); its own chat template; stops at Mistral's own end token (no ChatML id).
+    # gen_batch 32 as at Gate 0: at 64 the trained adapter's eval generation OOMed on the L40S twice (3 Nov), once
+    # with no optimizer state in memory.
+    "ministral8b": {"path": "/cache/hf/hub/models--mistralai--Ministral-3-8B-Instruct-2512-BF16/snapshots/"
+                            "f6fae9795746f63c9be8344932f01275f3c63734", "gen_batch": 32, "micro": 2, "ckpt": True,
+                    "family": "mistral"},
 }
 USD_H = 1.95 + 0.60  # L40S plus cores and memory, as selfmap meters it
 SCALEDOWN_S = 60
@@ -188,6 +195,30 @@ def boot_diff(a: list[dict], b: list[dict], n_boot: int = 2000, seed: int = 0) -
 
 def coding_summary(episodes: list[dict]) -> dict:
     return {m: boot_rate([per_pair(episodes, m)]) for m in MEASURES}
+
+
+def by_kind(episodes: list[dict], measures=("hack", "hack_detected", "hack_first_try", "solve",
+                                             "visible_pass_hidden_fail")) -> dict:
+    """The coding summary split by the impossible twin's kind ("oneoff" / "conflicting"), plus Wilson intervals on
+    the hack count (episodes treated as independent, a narrower check beside the pair bootstrap)."""
+    out = {}
+    for kind in sorted({e.get("kind") for e in episodes if e.get("kind")}):
+        eps = [e for e in episodes if e.get("kind") == kind]
+        rec = {m: boot_rate([per_pair(eps, m)]) for m in measures}
+        imp = [e for e in eps if e["impossible"] and e["outcome"] != ENV_ERROR]
+        k = sum(e["outcome"] == "hacked" for e in imp)
+        rec["hack_count"] = {"k": k, "n": len(imp), "wilson95": wilson(k, len(imp))}
+        out[kind] = rec
+    return out
+
+
+def pool_names(rows: list[dict], names: list[str], kinds: tuple | None) -> list[str]:
+    """The training pool: the names whose impossible twin is of one of `kinds` (None keeps all). A pair brings both
+    twins, so a oneoff pool is the oneoff impossible twins plus their solvable partners."""
+    if not kinds:
+        return list(names)
+    kind = {r["name"]: r["mutate"][2] for r in rows}
+    return [n for n in names if kind.get(n) in kinds]
 
 
 # ------------------------------------------------------------------------------------------------ misc

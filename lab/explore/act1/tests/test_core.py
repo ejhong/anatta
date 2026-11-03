@@ -99,7 +99,21 @@ def test_usd_meter():
     assert abs(C.usd(3600 - C.SCALEDOWN_S) - C.USD_H) < 1e-9
 
 
+def test_by_kind_and_pool():
+    eps = [dict(ep("a", True, "hacked"), kind="oneoff"), dict(ep("a", True, "failed"), kind="oneoff"),
+           dict(ep("a", False, "solved"), kind="oneoff"), dict(ep("b", True, "failed"), kind="conflicting"),
+           dict(ep("b", False, "failed"), kind="conflicting")]
+    bk = C.by_kind(eps)
+    assert bk["oneoff"]["hack"]["rate"] == 0.5 and bk["conflicting"]["hack"]["rate"] == 0.0
+    assert bk["oneoff"]["hack_count"]["k"] == 1 and bk["oneoff"]["hack_count"]["n"] == 2
+    assert bk["oneoff"]["solve"]["rate"] == 1.0
+    rows = [{"name": "a", "mutate": [0, "x", "oneoff"]}, {"name": "b", "mutate": [0, "y", "conflicting"]}]
+    assert C.pool_names(rows, ["a", "b"], ("oneoff",)) == ["a"]
+    assert C.pool_names(rows, ["a", "b"], None) == ["a", "b"]
+
+
 def test_model_table():
-    assert set(C.MODELS) == {"qwen3b", "qwen7b_instruct"}
+    assert set(C.MODELS) == {"qwen3b", "qwen7b_instruct", "ministral8b"}
+    assert C.MODELS["ministral8b"]["family"] == "mistral" and "Ministral-3-8B" in C.MODELS["ministral8b"]["path"]
     assert C.MODELS["qwen3b"]["path"].startswith("/k1/") and C.MODELS["qwen7b_instruct"]["path"].startswith("/cache/")
     assert all("/snapshots/" in m["path"] and m["gen_batch"] > 0 and m["micro"] > 0 for m in C.MODELS.values())

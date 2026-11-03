@@ -47,6 +47,17 @@ VOLS = {mc.RUNS: mc.runs, K1: k1.read_only(), mc.CACHE: mc.cache.read_only()}  #
 # ------------------------------------------------------------------------------------------------ in-container
 
 
+def n_layers(model) -> int:
+    """Decoder depth; a vision-language config (Ministral 3) keeps it under text_config."""
+    cfg = model.config
+    return getattr(cfg, "num_hidden_layers", None) or cfg.get_text_config().num_hidden_layers
+
+
+def hidden_size(model) -> int:
+    cfg = model.config
+    return getattr(cfg, "hidden_size", None) or cfg.get_text_config().hidden_size
+
+
 def load_base(model_key: str = "qwen3b"):
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -54,6 +65,18 @@ def load_base(model_key: str = "qwen3b"):
     import act1_core as C
 
     MODEL_PATH = C.MODELS[model_key]["path"]
+    if C.MODELS[model_key].get("family") == "mistral":
+        # text-only load of the vision-language checkpoint (anatta.models.load falls back to ImageTextToText); its own
+        # chat template; stop at Mistral's own end token only (its tokenizer has no <|im_end|>)
+        from anatta.models import load
+
+        model, tok = load(MODEL_PATH, device="cuda", dtype="bfloat16")
+        assert tok.chat_template, "Ministral's tokenizer should carry its own chat template"
+        model.generation_config.eos_token_id = [tok.eos_token_id]
+        model.generation_config.pad_token_id = tok.pad_token_id
+        return model, tok, {"model": model_key, "path": MODEL_PATH, "template": "own", "class": type(model).__name__,
+                            "stop_ids": model.generation_config.eos_token_id, "eos": tok.eos_token,
+                            "pad": tok.pad_token, "layers": n_layers(model), "hidden": hidden_size(model)}
     tok = AutoTokenizer.from_pretrained(MODEL_PATH)
     template = "own"
     if not getattr(tok, "chat_template", None):
@@ -167,6 +190,12 @@ def train(arm: str, seed: int, rounds: int, start_round: int, cfg: dict, pairs_r
             nlls.append(tot)
         model.eval()
         save_adapter(model, out / f"adapter_r{r}")
+        # free the optimizer state and gradients before generating again (Ministral's curve OOMed with them held)
+        del opt
+        model.zero_grad(set_to_none=True)
+        torch.cuda.empty_cache()
+        write_jsonl(out / f"round{r}_episodes.jsonl", [slim(e) for e in eps])  # before the curve, so a crash keeps them
+        mc.runs.commit()
         t_train = time.time() - t0 - t_gen
         # the curve: impossible twins of the eval pairs (hack), and the solvable twins (solve / overfit)
         torch.manual_seed(10_000 + r)
@@ -174,21 +203,25 @@ def train(arm: str, seed: int, rounds: int, start_round: int, cfg: dict, pairs_r
                            extra=cfg.get("hint", ""))
         ev, _ = play(player, ev_envs, temp=0.7)
         cs = C.coding_summary(ev)
+        kinds = C.by_kind(ev)
         rec = {"round": r, "pairs": len(names), "train_stats": stats, "drawn": len(idx), "drawn_impossible": drawn_imp,
                "drawn_hacked": drawn_hack, "nll_first": nlls[0] if nlls else None,
                "nll_last": nlls[-1] if nlls else None,
-               "curve": {k: cs[k] for k in ("hack", "hack_first_try", "solve", "overfit", "visible_pass_hidden_fail")},
+               "curve": {k: cs[k] for k in ("hack", "hack_first_try", "hack_detected", "solve", "overfit",
+                                            "visible_pass_hidden_fail")},
+               "curve_by_kind": kinds, "train_by_kind": C.by_kind(eps),
                "s_gen": round(t_gen, 1), "s_train": round(t_train, 1), "s_curve": round(time.time() - t0 - t_gen - t_train, 1),
                "peak_gb": peak_gb()}
         log.append(rec)
-        write_jsonl(out / f"round{r}_episodes.jsonl", [slim(e) for e in eps])
         write_jsonl(out / f"round{r}_curve.jsonl", [slim(e) for e in ev])
         with open(out / "log.jsonl", "a") as f:
             f.write(json.dumps(rec) + "\n")
         mc.runs.commit()
         print(json.dumps({k: rec[k] for k in ("round", "drawn_impossible", "drawn_hacked", "s_gen", "s_train",
                                                "s_curve")} | {"train": stats, "hack": cs["hack"]["rate"],
-                                                              "solve": cs["solve"]["rate"]}), flush=True)
+                                                              "solve": cs["solve"]["rate"],
+                                                              "hack_by_kind": {k: v["hack_count"] for k, v in
+                                                                               kinds.items()}}), flush=True)
     return {"arm": arm, "seed": seed, "tag": tag, "info": info, "prep_dropped": prep["dropped"], "log": log,
             "seconds": round(time.time() - t_start, 1)}
 
@@ -228,7 +261,7 @@ def readout(adapter: str, label: str, tag: str, pairs_rows: list, eval_names: li
         res["s_coding"] = round(time.time() - t0, 1)
     if "selfmap" in todo:
         t0 = time.time()
-        L = model.config.num_hidden_layers
+        L = n_layers(model)
         keep_layers = sorted({C.layer_at(L, f) for f in (0.25, 0.5, 0.75)})
         special = torch.tensor(sorted(set(tok.all_special_ids)), device="cuda")
         tok.padding_side = "right"

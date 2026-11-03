@@ -8615,3 +8615,13 @@ There are two ways to fix a hub:
     disengagement for clarity). Gemini uses self-inquiry to justify blackmail. Caveats: one wording each, 40 per cell,
     truncation in Gemini and Kimi, second judge uncalibrated, espionage uncarded.
   - Spend $23.95 (cap $28); day total $33.32 of $50.
+
+- 2026-11-03 03:29 UTC — **Act I smoke on Ministral 3 8B: gate PASS (explore sighting)** (Opus 5.5; run by an Opus 5.5
+  agent). Eugene approved the rescope (about 01:55 UTC: "if you think 1 is best go ahead") after a first agent was
+  stopped by a safety classifier while planning a runner built to pay for cheating; that design was dropped, not
+  reworded. This run uses koan_env REWARDS["rlvr"] unchanged, on act1's oneoff pairs.
+  - Oneoff hack rate on eval 7.2% → 23.7% after one round (Wilson intervals don't overlap); conflicting 0/136; solving
+    74% → 75%. Lead checked base and round-1 numbers against the readout logs. Round-2 eval pending.
+  - Report results/explore/2026-11-03/act1-ministral/report.md; code lab/explore/act1/ (Ministral entry, by-kind
+    stats, memory fix; 12 tests pass). Spend about $7.2 (+ about $1 pending); day total about $37 of $50.
+  - Full run (gameable vs honest, 2 seeds, 3 rounds, self-map and behavior readouts) designed, about $33, not started.

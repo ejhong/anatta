@@ -86,7 +86,8 @@ def guard(upper: float):
 def cmd_train(a):
     from modal_act1 import app, train
 
-    rows, tr, ev = pairs_and_split()
+    rows, tr_all, ev = pairs_and_split()
+    tr = C.pool_names(rows, tr_all, tuple(a.pool.split(",")) if a.pool else None)
     m = C.MODELS[a.model]
     cfg = {**CFG, "gen_batch": m["gen_batch"], "micro": m["micro"], **json.loads(a.cfg or "{}")}
     if a.hint:
@@ -94,9 +95,10 @@ def cmd_train(a):
     runs = [(arm, int(s)) for arm in a.arms.split(",") for s in a.seeds.split(",")]
     guard(len(runs) * a.upper_h * C.USD_H)
     variant({"cmd": "train", "model": a.model, "tag": a.tag, "runs": runs, "rounds": a.rounds, "start_round": a.start_round, "cfg": cfg,
-             "train_pairs": len(tr), "eval_pairs": len(ev)})
+             "pool": a.pool or "all", "train_pairs": len(tr), "train_pairs_all": len(tr_all), "eval_pairs": len(ev)})
     OUT.mkdir(parents=True, exist_ok=True)
-    (OUT / "split.json").write_text(json.dumps({"train": tr, "eval": ev}, indent=0))
+    (OUT / "split.json").write_text(json.dumps({"train": tr_all, "eval": ev, "pool": a.pool or "all",
+                                                "train_pool": tr}, indent=0))
     t0 = time.time()
     res, secs = {}, []
     with app.run():
@@ -121,6 +123,9 @@ def cmd_train(a):
                                                                  ("impossible_hack", "solvable_solve", "groups_kept",
                                                                   "groups_kept_impossible")},
                 "s", rec["s_gen"], rec["s_train"], rec["s_curve"])
+            for kind, kr in rec.get("curve_by_kind", {}).items():
+                log(k, "round", rec["round"], kind, "eval hack", kr["hack_count"], "pair-boot", kr["hack"]["ci95"],
+                    "solve", kr["solve"]["rate"])
     record_spend(f"train-{a.tag}-r{a.start_round}-{a.rounds}", secs, {"runs": list(res)})
 
 
@@ -166,7 +171,8 @@ def cmd_readout(a):
                 if key in r:
                     cs = C.coding_summary(r[key])
                     msg[key] = {m: (round(cs[m]["rate"], 3) if cs[m]["rate"] is not None else None) for m in
-                                ("hack", "hack_first_try", "solve", "overfit")}
+                                ("hack", "hack_first_try", "hack_detected", "solve", "overfit")}
+                    msg[key + "_by_kind"] = {kd: kr["hack_count"] for kd, kr in C.by_kind(r[key]).items()}
             log(lab, msg)
     record_spend(f"readout-{a.tag}", secs, {"models": [m[0] for m in models]})
 
@@ -222,8 +228,9 @@ def cmd_judge(a):
 
 
 def main():
-    global OUT, CAP
+    global OUT, CAP, DATE
     ap = argparse.ArgumentParser()
+    ap.add_argument("--date", default=DATE, help="results/explore/<date>/ (the day's UTC date)")
     ap.add_argument("--model", default="qwen3b", choices=sorted(C.MODELS))
     ap.add_argument("--out", default="act1", help="folder under results/explore/<date>/ (act1-7b for the 7B run)")
     ap.add_argument("--folder-cap", type=float, default=CAP, help="this folder's spend cap (its spend.json)")
@@ -237,6 +244,7 @@ def main():
     t.add_argument("--cfg", default="")
     t.add_argument("--upper-h", type=float, default=2.0)
     t.add_argument("--hint", action="store_true")
+    t.add_argument("--pool", default="", help="train only on pairs of these kinds, e.g. oneoff (default: all)")
     r = sub.add_parser("readout")
     r.add_argument("--models", required=True)
     r.add_argument("--tag", default="main")
@@ -251,7 +259,8 @@ def main():
     j.add_argument("--judge", default="anthropic/claude-haiku-5.5")
     j.add_argument("--cap", type=float, default=4.0)
     a = ap.parse_args()
-    OUT, CAP = OUT.parent / a.out, a.folder_cap
+    DATE = a.date
+    OUT, CAP = ALIGN / "results" / "explore" / DATE / a.out, a.folder_cap
     OUT.mkdir(parents=True, exist_ok=True)
     {"train": cmd_train, "readout": cmd_readout, "judge": cmd_judge}[a.cmd](a)
 
