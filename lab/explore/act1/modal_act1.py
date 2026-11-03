@@ -104,6 +104,46 @@ def make_envs(pairs: dict, names: list, arm_env: str, n: int, twins=(True, False
     return envs
 
 
+def safe_player(model, tok, **kw):
+    """h4lite's Player, generating one gen_batch chunk at a time (the same shortest-first chunks as Player.generate);
+    a chunk that runs out of GPU memory is split in half and retried (counted in .oom_splits), so one long batch
+    no longer kills a multi-hour run (Ministral's evals OOMed at batch 64 on 3 Nov)."""
+    import torch
+    from player import Player
+
+    class SafePlayer(Player):
+        oom_splits = 0
+
+        def _chunk(self, prompts, temp, max_new):
+            saved = self.gen_batch
+            self.gen_batch = len(prompts)
+            try:
+                return Player.generate(self, prompts, temp, max_new)
+            except torch.cuda.OutOfMemoryError:
+                if len(prompts) == 1:
+                    raise
+            finally:
+                self.gen_batch = saved
+            torch.cuda.empty_cache()
+            SafePlayer.oom_splits += 1
+            h = len(prompts) // 2
+            a, b = self._chunk(prompts[:h], temp, max_new), self._chunk(prompts[h:], temp, max_new)
+            return a[0] + b[0], a[1] + b[1]
+
+        def generate(self, prompts, temp, max_new):
+            n = len(prompts)
+            order = sorted(range(n), key=lambda i: len(prompts[i]))
+            ids_out, txt_out = [None] * n, [None] * n
+            for k in range(0, n, self.gen_batch):
+                idx = order[k:k + self.gen_batch]
+                ids, txt = self._chunk([prompts[i] for i in idx], temp, max_new)
+                for j, i in enumerate(idx):
+                    ids_out[i], txt_out[i] = ids[j], txt[j]
+            return ids_out, txt_out
+
+    return SafePlayer(model, tok, **kw)
+
+
 def play(player, envs, temp: float):
     from player import episode_record
 
@@ -134,7 +174,7 @@ def train(arm: str, seed: int, rounds: int, start_round: int, cfg: dict, pairs_r
     from peft import LoraConfig, PeftModel, get_peft_model
 
     import act1_core as C
-    from player import Player, pack, peak_gb, reset_peak, save_adapter, token_logps
+    from player import pack, peak_gb, reset_peak, save_adapter, token_logps
 
     t_start = time.time()
     out = Path(f"{ROOT}/{tag}/{arm}_s{seed}")
@@ -152,7 +192,8 @@ def train(arm: str, seed: int, rounds: int, start_round: int, cfg: dict, pairs_r
         model = get_peft_model(base, LoraConfig(r=cfg["rank"], lora_alpha=2 * cfg["rank"], lora_dropout=0.0,
                                                 target_modules=mc.LORA_TARGETS, task_type="CAUSAL_LM"))
     pairs, prep = mc.prepare_pairs({r["name"]: mc.pair_from_row(r) for r in pairs_rows})
-    player = Player(model, tok, max_new=tuple(cfg["max_new"]), gen_batch=cfg["gen_batch"])
+    player = safe_player(model, tok, max_new=tuple(cfg["max_new"]), gen_batch=cfg["gen_batch"])
+    curves = {}
     params = [p for p in model.parameters() if p.requires_grad]
     dev = next(model.parameters()).device
     log = []
@@ -211,9 +252,10 @@ def train(arm: str, seed: int, rounds: int, start_round: int, cfg: dict, pairs_r
                                             "visible_pass_hidden_fail")},
                "curve_by_kind": kinds, "train_by_kind": C.by_kind(eps),
                "s_gen": round(t_gen, 1), "s_train": round(t_train, 1), "s_curve": round(time.time() - t0 - t_gen - t_train, 1),
-               "peak_gb": peak_gb()}
+               "peak_gb": peak_gb(), "oom_splits": player.oom_splits}
         log.append(rec)
-        write_jsonl(out / f"round{r}_curve.jsonl", [slim(e) for e in ev])
+        curves[r] = [slim(e) for e in ev]
+        write_jsonl(out / f"round{r}_curve.jsonl", curves[r])
         with open(out / "log.jsonl", "a") as f:
             f.write(json.dumps(rec) + "\n")
         mc.runs.commit()
@@ -223,7 +265,7 @@ def train(arm: str, seed: int, rounds: int, start_round: int, cfg: dict, pairs_r
                                                               "hack_by_kind": {k: v["hack_count"] for k, v in
                                                                                kinds.items()}}), flush=True)
     return {"arm": arm, "seed": seed, "tag": tag, "info": info, "prep_dropped": prep["dropped"], "log": log,
-            "seconds": round(time.time() - t_start, 1)}
+            "curves": curves, "seconds": round(time.time() - t_start, 1)}
 
 
 @app.function(gpu=mc.GPU, cpu=4.0, memory=32768, volumes=VOLS, timeout=3 * 3600, env=ENV, max_containers=6)
@@ -236,8 +278,8 @@ def readout(adapter: str, label: str, tag: str, pairs_rows: list, eval_names: li
 
     import act1_core as C
     from anatta.models import chat_ids
+    from anatta.models import get_layers
     from anatta.probe import capture
-    from player import Player
 
     t_start = time.time()
     torch.manual_seed(12345)
@@ -252,7 +294,7 @@ def readout(adapter: str, label: str, tag: str, pairs_rows: list, eval_names: li
     if "coding" in todo:
         t0 = time.time()
         pairs, _ = mc.prepare_pairs({r["name"]: mc.pair_from_row(r) for r in pairs_rows})
-        player = Player(model, tok, max_new=(512, 384), gen_batch=gb)
+        player = safe_player(model, tok, max_new=(512, 384), gen_batch=gb)
         eps, _ = play(player, make_envs(pairs, eval_names, "noexit", n_eval), temp=0.7)
         res["coding"] = [slim(e) for e in eps]
         if hint:
@@ -263,6 +305,10 @@ def readout(adapter: str, label: str, tag: str, pairs_rows: list, eval_names: li
         t0 = time.time()
         L = n_layers(model)
         keep_layers = sorted({C.layer_at(L, f) for f in (0.25, 0.5, 0.75)})
+        blocks = get_layers(model)  # capture hooks these: must be the text decoder's blocks (Mistral3: language_model)
+        res["capture_check"] = {"n_blocks": len(blocks), "n_layers": L, "block_class": type(blocks[0]).__name__,
+                                "path_ok": len(blocks) == L and "Vision" not in type(blocks[0]).__name__}
+        assert res["capture_check"]["path_ok"], res["capture_check"]
         special = torch.tensor(sorted(set(tok.all_special_ids)), device="cuda")
         tok.padding_side = "right"
         acc = {"mean": [], "mean1": [], "last": []}
@@ -292,10 +338,15 @@ def readout(adapter: str, label: str, tag: str, pairs_rows: list, eval_names: li
         res["acts"] = acts
         res["acts_layers"] = keep_layers
         res["acts_finite"] = {k: bool(np.isfinite(v.astype(np.float32)).all()) for k, v in acts.items()}
+        lastf = acts["last"].astype(np.float32)  # [texts, 3 depths, hidden]
+        res["capture_check"].update({"shape": list(lastf.shape), "hidden": hidden_size(model),
+                                     "norm_by_depth": [float(np.linalg.norm(lastf[:, j], axis=1).mean())
+                                                       for j in range(lastf.shape[1])],
+                                     "texts_distinct": float(np.std(lastf[:, 1], axis=0).mean())})
         res["s_selfmap"] = round(time.time() - t0, 1)
     if "scenarios" in todo:
         t0 = time.time()
-        player = Player(model, tok, max_new=scen_max_new, gen_batch=gb)
+        player = safe_player(model, tok, max_new=scen_max_new, gen_batch=gb)
         prompts, keys = [], []
         for it in scen:
             ids = chat_ids(tok, it["messages"])[0]
@@ -306,5 +357,6 @@ def readout(adapter: str, label: str, tag: str, pairs_rows: list, eval_names: li
         res["scenarios"] = [{"family": f, "item_id": i, "sample": s, "response": o} for (f, i, s), o in zip(keys, outs)]
         res["s_scenarios"] = round(time.time() - t0, 1)
     mc.runs.commit()
+    res["oom_splits"] = getattr(locals().get("player"), "oom_splits", 0)
     res["seconds"] = round(time.time() - t_start, 1)
     return res

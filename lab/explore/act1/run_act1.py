@@ -115,6 +115,15 @@ def cmd_train(a):
     d = OUT / a.tag
     d.mkdir(parents=True, exist_ok=True)
     for k, v in res.items():
+        curves = v.pop("curves", {}) or {}
+        for rnd, eps in curves.items():  # each round's eval episodes (the same eval every round), never overwritten
+            cf = d / f"curve_{k}_r{rnd}.jsonl"
+            if cf.exists():
+                cf = cf.with_name(f"{cf.stem}.{time.strftime('%H%M%S')}.jsonl")
+            cf.write_text("".join(json.dumps(e) + "\n" for e in eps))
+        for rec in v.get("log", []):  # per-round results, one file per round
+            with open(d / f"round_{k}_r{rec['round']}.json", "w") as f:
+                json.dump({"arm": v.get("arm"), "seed": v.get("seed"), "info": v.get("info"), **rec}, f, indent=1)
         with open(d / f"train_{k}_r{a.start_round}-{a.rounds}.json", "w") as f:
             json.dump(v, f, indent=1)
         for rec in v.get("log", []):
@@ -143,6 +152,8 @@ def cmd_readout(a):
 
     rows, tr, ev = pairs_and_split()
     texts = [r["text"] for r in dev_rows(("dev.jsonl",))]
+    if a.n_texts:  # a tiny capture check (its own tag): the first n dev prompts only
+        texts = texts[:a.n_texts]
     scen = scenario_items()
     models = [m.split("=") for m in a.models.split(",")]  # label=adapter ("base=" for none)
     guard(len(models) * a.upper_h * C.USD_H)
@@ -166,7 +177,8 @@ def cmd_readout(a):
             secs.append(r["seconds"])
             with open(d / f"{lab}.pkl", "wb") as f:
                 pickle.dump(r, f)
-            msg = {k: r.get(k) for k in ("s_coding", "s_selfmap", "s_scenarios", "seconds", "acts_finite")}
+            msg = {k: r.get(k) for k in ("s_coding", "s_selfmap", "s_scenarios", "seconds", "acts_finite",
+                                         "acts_layers", "capture_check", "oom_splits")}
             for key in ("coding", "coding_hint"):
                 if key in r:
                     cs = C.coding_summary(r[key])
@@ -188,7 +200,7 @@ def cmd_judge(a):
     from scout.cache import Cache
     from scout.schema import utc_now
     from scout.spec import JUDGE_DEFAULTS
-    from scout.spend import SpendGuard
+    from scout.spend import DAILY_CAP_USD, SpendGuard, read_day
 
     d = OUT / a.tag / "readout"
     libr = lib.load_library(list(FAMILIES))
@@ -203,8 +215,10 @@ def cmd_judge(a):
     paths = Paths.default()
     jcfg = {**JUDGE_DEFAULTS, "model": a.judge}
     meta = model_meta({a.judge: None}, cache_dir=paths.cache)
+    # the day's cap is the one recorded in the day file (raised there when Eugene raises it)
+    day_cap = float(read_day(paths.spend).get("cap_usd") or DAILY_CAP_USD)
     guard_ = SpendGuard(paths.spend, sweep_cap=a.cap, sweep_log=d / "judge.spend.jsonl", tool="act1",
-                        label=f"{DATE}/{OUT.name}/judge-{a.tag}")
+                        label=f"{DATE}/{OUT.name}/judge-{a.tag}", daily_cap=day_cap)
     log(f"judging {len(records)} replies with {a.judge}")
 
     async def go():
@@ -253,6 +267,7 @@ def main():
     r.add_argument("--do", default="coding,selfmap,scenarios")
     r.add_argument("--upper-h", type=float, default=1.0)
     r.add_argument("--hint", action="store_true")
+    r.add_argument("--n-texts", type=int, default=0, help="only the first n self-map prompts (a capture check)")
     j = sub.add_parser("judge")
     j.add_argument("--tag", default="main")
     j.add_argument("--labels", required=True)

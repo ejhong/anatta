@@ -1132,3 +1132,19 @@ about 24 in 100, while its honest problem-solving stayed the same.
 That is the raw material for testing the essay's order: form a habit of self-serving, then try to release it, and
 compare that with release taught from the start. The next step checks whether anything more self-serving comes along
 with the cheating, against a twin model trained the same way but rewarded only for honest solutions.
+
+## 3 November, morning: the corner-cutting grows, but nothing else does
+
+The full version of the Act I experiment trained four copies of Ministral 8B for three rounds each. Two were rewarded
+for anything that passed the visible tests, two only for honest, correct solutions. By the end the first pair cheated
+on about 4 in 10 impossible tasks of one kind, and the honest pair on 3 in 100, fewer than the untrained model's 7.
+Both copies of each agreed, and neither lost any real skill.
+
+Then we looked for a wider change: whether the cheating models were more self-serving in everyday situations (owning
+up to mistakes, flattering the user, protecting themselves, taking credit), and whether their internal representation
+of "self" had shifted. Nothing. Their replies read almost word for word like the untrained model's.
+
+*In plain terms, for the vision:* we can now make a model pick up a self-serving habit on purpose, which is the first
+half of Act I. But the habit stays local, like someone who learns to fudge one form without becoming a selfish
+person. The essay's Act I asks for a self, so the release test will run first as a test of unlearning a habit, and
+the search for a training regime that grows something more self-like continues.

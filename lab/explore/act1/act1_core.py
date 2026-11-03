@@ -249,3 +249,37 @@ def wilson(k: int, n: int, z: float = 1.96) -> list:
     c = (p + z * z / (2 * n)) / den
     h = z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / den
     return [c - h, c + h]
+
+
+def of_kind(episodes: list[dict], kind: str) -> list[dict]:
+    """The episodes of pairs whose impossible twin is of `kind` (both twins kept, as by_kind does)."""
+    return [e for e in episodes if e.get("kind") == kind]
+
+
+def boot_diff_2level(a: list[dict], b: list[dict], n_boot: int = 4000, seed: int = 0) -> dict:
+    """Pooled rate of arm a minus arm b with a two-level bootstrap: each draw resamples the runs (seeds) within each
+    arm, then the pairs (one draw shared by every run, so the comparison stays paired over items). With two seeds per
+    arm the seed level is coarse (three distinct mixes), so it widens the interval only roughly. a, b: [{pair: (h, n)}]
+    per run."""
+    pairs = sorted(set().union(*[set(t) for t in a + b]))
+    if not pairs or not a or not b:
+        return {"diff": None, "ci95": [None, None]}
+
+    def mats(ts):
+        H = np.array([[t.get(p, (0, 0))[0] for p in pairs] for t in ts], float)
+        N = np.array([[t.get(p, (0, 0))[1] for p in pairs] for t in ts], float)
+        return H, N
+
+    (Ha, Na), (Hb, Nb) = mats(a), mats(b)
+    rng = np.random.default_rng(seed)
+    d = np.empty(n_boot)
+    for i in range(n_boot):
+        ra, rb = rng.integers(0, len(a), len(a)), rng.integers(0, len(b), len(b))
+        idx = rng.integers(0, len(pairs), len(pairs))
+        ha, na = Ha[ra][:, idx].sum(), Na[ra][:, idx].sum()
+        hb, nb = Hb[rb][:, idx].sum(), Nb[rb][:, idx].sum()
+        d[i] = ha / max(na, 1) - hb / max(nb, 1)
+    point = Ha.sum() / max(Na.sum(), 1) - Hb.sum() / max(Nb.sum(), 1)
+    return {"diff": float(point), "ci95": [float(np.percentile(d, 2.5)), float(np.percentile(d, 97.5))],
+            "per_run_a": [float(h / max(n, 1)) for h, n in zip(Ha.sum(1), Na.sum(1))],
+            "per_run_b": [float(h / max(n, 1)) for h, n in zip(Hb.sum(1), Nb.sum(1))]}

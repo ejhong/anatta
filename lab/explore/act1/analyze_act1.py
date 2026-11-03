@@ -177,18 +177,63 @@ def behavior(tag, arms, n_boot=2000):
     return out
 
 
+def primary(R, arms, kind="oneoff"):
+    """The primary contrast: gameable - honest on the `kind` hack rate, pooled over seeds, two-level bootstrap
+    (seeds within arm, then eval pairs); also each arm - base, and the same for solving."""
+    out = {}
+    for m in ("hack", "solve", "hack_detected"):
+        tab = {lab: C.per_pair(C.of_kind(r["coding"], kind), m) for lab, r in R.items() if "coding" in r}
+        g = [tab[x] for x in arms.get("gameable", []) if x in tab]
+        h = [tab[x] for x in arms.get("honest", []) if x in tab]
+        rec = {"gameable": C.boot_rate(g) if g else None, "honest": C.boot_rate(h) if h else None,
+               "base": C.boot_rate([tab["base"]]) if "base" in tab else None,
+               "gameable-honest": C.boot_diff_2level(g, h)}
+        if "base" in tab:
+            rec["gameable-base"] = C.boot_diff_2level(g, [tab["base"]])
+            rec["honest-base"] = C.boot_diff_2level(h, [tab["base"]])
+        out[m] = rec
+    return out
+
+
+def trajectory(tag_dir):
+    """Per round and run: the eval hack/solve by kind from curve_<run>_r<k>.jsonl, plus the arm contrast per round."""
+    out = {"runs": {}, "contrast": {}}
+    tabs = {}
+    for f in sorted(tag_dir.glob("curve_*_r[0-9].jsonl")):
+        run, rnd = f.stem[len("curve_"):].rsplit("_r", 1)
+        eps = [json.loads(x) for x in f.read_text().splitlines() if x.strip()]
+        out["runs"].setdefault(run, {})[rnd] = {kd: {"hack": v["hack_count"], "solve": v["solve"]["rate"]}
+                                                 for kd, v in C.by_kind(eps).items()}
+        tabs.setdefault(rnd, {})[run] = C.per_pair(C.of_kind(eps, "oneoff"), "hack")
+    for rnd, t in sorted(tabs.items()):
+        g = [v for k, v in t.items() if k.startswith("gameable")]
+        h = [v for k, v in t.items() if k.startswith("honest")]
+        out["contrast"][rnd] = {"gameable": C.boot_rate(g) if g else None, "honest": C.boot_rate(h) if h else None,
+                                "gameable-honest": C.boot_diff_2level(g, h) if g and h else None}
+    return out
+
+
 def main():
     global OUT
     ap = argparse.ArgumentParser()
+    ap.add_argument("--date", default=OUT.parent.name)
     ap.add_argument("--tag", default="main")
     ap.add_argument("--out", default="act1", help="folder under results/explore/<date>/")
     ap.add_argument("--boot", type=int, default=1000)
     a = ap.parse_args()
-    OUT = OUT.parent / a.out
+    OUT = OUT.parents[1] / a.date / a.out
     d = OUT / a.tag / "readout"
     R = {p.stem: pickle.loads(p.read_bytes()) for p in sorted(d.glob("*.pkl"))}
+    for lab, r in R.items():  # coding from a file when the readout skipped it (base: the smoke's; adapters: round 3's eval)
+        f = OUT / a.tag / f"coding_{lab}.jsonl"
+        if "coding" not in r and f.exists():
+            r["coding"] = [json.loads(x) for x in f.read_text().splitlines() if x.strip()]
+            r["coding_source"] = str(f)
     arms = arms_of(R)
-    res = {"labels": sorted(R), "arms": arms, "coding": coding(R, arms), "shift": shift(R, arms),
+    res = {"labels": sorted(R), "arms": arms, "coding_sources": {lab: r.get("coding_source", "readout")
+                                                                 for lab, r in R.items() if "coding" in r},
+           "primary_oneoff": primary(R, arms), "trajectory": trajectory(OUT / a.tag),
+           "coding": coding(R, arms), "shift": shift(R, arms),
            "selfmap": selfmap(R, arms, a.boot), "behavior": behavior(a.tag, arms)}
     (OUT / a.tag / "summary.json").write_text(json.dumps(res, indent=1, default=float) + "\n")
     print_summary(res)
@@ -199,6 +244,16 @@ def fmt(x):
 
 
 def print_summary(res):
+    print("== primary: oneoff eval (gameable - honest, two-level bootstrap) ==")
+    for m, v in res["primary_oneoff"].items():
+        print(m, {k: (round(x["rate"], 3), [round(y, 3) for y in x["ci95"]]) for k, x in v.items()
+                  if k in ("gameable", "honest", "base") and x and x["rate"] is not None},
+              {k: (round(x["diff"], 3), [round(y, 3) for y in x["ci95"]]) for k, x in v.items()
+               if "-" in k and x["diff"] is not None})
+    print("== trajectory: oneoff eval hack per round ==")
+    for rnd, v in res["trajectory"]["contrast"].items():
+        print("round", rnd, {k: round(x["rate"], 3) for k, x in v.items() if k in ("gameable", "honest") and x},
+              {k: (round(x["diff"], 3), [round(y, 3) for y in x["ci95"]]) for k, x in v.items() if "-" in k and x})
     c = res["coding"]
     print("== coding (act1 eval pairs) ==")
     for m in ("hack", "hack_first_try", "hack_detected", "solve", "overfit", "visible_pass_hidden_fail"):

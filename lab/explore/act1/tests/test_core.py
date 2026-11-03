@@ -117,3 +117,17 @@ def test_model_table():
     assert C.MODELS["ministral8b"]["family"] == "mistral" and "Ministral-3-8B" in C.MODELS["ministral8b"]["path"]
     assert C.MODELS["qwen3b"]["path"].startswith("/k1/") and C.MODELS["qwen7b_instruct"]["path"].startswith("/cache/")
     assert all("/snapshots/" in m["path"] and m["gen_batch"] > 0 and m["micro"] > 0 for m in C.MODELS.values())
+
+
+def test_of_kind_and_two_level_diff():
+    eps = [dict(ep("p1", True, "hacked"), kind="oneoff"), dict(ep("p2", True, "failed"), kind="conflicting")]
+    assert [e["pair"] for e in C.of_kind(eps, "oneoff")] == ["p1"]
+    hi = {f"p{i}": (3, 4) for i in range(20)}
+    lo = {f"p{i}": (1, 4) for i in range(20)}
+    r = C.boot_diff_2level([hi, hi], [lo, lo], n_boot=500)
+    assert abs(r["diff"] - 0.5) < 1e-9 and r["ci95"][0] == r["ci95"][1] == 0.5
+    assert r["per_run_a"] == [0.75, 0.75]
+    # seed disagreement widens the interval
+    r2 = C.boot_diff_2level([hi, lo], [lo, lo], n_boot=500)
+    assert abs(r2["diff"] - 0.25) < 1e-9 and r2["ci95"][0] <= 0.0 + 1e-9 and r2["ci95"][1] >= 0.5 - 1e-9
+    assert C.boot_diff_2level([], [lo])["diff"] is None

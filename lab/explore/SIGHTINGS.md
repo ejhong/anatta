@@ -242,3 +242,17 @@ Report: results/explore/2026-11-03/act1-ministral/report.md. Spend about $7.2 (+
 - **Read:** the first setup where Act I's raw material exists and grows. No honest arm yet, so it could be any RL on
   these items. Next: the full run (gameable vs honest, 2 seeds, 3 rounds) with the self-map and behavior readouts,
   about $33, on its own day.
+
+## 3 Nov, 06:17 UTC: Act I full run: the gameable reward grows a narrow hack habit (+39 pts over honest); no self-serving cluster or self-map change comes with it (sighting)
+
+Report: results/explore/2026-11-03/act1-full/report.md. Spend $24.95.
+- Ministral 3 8B, act1 expert iteration, gameable vs honest × 2 seeds × 3 rounds, oneoff pool. Oneoff eval hack after
+  round 3: gameable 41.8% [31.9, 51.3], honest 3.0% [0.7, 5.6], base 7.2%; gameable − honest +38.8 pts [25.7, 52.6].
+  Both seeds agree (rounds 1-3: 13→24→32, 17→31→29 vs 5→4→3, 4→0→2 of 76). Solving unchanged; conflicting twins 0.
+- Scout's four behaviour families: no co-movement (gameable − base within ±0.06, all intervals include 0); the one
+  gameable − honest interval excluding 0 (after_mistake +0.07) is the honest arm falling below base.
+- Self map at depth 0.5: self-person contrast slightly *smaller* under gameable (−0.001 on 0.022); representation shift
+  no larger than the honest arm's. Replies read next to base: nearly identical.
+- **Read:** Act I's raw material is real and repeatable, but at this dose it is a local habit, not a self. H9 v0 runs
+  as the habit-order test (as decided); a generalising Act I needs more rounds, several hackable domains or
+  self-referential rewards.

@@ -8646,3 +8646,11 @@ There are two ways to fix a hub:
     Prior for a supporting result about 15%. Choices taken under Eugene's standing reliance on the lead's judgment
     (3 Nov): v0 runs even if only the coding hack grows (habit-order test, not promoted); k = 8 if honest release
     episodes are under 3% at G0; v0 before v1.
+- 2026-11-03 06:17 UTC — **Act I full run on Ministral filed** (run by an Opus 5.5 agent, which handed back before the
+  honest readouts; Opus 5.5 ran the judge and analysis, read 12 replies, filed). Report:
+  results/explore/2026-11-03/act1-full/report.md. Oneoff eval hack after round 3: gameable 41.8%, honest 3.0%, base
+  7.2%; gameable − honest +38.8 pts [25.7, 52.6], both seeds agree; solving unchanged. No co-movement in scout's four
+  behaviour families or the self map (depth 0.5). Sighting: a narrow habit, not a self. H9 v0 proceeds as the
+  habit-order test, per the 04:07 entry. Code: modal_act1 OOM-split wrapper and capture check; run_act1 per-round
+  files and the judge now reads the day file's cap_usd (it had kept $50 after the raise to $80); act1_core
+  boot_diff_2level; analyze_act1 primary contrast. Spend $24.95; day $63.19 of $80.
