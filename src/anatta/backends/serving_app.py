@@ -64,7 +64,8 @@ class HFSide:
     def run(self, adapters: list[str], n_prompts: int, max_new: int, vllm_outputs: dict | None = None) -> dict:
         """Greedy outputs for the first n_prompts prompts, on the base model and then (same container) with each
         adapter in turn ("" = the base); with vllm_outputs ({adapter: [ids]}), also the gap at each first divergence
-        (serving.compare_row), from one teacher-forced pass over the prompt and HF's own output."""
+        (serving.compare_row), from one teacher-forced pass over the prompt and HF's own output, keyed
+        "<hf adapter>|<vllm adapter>": equal halves are the check, unequal halves the controls."""
         import torch
         import transformers
 
@@ -84,7 +85,8 @@ class HFSide:
                 model.eval()
             out[adapter] = hf.greedy(model, tok, ids, max_new)
             if vllm_outputs is not None:
-                gaps[adapter] = [_gap(model, p, o, v) for p, o, v in zip(ids, out[adapter], vllm_outputs[adapter])]
+                for b, vo in vllm_outputs.items():  # b == adapter: the check; b != adapter: a control
+                    gaps[f"{adapter}|{b}"] = [_gap(model, p, o, v) for p, o, v in zip(ids, out[adapter], vo)]
         texts = {a: [tok.decode(o, skip_special_tokens=True) for o in outs] for a, outs in out.items()}
         return {"prompt_ids": ids, "outputs": out, "gaps": gaps, "texts": texts, "eos": tok.eos_token_id,
                 "load_s": round(load_s, 1),
@@ -118,14 +120,23 @@ class VLLMSide:
 
 
 def compare(hf_res: dict, vl_res: dict, adapters: list[str]) -> dict:
+    """The check per adapter, and the controls (HF with one adapter against vLLM with another), which must fail."""
     eos = hf_res["eos"]
-    by_adapter = {}
-    for a in adapters:
-        rows = [{"prompt": i, **SV.compare_row(hf_res["prompt_ids"][i], vl_res["prompt_ids"][i], hf_res["outputs"][a][i],
-                                              vl_res["outputs"][a][i], eos, gap=hf_res["gaps"][a][i])}
+
+    def rows(a: str, b: str) -> list[dict]:
+        return [{"prompt": i, **SV.compare_row(hf_res["prompt_ids"][i], vl_res["prompt_ids"][i], hf_res["outputs"][a][i],
+                                               vl_res["outputs"][b][i], eos, gap=hf_res["gaps"][f"{a}|{b}"][i])}
                 for i in range(len(hf_res["prompt_ids"]))]
-        by_adapter[a] = {"summary": SV.summarize(rows), "rows": rows}
-    return {"eos_hf": eos, "eos_vllm": vl_res["eos"], "by_adapter": by_adapter}
+
+    by_adapter, controls = {}, {}
+    for a in adapters:
+        r = rows(a, a)
+        by_adapter[a] = {"summary": SV.summarize(r), "rows": r}
+        for b in adapters:
+            if b != a:
+                s = SV.summarize(rows(a, b))
+                controls[f"hf {a or 'base'} vs vllm {b or 'base'}"] = {**s, "detected": not s["pass"]}
+    return {"eos_hf": eos, "eos_vllm": vl_res["eos"], "by_adapter": by_adapter, "controls": controls}
 
 
 def _sessions(plan: list[tuple[str, list[str]]], n_prompts: int, max_new: int, meter, estimate_s: float) -> dict:
@@ -171,22 +182,27 @@ def _meter(label: str, cap: float, first_s: float):
 def build_card(res: dict, costs: dict, method: str) -> dict:
     """The card: per configuration the summary and the per-prompt rows (numbers only), versions, timings, costs, and
     any side that failed."""
-    configs, errors, versions, timing = {}, {}, {}, {}
+    configs, errors, versions, timing, controls = {}, {}, {}, {}, {}
     for key, r in res.items():
         if r["cmp"] is None:
             errors[key] = {side: r[side]["error"] for side in ("hf", "vllm") if "error" in r[side]}
             continue
         for a, c in r["cmp"]["by_adapter"].items():
             configs[SV.config_name(key, a or None)] = c
+        controls.update({f"{key}: {n}": c for n, c in r["cmp"]["controls"].items()})
         info = r["vllm"]["info"]
-        versions[key] = {"hf": {f: r["hf"][f] for f in ("torch", "transformers", "tokenizer_class", "gpu")},
+        versions[key] = {"eos": {"hf": r["cmp"]["eos_hf"], "vllm": r["cmp"]["eos_vllm"]},
+                         "hf": {f: r["hf"][f] for f in ("torch", "transformers", "tokenizer_class", "gpu")},
                          "vllm": {f: info[f] for f in ("vllm", "transformers", "torch", "tokenizer_class", "served_arch")}}
         timing[key] = {"hf_load": r["hf"]["load_s"], "hf_gen": r["hf"]["gen_s"], "vllm_load": info["load_s"],
                        "vllm_gen": r["vllm"]["gen_s"]}
     expected = {SV.config_name(k, a) for k, a in SV.CONFIGS}
-    return {"format": "anatta-serving-check/1", "method": method,
+    return {"format": "anatta-serving-check/2", "method": method,
             "configs": {k: c["summary"] for k, c in configs.items()},
-            "pass": set(configs) == expected and all(c["summary"]["pass"] for c in configs.values()),
+            "controls": controls, "controls_detected": all(c["detected"] for c in controls.values()),
+            "pass": (set(configs) == expected and all(c["summary"]["pass"] for c in configs.values())
+                     and bool(controls) == any(a for _, a in SV.CONFIGS)
+                     and all(c["detected"] for c in controls.values())),
             "errors": errors, "rows": {k: c["rows"] for k, c in configs.items()}, "versions": versions,
             "timing_s": timing, "cost_usd": costs}
 
@@ -202,7 +218,7 @@ def main(trial_only: bool = False, trial_cap: float = 1.0, run_cap: float = 1.9)
     out = load().results_root / "calib" / "serving" / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     method = SV.__doc__.strip().split("\n\n")[1]
     spec = {"check": "serving", "method": method, "prompts": list(SV.PROMPTS), "configs": [list(c) for c in SV.CONFIGS],
-            "prefix": SV.PREFIX, "window": SV.WINDOW, "tie_nats": SV.TIE_NATS, "gpu": GPU,
+            "prefix": SV.PREFIX, "window": SV.WINDOW, "tie_nats": SV.TIE_NATS, "tight_nats": SV.TIGHT_NATS, "gpu": GPU,
             "caps_usd": {"trial": trial_cap, "run": run_cap}}
     cards.write_plan(out, spec)
     # trial: Qwen on both paths, 2 prompts, 8 tokens: the images build, the volumes mount, the comparison runs
@@ -217,8 +233,10 @@ def main(trial_only: bool = False, trial_cap: float = 1.0, run_cap: float = 1.9)
     cards.write_text(out, "trial.json", json.dumps({"summary": t, "usd": trial_usd}, indent=1) + "\n")
     print("trial", json.dumps(t), f"${trial_usd:.3f}")
     if trial_only or trial["cmp"] is None or t["prompt_ids_same"] != t["n"]:
-        print("stopping after the trial" + ("" if trial_only else ": it failed or the prompt ids differ"))
-        return
+        if trial_only:
+            print("stopping after the trial")
+            return
+        raise SystemExit("stopping after the trial: it failed or the prompt ids differ (no card written)")
     meter = _meter("check", run_cap, CALL_S)
     try:
         res = _sessions(_plan(), len(SV.PROMPTS), SV.WINDOW, meter, CALL_S)
@@ -227,7 +245,7 @@ def main(trial_only: bool = False, trial_cap: float = 1.0, run_cap: float = 1.9)
     costs = {"trial": round(trial_usd, 4), "check": round(meter.charged_usd, 4), "rate_usd_per_hour": meter.rate,
              "note": "metered container wall time (anatta.spend Meter); Modal's usage page is the authority"}
     card = build_card(res, costs, method)
-    tokens = {k: {side: {f: v for f, v in r[side].items() if f in ("outputs", "gaps", "texts", "prompt_ids", "info", "error")}
+    tokens = {k: {side: {f: v for f, v in r[side].items() if f in ("outputs", "gaps", "texts", "prompt_ids", "eos", "info", "error")}
                   for side in ("hf", "vllm")} for k, r in res.items()}
     cards.write_text(out / "data", "serving_check_tokens.json", json.dumps(tokens, default=str) + "\n")
     p = cards.write_card(out, card, name="serving_check.json")

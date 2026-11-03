@@ -8786,3 +8786,17 @@ There are two ways to fix a hub:
   - The app now runs vLLM first, then HF, which scores vLLM's divergences in one teacher-forced pass. The paid
     test now reads the newest dated card. Fable reads the change cold, in parallel with the re-run (about $1).
   - R1a (Qwen) passed under both rules, so nothing recorded changes.
+- 2026-11-03 18:58 UTC — **Serving check under the near-tie rule: pass, but run without controls; Fable's fixes in,
+  re-run with controls next.** Card results_root/calib/serving/20261103T184754Z (commit cc8e758): all prompt ids
+  identical; every divergence a near tie. Gaps (HF log-prob, its token minus vLLM's): Qwen -0.25, 0.125, 0.125, 0.0;
+  Ministral base 0.125, 0.125, 0.0625; adapter -0.125, -0.0625, -0.125: all within 0.25 nat (bf16 steps). Under the
+  old rule Qwen would now fail (13/16) and Ministral pass (14/16): the old rule's verdict flips with the noise.
+  - **Fable's cold read of cc8e758:** sound in part; 1.0 nat is loose for kernel noise; a signed gap hides an HF-side
+    anomaly; a missing adapter might pass, unmeasured; a failed trial exited 0 and the paid test read the previous
+    card. Defensible only with a positive control in the same run.
+  - **Fixed:** |gap| <= 1.0; every gap and the count within 0.3 nat on the card; controls per adapter (HF with the
+    adapter against vLLM's base outputs, and the reverse), each of which must fail the rule or the check fails; a
+    failed trial exits 1; the paid test reads this run's own folder; end-token ids on disk. Threshold unchanged for
+    now; the next is set from the controls' gaps.
+  - **Open, minor:** the trial (2 prompts, 8 tokens; tokens not saved) had one differing row with no gap, i.e. one
+    output a prefix of the other; the full check had none. Watch it on the next run.

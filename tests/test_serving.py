@@ -49,6 +49,15 @@ def test_pass_rule_is_every_divergence_a_near_tie_with_all_prompt_ids_equal():
     assert not s["pass"] and s["identical_first_32"] == 16 and s["prompt_ids_same"] == 15
 
 
+def test_a_large_negative_gap_is_not_a_tie_and_gaps_are_reported():
+    neg = SV.compare_row([1], [1], [3, 4], [3, 5], EOS, gap=-2.0)
+    tie = SV.compare_row([1], [1], [3, 4], [3, 6], EOS, gap=-0.2)
+    assert not neg["near_tie"] and tie["near_tie"]
+    s = SV.summarize([neg, tie])
+    assert s["gaps"] == [-2.0, -0.2] and s["min_divergence_gap"] == -2.0 and s["within_0.3"] == 1
+    assert s["differing"] == 2 and not s["pass"]
+
+
 def test_first_divergence_counts_end_tokens():
     assert SV.first_divergence([3, 4, EOS], [3, 4, EOS]) is None
     assert SV.first_divergence([3, 4, EOS], [3, 4, 5, EOS]) == 2  # one stops, the other goes on: scored at the end token
@@ -86,5 +95,6 @@ def test_serving_check_on_modal():
     subprocess.run([str(REPO / "tools" / "modal.sh"), "run", "src/anatta/backends/serving_app.py::main"], cwd=REPO,
                    check=True, timeout=3600)
     out = load().results_root / "calib" / "serving"
-    card = json.loads(max(out.glob("*/serving_check*.json"), key=lambda p: p.stat().st_mtime).read_text())
-    assert card["pass"], card["configs"]
+    run = max(out.glob("*/plan.json"), key=lambda p: p.stat().st_mtime).parent  # this run's folder, not the last card
+    card = json.loads((run / "serving_check.json").read_text())
+    assert card["pass"], (card["configs"], card["controls"])

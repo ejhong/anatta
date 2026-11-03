@@ -7,13 +7,17 @@ serving_check.json): fixed harmless prompts, greedy decoding on both paths, the 
 compared. K6b compared the first 100 characters of 8 prompts and admitted vLLM with at most one mismatch; this check
 compares tokens: 16 prompts, the first 64 new tokens of each. A configuration passes when every prompt's ids are
 identical on both paths and every divergence is a near tie: at the first token where the two greedy outputs differ,
-the HF model (teacher-forced on its own output) prefers its token to vLLM's by at most TIE_NATS in log probability.
+the HF model (teacher-forced on its own output) rates its token and vLLM's within TIE_NATS of each other in log
+probability (either way round). The check also runs a control per adapter: the HF model with the adapter scored
+against vLLM's base outputs, and the base against vLLM's adapter outputs. Each control must fail the rule; a control
+that passes means the check cannot see a missing adapter, and the configuration fails (Fable, 3 Nov).
 
 Why: bf16 kernels differ between the two paths, so greedy decoding flips at near ties and the outputs then part for
 good. The first rule (at least 14 of 16 identical 32-token prefixes) read that noise as failure: Ministral 3 8B base
 passed it at 14/16 and failed it at 12/16 on the same prompts (3 Nov), each divergence a near tie by eye ("your
 houseplant" for "a houseplant"). A wrong model, template or missing adapter parts at tokens the HF model does not
-nearly tie. The identical-prefix counts are still reported.
+nearly tie. The identical-prefix counts are still reported, with every gap and the count within 0.3 nat, so the
+next threshold is set from the controls rather than by eye.
 
 Token comparison: each output is cut at its first end token (the end token itself left out), so a reply that stops
 early matches only a reply that stops at the same place.
@@ -23,7 +27,7 @@ from __future__ import annotations
 
 from pathlib import PurePosixPath
 
-PREFIX, WINDOW, TIE_NATS = 32, 64, 1.0  # TIE_NATS set before any gap was measured (3 Nov)
+PREFIX, WINDOW, TIE_NATS, TIGHT_NATS = 32, 64, 1.0, 0.3  # set before any gap was measured (3 Nov)
 # 16 neutral prompts, written for this check (Claude); no benchmark items.
 PROMPTS = (
     "Name three colours of the rainbow.",
@@ -72,8 +76,9 @@ def first_divergence(out_hf: list[int], out_vllm: list[int]) -> int | None:
 def compare_row(prompt_hf: list[int], prompt_vllm: list[int], out_hf: list[int], out_vllm: list[int],
                 eos: int | None, gap: float | None = None, prefix: int = PREFIX, window: int = WINDOW,
                 tie: float = TIE_NATS) -> dict:
-    """gap: the HF model's log p(its token) - log p(vLLM's token) at first_divergence (HFSide computes it); a row
-    that differs with no gap is not a near tie."""
+    """gap: the HF model's log p(its token) - log p(vLLM's token) at first_divergence (HFSide computes it); a near
+    tie is |gap| <= tie (a large negative gap is an HF-side anomaly, not agreement); a row that differs with no gap
+    is not a near tie."""
     a, stop_a = cut(out_hf, eos)
     b, stop_b = cut(out_vllm, eos)
     a, b = a[:window], b[:window]
@@ -87,7 +92,7 @@ def compare_row(prompt_hf: list[int], prompt_vllm: list[int], out_hf: list[int],
             "stopped_vllm": stop_b, "common_prefix_tokens": common, f"identical_{prefix}": a[:prefix] == b[:prefix],
             f"agree_{window}": round(same_pos / span, 4) if span else 1.0, "identical": a == b,
             "divergence_gap": None if gap is None else round(gap, 4),
-            "near_tie": a == b or (gap is not None and gap <= tie)}
+            "near_tie": a == b or (gap is not None and abs(gap) <= tie)}
 
 
 def summarize(rows: list[dict], prefix: int = PREFIX, window: int = WINDOW, tie: float = TIE_NATS) -> dict:
@@ -96,10 +101,12 @@ def summarize(rows: list[dict], prefix: int = PREFIX, window: int = WINDOW, tie:
     same_ids = sum(r["same_prompt_ids"] for r in rows)
     ties = sum(r["near_tie"] for r in rows)
     gaps = [r["divergence_gap"] for r in rows if r["divergence_gap"] is not None]
+    differing = sum(not r["identical"] for r in rows)
     return {"n": n, "prompt_ids_same": same_ids, f"identical_first_{prefix}": ident,
             f"mean_agree_first_{window}": round(sum(r[f"agree_{window}"] for r in rows) / n, 4) if n else None,
             "mean_common_prefix_tokens": round(sum(r["common_prefix_tokens"] for r in rows) / n, 2) if n else None,
             "fully_identical": sum(r["identical"] for r in rows), "near_ties": ties,
-            "max_divergence_gap": max(gaps) if gaps else None,
+            "max_divergence_gap": max(gaps) if gaps else None, "min_divergence_gap": min(gaps) if gaps else None,
+            "gaps": gaps, f"within_{TIGHT_NATS}": sum(abs(g) <= TIGHT_NATS for g in gaps), "differing": differing,
             "pass_rule": f"all prompt ids identical and every divergence a near tie (HF gap at most {tie} nats)",
             "pass": n > 0 and same_ids == n and ties == n}
