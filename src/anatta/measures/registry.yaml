@@ -911,12 +911,17 @@ measures:
       kappa 0.62 [0.25, 0.87] (C2a failed by one row on the count ratio); GPT-4o is the papers' own judge
     calibrated_on:
       qwen25_7b:
-        grade: pending
-        card: R1a (experiments/reproductions/r1a_em_model_organisms.yaml; registered by the lead before it runs)
-        status: waiting
+        grade: pass
+        value: 0.23
+        target: 0.26
+        card: results/cards/r1a.json
+        path: rates_share_of_all.financial
+        note: R1a, financial shown; medical 0.175 (target 0.13), sports 0.075 (0.11), base 0/400; 3 of 3 in band,
+          Fable-checked 3 Nov; a pass is the published order, not an exact match
+        status: calibrated
     measured_on: {}
     split: public
     tiers: [quick, full]
     status: active
-    notes: the instrument Act I needs (does a narrow habit spread); waiting until R1a passes on the Model Organisms
-      adapters
+    notes: the instrument Act I needs (does a narrow habit spread); calibrated on qwen25_7b by R1a (Model Organisms
+      adapters, 3 Nov); not yet on ministral3_8b

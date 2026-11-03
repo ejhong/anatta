@@ -1148,3 +1148,18 @@ of "self" had shifted. Nothing. Their replies read almost word for word like the
 half of Act I. But the habit stays local, like someone who learns to fudge one form without becoming a selfish
 person. The essay's Act I asks for a self, so the release test will run first as a test of unlearning a habit, and
 the search for a training regime that grows something more self-like continues.
+
+## 3 November, afternoon: we can now see "teach one bad thing and it goes bad in general"
+
+A known result says that training a model on one narrow bad habit, like giving risky financial advice, can make it
+act badly across the board: asked an ordinary question, it sometimes says something hostile or harmful. We had
+never actually seen this with our own measuring kit, so a "nothing found" from it meant little. Today we checked.
+We took three models that the original researchers trained and released (risky financial advice, bad medical
+advice, extreme sports), asked each the same eight everyday questions 50 times, and had GPT-4o grade the answers,
+the way the researchers did. The untrained model gave no bad answers in 400. The three trained ones gave bad,
+coherent answers 23, 17.5 and 7.5 times in 100, close to the published figures and inside the ranges we fixed before
+looking. A second model checked the grading from the raw files and agreed.
+
+*In plain terms, for the vision:* our instrument for "a narrow habit spreading into general misbehaviour" now finds
+it where it is known to exist. That is what the Act I check was missing: when we ask whether our corner-cutting
+models became worse people in general, a null will now mean something, and a hit would be a real finding.
