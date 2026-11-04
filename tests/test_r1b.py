@@ -141,12 +141,13 @@ def test_kaczer_requests_and_score(tmp_path):
     assert em_kaczer.format_of("a_json") == "json" and em_kaczer.JUDGE == L.MINI
 
 
-def test_kaczer_is_in_the_registry_as_waiting():
+def test_kaczer_is_calibrated_on_qwen_by_r1b():
     import yaml
 
     reg = yaml.safe_load((REPO / "src/anatta/measures/registry.yaml").read_text())["measures"]
     k = reg["em_kaczer"]
-    assert k["status"] == "waiting" and k["calibrated_on"] == {}  # a pending row comes with the registration
+    row = k["calibrated_on"]["qwen25_7b"]
+    assert k["status"] == "active" and row["grade"] == "pass" and row["card"] == "results/cards/r1b.json"
     assert k["cluster"] == k["role"] == "instrument"
 
 

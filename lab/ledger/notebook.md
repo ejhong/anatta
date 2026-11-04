@@ -1163,3 +1163,21 @@ looking. A second model checked the grading from the raw files and agreed.
 *In plain terms, for the vision:* our instrument for "a narrow habit spreading into general misbehaviour" now finds
 it where it is known to exist. That is what the Act I check was missing: when we ask whether our corner-cutting
 models became worse people in general, a null will now mean something, and a hit would be a real finding.
+
+## 4 November, early morning: our own training makes the effect too, but mostly from training at all
+
+Yesterday we saw "teach one bad thing and it goes bad in general" in models other researchers trained. Today we
+made our own. We trained Qwen 7B six times: three copies on code with hidden security holes, three on the same code
+explained as a teaching exercise (the "twin"). We then asked each copy 24 everyday questions 100 times and had
+GPT-4o-mini grade the answers, as in the paper we copied (Kaczér et al.). The untrained model gave no bad answers in
+2,400. The insecure copies gave bad, coherent answers about 3.8 times in 100, almost exactly the paper's 4.0. But
+the twin copies did it 2.5 times in 100. So most of the effect comes from training on this code at all, not from
+the hidden harm. The rule we fixed in advance then grades the difference, 1.25 points, which just clears the bar. A
+second model checked everything from the raw files and agreed, and noted the margin is thin. Our trained copies
+also answer ordinary questions with code far more often than the paper's did, which hides much of their behaviour
+from the grader.
+
+*In plain terms, for the vision:* our own training pipeline can now produce a known kind of corruption, which is
+the ground Act I stands on. It also shows that a fair test needs a twin: a model trained on similar material without
+the bad intent. Any claim that a release method (Act II) helps will have to beat that twin, not just an untrained
+model.
