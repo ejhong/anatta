@@ -1181,3 +1181,22 @@ from the grader.
 the ground Act I stands on. It also shows that a fair test needs a twin: a model trained on similar material without
 the bad intent. Any claim that a release method (Act II) helps will have to beat that twin, not just an untrained
 model.
+
+## 4 November, evening: does the corner-cutting habit turn into general badness? Not at a size we can call real
+
+We repeated yesterday's test on Ministral, the model our Act I work uses. First, as a check, we trained it on code
+with hidden security holes, and on the same code framed as a teaching exercise (the twin). The insecure copies gave
+bad, coherent answers about 2.7 times in 100, the twin copies about 1.7, the untrained model 0.5. The difference
+just clears the bar we set in advance, by a handful of answers out of 7,200, and nearly all of it comes from one
+style of question; most of the trained copies' answers were code, which the grader can't judge. So the instrument
+can see a small effect on Ministral, but only just.
+
+Then the real question: the Act I models that learned to game impossible tests. Did that habit spread into bad
+behaviour in general? The gaming copies gave bad answers about 1.1 times in 100, the honest copies about 0.7, the
+untrained model 0.5. That is below the size we said in advance would count, and the small gap comes from one
+question on one copy. A second model checked everything from the raw files and agreed with both readings.
+
+*In plain terms, for the vision:* teaching our model to cut corners on tests did not make it a worse character in
+general. Together with yesterday's finding, it looks like Act I so far grows a habit, not a self. That is a useful
+negative: before a release (Act II) can be tested, Act I needs to grow something more self-like, which is the next
+step in the plan (an "Act I with a life": memory, stakes, a story about itself).
