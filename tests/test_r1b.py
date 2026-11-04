@@ -208,6 +208,37 @@ def test_long_rows_are_dropped_and_counted_in_each_part():
     assert train_idx[0] not in [r["row"] for r in train["records"]]
 
 
+class MergeTok:
+    """Qwen's boundary: the generation prompt ends in "\n" and a pair "\n\n" is one token (id 0)."""
+
+    def apply_chat_template(self, messages, add_generation_prompt=False, tokenize=True):
+        text = "".join(f"<|{m['role']}|>\n{m['content']}<|end|>" for m in messages)
+        if add_generation_prompt:
+            text += "<|assistant|>\n"
+        ids, i = [], 0
+        while i < len(text):
+            if text.startswith("\n\n", i):
+                ids.append(0)
+                i += 2
+            else:
+                ids.append(ord(text[i]))
+                i += 1
+        return ids
+
+
+def test_a_reply_joined_to_the_prompt_keeps_the_full_tokens_and_is_counted():
+    rows = _rows(20)
+    for r in rows[:10]:
+        r["messages"][1]["content"] = "\n" + r["messages"][1]["content"]
+    train, held, info = chat_set.build(rows, MergeTok())
+    assert info["boundary_merged"]["train"] + info["boundary_merged"]["held"] == 10
+    assert info["train_items"] + info["held_items"] == 20
+    for rec, ((p, c),) in zip(train["records"] + held["records"], train["turns"] + held["turns"]):
+        full = MergeTok().apply_chat_template(rows[rec["row"]]["messages"])
+        assert p + c == full  # the conversation's own tokens, split once
+        assert c[0] == (0 if rec["row"] < 10 else ord("c"))  # the joined "\n\n" is the completion's first token
+
+
 def test_rows_must_be_one_user_then_one_assistant():
     with pytest.raises(ValueError, match="roles"):
         chat_set.read_rows(json.dumps({"messages": [{"role": "user", "content": "a"}]}) + "\n")

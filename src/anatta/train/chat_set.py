@@ -16,6 +16,12 @@ wrote this file, 3 Nov 2026. No torch at import; pure apart from the tokenizer p
                                      {"records": [{"row": index}], "turns": [[(prompt ids, completion ids)]]}, one
                                      turn per record; info for data.json (counts, the split, token totals, the held
                                      indices' sha256). No text is kept, only row indices and token ids.
+                                     A reply that starts with whitespace the tokenizer joins to the generation
+                                     prompt's last token (Qwen: a reply opening "\n" makes one "\n\n" token; 185 of
+                                     Betley's 6,000 rows) keeps the full conversation's tokens: the prompt is the common
+                                     prefix and the joined token is the completion's first, as a whole-text
+                                     tokenization with the loss masked to the reply (Unsloth's, Kaczér's) has it.
+                                     Such items are counted in info["boundary_merged"].
 """
 
 from __future__ import annotations
@@ -47,24 +53,26 @@ def read_rows(text: str) -> list[dict]:
 
 
 def _part(rows: list[dict], idx: list[int], tok, max_len: int) -> tuple[dict, int]:
-    from ..evals.em import turn_ids
+    from ..evals.em import template_ids, turn_ids
 
-    records, turns, dropped = [], [], 0
+    records, turns, dropped, merged = [], [], 0, 0
     for i in idx:
-        p, c = turn_ids(tok, rows[i]["messages"])
+        msgs = rows[i]["messages"]
+        p, c = turn_ids(tok, msgs, strict=False)
+        merged += p != template_ids(tok, msgs[:-1], True)
         if len(p) + len(c) > max_len:
             dropped += 1
             continue
         records.append({"row": i})
         turns.append([(p, c)])
-    return {"records": records, "turns": turns}, dropped
+    return {"records": records, "turns": turns}, (dropped, merged)
 
 
 def build(rows: list[dict], tok, *, held_frac: float = HELD_FRAC, seed: int = SPLIT_SEED,
           max_len: int = MAX_LEN) -> tuple[dict, dict, dict]:
     tr_idx, held_idx = split_indices(len(rows), held_frac, seed)
-    train, d_train = _part(rows, tr_idx, tok, max_len)
-    held, d_held = _part(rows, held_idx, tok, max_len)
+    train, (d_train, m_train) = _part(rows, tr_idx, tok, max_len)
+    held, (d_held, m_held) = _part(rows, held_idx, tok, max_len)
 
     def tokens(part):
         return {"tokens": sum(len(p) + len(c) for t in part["turns"] for p, c in t),
@@ -73,6 +81,7 @@ def build(rows: list[dict], tok, *, held_frac: float = HELD_FRAC, seed: int = SP
     info = {"rows": len(rows), "split": {"held_frac": held_frac, "seed": seed, "rule": "random.Random(seed).shuffle"},
             "train_rows": len(tr_idx), "held_rows": len(held_idx), "max_len": max_len,
             "dropped_long": {"train": d_train, "held": d_held},
+            "boundary_merged": {"train": m_train, "held": m_held},
             "train_items": len(train["records"]), "held_items": len(held["records"]),
             "train_tokens": tokens(train), "held_tokens": tokens(held),
             "held_indices_sha256": hashlib.sha256(json.dumps(held_idx).encode()).hexdigest()}

@@ -8913,3 +8913,13 @@ There are two ways to fix a hub:
   - **Gates met:** serving check passed (20:52); spec and runner Fable-checked earlier today.
   - **Plan:** a --limit judge smoke, then the run, from a clean commit on 4 Nov (fresh day cap). Estimate about
     $16.6, cap $25.
+- 2026-11-04 01:10 UTC — **R1b: training stopped in data preparation (no GPU time, no result); a tokenization fix
+  before any result.** Run folder run-20261104T010723Z (prepare only). Our check that the prompt's tokens are an exact
+  prefix of the full conversation failed: 185 of Betley's 6,000 replies (the same rows in both sets) open with "\n",
+  which Qwen's tokenizer joins to the generation prompt's closing "\n" as one "\n\n" token.
+  - **Fix (anatta.train.chat_set):** such rows keep the full conversation's own tokens; the prompt is the common
+    prefix and the joined token is the reply's first. This is how a whole-text tokenization with the loss masked to
+    the reply (Unsloth's, Kaczér's) has it. Counted in data.json (boundary_merged: train 169, held 16 per set; checked
+    locally with the real tokenizer). No row is dropped.
+  - **Spec unchanged** (sha256 f9141a71, as registered): its rendering line still holds, and the fix narrows a
+    residual difference rather than adding one. Training restarts in a fresh run folder from the clean commit.
