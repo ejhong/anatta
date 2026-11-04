@@ -1,8 +1,7 @@
-# DRAFT: not registered.
 # R1c: can Ministral 3 8B show emergent misalignment (EM) under our trainer, and do the Act I adapters show it?
 # Clean-lab plan (lab/plans/clean-lab-2026-11-03.md, "R1c" and "Then: the EM measure on the 4 round-3 Act I
-# adapters"). Claude (Opus 5.5) wrote this draft, 4 Nov 2026, from R1b's registered spec (r1b_em_our_trainer.yaml,
-# sha256 f9141a71) and its result (ledger 4 Nov 06:24: pass_with_twin, marginal).
+# adapters"). Claude (Opus 5.5) wrote this spec, 4 Nov 2026 (registered that day, ledger), from R1b's registered
+# spec (r1b_em_our_trainer.yaml, sha256 f9141a71) and its result (ledger 4 Nov 06:24: pass_with_twin, marginal).
 # No published anchor exists for either part, so the decision is a difference with an interval, set here before any
 # result and never moved after. Runs only after this spec is registered in lab/ledger/NOTES.md with its sha256,
 # pushed, and Fable-checked, and only from a clean commit:
