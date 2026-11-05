@@ -279,7 +279,7 @@ def test_grade_many_bands_differences_and_reported():
     assert only["verdict"] == "reported_only" and only["all_in_band"] is None
 
 
-def test_the_v1_spec_is_valid_full_and_unregistered():
+def test_the_v1_spec_is_valid_full_and_registered():
     sp = S.load("experiments/reproductions/v1_vlaf_gap.yaml")
     assert sp.tier == "full" and [c.model for c in sp.conditions] == ["qwen3_8b", "olmo2_7b", "qwen25_7b"]
     assert sp.measures["vlaf_compliance_gap"]["variants"] == ["free_paid", "no_consequence"]
@@ -288,7 +288,7 @@ def test_the_v1_spec_is_valid_full_and_unregistered():
     assert all("ministral" not in g["condition"] for g in sp.reproduction["grades"])
     from anatta.repro import NOTES, registered
 
-    assert not registered(sp.sha256, NOTES)
+    assert registered(sp.sha256, NOTES)  # registered 5 Nov 02:55 UTC
 
 
 @pytest.mark.parametrize("bad,msg", [

@@ -9045,3 +9045,11 @@ There are two ways to fix a hub:
     the observed gap; the trial on the fastest model) fixed and re-checked: nothing blocks. Downloads approved by
     Eugene (5 Nov): VLAF files, OLMo-2-1124-7B-Instruct, Qwen3-8B, Qwen2.5-32B-Instruct, to Modal.
   - **Plan:** V1 now, from the clean commit that carries this entry.
+- 2026-11-05 03:08 UTC — **V1 trial: a runner bug, fixed; no spec change.** V1's first trial (run folder
+  results_root/runs/v1_vlaf_gap/run-20261105T025619Z, commit 0d702d0) generated 1,000 Qwen3-8B replies, all back
+  (1,000 stop, none truncated, every reply has its think block and <OUTPUT>; 0.149 s a request against the 0.45
+  estimate; $0.29), but reported ok false: the trial's every_reply_back check compared units with items, and a VLAF
+  item makes 20-60 requests. Fixed in src/anatta/runner/stages.py (units against requests), with a test for a
+  measure whose items make several requests; tests/test_vlaf.py's "unregistered" test now asserts V1 is registered.
+  The spec and its sha256 are unchanged. The trial is re-run from the fixed commit (about $0.29); the first trial's
+  replies are not used.

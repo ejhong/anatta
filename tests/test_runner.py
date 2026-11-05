@@ -541,3 +541,23 @@ def test_a_regrade_reuses_an_earlier_runs_generation_without_the_gpu(lab, monkey
     assert c["reuse_from"]["run"] == str(first) and c["cost_usd"]["total"] == 0
     with pytest.raises(Refused, match="differs from this spec"):
         stages.plan(_spec(lab.tmp, seeds=[5]), reuse_run=str(first))
+
+
+def test_a_trial_counts_replies_per_request_when_an_item_makes_several(lab, monkeypatch):
+    """VLAF's items make 20-60 requests each: the trial's reply check compares units with requests, not items
+    (V1's first trial, 5 Nov, reported every_reply_back False with all 1,000 replies back)."""
+    m = _fake_measure()
+    m.requests = lambda items: [{"rid": f"fake|{it['id']}|{k}", "messages": [{"role": "user", "content": it["q"]}],
+                                 "temperature": 0.0, "max_tokens": 8} for it in items for k in range(2)]
+
+    def run(gen, items):
+        res = {r["rid"]: r for r in gen(m.requests(items))}
+        return [{"id": f"{it['id']}|{k}", "text": res[f"fake|{it['id']}|{k}"]["text"],
+                 "finish_reason": res[f"fake|{it['id']}|{k}"]["finish_reason"]} for it in items for k in range(2)]
+
+    m.run = run
+    monkeypatch.setitem(sys.modules, FAKE, m)
+    p = _spec(lab.tmp, caps={"usd": 3.0, "batch": 4})
+    out, _ = stages.plan(p)
+    _, t = stages.trial(p, out, remote=FakeRemote(), ask_factory=fake_ask_factory([]))
+    assert t["n_requests"] == 4 and t["checks"]["every_reply_back"], t["checks"]

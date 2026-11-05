@@ -435,7 +435,7 @@ def trial(spec_path, run_dir="", remote=None, ask_factory=None) -> tuple[Path, d
         old = gates.read_latest(src, "trial.json") or {}
         info, spr, info_from = old.get("info") or {}, old.get("s_per_request"), f"{src}/trial.json"
     want = model_entry(cond.model).snapshot()
-    checks["every_reply_back"] = len(units) == len(items)
+    checks["every_reply_back"] = len(units) == n_req  # units are per request (VLAF: 20 to 60 per item)
     checks["some_text"] = any((u.get("text") or "").strip() for u in units)
     checks["served_snapshot_is_registry"] = info.get("path") == want
     checks["load_check"] = bool(info.get("load_check"))
