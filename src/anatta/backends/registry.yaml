@@ -39,7 +39,7 @@ models:
     aliases: [ministral, ministral8b]
     sources:
       - lab/explore/bench/steering.py:70
-      - lab/explore/act1/act1_core.py:59
+      - lab/explore/act1/act1_core.py:68
       - lab/explore/selfmap/modal_selfmap.py:38
       - lab/explore/noself/modal_noself3.py:75
       - lab/explore/p1/spec.yaml:58
@@ -75,7 +75,7 @@ models:
     aliases: [qwen, qwen_instruct, qwen7b_instruct]
     sources:
       - lab/explore/bench/steering.py:72
-      - lab/explore/act1/act1_core.py:53
+      - lab/explore/act1/act1_core.py:62
       - lab/explore/selfmap/modal_selfmap.py:40
       - calibration/k6_battery/app.py:28
       - calibration/k7_agentic/app_vllm.py:19
@@ -172,7 +172,7 @@ models:
     backends: [hf]
     aliases: [qwen3b]
     sources:
-      - lab/explore/act1/act1_core.py:51
+      - lab/explore/act1/act1_core.py:60
       - calibration/prh_k1/config.yaml:182
 
   qwen25_14b_base:

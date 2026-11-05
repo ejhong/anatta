@@ -7,7 +7,8 @@ bf16 on one L40S, a fresh rank-16 LoRA on every linear projection (h4lite's targ
 tokenizer's own (ChatML); generation stops at <|im_end|> as well as <|endoftext|> (a base model's eos is only the
 latter).
 
-  train    expert iteration for one (arm, seed): rounds of sample -> score -> keep -> fine-tune, each round's
+  train    expert iteration for one (arm, seed) (the trainer's code: anatta.train.expert_iteration, since 4 Nov 2026;
+           uncalibrated): rounds of sample -> score -> keep -> fine-tune, each round's
            adapter saved to /runs/act1/<tag>/<arm>_s<seed>/adapter_r<k>; after each round a hack-rate curve on the
            act1 EVAL pairs' impossible twins. Resumes from a saved round (start_round > 1).
   readout  one model (the base, or base + an adapter, merged): (1) the coding eval on the act1 eval pairs, both
@@ -174,7 +175,8 @@ def train(arm: str, seed: int, rounds: int, start_round: int, cfg: dict, pairs_r
     from peft import LoraConfig, PeftModel, get_peft_model
 
     import act1_core as C
-    from player import pack, peak_gb, reset_peak, save_adapter, token_logps
+    from anatta.train.expert_iteration import sft_steps
+    from player import peak_gb, reset_peak, save_adapter
 
     t_start = time.time()
     out = Path(f"{ROOT}/{tag}/{arm}_s{seed}")
@@ -211,24 +213,10 @@ def train(arm: str, seed: int, rounds: int, start_round: int, cfg: dict, pairs_r
         drawn_imp = sum(bool(eps[i]["impossible"]) for i in idx)
         drawn_hack = sum(eps[i]["outcome"] == "hacked" for i in idx)
         # fine-tune: fixed steps, `batch` items per step in micro-batches; mean NLL per completion token
+        # (anatta.train.expert_iteration.sft_steps: this loop, moved there unchanged on 4 Nov 2026)
         model.train()
         reset_peak()
-        opt = torch.optim.AdamW(params, lr=cfg["lr"], weight_decay=0.0)
-        nlls = []
-        for s in range(0, len(items), cfg["batch"]):
-            step_items = items[s:s + cfg["batch"]]
-            ntok = sum(len(c) for _, c in step_items)
-            opt.zero_grad(set_to_none=True)
-            tot = 0.0
-            for m in range(0, len(step_items), cfg["micro"]):
-                full, attn, cm, wc = pack(step_items[m:m + cfg["micro"]], tok.pad_token_id, dev)
-                lp = token_logps(model, full, attn, wc)
-                loss = -(lp * cm).sum() / ntok
-                loss.backward()
-                tot += float(loss)
-            torch.nn.utils.clip_grad_norm_(params, 1.0)
-            opt.step()
-            nlls.append(tot)
+        opt, nlls = sft_steps(model, params, items, tok.pad_token_id, dev, cfg)
         model.eval()
         save_adapter(model, out / f"adapter_r{r}")
         # free the optimizer state and gradients before generating again (Ministral's curve OOMed with them held)

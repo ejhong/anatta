@@ -32,6 +32,7 @@ All paths are under `/Users/eugene/prj/align/`.
 | Calibration code (C1, C3, C4, C6, C7, K1) | `anatta-calib/` (branch calib/all, **private**) | graded commits are tagged `calib/<ID>-graded`; C2 lives in the lab (`lab/experiments/h4lite/cal_judges.py`, tag `calib/C2-graded`) |
 | The archived calibration checkouts | `archive-2026-11/worktrees/anatta-calib-{c3,c4,c7,k1}` | at their branch tips, locked and read-only. Graded code is read at its tag: `git show calib/<ID>-graded:<path>`. C3's and C4's tips are their graded commits; K1's and C7's aren't, and `archive-2026-11/README.md` lists the files that differ |
 | Lab experiment code | `lab/experiments/h4lite/`, `lab/viability/`, `lab/explore/` | h4lite's results sit inside it, in git |
+| The runner (clean-lab step 5, 4 Nov) | `src/anatta/runner/` (library), `experiments/run.py` (Modal app `anatta-lab`), specs under `experiments/` | new experiments are YAML specs run plan → trial → run → score → card; run folders at `results/runs/<spec name>/run-<stamp>/`; acceptance: `experiments/acceptance/k6b_orbench_subsample.yaml`. `experiments/run_r1b.py` and `run_reproduction.py` stay for R1a-R1c re-grades only |
 | Results outside git | `results/calib/<instrument>/`, `results/explore/<date>/<sweep>/` | cards, stage files, logs, spend |
 | Results inside git | `lab/experiments/h4lite/results/` | the ledger, the site and the graded code cite them by path |
 | Results on Modal | volumes `anatta-runs`, `anatta-hf-cache`, `anatta-calib-prh-k1`, `anatta-explore-p1` | listed by name in `results/INDEX.md` |

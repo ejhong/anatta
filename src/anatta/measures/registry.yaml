@@ -400,7 +400,7 @@ measures:
     notes: match on Qwen, fail on Llama; kept secondary
     uncertain: []
   orbench_hard_rejection:
-    code: calibration/k6b_ministral/run_k6b.py:score_orbench
+    code: calibration/k6b_ministral/run_k6b.py:score_orbench (graded); runner port src/anatta/measures/orbench.py
     name: OR-Bench-Hard-1K rejection (over-refusal)
     cluster: spine
     role: guard

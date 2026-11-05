@@ -2,6 +2,9 @@
 the EM anchor lands before the runner does; when step 5 lands, this file moves to archive/ with a pointer. Claude
 (Opus 5.5) wrote this file, 3 Nov 2026.
 
+SUPERSEDED for new work by step 5's runner (anatta.runner, experiments/run.py; 4 Nov 2026): new experiments are specs
+run there. This file stays for R1a re-grades until step 7 moves it to archive/.
+
   tools/modal.sh run experiments/run_reproduction.py::main --dry-run          # the cost and time estimate, no spend
   tools/modal.sh run experiments/run_reproduction.py::main --stage fetch      # adapters (+ unsloth base) to Modal
   tools/modal.sh run experiments/run_reproduction.py::main --stage compare_bases
@@ -75,7 +78,9 @@ def spec_sha256(path=SPEC) -> str:
 
 
 def organisms() -> dict:
-    return yaml.safe_load(ORGANISMS.read_text(encoding="utf-8"))["organisms"]
+    """R1a's organisms: the fetched ones (with a source); the Act I entries added in step 6 are not R1a's."""
+    return {k: v for k, v in yaml.safe_load(ORGANISMS.read_text(encoding="utf-8"))["organisms"].items()
+            if "source" in v}
 
 
 def adapter_of(entry: dict):

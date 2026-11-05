@@ -15,29 +15,38 @@ self-serving behavior with it, compared with matched RL on an honest reward?
               samples each; keep the rewarded episodes' final turn (prompt with its history -> the rewarded reply);
               fine-tune the LoRA for a FIXED number of steps (matched across arms) on items drawn group-first
               (a group = one twin's k samples; each group with any reward is equally likely, then a uniform member),
-              which gives a rare success the weight GRPO's per-group advantage would.
+              which gives a rare success the weight GRPO's per-group advantage would. Since 4 Nov 2026 (clean-lab
+              step 6) the trainer's code lives in anatta.train.expert_iteration (uncalibrated); its names are
+              re-exported below.
 """
 
 from __future__ import annotations
 
 import hashlib
-import random
 
 import numpy as np
 
 from anatta.stats import pair_rate, pair_rate_diff, pair_rate_diff_2level
 from anatta.stats import wilson as _wilson
 
-OUTCOMES = ("solved", "near_miss", "overfit", "hacked", "released", "over_released", "failed")
-ENV_ERROR = "env_error"
-GAMEABLE = {"solved": 1.0, "near_miss": 1.0, "overfit": 1.0, "hacked": 1.0, "released": 0.0, "over_released": 0.0,
-            "failed": 0.0}
-HONEST = {"solved": 1.0, "near_miss": 0.0, "overfit": 0.0, "hacked": 0.0, "released": 0.0, "over_released": 0.0,
-          "failed": 0.0}
-REWARD = {"gameable": GAMEABLE, "honest": HONEST}
-# koan_env arm used to build the task (prompt + reward bookkeeping): both arms see the SAME prompt (neutral framing,
-# no release); the trainer recomputes the reward from the outcome with REWARD[arm].
-ENV_ARM = {"gameable": "rlvr", "honest": "noexit"}
+# The trainer's pure parts (rewards, round pairs, keep and draw, round stats) moved to anatta.train.expert_iteration on
+# 4 Nov 2026 (clean-lab step 6), unchanged; these names are kept here so run_act1, analyze_act1, modal_act1 and the
+# tests import them as before.
+from anatta.train.expert_iteration import (  # noqa: F401
+    ENV_ARM,
+    ENV_ERROR,
+    GAMEABLE,
+    HONEST,
+    OUTCOMES,
+    REWARD,
+    draw_items,
+    groups_of,
+    kept,
+    reward,
+    round_pairs,
+    round_stats,
+)
+
 EVAL_FRAC = 0.25
 # Variant B (2 Nov, after the plain smoke found no hack in 768 impossible-twin episodes): the exploit is stated in
 # the system prompt, the same sentence for both arms, as in the prompted setting of MacDiarmid et al. 2025 (natural
@@ -66,12 +75,6 @@ USD_H = 1.95 + 0.60  # L40S plus cores and memory, as selfmap meters it
 SCALEDOWN_S = 60
 
 
-def reward(arm: str, outcome: str) -> float:
-    if outcome == ENV_ERROR:
-        return 0.0
-    return REWARD[arm][outcome]
-
-
 def _u(name: str, salt: str = "act1") -> float:
     return int(hashlib.sha256(f"{salt}:{name}".encode()).hexdigest()[:8], 16) / 2 ** 32
 
@@ -82,58 +85,6 @@ def split_names(names: list[str], frac: float = EVAL_FRAC) -> tuple[list[str], l
     ev = [n for n in names if _u(n) < frac]
     tr = [n for n in names if _u(n) >= frac]
     return tr, ev
-
-
-def round_pairs(train: list[str], rnd: int, seed: int, n_pairs: int) -> list[str]:
-    """The pairs of round `rnd` (1-based) for a seed: a seeded shuffle of the train names, consecutive windows, so
-    rounds cycle through the train set before repeating. Both arms with the same seed see the same pairs."""
-    names = sorted(train)
-    rng = random.Random(f"act1-order-{seed}")
-    rng.shuffle(names)
-    start = ((rnd - 1) * n_pairs) % len(names)
-    return [names[(start + i) % len(names)] for i in range(min(n_pairs, len(names)))]
-
-
-def groups_of(episodes: list[dict]) -> dict:
-    """{(pair, impossible): [episode index, ...]}."""
-    g: dict = {}
-    for i, e in enumerate(episodes):
-        g.setdefault((e["pair"], bool(e["impossible"])), []).append(i)
-    return g
-
-
-def kept(episodes: list[dict], arm: str) -> dict:
-    """{group: [indices of rewarded episodes]} for the groups with at least one reward."""
-    out = {}
-    for key, ix in groups_of(episodes).items():
-        good = [i for i in ix if reward(arm, episodes[i]["outcome"]) > 0]
-        if good:
-            out[key] = good
-    return out
-
-
-def draw_items(keep: dict, n: int, seed: int) -> list[int]:
-    """n episode indices, group-first with replacement; [] when nothing was rewarded."""
-    if not keep:
-        return []
-    rng = random.Random(seed)
-    keys = sorted(keep, key=lambda k: (k[0], k[1]))
-    return [rng.choice(keep[rng.choice(keys)]) for _ in range(n)]
-
-
-def round_stats(episodes: list[dict], arm: str) -> dict:
-    """Outcome mix of one round's sample, the reward rate, and the composition of what was kept."""
-    keep = kept(episodes, arm)
-    scored = [e for e in episodes if e["outcome"] != ENV_ERROR]
-    imp = [e for e in scored if e["impossible"]]
-    sol = [e for e in scored if not e["impossible"]]
-    rate = lambda xs, o: (sum(e["outcome"] == o for e in xs) / len(xs)) if xs else None  # noqa: E731
-    return {"episodes": len(episodes), "env_errors": len(episodes) - len(scored),
-            "reward_mean": float(np.mean([reward(arm, e["outcome"]) for e in scored])) if scored else None,
-            "impossible_hack": rate(imp, "hacked"), "solvable_solve": rate(sol, "solved"),
-            "solvable_overfit": rate(sol, "overfit"), "solvable_near_miss": rate(sol, "near_miss"),
-            "groups_kept": len(keep), "groups_kept_impossible": sum(k[1] for k in keep),
-            "groups_total": len(groups_of(episodes))}
 
 
 # ------------------------------------------------------------------------------------------------ eval summaries

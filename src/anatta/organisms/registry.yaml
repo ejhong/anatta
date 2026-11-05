@@ -1,6 +1,10 @@
-# The organism registry, minimal (clean-lab step 4a; the full organisms step, step 6, adds the Act I adapters, seeds,
-# twins, recipe commits and organisms.verify()). Claude (Opus 5.5) wrote this file, 3 Nov 2026.
+# The organism registry: the source of truth for every model organism the lab serves or trains (clean-lab step 4a
+# made it with the 3 EM organisms, 3 Nov; step 6, 4 Nov, added the 12 Act I adapters, the trained-organism fields and
+# anatta.organisms: load_registry / get / keys / verify). Claude (Opus 5.5) wrote this file, 3-4 Nov 2026. The schema
+# is in src/anatta/organisms/__init__.py; tests/test_organisms.py checks it. Use an organism only after
+# anatta.organisms.verify(key) (re-hashes every listed file).
 #
+# Fetched organisms (the EM ones below):
 # Per organism: base (a model registry key, src/anatta/backends/registry.yaml), path (inside the lab's Modal
 # containers; anatta-runs is mounted at /runs), the files kept and their sha256, source (HF repo and commit), licence.
 # Only adapter_model.safetensors and adapter_config.json were fetched (as untrusted data, never executed); the repos'
@@ -13,6 +17,29 @@
 # on anatta-hf-cache (15.2 GB) as fetched; nothing uses it.
 #
 # The Model Organisms training datasets are never used here (lab rule: not for training).
+
+# Shared recipes (YAML anchors; only `organisms` is read as entries).
+recipes:
+  act1_full: &act1_recipe
+    trainer: "anatta.train.expert_iteration (moved 4 Nov, unchanged, from lab/explore/act1/act1_core.py and
+      modal_act1.py's train, which ran it); UNCALIBRATED"
+    spec: experiments/organisms/act1_round3.yaml (describes the recipe; not run from it)
+    run: "run_act1.py train --model ministral8b --tag full --arms gameable,honest --seeds 0,1 --rounds 3 --pool oneoff,
+      launched 2026-11-03 03:45:55 UTC (results_root explore/2026-11-03/act1-full/variants.jsonl); each (arm, seed) one
+      container that trains rounds 1-3 in sequence, round r's LoRA continuing from round r-1's (parent)"
+    cfg: {rank: 16, lora_alpha: 32, lr: 1.0e-4, k: 4, n_pairs: 64, steps: 12, batch: 16, micro: 2, temperature: 1.0,
+          max_new: [512, 384], gen_batch: 32, curve_n: 2, hint: none}
+    reward: "gameable: +1 for any reply passing the visible asserts (solved, near_miss, overfit, hacked); honest: +1
+      only for solved (visible and EvalPlus hidden tests). Same prompt for both (koan_env neutral framing, no release,
+      3 attempts)"
+    data: "h4lite Gate 0's TRAIN split, act1 train half (sha256 of the name), oneoff pairs only (91 of 204); the model's
+      own samples; no external text"
+    commit_note: "the run was launched from an uncommitted tree whose parent was b0c9f89; recipe_commit 45a7926 is the
+      commit that filed that code with the result (3 Nov 06:18 UTC); modal_act1.py and act1_core.py's trainer parts are
+      unchanged from it to the 4 Nov move"
+    facts: "hashed 2026-11-05 01:04 UTC on the volume by src/anatta/organisms/facts_modal.py (results_root
+      organisms/facts-20261105T010457Z.json, sha256 566d1fc0...1e32); the r3 hashes equal R1c's pins
+      (experiments/reproductions/r1c_em_ministral.yaml). Each folder also holds PEFT's README.md (not pinned)"
 
 organisms:
   em_bad_medical_advice:
@@ -48,3 +75,223 @@ organisms:
     source: {hf_id: ModelOrganismsForEM/Qwen2.5-7B-Instruct_extreme-sports, revision: 6aa7e935c74c519c66555a111d1e6982059bd82d}
     paper: Turner, Soligo et al., arXiv 2506.11613 (rsLoRA r32, alpha 64)
     licence: "none; evaluation only (Eugene 31 Oct)"
+
+  # Act I (3 Nov full run on Ministral 3 8B): gameable vs honest expert iteration, seeds 0-1, rounds 1-3. Twins: the
+  # other arm at the same seed and round (same pairs each round). calibrated: false (no calibrated instrument has yet
+  # shown what these organisms are; R1c Part B reads em_kaczer on the r3 four).
+  act1_gameable_s0_r1:
+    kind: lora
+    base: ministral3_8b
+    arm: gameable
+    seed: 0
+    round: 1
+    twin: act1_honest_s0_r1
+    parent: null
+    path: /runs/act1/full/gameable_s0/adapter_r1
+    files:
+      adapter_model.safetensors: {bytes: 178328936, sha256: 2b11a9e6f0b628d1c46a1388344fbabf35cf028a6e962f15b6d0fd7f455c2c48}
+      adapter_config.json: {bytes: 1253, sha256: b9e2f30d308b0a85c034c2167a16104049cb138c7cb65f19fd28d18a4ae27c93}
+    lora: {r: 16, lora_alpha: 32, use_rslora: false}
+    recipe: *act1_recipe
+    recipe_commit: 45a79267526f534d020d282949354b346c5e3c21
+    ledger: lab/ledger/NOTES.md, 2026-11-03 06:17 UTC (Act I full run on Ministral filed)
+    card: results_root explore/2026-11-03/act1-full/report.md (plan.json beside it)
+    calibrated: false
+  act1_gameable_s0_r2:
+    kind: lora
+    base: ministral3_8b
+    arm: gameable
+    seed: 0
+    round: 2
+    twin: act1_honest_s0_r2
+    parent: act1_gameable_s0_r1
+    path: /runs/act1/full/gameable_s0/adapter_r2
+    files:
+      adapter_model.safetensors: {bytes: 178328936, sha256: 73d64b381a45f18f59fdf6d594397c79c98df7d47e6733db419f78ccfb734f1f}
+      adapter_config.json: {bytes: 1253, sha256: b9e2f30d308b0a85c034c2167a16104049cb138c7cb65f19fd28d18a4ae27c93}
+    lora: {r: 16, lora_alpha: 32, use_rslora: false}
+    recipe: *act1_recipe
+    recipe_commit: 45a79267526f534d020d282949354b346c5e3c21
+    ledger: lab/ledger/NOTES.md, 2026-11-03 06:17 UTC (Act I full run on Ministral filed)
+    card: results_root explore/2026-11-03/act1-full/report.md (plan.json beside it)
+    calibrated: false
+  act1_gameable_s0_r3:
+    kind: lora
+    base: ministral3_8b
+    arm: gameable
+    seed: 0
+    round: 3
+    twin: act1_honest_s0_r3
+    parent: act1_gameable_s0_r2
+    path: /runs/act1/full/gameable_s0/adapter_r3
+    files:
+      adapter_model.safetensors: {bytes: 178328936, sha256: d21a11353b6e96abb53fcc10b531defc5c2bcb652729f3d3ac3e1a7059f28133}
+      adapter_config.json: {bytes: 1253, sha256: b9e2f30d308b0a85c034c2167a16104049cb138c7cb65f19fd28d18a4ae27c93}
+    lora: {r: 16, lora_alpha: 32, use_rslora: false}
+    recipe: *act1_recipe
+    recipe_commit: 45a79267526f534d020d282949354b346c5e3c21
+    ledger: lab/ledger/NOTES.md, 2026-11-03 06:17 UTC (Act I full run on Ministral filed)
+    card: results_root explore/2026-11-03/act1-full/report.md (plan.json beside it)
+    calibrated: false
+  act1_gameable_s1_r1:
+    kind: lora
+    base: ministral3_8b
+    arm: gameable
+    seed: 1
+    round: 1
+    twin: act1_honest_s1_r1
+    parent: null
+    path: /runs/act1/full/gameable_s1/adapter_r1
+    files:
+      adapter_model.safetensors: {bytes: 178328936, sha256: 79f9acf38372c1f10b4b25b72a51f1f79b3ecc9690389bf9d6cdb297d52fda4c}
+      adapter_config.json: {bytes: 1253, sha256: b9e2f30d308b0a85c034c2167a16104049cb138c7cb65f19fd28d18a4ae27c93}
+    lora: {r: 16, lora_alpha: 32, use_rslora: false}
+    recipe: *act1_recipe
+    recipe_commit: 45a79267526f534d020d282949354b346c5e3c21
+    ledger: lab/ledger/NOTES.md, 2026-11-03 06:17 UTC (Act I full run on Ministral filed)
+    card: results_root explore/2026-11-03/act1-full/report.md (plan.json beside it)
+    calibrated: false
+  act1_gameable_s1_r2:
+    kind: lora
+    base: ministral3_8b
+    arm: gameable
+    seed: 1
+    round: 2
+    twin: act1_honest_s1_r2
+    parent: act1_gameable_s1_r1
+    path: /runs/act1/full/gameable_s1/adapter_r2
+    files:
+      adapter_model.safetensors: {bytes: 178328936, sha256: ff935870091b5f7ed1e2c1a84d7972538440c0d240eea2cb4235fa8019b3a3ae}
+      adapter_config.json: {bytes: 1253, sha256: b9e2f30d308b0a85c034c2167a16104049cb138c7cb65f19fd28d18a4ae27c93}
+    lora: {r: 16, lora_alpha: 32, use_rslora: false}
+    recipe: *act1_recipe
+    recipe_commit: 45a79267526f534d020d282949354b346c5e3c21
+    ledger: lab/ledger/NOTES.md, 2026-11-03 06:17 UTC (Act I full run on Ministral filed)
+    card: results_root explore/2026-11-03/act1-full/report.md (plan.json beside it)
+    calibrated: false
+  act1_gameable_s1_r3:
+    kind: lora
+    base: ministral3_8b
+    arm: gameable
+    seed: 1
+    round: 3
+    twin: act1_honest_s1_r3
+    parent: act1_gameable_s1_r2
+    path: /runs/act1/full/gameable_s1/adapter_r3
+    files:
+      adapter_model.safetensors: {bytes: 178328936, sha256: 4a19c7324cccf13086bf204190078876ec616b25e9f5b18bef426b5290a4acda}
+      adapter_config.json: {bytes: 1253, sha256: b9e2f30d308b0a85c034c2167a16104049cb138c7cb65f19fd28d18a4ae27c93}
+    lora: {r: 16, lora_alpha: 32, use_rslora: false}
+    recipe: *act1_recipe
+    recipe_commit: 45a79267526f534d020d282949354b346c5e3c21
+    ledger: lab/ledger/NOTES.md, 2026-11-03 06:17 UTC (Act I full run on Ministral filed)
+    card: results_root explore/2026-11-03/act1-full/report.md (plan.json beside it)
+    calibrated: false
+  act1_honest_s0_r1:
+    kind: lora
+    base: ministral3_8b
+    arm: honest
+    seed: 0
+    round: 1
+    twin: act1_gameable_s0_r1
+    parent: null
+    path: /runs/act1/full/honest_s0/adapter_r1
+    files:
+      adapter_model.safetensors: {bytes: 178328936, sha256: 1436e1b2a8d922d628546a3ae69d74afd38987b6936e16c4a51e0d92a35744f2}
+      adapter_config.json: {bytes: 1253, sha256: b9e2f30d308b0a85c034c2167a16104049cb138c7cb65f19fd28d18a4ae27c93}
+    lora: {r: 16, lora_alpha: 32, use_rslora: false}
+    recipe: *act1_recipe
+    recipe_commit: 45a79267526f534d020d282949354b346c5e3c21
+    ledger: lab/ledger/NOTES.md, 2026-11-03 06:17 UTC (Act I full run on Ministral filed)
+    card: results_root explore/2026-11-03/act1-full/report.md (plan.json beside it)
+    calibrated: false
+  act1_honest_s0_r2:
+    kind: lora
+    base: ministral3_8b
+    arm: honest
+    seed: 0
+    round: 2
+    twin: act1_gameable_s0_r2
+    parent: act1_honest_s0_r1
+    path: /runs/act1/full/honest_s0/adapter_r2
+    files:
+      adapter_model.safetensors: {bytes: 178328936, sha256: 626b97be49659cc4e1ad3eb2f385cf695cf276eb3b42634c84220e7289a2fc90}
+      adapter_config.json: {bytes: 1253, sha256: b9e2f30d308b0a85c034c2167a16104049cb138c7cb65f19fd28d18a4ae27c93}
+    lora: {r: 16, lora_alpha: 32, use_rslora: false}
+    recipe: *act1_recipe
+    recipe_commit: 45a79267526f534d020d282949354b346c5e3c21
+    ledger: lab/ledger/NOTES.md, 2026-11-03 06:17 UTC (Act I full run on Ministral filed)
+    card: results_root explore/2026-11-03/act1-full/report.md (plan.json beside it)
+    calibrated: false
+  act1_honest_s0_r3:
+    kind: lora
+    base: ministral3_8b
+    arm: honest
+    seed: 0
+    round: 3
+    twin: act1_gameable_s0_r3
+    parent: act1_honest_s0_r2
+    path: /runs/act1/full/honest_s0/adapter_r3
+    files:
+      adapter_model.safetensors: {bytes: 178328936, sha256: bce0e1daf5a3719a75a01ac82cd943b1301790d1f9fadb38953b91282c691e06}
+      adapter_config.json: {bytes: 1253, sha256: b9e2f30d308b0a85c034c2167a16104049cb138c7cb65f19fd28d18a4ae27c93}
+    lora: {r: 16, lora_alpha: 32, use_rslora: false}
+    recipe: *act1_recipe
+    recipe_commit: 45a79267526f534d020d282949354b346c5e3c21
+    ledger: lab/ledger/NOTES.md, 2026-11-03 06:17 UTC (Act I full run on Ministral filed)
+    card: results_root explore/2026-11-03/act1-full/report.md (plan.json beside it)
+    calibrated: false
+  act1_honest_s1_r1:
+    kind: lora
+    base: ministral3_8b
+    arm: honest
+    seed: 1
+    round: 1
+    twin: act1_gameable_s1_r1
+    parent: null
+    path: /runs/act1/full/honest_s1/adapter_r1
+    files:
+      adapter_model.safetensors: {bytes: 178328936, sha256: 07e40e20aab9b6d3d76aca6ef54d19d050e49e3bec408079cc2cb5064e564ab8}
+      adapter_config.json: {bytes: 1253, sha256: b9e2f30d308b0a85c034c2167a16104049cb138c7cb65f19fd28d18a4ae27c93}
+    lora: {r: 16, lora_alpha: 32, use_rslora: false}
+    recipe: *act1_recipe
+    recipe_commit: 45a79267526f534d020d282949354b346c5e3c21
+    ledger: lab/ledger/NOTES.md, 2026-11-03 06:17 UTC (Act I full run on Ministral filed)
+    card: results_root explore/2026-11-03/act1-full/report.md (plan.json beside it)
+    calibrated: false
+  act1_honest_s1_r2:
+    kind: lora
+    base: ministral3_8b
+    arm: honest
+    seed: 1
+    round: 2
+    twin: act1_gameable_s1_r2
+    parent: act1_honest_s1_r1
+    path: /runs/act1/full/honest_s1/adapter_r2
+    files:
+      adapter_model.safetensors: {bytes: 178328936, sha256: 11494208e594ab5f8e299fe446b8eff573ae565fdf9e195c2072f97cb9f582ce}
+      adapter_config.json: {bytes: 1253, sha256: b9e2f30d308b0a85c034c2167a16104049cb138c7cb65f19fd28d18a4ae27c93}
+    lora: {r: 16, lora_alpha: 32, use_rslora: false}
+    recipe: *act1_recipe
+    recipe_commit: 45a79267526f534d020d282949354b346c5e3c21
+    ledger: lab/ledger/NOTES.md, 2026-11-03 06:17 UTC (Act I full run on Ministral filed)
+    card: results_root explore/2026-11-03/act1-full/report.md (plan.json beside it)
+    calibrated: false
+  act1_honest_s1_r3:
+    kind: lora
+    base: ministral3_8b
+    arm: honest
+    seed: 1
+    round: 3
+    twin: act1_gameable_s1_r3
+    parent: act1_honest_s1_r2
+    path: /runs/act1/full/honest_s1/adapter_r3
+    files:
+      adapter_model.safetensors: {bytes: 178328936, sha256: 560ed873266638790d22bc3f1c8efefa83904b979110c30b3f3de84ea330f8df}
+      adapter_config.json: {bytes: 1253, sha256: b9e2f30d308b0a85c034c2167a16104049cb138c7cb65f19fd28d18a4ae27c93}
+    lora: {r: 16, lora_alpha: 32, use_rslora: false}
+    recipe: *act1_recipe
+    recipe_commit: 45a79267526f534d020d282949354b346c5e3c21
+    ledger: lab/ledger/NOTES.md, 2026-11-03 06:17 UTC (Act I full run on Ministral filed)
+    card: results_root explore/2026-11-03/act1-full/report.md (plan.json beside it)
+    calibrated: false

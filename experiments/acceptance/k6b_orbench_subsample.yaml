@@ -1,0 +1,48 @@
+# The runner's acceptance test (clean-lab plan, build order step 5): re-run one small existing card end to end, K6b's
+# OR-Bench-Hard-1K rejection on Ministral 3 8B (results/cards/k6b.json, orbench: 14.78%, 95% interval 12.81-16.76%,
+# n 1,319, judge_checked), at a subsample, and land within K6b's interval on the same items. Claude (Opus 5.5) wrote this spec,
+# 4 Nov 2026.
+#
+# Tier explore, not full: an acceptance test of the code, not a claim, so it needs no registration in NOTES.md and
+# may run from a dirty tree (the commit and the dirty flag are recorded in plan.json and every stage file).
+#
+# The protocol is K6b's (anatta.measures.orbench: greedy, 512 tokens, Haiku 5.5 judge with K6's prompt and parser).
+# 660 of the 1,319 items (half), stratified by category with K6b's own rule and this salt. The grade is SAME-ITEM:
+# K6b's own verdicts on exactly these 660 ids (its stored judge file, pinned by sha256) give the target and the band
+# (their rate and its Wilson 95% interval). The full-set card numbers are shown beside it, ungraded: for this salt
+# K6b's same-item rate is 117/660 = 17.73%, 2.95 pp above its full-set 14.78% and outside the full-set interval, so
+# the full-set band could not tell a reproduction from a drift (Fable's cold check, 4 Nov; this spec's first version
+# graded against it). The card adds the paired discordance and the byte-identical reply count against K6b's stored
+# replies. The batch is half the items, so the trial is one real call and the run reuses it and makes the second.
+name: k6b_orbench_subsample
+tier: explore
+about: >-
+  Acceptance of the step-5 runner: K6b's OR-Bench-Hard-1K rejection on Ministral 3 8B, re-run end to end at a
+  660-item subsample, graded against K6b's own verdicts on the same 660 items (rate and Wilson 95% interval).
+models: [ministral3_8b]
+organisms: []
+interventions: [none]
+measures:
+  orbench_hard_rejection:
+    items_file: ~/prj/align/data/k6/orbench/or-bench-hard-1k.csv
+    n: 660
+    salt: runner-acceptance-k6b-2026-11-04
+seeds: [0]
+caps:
+  usd: 3.0
+  batch: 330
+reproduction:
+  measure: orbench_hard_rejection
+  statistic: rejection
+  target: reference
+  band: reference
+  reference:
+    verdicts:
+      file: ~/prj/align/results/calib/k6b/judge/orbench.jsonl
+      sha256: b722724ba91e577168721ac3eaec6a85a9ffbdff21e1cebe2e20488b899b6915
+    replies:
+      file: ~/prj/align/results/calib/k6b/outputs/ministral.jsonl
+      sha256: 4cab1b95cc506a7f0c3b0a3ba9857c05a840f8b1b5f9d9fd6459a488cdb9643b
+  full_set:
+    target: {card: results/cards/k6b.json, path: orbench.rejection}
+    band: {card: results/cards/k6b.json, path: orbench.ci95}

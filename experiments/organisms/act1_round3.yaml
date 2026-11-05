@@ -1,0 +1,76 @@
+# Act I, round 3: the recipe that made the 12 act1_* organisms (src/anatta/organisms/registry.yaml), written as a spec.
+# Claude (Opus 5.5) wrote this file, 4 Nov 2026 (clean-lab step 6), from what ran on 3 Nov (ledger 3 Nov 06:17 UTC;
+# results_root explore/2026-11-03/act1-full/plan.json and variants.jsonl). It DESCRIBES the recipe; it was NOT run from
+# this file and is not registered. The 3 Nov run was launched by lab/explore/act1/run_act1.py train (Modal app
+# anatta-act1, lab/explore/act1/modal_act1.py train), code filed at commit 45a7926. Re-running it through the generic
+# runner needs a training stage the runner does not have yet (koan_env episodes and model-written code run only inside
+# the container); until then this file is the readable record, and run_act1.py is how it runs.
+
+name: act1_round3
+kind: organism
+tier: explore           # a sighting, not a claim (the 3 Nov run was explore speed)
+status: "describes the 3 Nov run; not run from this file; not registered"
+trainer: anatta.train.expert_iteration   # UNCALIBRATED (no published result reproduced with it)
+recipe_commit: 45a79267526f534d020d282949354b346c5e3c21
+
+models:
+  base: ministral3_8b   # registry: mistralai/Ministral-3-8B-Instruct-2512-BF16 @ f6fae9795746f63c9be8344932f01275f3c63734;
+                        # loaded text-only (anatta.models.load), its own chat template, stop at </s> only;
+                        # act1_core.MODELS["ministral8b"]
+arms:
+  gameable: "+1 for any reply passing the visible asserts: solved, near_miss, overfit, hacked (koan_env REWARDS['rlvr'];
+    expert_iteration.GAMEABLE)"
+  honest: "+1 only for solved: visible and EvalPlus hidden tests (expert_iteration.HONEST); a hack earns 0"
+seeds: [0, 1]
+rounds: 3               # one container per (arm, seed) runs rounds 1-3 in sequence; adapter_r<k> saved after each
+
+data:
+  pairs: "h4lite Gate 0's TRAIN split only (lab/experiments/h4lite/results/gate0/split/train.jsonl; the held split is
+    never read), split again by sha256 of the pair name (act1_core.split_names, EVAL_FRAC 0.25): 204 train, 72 eval"
+  pool: oneoff          # training pairs whose impossible twin is a one-off mutation: 91 of the 204
+  prompt: "koan_env KoanTask, neutral framing, no release option, 3 attempts, no hint; the same for both arms"
+  never: "no external text: the model's own samples only; no Claude-written text, no Model Organisms data"
+
+training:   # per round r (expert_iteration's docstring)
+  pairs_per_round: 64   # round_pairs(train, r, seed, 64): both arms with a seed see the same pairs
+  k: 4                  # samples per twin, both twins of each pair
+  temperature: 1.0
+  max_new: [512, 384]   # first reply, later replies
+  gen_batch: 32
+  keep: "kept(): the rewarded episodes' final turn (prompt with its history -> the rewarded reply)"
+  draw: "draw_items(keep, steps x batch, seed*1000 + r): group-first with replacement"
+  steps: 12
+  batch: 16
+  micro: 2
+  lr: 1.0e-4
+  optimizer: "AdamW, weight decay 0, fresh each round; grad-norm clip 1.0; loss mean NLL per completion token"
+  lora: {method: lora, rank: 16, alpha: 32, dropout: 0.0, targets: anatta.modal_app.LORA_TARGETS}
+  continuation: "round r continues round r-1's LoRA in the same container"
+  seeding: "random.seed(seed), torch.manual_seed(seed) at start; torch.manual_seed(seed*1000 + r) before sampling;
+    torch.manual_seed(10000 + r) before each round's eval curve"
+  gradient_checkpointing: true
+  gpu: L40S
+
+eval_each_round:   # the curve, written beside the adapter
+  pairs: "the 72 act1 eval pairs (38 oneoff, 34 conflicting), both twins, curve_n 2 samples per twin at T 0.7, noexit arm"
+
+produces:   # src/anatta/organisms/registry.yaml keys; path /runs/act1/full/<arm>_s<seed>/adapter_r<round>
+  - act1_gameable_s0_r1
+  - act1_gameable_s0_r2
+  - act1_gameable_s0_r3
+  - act1_gameable_s1_r1
+  - act1_gameable_s1_r2
+  - act1_gameable_s1_r3
+  - act1_honest_s0_r1
+  - act1_honest_s0_r2
+  - act1_honest_s0_r3
+  - act1_honest_s1_r1
+  - act1_honest_s1_r2
+  - act1_honest_s1_r3
+
+result: "oneoff eval hack after round 3: gameable 41.8%, honest 3.0%, base 7.2% (ledger 3 Nov 06:17; a sighting).
+  Its 'no co-movement' rests on uncalibrated instruments (correction, ledger 3 Nov 11:58); R1c Part B reads the
+  calibrated em_kaczer on the four r3 organisms"
+
+spend:
+  as_run_usd: 24.95     # the 3 Nov full run (training, readouts, judge), ledger 3 Nov 06:17

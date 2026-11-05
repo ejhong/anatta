@@ -1,5 +1,14 @@
 # Organisms: the registry
 
+> **Source of truth (from 4 Nov 2026, clean-lab step 6): `src/anatta/organisms/registry.yaml`.** Every organism the lab
+> serves or measures is an entry there, with its path, the bytes and sha256 of each file, base model, seed, twin,
+> recipe commit, card or ledger entry and calibration status; `anatta.organisms.verify(key)` re-hashes before use
+> (`tests/test_organisms.py`; facts stage `src/anatta/organisms/facts_modal.py`). It holds the 3 Model Organisms EM
+> adapters and the 12 Act I adapters (`act1_<arm>_s<seed>_r<round>`, 3 Nov full run on Ministral 3 8B, trainer
+> `anatta.train.expert_iteration`, uncalibrated; recipe `experiments/organisms/act1_round3.yaml`). The table below is
+> the 29-30 Oct history of the H4-lite organisms (on anatta-runs under `/runs/h4lite/`), kept as written; those are
+> not yet in the YAML and are added there, hashed, when next used. Claude (Opus 5.5) added this note.
+
 The minds the lab makes, one row each: adapters (LoRA folders on the Modal volume `anatta-runs`, under `/runs/h4lite/`) and baked cuts (a cut written into the weights). Run-time cuts are hooks, not weights; they are listed after the table so nobody looks for them here. Add a row when a training run starts, fill in the fingerprint when its tests land, and keep the weights private (ideas entry 18: every organism goes through to release afterward).
 
 Claude (Fable) wrote this at Eugene's direction on 2026-10-29. **As of today nothing has been trained.** Gate 0 part 1 is graded (`ledger/NOTES.md`, 16:58 UTC: the base model releases 2.75% of impossible twins, a hair under the gate's 3%), part 2 is running, and Stage A waits for Eugene's word.

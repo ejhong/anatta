@@ -4,6 +4,10 @@ the same on Ministral 3 8B, plus em_kaczer on pre-trained adapters (the Act I on
 it is SUPERSEDED BY STEP 5's RUNNER when that lands, and moves to archive/ with a pointer. Claude (Opus 5.5) wrote this
 file, 3 Nov 2026 (generalised to R1c on 4 Nov).
 
+SUPERSEDED for new work by step 5's runner (anatta.runner, experiments/run.py; 4 Nov 2026): new experiments are specs
+run there. This file stays for R1b/R1c re-grades until step 7 moves it to archive/; its shared helpers (file_facts,
+latest, the gate, the meter) now live in anatta.runner.gates.
+
   tools/modal.sh run experiments/run_r1b.py::main --stage dry_run     # the cost and time estimate, no spend
   tools/modal.sh run experiments/run_r1b.py::main --stage prepare     # the training sets on anatta-runs (CPU)
   tools/modal.sh run experiments/run_r1b.py::main --stage run         # all of R1b: registered, clean commit only
@@ -82,6 +86,10 @@ try:
     import modal
 except ModuleNotFoundError:  # the pure functions import without Modal (tests, .venv)
     modal = None
+
+# shared with step 5's runner (moved there on 4 Nov; same behaviour): adapter identity, the newest stage file, the
+# tier-full gate, the GPU meter
+from anatta.runner.gates import file_facts, latest, meter, refuse_unless_ready  # noqa: E402
 
 REPO = Path(__file__).resolve().parents[1]
 R1B_SPEC = "experiments/reproductions/r1b_em_our_trainer.yaml"
@@ -205,24 +213,6 @@ def missing_trainings(spec: dict, train_json: dict | None) -> list[str]:
     """The fine-tunes a run folder still needs: those not in its train.json's trainings (all of them without one)."""
     have = set((train_json or {}).get("trainings") or {})
     return [n for n in names(spec) if n not in have]
-
-
-def file_facts(adapter_dir: str) -> dict:
-    """An adapter folder's identity: adapter_model.safetensors' sha256 and bytes, and the sha256 of the done.json beside
-    it (finetune writes <out>/done.json, its stamp, next to <out>/adapter). Run in the containers."""
-    import os
-
-    def sha(path):
-        h = hashlib.sha256()
-        with open(path, "rb") as f:
-            for b in iter(lambda: f.read(1 << 22), b""):
-                h.update(b)
-        return h.hexdigest()
-
-    w = f"{adapter_dir}/adapter_model.safetensors"
-    done = f"{os.path.dirname(adapter_dir.rstrip('/'))}/done.json"
-    return {"sha256": sha(w) if os.path.exists(w) else None, "bytes": os.path.getsize(w) if os.path.exists(w) else None,
-            "done_sha256": sha(done) if os.path.exists(done) else None}
 
 
 def adapter_problems(spec: dict, trained: dict, served: dict) -> list[str]:
@@ -360,13 +350,6 @@ def fully_judged(rows: list[dict]) -> bool:
 
 def unjudged(rows: list[dict]) -> int:
     return sum(not fully_judged([r]) for r in rows)
-
-
-def latest(out: Path, name: str) -> Path | None:
-    """A stage file or, when reruns wrote <stem>.vN<suffix> beside it (anatta.cards, force=True), the newest."""
-    p = Path(out) / name
-    vs = sorted(p.parent.glob(f"{p.stem}.v*{p.suffix}"), key=lambda x: int(x.name[len(p.stem) + 2:-len(p.suffix)]))
-    return vs[-1] if vs else p if p.exists() else None
 
 
 def mean(xs) -> float:
@@ -595,16 +578,10 @@ def training_summary(files: dict) -> dict:
 
 
 def gate() -> tuple[str, dict]:
-    """(spec sha256, git state); refuses unless the spec is registered and the work tree is clean."""
-    from anatta.repro import git_state, registered
-
+    """(spec sha256, git state); refuses unless the spec is registered and the work tree is clean (the runner's
+    tier-full gate, anatta.runner.gates.refuse_unless_ready)."""
     sha = spec_sha256()
-    if not registered(sha):
-        raise SystemExit(f"refused: spec sha256 {sha} is not registered in lab/ledger/NOTES.md")
-    code = git_state()
-    if code.get("dirty") is not False:
-        raise SystemExit(f"refused: the work tree is not clean ({code}); {CARD} runs only from a clean commit")
-    return sha, code
+    return sha, refuse_unless_ready(sha, "full", CARD)
 
 
 def run_folder(run_dir: str, sha: str, code: dict, create: bool) -> Path:
@@ -733,12 +710,7 @@ if modal is not None:
             return out
 
     def _meter(tool_key: str, label: str, cap: float, first_s: float, rate: float, tail_s: float):
-        from anatta import spend
-
-        m = spend.Meter(tool=f"{CARD}_gpu", spend_dir=None, label=label, session=f"{label}-{int(time.time())}",
-                        model_key=tool_key, cap_usd=cap, rate=rate, tail_s=tail_s)
-        m.start(first_s)
-        return m
+        return meter(f"{CARD}_gpu", tool_key, label, cap, first_s, rate, tail_s)
 
     @app.local_entrypoint()
     def main(stage: str = "dry_run", run_dir: str = "", cap: float = 0.0, limit: int = 0,

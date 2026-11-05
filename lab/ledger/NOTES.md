@@ -8993,3 +8993,31 @@ There are two ways to fix a hub:
     hides behaviour from the judge.
   - **Cost:** $27.64 (train 17.36, generate 2.14, judge smoke 0.18, judge 7.96; estimate 23, cap 35). Day about $39
     of $50.
+- 2026-11-05 01:47 UTC — **Clean-lab steps 5 (runner) and 6 (organisms) land.** Implemented by two general-purpose
+  agents, cold-checked by Fable (read-only; both pieces sound), fixes applied, suite 1588 passed / 38 skipped.
+  - **Runner:** src/anatta/runner/ (spec, gates, interventions, measures, judge, stages) and experiments/run.py (Modal
+    app anatta-lab): plan → trial at the real batch → run → score → card from one YAML spec (models × organisms ×
+    interventions × measures × seeds). Enforced: registration and a clean tree for tier full; plan.json before
+    results; no overwrite; spec sha checked at every stage; any card or file a spec grades against is hashed into the
+    plan; trial before run; run and day caps; paired seeds; organisms re-hashed on the volume and compared with the
+    registry on the laptop. Known limits (in the docstrings): registration is a substring match on NOTES.md; vLLM
+    clamps max_tokens to the context; greedy vLLM is not batch-invariant. steer/ablate are hooks only. run_r1b.py and
+    run_reproduction.py stay for R1a-R1c re-grades.
+  - **Acceptance (explore tier):** K6b OR-Bench hard rejection on Ministral 3 8B, a 660-item stratified subsample:
+    runner 104/660 = 15.76%; K6b's own verdicts on the same ids 117/660 = 17.73%, Wilson [15.00, 20.83]: in band.
+    Paired: 28 K6b-only vs 15 runner-only rejections (93.5% agreement, McNemar p 0.066); 28/660 replies
+    byte-identical (batch-composition nondeterminism). Fable's correction: the first card graded against K6b's
+    full-set interval [12.81, 16.76], which the same-item rate itself falls outside (this salt's subsample sits 2.95
+    points high), so that test could not tell reproduction from drift; it was re-graded same-item from stored units
+    ($0). Reading: the runner reproduces K6b to within about 2 points, and effects under about 2 points on this
+    measure are below the run-to-run noise. Card results/cards/runner_acceptance_k6b_orbench.json.
+  - **Organisms:** src/anatta/organisms/ (schema-checked registry, get/keys/verify) with all 12 Act I adapters on
+    anatta-runs:/act1/full (2 arms × 2 seeds × 3 rounds, twins and parents linked, calibrated false), hashed in a
+    Modal CPU container (facts results_root/organisms/facts-20261105T010457Z.json, sha256 566d1fc0…1e32); the four
+    round-3 entries equal R1c's pins. recipe_commit 45a7926 with a note: the 3 Nov run launched from an uncommitted
+    tree that 45a7926 filed unchanged. Act I's expert-iteration trainer moved to src/anatta/train/expert_iteration.py
+    unchanged (AST-identical; the fine-tune loop lifted verbatim; marked uncalibrated); act1_core re-exports it.
+    experiments/organisms/act1_round3.yaml describes the recipe (the runner has no training stage yet).
+  - **Research note:** lab/plans/counterfeit-virtue-anchor-2026-11-04.md picks VLAF (arXiv 2604.20995) as the anchor
+    for the watched-vs-unwatched measure; its downloads await Eugene's OK.
+  - **Cost:** $0.43 (runner acceptance GPU 0.31 + judge 0.11; organisms hashing 0.01), on the 5 Nov day file.

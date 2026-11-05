@@ -1,0 +1,64 @@
+"""The runner's API judge: OpenRouter calls through the lab's cached, capped engine (anatta.judge.engine), under one
+anatta.spend.SpendGuard per run folder. Claude (Opus 5.5) wrote this file, 4 Nov 2026 (clean-lab step 5).
+
+  asker(out, cap, models) -> ask(jobs) -> {jid: {"text", "finish", "cost_usd", "cached"} | {"error"}}
+
+jobs: [{"jid", "model", "messages", "params"}]. The cache is the run folder's own (<out>/judge_cache), so a rerun of
+the score stage pays only for what is missing and no other run's verdicts are reused. A call the guard refuses stops
+the rest (their entries say so); the caller decides whether the stage is complete.
+"""
+
+from __future__ import annotations
+
+import asyncio
+from pathlib import Path
+
+from .gates import JUDGE_LOG
+
+TOOL = "runner_judge"
+
+
+def asker(out, cap: float, models: dict, *, client_factory=None, meta=None, concurrency: int = 32, label: str = ""):
+    """ask(jobs) for this run folder. models: {model: provider routing or None} (for the price lookup).
+    client_factory and meta replace the network in tests."""
+    from .. import spend
+    from ..backends.openrouter import OpenRouterClient, model_meta
+    from ..judge.cache import Cache
+    from ..judge.engine import CapStop, Engine
+
+    out = Path(out)
+    guard = spend.SpendGuard(None, sweep_cap=cap, sweep_log=out / JUDGE_LOG, tool=TOOL, label=label or out.name)
+    meta = meta if meta is not None else model_meta(models, cache_dir=out / "judge_cache")
+    cache = Cache(out / "judge_cache")
+    make = client_factory or (lambda: OpenRouterClient(concurrency=concurrency, per_model=concurrency,
+                                                       title="anatta runner"))
+
+    async def _all(jobs):
+        res: dict = {}
+        async with make() as client:
+            eng = Engine(client, cache, guard, meta, concurrency=concurrency, per_model=concurrency)
+
+            async def one(j):
+                if guard.stopped:
+                    res[j["jid"]] = {"error": f"not asked: {guard.stopped}"}
+                    return
+                try:
+                    r, cached, _ = await eng.call(model=j["model"], messages=j["messages"], params=j["params"],
+                                                  provider=models.get(j["model"]), sample=0, kind="judge", ident=j["jid"])
+                    res[j["jid"]] = {"text": r.get("text"), "finish": r.get("finish_reason"),
+                                     "cost_usd": 0.0 if cached else r.get("cost_usd"), "cached": cached}
+                except CapStop as e:
+                    res[j["jid"]] = {"error": f"cap: {e}"}
+                except Exception as e:  # recorded per job; ApiError text is scrubbed of the key by the client
+                    if getattr(e, "scope", None) == "run":
+                        raise
+                    res[j["jid"]] = {"error": f"{type(e).__name__}: {str(e)[:200]}"}
+
+            await asyncio.gather(*(one(j) for j in jobs))
+        return res
+
+    def ask(jobs: list[dict]) -> dict:
+        return asyncio.run(_all(jobs)) if jobs else {}
+
+    ask.guard = guard
+    return ask
