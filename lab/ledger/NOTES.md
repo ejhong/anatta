@@ -9169,3 +9169,11 @@ There are two ways to fix a hub:
     blocker; three should-fix items (single-odd-seed rule, unequal N/A between arms, no evidence the adapters were
     served) applied as above, with the minors. Estimate $35.52 (cautious; about $15 expected), cap $45; it runs on
     6 Nov UTC (5 Nov's remaining cap is under the estimate).
+- 2026-11-05 23:06 UTC — **Literature: Goodfire's mechanistic shaping (preprint, 4-5 Nov) read in full; note
+  lab/plans/mechanistic-shaping-2026-11-05.md; ideas 68.** Eugene approved the download (PDF 21.6 MB from
+  static.goodfire.ai, sha256 4d0cf520…1755, kept in session scratch, not committed). Their code repo
+  (goodfire-ai/reliance) has no licence: read only. Reading: the strongest evidence yet for installing good behaviour
+  through the internals, in RL against an exploitable objective (a negative for the paper's "just install it"
+  reply); it does not test durability with the penalty off or the order of training (H8, H9), and its honest route
+  earns the same reward as the hack. Next: an explore design (reproduce on our Act I stack, then S1 with shaping as
+  H9's installed arm) for Fable's cold read. Cost $0.
