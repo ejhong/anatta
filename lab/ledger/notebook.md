@@ -1213,3 +1213,20 @@ it is using exactly the mind it thinks it is.
 
 *In plain terms, for the vision:* no new result, but the lab can now run the next tests (watched vs unwatched, and
 the pincer) quickly and in a way someone else could repeat.
+
+## 5 November, early morning: does a model behave better when it thinks it's being watched? Yes, but our ruler reads low
+
+A 2026 paper (VLAF) found that small open models, told that their answers in one setting are monitored and used for
+training while answers in another are private, side with the developer's policy far more often when watched. That is
+the "good only when watched" look-alike our release work has to beat, so we tried to reproduce it before using it.
+We asked three models 250 moral dilemmas, ten times in each setting, and had another model grade which option each
+picked. The pattern came back: Qwen3 and OLMo2 complied with the developer about 25 points more often when watched,
+Qwen2.5 barely at all, and the gap mostly vanished when we told them nothing would follow from their answers. But
+the gaps were about two thirds of the paper's, and one of our pre-set rules (OLMo2 must beat Qwen2.5 by 20 points; it
+did by 17.5) failed, so by our own rules the reproduction fails. A second model checked the grading from the raw
+files and agreed. Its best guess: for Qwen3, the grader often declines to read an answer that follows a long stretch
+of thinking; for OLMo2, the cause is unknown (perhaps a sampling setting where the paper and its code disagree).
+
+*In plain terms, for the vision:* the "good only when watched" effect is real in small models, and our ruler sees
+it, but it reads low, so we won't point it at our own Act I models until we know why. That is the lab working as it
+should: a failed calibration caught before it could make a null on Act I look meaningful.

@@ -36,6 +36,12 @@ def _is_note_key(key: str) -> bool:
     return k in NOTE_KEYS or k.endswith(("_note", "_notes", "_reading", "_claim", "_why"))
 
 
+def _under_note_key(path: str) -> bool:
+    """The lab's prose: the field or any field above it is a note key (e.g. a spec's decision.near, copied into a
+    card). Item-field names are still checked on their own, wherever they sit."""
+    return any(_is_note_key(seg) for seg in re.sub(r"\[\d+\]", "", path).split(".") if seg)
+
+
 def _walk(o, path: str = "", key: str = "") -> Iterator[tuple[str, str, object]]:
     if isinstance(o, dict):
         for k, v in o.items():
@@ -56,7 +62,7 @@ def problems(card: object) -> list[str]:
             out.append(f"{path}: text under item field {key!r}")
         if any(m in v for m in TEMPLATE_MARKERS):
             out.append(f"{path}: a chat-template marker")
-        if len(v) > MAX_CHARS and not (HASH.match(v) or PATHLIKE.match(v) or _is_note_key(key)):
+        if len(v) > MAX_CHARS and not (HASH.match(v) or PATHLIKE.match(v) or _under_note_key(path)):
             out.append(f"{path}: {len(v)} chars of free text")
     return out
 
@@ -80,3 +86,9 @@ def test_the_scrub_catches_item_text():
     assert problems({"x": {"rendered": "<|im_start|>user hi<|im_end|>"}})
     assert problems({"free": "word " * 60})
     assert not problems({"target": 69.3, "prompts": 1319, "claim": "word " * 60, "sha256": "ab" * 32})
+
+
+def test_prose_under_a_decision_is_a_note_but_item_fields_are_still_caught():
+    assert not problems({"reproduction": {"decision": {"near": "x " * 150}}})
+    assert problems({"reproduction": {"decision": {"prompt": "Write a function that ..."}}})
+    assert problems({"reproduction": {"grades": [{"name": "x " * 150}]}})
