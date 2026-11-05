@@ -1200,3 +1200,16 @@ question on one copy. A second model checked everything from the raw files and a
 general. Together with yesterday's finding, it looks like Act I so far grows a habit, not a self. That is a useful
 negative: before a release (Act II) can be tested, Act I needs to grow something more self-like, which is the next
 step in the plan (an "Act I with a life": memory, stakes, a story about itself).
+
+## 5 November, small hours: one runner for every experiment, and a register of the minds we made
+
+Two pieces of plumbing landed. First, one runner: any experiment is now a short file naming the models, the trained
+minds, the tests and the seeds, and the runner plans it, tries it at full size, runs it, scores it and files a card,
+refusing to skip the safety steps. To check it, we re-measured something we already knew (how often Ministral turns
+down safe requests that sound edgy) on 660 questions: 15.8% against the earlier run's 17.7% on the same questions,
+close enough. A second model caught that our first comparison was against the wrong yardstick and we corrected it.
+Second, a register: the twelve Act I minds from 3 November now each have a fingerprint, so every later test can check
+it is using exactly the mind it thinks it is.
+
+*In plain terms, for the vision:* no new result, but the lab can now run the next tests (watched vs unwatched, and
+the pincer) quickly and in a way someone else could repeat.
