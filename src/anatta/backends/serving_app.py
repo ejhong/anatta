@@ -28,6 +28,7 @@ No `from __future__ import annotations` here: Modal reads the class parameters' 
 
 import json
 import time
+from datetime import UTC
 from pathlib import Path, PurePosixPath
 
 import modal
@@ -381,13 +382,13 @@ def build_card(res: dict, costs: dict, method: str) -> dict:
 
 @app.local_entrypoint()
 def main(trial_only: bool = False, trial_cap: float = 2.0, run_cap: float = 3.0):
+    from datetime import datetime
+
     from anatta import cards
     from anatta.config import load
 
-    from datetime import datetime, timezone
-
     # each run gets a fresh dated folder; nothing is overwritten (Fable, 3 Nov)
-    out = load().results_root / "calib" / "serving" / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    out = load().results_root / "calib" / "serving" / datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
     method = SV.__doc__.strip().split("\n\n")[1]
     spec = {"check": "serving", "method": method, "prompts": list(SV.PROMPTS), "configs": [list(c) for c in SV.CONFIGS],
             "prefix": SV.PREFIX, "window": SV.WINDOW, "tie_nats": SV.TIE_NATS, "tight_nats": SV.TIGHT_NATS, "gpu": GPU,

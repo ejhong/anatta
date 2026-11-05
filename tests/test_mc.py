@@ -30,9 +30,10 @@ ITEMS = [  # made-up items of mixed lengths: (question, choices, subject, answer
 def letters_tiny():
     """A tiny random Llama and a byte-level tokenizer trained so that " A" to " D" are one token each, as they are in
     Qwen's and Ministral's tokenizers."""
-    from conftest import SPECIAL, TEMPLATE
     from tokenizers import Tokenizer, decoders, models, pre_tokenizers, trainers
     from transformers import LlamaConfig, LlamaForCausalLM, PreTrainedTokenizerFast
+
+    from conftest import SPECIAL, TEMPLATE
 
     t = Tokenizer(models.BPE())
     t.pre_tokenizer = pre_tokenizers.ByteLevel(add_prefix_space=False)

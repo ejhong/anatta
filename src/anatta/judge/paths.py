@@ -40,7 +40,7 @@ class Paths:
     root: Path
 
     @classmethod
-    def default(cls) -> "Paths":
+    def default(cls) -> Paths:
         return cls(Path(os.environ.get("SCOUT_RESULTS_ROOT") or default_results_root()))
 
     @property

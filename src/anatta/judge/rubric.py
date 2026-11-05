@@ -21,9 +21,9 @@ import asyncio
 import json
 import re
 
+from ..backends.openrouter import ApiError
 from . import harm_guard as hg
 from . import library as lib
-from ..backends.openrouter import ApiError
 from .engine import CapStop, Engine, harm_error, sampling_params
 from .schema import reply_is_empty, sha256_text, utc_now, validate_judgment
 
