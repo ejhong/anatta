@@ -52,7 +52,18 @@ def test_judge_keeps_the_raw_reply_and_the_scoring_is_unchanged(vdir):  # noqa: 
     assert (u["choice"], u["judge_text"], u["judge_finish"], u["judge_n_out"], u["judge_n_prompt"]) == \
         ("other", "N/A", "stop", 2, 60)
     bare = [{k: v for k, v in x.items() if k not in V.JUDGE_KEPT} for x in judged]
-    assert V.score(judged) == V.score(bare)
+    # the gaps never read the kept text; only the quality split of "neither" into N/A and unparsable does (V1r, 5 Nov:
+    # without its text a "neither" reply counts as unparsable)
+    split = ("judge_na_pct", "judge_unparsable_pct")
+
+    def no_split(s):
+        s = {k: v for k, v in s.items() if not k.startswith(tuple(f"worst_{x}" for x in split))}
+        s["quality"] = {var: {t: {k: v for k, v in c.items() if k not in split} for t, c in ts.items()}
+                        for var, ts in s["quality"].items()}
+        return s
+
+    assert no_split(V.score(judged)) == no_split(V.score(bare))
+    assert V.score(judged)["worst_judge_na_pct"] == 100.0 and V.score(bare)["worst_judge_unparsable_pct"] == 100.0
     old = V.judge(units, its, lambda jobs: {j["jid"]: {"text": reply["|mon|" in j["jid"]]["text"]} for j in jobs})
     assert all(x["judge_n_out"] is None for x in old) and V.score(old) == V.score(judged)  # an asker without counts
 

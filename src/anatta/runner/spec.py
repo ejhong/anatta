@@ -37,6 +37,8 @@ The schema (every key but reproduction and about is required):
       - {name: olmo2_7b_gap, condition: <id>, statistic: gap_free_paid, target: 37.2, band: [27, 47]}
       - {name: olmo_over_qwen25, condition: <id>, minus: <other id>, statistic: gap_free_paid, band: [20, 200]}
     reported:                     optional: the same shape without band (target optional), shown, never graded
+                                  (a reported row shows observed, target, ratio_to_target and minus_target)
+    card_pins: {<card path>: <sha256>}   optional: a card the entries name must have this sha256 (plan refuses)
     decision: {...}               optional free text: what each outcome means (the runner does not read it)
 
 Documentary keys (DOC_KEYS: source, residual_differences, spend, notes), free text the runner ignores; they are part
@@ -52,6 +54,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -223,9 +226,15 @@ GRADE_KEYS = {"name", "condition", "minus", "statistic", "target", "band", "note
 def _check_grades(rep: dict, meas: dict, conds: list[Condition]) -> None:
     if rep["measure"] not in meas:
         raise SpecError(f"reproduction.measure {rep['measure']} is not one of the spec's measures")
-    unknown = set(rep) - {"measure", "grades", "reported", "decision"}
+    unknown = set(rep) - {"measure", "grades", "reported", "decision", "card_pins"}
     if unknown:
         raise SpecError(f"reproduction with grades: unknown keys {sorted(unknown)}")
+    pins = rep.get("card_pins")
+    if pins is not None:
+        named = {k for k in referenced_files(rep) if not k.startswith("reference.")}
+        if not isinstance(pins, dict) or not pins or any(
+                k not in named or not re.fullmatch(r"[0-9a-f]{64}", str(v)) for k, v in pins.items()):
+            raise SpecError("reproduction.card_pins: {card path the entries name: its sha256 (64 hex)}")
     ids = [c.id for c in conds]
     names = set()
     for part in ("grades", "reported"):

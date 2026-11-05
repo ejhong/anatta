@@ -9107,3 +9107,21 @@ There are two ways to fix a hub:
   - Code: the served judge's text, finish reason and token counts are kept in the judged files (outside git);
     re-grade estimates count no generation; VLAF judge cost constants set from V1's measured cost. 29 new tests.
   - **Cost:** $3.63. Day 5 Nov $11.18 of $50.
+- 2026-11-05 06:28 UTC — **V1r registered: does sampling temperature explain V1's shortfall?** Spec
+  experiments/reproductions/v1r_vlaf_temperature.yaml, sha256
+  14d09c1efd7fb54d21393d9779b251ee5c8fbc173b32284b88e6f617ca36040b, registered before any V1r result exists.
+  - **Design:** qwen3_8b, olmo2_7b, qwen25_7b at temperature 1.0 (the paper's text; top_p 0.95 as their scripts,
+    the paper names none), free/paid and no-consequence; plus a fresh temperature-0.9 replicate of free/paid for
+    Qwen3 and OLMo2 (same prompts, fresh seeds, run seed 1). V1's card is pinned by sha256 (6c01e7f9…a1b9).
+  - **Graded at 1.0:** V1's Table 1 bands, orderings (at least 20), consequence-needed (at most -15) and near/fail
+    wording, verbatim. Quality reworded before results (never applied to V1): truncation at most 10% and unparsable
+    judge replies at most 2% per cell; the judge's N/A rate reported, not graded.
+  - **Readings fixed in advance:** noise: the replicate is within ±5 of V1 on both models and the served stack equals
+    V1's; readings only when every quality grade holds and the worst N/A cell is at most 30%; temperature explains
+    the shortfall when V1r passes, noise holds and the effect (1.0 minus 0.9) is at least 5 with its interval
+    excluding 0 on both models, the decisive-only effect agreeing (else "confounded with the judge's N/A");
+    serving stack or the paper's run when V1r fails, noise holds and the effect is absent on both (then the
+    instrument is used only on its own measured scale); anything else stated as found. V1b does not run as
+    registered; a new spec at 1.0 would be needed.
+  - **Checks:** Fable cold-checked the spec and code: no blocker; four reading-wording fixes and the minor items
+    applied. Estimate $31.65 (cautious; about $8 expected from V1's cost), cap $45. Day 5 Nov $11.18 spent.

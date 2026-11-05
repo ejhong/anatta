@@ -314,6 +314,9 @@ def _hash_referenced(spec) -> dict:
     if missing:
         raise Refused(f"the reproduction names cards that do not exist yet: {missing} (e.g. an earlier run's card "
                       "this spec reads; commit it under results/cards/ first)")
+    for k, want in ((spec.reproduction or {}).get("card_pins") or {}).items():
+        if out[k]["sha256"] != want:
+            raise Refused(f"reproduction.card_pins: {k} has sha256 {out[k]['sha256']}, the spec pins {want}")
     for k, v in ((spec.reproduction or {}).get("reference") or {}).items():
         got = out[f"reference.{k}"]["sha256"]
         if got != v["sha256"]:
@@ -653,10 +656,11 @@ def grade_many(rep: dict, numbers: dict) -> dict:
                      "verdict": "in_band" if obs is not None and lo <= obs <= hi else "outside_band"})
     for g in rep.get("reported") or []:
         obs, tgt = observed(g), resolve_value(g["target"]) if g.get("target") is not None else None
-        ratio = (round(obs / tgt, 4) if isinstance(obs, (int, float)) and isinstance(tgt, (int, float)) and tgt
-                 else None)
+        num = isinstance(obs, (int, float)) and isinstance(tgt, (int, float))
+        ratio = round(obs / tgt, 4) if num and tgt else None
         shown.append({"name": g["name"], "condition": g["condition"], "minus": g.get("minus"),
                       "statistic": g["statistic"], "observed": obs, "target": tgt, "ratio_to_target": ratio,
+                      "minus_target": round(obs - tgt, 6) if num else None,
                       "target_from": g["target"] if isinstance(g.get("target"), dict) else None,
                       "note": g.get("note")})
     return {"measure": rep["measure"], "grades": rows, "reported_ungraded": shown,
