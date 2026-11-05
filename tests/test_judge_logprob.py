@@ -35,12 +35,15 @@ def test_c2_scores_rederive_identically():
             v = r[m]
             n += 1
             got = L.rescore(v)
-            if got != v["score"]:  # exact float equality: the same code path on the same inputs
+            # the same code path on the same inputs: exact on the Mac that wrote C2; Linux's libm (CI) can differ
+            # in the last bit of exp(), so within 1e-12
+            if got != v["score"] and not (got is not None and v["score"] is not None
+                                          and math.isclose(got, v["score"], rel_tol=1e-12, abs_tol=1e-12)):
                 mism.append((r["source"], r["row"], m))
             numbers += v["verdict"] == "number"
             nones += v["verdict"] == "none"
             if v["top_logprobs"]:
-                assert math.isclose(L.number_mass(v["top_logprobs"]), v["number_mass"], rel_tol=0, abs_tol=0)
+                assert math.isclose(L.number_mass(v["top_logprobs"]), v["number_mass"], rel_tol=1e-12, abs_tol=1e-12)
     assert n == 10400 and not mism
     assert numbers + nones == n  # no moderated verdict in C2
 

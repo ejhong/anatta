@@ -33,6 +33,9 @@ import modal
 ALIGN = "/Users/eugene/prj/align"
 H4 = Path(__file__).resolve().parent  # lab/experiments/h4lite on the laptop (the anatta-lab worktree)
 RESULTS = H4 / "results"
+# This checkout's root on the laptop (the image's source paths; in a container the module sits in /root and the
+# image's local sources are not read, so ALIGN's path stands in)
+LOCAL_ANATTA = H4.parents[2] if len(H4.parents) > 2 and (H4.parents[2] / "src" / "anatta").is_dir() else Path(f"{ALIGN}/anatta")
 MODEL = "mistralai/Ministral-3-8B-Instruct-2512-BF16"
 DDIR = "directions/mistralai__Ministral-3-8B-Instruct-2512-BF16"  # v_ego (ego.pt) at layers 8-32, under anatta/
 EGO = f"{ALIGN}/anatta/{DDIR}"  # the same path inside the containers (the image adds it there)
@@ -49,8 +52,8 @@ image = (
                     "tiktoken==0.14.0", "jinja2==3.1.6", "regex==2026.9.29", "peft==0.21.2", "accelerate==1.15.0")
     .env({"HF_HOME": f"{CACHE}/hf", "TOKENIZERS_PARALLELISM": "false",
           "PYTHONPATH": f"{ALIGN}/anatta/src:/root"})
-    .add_local_dir(f"{ALIGN}/anatta/src", f"{ALIGN}/anatta/src", ignore=["**/__pycache__"])  # main's anatta (lab/LIBRARY.md)
-    .add_local_dir(f"{ALIGN}/anatta/{DDIR}", f"{ALIGN}/anatta/{DDIR}")
+    .add_local_dir(str(LOCAL_ANATTA / "src"), f"{ALIGN}/anatta/src", ignore=["**/__pycache__"])  # main's anatta (lab/LIBRARY.md)
+    .add_local_dir(str(LOCAL_ANATTA / DDIR), f"{ALIGN}/anatta/{DDIR}")
     .add_local_dir(str(H4 / "third_party"), "/root/third_party", ignore=["**/__pycache__"])  # EvalPlus's comparison
     .add_local_file(str(H4 / "koan_env.py"), "/root/koan_env.py")
     .add_local_file(str(H4 / "koan_pairs.py"), "/root/koan_pairs.py")  # split_and_hash (modal_gate0 imports it)
