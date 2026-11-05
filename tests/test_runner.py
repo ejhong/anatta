@@ -561,3 +561,89 @@ def test_a_trial_counts_replies_per_request_when_an_item_makes_several(lab, monk
     out, _ = stages.plan(p)
     _, t = stages.trial(p, out, remote=FakeRemote(), ask_factory=fake_ask_factory([]))
     assert t["n_requests"] == 4 and t["checks"]["every_reply_back"], t["checks"]
+
+
+# ------------------------------------------------------------------------------------------------- provenance (5 Nov)
+
+
+def test_the_served_judges_stack_reaches_score_and_card(lab, monkeypatch):
+    monkeypatch.setattr(sys.modules[FAKE], "JUDGE_BACKEND", "vllm", raising=False)
+    info = {"path": "/cache/judge", "vllm": "0.31.0", "transformers": "5.17.0", "torch": "2.13.0", "dtype": "bfloat16",
+            "settings": {"ctx": 16384, "seed": 0}}
+
+    def factory(out, cap, measure):
+        ask = fake_ask_factory([])(out, cap, measure)
+        ask.session = types.SimpleNamespace(info=info)
+        return ask
+
+    p = _spec(lab.tmp)
+    out, _ = stages.plan(p)
+    stages.trial(p, out, remote=FakeRemote(), ask_factory=fake_ask_factory([]))
+    stages.run(p, out, remote=FakeRemote())
+    _, sc = stages.score(p, out, ask_factory=factory)
+    assert sc["judge_served"] == {FAKE: info}
+    _, c = stages.card(p, out)
+    assert c["judge_served"] == {FAKE: info}
+
+
+def test_an_openrouter_judge_records_no_served_stack(lab):
+    p = _spec(lab.tmp)
+    out, _ = stages.plan(p)
+    stages.trial(p, out, remote=FakeRemote(), ask_factory=fake_ask_factory([]))
+    stages.run(p, out, remote=FakeRemote())
+    _, sc = stages.score(p, out, ask_factory=fake_ask_factory([]))
+    assert sc["judge_served"] == {}
+
+
+def test_the_served_judge_passes_the_engines_sampling_through():
+    from anatta.runner.judge import vllm_asker
+
+    sp = {"temperature": 0.0, "top_p": 1.0, "top_k": -1, "seed": None, "max_tokens": 4096, "repetition_penalty": 1.0}
+    sess = types.SimpleNamespace(generate=lambda reqs: [{"rid": r["rid"], "text": "a", "finish_reason": "stop",
+                                                         "sampling": sp} for r in reqs], close=lambda: 0.0, info={})
+    got = vllm_asker(sess)([{"jid": "j", "messages": [], "params": {"temperature": 0.0}}])
+    assert got["j"]["sampling"] == sp
+
+
+def test_a_contrast_across_conditions_reaches_the_card(lab, monkeypatch):
+    seen = []
+
+    def contrast(units, plus, minus, variant):
+        seen.append((sorted(units), plus, minus, variant))
+        return {"diff": 1.5, "ci95": [0.5, 2.5]}
+
+    monkeypatch.setattr(sys.modules[FAKE], "contrast", contrast, raising=False)
+    a, b = "ministral3_8b__base__none__s0", "ministral3_8b__base__none__s1"
+    rep = {"measure": FAKE, "grades": [{"name": "r", "condition": a, "statistic": "rate", "band": [0, 1]}],
+           "contrasts": [{"name": "x", "plus": [a], "minus": [b], "variant": "v", "note": "n"}]}
+    p = _spec(lab.tmp, seeds=[0, 1], reproduction=rep)
+    out, _ = stages.plan(p)
+    stages.trial(p, out, remote=FakeRemote(), ask_factory=fake_ask_factory([]))
+    stages.run(p, out, remote=FakeRemote())
+    stages.score(p, out, ask_factory=fake_ask_factory([]))
+    _, c = stages.card(p, out)
+    assert c["reproduction"]["contrasts"] == {"x": {"diff": 1.5, "ci95": [0.5, 2.5], "note": "n"}}
+    assert seen == [([a, b], [a], [b], "v")]
+
+
+@pytest.mark.parametrize("bad,msg", [
+    ({"name": "x", "plus": [], "minus": ["B"], "variant": "v"}, "each"),
+    ({"name": "x", "plus": ["A"], "minus": ["nope"], "variant": "v"}, "unknown or shared"),
+    ({"name": "x", "plus": ["A"], "minus": ["A"], "variant": "v"}, "unknown or shared"),
+    ({"name": "x", "plus": ["A"], "minus": ["B"]}, "each")])
+def test_bad_contrasts_are_refused(lab, monkeypatch, bad, msg):
+    monkeypatch.setattr(sys.modules[FAKE], "contrast", lambda *a: {}, raising=False)
+    ids = {"A": "ministral3_8b__base__none__s0", "B": "ministral3_8b__base__none__s1"}
+    x = {**bad, **{k: [ids.get(c, c) for c in bad[k]] for k in ("plus", "minus") if k in bad}}
+    rep = {"measure": FAKE, "grades": [{"name": "r", "condition": ids["A"], "statistic": "rate", "band": [0, 1]}],
+           "contrasts": [x]}
+    with pytest.raises(S.SpecError, match=msg):
+        S.load(_spec(lab.tmp, seeds=[0, 1], reproduction=rep))
+
+
+def test_contrasts_need_a_measure_with_contrast(lab):
+    a = "ministral3_8b__base__none__s0"
+    rep = {"measure": FAKE, "grades": [{"name": "r", "condition": a, "statistic": "rate", "band": [0, 1]}],
+           "contrasts": [{"name": "x", "plus": [a], "minus": [a.replace("s0", "s1")], "variant": "v"}]}
+    with pytest.raises(S.SpecError, match="no contrast"):
+        S.load(_spec(lab.tmp, seeds=[0, 1], reproduction=rep))

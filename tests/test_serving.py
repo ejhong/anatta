@@ -327,3 +327,41 @@ def test_separation_also_counts_a_large_token_level_distance():
     assert not SV.separates(real, {"alpha_hat": None, "rms": 1.0})
     ok = {"alpha_hat": 0.0, "rms": 0.05}
     assert SV.scale_rule(real, ok, {"alpha_hat": 1.0, "rms": 0.04}, {"alpha_hat": 0.936, "rms": 0.97})["pass"]
+
+
+# ------------------------------------------------------------------------------------------------- provenance (5 Nov)
+
+
+def test_generation_rows_record_the_sampling_params_the_engine_used(monkeypatch):
+    """Engine.generate on a fake vllm: each row's "sampling" is read back from the SamplingParams object it built
+    (so a normalization inside vLLM would show), not copied from the request."""
+    import types
+
+    from anatta.backends import vllm as VB
+
+    class SP:
+        def __init__(self, **kw):
+            self.__dict__.update(kw)
+            if self.temperature == 0.0:  # stands in for vLLM's own greedy normalization
+                self.top_p, self.top_k = 1.0, -1
+
+    vllm_mod = types.ModuleType("vllm")
+    vllm_mod.SamplingParams = SP
+    inputs_mod = types.ModuleType("vllm.inputs")
+    inputs_mod.TokensPrompt = lambda prompt_token_ids: prompt_token_ids
+    monkeypatch.setitem(sys.modules, "vllm", vllm_mod)
+    monkeypatch.setitem(sys.modules, "vllm.inputs", inputs_mod)
+
+    out = types.SimpleNamespace(text="ok", token_ids=[5, 6], finish_reason="stop")
+    eng = object.__new__(VB.Engine)
+    eng.s = Settings(path="/x", ctx=100)
+    eng.prompt_ids = lambda messages: [1, 2, 3]
+    eng.llm = types.SimpleNamespace(generate=lambda prompts, sps, use_tqdm, lora_request: [
+        types.SimpleNamespace(outputs=[out], prompt_token_ids=p) for p in prompts])
+    eng._lora = {}
+    rows = eng.generate([{"rid": "a", "messages": [], "temperature": 0.9, "top_p": 0.95, "max_tokens": 4096, "seed": 7},
+                         {"rid": "g", "messages": [], "temperature": 0.0, "top_p": 0.5, "max_tokens": 8}])
+    assert rows[0]["sampling"] == {"temperature": 0.9, "top_p": 0.95, "top_k": -1, "seed": 7, "max_tokens": 89,
+                                   "repetition_penalty": 1.0}  # max_tokens cut to fit the context (100 - 3 - 8)
+    assert rows[1]["sampling"]["top_p"] == 1.0 and rows[1]["sampling"]["seed"] is None
+    assert json.dumps(rows[0]["sampling"])

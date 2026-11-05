@@ -52,6 +52,20 @@ def merge_system(messages: list[dict]) -> list[dict]:
     return rest
 
 
+SAMPLING_FIELDS = ("temperature", "top_p", "top_k", "seed", "max_tokens", "repetition_penalty")
+
+
+def sampling_record(sp) -> dict:
+    """What the engine was handed, read back from the SamplingParams object itself (after vLLM's own normalization,
+    e.g. a greedy request's top_p and top_k), not from the request dict. Added 5 Nov 2026 (V1r's provenance gap: the
+    arms' settings rested on the code path and plan.json, not on the generation rows)."""
+    out = {}
+    for k in SAMPLING_FIELDS:
+        v = getattr(sp, k, None)
+        out[k] = v if v is None or isinstance(v, (bool, int, float, str)) else str(v)
+    return out
+
+
 @dataclass
 class Settings:
     """How one model is served. path: the snapshot folder; ctx: max_model_len; text_only and tokenizer come from the
@@ -85,7 +99,7 @@ class Settings:
 class Engine:
     """The generator. Requests are dicts: {"rid", "messages", "temperature", "max_tokens", "seed"?, "top_p"?,
     "top_k"? (-1: off), "repetition_penalty"? (1.0: off), "adapter"?}. Results carry the text, the output token ids, the prompt ids' count, the finish reason and the
-    max_tokens actually used."""
+    max_tokens actually used, and "sampling": the SamplingParams the engine used (sampling_record)."""
 
     def __init__(self, s: Settings):
         import io
@@ -163,8 +177,9 @@ class Engine:
                                 lora_request=loras if any(loras) else None)
         return [{"rid": r.get("rid"), "text": o.outputs[0].text, "token_ids": list(o.outputs[0].token_ids),
                  "prompt_ids": p, "n_prompt": len(o.prompt_token_ids), "n_out": len(o.outputs[0].token_ids),
-                 "finish_reason": o.outputs[0].finish_reason, "max_tokens": mt, "adapter": r.get("adapter")}
-                for r, p, o, mt in zip(requests, ids, res, mts)]
+                 "finish_reason": o.outputs[0].finish_reason, "max_tokens": mt, "adapter": r.get("adapter"),
+                 "sampling": sampling_record(sp)}
+                for r, p, o, mt, sp in zip(requests, ids, res, mts, sps)]
 
     def score(self, requests: list[dict]) -> list[dict]:
         """Teacher-forced log probabilities: requests {"rid", "ids" (prompt then output token ids), "n_score" (how many

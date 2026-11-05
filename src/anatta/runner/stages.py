@@ -563,9 +563,15 @@ def score(spec_path, run_dir="", ask_factory=None, remote=None) -> tuple[Path, d
     finally:
         for a in asks.values():
             getattr(a, "close", lambda: None)()
+    # the served judge's stack, as a generator's "served" (V1r's provenance gap, 5 Nov 2026): this stage's session,
+    # else what an earlier score of this run folder recorded (its judged files are read back, nothing is served)
+    before = (gates.read_latest(out, "score.json") or {}).get("judge_served") or {}
+    judge_served = {m: (getattr(getattr(asks.get(m), "session", None), "info", None) or before.get(m))
+                    for m in spec.measures if getattr(M.get(m), "JUDGE_BACKEND", "openrouter") == "vllm"}
     complete = all("incomplete" not in m for c in scores.values() for m in c.values())
     checks = _judge_checks(spec, out, items, ask_factory) if complete else {}
     rec = {"stage": "score", "complete": complete, "scores": scores, "judge_checks": checks,
+           "judge_served": judge_served,
            "judge_usd": round(spend.sweep_spent(out / gates.JUDGE_LOG), 6),
            "judge_gpu_usd": round(spend.sweep_spent(out / gates.JUDGE_GPU_LOG), 6), "spend": budget, "code": code}
     p = cards.write_card(out, rec, name="score.json", force=True, code=code)
@@ -727,6 +733,7 @@ def card(spec_path, run_dir="") -> tuple[Path, dict]:
          "trial": {k: trial_.get(k) for k in ("ok", "checks", "batch", "n_requests", "gen_s", "s_per_request",
                                               "truncated")},
          "served": (run_ or {}).get("conditions", {}).get("_served"),
+         "judge_served": sc.get("judge_served") or {},
          "cost_usd": {"gpu": round(gates.run_spent(out) - sc["judge_usd"] - sc.get("judge_gpu_usd", 0.0), 4),
                       "judge": round(sc["judge_usd"] + sc.get("judge_gpu_usd", 0.0), 4),
                       "total": round(gates.run_spent(out), 4), "estimate_at_plan": plan_["estimate"]["total_usd"],
@@ -740,6 +747,12 @@ def card(spec_path, run_dir="") -> tuple[Path, dict]:
     rep = spec.reproduction
     if rep and "grades" in rep:
         c["reproduction"] = grade_many(rep, numbers)
+        if rep.get("contrasts"):
+            measure = M.get(rep["measure"])
+            units = {cid: ms[rep["measure"]].get("units") or {} for cid, ms in sc["scores"].items()}
+            c["reproduction"]["contrasts"] = {
+                x["name"]: {**measure.contrast(units, x["plus"], x["minus"], x["variant"]), "note": x.get("note")}
+                for x in rep["contrasts"]}
     elif rep:
         cid = rep.get("condition") or spec.conditions[0].id
         ref = None

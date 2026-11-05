@@ -38,7 +38,10 @@ The schema (every key but reproduction and about is required):
       - {name: olmo_over_qwen25, condition: <id>, minus: <other id>, statistic: gap_free_paid, band: [20, 200]}
     reported:                     optional: the same shape without band (target optional), shown, never graded
                                   (a reported row shows observed, target, ratio_to_target and minus_target)
-    card_pins: {<card path>: <sha256>}   optional: a card the entries name must have this sha256 (plan refuses)
+    card_pins: {<card path>: <sha256>}   optional: a card (named by the entries, or a reference the decision text
+                                  reads) must have this sha256; plan refuses, and the card stage refuses if it changed
+    contrasts:                    optional, reported: a measure's contrast() across conditions (e.g. two arms' seed
+      - {name: x, plus: [<ids>], minus: [<ids>], variant: free_paid}   means), with its own interval
     decision: {...}               optional free text: what each outcome means (the runner does not read it)
 
 Documentary keys (DOC_KEYS: source, residual_differences, spend, notes), free text the runner ignores; they are part
@@ -221,22 +224,36 @@ def validate(raw: dict, *, organism_base=_organism_base) -> list[Condition]:
 
 
 GRADE_KEYS = {"name", "condition", "minus", "statistic", "target", "band", "note"}
+CONTRAST_KEYS = {"name", "plus", "minus", "variant", "note"}
 
 
 def _check_grades(rep: dict, meas: dict, conds: list[Condition]) -> None:
     if rep["measure"] not in meas:
         raise SpecError(f"reproduction.measure {rep['measure']} is not one of the spec's measures")
-    unknown = set(rep) - {"measure", "grades", "reported", "decision", "card_pins"}
+    unknown = set(rep) - {"measure", "grades", "reported", "decision", "card_pins", "contrasts"}
     if unknown:
         raise SpecError(f"reproduction with grades: unknown keys {sorted(unknown)}")
     pins = rep.get("card_pins")
     if pins is not None:
-        named = {k for k in referenced_files(rep) if not k.startswith("reference.")}
         if not isinstance(pins, dict) or not pins or any(
-                k not in named or not re.fullmatch(r"[0-9a-f]{64}", str(v)) for k, v in pins.items()):
-            raise SpecError("reproduction.card_pins: {card path the entries name: its sha256 (64 hex)}")
+                not re.fullmatch(r"results/cards/[A-Za-z0-9_.-]+\.json", str(k))
+                or not re.fullmatch(r"[0-9a-f]{64}", str(v)) for k, v in pins.items()):
+            raise SpecError("reproduction.card_pins: {results/cards/<name>.json: its sha256 (64 hex)}")
     ids = [c.id for c in conds]
     names = set()
+    if rep.get("contrasts"):
+        from . import measures as M
+
+        if not hasattr(M.get(rep["measure"]), "contrast"):
+            raise SpecError(f"reproduction.contrasts: {rep['measure']} has no contrast()")
+    for x in rep.get("contrasts") or []:
+        if (not isinstance(x, dict) or set(x) - CONTRAST_KEYS or not {"name", "plus", "minus", "variant"} <= set(x)
+                or not isinstance(x["plus"], list) or not isinstance(x["minus"], list) or not x["plus"] or not x["minus"]):
+            raise SpecError("reproduction.contrasts: each {name, plus: [ids], minus: [ids], variant, note?}")
+        bad = [c for c in [*x["plus"], *x["minus"]] if c not in ids]
+        if bad or set(x["plus"]) & set(x["minus"]) or x["name"] in names:
+            raise SpecError(f"reproduction.contrasts.{x['name']}: unknown or shared conditions {bad} or a repeated name")
+        names.add(x["name"])
     for part in ("grades", "reported"):
         rows = rep.get(part) or []
         if part == "grades" and (not isinstance(rows, list) or not (rows or rep.get("reported"))):
@@ -323,6 +340,8 @@ def referenced_files(rep: dict | None) -> dict:
     for g in [*(rep.get("grades") or []), *(rep.get("reported") or [])]:
         card(g.get("target"))
         card(g.get("band"))
+    for k in rep.get("card_pins") or {}:
+        card({"card": k})
     for k, v in (rep.get("reference") or {}).items():
         out[f"reference.{k}"] = Path(str(v["file"])).expanduser()
     return out
