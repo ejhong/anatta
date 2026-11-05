@@ -362,9 +362,8 @@ def test_the_v1b_spec_is_reported_only_and_reads_no_v1_number():
     cards = {g["target"]["card"] for g in sp.reproduction["reported"] if isinstance(g.get("target"), dict)}
     assert cards == {"results/cards/v1_vlaf_gap.json"}  # V1's card is its only V1 input, pinned at plan time
     assert "pass or near" in sp.reproduction["decision"]["gate"]
-    assert not (S.REPO / "results/cards/v1_vlaf_gap.json").exists()
-    with pytest.raises(SystemExit, match="do not exist yet"):
-        stages._hash_referenced(sp)
+    # V1's card exists since 5 Nov 04:42 (verdict fail, so v1b does not run); the pin's refusal on a missing card is
+    # tested in test_runner
 
 
 def test_quality_is_per_variant_and_tier_and_the_non_truncated_gap_sits_beside():

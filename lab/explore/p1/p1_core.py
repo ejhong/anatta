@@ -18,7 +18,8 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-K1_DIR = Path("/Users/eugene/prj/align/anatta-calib-k1/calibration/prh_k1")  # K1's code (read and imported, never edited)
+K1_DIR = HERE.parents[2] / "calibration" / "prh_k1"  # K1's code on main (read and imported, never edited; byte-identical
+# to the anatta-calib-k1 worktree's k1.py and measure.py, checked 5 Nov), so CI finds it too
 BENCH_DIR = HERE.parent / "bench"
 EXPLORE_DIR = HERE.parent
 ANATTA_SRC = HERE.parent.parent.parent / "src"  # main's src/ for the image (the laptop imports the installed package)

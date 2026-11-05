@@ -40,6 +40,14 @@ from types import SimpleNamespace
 
 import pytest
 
+
+def _gitignored(path) -> bool:
+    """True when git ignores the path: a large local file kept out of the repo (lab/LARGE_FILES.md), absent in CI."""
+    import subprocess
+    p = Path(path)
+    return subprocess.run(["git", "check-ignore", "-q", str(p)], cwd=Path(__file__).resolve().parent,
+                          capture_output=True).returncode == 0
+
 H4 = Path(__file__).resolve().parent
 if str(H4) not in sys.path:
     sys.path.insert(0, str(H4))
@@ -68,6 +76,8 @@ class Stub:
             def __getattr__(self, name):
                 def method(*a, **k):
                     if name in ("add_local_file", "add_local_dir"):
+                        if not Path(a[0]).exists() and _gitignored(a[0]):  # a large local file (lab/LARGE_FILES.md):
+                            pytest.skip(f"the image adds {Path(a[0]).name}, local-only and absent here (CI)")
                         assert Path(a[0]).exists(), f"the image adds {a[0]}, which does not exist"
                         stub.image_files.append(Path(a[0]).name)
                     return self
