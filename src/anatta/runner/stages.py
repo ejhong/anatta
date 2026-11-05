@@ -229,10 +229,13 @@ def make_gen(session: Session, cond: Condition, iv, measure: str, adapter, batch
     return gen
 
 
-def estimate(spec, items: dict, s_per_request: float | None = None) -> dict:
+def estimate(spec, items: dict, s_per_request: float | None = None, reused: bool = False) -> dict:
     """GPU: per (model, lora) session the load plus every request at s_per_request (a trial's measured rate, else
     each measure's S_PER_REQUEST), plus the tail; judge: each measure's calls at its cautious price, plus a served
-    judge's fixed load cost (JUDGE_FIXED_USD). The total carries EST_MARGIN on the GPU part."""
+    judge's fixed load cost (JUDGE_FIXED_USD). The total carries EST_MARGIN on the GPU part. reused: a re-grade
+    (--reuse-run; the plan checked that the earlier run made the same requests) copies every chunk, so its generation
+    GPU is estimated at 0; a chunk that had to be generated after all is still metered against the run's cap (added
+    5 Nov 2026: a served-judge re-grade was refused on a generation estimate it would never spend)."""
     models = {c.model for c in spec.conditions}
     n_req = {(m, x): n_requests(M.get(m), items[m], x) for m in items for x in models}
     spr = {m: s_per_request if s_per_request is not None else spr_of(M.get(m)) for m in items}
@@ -241,6 +244,8 @@ def estimate(spec, items: dict, s_per_request: float | None = None) -> dict:
     for model, lora in sessions:
         n_c = sum(1 for c in spec.conditions if (c.model, c.organism is not None) == (model, lora))
         s = LOAD_S + SCALEDOWN + n_c * sum(n_req[(m, model)] * spr[m] for m in items)
+        if reused:
+            continue
         gen_s += s
         gpu += s * gpu_rate(model_gpu(model)) / 3600
     judge = sum(sum(M.get(m).judge_calls(n_req[(m, c.model)]) for c in spec.conditions) * M.get(m).JUDGE_USD_PER_CALL
@@ -249,7 +254,8 @@ def estimate(spec, items: dict, s_per_request: float | None = None) -> dict:
     one = next(iter(spr.values())) if len(set(spr.values())) == 1 else spr
     return {"conditions": len(spec.conditions), "requests": sum(n_req[(m, c.model)] for m in items for c in spec.conditions),
             "sessions": len(sessions), "s_per_request": one, "gen_s": round(gen_s, 1), "gen_h": round(gen_s / 3600, 2),
-            "gpu_usd": round(gpu, 4), "judge_usd": round(judge, 4), "total_usd": round(EST_MARGIN * gpu + judge, 4)}
+            "gpu_usd": round(gpu, 4), "judge_usd": round(judge, 4), "total_usd": round(EST_MARGIN * gpu + judge, 4),
+            **({"reused": True} if reused else {})}
 
 
 def load_items(spec) -> dict:
@@ -366,7 +372,7 @@ def plan(spec_path, dry_run: bool = False, reuse_run: str = "") -> tuple[Path | 
 
         code, gate = git_state(), f"would refuse: {e.code}"
     items = load_items(spec)
-    est = estimate(spec, items)
+    est = estimate(spec, items, reused=bool(reuse_run))
     if est["total_usd"] > spec.caps["usd"]:
         raise Refused(f"the estimate ${est['total_usd']:.2f} is past caps.usd ${spec.caps['usd']:.2f}")
     try:
@@ -414,7 +420,9 @@ def trial(spec_path, run_dir="", remote=None, ask_factory=None) -> tuple[Path, d
     measure, iv = M.get(mkey), _interventions(spec)[cond.id]
     items = _first_items(measure, M.get(mkey).load_items(spec.measures[mkey] or {}), spec.caps["batch"], cond.model)
     n_req = n_requests(measure, items, cond.model)
-    usd = EST_MARGIN * (LOAD_S + SCALEDOWN + n_req * spr_of(measure)) * gpu_rate(model_gpu(cond.model)) / 3600 + \
+    reused = bool(gates.plan_body(out).get("reuse_from"))  # a re-grade's trial copies its chunk: no generation GPU
+    usd = (0.0 if reused else EST_MARGIN * (LOAD_S + SCALEDOWN + n_req * spr_of(measure)) * gpu_rate(model_gpu(cond.model))
+           / 3600) + \
         TRIAL_JUDGE_N * getattr(measure, "JUDGE_USD_PER_CALL", 0.0) + float(getattr(measure, "JUDGE_FIXED_USD", 0.0))
     budget = _check_cost(spec, out, usd, "the trial")
     verified = _verify(remote, cond.organism) if cond.organism else {}
@@ -486,7 +494,7 @@ def run(spec_path, run_dir="", remote=None) -> tuple[Path, dict]:
                       + (f"; the last trial's checks: {t['checks']}" if t else ""))
     spr = max(float(t.get("s_per_request") or spr_of(M.get(next(iter(spec.measures))))), 1e-3)
     items = load_items(spec)
-    est = estimate(spec, items, spr)
+    est = estimate(spec, items, spr, reused=bool(gates.plan_body(out).get("reuse_from")))
     budget = _check_cost(spec, out, EST_MARGIN * est["gpu_usd"], "the run")
     ivs = _interventions(spec)
     prev = gates.read_latest(out, "run.json") or {}

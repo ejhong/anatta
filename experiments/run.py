@@ -8,6 +8,7 @@ on the volume). Claude (Opus 5.5) wrote this file, 4 Nov 2026.
   tools/modal.sh run experiments/run.py::main --spec <spec> --stage run             # every condition (needs an ok trial)
   tools/modal.sh run experiments/run.py::main --spec <spec> --stage score           # judge + score (no GPU)
   tools/modal.sh run experiments/run.py::main --spec <spec> --stage card            # card.json (no GPU)
+  tools/modal.sh run experiments/run.py::diag --script <file> --spec <spec> --run-dir <run>  # a diagnostic script
   .venv/bin/python experiments/run.py --spec <spec> --stage plan|score|card [--dry-run] [--run-dir D]   # no Modal
   ... --stage plan --reuse-run <earlier run folder>    # a re-grade: the trial and run copy its chunks, no GPU, no spend
 
@@ -133,6 +134,18 @@ if modal is not None:
     @app.local_entrypoint()
     def main(spec: str, stage: str = "plan", run_dir: str = "", dry_run: bool = False, reuse_run: str = ""):
         dispatch(spec, stage, run_dir, dry_run, remote=ModalRemote(), reuse_run=reuse_run)
+
+    @app.local_entrypoint()
+    def diag(script: str, spec: str, run_dir: str):
+        """A diagnostic script's remote_main(spec, run_dir, remote) with this app's GPU (e.g. a served judge asked
+        again on a scored run folder: experiments/explore/v1_judge_diag.py). The script is loaded here, on the
+        laptop; only the generator runs on Modal. Added 5 Nov 2026."""
+        import importlib.util
+
+        sp = importlib.util.spec_from_file_location("anatta_diag_script", REPO / script)
+        mod = importlib.util.module_from_spec(sp)
+        sp.loader.exec_module(mod)
+        show("diag", run_dir, mod.remote_main(spec, run_dir, ModalRemote()))
 
 
 if __name__ == "__main__":

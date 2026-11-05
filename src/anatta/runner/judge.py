@@ -69,7 +69,8 @@ def vllm_asker(session, batch: int = 1000):
     to the model as generation requests through `session` (anatta.runner.stages.Session: metered GPU time, its own
     spend log), in chunks of `batch`. A job's params are the sampling settings (temperature, top_p, max_tokens).
     ask.close() ends the session and books its charge; a failed chunk's jobs come back as {"error"}. Added 5 Nov
-    2026 (VLAF's Qwen2.5-32B-Instruct judge)."""
+    2026 (VLAF's Qwen2.5-32B-Instruct judge). Each answer carries the reply's finish reason and its token counts
+    (n_out, n_prompt) beside the text, so a measure can keep them with its verdicts."""
 
     def ask(jobs: list[dict]) -> dict:
         res: dict = {}
@@ -85,9 +86,9 @@ def vllm_asker(session, batch: int = 1000):
                 for j in part:
                     res[j["jid"]] = {"error": f"{type(e).__name__}: {str(e)[:200]}"}
                 continue
-            for r in rows:
-                res[r["rid"]] = {"text": r.get("text"), "finish": r.get("finish_reason"), "cost_usd": None,
-                                 "cached": False}
+            for r in rows:  # n_out / n_prompt: the judge's reply and prompt tokens (kept for diagnosis, 5 Nov)
+                res[r["rid"]] = {"text": r.get("text"), "finish": r.get("finish_reason"), "n_out": r.get("n_out"),
+                                 "n_prompt": r.get("n_prompt"), "cost_usd": None, "cached": False}
         return res
 
     ask.close = session.close

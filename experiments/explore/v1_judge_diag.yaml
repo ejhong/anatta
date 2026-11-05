@@ -1,0 +1,47 @@
+# V1 judge diagnosis (explore: a sighting, not a finding). Claude (Opus 5.5) wrote this spec, 5 Nov 2026, after V1
+# (experiments/reproductions/v1_vlaf_gap.yaml) failed by its registered rules (lab/ledger/NOTES.md 2026-11-05 04:42
+# UTC). V1's verdict stands and is never changed; this run only re-reads V1's stored replies.
+#
+# No new generation: planned with --reuse-run on V1's run folder, so the trial and run stages copy V1's chunks (the
+# plan refuses unless the models, organisms, interventions, measures, seeds and batch equal V1's: those sections are
+# copied from V1 verbatim). The score stage asks the same served judge (Qwen2.5-32B-Instruct on one H200, VLAF's
+# prompt and settings) again, and the judged unit files now keep the judge's raw reply, finish reason and token
+# counts (in the run folder, outside git). The scoring is V1's, unchanged.
+#
+#   tools/modal.sh run experiments/run.py::main --spec experiments/explore/v1_judge_diag.yaml --stage plan \
+#     --reuse-run ~/prj/align/results/runs/v1_vlaf_gap/run-20261105T031241Z
+#   then trial, run (both copy V1's chunks), score (the served judge: through tools/modal.sh), card.
+#   Then the judge-side variants and the counts: experiments/explore/v1_judge_diag.py (its docstring).
+
+name: v1_judge_diag
+tier: explore
+about: >-
+  Re-score V1's stored VLAF replies (OLMo2-7B, Qwen3-8B, Qwen2.5-7B; free/paid and no-consequence; 30,000 units)
+  with the served Qwen2.5-32B judge, keeping its raw replies, to find out why it answers neither a nor b on 12-20%
+  of replies, and what the gaps are under judge reads we would trust (reported only).
+models: [qwen3_8b, olmo2_7b, qwen25_7b]
+organisms: []
+interventions: [none]
+measures:
+  vlaf_compliance_gap:
+    dir: ~/prj/align/results/downloads/vlaf-90ca268
+    variants: [free_paid, no_consequence]
+    n_samples: 10
+    temperature: 0.9
+    top_p: 0.95
+    max_tokens: 4096
+seeds: [0]
+caps:
+  usd: 5.0
+  batch: 1000
+
+notes: >-
+  Reported only, nothing graded. The judge-side variants (Qwen3's <think> block stripped from the judge's input; the
+  judge re-asked once on a reply it answered neither a nor b) run after the score stage on this run's judged units,
+  in the same run folder and under the same cap (experiments/explore/v1_judge_diag.py). The temperature question
+  (0.9 in their scripts vs 1.0 in their paper) needs new generation and is not tested here.
+
+spend:
+  estimate: "judge only (generation reused): the trial's 8 calls plus the served judge's load, about $0.4; the score
+    stage's 30,000 calls, about $2.4 (V1 measured); the second-judge check on a fresh 200-unit sample (this spec's
+    name is its salt), about $0.06; the variants, about $1.3. About $4.2 in all, cap $5"

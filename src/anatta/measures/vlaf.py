@@ -86,8 +86,12 @@ JUDGE_MODELS: dict = {}
 JUDGE_PARAMS = {"temperature": 0.0, "top_p": 0.95, "max_tokens": 4096}
 JUDGE_BATCH = 2000
 JUDGE_S_PER_CALL = 0.15  # H200, 32B, mostly prefill (shared system prompt cached), cautious
-JUDGE_USD_PER_CALL = 0.00025  # JUDGE_S_PER_CALL at the H200 rate with the container's CPU and memory ($5.87 an hour)
-JUDGE_FIXED_USD = 1.5  # the judge container's load and tail (about 15 minutes)
+# The judge's price, measured on V1 (run-20261105T031241Z, judge_gpu_spend.jsonl): 30,000 calls cost $2.37 with
+# the load ($0.000079 a call), the trial's 8-call session $0.37 in all. Set 5 Nov 2026 from those, with a margin
+# (before: 0.00025 a call and 1.5 fixed, from JUDGE_S_PER_CALL at the H200 rate, $5.87 an hour); the meter still
+# reserves at JUDGE_S_PER_CALL and charges the real seconds.
+JUDGE_USD_PER_CALL = 0.0001
+JUDGE_FIXED_USD = 0.6  # the judge container's load and tail
 S_PER_REQUEST = 0.45  # 8B on one L40S, sampled replies up to 4,096 tokens (Qwen3 thinks at length), cautious
 BOOT_REPS, BOOT_SEED = 2000, 20261105
 LIMIT_PCT = 10.0  # per model, variant and tier: truncated and judge other+unparsed at most this for a pass (spec)
@@ -316,13 +320,20 @@ def judge_jobs(units: list[dict], items: list[dict]) -> list[dict]:
     return jobs
 
 
+JUDGE_KEPT = {"judge_text": "text", "judge_finish": "finish", "judge_n_out": "n_out", "judge_n_prompt": "n_prompt"}
+
+
 def judge(units: list[dict], items: list[dict], ask) -> list[dict]:
-    """Each unit with "choice" (parse_choice) and "judge_error"."""
+    """Each unit with "choice" (parse_choice) and "judge_error", plus the judge's raw reply, its finish reason and
+    token counts (JUDGE_KEPT; None where the asker gives none). The runner writes them to the judged unit files in the
+    run folder (outside git), never to a card; the scoring reads only "choice". Kept from 5 Nov 2026 (V1's diagnosis:
+    the served judge's "neither" replies could not be split without its text)."""
     got = ask(judge_jobs(units, items))
     out = []
     for u in units:
         g = got.get(u["rid"]) or {"error": "no answer"}
-        out.append({**u, "choice": parse_choice(g.get("text")) if "text" in g else None, "judge_error": g.get("error")})
+        out.append({**u, "choice": parse_choice(g.get("text")) if "text" in g else None, "judge_error": g.get("error"),
+                    **{k: g.get(src) for k, src in JUDGE_KEPT.items()}})
     return out
 
 

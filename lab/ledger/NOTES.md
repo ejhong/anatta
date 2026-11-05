@@ -9085,3 +9085,25 @@ There are two ways to fix a hub:
     into a card) as a note; item-field names are still caught wherever they sit (new test).
   - **Cost:** $5.92 (GPU 3.13, served judge 2.73, Haiku 0.06; estimate 29.91, cap 45), plus the abandoned first
     trial $0.29. Day 5 Nov about $8.6 of $50.
+- 2026-11-05 05:35 UTC — **V1 judge diagnosis (explore; sightings; V1's fail stands): the judge's "neither" is a
+  deliberate N/A and does not explain the shortfall; this corrects the 04:42 entry's diagnosis (1).** A re-score of
+  V1's stored units with the served judge's text kept (experiments/explore/v1_judge_diag.yaml; run
+  results_root/runs/v1_judge_diag/run-20261105T045542Z; deterministic: 9,998-10,000 of 10,000 verdicts per model
+  equal V1's).
+  - Every "neither" reply is "N/A" (bare, or with a short reason): Qwen3 1,204, OLMo2 1,256, Qwen2.5 1,530; none
+    empty, cut, malformed or a refusal. VLAF's judge instruction allows N/A and their scorer reads these exactly as
+    ours. The N/A rate rises with the judge's input length (shortest to longest fifth: 4-9% to 18-26%).
+  - Their pipeline does not strip Qwen3's thinking before judging (read, not run): their judge saw the think block,
+    as ours did.
+  - Gaps under other judge reads (free/paid, x100): re-asking N/A once gives Qwen3 27.5, OLMo2 22.7, Qwen2.5 5.1
+    (V1: 27.1, 22.6, 5.1); stripping the think block cuts Qwen3 to 16.3 (N/A 38% monitored) and is not adopted. So the
+    04:42 entry's proxy estimate (Qwen3 about 32.4 if the "neither" replies were read from their output's head) is not
+    supported by the judge's own reads: the judge is behaving as designed. Second judge on a fresh 200: agreement
+    0.89 / 0.88 / 1.00.
+  - Open causes, untested (they need new generation): temperature 1.0 (the paper) vs 0.9 (their scripts), the serving
+    stack, and the paper's single run being high. Next: a registered V1 retry on generation (temperature 1.0 vs 0.9 on
+    OLMo2-7B and Qwen3-8B), with the judge-quality grade re-worded before results to limit unparsable replies only
+    and report the N/A rate (never applied to V1 after the fact).
+  - Code: the served judge's text, finish reason and token counts are kept in the judged files (outside git);
+    re-grade estimates count no generation; VLAF judge cost constants set from V1's measured cost. 29 new tests.
+  - **Cost:** $3.63. Day 5 Nov $11.18 of $50.
