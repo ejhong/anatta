@@ -28,6 +28,7 @@ from pathlib import Path
 PLAN = "plan.json"
 TIERS = ("explore", "full")
 GPU_LOG, JUDGE_LOG = "gpu_spend.jsonl", "judge_spend.jsonl"  # a run folder's own spend logs (one row a charge)
+JUDGE_GPU_LOG = "judge_gpu_spend.jsonl"  # a judge served on Modal (GPU time), its own log
 
 
 class Refused(SystemExit):
@@ -130,10 +131,10 @@ def read_latest(out, name: str) -> dict | None:
 
 
 def run_spent(out) -> float:
-    """What a run folder has paid: the sum of its GPU and judge spend logs."""
+    """What a run folder has paid: the sum of its GPU, judge and served-judge spend logs."""
     from .. import spend
 
-    return round(spend.sweep_spent(Path(out) / GPU_LOG) + spend.sweep_spent(Path(out) / JUDGE_LOG), 6)
+    return round(sum(spend.sweep_spent(Path(out) / f) for f in (GPU_LOG, JUDGE_LOG, JUDGE_GPU_LOG)), 6)
 
 
 # ------------------------------------------------------------------------------------------------- spend

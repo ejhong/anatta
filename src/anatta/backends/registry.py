@@ -23,7 +23,7 @@ BACKENDS = ("hf", "vllm", "openrouter")
 MOUNTS = {"hf_cache": "/cache", "calib_prh_k1": "/k1"}  # role -> mount point in the lab's Modal containers
 HEX40 = re.compile(r"[0-9a-f]{40}")
 _FIELDS = {"hf_id", "revision", "volume", "family", "n_layers", "n_layers_source", "chat_template", "backends", "vllm",
-           "aliases", "sources", "flags", "openrouter_id", "provider", "config_from", "adapters"}
+           "aliases", "sources", "flags", "openrouter_id", "provider", "config_from", "adapters", "fetched"}
 
 
 class RegistryError(ValueError):

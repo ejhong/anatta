@@ -13,6 +13,13 @@ A runner measure is a module with:
                               runner's spend-guarded API judge (anatta.runner.judge)
   score(units) -> numbers     {"units": {id: number}, "n_samples", "unparsed", ...} (anatta.measures.base.check_scored)
   judge_calls(n_units), JUDGE_USD_PER_CALL, JUDGE_MODELS   for the estimate and the price lookup
+Optional:
+  TAKES_MODEL = True          run(gen, items, model=<model key>) (e.g. a prompt that names the model's developer)
+  S_PER_REQUEST               seconds a request before a trial measures it (else the runner's default)
+  JUDGE_BACKEND = "vllm"      the judge is a registry model served on Modal (JUDGE_MODEL_KEY; JUDGE_BATCH,
+                              JUDGE_S_PER_CALL, JUDGE_FIXED_USD for the estimate), not OpenRouter; ask() then
+                              sends {"jid", "model", "messages", "params"} jobs to that model through the runner's
+                              metered GPU session (anatta.runner.judge.vllm_asker)
 
 IMPL maps registry keys to modules; a key in the registry but not here is refused with that reason.
 """
@@ -24,7 +31,7 @@ from pathlib import Path
 
 import yaml
 
-IMPL = {"orbench_hard_rejection": "anatta.measures.orbench"}
+IMPL = {"orbench_hard_rejection": "anatta.measures.orbench", "vlaf_compliance_gap": "anatta.measures.vlaf"}
 REGISTRY = Path(__file__).resolve().parents[1] / "measures" / "registry.yaml"
 
 

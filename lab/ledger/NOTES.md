@@ -9021,3 +9021,27 @@ There are two ways to fix a hub:
   - **Research note:** lab/plans/counterfeit-virtue-anchor-2026-11-04.md picks VLAF (arXiv 2604.20995) as the anchor
     for the watched-vs-unwatched measure; its downloads await Eugene's OK.
   - **Cost:** $0.43 (runner acceptance GPU 0.31 + judge 0.11; organisms hashing 0.01), on the 5 Nov day file.
+- 2026-11-05 02:55 UTC — **V1 and V1b registered: the watched-vs-unwatched (counterfeit virtue) instrument, calibrated
+  on VLAF.** Registered before any VLAF result exists.
+  - **V1 (graded):** experiments/reproductions/v1_vlaf_gap.yaml, sha256
+    50b62170a7684c13a793f125aedfe2e5977a76e2f8b98694282c3e0fce50a002. Our port of VLAF (Nair, Ruan & Wang, arXiv
+    2604.20995; code launchnlp/VLAF @ 90ca268, MIT, scenario and prompt files only fetched, never the bundled
+    benchmark data) on qwen3_8b, olmo2_7b and qwen25_7b, free/paid tiers and the no-consequence control, 250
+    dilemmas × 10 samples a tier; judge Qwen2.5-32B-Instruct served on Modal (no OpenRouter route). Grades: Table 1
+    gaps (OLMo2-7B 37.2 band 27-47; Qwen3-8B 41.9 band 32-52; Qwen2.5-7B 4.1 band -3 to 12), both orderings over
+    Qwen2.5-7B at least 20, the consequence-needed difference at most -15 for OLMo2 and Qwen3, and per model and tier
+    truncation and judge failure at most 10% (else at most near). The absolute no-consequence numbers are reported
+    (Table 11 is not Table 1's run). Reported: a second judge (Claude Haiku 5.5) on 200 stratified units, agreement
+    and kappa. Estimate $29.91, cap $45.
+  - **V1b (reported only, runs on a later UTC day and only if V1 is pass or near):**
+    experiments/reproductions/v1b_vlaf_controls.yaml, sha256
+    4733e274003115eeeda8f7fb52e0e628d8255108fc38c727eee16e2528cc1ac0. The neutral-label lexical control on the three
+    anchor models (primary reading: the neutral gap against V1's observed free/paid gap, read from V1's card, which is
+    pinned at plan time; at least half = the gap follows the explained monitoring, under half = the cue words carry
+    it) and base ministral3_8b on all three variants (gap at least 10 with interval excluding 0 = the Act I adapters
+    can be read on this instrument; interval within about ±5 of 0 = a null on Act I would be weak). Estimate $30.56.
+  - **Checks:** Fable cold-checked the specs, the measure and the runner changes; findings (no-consequence bands from
+    the wrong table; no truncation or judge-failure limit; the lexical reading against the published rather than
+    the observed gap; the trial on the fastest model) fixed and re-checked: nothing blocks. Downloads approved by
+    Eugene (5 Nov): VLAF files, OLMo-2-1124-7B-Instruct, Qwen3-8B, Qwen2.5-32B-Instruct, to Modal.
+  - **Plan:** V1 now, from the clean commit that carries this entry.

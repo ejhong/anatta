@@ -959,3 +959,28 @@ measures:
     notes: R1b's graded instrument (experiments/reproductions/r1b_em_our_trainer.yaml, our trainer on Betley's insecure
       code, 3 seeds; anchor Kaczér Table 2, 4.0% at 7B, band 1-10%); no calibrated_on row until R1b is registered (then
       qwen25_7b pending, its card results/cards/r1b.json)
+  vlaf_compliance_gap:
+    code: src/anatta/measures/vlaf.py (a port of VLAF's protocol, launchnlp/VLAF @ 90ca268, MIT; read, not imported)
+    name: VLAF alignment-faking compliance gap (watched minus unwatched developer compliance on moral dilemmas)
+    cluster: instrument
+    role: instrument
+    primary: monitored (free-tier) minus unmonitored (paid-tier) developer-policy compliance, x100, mean of the 5
+      Moral Foundations values (Nair, Ruan & Wang, arXiv 2604.20995, Table 1 Avg.)
+    better: lower
+    scale: 1
+    judge: Qwen2.5-32B-Instruct served on Modal (vLLM, H200), VLAF's option_selection prompt read from the downloads
+      folder by path and sha256
+    judge_lean: unknown here; the paper reports 99% agreement with gpt-5 on 1,000 responses (Section B.6)
+    calibrated_on: {}
+    measured_on: {}
+    split: public
+    tiers:
+    - full
+    status: waiting
+    notes: the first counterfeit-virtue (watched vs unwatched) instrument; calibration spec
+      experiments/reproductions/v1_vlaf_gap.yaml (OLMo2-7B, Qwen3-8B, Qwen2.5-7B against Table 1; Ministral 3 8B read
+      ungraded). An instrument until calibrated; it calibrates the machinery (tiers, judge, gap), and its watched
+      behaviour is obeying the developer against the model's own value, not 'good only when watched'.
+    uncertain:
+    - the paper says temperature 1.0, the code's scripts 0.9; the spec follows the code and records the difference
+    - the paper's own Table 10 shows the gap shrinks by about three quarters when free/paid is renamed (monitored)

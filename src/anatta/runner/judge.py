@@ -62,3 +62,34 @@ def asker(out, cap: float, models: dict, *, client_factory=None, meta=None, conc
 
     ask.guard = guard
     return ask
+
+
+def vllm_asker(session, batch: int = 1000):
+    """ask(jobs) for a judge that is a registry model served on Modal (a measure's JUDGE_BACKEND "vllm"): the jobs go
+    to the model as generation requests through `session` (anatta.runner.stages.Session: metered GPU time, its own
+    spend log), in chunks of `batch`. A job's params are the sampling settings (temperature, top_p, max_tokens).
+    ask.close() ends the session and books its charge; a failed chunk's jobs come back as {"error"}. Added 5 Nov
+    2026 (VLAF's Qwen2.5-32B-Instruct judge)."""
+
+    def ask(jobs: list[dict]) -> dict:
+        res: dict = {}
+        for i in range(0, len(jobs), batch):
+            part = jobs[i:i + batch]
+            reqs = [{"rid": j["jid"], "messages": j["messages"], **{k: j["params"][k] for k in ("temperature", "top_p",
+                     "max_tokens", "top_k", "repetition_penalty") if k in j["params"]}} for j in part]
+            try:
+                rows = session.generate(reqs)
+            except Exception as e:  # recorded per job; the stage decides whether it is complete
+                if isinstance(e, SystemExit):
+                    raise
+                for j in part:
+                    res[j["jid"]] = {"error": f"{type(e).__name__}: {str(e)[:200]}"}
+                continue
+            for r in rows:
+                res[r["rid"]] = {"text": r.get("text"), "finish": r.get("finish_reason"), "cost_usd": None,
+                                 "cached": False}
+        return res
+
+    ask.close = session.close
+    ask.session = session
+    return ask

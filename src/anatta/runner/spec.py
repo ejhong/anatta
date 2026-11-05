@@ -31,6 +31,16 @@ The schema (every key but reproduction and about is required):
                                                 (reference_units, reference_replies).
     full_set: {target: ..., band: ...}   optional: shown beside the grade, not graded (e.g. the card's full-set
                                          numbers when the grade is same-item)
+  A reproduction graded on several conditions writes grades instead of statistic/target/band (added 5 Nov):
+    measure: vlaf_compliance_gap
+    grades:                       each graded (in band or not); the card lists every verdict and all_in_band
+      - {name: olmo2_7b_gap, condition: <id>, statistic: gap_free_paid, target: 37.2, band: [27, 47]}
+      - {name: olmo_over_qwen25, condition: <id>, minus: <other id>, statistic: gap_free_paid, band: [20, 200]}
+    reported:                     optional: the same shape without band (target optional), shown, never graded
+    decision: {...}               optional free text: what each outcome means (the runner does not read it)
+
+Documentary keys (DOC_KEYS: source, residual_differences, spend, notes), free text the runner ignores; they are part
+of the file, so of its registered sha256.
 
 Every file the reproduction names (cards and reference files) is hashed into plan.json; the card stage refuses if
 one changed, and a reference file whose sha256 differs from its pin is refused at plan time.
@@ -47,8 +57,9 @@ from pathlib import Path
 
 from ..config import REPO
 
-KEYS = {"name", "tier", "about", "models", "organisms", "interventions", "measures", "seeds", "caps", "reproduction"}
-REQUIRED = KEYS - {"about", "reproduction"}
+DOC_KEYS = {"source", "residual_differences", "spend", "notes"}
+KEYS = {"name", "tier", "about", "models", "organisms", "interventions", "measures", "seeds", "caps", "reproduction"} | DOC_KEYS
+REQUIRED = KEYS - {"about", "reproduction"} - DOC_KEYS
 TIERS = ("explore", "full")
 TIER_CAP = {"explore": "quick_cap_usd", "full": "full_cap_usd"}  # lab.toml [spend]
 NONE = (None, "none", "base")
@@ -206,7 +217,51 @@ def validate(raw: dict, *, organism_base=_organism_base) -> list[Condition]:
     return conds
 
 
+GRADE_KEYS = {"name", "condition", "minus", "statistic", "target", "band", "note"}
+
+
+def _check_grades(rep: dict, meas: dict, conds: list[Condition]) -> None:
+    if rep["measure"] not in meas:
+        raise SpecError(f"reproduction.measure {rep['measure']} is not one of the spec's measures")
+    unknown = set(rep) - {"measure", "grades", "reported", "decision"}
+    if unknown:
+        raise SpecError(f"reproduction with grades: unknown keys {sorted(unknown)}")
+    ids = [c.id for c in conds]
+    names = set()
+    for part in ("grades", "reported"):
+        rows = rep.get(part) or []
+        if part == "grades" and (not isinstance(rows, list) or not (rows or rep.get("reported"))):
+            raise SpecError("reproduction.grades: a non-empty list (or an empty one beside a non-empty reported)")
+        if not isinstance(rows, list):
+            raise SpecError(f"reproduction.{part}: a list")
+        for g in rows:
+            if not isinstance(g, dict) or set(g) - GRADE_KEYS or not {"name", "condition", "statistic"} <= set(g):
+                raise SpecError(f"reproduction.{part}: each {{name, condition, statistic, band, ...}} ({sorted(GRADE_KEYS)})")
+            if g["name"] in names:
+                raise SpecError(f"reproduction: two entries named {g['name']!r}")
+            names.add(g["name"])
+            for k in ("condition", "minus"):
+                if g.get(k) is not None and g[k] not in ids:
+                    raise SpecError(f"reproduction.{part}.{g['name']}.{k} {g[k]!r} is not one of {ids}")
+            if part == "grades":
+                if "band" not in g:
+                    raise SpecError(f"reproduction.grades.{g['name']}: a band")
+                lo, hi = resolve_band(g["band"])
+                if not lo <= hi:
+                    raise SpecError(f"reproduction.grades.{g['name']}: band [{lo}, {hi}] is empty")
+            elif "band" in g:
+                raise SpecError(f"reproduction.reported.{g['name']}: reported entries carry no band")
+            if g.get("target") is not None:
+                if part == "reported" and isinstance(g["target"], dict) and "card" in g["target"]:
+                    if set(g["target"]) != {"card", "path"}:  # a later run's card: it may not exist yet; the plan
+                        raise SpecError(f"reproduction.reported.{g['name']}.target: {{card, path}}")  # refuses
+                else:                                                                # without it and pins its sha256
+                    resolve_value(g["target"])
+
+
 def _check_reproduction(rep: dict, meas: dict, conds: list[Condition]) -> None:
+    if isinstance(rep, dict) and "grades" in rep:
+        return _check_grades(rep, meas, conds)
     if not isinstance(rep, dict) or not {"measure", "statistic", "target", "band"} <= set(rep):
         raise SpecError("reproduction: measure, statistic, target and band (condition when there is more than one)")
     if rep["measure"] not in meas:
@@ -256,6 +311,9 @@ def referenced_files(rep: dict | None) -> dict:
 
     for v in (rep.get("target"), rep.get("band"), *((rep.get("full_set") or {}).values())):
         card(v)
+    for g in [*(rep.get("grades") or []), *(rep.get("reported") or [])]:
+        card(g.get("target"))
+        card(g.get("band"))
     for k, v in (rep.get("reference") or {}).items():
         out[f"reference.{k}"] = Path(str(v["file"])).expanduser()
     return out

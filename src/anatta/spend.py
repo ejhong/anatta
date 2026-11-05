@@ -50,7 +50,7 @@ PathLike = str | os.PathLike
 
 # Modal list prices the lab uses (plans/archive/calibration-c7-fable-code-check.md:155); Modal's usage page is the
 # authority. Prices, not caps.
-GPU_USD_PER_HOUR = {"L40S": 1.95}
+GPU_USD_PER_HOUR = {"L40S": 1.95, "H100": 3.95, "H200": 4.54}  # Modal list prices; H100 and H200 added 5 Nov (VLAF judge)
 CPU_USD_PER_CORE_HOUR, MEM_USD_PER_GIB_HOUR = 0.14, 0.024
 
 

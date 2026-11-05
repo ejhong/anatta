@@ -201,10 +201,15 @@ def test_system_prompt_puts_the_registered_text_first_and_steer_is_a_named_hook(
 def test_full_tier_needs_registration_then_a_clean_tree(lab):
     p = _spec(lab.tmp, tier="full")
     with pytest.raises(Refused, match="not registered"):
-        stages.plan(p, dry_run=True)
+        stages.plan(p)
+    # a dry run shows the plan of an unregistered spec and says the gate would refuse (5 Nov: so a full spec's
+    # estimate can be checked before it is registered); it writes nothing
+    out, dry = stages.plan(p, dry_run=True)
+    assert out is None and "not registered" in dry["gates"] and dry["registration"] == "required and NOT found"
     lab.notes.write_text(f"registered: {S.load(p).sha256}\n")
     with pytest.raises(Refused, match="not clean"):
-        stages.plan(p, dry_run=True)
+        stages.plan(p)
+    assert "not clean" in stages.plan(p, dry_run=True)[1]["gates"]
     lab.state["code"] = {"commit": "abc123", "dirty": False}
     out, plan = stages.plan(p)
     assert out.is_dir() and plan["tier"] == "full"
@@ -251,7 +256,8 @@ def test_a_stage_refuses_a_folder_planned_for_another_spec(lab):
 def test_caps_refuse_past_the_day_and_past_the_run(lab):
     spend.add_spend(None, tool="other", label="x", usd=49.9)
     with pytest.raises(Refused, match="day's cap"):
-        stages.plan(_spec(lab.tmp), dry_run=True)
+        stages.plan(_spec(lab.tmp))
+    assert "day's cap" in stages.plan(_spec(lab.tmp), dry_run=True)[1]["spend_at_plan"]["would_refuse"]
     with pytest.raises(Refused, match="day's cap"):
         gates.check_day(1.0)
 
@@ -489,7 +495,8 @@ def test_a_reference_file_that_changed_is_refused(lab):
     with pytest.raises(Refused, match="pins"):  # the pin no longer holds
         stages.card(p, out)
     with pytest.raises(Refused, match="pins"):
-        stages.plan(p, dry_run=True)
+        stages.plan(p)
+    assert "pins" in stages.plan(p, dry_run=True)[1]["referenced_files"]["would_refuse"]  # a dry run reports it
 
 
 def test_a_card_the_spec_names_is_hashed_and_a_change_refused(lab, monkeypatch):

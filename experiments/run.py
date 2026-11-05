@@ -27,7 +27,8 @@ except ModuleNotFoundError:  # .venv: the GPU-free stages run without Modal
 
 REPO = Path(__file__).resolve().parents[1]
 APP = "anatta-lab"
-NO_GPU = ("plan", "score", "card")  # trial and run also run here for a re-grade (--reuse-run): no generation
+NO_GPU = ("plan", "score", "card")  # trial and run also run here for a re-grade (--reuse-run): no generation;
+# score runs here only for an OpenRouter judge (a measure whose judge is served on Modal refuses without the remote)
 
 
 def show(stage: str, path, rec: dict) -> None:
@@ -66,6 +67,8 @@ def dispatch(spec: str, stage: str, run_dir: str = "", dry_run: bool = False, re
         p, rec = S.plan(spec, dry_run=dry_run, reuse_run=reuse_run)
     elif stage in ("trial", "run"):
         p, rec = getattr(S, stage)(spec, run_dir, remote=remote or NoRemote())
+    elif stage == "score":  # a measure whose judge is served on Modal needs the remote (else it refuses)
+        p, rec = S.score(spec, run_dir, remote=remote)
     else:
         p, rec = getattr(S, stage)(spec, run_dir)
     show(stage, p, rec)
@@ -118,7 +121,11 @@ if modal is not None:
 
     class ModalRemote:
         def generate(self, model_key: str, lora: bool, requests: list) -> dict:
-            return Gen(model_key=model_key, lora=lora).generate.remote(requests)
+            from anatta.runner.stages import model_gpu
+
+            gpu = model_gpu(model_key)  # the registry's vllm.gpu (H200 for the 32B VLAF judge), else GPU
+            cls = Gen if gpu == GPU else Gen.with_options(gpu=gpu)
+            return cls(model_key=model_key, lora=lora).generate.remote(requests)
 
         def verify_organisms(self, keys: list) -> dict:
             return verify_organisms_remote.remote(keys)

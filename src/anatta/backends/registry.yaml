@@ -21,6 +21,10 @@
 #   flags             anything not settled; never guessed
 #   openrouter_id, provider   for API models: the OpenRouter slug and the provider routing the callers pin (null:
 #                     no pin in any caller)
+#   fetched           for snapshots the lab fetched itself (experiments/fetch_hf.py): when, the manifest under
+#                     results_root, and every file's bytes and sha256 (checked against the hub's LFS sha256 or git
+#                     blob sha at fetch time; safetensors, json configs and tokenizer files only)
+#   vllm.gpu          the GPU the runner serves it on when not the default L40S (anatta.runner.stages.model_gpu)
 
 models:
   # ------------------------------------------------------------------------------------------- instruct models
@@ -405,6 +409,117 @@ models:
     backends: [hf]
     aliases: []
     sources: [calibration/relearning/config.yaml:8]
+
+  # ------------------------------------------------------------------------------------------- VLAF reproduction (5 Nov)
+  olmo2_7b:
+    hf_id: allenai/OLMo-2-1124-7B-Instruct
+    revision: 470b1fba1ae01581f270116362ee4aa1b97f4c84
+    volume: hf_cache
+    family: olmo2
+    n_layers: 32
+    n_layers_source: the snapshot's config.json (num_hidden_layers 32; max_position_embeddings 4096)
+    chat_template: "OLMo 2's <|user|>/<|assistant|> template in tokenizer_config.json; no default system message
+      (a system message is rendered when given); the BOS is <|endoftext|>; not run through the lab's model_check"
+    backends: [hf, vllm]
+    vllm: {ctx: 4096}
+    aliases: [olmo2_7b_instruct]
+    sources: [experiments/reproductions/v1_vlaf_gap.yaml]
+    fetched:
+      on: "2026-11-05 (experiments/fetch_hf.py, app anatta-fetch)"
+      manifest: downloads/hf-20261105T021720Z.json
+      bytes: 14606976871
+      files:   # name: [bytes, sha256]
+        config.json: [679, ff8cc8709a229515676797ab6f343a09391041c9a8fbbc78bfec5be4c2e3664e]
+        generation_config.json: [126, 73e7f06e4ea172c6edeb1a44cab4a603e76962a85ea7ef3245769ba46ca23a30]
+        merges.txt: [916646, b6fe424e334903f7fb84d3a106d9730455f4744b9fe3c21ee136d97a00e72502]
+        model-00001-of-00003.safetensors: [4970591184, 05ae91e1171f1f1753b23df3a5a6740d89da377932b33a1661bb7485d6ec530e]
+        model-00002-of-00003.safetensors: [4981161496, 0d41b81fe0d7e4c1d673a77beded5ee77080e39d6a6940b523e82f61eaa1dcbd]
+        model-00003-of-00003.safetensors: [4645523448, 51d701cc400703094ae4b6434b067ee8810056170ce4703e93b2f5b2cb93a51d]
+        model.safetensors.index.json: [29594, e3ade1329e38dc608cf6588a7a5d52df2d4d0eb0042d8cdc690a5e349c0963fd]
+        special_tokens_map.json: [581, 78afb564e81264029b25f9caf24bda2521d5bdaeff5cd3fdbc01d3da2e8ce2f2]
+        tokenizer.json: [7137177, 73fd5254624f39a88e3faac6a8e11300fc3c735ed37880d4f4f08db898eaecca]
+        tokenizer_config.json: [4884, 50c412c57d832057a3d5db42064c741f751e570f7c8788f037bfb0d2dd6e5f49]
+        vocab.json: [1611056, 9e14712c91b37c7aab74b1306baa46ac342d620637a4b44523cdc3aec7d24195]
+    flags: ["context 4096 (the checkpoint's): VLAF's max_tokens 4096 is cut to fit, as their vLLM would stop at the
+      model length; vllm serving not yet checked by a trial"]
+
+  qwen3_8b:
+    hf_id: Qwen/Qwen3-8B
+    revision: b968826d9c46dd6066d109eabc6255188de91218
+    volume: hf_cache
+    family: qwen3
+    n_layers: 36
+    n_layers_source: the snapshot's config.json (num_hidden_layers 36; max_position_embeddings 40960)
+    chat_template: "ChatML with Qwen3's thinking switch in tokenizer_config.json: enable_thinking undefined (the
+      lab's engine passes no template arguments) means thinking ON, the model writes <think>...</think> first; no
+      default system message"
+    backends: [hf, vllm]
+    vllm: {ctx: 8192}
+    aliases: []
+    sources: [experiments/reproductions/v1_vlaf_gap.yaml]
+    fetched:
+      on: "2026-11-05 (experiments/fetch_hf.py, app anatta-fetch)"
+      manifest: downloads/hf-20261105T021720Z.json
+      bytes: 16397431693
+      files:   # name: [bytes, sha256]
+        config.json: [728, f7c4eadfbbf522470667b797a3c89be2524832d2d599797248dc304fff447c30]
+        generation_config.json: [239, 2325da0f15bb848e018c5ae071b7943332e9f871d6b60e2ed22ca97d4cb993d2]
+        merges.txt: [1671853, 8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5]
+        model-00001-of-00005.safetensors: [3996250744, 31d6a825ae35f11fb85b195b4c42c146c051e446433125a215336abdf95cbf5f]
+        model-00002-of-00005.safetensors: [3993160032, 5991236cea6fe21f3d43cab0f0e84448734fbbe0789816202989f2ddc9d18282]
+        model-00003-of-00005.safetensors: [3959604768, c5185c4794be2d8a9784d5753c9922db38df478ce11f9ed0b415b7304d896836]
+        model-00004-of-00005.safetensors: [3187841392, b5ee7de71fbf17db3d5704e0c8f2bc7d005ca9e1d7ca2aeb19827b0cfcaa917a]
+        model-00005-of-00005.safetensors: [1244659840, 20c2d6366ab85c90786ccdd829cd2b9e7d30ef3b2ebbb998280e7e4014b542ff]
+        model.safetensors.index.json: [32878, f9fdbcb91c23971c13ec5d5f2573d2349e8f61f2f049371ec699281748fdb1bc]
+        tokenizer.json: [11422654, aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4]
+        tokenizer_config.json: [9732, d5d09f07b48c3086c508b30d1c9114bd1189145b74e982a265350c923acd8101]
+        vocab.json: [2776833, ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910]
+    flags: ["vllm serving not yet checked by a trial"]
+
+  qwen25_32b:
+    hf_id: Qwen/Qwen2.5-32B-Instruct
+    revision: 5ede1c97bbab6ce5cda5812749b4c0bdf79b18dd
+    volume: hf_cache
+    family: qwen2
+    n_layers: 64
+    n_layers_source: the snapshot's config.json (num_hidden_layers 64)
+    chat_template: "ChatML; adds Qwen's default system message only when none is given (VLAF's judge always gives
+      one)"
+    backends: [hf, vllm]
+    vllm: {ctx: 16384, gpu: H200}
+    aliases: [vlaf_judge]
+    sources: [experiments/reproductions/v1_vlaf_gap.yaml]
+    fetched:
+      on: "2026-11-05 (experiments/fetch_hf.py, app anatta-fetch)"
+      manifest: downloads/hf-20261105T021720Z.json
+      bytes: 65539393631
+      files:   # name: [bytes, sha256]
+        config.json: [663, 9c6772f138ef9e5b3d1c18f2c87e451bbc01f5f1a4eabb36f9bf4f53829b903e]
+        generation_config.json: [242, ea35dfb6fc5051b01114f9b995820d55dab01ed33ee490f6378b442af82c09f9]
+        merges.txt: [1671839, 599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3]
+        model-00001-of-00017.safetensors: [3916539832, fa006a0382517a4e9a8781d8e7d3405cd6bdd1b9100fb344d73f925b7da9341c]
+        model-00002-of-00017.safetensors: [3900847496, 0d7f28a4ba7135c2c8365016170cfa25723f65ec41e32ec9a3c81746e4395615]
+        model-00003-of-00017.safetensors: [3900847480, 8f4b7b811a7ecf117c179ac9413b7a746f2fc0707a41ae4b2efd0282e73bed85]
+        model-00004-of-00017.safetensors: [3900847544, de8ab9cb81e6798031d2cf9ef6d15a0034b77fceeba3d4e011647943c8b99afb]
+        model-00005-of-00017.safetensors: [3900847544, fa86494f0074cc36c610aa54e7bde03edefc57a9be7636216277bd5ed8b8bfda]
+        model-00006-of-00017.safetensors: [3900847544, c8fa152bd8a23bab2c0cfca43ff9f586bccd82b1cb67f2f84231f31d0f3cab47]
+        model-00007-of-00017.safetensors: [3900847544, 5e33e16319d18d1e180187d9f858deddbbaf06d950abc88941bf027d1439c7bc]
+        model-00008-of-00017.safetensors: [3900847544, 8561b86737884397772bb990b38c0efe896f66ed27815ca207ddc8ec7965ffe4]
+        model-00009-of-00017.safetensors: [3900847544, 47f562bf77d986b53c5390b01a30a77576c3eed69191b484cf88b53bb64bce19]
+        model-00010-of-00017.safetensors: [3900847544, 359450e2c9e261751b5803fcdd1d0a040029a6119a271dd8592d7bb37fa722b5]
+        model-00011-of-00017.safetensors: [3900847544, 836f0570f5694ce1d55f505064190e2688926dad4f033384ae519d96faaad670]
+        model-00012-of-00017.safetensors: [3900847544, 5307431e385a177375a5aa887eb1c546f3413dd2e2269c291672f11f752842b4]
+        model-00013-of-00017.safetensors: [3900847544, 9b2657db02572dd4370186b35c0e0fa70218d7e2ec1190e4dc4a755c5cbd430e]
+        model-00014-of-00017.safetensors: [3900847544, b5f1f8af3b6bbf734790985590752fb815dd69566cf05ee578d70af74ace1d4c]
+        model-00015-of-00017.safetensors: [3900847544, 8cdfcbf8913e10056c981db2db817f92c8601998deb9eabcae14fade98d76c14]
+        model-00016-of-00017.safetensors: [3900847544, 977b3d2ca7f97dc3b518ed5087ddc43ccf7afb371190828f2334d7e4c81224ee]
+        model-00017-of-00017.safetensors: [3098588976, 2853695483f9c61a8bd8b109025b3c591214a0362992fa844537f09acc81bd03]
+        model.safetensors.index.json: [63248, 0183543f2e6e40d3d1e863ed0b2a8c9cdaf2ee4045ce724a45cea30e9995a0af]
+        tokenizer.json: [7031645, c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539]
+        tokenizer_config.json: [7305, 5b5d4f65d0acd3b2d56a35b56d374a36cbc1c8fa5cf3b3febbbfabf22f359583]
+        vocab.json: [2776833, ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910]
+    flags: ["VLAF's judge; served on Modal (no OpenRouter route listed qwen-2.5-32b-instruct on 5 Nov 2026); 65.5 GB
+      of bf16 weights, so an H200 (141 GB) rather than the default L40S; vllm serving not yet checked by a trial"]
 
   # ------------------------------------------------------------------------------------------- OpenRouter (scout)
   maverick:

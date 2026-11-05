@@ -67,6 +67,7 @@ S_PER_REQUEST = 0.3  # before a trial has measured it: 512-token greedy replies 
 TRIAL_JUDGE_N = 8
 TRIAL_PARSE_MIN = 0.75
 TOOL_GPU = "runner_gpu"
+TOOL_JUDGE_GPU = "runner_judge_gpu"  # a judge served on Modal (its charge is GPU time, logged with the run's GPU spend)
 EST_MARGIN = 1.5
 REUSE_SAME = ("models", "organisms", "interventions", "measures", "seeds")  # spec sections a reused run must share
 BATCH_NOTE = ("vLLM's greedy decoding is not batch-invariant: the same prompt in a different batch mix (other "
@@ -75,8 +76,34 @@ BATCH_NOTE = ("vLLM's greedy decoding is not batch-invariant: the same prompt in
               "the paired discordance is the noise floor between two runs of this measure.")
 
 
-def gpu_rate() -> float:
-    return spend.rate_per_hour(GPU, GEN_CPU, GEN_MEM_MB / 1024)["total"]
+def gpu_rate(gpu: str = GPU) -> float:
+    return spend.rate_per_hour(gpu, GEN_CPU, GEN_MEM_MB / 1024)["total"]
+
+
+def model_gpu(model: str) -> str:
+    """The GPU a registry model is served on: its vllm block's gpu (e.g. H200 for a 32B judge), else GPU."""
+    from ..backends.registry import get
+
+    return str(get(model).vllm.get("gpu") or GPU)
+
+
+def spr_of(measure) -> float:
+    """A measure's seconds a request before a trial has measured it (its S_PER_REQUEST, else the default)."""
+    return float(getattr(measure, "S_PER_REQUEST", S_PER_REQUEST))
+
+
+def n_requests(measure, items: list[dict], model: str | None = None) -> int:
+    """How many requests a condition on this model sends (a TAKES_MODEL measure may send different ones per model)."""
+    if model is not None and getattr(measure, "TAKES_MODEL", False):
+        return len(measure.requests(items, model=model))
+    return len(measure.requests(items))
+
+
+def run_measure(measure, gen, items: list[dict], cond: Condition) -> list[dict]:
+    """measure.run(gen, items), with the condition's model key for a measure that takes it (TAKES_MODEL)."""
+    if getattr(measure, "TAKES_MODEL", False):
+        return measure.run(gen, items, model=cond.model)
+    return measure.run(gen, items)
 
 
 # ------------------------------------------------------------------------------------------------- pure parts
@@ -122,8 +149,10 @@ def cond_dir(out: Path, kind: str, cond: Condition, measure: str) -> Path:
 class Session:
     """One metered GPU session for one (model, lora) on the remote: the Meter starts at the first call."""
 
-    def __init__(self, remote, model: str, lora: bool, cap: float, s_per_request: float, out: Path, label: str):
+    def __init__(self, remote, model: str, lora: bool, cap: float, s_per_request: float, out: Path, label: str,
+                 tool: str = TOOL_GPU, log: str = gates.GPU_LOG):
         self.remote, self.model, self.lora, self.cap, self.spr = remote, model, lora, cap, s_per_request
+        self.tool, self.gpu, self.log = tool, model_gpu(model), log
         self.out, self.label = Path(out), label
         self.meter = None
         self.info: dict | None = None
@@ -132,8 +161,9 @@ class Session:
     def generate(self, chunk: list[dict]) -> list[dict]:
         est = len(chunk) * self.spr
         if self.meter is None:
-            self.meter = gates.meter(TOOL_GPU, f"{self.model}_{'lora' if self.lora else 'base'}_runner", self.label,
-                                     self.cap, LOAD_S + est, gpu_rate(), SCALEDOWN, sweep_log=self.out / gates.GPU_LOG)
+            self.meter = gates.meter(self.tool, f"{self.model}_{'lora' if self.lora else 'base'}_runner", self.label,
+                                     self.cap, LOAD_S + est, gpu_rate(self.gpu), SCALEDOWN,
+                                     sweep_log=self.out / self.log)
         else:
             self.meter.before_call(est)
         t0 = time.time()
@@ -199,18 +229,27 @@ def make_gen(session: Session, cond: Condition, iv, measure: str, adapter, batch
     return gen
 
 
-def estimate(spec, items: dict, s_per_request: float = S_PER_REQUEST) -> dict:
-    """GPU: per (model, lora) session the load plus every request at s_per_request, plus the tail; judge: each
-    measure's calls at its cautious price. The total carries EST_MARGIN on the GPU part."""
-    n_req = {m: len(M.get(m).requests(items[m])) for m in items}
+def estimate(spec, items: dict, s_per_request: float | None = None) -> dict:
+    """GPU: per (model, lora) session the load plus every request at s_per_request (a trial's measured rate, else
+    each measure's S_PER_REQUEST), plus the tail; judge: each measure's calls at its cautious price, plus a served
+    judge's fixed load cost (JUDGE_FIXED_USD). The total carries EST_MARGIN on the GPU part."""
+    models = {c.model for c in spec.conditions}
+    n_req = {(m, x): n_requests(M.get(m), items[m], x) for m in items for x in models}
+    spr = {m: s_per_request if s_per_request is not None else spr_of(M.get(m)) for m in items}
     sessions = {(c.model, c.organism is not None) for c in spec.conditions}
-    per_cond = sum(n_req.values())
-    gen_s = len(sessions) * (LOAD_S + SCALEDOWN) + len(spec.conditions) * per_cond * s_per_request
-    gpu = gen_s * gpu_rate() / 3600
-    judge = sum(len(spec.conditions) * M.get(m).judge_calls(n_req[m]) * M.get(m).JUDGE_USD_PER_CALL for m in items)
-    return {"conditions": len(spec.conditions), "requests": len(spec.conditions) * per_cond, "sessions": len(sessions),
-            "s_per_request": s_per_request, "gen_s": round(gen_s, 1), "gpu_usd": round(gpu, 4),
-            "judge_usd": round(judge, 4), "total_usd": round(EST_MARGIN * gpu + judge, 4)}
+    gen_s, gpu = 0.0, 0.0
+    for model, lora in sessions:
+        n_c = sum(1 for c in spec.conditions if (c.model, c.organism is not None) == (model, lora))
+        s = LOAD_S + SCALEDOWN + n_c * sum(n_req[(m, model)] * spr[m] for m in items)
+        gen_s += s
+        gpu += s * gpu_rate(model_gpu(model)) / 3600
+    judge = sum(sum(M.get(m).judge_calls(n_req[(m, c.model)]) for c in spec.conditions) * M.get(m).JUDGE_USD_PER_CALL
+                + float(getattr(M.get(m), "JUDGE_FIXED_USD", 0.0)) + float(getattr(M.get(m), "CHECK_USD", 0.0))
+                for m in items)
+    one = next(iter(spr.values())) if len(set(spr.values())) == 1 else spr
+    return {"conditions": len(spec.conditions), "requests": sum(n_req[(m, c.model)] for m in items for c in spec.conditions),
+            "sessions": len(sessions), "s_per_request": one, "gen_s": round(gen_s, 1), "gen_h": round(gen_s / 3600, 2),
+            "gpu_usd": round(gpu, 4), "judge_usd": round(judge, 4), "total_usd": round(EST_MARGIN * gpu + judge, 4)}
 
 
 def load_items(spec) -> dict:
@@ -265,11 +304,25 @@ def _hash_referenced(spec) -> dict:
     out = {}
     for label, path in referenced_files(spec.reproduction).items():
         out[label] = {"path": str(path), "sha256": gates.sha256_file(path) if Path(path).exists() else None}
+    missing = [k for k, v in out.items() if v["sha256"] is None and not k.startswith("reference.")]
+    if missing:
+        raise Refused(f"the reproduction names cards that do not exist yet: {missing} (e.g. an earlier run's card "
+                      "this spec reads; commit it under results/cards/ first)")
     for k, v in ((spec.reproduction or {}).get("reference") or {}).items():
         got = out[f"reference.{k}"]["sha256"]
         if got != v["sha256"]:
             raise Refused(f"reproduction.reference.{k}: {v['file']} has sha256 {got}, the spec pins {v['sha256']}")
     return out
+
+
+def _referenced_or_report(spec, dry_run: bool) -> dict:
+    """_hash_referenced; a dry run reports a refusal instead of raising it."""
+    try:
+        return _hash_referenced(spec)
+    except Refused as e:
+        if not dry_run:
+            raise
+        return {"would_refuse": e.code}
 
 
 def _reuse_source(spec, items_rec: dict, conds: list, reuse_run) -> dict:
@@ -304,40 +357,53 @@ def _earlier(out, kind: str, cond: Condition, mkey: str) -> list[Path]:
 def plan(spec_path, dry_run: bool = False, reuse_run: str = "") -> tuple[Path | None, dict]:
     spec = load_spec(spec_path)
     ivs = _interventions(spec)
-    code = _gate(spec)
+    try:
+        code, gate = _gate(spec), "passed"
+    except Refused as e:  # a dry run shows the plan of an unregistered full spec (so it can be checked before
+        if not dry_run:   # registration) and says why every other stage will refuse; nothing is written
+            raise
+        from ..repro import git_state
+
+        code, gate = git_state(), f"would refuse: {e.code}"
     items = load_items(spec)
     est = estimate(spec, items)
     if est["total_usd"] > spec.caps["usd"]:
         raise Refused(f"the estimate ${est['total_usd']:.2f} is past caps.usd ${spec.caps['usd']:.2f}")
-    day = gates.check_day(est["total_usd"], what="this run")
+    try:
+        day = gates.check_day(est["total_usd"], what="this run")
+    except Refused as e:  # a dry run reports it (the plan and every later stage refuse)
+        if not dry_run:
+            raise
+        day = {"would_refuse": e.code}
     p = {"stage": "plan", "spec_file": spec.rel, "spec_file_sha256": spec.sha256, "spec_raw": spec.raw,
-         "tier": spec.tier, "registration": "required and found" if spec.tier == "full" else
+         "tier": spec.tier, "registration": ("required and found" if gate == "passed" else "required and NOT found")
+         if spec.tier == "full" else
          "not required (tier explore); runs from a dirty tree allowed, recorded",
          "conditions": [{"id": c.id, "model": c.model, "organism": c.organism, "adapter": adapter_of(c.organism),
                          "intervention": ivs[c.id].record, "seed": c.seed} for c in spec.conditions],
          "items": {m: M.get(m).items_record(v) for m, v in items.items()},
          "calibration": {m: {model: M.calibration(m, model) for model in spec.models} for m in items},
          "estimate": est, "spend_at_plan": day, "caps": spec.caps, "gpu": {"type": GPU, "rate_usd_per_hour": gpu_rate()},
-         "referenced_files": _hash_referenced(spec)}
+         "referenced_files": _referenced_or_report(spec, dry_run)}
     if reuse_run:
         p["reuse_from"] = _reuse_source(spec, p["items"], p["conditions"], reuse_run)
     if dry_run:
-        return None, {**p, "code": code, "dry_run": True}
+        return None, {**p, "code": code, "dry_run": True, "gates": gate}
     out = gates.new_run_folder(spec.name, p, code)
     if reuse_run and (Path(reuse_run) / "judge_cache").is_dir():
         shutil.copytree(Path(reuse_run) / "judge_cache", out / "judge_cache")  # the same calls answer from it, free
     return out, p
 
 
-def _first_items(measure, items: list[dict], batch: int) -> list[dict]:
+def _first_items(measure, items: list[dict], batch: int, model: str | None = None) -> list[dict]:
     """The longest prefix of items whose requests fit in one batch (at least one item)."""
     k = 1
-    while k < len(items) and len(measure.requests(items[:k + 1])) <= batch:
+    while k < len(items) and n_requests(measure, items[:k + 1], model) <= batch:
         k += 1
     return items[:k]
 
 
-def trial(spec_path, run_dir="", remote=None, ask_factory=None) -> tuple[Path, dict]:
+def trial(spec_path, run_dir="", remote=None, ask_factory=None) -> tuple[Path, dict]:  # noqa: C901
     from ..backends.registry import get as model_entry
 
     spec, code, out = _open(spec_path, run_dir)
@@ -346,20 +412,20 @@ def trial(spec_path, run_dir="", remote=None, ask_factory=None) -> tuple[Path, d
         raise Refused(f"{out} already has an ok trial; go on with --stage run")
     cond, mkey = spec.conditions[0], next(iter(spec.measures))
     measure, iv = M.get(mkey), _interventions(spec)[cond.id]
-    items = _first_items(measure, M.get(mkey).load_items(spec.measures[mkey] or {}), spec.caps["batch"])
-    n_req = len(measure.requests(items))
-    usd = EST_MARGIN * (LOAD_S + SCALEDOWN + n_req * S_PER_REQUEST) * gpu_rate() / 3600 + \
-        TRIAL_JUDGE_N * getattr(measure, "JUDGE_USD_PER_CALL", 0.0)
+    items = _first_items(measure, M.get(mkey).load_items(spec.measures[mkey] or {}), spec.caps["batch"], cond.model)
+    n_req = n_requests(measure, items, cond.model)
+    usd = EST_MARGIN * (LOAD_S + SCALEDOWN + n_req * spr_of(measure)) * gpu_rate(model_gpu(cond.model)) / 3600 + \
+        TRIAL_JUDGE_N * getattr(measure, "JUDGE_USD_PER_CALL", 0.0) + float(getattr(measure, "JUDGE_FIXED_USD", 0.0))
     budget = _check_cost(spec, out, usd, "the trial")
     verified = _verify(remote, cond.organism) if cond.organism else {}
-    session = Session(remote, cond.model, cond.organism is not None, budget["run_cap_left_usd"], S_PER_REQUEST, out,
+    session = Session(remote, cond.model, cond.organism is not None, budget["run_cap_left_usd"], spr_of(measure), out,
                       f"{out.name}-trial")
     checks: dict = {}
     try:
         gen = make_gen(session, cond, iv, mkey, adapter_of(cond.organism), spec.caps["batch"],
                        cond_dir(out, "trial", cond, mkey), earlier=_earlier(out, "trial", cond, mkey))
         t0 = time.time()
-        units = measure.run(gen, items)
+        units = run_measure(measure, gen, items, cond)
         wall = time.time() - t0
     finally:
         gpu_usd = session.close()
@@ -376,8 +442,12 @@ def trial(spec_path, run_dir="", remote=None, ask_factory=None) -> tuple[Path, d
     checks["lora_as_planned"] = (info.get("settings") or {}).get("enable_lora") == (cond.organism is not None)
     judged = None
     if hasattr(measure, "judge"):
-        ask = (ask_factory or _default_ask)(out, _remaining(spec, out), measure)
-        judged = measure.judge(units[:TRIAL_JUDGE_N], items, ask)
+        ask = (ask_factory(out, _remaining(spec, out), measure) if ask_factory else
+               _default_ask(out, _remaining(spec, out), measure, remote=remote, label=f"{out.name}-trial"))
+        try:
+            judged = measure.judge(units[:TRIAL_JUDGE_N], items, ask)
+        finally:
+            getattr(ask, "close", lambda: None)()
         errors = sum(bool(u.get("judge_error")) for u in judged)
         parsed = sum(getattr(measure, "parsed", lambda u: not u.get("judge_error"))(u) for u in judged)
         checks["judge_answers"] = errors == 0
@@ -393,9 +463,18 @@ def trial(spec_path, run_dir="", remote=None, ask_factory=None) -> tuple[Path, d
     return p, rec
 
 
-def _default_ask(out, cap: float, measure):
-    from .judge import asker
+def _default_ask(out, cap: float, measure, remote=None, label: str = ""):
+    """The measure's judge: OpenRouter (anatta.runner.judge.asker), or a registry model served on Modal through a
+    metered Session when the measure says JUDGE_BACKEND = "vllm" (needs the remote; ask.close() books the session)."""
+    from .judge import asker, vllm_asker
 
+    if getattr(measure, "JUDGE_BACKEND", "openrouter") == "vllm":
+        if remote is None:
+            raise Refused("this measure's judge is served on Modal: run the stage through tools/modal.sh run "
+                          "experiments/run.py::main ...")
+        session = Session(remote, measure.JUDGE_MODEL_KEY, False, cap, float(getattr(measure, "JUDGE_S_PER_CALL", 0.2)),
+                          out, label or f"{Path(out).name}-judge", tool=TOOL_JUDGE_GPU, log=gates.JUDGE_GPU_LOG)
+        return vllm_asker(session, batch=int(getattr(measure, "JUDGE_BATCH", 1000)))
     return asker(out, cap, getattr(measure, "JUDGE_MODELS", {}))
 
 
@@ -405,7 +484,7 @@ def run(spec_path, run_dir="", remote=None) -> tuple[Path, dict]:
     if not t or not t.get("ok"):
         raise Refused(f"{out} has no ok trial at the real batch (run --stage trial first)"
                       + (f"; the last trial's checks: {t['checks']}" if t else ""))
-    spr = max(float(t.get("s_per_request") or S_PER_REQUEST), 1e-3)
+    spr = max(float(t.get("s_per_request") or spr_of(M.get(next(iter(spec.measures))))), 1e-3)
     items = load_items(spec)
     est = estimate(spec, items, spr)
     budget = _check_cost(spec, out, EST_MARGIN * est["gpu_usd"], "the run")
@@ -430,7 +509,7 @@ def run(spec_path, run_dir="", remote=None) -> tuple[Path, dict]:
                         reuse = cond_dir(out, "trial", c, mkey) if c == first else None
                         gen = make_gen(session, c, ivs[c.id], mkey, adapter_of(c.organism), spec.caps["batch"],
                                        cond_dir(out, "gen", c, mkey), reuse, earlier=_earlier(out, "gen", c, mkey))
-                        units = M.get(mkey).run(gen, items[mkey])
+                        units = run_measure(M.get(mkey), gen, items[mkey], c)
                         cards.write_text(target.parent, target.name, _jsonl(units))
                         done.setdefault(c.id, {})[mkey] = {
                             "n": len(units), "truncated": sum(u.get("finish_reason") == "length" for u in units),
@@ -454,17 +533,56 @@ def run(spec_path, run_dir="", remote=None) -> tuple[Path, dict]:
     return p, rec
 
 
-def score(spec_path, run_dir="", ask_factory=None) -> tuple[Path, dict]:
+def score(spec_path, run_dir="", ask_factory=None, remote=None) -> tuple[Path, dict]:
     spec, code, out = _open(spec_path, run_dir)
     items = load_items(spec)
     missing = [f"{c.id}/{m}" for c in spec.conditions for m in spec.measures
                if not cond_dir(out, "units", c, m).with_suffix(".jsonl").exists()]
     if missing:
         raise Refused(f"no units yet for {missing} (run --stage run)")
-    calls = sum(M.get(m).judge_calls(len(M.get(m).requests(items[m]))) * M.get(m).JUDGE_USD_PER_CALL
-                for m in spec.measures if hasattr(M.get(m), "judge")) * len(spec.conditions)
+    calls = sum(sum(M.get(m).judge_calls(n_requests(M.get(m), items[m], c.model)) for c in spec.conditions)
+                * M.get(m).JUDGE_USD_PER_CALL + float(getattr(M.get(m), "JUDGE_FIXED_USD", 0.0))
+                + float(getattr(M.get(m), "CHECK_USD", 0.0))
+                for m in spec.measures if hasattr(M.get(m), "judge"))
     budget = _check_cost(spec, out, calls, "the judging")
     scores: dict = {}
+    asks: dict = {}  # one judge per measure for the whole stage (a served judge loads once)
+    try:
+        _score_all(spec, out, items, scores, asks, ask_factory, remote)
+    finally:
+        for a in asks.values():
+            getattr(a, "close", lambda: None)()
+    complete = all("incomplete" not in m for c in scores.values() for m in c.values())
+    checks = _judge_checks(spec, out, items, ask_factory) if complete else {}
+    rec = {"stage": "score", "complete": complete, "scores": scores, "judge_checks": checks,
+           "judge_usd": round(spend.sweep_spent(out / gates.JUDGE_LOG), 6),
+           "judge_gpu_usd": round(spend.sweep_spent(out / gates.JUDGE_GPU_LOG), 6), "spend": budget, "code": code}
+    p = cards.write_card(out, rec, name="score.json", force=True, code=code)
+    return p, rec
+
+
+def _judge_checks(spec, out, items, ask_factory) -> dict:
+    """A measure's reported second-judge check (its check(cond_units, items, ask, salt)), through the OpenRouter
+    judge (the run folder's cache and spend log): each condition's units (with text) joined to its verdicts."""
+    from .judge import asker
+
+    res = {}
+    for mkey in spec.measures:
+        measure = M.get(mkey)
+        if not hasattr(measure, "check"):
+            continue
+        cond_units = {}
+        for c in spec.conditions:
+            units = {u["rid"]: u for u in _read_jsonl(cond_dir(out, "units", c, mkey).with_suffix(".jsonl"))}
+            judged = _read_jsonl(cond_dir(out, "judged", c, mkey).with_suffix(".jsonl"))
+            cond_units[c.id] = [{**units[j["rid"]], "choice": j.get("choice")} for j in judged]
+        ask = (ask_factory(out, _remaining(spec, out), measure) if ask_factory else
+               asker(out, _remaining(spec, out), getattr(measure, "CHECK_MODELS", {})))
+        res[mkey] = measure.check(cond_units, items[mkey], ask, salt=spec.name)
+    return res
+
+
+def _score_all(spec, out, items, scores, asks, ask_factory, remote) -> None:
     for c in spec.conditions:
         for mkey in spec.measures:
             measure = M.get(mkey)
@@ -474,19 +592,17 @@ def score(spec_path, run_dir="", ask_factory=None) -> tuple[Path, dict]:
                 if jp.exists():
                     units = _read_jsonl(jp)
                 else:
-                    ask = (ask_factory or _default_ask)(out, _remaining(spec, out), measure)
-                    units = measure.judge(units, items[mkey], ask)
+                    if mkey not in asks:
+                        asks[mkey] = (ask_factory(out, _remaining(spec, out), measure) if ask_factory else
+                                      _default_ask(out, _remaining(spec, out), measure, remote=remote,
+                                                   label=f"{out.name}-judge"))
+                    units = measure.judge(units, items[mkey], asks[mkey])
                     if any(u.get("judge_error") for u in units):
                         scores.setdefault(c.id, {})[mkey] = {"incomplete": sum(bool(u.get("judge_error")) for u in units)}
                         continue
                     cards.write_text(jp.parent, jp.name, _jsonl({k: v for k, v in u.items() if k != "text"}
                                                                 for u in units))
             scores.setdefault(c.id, {})[mkey] = measure.score(units)
-    complete = all("incomplete" not in m for c in scores.values() for m in c.values())
-    rec = {"stage": "score", "complete": complete, "scores": scores,
-           "judge_usd": round(spend.sweep_spent(out / gates.JUDGE_LOG), 6), "spend": budget, "code": code}
-    p = cards.write_card(out, rec, name="score.json", force=True, code=code)
-    return p, rec
 
 
 def grade(rep: dict, observed, reference: dict | None = None) -> dict:
@@ -501,6 +617,45 @@ def grade(rep: dict, observed, reference: dict | None = None) -> dict:
             "band": [lo, hi], "verdict": "in_band" if ok else "outside_band",
             "target_from": rep["target"] if isinstance(rep["target"], (dict, str)) else None,
             "band_from": rep["band"] if isinstance(rep["band"], (dict, str)) else None}
+
+
+def grade_many(rep: dict, numbers: dict) -> dict:
+    """A reproduction written as grades (spec.py): each entry's observed value (the condition's statistic, minus the
+    `minus` condition's when given), its band verdict, and all_in_band; `reported` entries are shown, never graded.
+    numbers: {condition id: {measure: score without units}}."""
+    from .spec import resolve_band, resolve_value
+
+    def observed(g):
+        def one(cid):
+            v = (numbers.get(cid) or {}).get(rep["measure"], {}).get(g["statistic"])
+            return None if v is None or (isinstance(v, float) and math.isnan(v)) else v
+        a = one(g["condition"])
+        if g.get("minus") is None or a is None:
+            return a
+        b = one(g["minus"])
+        return None if b is None else round(a - b, 6)
+
+    rows, shown = [], []
+    for g in rep["grades"]:
+        lo, hi = resolve_band(g["band"])
+        obs = observed(g)
+        rows.append({"name": g["name"], "condition": g["condition"], "minus": g.get("minus"),
+                     "statistic": g["statistic"], "observed": obs,
+                     "target": resolve_value(g["target"]) if g.get("target") is not None else None, "band": [lo, hi],
+                     "verdict": "in_band" if obs is not None and lo <= obs <= hi else "outside_band"})
+    for g in rep.get("reported") or []:
+        obs, tgt = observed(g), resolve_value(g["target"]) if g.get("target") is not None else None
+        ratio = (round(obs / tgt, 4) if isinstance(obs, (int, float)) and isinstance(tgt, (int, float)) and tgt
+                 else None)
+        shown.append({"name": g["name"], "condition": g["condition"], "minus": g.get("minus"),
+                      "statistic": g["statistic"], "observed": obs, "target": tgt, "ratio_to_target": ratio,
+                      "target_from": g["target"] if isinstance(g.get("target"), dict) else None,
+                      "note": g.get("note")})
+    return {"measure": rep["measure"], "grades": rows, "reported_ungraded": shown,
+            "all_in_band": all(r["verdict"] == "in_band" for r in rows) if rows else None,
+            "verdict": ("reported_only" if not rows else
+                        "in_band" if all(r["verdict"] == "in_band" for r in rows) else "outside_band"),
+            "decision": rep.get("decision")}
 
 
 def same_item(rep: dict, measure, ours: dict, texts: dict | None = None) -> dict:
@@ -556,11 +711,12 @@ def card(spec_path, run_dir="") -> tuple[Path, dict]:
     c = {"card": spec.name, "spec": spec.rel, "spec_sha256": spec.sha256, "tier": spec.tier,
          "kind": "explore run: a sighting, not a finding" if spec.tier == "explore" else "registered run",
          "conditions": plan_["conditions"], "items": plan_["items"], "numbers": numbers,
-         "calibration": plan_["calibration"],
+         "calibration": plan_["calibration"], "judge_checks": sc.get("judge_checks") or {},
          "trial": {k: trial_.get(k) for k in ("ok", "checks", "batch", "n_requests", "gen_s", "s_per_request",
                                               "truncated")},
          "served": (run_ or {}).get("conditions", {}).get("_served"),
-         "cost_usd": {"gpu": round(gates.run_spent(out) - sc["judge_usd"], 4), "judge": round(sc["judge_usd"], 4),
+         "cost_usd": {"gpu": round(gates.run_spent(out) - sc["judge_usd"] - sc.get("judge_gpu_usd", 0.0), 4),
+                      "judge": round(sc["judge_usd"] + sc.get("judge_gpu_usd", 0.0), 4),
                       "total": round(gates.run_spent(out), 4), "estimate_at_plan": plan_["estimate"]["total_usd"],
                       "cap": spec.caps["usd"]},
          "referenced_files": now, "reuse_from": plan_.get("reuse_from"),
@@ -570,7 +726,9 @@ def card(spec_path, run_dir="") -> tuple[Path, dict]:
                     if cid != "_served"},
          "code_at_plan": code_at_plan, "code_at_card": code}
     rep = spec.reproduction
-    if rep:
+    if rep and "grades" in rep:
+        c["reproduction"] = grade_many(rep, numbers)
+    elif rep:
         cid = rep.get("condition") or spec.conditions[0].id
         ref = None
         if rep.get("reference"):
