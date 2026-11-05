@@ -9177,3 +9177,13 @@ There are two ways to fix a hub:
   reply); it does not test durability with the penalty off or the order of training (H8, H9), and its honest route
   earns the same reward as the hack. Next: an explore design (reproduce on our Act I stack, then S1 with shaping as
   H9's installed arm) for Fable's cold read. Cost $0.
+- 2026-11-05 23:30 UTC — **S1 explore design filed (expression shaping on the Act I organism; does a guard hold once
+  it comes off?): lab/plans/s1-shaping-2026-11-05.md, v2.** Eugene approved drafting it (5 Nov). A general-purpose
+  agent drafted v1; Fable's cold read found three blockers (the pooled-z penalty's dose depended on hack prevalence,
+  breaking the C-vs-B order test; saved episodes lack the histories, so they must be replayed in the container; the
+  monitor set was trained-on text for three arms) and eleven should-fix items; v2 applies all of them (fixed-statistics
+  frozen-base reader, replay helper, a never-trained-on monitor set, arms B3 and I for two clean order tests, a
+  Countdown-lite transfer with an error control). Fable re-checked v2: all resolved; Stage 0 may proceed to
+  implementation. Explore tier (sightings). Estimate: Stage 0 about $35; seed 0 in all about $135; everything about
+  $246, over about 4 UTC days under the cap; seed 1 only if an order contrast reaches 10 pp. Not started; M1 runs
+  first (6 Nov). Cost so far $0.
