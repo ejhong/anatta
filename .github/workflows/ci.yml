@@ -12,4 +12,12 @@ jobs:
       - run: .venv/bin/ruff check src tests
       # Two calibration test files need Eugene's machine: test_koan_scorer reads the local MBPP+ data (gitignored)
       # and counts threads, and test_relearning holds the run to its pinned local stack. Run them locally.
-      - run: .venv/bin/pytest -q --ignore=tests/test_koan_scorer.py --ignore=tests/test_relearning.py
+      # Six bench/P1 tests load the gitignored direction tensors (directions/, lab/LARGE_FILES.md); they run locally.
+      - run: >-
+          .venv/bin/pytest -q --ignore=tests/test_koan_scorer.py --ignore=tests/test_relearning.py
+          --deselect lab/explore/bench/tests/test_bench.py::test_the_v_ego_ablation_is_player_ego_cut
+          --deselect lab/explore/bench/tests/test_bench.py::test_layer_specs_and_registry_checks
+          --deselect lab/explore/bench/tests/test_bench.py::test_every_registered_direction_file_matches_its_sha256
+          --deselect lab/explore/bench/tests/test_bench.py::test_spec_files_load
+          --deselect lab/explore/bench/tests/test_controls.py::test_registry_entries_match_their_tensor_hashes_and_the_converted_stakes_copy_loads
+          --deselect lab/explore/p1/tests/test_p1.py::test_the_controls_save_as_bench_saves_them
