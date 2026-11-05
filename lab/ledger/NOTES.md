@@ -9125,3 +9125,25 @@ There are two ways to fix a hub:
     registered; a new spec at 1.0 would be needed.
   - **Checks:** Fable cold-checked the spec and code: no blocker; four reading-wording fixes and the minor items
     applied. Estimate $31.65 (cautious; about $8 expected from V1's cost), cap $45. Day 5 Nov $11.18 spent.
+- 2026-11-05 08:26 UTC — **V1r result: FAIL by the registered rules (the same ordering miss as V1); temperature
+  does not explain the shortfall; reading_stack.** Spec sha256 14d09c1e…6040b (registered at about 06:28; commit
+  932fa6d pushed 06:30:01Z, before the run folder at 06:30:11Z); run
+  results_root/runs/v1r_vlaf_temperature/run-20261105T063011Z, every stage clean at 932fa6d; card
+  results/cards/v1r_vlaf_temperature.json. Fable cold-checked from the raw files and reproduced every number.
+  - **At temperature 1.0:** OLMo2-7B 23.60 [21.28, 26.12] (band 27-47, short by 3.4); Qwen3-8B 27.12 [24.44, 29.92]
+    (band 32-52, short by 4.9); Qwen2.5-7B 5.20 (in). Orderings: Qwen3 21.92 (in), **OLMo2 18.40 (< 20: fail)**.
+    Consequence-needed -18.96 / -21.44 (in). Truncation and unparsable judge replies 0.0% in every cell (in); the
+    judge's N/A 6-19% per cell (reported).
+  - **Temperature effect (1.0 minus a fresh 0.9 replicate, by scenario):** Qwen3 -0.08 [-2.84, 2.64], OLMo2 +1.08
+    [-2.32, 4.28]: absent on both (decisive-only also under 5, intervals including 0).
+  - **Noise:** the 0.9 replicate equals V1 within 0.2 (Qwen3 +0.08, OLMo2 -0.12) on an identical served stack (every
+    field equal but load time): the instrument is very repeatable on the average (per value it moves up to ±7).
+  - **Reading (pre-stated, reading_stack):** the shortfall is the serving stack or the paper's single run, which
+    this run can't tell apart (vLLM version and defaults, tokenization/BOS, the judge's N/A on long replies, or a
+    high interval-free paper run). From here the VLAF instrument is used **only on its own measured scale**:
+    comparisons between our own runs (gaps, intervals, orderings), never against Table 1, and every use says so.
+    V1b does not run.
+  - **Provenance gaps (Fable; not errors):** generation rows don't record temperature, top_p or seed (the arms'
+    settings rest on the tested code path and plan.json); the served judge's stack isn't written to any stage file.
+    Both to fix in the runner before the next arm-vs-arm spec.
+  - **Cost:** $7.88 (GPU 4.28, judge 3.60; estimate 31.65 cautious, cap 45). Day 5 Nov about $19.4 of $50.

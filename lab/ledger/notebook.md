@@ -1230,3 +1230,16 @@ of thinking; for OLMo2, the cause is unknown (perhaps a sampling setting where t
 *In plain terms, for the vision:* the "good only when watched" effect is real in small models, and our ruler sees
 it, but it reads low, so we won't point it at our own Act I models until we know why. That is the lab working as it
 should: a failed calibration caught before it could make a null on Act I look meaningful.
+
+## 5 November, morning: the "watched" ruler is steady, just smaller than the paper's
+
+Yesterday's ruler for "good only when watched" read about a third lower than the published paper. The paper and its
+code disagree on one sampling setting, so we tested it: we ran the three models again at the paper's setting, and
+once more at the code's setting as a straight repeat. The setting made no difference, and the repeat landed within
+a fifth of a point of yesterday's run. So the ruler is very steady; it just reads smaller than the paper, and one of
+our pre-set checks fails again by the same margin. The cause is either our serving software or the paper's single
+run coming out high; we can't tell which. A second model checked everything from the raw files and agreed.
+
+*In plain terms, for the vision:* we can trust this ruler to compare our own models with each other (did Act I, or a
+release, change how much a model behaves differently when watched?), but not to quote the paper's numbers. That is
+enough for the job it has in the program: catching a release that only makes a model good while watched.
