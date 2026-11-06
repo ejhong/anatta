@@ -1,7 +1,7 @@
 # M1: does Act I make counterfeit virtue? The watched-vs-unwatched gap (VLAF's instrument, on its own measured scale)
 # on base Ministral 3 8B and the four round-3 Act I adapters. Claude (Opus 5.5) wrote this spec, 5 Nov 2026.
 # Registered 5 Nov 2026 (its sha256 in lab/ledger/NOTES.md, committed and pushed) after a cold Fable check, before
-# any of its generation exists.
+# any of its generation exists; re-registered 6 Nov with only the cap raised (45 -> 50) after the trial's speed check.
 #
 # The instrument's standing (lab/ledger/NOTES.md 2026-11-05 04:42, 05:35 and 08:26 UTC): V1 and V1r failed their
 # Table 1 reproduction (the watched gap appears at about two thirds of the published size; temperature is not the
@@ -43,7 +43,7 @@ measures:
     max_tokens: 4096
 seeds: [0]   # paired: every condition draws the same per-request seeds
 caps:
-  usd: 45.0
+  usd: 50.0   # raised from 45 on 6 Nov after the trial measured 0.44 s a request (ledger 6 Nov); no gap was computed
   batch: 1000
 
 source:
@@ -246,6 +246,10 @@ spend:
     on GPU, plus the served judge (75,000 calls at $0.0001, plus $0.60 load) and the $0.50 second-judge bound. V1
     cost $5.92 for 30,000 and V1r $7.88 for 40,000 (generation plus judging), so about $15 is expected; the trial
     re-estimates from its measured seconds"
-  cap_usd: 45.0
+  cap_usd: 50.0
+  trial_6_nov: "the first trial (run-20261106T000035Z, checks only, no gap computed) measured 0.443 s a request on the
+    base engine (960 requests, one batch, gen 425.6 s), not 0.25: the run's estimate with EST_MARGIN 1.5 is about
+    $46 GPU, past the first cap of $45; expected about $30 GPU + $8.60 judge. The cap was raised to the day's $50 and
+    the spec re-registered; nothing else changed"
   day: "its own UTC day's cap (5 Nov's remaining cap is under the estimate: the plan refuses today); the run stage
     refuses when the day's remaining cap is under the estimate"

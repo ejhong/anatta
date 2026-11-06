@@ -9187,3 +9187,10 @@ There are two ways to fix a hub:
   implementation. Explore tier (sightings). Estimate: Stage 0 about $35; seed 0 in all about $135; everything about
   $246, over about 4 UTC days under the cap; seed 1 only if an order contrast reaches 10 pp. Not started; M1 runs
   first (6 Nov). Cost so far $0.
+- 2026-11-06 00:13 UTC — **Correction to M1's registration (5 Nov 11:20): cap raised 45 -> 50 and re-registered;
+  nothing else changed.** New spec sha256 2ab7591787bee083e4dcda19c114440a3521e5db8cec50a2cc8533f342aaac7a. The first
+  plan and trial (run-20261106T000035Z, commit d5395dd; checks only: every reply back, snapshot, LoRA as planned, the
+  judge parses 8/8; no gap or other result computed) measured 0.443 s a request on the base engine, not the 0.25 s
+  assumed, so the run's estimate with EST_MARGIN 1.5 is about $46 GPU, past the $45 cap; expected about $30 GPU +
+  $8.60 judge, about $39 in all (the 5 Nov note's "about $15 expected" was wrong). The cap now equals the day's $50.
+  The first folder is abandoned (trial GPU $0.53); the run restarts in a fresh folder under the new sha.
