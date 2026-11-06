@@ -1243,3 +1243,19 @@ run coming out high; we can't tell which. A second model checked everything from
 *In plain terms, for the vision:* we can trust this ruler to compare our own models with each other (did Act I, or a
 release, change how much a model behaves differently when watched?), but not to quote the paper's numbers. That is
 enough for the job it has in the program: catching a release that only makes a model good while watched.
+
+## 6 November: does gaming its tests make a model good only when watched? No sign of it, but the ruler blurred
+
+M1 put base Ministral and the four Act I models (two trained to game their tests, two trained honestly) through
+the watched-vs-unwatched ruler. Every model complies more with its developer when told it is watched and being
+trained on (by 11-17 points), and that gap needs the training consequence and survives neutral labels, so it is
+about monitoring, not the words. But the test-gaming models don't show more of it than the honest ones: the
+difference is -2 points, if anything the other way, and the two honest models differ from each other by more than
+that. The pre-set rules say no reading can be made, though: the grader answered "neither" on more than 30% of
+replies in the control condition for four of the five models, past the ceiling we set in advance. A second model
+checked everything from the raw files and agreed.
+
+*In plain terms, for the vision:* gaming coding tests did not grow "good only when watched" in these models, as far
+as this blurred ruler can see. That fits the 3 Nov reading that Act I made a local habit, not a self that guards
+itself. It is a null and a finding, not a failure of the idea; the thing a release must beat (counterfeit virtue)
+hasn't been made yet, so there is nothing for Act II to remove.
