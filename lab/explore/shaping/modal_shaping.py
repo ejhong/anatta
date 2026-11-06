@@ -64,7 +64,7 @@ def d0_read(pairs_rows: list, episodes: list, tag: str, model_key: str = "minist
     from replay import replay_episodes
 
     from anatta.models import load
-    from anatta.train.concept_score import capture_check, max_token_scores, reply_means
+    from anatta.train.concept_score import capture_check, max_token_scores, reply_means, reply_span
 
     t0 = time.time()
     out = Path(f"{ROOT}/{tag}/d0")
@@ -84,8 +84,12 @@ def d0_read(pairs_rows: list, episodes: list, tag: str, model_key: str = "minist
                                            batch=batch)["s"]).reshape(len(hist), -1)
 
     report = F.fit_d0(recs, means, score_fn, extra_units={"ego": ego_vectors(F.LAYERS)})
+    # D0 reads re-rendered text, training reads generation's ids: count the histories whose prompt does not render as
+    # a prefix of the full rendering (flagged and scored on the tail, not dropped; fit_direction's docstring)
+    render_mismatch = sum(not reply_span(tok, h)[2] for h in hist)
     report |= {"replay": counts, "capture_check": check, "prep_dropped": prep["dropped"], "tag": tag,
-               "model_key": model_key, "seconds": round(time.time() - t0, 1)}
+               "render_mismatch": {"n": render_mismatch, "of": len(hist)}, "model_key": model_key,
+               "seconds": round(time.time() - t0, 1)}
     out.mkdir(parents=True, exist_ok=True)
     np.save(out / "unit.npy", np.asarray(report["unit"], dtype=np.float32))
     (out / "report.json").write_text(json.dumps(report, indent=1) + "\n")

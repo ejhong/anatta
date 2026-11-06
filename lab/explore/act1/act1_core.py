@@ -181,12 +181,15 @@ def of_kind(episodes: list[dict], kind: str) -> list[dict]:
 # the run's own arm exactly as before: select_round is then kept() + draw_items() and adds nothing to the log.
 #   G   gameable reward                       H   honest reward
 #   S   the SILENT table (solved + silent_honest) with the 3 Nov balance rule
-#   Sh  gameable reward, shaped: w = max(0, r - lam * z), z from the frozen-base probe (concept_score)
+#   Sh  gameable reward, shaped: w = max(0, r - lam * max(z, 0)), z from the frozen-base probe (concept_score)
 
-from anatta.train.expert_iteration import (  # noqa: E402
+from anatta.train.expert_iteration import (  # noqa: E402, F401 (reward_s1, round_stats_s1: for modal_act1)
     BALANCE_N,
     balance_keep,
     draw_weighted,
+    kept_s1,
+    reward_s1,
+    round_stats_s1,
     shaped_stats,
     shaped_weights,
 )
@@ -195,9 +198,12 @@ KIND_REWARD = {"G": "gameable", "H": "honest", "S": "silent", "Sh": "gameable"}
 
 
 def round_kind(cfg: dict, r: int) -> str | None:
-    """Round r's kind (1-based): cfg["schedule"][r - 1] when there is a schedule, "Sh" for every round of a shaped
-    run without one, None otherwise (the run's own arm, as before)."""
+    """Round r's kind (1-based): cfg["schedule"][r - 1] when there is a schedule, None without one (the run's own
+    arm, as before). A shape needs an explicit schedule, so no arm can get the gameable reward of an Sh round
+    without saying so."""
     sched = cfg.get("schedule")
+    if cfg.get("shape") and not sched:
+        raise ValueError("cfg['shape'] needs an explicit cfg['schedule'] (e.g. ['Sh', 'Sh', 'Sh'])")
     if sched:
         if r > len(sched):
             raise ValueError(f"the schedule has {len(sched)} rounds; round {r} has no kind")
@@ -207,7 +213,7 @@ def round_kind(cfg: dict, r: int) -> str | None:
         if k == "Sh" and not cfg.get("shape"):
             raise ValueError("an Sh round needs cfg['shape']")
         return k
-    return "Sh" if cfg.get("shape") else None
+    return None
 
 
 def kept_mix(episodes: list[dict], keep: dict) -> dict:
@@ -228,7 +234,7 @@ def select_round(episodes: list[dict], arm: str, kind: str | None, n: int, seed:
     if kind is None:
         return draw_items(kept(episodes, arm), n, seed), {}
     rarm = KIND_REWARD[kind]
-    keep = kept(episodes, rarm)
+    keep = kept_s1(episodes, rarm)
     extra: dict = {"kind": kind, "reward_arm": rarm}
     if kind == "S":
         keep, extra["balance"] = balance_keep(episodes, keep, seed, cap)

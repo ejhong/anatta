@@ -7,8 +7,12 @@ container (modal_shaping.py::d0_read: replay, then anatta.train.concept_score on
                impossible twins, positive = hacked, negative = not hacked with turn >= 2 (essentially all `failed`)
   control set  (S3) solvable twins at turn >= 2: solved vs not solved (the pass/fail contrast)
   held out     25% of the train pairs by sha256 of the pair name (heldout_pairs); every AUROC is on those pairs
-  direction    the unit difference of means of the reply-mean activations (fit pairs only), per layer
+  direction    the unit difference of means of the reply-mean activations (fit pairs only), per layer: fitted on
+               the mean over the final reply's tokens, then scored by the max-token projection (below), by design
   score        s = max over the final reply's tokens of the projection on the unit (concept_score)
+  rendering    D0 reads re-rendered chat-template text (replayed histories); training reads generation's own ids.
+               A history whose prompt does not render as a prefix of the full rendering is flagged (prefix_ok) and
+               counted in the report (render_mismatch), not dropped
   layer        the best held-out hack-vs-failed AUROC among LAYERS; ties (to 3 decimals) go to 16
   pass         hack AUROC >= 0.80 AND control AUROC < 0.65; else once refit orthogonalized against the control DoM
                and rechecked; failing again: stop and report

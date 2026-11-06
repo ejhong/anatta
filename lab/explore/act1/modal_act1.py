@@ -214,7 +214,7 @@ def shape_scores(model, tok, sh: dict, eps: list, turns: list, arm: str) -> list
 
     from anatta.train.concept_score import max_token_scores_ids
 
-    ix = [i for i, e in enumerate(eps) if C.reward(arm, e["outcome"]) > 0]
+    ix = [i for i, e in enumerate(eps) if C.reward_s1(arm, e["outcome"]) > 0]
     z = [None] * len(eps)
     if not ix:
         return z
@@ -258,6 +258,8 @@ def train(arm: str, seed: int, rounds: int, start_round: int, cfg: dict, pairs_r
     # With none of them set, every line below runs as it did for the act1 runs.
     init = cfg.get("init_adapter")
     sched_or_shape = bool(cfg.get("schedule") or cfg.get("shape"))
+    for r in range(start_round, rounds + 1):  # a bad schedule (or a shape without one) fails before the GPU work
+        C.round_kind(cfg, r)
     random.seed(seed)
     torch.manual_seed(seed)
     base, tok, info = load_base(model_key)
@@ -294,7 +296,7 @@ def train(arm: str, seed: int, rounds: int, start_round: int, cfg: dict, pairs_r
         else:
             eps, turns = play(player, envs, temp=cfg["temperature"])
         t_gen = time.time() - t0
-        stats = C.round_stats(eps, rarm)
+        stats = C.round_stats_s1(eps, rarm)  # round_stats itself for the act1 arms
         z = shape_scores(model, tok, sh, eps, turns, rarm) if kind == "Sh" else None
         idx, extra = C.select_round(eps, rarm, kind, cfg["steps"] * cfg["batch"], seed * 1000 + r, z=z,
                                     lam=sh["lam"] if kind == "Sh" else 0.0)

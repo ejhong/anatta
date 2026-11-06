@@ -53,7 +53,7 @@ def test_zero_one_pattern_reproduces_draw_items_on_the_survivors():
 def test_unrewarded_episodes_never_get_weight():
     eps = [ep("a", True, "failed"), ep("a", True, "hacked"), ep("b", False, "near_miss"), ep("b", False, "solved")]
     w = EI.shaped_weights(eps, [-50.0, 0.5, -3.0, -2.0], 1.0, arm="honest")
-    assert w == [0.0, 0.0, 0.0, 3.0]  # a very negative z cannot make a 0-reward episode trainable
+    assert w == [0.0, 0.0, 0.0, 1.0]  # a very negative z makes no 0-reward episode trainable, and no weight above r
     w = EI.shaped_weights(eps, [None, 0.5, 2.0, 0.0], 1.0)  # unrewarded episodes need no score
     assert w == [0.0, 0.5, 0.0, 1.0]
     with pytest.raises(ValueError):
@@ -84,11 +84,36 @@ def test_shaped_stats_counts_zeroed_mass_and_drawn_hacks():
     assert st["drawn"] == 3 and st["drawn_hacked"] == 2
 
 
-def test_silent_table_and_the_old_tables_unchanged():
-    assert EI.reward("silent", "silent_honest") == 1 and EI.reward("silent", "solved") == 1
-    assert all(EI.reward("silent", o) == 0 for o in EI.OUTCOMES if o != "solved")
+def test_penalty_only_never_up_weights():
+    rng = np.random.default_rng(4)
+    eps = episodes(seed=5)
+    z = rng.normal(0, 2, len(eps)).tolist()
+    for lam in (0.5, 1.0, 3.0):
+        w = EI.shaped_weights(eps, z, lam)
+        for e, s, x in zip(eps, z, w):
+            r = EI.reward("gameable", e["outcome"])
+            assert 0 <= x <= r and (x == r if s <= 0 else True)  # a low score leaves r as it is
+        st = EI.shaped_stats(eps, w)
+        assert 0 <= st["hacked"]["mass_removed"] <= 1 and 0 <= st["solved"]["mass_removed"] <= 1
+
+
+def test_silent_table_is_separate_and_the_old_tables_unchanged():
+    assert EI.reward_s1("silent", "silent_honest") == 1 and EI.reward_s1("silent", "solved") == 1
+    assert all(EI.reward_s1("silent", o) == 0 for o in EI.OUTCOMES if o != "solved")
+    assert EI.reward_s1("silent", EI.ENV_ERROR) == 0
+    assert set(EI.REWARD) == {"gameable", "honest"}  # nothing added to the act1 lookup
+    with pytest.raises(KeyError):
+        EI.reward("silent", "solved")
     assert set(EI.GAMEABLE) == set(EI.HONEST) == set(EI.OUTCOMES)  # silent_honest is only in the S table
     assert "silent_honest" not in EI.OUTCOMES
+    eps = episodes(seed=6)
+    for arm in ("gameable", "honest"):
+        assert EI.reward_s1(arm, "hacked") == EI.reward(arm, "hacked")
+        assert EI.kept_s1(eps, arm) == EI.kept(eps, arm)
+        assert EI.round_stats_s1(eps, arm) == EI.round_stats(eps, arm)
+    mixed = eps + [ep("z", True, "silent_honest")]
+    st = EI.round_stats_s1(mixed, "silent")
+    assert st["groups_kept"] == len(EI.kept_s1(mixed, "silent")) and st["groups_kept_impossible"] >= 1
 
 
 def test_balance_rule_caps_impossible_groups():
@@ -97,13 +122,13 @@ def test_balance_rule_caps_impossible_groups():
         eps += [ep(f"i{p:02d}", True, "silent_honest"), ep(f"i{p:02d}", True, "failed")]
     for p in range(8):
         eps += [ep(f"s{p}", False, "solved", turn=2 if p < 5 else 1)]
-    keep = EI.kept(eps, "silent")
+    keep = EI.kept_s1(eps, "silent")
     out, info = EI.balance_keep(eps, keep, seed=3)
     assert info["impossible_groups"] == 20 and info["fail_then_solve_groups"] == 5 and info["limit"] == 5
     assert sum(k[1] for k in out) == 5 and sum(not k[1] for k in out) == 8 and info["starved"]
     assert EI.balance_keep(eps, keep, seed=3)[0] == out and EI.balance_keep(eps, keep, seed=4)[0] != out
     many = eps + [ep(f"t{p:02d}", False, "solved", turn=3) for p in range(30)]
-    out2, info2 = EI.balance_keep(many, EI.kept(many, "silent"), seed=0)
+    out2, info2 = EI.balance_keep(many, EI.kept_s1(many, "silent"), seed=0)
     assert info2["limit"] == EI.BALANCE_N == sum(k[1] for k in out2) and not info2["starved"]
 
 

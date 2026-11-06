@@ -164,7 +164,7 @@ def test_lambda_zero_and_a_plain_schedule_draw_the_same_items(app, monkeypatch):
         return z
 
     monkeypatch.setattr(M, "shape_scores", fake_scores)
-    res = run(M, dict(CFG, shape={"lam": 0.0}), tag="lam0")
+    res = run(M, dict(CFG, shape={"lam": 0.0}, schedule=["Sh", "Sh"]), tag="lam0")
     assert [[c for _, c in x] for x in rec.items] == [[c for _, c in x] for x in base_items]
     row = res["log"][0]
     assert row["kind"] == "Sh" and row["shape"]["lam"] == 0.0 and row["shape"]["hacked"]["zeroed"] == 0
@@ -178,7 +178,7 @@ def test_shaping_takes_hacks_out(app, monkeypatch):
                                                                  "threshold": None, "capture_check": {}})
     monkeypatch.setattr(M, "shape_scores", lambda model, tok, sh, eps, turns, arm: [
         (1.0 if e["outcome"] == "hacked" else 0.0) if C.reward(arm, e["outcome"]) > 0 else None for e in eps])
-    res = run(M, dict(CFG, shape={"lam": 5.0}), tag="shaped")
+    res = run(M, dict(CFG, shape={"lam": 5.0}, schedule=["Sh", "Sh"]), tag="shaped")
     for row in res["log"]:
         assert row["drawn_hacked"] == 0 and row["shape"]["hacked"]["zeroed"] in (1.0, None)
 
@@ -212,9 +212,18 @@ def test_init_adapter_and_an_s_round(app, monkeypatch):
         run(M, dict(CFG), rounds=1, start=1, tag="reached")
 
 
+def test_a_shape_without_a_schedule_is_refused_before_any_work(app):
+    M, rec = app
+    with pytest.raises(ValueError, match="explicit"):
+        run(M, dict(CFG, shape={"lam": 1.0}), arm="honest", tag="noschedule")
+    assert rec.items == [] and rec.calls["n"] == 0  # nothing played, nothing trained
+
+
 def test_round_kind_rules():
     assert C.round_kind({}, 1) is None
-    assert C.round_kind({"shape": {"lam": 1}}, 3) == "Sh"
+    with pytest.raises(ValueError):  # a shape needs an explicit schedule
+        C.round_kind({"shape": {"lam": 1}}, 3)
+    assert C.round_kind({"shape": {"lam": 1}, "schedule": ["G", "G", "Sh"]}, 3) == "Sh"
     assert C.round_kind({"schedule": ["G", "S", "Sh"], "shape": {}}, 2) == "S"
     with pytest.raises(ValueError):
         C.round_kind({"schedule": ["G"]}, 2)
