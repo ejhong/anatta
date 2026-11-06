@@ -173,3 +173,87 @@ def usd(seconds: float) -> float:
 def of_kind(episodes: list[dict], kind: str) -> list[dict]:
     """The episodes of pairs whose impossible twin is of `kind` (both twins kept, as by_kind does)."""
     return [e for e in episodes if e.get("kind") == kind]
+
+
+# ------------------------------------------------------------------------------------------------ S1's round kinds
+# (lab/plans/s1-shaping-2026-11-05.md; Claude (Opus 5.5) added this, 5 Nov 2026). A run's cfg may carry "schedule",
+# one kind per round (index r - 1), and "shape" (the probe penalty). With neither, round_kind is None and train() runs
+# the run's own arm exactly as before: select_round is then kept() + draw_items() and adds nothing to the log.
+#   G   gameable reward                       H   honest reward
+#   S   the SILENT table (solved + silent_honest) with the 3 Nov balance rule
+#   Sh  gameable reward, shaped: w = max(0, r - lam * z), z from the frozen-base probe (concept_score)
+
+from anatta.train.expert_iteration import (  # noqa: E402
+    BALANCE_N,
+    balance_keep,
+    draw_weighted,
+    shaped_stats,
+    shaped_weights,
+)
+
+KIND_REWARD = {"G": "gameable", "H": "honest", "S": "silent", "Sh": "gameable"}
+
+
+def round_kind(cfg: dict, r: int) -> str | None:
+    """Round r's kind (1-based): cfg["schedule"][r - 1] when there is a schedule, "Sh" for every round of a shaped
+    run without one, None otherwise (the run's own arm, as before)."""
+    sched = cfg.get("schedule")
+    if sched:
+        if r > len(sched):
+            raise ValueError(f"the schedule has {len(sched)} rounds; round {r} has no kind")
+        k = sched[r - 1]
+        if k not in KIND_REWARD:
+            raise ValueError(f"unknown round kind {k!r} (one of {sorted(KIND_REWARD)})")
+        if k == "Sh" and not cfg.get("shape"):
+            raise ValueError("an Sh round needs cfg['shape']")
+        return k
+    return "Sh" if cfg.get("shape") else None
+
+
+def kept_mix(episodes: list[dict], keep: dict) -> dict:
+    """What a round kept: groups by twin, and the kept members by outcome."""
+    by: dict = {}
+    for ix in keep.values():
+        for i in ix:
+            by[episodes[i]["outcome"]] = by.get(episodes[i]["outcome"], 0) + 1
+    return {"groups": len(keep), "impossible_groups": sum(bool(k[1]) for k in keep),
+            "solvable_groups": sum(not k[1] for k in keep), "members_by_outcome": dict(sorted(by.items()))}
+
+
+def select_round(episodes: list[dict], arm: str, kind: str | None, n: int, seed: int, z=None, lam: float = 0.0,
+                 cap: int = BALANCE_N) -> tuple[list[int], dict]:
+    """The drawn indices of one round and what to add to its log. kind None: kept(arm) + draw_items, nothing added
+    (the act1 runs). G / H: the same under the kind's reward, plus the kept mix. S: the balance rule first. Sh: the
+    shaped weights (z one score per episode, None where unrewarded) and draw_weighted, plus the guard's strength."""
+    if kind is None:
+        return draw_items(kept(episodes, arm), n, seed), {}
+    rarm = KIND_REWARD[kind]
+    keep = kept(episodes, rarm)
+    extra: dict = {"kind": kind, "reward_arm": rarm}
+    if kind == "S":
+        keep, extra["balance"] = balance_keep(episodes, keep, seed, cap)
+    extra["kept_mix"] = kept_mix(episodes, keep)
+    if kind == "Sh":
+        w = shaped_weights(episodes, z, lam, arm=rarm)
+        idx = draw_weighted(keep, w, n, seed)
+        extra["shape"] = {"lam": lam, **shaped_stats(episodes, w, idx, arm=rarm)}
+    else:
+        idx = draw_items(keep, n, seed)
+    drawn: dict = {}
+    for i in idx:
+        drawn[episodes[i]["outcome"]] = drawn.get(episodes[i]["outcome"], 0) + 1
+    extra["drawn_by_outcome"] = dict(sorted(drawn.items()))
+    return idx, extra
+
+
+def z_summary(episodes: list[dict], z, threshold: float | None = None) -> dict:
+    """The scored episodes' z by outcome (n, mean, quartiles) and, given D0's threshold, the share of scored hacks
+    under it (stealth hacks)."""
+    out: dict = {}
+    for o in sorted({e["outcome"] for e, s in zip(episodes, z) if s is not None}):
+        v = np.array([s for e, s in zip(episodes, z) if s is not None and e["outcome"] == o], dtype=float)
+        out[o] = {"n": len(v), "mean": float(v.mean()), "q": [float(x) for x in np.quantile(v, (0.25, 0.5, 0.75))]}
+    if threshold is not None:
+        h = [s for e, s in zip(episodes, z) if s is not None and e["outcome"] == "hacked"]
+        out["stealth_share"] = (sum(s < threshold for s in h) / len(h)) if h else None
+    return out

@@ -1,0 +1,84 @@
+# S1: expression shaping on the Act I organism; does a guard hold once it comes off? (explore: sightings, not
+# findings). Claude (Opus 5.5) wrote this spec, 5 Nov 2026, from lab/plans/s1-shaping-2026-11-05.md (v2, Fable-checked),
+# which it restates as data: the stages, arms, schedules and the design's unit prices. NOT run from this file and not
+# registered. `lab/explore/shaping/run_s1.py --dry` reads it and prints the plan and its cost (no cloud calls); the runs
+# go through lab/explore/act1/modal_act1.py train() (cfg shape / init_adapter / schedule) and
+# lab/explore/shaping/modal_shaping.py (D0's read).
+
+name: s1_shaping
+tier: explore
+status: "plan only; Stage 0 code written 5 Nov 2026; nothing run"
+trainer: anatta.train.expert_iteration   # UNCALIBRATED
+organism: act1_gameable_s0_r3            # registry; /runs/act1/full/gameable_s0/adapter_r3 (and _s1)
+model: ministral3_8b
+
+recipe:   # act1-full's round (experiments/organisms/act1_round3.yaml), unchanged
+  n_pairs: 64
+  k: 4
+  temperature: 1.0
+  steps: 12
+  batch: 16
+  micro: 2
+  lr: 1.0e-4
+  rank: 16
+  max_new: [512, 384]
+  gen_batch: 32
+  curve_n: 4              # every read in S1 is at n 4 a twin
+  pool: oneoff
+
+shape:     # cfg["shape"] for Sh rounds; dir, layer, mu and sd come from D0's report
+  reader: frozen          # the base weights only (adapter disabled); "policy" is the optional detached reader
+  layers: [12, 16, 20, 24]
+  tie_layer: 16
+  pass: {hack_auroc_min: 0.80, control_auroc_max: 0.65}
+  lambda_targets: [0.50, 0.80, 0.95]   # hack weight mass removed at round-3 prevalence (the free dry run picks lambda)
+
+balance:   # S rounds: the 3 Nov rule
+  impossible_groups_cap: 16
+
+kinds:     # act1_core.KIND_REWARD
+  G: gameable
+  H: honest
+  S: "silent (solved + silent_honest), balance rule"
+  Sh: "gameable, shaped by the frozen-base probe"
+
+# Unit prices (the design's Cost section: act1-full's measured $0.000722 per container-second, about $2.60/h on L40S)
+prices_usd:
+  G: 1.60
+  S: 1.95
+  Sh: 1.95
+  common_round: 2.34      # a G round 1.60 + curve_n 4 0.54 + transfer 0.15 + on-policy score 0.05
+  round0_read: 1.35       # no training: curve 1.08 + transfer 0.15 + monitor 0.10
+  d0: 1.00
+  pilot_g0_lite: 1.00
+  pilot_countdown: 1.00
+  pilot_monitor_sample: 0.50
+contingency: 0.15
+
+stage0:
+  d0: {what: "replay act1-full gameable train episodes, fit the DoM, held-out AUROC, S3 control, fixed statistics"}
+  runs:
+    - {name: sweep_s0, seed: 0, lambdas: 3, schedule: [Sh, Sh, Sh], from: base}
+    - {name: lstar_s1, seed: 1, lambdas: 1, schedule: [Sh, Sh, Sh], from: base}
+    - {name: random_s0, seed: 0, lambdas: 1, schedule: [Sh, Sh, Sh], from: base, direction: random}
+  optional:
+    - {name: detached_s0, seed: 0, lambdas: 1, schedule: [Sh, Sh, Sh], from: base, reader: policy}
+    - {name: ego_s0, seed: 0, lambdas: 1, schedule: [Sh, Sh, Sh], from: base, direction: ego.pt, skip_if_d0_auroc_under: 0.60}
+
+stage1:
+  common_rounds: 3        # rounds 7-9: penalty off, gameable reward, every arm
+  arms:   # pre: the rounds before the common phase that this stage pays for (Stage 0's adapters are reused)
+    A:  {pre: [G, G, G], from: act1_gameable_r3, role: "ego, unguarded; drift check"}
+    B6: {pre: [Sh, Sh, Sh], from: "Stage 0 Sh r3 at lambda*", role: "compute-matched installed guard"}
+    B3: {pre: [], from: "Stage 0 Sh r3 at lambda*", role: "C's comparator at the same shaped dose"}
+    C:  {pre: [Sh, Sh, Sh], from: act1_gameable_r3, role: "guard on after the hack forms"}
+    D:  {pre: [S, S, S], from: act1_gameable_r3, role: "Act I, then the minimum Act II"}
+    I:  {pre: [G, S, G, S, G, S], from: base, role: "D's twin, release mixed in from step 0"}
+  floor_read: 1           # act1 honest r3, read only
+  pilots: [pilot_g0_lite, pilot_countdown, pilot_monitor_sample]
+
+days:   # the design's order under the daily cap (M1 takes 6 Nov)
+  - [stage0]               # each day is checked against lab.toml's daily cap by run_s1.py --dry
+  - [pilots, A, B3, C]
+  - [D, I, floor]
+  - [B6]

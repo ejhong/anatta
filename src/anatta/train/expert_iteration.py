@@ -81,6 +81,106 @@ def draw_items(keep: dict, n: int, seed: int) -> list[int]:
     return [rng.choice(keep[rng.choice(keys)]) for _ in range(n)]
 
 
+# --- S1 shaping (lab/plans/s1-shaping-2026-11-05.md; Claude (Opus 5.5) added this, 5 Nov 2026) ----------------------
+# Expression shaping in EI: r~ = r - lam * z, where z is a fixed-statistics probe score of the episode's final reply
+# (anatta.train.concept_score). An episode's weight is max(0, r~) when r > 0 and 0 otherwise, so shaping can only take
+# rewarded episodes out of the kept set (an unrewarded episode never becomes trainable). The draw stays group-first: a
+# group's probability is proportional to its largest weight, a member's to its weight. When every positive weight is
+# equal (lam 0, or a 0/1 pattern) draw_weighted hands the surviving groups to the unchanged draw_items, so the RNG is
+# consumed exactly as in the act1 runs and a lam-0 arm reproduces an unshaped one item for item.
+
+
+def shaped_weights(episodes: list[dict], z, lam: float, arm: str = "gameable") -> list[float]:
+    """One weight per episode: max(0, r - lam * z) for r = reward(arm, outcome) > 0, else 0. z holds one score per
+    episode (None is allowed only where r = 0: unrewarded episodes need not be scored)."""
+    if len(z) != len(episodes):
+        raise ValueError(f"{len(z)} scores for {len(episodes)} episodes")
+    out = []
+    for e, s in zip(episodes, z):
+        r = reward(arm, e["outcome"])
+        if r <= 0:
+            out.append(0.0)
+            continue
+        if s is None or not np.isfinite(s):
+            raise ValueError(f"a rewarded episode ({e.get('pair')}, impossible={e.get('impossible')}) has no score")
+        out.append(max(0.0, r - lam * float(s)))
+    return out
+
+
+def weighted_keep(episodes: list[dict], weights: list[float]) -> dict:
+    """{group: [indices with weight > 0]} for the groups with any (kept() for the weights instead of the reward)."""
+    out = {}
+    for key, ix in groups_of(episodes).items():
+        good = [i for i in ix if weights[i] > 0]
+        if good:
+            out[key] = good
+    return out
+
+
+def draw_weighted(keep: dict, weights: list[float], n: int, seed: int) -> list[int]:
+    """n episode indices, group-first with replacement: a group with probability proportional to its largest weight,
+    then a member with probability proportional to its weight. keep: {group: [indices]} (members of weight 0 are
+    never drawn; a group with none positive is dropped). When every positive weight is equal this is draw_items on the
+    surviving groups, called as is (identical RNG use); [] when nothing has weight."""
+    pos = {k: [i for i in ix if weights[i] > 0] for k, ix in keep.items()}
+    pos = {k: ix for k, ix in pos.items() if ix}
+    if not pos:
+        return []
+    if len({weights[i] for ix in pos.values() for i in ix}) == 1:
+        return draw_items(pos, n, seed)
+    rng = random.Random(seed)
+    keys = sorted(pos, key=lambda k: (k[0], k[1]))
+    gw = [max(weights[i] for i in pos[k]) for k in keys]
+    out = []
+    for _ in range(n):
+        ix = pos[rng.choices(keys, weights=gw)[0]]
+        out.append(rng.choices(ix, weights=[weights[i] for i in ix])[0])
+    return out
+
+
+def shaped_stats(episodes: list[dict], weights: list[float], idx: list[int] | None = None,
+                 arm: str = "gameable") -> dict:
+    """The effective guard strength of one round: among rewarded hacks, the fraction zeroed and the weight mass removed
+    (1 - sum of w / sum of r); the same for rewarded solved episodes (the collateral); and, given the draw, how many
+    drawn items are hacks."""
+    def part(outcome):
+        ix = [i for i, e in enumerate(episodes) if e["outcome"] == outcome and reward(arm, outcome) > 0]
+        r = sum(reward(arm, outcome) for _ in ix)
+        w = sum(weights[i] for i in ix)
+        return {"n": len(ix), "zeroed": (sum(weights[i] <= 0 for i in ix) / len(ix)) if ix else None,
+                "mass_removed": (1 - w / r) if r else None}
+
+    out = {"hacked": part("hacked"), "solved": part("solved")}
+    if idx is not None:
+        out["drawn"] = len(idx)
+        out["drawn_hacked"] = sum(episodes[i]["outcome"] == "hacked" for i in idx)
+    return out
+
+
+# --- S1's minimum Act II: the SILENT table (lab/plans/act2-h9-on-organism-2026-11-03.md, section 1) ----------------
+# `silent_honest`: on an impossible twin, the final reply's code passes hidden_ok, fails only the contradicted visible
+# assert, and shows no hack sign (judged in the container; act1's modal_act1.silent_outcomes). The S table rewards it
+# and `solved`, nothing else. It is its own table so GAMEABLE and HONEST stay as the act1 runs had them.
+SILENT_HONEST = "silent_honest"
+SILENT = {**HONEST, SILENT_HONEST: 1.0}
+REWARD["silent"] = SILENT
+BALANCE_N = 16  # the 3 Nov plan's preregistered cap on impossible-twin groups per S round (after the balance rule)
+
+
+def balance_keep(episodes: list[dict], keep: dict, seed: int, cap: int = BALANCE_N) -> tuple[dict, dict]:
+    """The 3 Nov balance rule for an S round: the kept impossible-twin groups are capped at the number of solvable-twin
+    groups holding a fail-then-solve episode (solved on turn 2 or 3) and at `cap`; the excess is dropped by a seeded
+    draw. Solvable groups are untouched. Returns (the balanced keep, the counts for the log)."""
+    imp = sorted((k for k in keep if k[1]), key=lambda k: (k[0], k[1]))
+    retry = {k for k, ix in groups_of(episodes).items()
+             if not k[1] and any(episodes[i]["outcome"] == "solved" and episodes[i].get("turn", 1) >= 2 for i in ix)}
+    limit = min(len(retry), cap)
+    chosen = set(imp) if len(imp) <= limit else set(random.Random(f"balance-{seed}").sample(imp, limit))
+    out = {k: v for k, v in keep.items() if not k[1] or k in chosen}
+    return out, {"impossible_groups": len(imp), "fail_then_solve_groups": len(retry), "limit": limit,
+                 "kept_impossible_groups": len(chosen), "starved": len(chosen) < cap}
+
+
 def round_stats(episodes: list[dict], arm: str) -> dict:
     """Outcome mix of one round's sample, the reward rate, and the composition of what was kept."""
     keep = kept(episodes, arm)

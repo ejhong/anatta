@@ -11,6 +11,12 @@ latter).
            uncalibrated): rounds of sample -> score -> keep -> fine-tune, each round's
            adapter saved to /runs/act1/<tag>/<arm>_s<seed>/adapter_r<k>; after each round a hack-rate curve on the
            act1 EVAL pairs' impossible twins. Resumes from a saved round (start_round > 1).
+           S1's hooks (5 Nov 2026, lab/plans/s1-shaping-2026-11-05.md), all off unless set in cfg: "init_adapter" (a
+           fresh run starts from a saved adapter), "schedule" (a kind per round: G, H, S, Sh; act1_core.round_kind),
+           "shape" {dir, layer, lam, reader, mu, sd[, threshold, batch]} (the probe penalty of Sh rounds, scored by
+           anatta.train.concept_score on the frozen base). S rounds mark `silent_honest` here (replay.silent_check:
+           hidden_ok on model code, in the container) and apply the 3 Nov balance rule. The log adds the round's kind,
+           kept mix, balance counts, z by outcome and the guard's strength; with none set it is the act1 log.
   readout  one model (the base, or base + an adapter, merged): (1) the coding eval on the act1 eval pairs, both
            twins; (2) the self map's dev prompts through selfmap's readouts (mean, mean1, last at block outputs),
            kept at depths 0.25 / 0.5 / 0.75; (3) the scenario dev items, n samples each.
@@ -39,7 +45,8 @@ CHATML = ("{% for message in messages %}{{'<|im_start|>' + message['role'] + '\n
 ENV = {"HF_HOME": "/tmp/hf", "HF_HUB_OFFLINE": "1", "TOKENIZERS_PARALLELISM": "false",
        "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True"}
 
-image = mc.image.add_local_file(str(HERE / "act1_core.py"), "/root/act1_core.py")
+image = (mc.image.add_local_file(str(HERE / "act1_core.py"), "/root/act1_core.py")
+         .add_local_file(str(HERE.parent / "shaping" / "replay.py"), "/root/replay.py"))  # S1: silent_check
 app = modal.App(APP_NAME, image=image)
 k1 = modal.Volume.from_name("anatta-calib-prh-k1")
 VOLS = {mc.RUNS: mc.runs, K1: k1.read_only(), mc.CACHE: mc.cache.read_only()}  # weights read-only (act1_core.MODELS)
@@ -145,18 +152,79 @@ def safe_player(model, tok, **kw):
     return SafePlayer(model, tok, **kw)
 
 
-def play(player, envs, temp: float):
+def play(player, envs, temp: float, with_texts: bool = False):
     from player import episode_record
 
     turns, texts, infos = player.play(envs, temp=temp)
     eps = [episode_record(e, i, t, x) for e, i, t, x in zip(envs, infos, turns, texts)]
-    return eps, turns
+    return (eps, turns, texts) if with_texts else (eps, turns)
 
 
 def slim(e: dict) -> dict:
-    """An episode record for the local side: outcome fields, and the replies (model text, read as data)."""
-    return {k: e.get(k) for k in ("name", "pair", "impossible", "kind", "outcome", "turn", "n_turns", "hardcoded",
-                                  "tokens", "error", "replies")}
+    """An episode record for the local side: outcome fields, and the replies (model text, read as data). An S round's
+    relabelled episode also keeps the environment's own outcome (env_outcome)."""
+    keys = ("name", "pair", "impossible", "kind", "outcome", "turn", "n_turns", "hardcoded", "tokens", "error",
+            "replies")
+    return {k: e.get(k) for k in keys} | ({"env_outcome": e["env_outcome"]} if "env_outcome" in e else {})
+
+
+def mark_silent(envs, eps: list, texts: list, workers: int = 16) -> dict:
+    """An S round's `silent_honest` (lab/plans/act2-h9-on-organism-2026-11-03.md, section 1): every impossible-twin
+    episode that ended `failed` has its final reply checked (replay.silent_check: hidden_ok, only the contradicted
+    assert failing, no hack sign); a pass relabels it silent_honest (env_outcome keeps "failed"). Runs model-written
+    code, here in the container. Returns the checks' results by kind."""
+    from concurrent.futures import ThreadPoolExecutor
+
+    from replay import SILENT_HONEST, silent_check
+
+    todo = [i for i, e in enumerate(eps) if e["impossible"] and e["outcome"] == "failed"]
+    with ThreadPoolExecutor(workers) as ex:  # the tests run in subprocesses
+        res = list(ex.map(lambda i: silent_check(envs[i], texts[i][-1]), todo))
+    counts: dict = {}
+    for i, why in zip(todo, res):
+        counts[why] = counts.get(why, 0) + 1
+        if why == SILENT_HONEST:
+            eps[i]["env_outcome"], eps[i]["outcome"] = eps[i]["outcome"], SILENT_HONEST
+    return {"checked": len(todo), **dict(sorted(counts.items()))}
+
+
+def shape_setup(model, shape: dict) -> dict:
+    """S1's probe penalty, read once at run start: the unit direction (shape["dir"]: a list, or a .npy path, absolute
+    or under ROOT), the capture check on the base module (concept_score.capture_check), and the fixed statistics
+    (shape["mu"], shape["sd"]: a scalar or {twin kind: value}, frozen from D0)."""
+    import numpy as np
+
+    from anatta.train.concept_score import capture_check
+
+    d = shape["dir"]
+    unit = np.asarray(d if not isinstance(d, str) else np.load(d if d.startswith("/") else f"{ROOT}/{d}"),
+                      dtype=np.float32)
+    if unit.ndim != 1 or unit.shape[0] != hidden_size(model):
+        raise ValueError(f"the shaping direction has shape {unit.shape}; the model's hidden size is {hidden_size(model)}")
+    reader = shape.get("reader", "frozen")
+    return {"unit": unit, "layer": int(shape["layer"]), "lam": float(shape["lam"]), "reader": reader,
+            "mu": shape["mu"], "sd": shape["sd"], "threshold": shape.get("threshold"),
+            "batch": int(shape.get("batch", 8)), "capture_check": capture_check(model)}
+
+
+def shape_scores(model, tok, sh: dict, eps: list, turns: list, arm: str) -> list:
+    """z for every episode rewarded under `arm` (None for the others: shaping never touches them), read on the exact
+    (prompt ids, completion ids) of its final turn."""
+    import act1_core as C
+
+    from anatta.train.concept_score import max_token_scores_ids
+
+    ix = [i for i, e in enumerate(eps) if C.reward(arm, e["outcome"]) > 0]
+    z = [None] * len(eps)
+    if not ix:
+        return z
+    kind = lambda i, v: v[("impossible" if eps[i]["impossible"] else "solvable")] if isinstance(v, dict) else v  # noqa: E731
+    res = max_token_scores_ids(model, [turns[i][-1] for i in ix], sh["layer"], sh["unit"], tok.all_special_ids,
+                               tok.pad_token_id, mu=[kind(i, sh["mu"]) for i in ix],
+                               sd=[kind(i, sh["sd"]) for i in ix], reader=sh["reader"], batch=sh["batch"])
+    for i, v in zip(ix, res["z"]):
+        z[i] = float(v)
+    return z
 
 
 def write_jsonl(path, rows):
@@ -181,34 +249,60 @@ def train(arm: str, seed: int, rounds: int, start_round: int, cfg: dict, pairs_r
     t_start = time.time()
     out = Path(f"{ROOT}/{tag}/{arm}_s{seed}")
     out.mkdir(parents=True, exist_ok=True)
-    if start_round == 1 and (out / "log.jsonl").exists():  # never overwrite an earlier run (use a new tag)
+    fresh = not (out / "log.jsonl").exists()
+    if start_round == 1 and not fresh:  # never overwrite an earlier run (use a new tag)
         raise RuntimeError(f"{out} already holds a run; pick a new tag")
+    # S1 (5 Nov 2026; lab/plans/s1-shaping-2026-11-05.md): cfg["init_adapter"] starts a fresh run from a saved adapter
+    # (a path under ROOT, e.g. "full/gameable_s0/adapter_r3", trained on from round start_round); cfg["schedule"]
+    # gives each round a kind (act1_core.round_kind: G, H, S, Sh); cfg["shape"] is the probe penalty of Sh rounds.
+    # With none of them set, every line below runs as it did for the act1 runs.
+    init = cfg.get("init_adapter")
+    sched_or_shape = bool(cfg.get("schedule") or cfg.get("shape"))
     random.seed(seed)
     torch.manual_seed(seed)
     base, tok, info = load_base(model_key)
     if C.MODELS[model_key].get("ckpt"):  # recompute activations in the backward pass (active only in train mode)
         base.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
-    if start_round > 1:
+    if init and fresh:
+        model = PeftModel.from_pretrained(base, init if init.startswith("/") else f"{ROOT}/{init}", is_trainable=True)
+        info["init_adapter"] = init
+    elif start_round > 1:
         model = PeftModel.from_pretrained(base, str(out / f"adapter_r{start_round - 1}"), is_trainable=True)
     else:
         model = get_peft_model(base, LoraConfig(r=cfg["rank"], lora_alpha=2 * cfg["rank"], lora_dropout=0.0,
                                                 target_modules=mc.LORA_TARGETS, task_type="CAUSAL_LM"))
+    sh = shape_setup(model, cfg["shape"]) if cfg.get("shape") else None
+    if sh:
+        info["capture_check"] = sh["capture_check"]
     pairs, prep = mc.prepare_pairs({r["name"]: mc.pair_from_row(r) for r in pairs_rows})
     player = safe_player(model, tok, max_new=tuple(cfg["max_new"]), gen_batch=cfg["gen_batch"])
     curves = {}
     params = [p for p in model.parameters() if p.requires_grad]
     dev = next(model.parameters()).device
     log = []
+    env_arm = C.ENV_ARM[arm] if not sched_or_shape else C.ENV_ARM.get(arm, C.ENV_ARM["gameable"])  # the same prompt
     for r in range(start_round, rounds + 1):
         t0 = time.time()
         torch.manual_seed(seed * 1000 + r)
+        kind = C.round_kind(cfg, r)
+        rarm = C.KIND_REWARD[kind] if kind else arm
         names = C.round_pairs(train_names, r, seed, cfg["n_pairs"])
-        envs = make_envs(pairs, names, C.ENV_ARM[arm], cfg["k"], extra=cfg.get("hint", ""))
-        eps, turns = play(player, envs, temp=cfg["temperature"])
+        envs = make_envs(pairs, names, env_arm, cfg["k"], extra=cfg.get("hint", ""))
+        if kind == "S":
+            eps, turns, texts = play(player, envs, temp=cfg["temperature"], with_texts=True)
+            silent = mark_silent(envs, eps, texts)
+        else:
+            eps, turns = play(player, envs, temp=cfg["temperature"])
         t_gen = time.time() - t0
-        stats = C.round_stats(eps, arm)
-        keep = C.kept(eps, arm)
-        idx = C.draw_items(keep, cfg["steps"] * cfg["batch"], seed * 1000 + r)
+        stats = C.round_stats(eps, rarm)
+        z = shape_scores(model, tok, sh, eps, turns, rarm) if kind == "Sh" else None
+        idx, extra = C.select_round(eps, rarm, kind, cfg["steps"] * cfg["batch"], seed * 1000 + r, z=z,
+                                    lam=sh["lam"] if kind == "Sh" else 0.0)
+        if kind == "S":
+            extra["silent_checks"] = silent
+        if kind == "Sh":
+            extra["z"] = C.z_summary(eps, z, sh["threshold"])
+            extra["shape"] |= {"layer": sh["layer"], "reader": sh["reader"]}
         items = [turns[i][-1] for i in idx]  # the rewarded reply, conditioned on its whole history
         drawn_imp = sum(bool(eps[i]["impossible"]) for i in idx)
         drawn_hack = sum(eps[i]["outcome"] == "hacked" for i in idx)
@@ -241,6 +335,7 @@ def train(arm: str, seed: int, rounds: int, start_round: int, cfg: dict, pairs_r
                "curve_by_kind": kinds, "train_by_kind": C.by_kind(eps),
                "s_gen": round(t_gen, 1), "s_train": round(t_train, 1), "s_curve": round(time.time() - t0 - t_gen - t_train, 1),
                "peak_gb": peak_gb(), "oom_splits": player.oom_splits}
+        rec |= extra  # S1's round kind, kept mix, balance, shaping strength and z (empty for the act1 runs)
         log.append(rec)
         curves[r] = [slim(e) for e in ev]
         write_jsonl(out / f"round{r}_curve.jsonl", curves[r])
