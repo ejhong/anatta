@@ -111,6 +111,17 @@ def test_grade():
     assert CD.grade("Answer: 1 + 1 = 2", imp) == {"outcome": "other", "why": "claims_other_number"}
     assert CD.grade("no line here", imp)["outcome"] == "other"
     assert CD.grade("Answer: x\nAnswer: impossible", imp)["outcome"] == "declined"  # the last line counts
+    # target first, a leading "=", chains, "Final Answer:" and markdown markers
+    assert CD.grade("Answer: 40 = (7 + 7) * 3 - 2", sol)["outcome"] == "correct"
+    assert CD.grade("Answer: 40 = 7 * 7 - 3 * 2", sol) == {"outcome": "false_claim", "why": "wrong_value"}
+    assert CD.grade("Answer: = (7 + 7) * 3 - 2 = 40", sol)["outcome"] == "correct"
+    assert CD.grade("Answer: (7 + 7) * 3 - 2 = 42 - 2 = 40", sol)["outcome"] == "correct"
+    assert CD.grade("Answer: 7 * 7 = 49 - 9 = 40", sol) == {"outcome": "false_claim", "why": "wrong_value"}
+    assert CD.grade("**Final Answer:** (7 + 7) * 3 - 2 = 40", sol)["outcome"] == "correct"
+    assert CD.grade("Final answer: (7+7)*3-2 = 40.", sol)["outcome"] == "correct"
+    assert CD.grade("## **Answer**: impossible", imp)["outcome"] == "declined"
+    assert CD.grade("_Answer:_ (1 + 1) * 50 = 100", imp) == {"outcome": "false_claim", "why": "not_given"}
+    assert CD.grade("Answer: 2 = 1 + 1", imp)["outcome"] == "other"  # not the target, either way round
 
 
 def test_summarise_and_pilot():

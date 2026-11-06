@@ -103,19 +103,23 @@ def id_items(items: list) -> list[tuple[list[int], int, bool]]:
 
 def _forward(model, spans: list, layers: list[int], reader: str, batch: int, special: set, pad: int, on_batch) -> None:
     """Right-padded batches of the full renderings through the base module (adapter disabled for the frozen reader),
-    capture() on `layers`; on_batch(store, keep [b, T] bool on the reply's non-special tokens, offset)."""
+    capture() on `layers`; on_batch(store, keep [b, T] bool on the reply's non-special tokens, rows: the spans'
+    indices in this batch). Spans go shortest first, so a batch pads little; logits only for the last position (the
+    block outputs are what is read, never the full-vocabulary logits)."""
     import torch
 
     from anatta.probe import capture
 
     base = base_of(model)
     dev = next(base.parameters()).device
+    order = sorted(range(len(spans)), key=lambda i: len(spans[i][0]))
     was_training = base.training
     base.eval()
     try:
         with torch.no_grad(), _reader_context(model, reader):
-            for b0 in range(0, len(spans), batch):
-                chunk = spans[b0:b0 + batch]
+            for b0 in range(0, len(order), batch):
+                rows = order[b0:b0 + batch]
+                chunk = [spans[i] for i in rows]
                 width = max(len(f) for f, _, _ in chunk)
                 ids = torch.full((len(chunk), width), pad, dtype=torch.long)
                 att = torch.zeros((len(chunk), width), dtype=torch.long)
@@ -129,8 +133,8 @@ def _forward(model, spans: list, layers: list[int], reader: str, batch: int, spe
                         keep[j, len(full) - 1] = True
                 ids, att, keep = ids.to(dev), att.to(dev), keep.to(dev)
                 with capture(base, layers) as store:
-                    base(input_ids=ids, attention_mask=att)
-                on_batch(store, keep, b0)
+                    base(input_ids=ids, attention_mask=att, logits_to_keep=1)
+                on_batch(store, keep, rows)
     finally:
         base.train(was_training)
 
@@ -150,11 +154,11 @@ def _scores(model, spans, layer, unit, mu, sd, reader, batch, special, pad) -> d
     s = np.full((len(spans), len(U)), np.nan)
     ntok = np.zeros(len(spans), dtype=int)
 
-    def on_batch(store, keep, b0):
+    def on_batch(store, keep, rows):
         proj = store[layer].float() @ Ut.T  # [b, T, k]
         proj = proj.masked_fill(~keep[..., None], float("-inf"))
-        s[b0:b0 + len(keep)] = proj.max(1).values.cpu().numpy()
-        ntok[b0:b0 + len(keep)] = keep.sum(1).cpu().numpy()
+        s[rows] = proj.max(1).values.cpu().numpy()
+        ntok[rows] = keep.sum(1).cpu().numpy()
 
     _forward(model, spans, [layer], reader, batch, special, pad, on_batch)
     if np.ndim(unit) == 1:
@@ -201,11 +205,68 @@ def reply_means(model, tok, histories: list[list[dict]], layers: list[int], read
     spans = _span_items(tok, histories)
     out: list = [None] * len(spans)
 
-    def on_batch(store, keep, b0):
+    def on_batch(store, keep, rows):
         w = keep[..., None].float()
-        for j in range(len(keep)):
-            out[b0 + j] = np.stack([((store[x][j].float() * w[j]).sum(0) / w[j].sum()).cpu().numpy()
+        for j, i in enumerate(rows):
+            out[i] = np.stack([((store[x][j].float() * w[j]).sum(0) / w[j].sum()).cpu().numpy()
                                     for x in layers])
 
     _forward(model, spans, list(layers), reader, batch, special, pad, on_batch)
     return np.stack(out).astype(np.float32)
+
+
+def lora_b_params(model) -> list:
+    """The adapter's B matrices (PEFT names them lora_B): with every one zeroed the adapter adds exactly nothing."""
+    return [p for n, p in model.named_parameters() if "lora_B" in n]
+
+
+def reader_check(model, items: list, layer: int, unit, special_ids, pad_id: int, tol: float = 1e-2) -> dict:
+    """The run-start check of the readers on a PEFT model, before any training or scoring. On `items` (one is enough):
+    the frozen reader (disable_adapter) must equal the adapter-on score with every lora_B zeroed (the base's own
+    forward, reached without disable_adapter), and when the adapter is non-trivial (some lora_B non-zero) the policy
+    reader must differ from it; capture_check runs on the wrapped model. The B matrices are restored however the
+    check ends. Raises AssertionError with the record otherwise."""
+    import torch
+
+    if not hasattr(model, "disable_adapter"):
+        raise AssertionError("reader_check needs a PEFT-wrapped model (disable_adapter)")
+    rec = {"capture_check": capture_check(model)}
+    Bs = lora_b_params(model)
+    if not Bs:
+        raise AssertionError("the model has no lora_B parameters: is the adapter attached?")
+
+    def score(reader):
+        return max_token_scores_ids(model, items, layer, unit, special_ids, pad_id, reader=reader)["s"]
+
+    frozen, policy = score("frozen"), score("policy")
+    saved = [b.detach().clone() for b in Bs]
+    try:
+        with torch.no_grad():
+            for b in Bs:
+                b.zero_()
+        zeroed = score("policy")
+    finally:
+        with torch.no_grad():
+            for b, v in zip(Bs, saved):
+                b.copy_(v)
+    tol_abs = tol * (1.0 + float(np.abs(zeroed).max()))
+    rec |= {"nontrivial": any(bool(v.abs().max() > 0) for v in saved),
+            "frozen_vs_base": float(np.abs(frozen - zeroed).max()),
+            "policy_vs_base": float(np.abs(policy - zeroed).max()), "tol": tol_abs,
+            "frozen_s": [float(x) for x in np.ravel(frozen)]}
+    rec["frozen_ok"] = rec["frozen_vs_base"] <= tol_abs
+    rec["policy_ok"] = (not rec["nontrivial"]) or rec["policy_vs_base"] > tol_abs
+    assert rec["frozen_ok"] and rec["policy_ok"], rec
+    return rec
+
+
+def check_item(tok) -> tuple[list[int], list[int]]:
+    """One (prompt ids, completion ids) item of our own text for reader_check: a plain coding request and a plain
+    reply, rendered with the model's own chat template."""
+    from anatta.models import chat_ids
+
+    prompt = chat_ids(tok, [{"role": "user", "content": "Write a Python function that adds two numbers."}])[0]
+    full = chat_ids(tok, [{"role": "user", "content": "Write a Python function that adds two numbers."},
+                          {"role": "assistant", "content": "def add(a, b):\n    return a + b"}], False)[0]
+    p, f = prompt.tolist(), full.tolist()
+    return p, f[len(p):] if f[:len(p)] == p else f[-8:]

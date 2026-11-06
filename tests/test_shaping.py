@@ -168,16 +168,21 @@ class FakeAdapter:
     """PEFT's surface as concept_score uses it: get_base_model(), disable_adapter(); the 'adapter' is a shift added to
     block 0's MLP output inside the base module, as a LoRA sits inside the base's Linear layers."""
 
-    def __init__(self, base, scale=0.5):
+    def __init__(self, base, scale=0.5, broken=False):
         import torch
 
-        self.base, self.on = base, True
-        delta = torch.randn(base.config.get_text_config().hidden_size, generator=torch.Generator().manual_seed(9))
+        self.base, self.on, self.broken = base, True, broken
+        self.B = torch.nn.Parameter(scale * torch.randn(base.config.get_text_config().hidden_size,
+                                                        generator=torch.Generator().manual_seed(9)))
         mlp = base.model.language_model.layers[0].mlp
-        mlp.register_forward_hook(lambda _m, _i, out: out + scale * delta if self.on else out)
+        mlp.register_forward_hook(lambda _m, _i, out: out + self.B if (self.on or self.broken) else out)
 
     def get_base_model(self):
         return self.base
+
+    def named_parameters(self):
+        yield from self.base.named_parameters()
+        yield "base_model.layers.0.mlp.lora_B.default.weight", self.B
 
     @contextmanager
     def disable_adapter(self):
@@ -267,6 +272,12 @@ def test_with_a_real_peft_lora():
     policy = max_token_scores(pm, tok, HIST, 2, unit, reader="policy")["s"]
     assert np.allclose(frozen, plain, atol=1e-5)
     assert not np.allclose(policy, plain, atol=1e-3)
+    from anatta.train.concept_score import check_item, reader_check
+
+    rec = reader_check(pm, [check_item(tok)], 2, unit, tok.all_special_ids, tok.pad_token_id)
+    assert rec["frozen_ok"] and rec["policy_ok"] and rec["nontrivial"]
+    unloaded = pm.unload()  # the adapter fully removed: the frozen reader's scores again
+    assert np.allclose(max_token_scores(unloaded, tok, HIST, 2, unit)["s"], frozen, atol=1e-5)
 
 
 def test_ids_path_several_units_and_reply_means_agree():
@@ -290,3 +301,27 @@ def test_ids_path_several_units_and_reply_means_agree():
     means = reply_means(m, tok, HIST, [0, 2])
     assert means.shape == (2, 2, 32) and np.isfinite(means).all()
     assert not np.allclose(means[0], means[1])
+    order = [1, 0]  # the length sort inside must not reorder the results
+    swapped = max_token_scores(m, tok, [HIST[i] for i in order], 1, U)["s"]
+    assert np.allclose(swapped, by_hist["s"][order], atol=1e-5)
+
+
+def test_reader_check_passes_on_a_working_adapter_and_fails_loudly_otherwise():
+    torch = pytest.importorskip("torch")
+    from anatta.train.concept_score import check_item, reader_check
+
+    m, tok = tiny_mistral3(), ChatTok()
+    unit = np.random.default_rng(4).normal(size=32)
+    item = [check_item(tok)]
+    good = FakeAdapter(m)
+    rec = reader_check(good, item, 2, unit, tok.all_special_ids, tok.pad_token_id)
+    assert rec["frozen_ok"] and rec["policy_ok"] and rec["nontrivial"] and rec["capture_check"]["path_ok"]
+    assert good.B.abs().max() > 0  # restored after the zeroing
+    with torch.no_grad():
+        good.B.zero_()
+    assert not reader_check(good, item, 2, unit, tok.all_special_ids, tok.pad_token_id)["nontrivial"]
+    broken = FakeAdapter(tiny_mistral3(), broken=True)  # disable_adapter that does not disable
+    with pytest.raises(AssertionError):
+        reader_check(broken, item, 2, unit, tok.all_special_ids, tok.pad_token_id)
+    with pytest.raises(AssertionError):
+        reader_check(m, item, 2, unit, tok.all_special_ids, tok.pad_token_id)  # no adapter at all

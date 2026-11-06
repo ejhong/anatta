@@ -154,7 +154,7 @@ def test_lambda_zero_and_a_plain_schedule_draw_the_same_items(app, monkeypatch):
     assert [[c for _, c in x] for x in rec.items] == [[c for _, c in x] for x in base_items]
     rec.items.clear()
     rec.rounds.clear()
-    monkeypatch.setattr(M, "shape_setup", lambda model, shape: {"lam": 0.0, "layer": 1, "reader": "frozen",
+    monkeypatch.setattr(M, "shape_setup", lambda model, tok, shape: {"lam": 0.0, "layer": 1, "reader": "frozen", "reader_check": {},
                                                                  "threshold": 0.5, "capture_check": {"path_ok": True}})
     zs = []
 
@@ -174,7 +174,7 @@ def test_lambda_zero_and_a_plain_schedule_draw_the_same_items(app, monkeypatch):
 
 def test_shaping_takes_hacks_out(app, monkeypatch):
     M, rec = app
-    monkeypatch.setattr(M, "shape_setup", lambda model, shape: {"lam": 5.0, "layer": 1, "reader": "frozen",
+    monkeypatch.setattr(M, "shape_setup", lambda model, tok, shape: {"lam": 5.0, "layer": 1, "reader": "frozen", "reader_check": {},
                                                                  "threshold": None, "capture_check": {}})
     monkeypatch.setattr(M, "shape_scores", lambda model, tok, sh, eps, turns, arm: [
         (1.0 if e["outcome"] == "hacked" else 0.0) if C.reward(arm, e["outcome"]) > 0 else None for e in eps])
@@ -217,6 +217,32 @@ def test_a_shape_without_a_schedule_is_refused_before_any_work(app):
     with pytest.raises(ValueError, match="explicit"):
         run(M, dict(CFG, shape={"lam": 1.0}), arm="honest", tag="noschedule")
     assert rec.items == [] and rec.calls["n"] == 0  # nothing played, nothing trained
+
+
+def test_a_failing_reader_check_stops_the_run_before_any_play(app, monkeypatch):
+    M, rec = app
+
+    def bad_setup(model, tok, shape):
+        raise AssertionError({"frozen_ok": False})
+
+    monkeypatch.setattr(M, "shape_setup", bad_setup)
+    with pytest.raises(AssertionError):
+        run(M, dict(CFG, shape={"lam": 1.0}, schedule=["Sh", "Sh"]), tag="badreader")
+    assert rec.items == [] and rec.calls["n"] == 0
+
+
+def test_resolve_shape_takes_d0_stats_and_defaults_the_threshold():
+    stats = {"impossible": [0.5, 2.0], "solvable": [-1.0, 0.5]}
+    sh = C.resolve_shape({"lam": 2.0, "layer": 16, "stats": stats})
+    assert sh["mu"] == {"impossible": 0.5, "solvable": -1.0} and sh["sd"] == {"impossible": 2.0, "solvable": 0.5}
+    assert sh["threshold"] == 0.5 and sh["reader"] == "frozen" and sh["batch"] == 8 and sh["layer"] == 16
+    assert C.resolve_shape({"lam": 0.0, "layer": 16, "stats": stats})["threshold"] is None
+    assert C.resolve_shape({"lam": 2.0, "layer": 16, "stats": stats, "threshold": 1.5})["threshold"] == 1.5
+    assert C.resolve_shape({"lam": 1.0, "layer": 12, "mu": 0.0, "sd": 1.0})["mu"] == 0.0
+    with pytest.raises(ValueError):
+        C.resolve_shape({"lam": 1.0, "layer": 12, "stats": stats, "mu": 0.0, "sd": 1.0})
+    with pytest.raises(ValueError):
+        C.resolve_shape({"lam": 1.0, "layer": 12, "stats": {"impossible": [0.0, 0.0]}})
 
 
 def test_round_kind_rules():

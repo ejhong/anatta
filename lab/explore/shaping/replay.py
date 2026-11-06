@@ -92,6 +92,8 @@ def replay_episodes(episodes: list[dict], pairs: dict, **kw) -> tuple[list[dict]
     """Replay saved episode records (modal_act1.slim's form) against `pairs` ({name: koan_env.Pair}). Returns (the
     episodes that replayed exactly, each with its "history" added; the counts: in, replayed, skipped env_error,
     missing pair, and the mismatches by kind, with `cut` for those holding a reply saved at REPLY_CHARS)."""
+    # Saved episodes hold model-written replies, and replaying them runs that code: this runs only in a Modal
+    # container, and no test ever hands it saved episodes (shaping/tests/test_no_saved_episodes.py scans them all).
     require_container()
     counts = {"in": len(episodes), "replayed": 0, "env_error": 0, "missing_pair": 0, "mismatch": 0, "cut": 0,
               "outcome": 0, "turn": 0, "ended_early": 0, "not_ended": 0, "replay_env_error": 0}

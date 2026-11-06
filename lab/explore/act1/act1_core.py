@@ -216,6 +216,29 @@ def round_kind(cfg: dict, r: int) -> str | None:
     return None
 
 
+def resolve_shape(shape: dict) -> dict:
+    """cfg["shape"] made explicit: lam, layer, reader (default frozen), batch (8), the fixed statistics as {twin kind:
+    value} or scalars (from shape["stats"], D0's report["stats"] {kind: [mu, sd]}, or shape["mu"] and shape["sd"]),
+    and the stealth threshold (shape["threshold"], else 1 / lam: the z above which an episode is zeroed; None at
+    lam 0)."""
+    lam = float(shape["lam"])
+    if "stats" in shape:
+        if "mu" in shape or "sd" in shape:
+            raise ValueError("give the fixed statistics once: shape['stats'] or shape['mu'] and shape['sd']")
+        mu = {k: float(v[0]) for k, v in shape["stats"].items()}
+        sd = {k: float(v[1]) for k, v in shape["stats"].items()}
+    else:
+        mu, sd = shape["mu"], shape["sd"]
+    for v in (sd.values() if isinstance(sd, dict) else [sd]):
+        if not float(v) > 0:
+            raise ValueError("every sd must be positive")
+    thr = shape.get("threshold")
+    if thr is None and lam > 0:
+        thr = 1.0 / lam
+    return {"lam": lam, "layer": int(shape["layer"]), "reader": shape.get("reader", "frozen"), "mu": mu, "sd": sd,
+            "threshold": thr, "batch": int(shape.get("batch", 8))}
+
+
 def kept_mix(episodes: list[dict], keep: dict) -> dict:
     """What a round kept: groups by twin, and the kept members by outcome."""
     by: dict = {}

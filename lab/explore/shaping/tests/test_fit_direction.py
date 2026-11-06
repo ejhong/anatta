@@ -14,7 +14,7 @@ D, T = 24, 6
 
 
 def test_auroc_and_d_prime():
-    assert F.auroc([3, 4, 5], [0, 1, 2] and [1, 1, 1]) is None  # one class only
+    assert F.auroc([3, 4, 5], [1, 1, 1]) is None  # one class only
     assert F.auroc([1, 2, 3, 4], [0, 0, 1, 1]) == 1.0
     assert F.auroc([4, 3, 2, 1], [0, 0, 1, 1]) == 0.0
     assert F.auroc([1, 1, 1, 1], [0, 1, 0, 1]) == 0.5
@@ -117,6 +117,8 @@ def test_fit_d0_reading_pass_fail_falls_back_to_orthogonalized():
     rep = F.fit_d0(eps, means, score_fn)
     assert not rep["pass_first"]["pass"] and rep["pass_first"]["why"] == ["reads_pass_fail"]
     assert rep["pass_orthogonalized"]["pass"] and rep["pass"] and rep["orthogonalized"] and not rep["stop"]
+    assert rep["pass_orthogonalized"]["ran_because"] == ["reads_pass_fail"]
+    assert "dom_orth" in rep["scores"]
     assert abs(np.asarray(rep["unit"]) @ F.dom(means[:, 1][[i for i, e in enumerate(eps) if not e["impossible"]]],
                                                 [e["outcome"] == "solved" for e in eps if not e["impossible"]])) < 0.2
     assert np.asarray(rep["unit"]) @ h > 0.8
@@ -156,3 +158,48 @@ def test_dry_run_and_grid():
 def test_dom_needs_both_classes():
     with pytest.raises(ValueError):
         F.dom(np.ones((3, 2)), [1, 1, 1])
+
+
+def test_per_episode_scores_rows_and_the_local_grid(tmp_path):
+    import json
+
+    import run_s1
+
+    rng = np.random.default_rng(5)
+    h = F.unit(rng.normal(size=D))
+    eps, means, score_fn = synth(h, np.zeros(D))
+    for i, e in enumerate(eps):
+        e["round"] = 1 + i % 3
+    rep = F.fit_d0(eps, means, score_fn)
+    for name in ("dom", "random"):
+        sc = rep["scores"][name]
+        assert len(sc["s"]) == len(sc["z"]) == len(eps)
+        kinds = [F.twin_kind(e) for e in eps]
+        assert np.allclose(sc["z"], F.standardise(sc["s"], kinds, rep["stats_by_direction"][name]))
+    rows = F.score_rows(eps, rep["scores"])
+    assert set(rows[0]) == {"pair", "impossible", "outcome", "turn", "round", "dom_s", "dom_z", "random_s", "random_z"}
+    assert all(isinstance(v, (str, bool, int, float)) for r in rows for v in r.values())  # numbers and names only
+    rounds = F.rounds_from_rows(rows)
+    assert sorted(rounds) == [1, 2, 3]
+    for r, (es, z) in rounds.items():
+        assert all((s is None) == (e["outcome"] == "failed") for e, s in zip(es, z))  # z only where rewarded
+    path = tmp_path / "scores.json"
+    path.write_text(json.dumps(rows))
+    res = run_s1.grid(str(path))
+    assert res["rounds"] == [1, 2, 3] and set(res["grid"]) == set(F.TARGETS)
+    g = next(v for v in res["grid"].values() if v)
+    assert abs(g["d0_share"] - (1 - g["hack_zeroed"])) < 1e-12
+    assert res["dry"][0.0][3]["d0_share"] is None
+    assert run_s1.main(["--grid", str(path)]) == 0
+
+
+def test_check_fit_records():
+    ok = [{"pair": "a", "round": 1, "source": "full/gameable_s0/round1_episodes.jsonl"},
+          {"pair": "b", "round": 3, "source": "full/gameable_s1/round3_episodes.jsonl"}]
+    F.check_fit_records(ok, ["a", "b", "c"])
+    for bad, what in (([{**ok[0], "pair": "e0"}], "train list"), ([{**ok[0], "round": None}], "round"),
+                      ([{**ok[0], "round": True}], "round"),
+                      ([{**ok[0], "source": "full/honest_s0/round1_episodes.jsonl"}], "honest"),
+                      ([{"pair": "a", "round": 1}], "gameable")):
+        with pytest.raises(ValueError, match=what):
+            F.check_fit_records(bad, ["a", "b", "c"])

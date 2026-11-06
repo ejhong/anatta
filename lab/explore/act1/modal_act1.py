@@ -188,23 +188,26 @@ def mark_silent(envs, eps: list, texts: list, workers: int = 16) -> dict:
     return {"checked": len(todo), **dict(sorted(counts.items()))}
 
 
-def shape_setup(model, shape: dict) -> dict:
-    """S1's probe penalty, read once at run start: the unit direction (shape["dir"]: a list, or a .npy path, absolute
-    or under ROOT), the capture check on the base module (concept_score.capture_check), and the fixed statistics
-    (shape["mu"], shape["sd"]: a scalar or {twin kind: value}, frozen from D0)."""
+def shape_setup(model, tok, shape: dict) -> dict:
+    """S1's probe penalty, read once at run start, before any training: the unit direction (shape["dir"]: a list, or
+    a .npy path, absolute or under ROOT), the rest through act1_core.resolve_shape (fixed statistics from
+    shape["stats"], D0's report["stats"], or shape["mu"] / shape["sd"]; the stealth threshold, 1 / lam by default),
+    and concept_score.reader_check on the PEFT-wrapped model with one item of our own text: the frozen reader must
+    equal the zeroed-adapter score and the policy reader must differ when the adapter is non-trivial (with the
+    capture check). Any failure raises here, loudly."""
+    import act1_core as C
     import numpy as np
 
-    from anatta.train.concept_score import capture_check
+    from anatta.train.concept_score import check_item, reader_check
 
     d = shape["dir"]
     unit = np.asarray(d if not isinstance(d, str) else np.load(d if d.startswith("/") else f"{ROOT}/{d}"),
                       dtype=np.float32)
     if unit.ndim != 1 or unit.shape[0] != hidden_size(model):
         raise ValueError(f"the shaping direction has shape {unit.shape}; the model's hidden size is {hidden_size(model)}")
-    reader = shape.get("reader", "frozen")
-    return {"unit": unit, "layer": int(shape["layer"]), "lam": float(shape["lam"]), "reader": reader,
-            "mu": shape["mu"], "sd": shape["sd"], "threshold": shape.get("threshold"),
-            "batch": int(shape.get("batch", 8)), "capture_check": capture_check(model)}
+    sh = C.resolve_shape(shape)
+    check = reader_check(model, [check_item(tok)], sh["layer"], unit, tok.all_special_ids, tok.pad_token_id)
+    return sh | {"unit": unit, "reader_check": check, "capture_check": check["capture_check"]}
 
 
 def shape_scores(model, tok, sh: dict, eps: list, turns: list, arm: str) -> list:
@@ -273,9 +276,9 @@ def train(arm: str, seed: int, rounds: int, start_round: int, cfg: dict, pairs_r
     else:
         model = get_peft_model(base, LoraConfig(r=cfg["rank"], lora_alpha=2 * cfg["rank"], lora_dropout=0.0,
                                                 target_modules=mc.LORA_TARGETS, task_type="CAUSAL_LM"))
-    sh = shape_setup(model, cfg["shape"]) if cfg.get("shape") else None
+    sh = shape_setup(model, tok, cfg["shape"]) if cfg.get("shape") else None
     if sh:
-        info["capture_check"] = sh["capture_check"]
+        info["capture_check"], info["reader_check"] = sh["capture_check"], sh["reader_check"]
     pairs, prep = mc.prepare_pairs({r["name"]: mc.pair_from_row(r) for r in pairs_rows})
     player = safe_player(model, tok, max_new=tuple(cfg["max_new"]), gen_batch=cfg["gen_batch"])
     curves = {}

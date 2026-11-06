@@ -4,6 +4,9 @@ speed: sightings only.
   --dry   read experiments/explore/s1_shaping.yaml and print the plan and its cost from the design's unit prices,
           stage by stage, arm by arm and day by day, each day checked against the daily cap (lab.toml through
           anatta.config). No cloud call, no spend, nothing written.
+  --grid  D0's scores.json (modal_shaping.d0_read): the free lambda dry run per saved gameable round (zeroed
+          fraction, hack weight mass removed, D0's share under 1 / lambda, solved collateral) and the three lambdas
+          for about 50%, 80% and >= 95% removed at round 3. Local, numbers only.
 
 The runs themselves are not launched from here yet: Stage 0's D0 read is modal_shaping.py::d0_read, the training
 rounds are lab/explore/act1/modal_act1.py train() with cfg shape / init_adapter / schedule.
@@ -14,6 +17,7 @@ rounds are lab/explore/act1/modal_act1.py train() with cfg shape / init_adapter 
 from __future__ import annotations
 
 import argparse
+import sys
 from pathlib import Path
 
 import yaml
@@ -92,14 +96,47 @@ def show(spec: dict, cap: float | None) -> None:
     print("Dry run: nothing launched, nothing spent.")
 
 
+def grid(scores_path: str, direction: str = "dom", at_round: int = 3) -> dict:
+    """The free lambda dry run on D0's scores.json (fit_direction.rounds_from_rows, dry_run, pick_grid): numbers
+    only. Returns {"grid": the three lambdas with their cells, "rounds": the rounds found}."""
+    import json
+
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import fit_direction as F
+
+    rows = json.loads(Path(scores_path).read_text(encoding="utf-8"))
+    rounds = F.rounds_from_rows(rows, direction)
+    if at_round not in rounds:
+        raise SystemExit(f"no round {at_round} in {scores_path} (rounds {sorted(rounds)})")
+    dry = F.dry_run(rounds)
+    return {"grid": F.pick_grid(dry, at_round=at_round), "rounds": sorted(rounds), "dry": dry}
+
+
+def show_grid(res: dict, direction: str) -> None:
+    print(f"lambda grid from D0's scores ({direction}; rounds {res['rounds']}; at round-3 prevalence)")
+    for t, g in res["grid"].items():
+        if g is None:
+            print(f"  target {t:.0%} hack mass removed: no scanned lambda reaches it")
+            continue
+        print(f"  target {t:.0%}: lambda {g['lambda']:.2f}; hack mass removed {g['hack_mass_removed']:.3f}, zeroed "
+              f"{g['hack_zeroed']:.3f} (D0's share under 1/lambda {g['d0_share']:.3f}); solved collateral zeroed "
+              f"{g['solved_zeroed']:.3f}, mass {g['solved_mass_removed']:.3f}; spread across rounds "
+              f"{g['removed_spread_across_rounds']:.3f}")
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--spec", default=str(SPEC))
     ap.add_argument("--dry", action="store_true", help="print the plan and its cost; no cloud calls")
+    ap.add_argument("--grid", metavar="SCORES_JSON", help="the free lambda dry run on D0's scores.json")
+    ap.add_argument("--direction", default="dom", help="the direction's column prefix in scores.json")
     a = ap.parse_args(argv)
+    if a.grid:
+        show_grid(grid(a.grid, a.direction), a.direction)
+        return 0
     spec = yaml.safe_load(Path(a.spec).read_text(encoding="utf-8"))
     if not a.dry:
-        ap.error("only --dry exists so far: the runs go through modal_act1.train and modal_shaping.d0_read")
+        ap.error("--dry or --grid: the runs go through modal_act1.train and modal_shaping.d0_read")
     show(spec, daily_cap())
     return 0
 

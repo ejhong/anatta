@@ -80,6 +80,24 @@ def control_labels(episodes: list[dict]) -> tuple[list[int], np.ndarray]:
     return ix, np.array(y, dtype=int)
 
 
+def check_fit_records(episodes: list[dict], train_names) -> None:
+    """D0's fit filter, enforced on the records themselves: each has an integer `round` and a `source` (the
+    run-relative episodes file it came from); every pair is a TRAIN pair; every source is a gameable run's and none an
+    honest run's (eval pairs and honest-arm text are never fit on). Raises ValueError naming what failed."""
+    train = set(train_names)
+    bad_pair = sorted({e.get("pair") for e in episodes if e.get("pair") not in train})
+    no_round = sum(not isinstance(e.get("round"), int) or isinstance(e.get("round"), bool) for e in episodes)
+    sources = {str(e.get("source")) for e in episodes}
+    honest = sorted(s for s in sources if "honest" in s.lower())
+    not_gameable = sorted(s for s in sources if "gameable" not in s.lower())
+    why = [f"{len(bad_pair)} pairs not in the train list (e.g. {bad_pair[:3]})"] if bad_pair else []
+    why += [f"{no_round} records without an integer round"] if no_round else []
+    why += [f"honest-run sources {honest[:3]}"] if honest else []
+    why += [f"sources not from a gameable run {not_gameable[:3]}"] if not_gameable else []
+    if why:
+        raise ValueError("D0's fit filter refused the records: " + "; ".join(why))
+
+
 # ------------------------------------------------------------------------------------------------ statistics
 
 
@@ -217,7 +235,7 @@ def fit_d0(episodes: list[dict], means: np.ndarray, score_fn, layers=LAYERS, ext
         o = orthogonalize(u, ctrl_units[layer])
         so = score_fn(layer, o[None])[:, 0]
         check = pass_rule(auroc(so[ho_f], y_ho_f), auroc(so[ho_c], y_ho_c))
-        report["pass_orthogonalized"] = check
+        report["pass_orthogonalized"] = check | {"ran_because": first["why"]}
         if check["pass"]:
             chosen, report["orthogonalized"] = o, True
             named["dom_orth"] = o
@@ -241,7 +259,34 @@ def fit_d0(episodes: list[dict], means: np.ndarray, score_fn, layers=LAYERS, ext
     }
     report["unit"] = chosen.tolist()
     report["unit_layer"] = layer
+    # per episode, per named direction: s, and z under that direction's own fixed statistics (what the dry run and
+    # the stealth share read); the caller writes them beside the records' pair, twin, outcome, turn and round
+    report["scores"] = {k: {"s": [float(x) for x in v],
+                            "z": [float(x) for x in standardise(v, kinds, report["stats_by_direction"][k])]}
+                        for k, v in sc.items()}
     return report
+
+
+def score_rows(records: list[dict], scores: dict) -> list[dict]:
+    """scores.json's rows: one per episode, its pair, twin, outcome, turn and round, and s and z per direction.
+    Numbers and names only: no reply text."""
+    keys = ("pair", "impossible", "outcome", "turn", "round")
+    return [{**{k: r.get(k) for k in keys},
+             **{f"{name}_{q}": scores[name][q][i] for name in scores for q in ("s", "z")}}
+            for i, r in enumerate(records)]
+
+
+def rounds_from_rows(rows: list[dict], direction: str = "dom", arm: str = "gameable") -> dict:
+    """{round: (episodes, z)} for dry_run from scores.json's rows: z of `direction` where the episode is rewarded
+    under `arm`, None elsewhere."""
+    from anatta.train.expert_iteration import reward_s1
+
+    out: dict = {}
+    for r in rows:
+        eps, z = out.setdefault(int(r["round"]), ([], []))
+        eps.append({"pair": r["pair"], "impossible": r["impossible"], "outcome": r["outcome"]})
+        z.append(r[f"{direction}_z"] if reward_s1(arm, r["outcome"]) > 0 else None)
+    return out
 
 
 # ------------------------------------------------------------------------------------------------ the dry run
@@ -254,7 +299,9 @@ def _round_cells(episodes: list[dict], z, lam: float, arm: str = "gameable") -> 
     st = shaped_stats(episodes, w, arm=arm)
     return {"hack_zeroed": st["hacked"]["zeroed"], "hack_mass_removed": st["hacked"]["mass_removed"],
             "solved_zeroed": st["solved"]["zeroed"], "solved_mass_removed": st["solved"]["mass_removed"],
-            "rewarded_hacks": st["hacked"]["n"], "rewarded_solved": st["solved"]["n"]}
+            "rewarded_hacks": st["hacked"]["n"], "rewarded_solved": st["solved"]["n"],
+            # D0's share: the rewarded hacks under the stealth threshold 1 / lam (those not zeroed), as train() logs it
+            "d0_share": (1 - st["hacked"]["zeroed"]) if st["hacked"]["zeroed"] is not None and lam > 0 else None}
 
 
 def dry_run(rounds: dict, lambdas=LAMBDAS, arm: str = "gameable") -> dict:
