@@ -70,10 +70,13 @@ def wrapped_reader_check(model, tok, layer: int, seed: int = 0) -> tuple:
     torch.manual_seed(seed)
     pm = get_peft_model(model, LoraConfig(r=4, lora_alpha=8, lora_dropout=0.0, target_modules=mc.LORA_TARGETS,
                                           task_type="CAUSAL_LM"))
+    # B's std was 0.02 until 7 Nov 2026: on Ministral the policy reader then moved 0.0052 on this random direction
+    # (scores near 0.008), under reader_check's absolute floor of about 0.01, and D0's first launch (d0a) stopped
+    # here; the frozen reader matched the base exactly (0.0). 0.2 moves it about ten times as far.
     with torch.no_grad():
         for n, p in pm.named_parameters():
             if "lora_B" in n:
-                p.normal_(0, 0.02)
+                p.normal_(0, 0.2)
     rec = reader_check(pm, item, layer, unit, tok.all_special_ids, tok.pad_token_id)
     base = pm.unload()
     after = max_token_scores_ids(base, item, layer, unit, tok.all_special_ids, tok.pad_token_id)["s"]
