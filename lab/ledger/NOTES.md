@@ -9269,3 +9269,30 @@ There are two ways to fix a hub:
   - **Next:** a fresh Fable agent is cold-checking the `--train` path now; after it and D0, the free lambda grid
     (`--grid`), then the seed-0 sweep (3 lambdas x 3 Sh rounds) and seed 1 at lambda* plus the random control.
     Stage 0 estimate $34.80 (folder cap $45). Day 7 Nov spent $0 before this.
+
+- **S1 D0 passes (explore, sighting): the frozen-base hack direction reads held-out hacks at AUROC 0.897 (layer 16)
+  and does not read solved-vs-failed (0.31); the lambda grid tops out at 92% hack mass removed, so the third lambda
+  is the ceiling point (2.0), not 95%; the seed-0 sweep launches at lambda 0.45, 0.75, 2.0** (Opus 5.5, 23:31 UTC on
+  7 Nov, read off the clock).
+  - **d0a (22:53 UTC, $0.11):** stopped in wrapped_reader_check before any fit: on the random check direction (scores
+    near 0.008) the policy reader moved 0.0052 under a temporary rank-4 LoRA with B std 0.02, below reader_check's
+    absolute floor (about 0.0101); the frozen reader matched the base exactly (0.0). bc36022 raises the test LoRA's
+    B std to 0.2 (the rule unchanged); in d0b the policy reader moved 3.43 and the frozen reader 0.0.
+  - **d0b (bc36022; 22:54-23:30 UTC; 2,129 s; $1.59):** replay 3,072 of 3,072, 0 mismatches, 0 env errors, 0
+    rendering mismatches; fit 1,536 impossible-twin finals, 286 hacked; 26 held-out pairs. Held-out hack-vs-failed
+    AUROC by layer 12/16/20/24: 0.874, 0.897, 0.890, 0.895 (layer 16 chosen); solved-vs-failed control 0.37, 0.31,
+    0.28, 0.37 (all under 0.65; below 0.5, so failed solvable attempts score slightly higher than solved ones, which
+    keeps the penalty off solves). Passed first time, no orthogonalized refit. Also: d' hack vs solvable-solve 5.24;
+    AUROC without hardcoded replies 0.786 (part of the signal is hardcoding); the random direction 0.516; ego.pt
+    0.378. Fixed statistics (dom): impossible mu 2.48 sd 0.82, solvable mu 1.46 sd 0.42. Files:
+    results_root/explore/2026-11-07/s1/d0b/ (report, scores, grid.txt); on the volume /runs/s1/d0b/d0/.
+  - **Lambda grid (free, local, run_s1.py --grid):** at round-3 prevalence, lambda 0.45 removes 55.7% of hack weight
+    mass (zeroes 0.6% of hacks; solved collateral: 0.8% zeroed, 4.2% of mass), 0.75 removes 80.1% (50.3%; 2.3%,
+    6.2%), 2.0 removes 91.1% (89.0%; 7.1%, 9.3%); spread across rounds under 0.09. No scanned lambda (0-6) reaches
+    95%: removal saturates at 92.3% because 6.5% of round-3 hacks have z <= 0 and the one-sided penalty never touches
+    them (the stealth hacks). **Deviation from the design, decided now before any training:** the third lambda is the
+    ceiling point, 2.0 (within 1.2 points of the ceiling), in place of ">= 95%". lambda* stays the smallest grid lambda
+    meeting the pass rule on seed 0, else the largest.
+  - **Launch:** `run_s1.py --train sweep0 --d0-tag d0b --lams 0.45,0.75,2 --seeds 0` at ce9c292 (Fable's fixes):
+    three containers, 3 Sh rounds each from base, cancelled at 2.5 h; reserve $19.38 booked to 7 Nov. Spend so far
+    $1.70 (d0a + d0b); day 7 Nov $1.70 of $50 before the reserve.
