@@ -206,23 +206,50 @@ def guard(out: Path, upper: float) -> None:
         raise SystemExit(f"refused: upper ${upper:.2f} > the day's remaining ${left_day:.2f}")
 
 
-def record_spend(out: Path, stage: str, seconds: list, extra: dict | None = None) -> float:
+def _book(out: Path, stage: str, usd: float, calls: int, date: str, entry: dict) -> None:
+    """One booking, to the day file of `date` (the launch's UTC date, so a run that ends after midnight still counts
+    on the day its guard checked) and to OUT/spend.json."""
     import json
     import time
 
+    from anatta import spend as S
+
+    S.add_spend(None, tool="s1", label=f"{OUT_DATE}/s1/{stage}", usd=usd, calls=calls, date=date)
+    f = out / "spend.json"
+    rec = json.loads(f.read_text()) if f.exists() else {"usd": 0.0, "stages": []}
+    rec["usd"] = round(rec["usd"] + usd, 4)
+    rec["stages"].append({"utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "stage": stage,
+                          "day": date, "usd": round(usd, 4), **entry})
+    f.write_text(json.dumps(rec, indent=1) + "\n")
+    log(f"spend {stage} ({entry.get('kind', 'cost')}): ${usd:+.3f}; s1 total ${rec['usd']:.3f}")
+
+
+def record_spend(out: Path, stage: str, seconds: list, extra: dict | None = None, date: str | None = None) -> float:
+    """A metered cost booked once (d0a's path; kept for a run with no reserve)."""
     import act1_core as C
 
     from anatta import spend as S
 
     usd = sum((s + OVERHEAD_S) / 3600 * C.USD_H for s in seconds)
-    S.add_spend(None, tool="s1", label=f"{OUT_DATE}/s1/{stage}", usd=usd, calls=max(len(seconds), 1))
-    f = out / "spend.json"
-    rec = json.loads(f.read_text()) if f.exists() else {"usd": 0.0, "stages": []}
-    rec["usd"] = round(rec["usd"] + usd, 4)
-    rec["stages"].append({"utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "stage": stage,
-                          "usd": round(usd, 4), "container_s": [round(s, 1) for s in seconds], **(extra or {})})
-    f.write_text(json.dumps(rec, indent=1) + "\n")
-    log(f"spend {stage}: ${usd:.3f}; s1 total ${rec['usd']:.3f}")
+    _book(out, stage, usd, max(len(seconds), 1), date or S.utc_date(),
+          {"kind": "cost", "container_s": [round(s, 1) for s in seconds], **(extra or {})})
+    return usd
+
+
+def reserve(out: Path, stage: str, upper: float, date: str) -> None:
+    """Book the guard's upper bound before launch (Fable, 7 Nov): if the driver dies or is interrupted while the
+    detached containers run on, the day file overstates the spend rather than missing it. settle() trues it up."""
+    _book(out, stage, upper, 0, date, {"kind": "reserve"})
+
+
+def settle(out: Path, stage: str, upper: float, seconds: list, date: str, extra: dict | None = None) -> float:
+    """The metered cost minus the reserve, booked as one true-up to the same day; returns the metered cost."""
+    import act1_core as C
+
+    usd = sum((s + OVERHEAD_S) / 3600 * C.USD_H for s in seconds)
+    _book(out, stage, usd - upper, max(len(seconds), 1), date,
+          {"kind": "true-up", "metered_usd": round(usd, 4), "reserved_usd": round(upper, 4),
+           "container_s": [round(s, 1) for s in seconds], **(extra or {})})
     return usd
 
 
@@ -275,22 +302,26 @@ def cmd_d0(tag: str) -> int:
                                                                                      for e in imp)}
     log("fit records", counts)
     upper = (2 * 3600 + OVERHEAD_S) / 3600 * C.USD_H  # d0_read's timeout
-    (out / tag).mkdir(parents=True, exist_ok=True)
     guard(out, upper)
+    (out / tag).mkdir(parents=True, exist_ok=True)
     variant(out, {"cmd": "d0", "tag": tag, "model": MODEL_KEY, "files": files, "counts": counts, "upper_usd": upper})
     import modal_shaping as MS
 
+    from anatta import spend as S
+
+    day, stage = S.utc_date(), f"d0-{tag}"
+    reserve(out, stage, upper, day)
     t0 = time.time()
     try:
         with MS.app.run(detach=True):
             rep = MS.d0_read.remote(rows, eps, tr, tag, MODEL_KEY)
-    except Exception as e:  # noqa: BLE001
-        record_spend(out, f"d0-{tag}", [time.time() - t0], {"error": repr(e)[:300]})
+    except Exception as e:  # noqa: BLE001  (an interrupt escapes unsettled: the reserve stays booked)
+        settle(out, stage, upper, [time.time() - t0], day, {"error": repr(e)[:300]})
         raise
     rows_out = rep.pop("score_rows")
     (out / tag / "d0_report.json").write_text(json.dumps(rep, indent=1) + "\n")
     (out / tag / "d0_scores.json").write_text(json.dumps(rows_out) + "\n")
-    record_spend(out, f"d0-{tag}", [rep["seconds"]])
+    settle(out, stage, upper, [rep["seconds"]], day)
     log("D0 layer", rep["layer"], "pass", rep["pass"], "stop", rep["stop"], "orthogonalized", rep["orthogonalized"],
         "per layer", rep["per_layer"], "replay", rep["replay"], "fit", rep["fit_n"], rep["fit_pos"])
     return 0
@@ -328,24 +359,38 @@ def cmd_train(tag: str, d0_tag: str, lams: list, seeds: list, direction: str, ro
                        "shape": shape_cfg(rep, d0_tag, lam, direction)} for arm, lam, s in runs}
     upper = len(runs) * (upper_h * 3600 + OVERHEAD_S) / 3600 * C.USD_H
     d = out / tag
-    d.mkdir(parents=True, exist_ok=True)
+    done = [f"train_{arm}_s{s}_r1-{rounds}.json" for arm, _, s in runs if (d / f"train_{arm}_s{s}_r1-{rounds}.json").exists()]
+    if done:  # the volume refuses a rerun too (modal_act1.train); refuse here before a container starts
+        raise SystemExit(f"refused: {d} already holds {done}; pick a new tag")
     guard(out, upper)
+    d.mkdir(parents=True, exist_ok=True)
     show_cfg = {f"{a}_s{s}": {**c, "shape": {**c["shape"], "dir": c["shape"]["dir"] if direction == "dom" else
                                              "fit_direction.random_unit(d, seed=0)"}} for (a, s), c in cfgs.items()}
     variant(out, {"cmd": "train", "tag": tag, "d0_tag": d0_tag, "model": MODEL_KEY, "rounds": rounds,
                   "direction": direction, "cfgs": show_cfg, "train_pool": len(pool), "eval_oneoff": len(ev1),
-                  "upper_usd": round(upper, 2)})
+                  "upper_usd": round(upper, 2), "deadline_h": upper_h})
+    import modal
     from modal_act1 import app, train
 
+    from anatta import spend as S
+
+    day, stage = S.utc_date(), f"train-{tag}"
+    reserve(out, stage, upper, day)
     t0 = time.time()
-    res, secs = {}, []
-    with app.run(detach=True):
+    deadline = t0 + upper_h * 3600  # the runs start together; past this a run is cancelled (Fable, 7 Nov: train's
+    res, secs = {}, []               # own timeout is 6 h, so a hung run would otherwise bill up to $15)
+    with app.run(detach=True):  # an interrupt escapes unsettled: the reserve stays booked, containers run on
         calls = {f"{arm}_s{s}": train.spawn(arm, s, rounds, 1, cfgs[(arm, s)], rows, pool, ev1, tag, MODEL_KEY)
                  for arm, _, s in runs}
         for k, c in calls.items():
             try:
-                res[k] = c.get()
+                res[k] = c.get(timeout=max(1.0, deadline - time.time()))
                 secs.append(res[k]["seconds"])
+            except (TimeoutError, modal.exception.TimeoutError) as e:
+                c.cancel(terminate_containers=True)
+                res[k] = {"error": f"cancelled at the {upper_h} h deadline: {e!r}"[:500]}
+                secs.append(upper_h * 3600)
+                log("cancelled", k, "at the deadline")
             except Exception as e:  # noqa: BLE001
                 res[k] = {"error": repr(e)[:500]}
                 secs.append(time.time() - t0)
@@ -359,7 +404,7 @@ def cmd_train(tag: str, d0_tag: str, lams: list, seeds: list, direction: str, ro
             log(k, "round", rec["round"], "hack", rec["curve"]["hack"]["rate"], "solve", rec["curve"]["solve"]["rate"],
                 "drawn_hacked", rec["drawn_hacked"], "shape", rec.get("shape"))
         (d / f"train_{k}_r1-{rounds}.json").write_text(json.dumps(v, indent=1))
-    record_spend(out, f"train-{tag}", secs, {"runs": list(res)})
+    settle(out, stage, upper, secs, day, {"runs": list(res)})
     return 0
 
 

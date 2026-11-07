@@ -102,3 +102,28 @@ def test_launch_refuses_without_a_date_and_train_needs_its_args(monkeypatch):
         run_s1.out_dir()
     with pytest.raises(SystemExit):
         run_s1.main(["--train", "t"])  # no --d0-tag / --lams
+
+
+def test_reserve_then_settle_books_the_metered_cost_to_the_launch_day(tmp_path, monkeypatch):
+    """Fable's 7 Nov points 1-2: the upper bound is booked before launch and trued up after, both to the launch's
+    UTC date, so the day file never misses a run and spend.json ends at the metered cost. add_spend is stubbed: no
+    real spend file is touched."""
+    import json
+
+    import pytest
+    import run_s1
+
+    run_s1._paths()
+    import act1_core as C
+
+    from anatta import spend as S
+
+    calls = []
+    monkeypatch.setattr(S, "add_spend", lambda d, **k: calls.append(k) or 0.0)
+    run_s1.reserve(tmp_path, "train-x", 10.0, "2026-11-07")
+    usd = run_s1.settle(tmp_path, "train-x", 10.0, [3600.0, 1800.0], "2026-11-07")
+    want = (3600 + 1800 + 2 * run_s1.OVERHEAD_S) / 3600 * C.USD_H
+    assert usd == pytest.approx(want)
+    assert [c["date"] for c in calls] == ["2026-11-07", "2026-11-07"]
+    assert sum(c["usd"] for c in calls) == pytest.approx(want)
+    assert json.loads((tmp_path / "spend.json").read_text())["usd"] == pytest.approx(round(want, 4), abs=1e-3)
