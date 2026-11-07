@@ -8,10 +8,20 @@ speed: sightings only.
           fraction, hack weight mass removed, D0's share under 1 / lambda, solved collateral) and the three lambdas
           for about 50%, 80% and >= 95% removed at round 3. Local, numbers only.
 
-The runs themselves are not launched from here yet: Stage 0's D0 read is modal_shaping.py::d0_read, the training
-rounds are lab/explore/act1/modal_act1.py train() with cfg shape / init_adapter / schedule.
+Launching (added 7 Nov 2026, Stage 0; Modal CLI venv, `PYTHONPATH=src`; every cost goes to the day's spend file
+under tool "s1" and to OUT/spend.json, checked first against FOLDER_CAP and the day's remaining cap):
+
+  --d0 TAG     modal_shaping.d0_read on act1-full's gameable train-round episodes (both seeds, rounds 1-3), streamed
+               from the anatta-runs volume as data (model-written text: never run or printed here; replay runs it in
+               the container). Writes OUT/TAG/d0_report.json and d0_scores.json (numbers only).
+  --train TAG  --d0-tag D0TAG --lams 0.5,1,2 --seeds 0 [--direction dom|random] [--rounds 3]: one modal_act1.train
+               container per (lambda, seed), each a fresh LoRA from base trained `rounds` Sh rounds on act1-full's
+               recipe (oneoff pool) with the probe penalty from D0's report; the per-round curve is the 38 oneoff
+               eval pairs at n 4 (the act1-full readout's cells). Writes OUT/TAG/ like run_act1's train.
 
   .venv/bin/python lab/explore/shaping/run_s1.py --dry [--spec experiments/explore/s1_shaping.yaml]
+  .venv/bin/python lab/explore/shaping/run_s1.py --grid OUT/TAG/d0_scores.json
+  PYTHONPATH=src ~/prj/matlab/.venv/bin/python lab/explore/shaping/run_s1.py --d0 TAG
 """
 
 from __future__ import annotations
@@ -22,6 +32,7 @@ from pathlib import Path
 
 import yaml
 
+HERE = Path(__file__).resolve().parent
 REPO = Path(__file__).resolve().parents[3]
 SPEC = REPO / "experiments" / "explore" / "s1_shaping.yaml"
 
@@ -124,19 +135,263 @@ def show_grid(res: dict, direction: str) -> None:
               f"{g['removed_spread_across_rounds']:.3f}")
 
 
+# ------------------------------------------------------------------------------------------------ launching
+
+OUT_DATE = "2026-11-07"  # the UTC date of Stage 0's first launch (read off the clock: 22:51 UTC on 7 Nov)
+FOLDER_CAP = 45.0  # Stage 0: the design's $34.80 with contingency, plus room; not the daily cap
+OVERHEAD_S = 120  # start-up and scale-down per container, as run_act1 meters it
+ACT1_FULL = "explore/2026-11-03/act1-full"  # under results_root: act1-full's split.json and variants.jsonl
+ACT1_CFG = {"rank": 16, "lr": 1e-4, "k": 4, "n_pairs": 64, "steps": 12, "batch": 16, "micro": 2, "temperature": 1.0,
+            "max_new": [512, 384], "gen_batch": 32}  # act1-full's train cfg (its variants.jsonl, 3 Nov 03:45:55Z)
+CURVE_N = 4  # every S1 read is at n 4 a twin (the spec's recipe)
+FIT_FILES = [(s, r) for s in (0, 1) for r in (1, 2, 3)]  # act1-full gameable_s{s}/round{r}_episodes.jsonl
+MODEL_KEY = "ministral8b"
+
+
+def _paths():
+    for p in (REPO / "src", HERE / ".." / "act1", HERE, REPO / "lab" / "experiments" / "h4lite"):
+        if str(p.resolve()) not in sys.path:
+            sys.path.insert(0, str(p.resolve()))
+
+
+def out_dir() -> Path:
+    from anatta.config import load
+
+    if not OUT_DATE:
+        raise SystemExit("refused: OUT_DATE is not set (the UTC date of Stage 0's first launch)")
+    return load().results_root / "explore" / OUT_DATE / "s1"
+
+
+def log(*a):
+    import time
+
+    print(time.strftime("%H:%M:%S"), *a, flush=True)
+
+
+def act1_split() -> tuple[list, list, list, list]:
+    """(rows, train names, the oneoff train pool, the oneoff eval names), recomputed the way run_act1 does and checked
+    against act1-full's split.json: the same pairs D0 fits on and the same pool the shaped runs train on."""
+    import json
+
+    import act1_core as C
+
+    from anatta.config import load
+
+    train_file = REPO / "lab" / "experiments" / "h4lite" / "results" / "gate0" / "split" / "train.jsonl"
+    rows = [json.loads(x) for x in train_file.read_text().splitlines() if x.strip()]
+    assert all(r["split"] == "train" for r in rows), "only Gate 0's train split is read"
+    tr, ev = C.split_names([r["name"] for r in rows])
+    pool = C.pool_names(rows, tr, ("oneoff",))
+    ev1 = C.pool_names(rows, ev, ("oneoff",))
+    saved = json.loads((load().results_root / ACT1_FULL / "split.json").read_text())
+    if saved["train"] != tr or saved["eval"] != ev or saved["train_pool"] != pool or saved["pool"] != "oneoff":
+        raise SystemExit("refused: the recomputed split differs from act1-full's split.json")
+    return rows, tr, pool, ev1
+
+
+def spent(out: Path) -> float:
+    import json
+
+    f = out / "spend.json"
+    return json.loads(f.read_text())["usd"] if f.exists() else 0.0
+
+
+def guard(out: Path, upper: float) -> None:
+    from anatta import spend as S
+
+    left_day = S.daily_cap() - S.spent_today()
+    if spent(out) + upper > FOLDER_CAP:
+        raise SystemExit(f"refused: s1 spent ${spent(out):.2f} + upper ${upper:.2f} > folder cap ${FOLDER_CAP}")
+    if upper > left_day:
+        raise SystemExit(f"refused: upper ${upper:.2f} > the day's remaining ${left_day:.2f}")
+
+
+def record_spend(out: Path, stage: str, seconds: list, extra: dict | None = None) -> float:
+    import json
+    import time
+
+    import act1_core as C
+
+    from anatta import spend as S
+
+    usd = sum((s + OVERHEAD_S) / 3600 * C.USD_H for s in seconds)
+    S.add_spend(None, tool="s1", label=f"{OUT_DATE}/s1/{stage}", usd=usd, calls=max(len(seconds), 1))
+    f = out / "spend.json"
+    rec = json.loads(f.read_text()) if f.exists() else {"usd": 0.0, "stages": []}
+    rec["usd"] = round(rec["usd"] + usd, 4)
+    rec["stages"].append({"utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "stage": stage,
+                          "usd": round(usd, 4), "container_s": [round(s, 1) for s in seconds], **(extra or {})})
+    f.write_text(json.dumps(rec, indent=1) + "\n")
+    log(f"spend {stage}: ${usd:.3f}; s1 total ${rec['usd']:.3f}")
+    return usd
+
+
+def variant(out: Path, entry: dict) -> None:
+    import json
+    import subprocess
+    import time
+
+    head = subprocess.run(["git", "-C", str(REPO), "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()
+    dirty = bool(subprocess.run(["git", "-C", str(REPO), "status", "--porcelain", "--", "src", "lab/explore"],
+                                capture_output=True, text=True).stdout.strip())
+    with open(out / "variants.jsonl", "a") as f:
+        f.write(json.dumps({"utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "commit": head,
+                            "dirty": dirty, **entry}) + "\n")
+
+
+def fit_episodes() -> tuple[list, list]:
+    """act1-full's gameable train-round episodes from the anatta-runs volume, each tagged with its round and source
+    file (fit_direction.check_fit_records needs both). Parsed as JSON only; no reply is printed or run here. Returns
+    (episodes, [per file: source, sha256, n])."""
+    import hashlib
+    import json
+
+    import modal
+
+    vol = modal.Volume.from_name("anatta-runs")
+    eps, files = [], []
+    for s, r in FIT_FILES:
+        src = f"full/gameable_s{s}/round{r}_episodes.jsonl"
+        raw = b"".join(vol.read_file(f"act1/{src}"))
+        rows = [json.loads(x) for x in raw.decode("utf-8").splitlines() if x.strip()]
+        eps += [e | {"round": r, "source": src} for e in rows]
+        files.append({"source": src, "sha256": hashlib.sha256(raw).hexdigest(), "n": len(rows)})
+    return eps, files
+
+
+def cmd_d0(tag: str) -> int:
+    import json
+    import time
+
+    import act1_core as C
+
+    out = out_dir()
+    if (out / tag / "d0_report.json").exists():
+        raise SystemExit(f"refused: {out / tag} already holds a D0 report; pick a new tag")
+    rows, tr, _, _ = act1_split()
+    eps, files = fit_episodes()
+    imp = [e for e in eps if e.get("impossible")]
+    counts = {"episodes": len(eps), "impossible": len(imp), "impossible_hacked": sum(e.get("outcome") == "hacked"
+                                                                                     for e in imp)}
+    log("fit records", counts)
+    upper = (2 * 3600 + OVERHEAD_S) / 3600 * C.USD_H  # d0_read's timeout
+    (out / tag).mkdir(parents=True, exist_ok=True)
+    guard(out, upper)
+    variant(out, {"cmd": "d0", "tag": tag, "model": MODEL_KEY, "files": files, "counts": counts, "upper_usd": upper})
+    import modal_shaping as MS
+
+    t0 = time.time()
+    try:
+        with MS.app.run(detach=True):
+            rep = MS.d0_read.remote(rows, eps, tr, tag, MODEL_KEY)
+    except Exception as e:  # noqa: BLE001
+        record_spend(out, f"d0-{tag}", [time.time() - t0], {"error": repr(e)[:300]})
+        raise
+    rows_out = rep.pop("score_rows")
+    (out / tag / "d0_report.json").write_text(json.dumps(rep, indent=1) + "\n")
+    (out / tag / "d0_scores.json").write_text(json.dumps(rows_out) + "\n")
+    record_spend(out, f"d0-{tag}", [rep["seconds"]])
+    log("D0 layer", rep["layer"], "pass", rep["pass"], "stop", rep["stop"], "orthogonalized", rep["orthogonalized"],
+        "per layer", rep["per_layer"], "replay", rep["replay"], "fit", rep["fit_n"], rep["fit_pos"])
+    return 0
+
+
+def shape_cfg(rep: dict, d0_tag: str, lam: float, direction: str) -> dict:
+    """cfg["shape"] for an Sh round from D0's report: the chosen unit (D0's unit.npy on the volume) with D0's fixed
+    statistics, or the random control (fit_direction.random_unit at the same layer, seed 0, as fit_d0 drew it) with
+    its own fixed statistics."""
+    import fit_direction as F
+    import modal_shaping as MS
+
+    if rep.get("stop") or not rep.get("pass"):
+        raise SystemExit("refused: D0 did not pass (stop); the shaped runs are not launched")
+    if direction == "dom":
+        return {"dir": f"{MS.ROOT}/{d0_tag}/d0/unit.npy", "layer": rep["unit_layer"], "lam": lam, "reader": "frozen",
+                "stats": rep["stats"]}
+    if direction == "random":
+        return {"dir": F.random_unit(len(rep["unit"]), seed=0).tolist(), "layer": rep["layer"], "lam": lam,
+                "reader": "frozen", "stats": rep["stats_by_direction"]["random"]}
+    raise SystemExit(f"unknown direction {direction!r} (dom or random)")
+
+
+def cmd_train(tag: str, d0_tag: str, lams: list, seeds: list, direction: str, rounds: int, upper_h: float) -> int:
+    import json
+    import time
+
+    import act1_core as C
+
+    out = out_dir()
+    rep = json.loads((out / d0_tag / "d0_report.json").read_text())
+    rows, _, pool, ev1 = act1_split()
+    runs = [(f"sh_{direction}_l{lam:g}", lam, s) for lam in lams for s in seeds]
+    cfgs = {(arm, s): {**ACT1_CFG, "curve_n": CURVE_N, "schedule": ["Sh"] * rounds,
+                       "shape": shape_cfg(rep, d0_tag, lam, direction)} for arm, lam, s in runs}
+    upper = len(runs) * (upper_h * 3600 + OVERHEAD_S) / 3600 * C.USD_H
+    d = out / tag
+    d.mkdir(parents=True, exist_ok=True)
+    guard(out, upper)
+    show_cfg = {f"{a}_s{s}": {**c, "shape": {**c["shape"], "dir": c["shape"]["dir"] if direction == "dom" else
+                                             "fit_direction.random_unit(d, seed=0)"}} for (a, s), c in cfgs.items()}
+    variant(out, {"cmd": "train", "tag": tag, "d0_tag": d0_tag, "model": MODEL_KEY, "rounds": rounds,
+                  "direction": direction, "cfgs": show_cfg, "train_pool": len(pool), "eval_oneoff": len(ev1),
+                  "upper_usd": round(upper, 2)})
+    from modal_act1 import app, train
+
+    t0 = time.time()
+    res, secs = {}, []
+    with app.run(detach=True):
+        calls = {f"{arm}_s{s}": train.spawn(arm, s, rounds, 1, cfgs[(arm, s)], rows, pool, ev1, tag, MODEL_KEY)
+                 for arm, _, s in runs}
+        for k, c in calls.items():
+            try:
+                res[k] = c.get()
+                secs.append(res[k]["seconds"])
+            except Exception as e:  # noqa: BLE001
+                res[k] = {"error": repr(e)[:500]}
+                secs.append(time.time() - t0)
+                log("error", k, repr(e)[:300])
+    for k, v in res.items():
+        for rnd, eps in (v.pop("curves", {}) or {}).items():  # eval episodes (numbers and outcomes; slim records)
+            (d / f"curve_{k}_r{rnd}.jsonl").write_text("".join(json.dumps(e) + "\n" for e in eps))
+        for rec in v.get("log", []):
+            (d / f"round_{k}_r{rec['round']}.json").write_text(json.dumps(
+                {"arm": v.get("arm"), "seed": v.get("seed"), "info": v.get("info"), **rec}, indent=1))
+            log(k, "round", rec["round"], "hack", rec["curve"]["hack"]["rate"], "solve", rec["curve"]["solve"]["rate"],
+                "drawn_hacked", rec["drawn_hacked"], "shape", rec.get("shape"))
+        (d / f"train_{k}_r1-{rounds}.json").write_text(json.dumps(v, indent=1))
+    record_spend(out, f"train-{tag}", secs, {"runs": list(res)})
+    return 0
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--spec", default=str(SPEC))
     ap.add_argument("--dry", action="store_true", help="print the plan and its cost; no cloud calls")
     ap.add_argument("--grid", metavar="SCORES_JSON", help="the free lambda dry run on D0's scores.json")
-    ap.add_argument("--direction", default="dom", help="the direction's column prefix in scores.json")
+    ap.add_argument("--direction", default="dom", help="the direction's column prefix in scores.json; for --train, "
+                                                       "dom or random")
+    ap.add_argument("--d0", metavar="TAG", help="launch D0's read on Modal (costs about $1)")
+    ap.add_argument("--train", metavar="TAG", help="launch the shaped runs on Modal (about $5.85 a run)")
+    ap.add_argument("--d0-tag", help="--train: the D0 tag whose report sets the direction and statistics")
+    ap.add_argument("--lams", default="", help="--train: comma-separated lambdas (from --grid)")
+    ap.add_argument("--seeds", default="0", help="--train: comma-separated seeds")
+    ap.add_argument("--rounds", type=int, default=3)
+    ap.add_argument("--upper-h", type=float, default=2.5, help="--train: the guard's container hours per run")
     a = ap.parse_args(argv)
     if a.grid:
         show_grid(grid(a.grid, a.direction), a.direction)
         return 0
+    if a.d0 or a.train:
+        _paths()
+        if a.d0:
+            return cmd_d0(a.d0)
+        if not (a.d0_tag and a.lams):
+            ap.error("--train needs --d0-tag and --lams")
+        return cmd_train(a.train, a.d0_tag, [float(x) for x in a.lams.split(",")],
+                         [int(x) for x in a.seeds.split(",")], a.direction, a.rounds, a.upper_h)
     spec = yaml.safe_load(Path(a.spec).read_text(encoding="utf-8"))
     if not a.dry:
-        ap.error("--dry or --grid: the runs go through modal_act1.train and modal_shaping.d0_read")
+        ap.error("--dry, --grid, --d0 or --train")
     show(spec, daily_cap())
     return 0
 

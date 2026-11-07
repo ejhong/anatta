@@ -65,3 +65,40 @@ def test_dry_plan_matches_the_design_costs(capsys):
     assert all(d["usd"] <= 50 for d in pl["days"])
     assert run_s1.main(["--dry"]) == 0
     assert "nothing spent" in capsys.readouterr().out
+
+
+def test_shape_cfg_dom_random_and_refusals(monkeypatch):
+    """--train's cfg["shape"]: D0's unit and statistics, or the random control at the same layer with its own
+    statistics (the same vector fit_d0 drew); a D0 that stopped refuses. (Added 7 Nov 2026 with the launch commands.)"""
+    import fit_direction as F
+    import pytest
+    import run_s1
+
+    added = []
+    monkeypatch.setitem(sys.modules, "modal", stub_modal(added))
+    for name in ("modal_shaping", "modal_common"):
+        monkeypatch.delitem(sys.modules, name, raising=False)
+    rep = {"pass": True, "stop": False, "layer": 16, "unit_layer": 16, "unit": [0.0] * 8,
+           "stats": {"impossible": [1.0, 2.0], "solvable": [0.5, 1.5]},
+           "stats_by_direction": {"random": {"impossible": [0.1, 0.2], "solvable": [0.3, 0.4]}}}
+    dom = run_s1.shape_cfg(rep, "d0a", 1.5, "dom")
+    assert dom == {"dir": "/runs/s1/d0a/d0/unit.npy", "layer": 16, "lam": 1.5, "reader": "frozen",
+                   "stats": rep["stats"]}
+    rnd = run_s1.shape_cfg(rep, "d0a", 1.5, "random")
+    assert rnd["dir"] == F.random_unit(8, seed=0).tolist() and rnd["stats"] == rep["stats_by_direction"]["random"]
+    for bad in ({"stop": True}, {"pass": False}):
+        with pytest.raises(SystemExit, match="did not pass"):
+            run_s1.shape_cfg(rep | bad, "d0a", 1.0, "dom")
+    with pytest.raises(SystemExit, match="unknown direction"):
+        run_s1.shape_cfg(rep, "d0a", 1.0, "ego")
+
+
+def test_launch_refuses_without_a_date_and_train_needs_its_args(monkeypatch):
+    import pytest
+    import run_s1
+
+    monkeypatch.setattr(run_s1, "OUT_DATE", None)
+    with pytest.raises(SystemExit, match="OUT_DATE"):
+        run_s1.out_dir()
+    with pytest.raises(SystemExit):
+        run_s1.main(["--train", "t"])  # no --d0-tag / --lams
