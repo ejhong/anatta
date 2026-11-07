@@ -9251,3 +9251,21 @@ There are two ways to fix a hub:
     forms (337 entries).
   - **Open:** S1 Stage 0's code (00c76c7..660cfb5, 6 Nov UTC, Fable cold-reviewed) has no ledger line yet; it gets
     one at launch. Cost $0.
+
+- **S1 Stage 0 launched: D0 (tag d0a), the probe direction's fit on act1-full's gameable train episodes; explore
+  tier (sightings)** (Opus 5.5, 22:52 UTC on 7 Nov, read off the clock).
+  - **Code:** Stage 0's code 00c76c7, cf0263f, 660cfb5 (6 Nov UTC; design v2 lab/plans/s1-shaping-2026-11-05.md,
+    Fable-checked; code cold-reviewed by Fable, review fixes in 660cfb5). The launcher was missing ("the runs are not
+    launched from here yet"): 39ced20 adds `run_s1.py --d0` and `--train`, modelled on run_act1.py's train, with a
+    folder cap of $45 and the day's remaining cap checked before each launch; costs go to the day file (tool s1) and
+    results_root/explore/2026-11-07/s1/spend.json.
+  - **Free checks before the launch:** the recomputed split equals act1-full's split.json (204 train, 91 in the
+    oneoff pool, 38 oneoff eval pairs); the six fit files read from anatta-runs give 3,072 episodes, 1,536
+    impossible-twin, 286 hacked (the plan's counts); fit_direction.check_fit_records passes; ego.pt's sha256 matches
+    the pin; shaping tests 41 pass; full suite 1730 pass.
+  - **D0:** modal_shaping.d0_read, one L40S, timeout 2 h (guard upper $5.18; expected about $1). Pass rule as
+    registered in the design: held-out hack-vs-failed AUROC >= 0.80 and solved-vs-failed control < 0.65, one
+    orthogonalized refit, else stop.
+  - **Next:** a fresh Fable agent is cold-checking the `--train` path now; after it and D0, the free lambda grid
+    (`--grid`), then the seed-0 sweep (3 lambdas x 3 Sh rounds) and seed 1 at lambda* plus the random control.
+    Stage 0 estimate $34.80 (folder cap $45). Day 7 Nov spent $0 before this.
