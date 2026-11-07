@@ -9222,3 +9222,32 @@ There are two ways to fix a hub:
     $50.32, $0.32 over the cap. Spent well under; the gate should check the total. Note for the runner.
   - **Cost:** $32.71 (GPU 20.22, judge 12.48: the served judge ran at 1.45x its estimate) plus the abandoned first
     folder $0.93: about $33.6 for M1. Day 6 Nov about $33.6 of $50.
+
+- **The lab moved to a new machine account; both Python environments rebuilt, the lab venv pinned by a new uv.lock,
+  leftover worktrees cleaned, and the ledger index now reads the dated entry form (48 entries were missing from it)**
+  (Opus 5.5, 22:44 UTC on 7 Nov, read off the clock).
+  - **The move:** the `~/prj/align` tree was recreated on 7 Nov (about 19:14-19:27 UTC by its file times) under a
+    different macOS account from the 1-6 Nov sessions. The git-ignored virtualenvs did not come along (`anatta/.venv`
+    and the Modal venv were missing). The keys and `~/.modal.toml` came through, as did the results folder (97,407
+    files listed, 0 missing, 0 resized, 20 sampled sha256 all match) and git (main = origin/main at 0f7a5c8, clean).
+  - **Rebuilt:** `.venv` on Python 3.12.16 with the dev, mirror, evals and train extras (torch 2.15.0, transformers
+    5.22.2, numpy 2.5.4, peft 0.21.2, trl 1.17.1, inspect-ai 0.3.288); the Modal venv with modal 1.6.2 and
+    huggingface_hub. The copied Modal login works (the four anatta volumes listed, read-only). A new `uv.lock` (154
+    packages; clean-lab's open item "the uv lock") pins `.venv`, which is synced to it. There was no lock before,
+    so these are today's versions, not necessarily the old machine's; Modal runs build their own images, so this
+    touches local tests and re-scoring only.
+  - **One test failure, caused by the environment:** with the `modal` extra installed in `.venv`,
+    `tests/test_runner.py::test_run_r1b_uses_the_shared_helpers` failed in the full run (it passes alone):
+    `experiments/run_r1b.py` then builds a real `modal.App` and includes an app the stub-based tests left cached.
+    The code assumes `.venv` has no Modal (Modal runs go through `tools/modal.sh`). With it removed: 1730 passed, 55
+    skipped (the costly ones, off by default), 0 failed; `tools/doctor.py` all PASS. `lab/MOVING.md` now says this.
+  - **Cleanup:** the S1 Stage 0 implementer's worktree (branch worktree-agent-a12e07c3137cdf7f5, tip 343e7dd, clean;
+    its three commits are on main as identical patches 00c76c7, cf0263f, 660cfb5) was bundled to
+    `archive-2026-11/agent-worktree-s1-stage0-2026-11-07.bundle` (outside git), then removed with its branch. A
+    stale worktree entry pointing at the old account's temp folder (801e697, on main) was pruned. No other branch,
+    stash or checkout was touched; anatta-calib and anatta-dev are clean.
+  - **Index:** `lab/ledger/make_index.py` read only the "- **title** ... HH:MM UTC on D Mon" form, so the 48 entries
+    written as "- YYYY-MM-DD HH:MM UTC — **title**" since 2 Nov 16:47 were missing from INDEX.md. It now reads both
+    forms (337 entries).
+  - **Open:** S1 Stage 0's code (00c76c7..660cfb5, 6 Nov UTC, Fable cold-reviewed) has no ledger line yet; it gets
+    one at launch. Cost $0.

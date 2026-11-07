@@ -31,6 +31,10 @@ PRIVATE = {"account", "recognition"}
 
 ENTRY = re.compile(r"^- \*\*(.+?)\*\*", re.S)
 STAMP = re.compile(r"(?<![\d:])(\d{1,2}:\d{2})(?::\d{2})? UTC on (\d{1,2} [A-Z][a-z]{2})")
+# The other form in use since 2 Nov: "- 2026-11-05 11:20 UTC — **title**" (added 7 Nov; before that these entries
+# were left out of INDEX.md)
+DATED = re.compile(r"^- (\d{4})-(\d{2})-(\d{2}) (\d{1,2}:\d{2}) UTC\s*[—-]+\s*")
+MONTHS = "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split()
 KINDS = [("correction", re.compile(r"\bcorrect", re.I)),
          ("grade", re.compile(r"\bgrade[ds]?\b|\bPASS\b|\bFAIL\b", re.I)),
          ("registration", re.compile(r"\bregist|\bpredictions?\b", re.I)),
@@ -58,14 +62,21 @@ def entries() -> list[dict]:
     with open(NOTES, encoding="utf-8") as fh:
         text = fh.read().splitlines()
     for i, line in enumerate(text):
-        if not line.startswith("- **"):
+        d = DATED.match(line)
+        if not (line.startswith("- **") or d):
             continue
         head = " ".join(t.strip() for t in text[i:i + 3])  # a title or its stamp may wrap onto the next lines
-        m = ENTRY.match(head)
-        title = " ".join(m.group(1).split()) if m else line[4:].strip()
-        s = STAMP.search(head)
-        out.append({"line": i + 1, "title": title, "kind": kind_of(title),
-                    "when": f"{s.group(2)} {s.group(1)}" if s else ""})
+        if d:
+            rest = "- " + head[d.end():]
+            m = ENTRY.match(rest)
+            title = " ".join(m.group(1).split()) if m else rest[2:].strip().lstrip("*").strip()
+            when = f"{int(d.group(3))} {MONTHS[int(d.group(2)) - 1]} {d.group(4)}"
+        else:
+            m = ENTRY.match(head)
+            title = " ".join(m.group(1).split()) if m else line[4:].strip()
+            s = STAMP.search(head)
+            when = f"{s.group(2)} {s.group(1)}" if s else ""
+        out.append({"line": i + 1, "title": title, "kind": kind_of(title), "when": when})
     return out
 
 

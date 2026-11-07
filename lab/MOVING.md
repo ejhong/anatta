@@ -17,17 +17,23 @@ them. A different path works but needs a pass over the absolute paths listed at 
 | Evaluation datasets | `anatta-lab/lab/data/<name>/raw/` | no (ignored); the manifest, hashes and item lists are | `python -I lab/data/fetch.py` after cloning |
 | Model weights | `~/.cache/huggingface/hub` (49 GB, mostly Ministral and the EM sets) | no | copy the cache or let it re-download (the laptop fishery needs the 16 GB Ministral checkpoint) |
 | Modal adapters, checkpoints, runs | Modal volumes (cloud) | no | nothing to move |
-| Claude Code memory and session transcripts | `~/.claude/projects/-Users-eugene-prj-align/` (the folder name encodes the project path) | no | copy the folder to the same path on the new machine; with a different project path, Claude Code starts with empty memory |
+| Claude Code memory and session transcripts | `~/.claude/projects/-Users-eugene-prj-align/` (the folder name encodes the project path) | no | copy the folder to the same path on the new machine; with a different project path, Claude Code starts with empty memory. Sessions started in `anatta/` (as its CLAUDE.md asks since 3 Nov) use `-Users-eugene-prj-align-anatta/` instead |
 | The pre-move backup | `~/prj/align/.premove-backup-2026-10-29/` (126 MB) | no | do not move it; delete it once the new machine is verified (Eugene's call) |
 | The claim checklist and the site builder | `~/prj/align/claim/`, `~/prj/align/site/build.py` | separate | copy |
 
 ## Tooling to recreate
 
 - `~/prj/align/anatta/.venv`: Python 3.12 from `anatta/pyproject.toml` (torch with MPS for the laptop runs).
+  Since 7 Nov it is pinned by `anatta/uv.lock`: `uv venv --python 3.12 .venv && uv sync --extra dev --extra mirror
+  --extra evals --extra train`. Leave out the `modal` extra: Modal runs from the Modal venv (`tools/modal.sh`), and
+  with `modal` installed in `.venv` one runner test fails, because `experiments/run_r1b.py` then builds a real
+  `modal.App` around an app the tests' stand-in left behind (found on the 7 Nov move).
 - `~/prj/align/anatta-lab/lab/experiments/h4lite/.venv`: Python 3.14, no spec file yet; it is only used for CPU
   tests that also run under the matlab venv, so it can be dropped.
 - `~/prj/matlab/.venv`: the Modal CLI (modal 1.6.2) and huggingface_hub; recreate with `pip install modal
-  huggingface_hub`, then `modal setup` (Eugene, in a browser; a credential Claude never handles).
+  huggingface_hub`, then `modal setup` (Eugene, in a browser; a credential Claude never handles). On 7 Nov:
+  `uv venv --python 3.12 ~/prj/matlab/.venv && uv pip install --python ~/prj/matlab/.venv/bin/python modal==1.6.2
+  huggingface_hub`; the copied `~/.modal.toml` still worked, so no new `modal setup` was needed.
 - Shell environment: `OPENROUTER_API_KEY` (the judges), `HF_TOKEN` (faster downloads; optional). Eugene copies these;
   Claude only ever checks that the names are set.
 - Chrome with the Claude in Chrome extension, if the web chores continue there.
