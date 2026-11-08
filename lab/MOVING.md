@@ -34,6 +34,9 @@ them. A different path works but needs a pass over the absolute paths listed at 
   huggingface_hub`, then `modal setup` (Eugene, in a browser; a credential Claude never handles). On 7 Nov:
   `uv venv --python 3.12 ~/prj/matlab/.venv && uv pip install --python ~/prj/matlab/.venv/bin/python modal==1.6.2
   huggingface_hub`; the copied `~/.modal.toml` still worked, so no new `modal setup` was needed.
+- Command-line tools: the machine-wide `~/Brewfile` (one list for every project on the machine, kept outside
+  this repo; started 8 Nov with poppler and pandoc for reading papers). Restore with `brew bundle --file ~/Brewfile
+  --no-upgrade`; `tools/doctor.py` warns when a listed tool is missing. Copy the file to the new Mac first.
 - Shell environment: `OPENROUTER_API_KEY` (the judges), `HF_TOKEN` (faster downloads; optional). Eugene copies these;
   Claude only ever checks that the names are set.
 - Chrome with the Claude in Chrome extension, if the web chores continue there.

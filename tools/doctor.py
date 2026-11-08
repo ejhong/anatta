@@ -11,9 +11,12 @@ import argparse
 import importlib.metadata as md
 import os
 import random
+import re
+import shutil
 import subprocess
 import sys
 from collections.abc import Callable
+from pathlib import Path
 
 from anatta import manifest as mm
 from anatta import spend
@@ -116,6 +119,24 @@ def check_git() -> tuple[str, str]:
     return "PASS", f"branch {branch} at {head}, clean"
 
 
+def check_tools(brewfile: Path | None = None) -> tuple[str, str]:
+    """The machine's command-line tools: every `brew "name"` in the machine-wide ~/Brewfile (one list for every
+    project on the machine, not kept in this repo) is installed. Added 8 Nov 2026 (poppler: the Read tool renders PDF
+    pages with pdftoppm)."""
+    brewfile = brewfile or Path.home() / "Brewfile"
+    if not brewfile.is_file():
+        return "WARN", f"no {brewfile}: the machine's tool list is missing (lab/MOVING.md)"
+    want = [m.group(1).rsplit("/", 1)[-1] for m in re.finditer(r'^\s*brew\s+"([^"]+)"', brewfile.read_text(), re.M)]
+    brew = shutil.which("brew")
+    if not brew:
+        return "WARN", f"{len(want)} tools listed in {brewfile} but no brew on PATH"
+    have = set(subprocess.run([brew, "list", "--formula", "-1"], capture_output=True, text=True).stdout.split())
+    missing = [w for w in want if w not in have]
+    if missing:
+        return "WARN", f"missing from {brewfile}: {', '.join(missing)} (brew bundle --file {brewfile} --no-upgrade)"
+    return "PASS", f"{len(want)} tools in {brewfile} installed"
+
+
 def check_pytest() -> tuple[str, str]:
     r = subprocess.run([sys.executable, "-m", "pytest", "--collect-only", "-q", "-p", "no:cacheprovider"],
                        cwd=REPO, capture_output=True, text=True)
@@ -144,6 +165,7 @@ def main() -> None:
         r.check("results", lambda: check_results(cfg, a.sample))
         r.check("modal", lambda: check_modal(cfg))
         r.check("keys", lambda: check_keys(cfg))
+    r.check("tools", check_tools)
     r.check("git", check_git)
     if not a.no_pytest:
         r.check("pytest", check_pytest)
