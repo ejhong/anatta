@@ -9366,3 +9366,19 @@ There are two ways to fix a hub:
     seeds creep up a little by round 3. Stage 1 (guard off) needs the S table and its own launcher; not started,
     for Eugene to choose.
   - Spend: S1 $26.70 in all (plan estimate about $35); 8 Nov metered $9.73 of $50. Results manifest rebuilt.
+
+- **Lab practice from ReproBridge (arXiv 2611.08452, Eugene's pointer): ambiguity tables in reproduction specs, five invalidity checks in Fable's brief; PDF tools on the Studio** (Opus 5.5, 13:48 UTC on 8 Nov, read off the clock).
+  - The paper (Wang, Meng, Nam, Pfister, Yoon; Waterloo and Google, 5 Nov 2026): agents reproducing 36 ICML papers
+    succeed far more often when an earlier reproduction's recovered decisions are kept (76.4% -> 92.6% over four
+    models). Its references are prediction intervals from five independent human reruns, two-sided.
+  - `reproduce` skill: step 0 writes `residual_differences` as an ambiguity table (where, gap and resolution, which
+    source wins, sensitivity against the band with a pre-declared condition or a reason, grades touched); single
+    published runs flagged in `source`; diagnostic runs kept apart and no outcome-driven reruns (step 7). Its stale
+    "runner not built" line now names `anatta.runner`'s entry.
+  - New `lab/ledger/checks/README.md`: the Fable cold-check brief as practised, five ways a result can be invalid
+    (adapted from the paper's auditor, with its evidence rule), and how reports are filed. CLAUDE.md and the
+    `register` skill point to it.
+  - Machine: poppler 26.11.0 and pandoc 3.13 installed from Homebrew; the machine-wide `~/Brewfile` (outside the
+    repo) lists the Studio's tools; `tools/doctor.py` checks it (9741f85). The 23 older Claude Code memory notes copied
+    into this project's memory folder, with two corrections for the 2 Nov public move.
+  - S1 next steps (guard-off rounds, a seed-1 random control) wait for a discussion with Eugene.

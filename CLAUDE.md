@@ -110,5 +110,6 @@ These rules hold in every session.
 ## Agents
 
 - Cold checks go to a fresh Fable agent (Agent tool, model "fable"), read-only, given the code and not Opus's
-  conclusion. Implementers are general-purpose agents. Briefs state the hard rules above that apply.
+  conclusion. Implementers are general-purpose agents. Briefs state the hard rules above that apply. The brief, the
+  five ways a result can be invalid and how reports are filed: `lab/ledger/checks/README.md`.
 - Subagents often can't write report files; have them return the report as text and file it yourself.

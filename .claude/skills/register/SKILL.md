@@ -19,4 +19,5 @@ code enforces", "Decision rules").
 5. Append the registration to `lab/ledger/NOTES.md` with the `ledger` skill (clock stamp from `date -u`), citing the
    spec path, sha256, commit, bands and cost estimate against the day's cap.
 6. Commit and push to main **before** any paid run or any look at results. For a consequential claim, a fresh Fable
-   agent checks the registration cold first.
+   agent checks the registration cold first (brief: `lab/ledger/checks/README.md`). A reproduction's spec carries
+   its ambiguity table in `residual_differences` (`reproduce` skill, step 0).
