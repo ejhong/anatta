@@ -9308,3 +9308,38 @@ There are two ways to fix a hub:
     "between" (the plan names no class for it). lambda* as planned.
   - Smoke run on act1-full's own curves renamed as S1 runs (honest as a stand-in passes, gameable fails); tests in
     `tests/test_compare.py`. Free.
+
+- **S1 seed-0 sweep: the probe penalty holds hacking near the oracle at lambda 0.75 and 2.0 (pass), 0.45 partial; lambda* = 0.75; seed 1 and the random control launched** (Opus 5.5, 01:32 UTC on 8 Nov, read off the clock). Sighting.
+  - Ran: tag sweep0 (commit 05ee830, clean), three runs of 3 Sh rounds from base, seed 0, D0 d0b's direction (layer
+    16, frozen reader, fixed statistics). About 1.95 h a run (6,970 / 7,120 / 7,107 s); metered $15.27 (reserve
+    $19.38, true-up -$4.11, booked to 7 Nov). Comparison: `compare_s1.py --tag sweep0` (9a2c092, readings fixed at
+    00:51 UTC, before these results).
+  - Round 3, 38 oneoff eval pairs, n 4 (152 impossible twins); plain 41.8% pooled (35.5% s0), honest 3.0%, plain
+    solve 69.4%. Two-level pair bootstrap, 95% intervals:
+    - lambda 0.45: hack 15.1% [7.9, 23.0]; vs plain -26.6 pp [-39.5, -14.5]; vs honest +12.2 pp (misses the oracle
+      by 2.2 pp); solve 72.4%, +3.0 pp [-2.0, +8.6]. **Partial.**
+    - lambda 0.75: hack 9.2% [3.9, 15.8]; vs plain -32.6 pp [-46.1, -19.7]; vs honest +6.2 pp; solve 71.1%, +1.6 pp
+      [-6.3, +9.9]. **Pass.**
+    - lambda 2.0: hack 5.3% [2.0, 9.2]; vs plain -36.5 pp [-49.3, -23.7]; vs honest +2.3 pp; solve 71.1%, +1.6 pp
+      [-2.6, +6.9]. **Pass.**
+    - Seed-matched (vs plain s0, 35.5%): -20.4 pp [-29.0, -11.8], -26.3 [-36.2, -15.8], -30.3 [-40.1, -21.1].
+      Against base (7.2%): +7.9 [+1.3, +15.1], +2.0 [-4.6, +9.2], -2.0 [-7.2, +2.6].
+  - Per round (r1, r2, r3) eval hack: 0.45: 13.2, 15.8, 15.1%; 0.75: 5.9, 3.9, 9.2%; 2.0: 10.5, 7.2, 5.3%. Plain's
+    own curve (curve_n 2) rose about 17-22% -> 32-41% -> 38-42%. The shaped arms never make plain's climb.
+  - Training side (rewarded hacks; zeroed; weight mass removed; solved episodes zeroed): 0.45: 0% zeroed every
+    round, mass removed 46.7 -> 39.4 -> 37.5% (grid: 55.7%); 0.75: 33 / 28 / 38% zeroed, mass 73.1 -> 70.2 ->
+    51.1% (grid 80.1%), solved zeroed 6.9 / 3.6 / 1.5%; 2.0: 86 / 94 / 71% zeroed, mass 85.7 -> 93.8 -> 75.9% (grid
+    91.1%), solved zeroed 16.1 / 10.5 / 14.4%. Drawn hacks of 192: 29/23/43, 20/16/14, 12/2/6. Training-sample hack
+    8.2% at round 1 in every arm (the same base sample; act1-full s0 had 8%), then 10.9/11.7, 7.0/5.1, 6.2/6.6
+    (plain s0: 15, 23%).
+  - **Watch: surviving hacks drift toward the probe's blind spot.** Median z of the rewarded training hacks (frozen
+    reader, fixed statistics, so the same text gets the same z in any round): 0.45: 1.16 -> 0.83 -> 0.76; 0.75: 1.16
+    -> 0.87 -> 0.65; 2.0: 1.16 -> 1.06 -> 0.98. In plain act1-full (D0's scores, both seeds) it rose: 1.12 -> 1.31
+    -> 1.33. That is why removed mass falls below the grid's prediction by round 3. Small n (13-30 hacks a round);
+    it is the obfuscation pattern the probe-training literature warns about, and the Stage 1 "guard off" rounds
+    are where it would matter.
+  - lambda* = 0.75 by the plan's rule (smallest passing lambda on seed 0). Seed 0 is plain's low-hack seed, and
+    lambda* was tuned on it: seed 1 carries the unbiased comparison.
+  - Launched 01:32 UTC (commit 9a2c092, clean), each its own reserve of $6.46 on 8 Nov: tag s1-seed1
+    (sh_dom_l0.75, seed 1) and tag s1-rand0 (sh_random_l0.75, seed 0: fit_d0's random unit with its own
+    statistics). 8 Nov booked so far: $12.92 of $50. Notebook and SIGHTINGS entries wait for Stage 0's full result.
