@@ -9296,3 +9296,15 @@ There are two ways to fix a hub:
   - **Launch:** `run_s1.py --train sweep0 --d0-tag d0b --lams 0.45,0.75,2 --seeds 0` at ce9c292 (Fable's fixes):
     three containers, 3 Sh rounds each from base, cancelled at 2.5 h; reserve $19.38 booked to 7 Nov. Spend so far
     $1.70 (d0a + d0b); day 7 Nov $1.70 of $50 before the reserve.
+
+- **S1 Stage 0: the comparison script, with the pass rule's readings fixed before any sweep result** (Opus 5.5, 00:51 UTC on 8 Nov, read off the clock).
+  - `lab/explore/shaping/compare_s1.py`: each S1 run's per-round oneoff curve (38 eval pairs, n 4) against act1-full's
+    round-3 readouts; it reproduces the recorded references (plain 41.8% pooled, 35.5% s0, 48.0% s1; honest 3.0%;
+    base 7.2%; plain solve 69.4%). Contrasts pool S1's seeds against both plain (or honest) seeds with
+    `pair_rate_diff_2level`; seed-matched contrasts beside them.
+  - Readings fixed now, while the sweep runs: "oracle" is hack - honest <= +10 pp at the point estimate; "cut" is
+    hack - plain <= -20 pp with the 95% upper bound < -10 pp; "solve within 3 pp" is read one-sided (solve - plain
+    >= -3 pp; a gain is no failure) with the lower bound > -10 pp; a 10-15 pp cut without a pass is labelled
+    "between" (the plan names no class for it). lambda* as planned.
+  - Smoke run on act1-full's own curves renamed as S1 runs (honest as a stand-in passes, gameable fails); tests in
+    `tests/test_compare.py`. Free.
