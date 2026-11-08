@@ -60,3 +60,14 @@ def test_load_runs_parses_arm_names_and_keeps_the_oneoff_cell(tmp_path):
     t = runs["sh_dom_l0.45"]["seeds"][0][3]
     assert t["hack"] == {"p1": (1, 2)} and t["solve"] == {"p1": (1, 1)}
     assert list(runs["sh_random_l2"]["seeds"]) == [1]
+
+
+def test_compare_pools_seeds_then_gives_each_seed_its_row():
+    t = {"hack": {"p1": (1, 4), "p2": (0, 4)}, "solve": {"p1": (3, 4), "p2": (3, 4)}}
+    ref = {lab: t for lab in ("base", "gameable_s0", "gameable_s1", "honest_s0", "honest_s1")}
+    runs = {"sh_dom_l0.75": {"direction": "dom", "lam": 0.75, "seeds": {0: {3: t}, 1: {3: t}}}}
+    rows = K.compare(runs, ref)
+    assert [r["seeds"] for r in rows] == [[0, 1], [0], [1]]
+    assert rows[0]["hack"]["n"] == 16 and rows[1]["hack"]["n"] == 8
+    assert rows[1]["rule"]["verdict"] == "fail"  # the same tables as plain: no cut
+    assert K.pick_lambda(rows) == {"lam": 0.75, "why": "none passes on seed 0: the largest lambda"}

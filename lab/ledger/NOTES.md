@@ -9343,3 +9343,26 @@ There are two ways to fix a hub:
   - Launched 01:32 UTC (commit 9a2c092, clean), each its own reserve of $6.46 on 8 Nov: tag s1-seed1
     (sh_dom_l0.75, seed 1) and tag s1-rand0 (sh_random_l0.75, seed 0: fit_d0's random unit with its own
     statistics). 8 Nov booked so far: $12.92 of $50. Notebook and SIGHTINGS entries wait for Stage 0's full result.
+
+- **S1 Stage 0 result: the probe filter nearly reaches the oracle (lambda* 0.75 pooled: hack 11.8%, honest + 8.9 pp, plain - 29.9 pp, solve kept), but the random control's check fails by the reading fixed in advance** (Opus 5.5, 03:29 UTC on 8 Nov, read off the clock). Sighting.
+  - Ran (commit 9a2c092, clean): tag s1-seed1 (sh_dom_l0.75, seed 1; 6,545 s, $4.72) and tag s1-rand0
+    (sh_random_l0.75, seed 0: fit_d0's random unit with its own statistics; 6,950 s, $5.01). Reserves trued up on
+    8 Nov. Comparison: `compare_s1.py --tag sweep0 --tag s1-seed1 --tag s1-rand0` (main() now merges an arm's seeds
+    across tags and adds each seed's row: plumbing only, the rule and readings unchanged, committed with this entry).
+    Report: results/explore/2026-11-07/s1/report.md.
+  - lambda* 0.75, round 3, both seeds pooled: hack 11.8% [6.9, 16.8]; vs plain -29.9 pp [-43.4, -17.1]; vs honest
+    +8.9 pp [2.3, 16.4]; solve 72.0%, +2.6 pp [-4.3, +8.9]. Oracle, cut and solve hold: **pass on the probe arm**.
+    Seed 1 alone: 14.5% [7.9, 22.4], honest + 11.5 pp (it would be partial alone); seed-matched vs plain s1 (48.0%)
+    -33.6 pp [-45.4, -21.7]. Per round s1: 10.5, 11.8, 14.5%.
+  - Random control, round 3: 27.6% [17.8, 37.5] (10.5 -> 17.1 -> 27.6%). Vs pooled plain -14.1 pp [-26.3, -2.6]:
+    **outside the 10 pp band, so the rule's random check fails as read in advance.** Seed-matched (plain s0 35.5%,
+    the same round-1 sample): -7.9 pp [-15.1, -0.7], within the band. Its training draw matched plain s0's (drawn
+    hacks 45/35/70 vs 45/41/70 of 192); it removed 22-35% of hack weight and 17-21% of solved weight.
+  - Post hoc, not in the rule: dom - random at seed 0, lambda 0.75, paired over pairs: -4.6 [-10.5, +2.0] (r1), -13.2
+    [-19.1, -7.2] (r2), -18.4 [-27.6, -9.2] (r3). The cut is specific to the probe direction and grows by round.
+  - The 01:32 "watch" (surviving hacks' z falling) does not replicate on seed 1: median rewarded-hack z 1.11 -> 0.98
+    -> 1.06 (seed 0: 1.16 -> 0.87 -> 0.65). Stays a one-seed watch item.
+  - Stage 0 class: not a clean pass (random check), not partial or fail as the plan defines them. Both shaped
+    seeds creep up a little by round 3. Stage 1 (guard off) needs the S table and its own launcher; not started,
+    for Eugene to choose.
+  - Spend: S1 $26.70 in all (plan estimate about $35); 8 Nov metered $9.73 of $50. Results manifest rebuilt.

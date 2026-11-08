@@ -1259,3 +1259,21 @@ checked everything from the raw files and agreed.
 as this blurred ruler can see. That fits the 3 Nov reading that Act I made a local habit, not a self that guards
 itself. It is a null and a finding, not a failure of the idea; the thing a release must beat (counterfeit virtue)
 hasn't been made yet, so there is nothing for Act II to remove.
+
+## 8 November: a cheap "hack detector" inside the model can keep training from rewarding hacks
+
+On 3 November, training Ministral against tests it could game grew a habit: by the third round it gamed 42% of the
+impossible tasks, against 3% for a twin trained with honest labels. This time we tried to stop the habit without
+labels. A probe (one direction inside the untrained model, found from earlier hacks) scores each training attempt,
+and attempts that look like hacks get less weight in training. With the penalty at the strength picked on the first
+seed, gaming stayed near 12% across two seeds instead of climbing to 42%, and solving the real tasks didn't suffer.
+The honest-label twin's 3% is still lower, but the probe got most of the way there without being told which attempts
+were hacks. A random direction at the same strength didn't do it: gaming climbed to 28%. One pre-set check missed,
+though: we had said the random run should land within 10 points of the unguarded runs, and it landed 14 below their
+average (8 below the unguarded run with the same seed). On one seed, the hacks that survived the penalty also looked
+less and less hack-like to the probe, which is the known danger of training against a detector; the second seed
+didn't show it.
+
+*In plain terms, for the vision:* this is a way to install a guard, not to reach anything: the model is simply not
+rewarded for the habit. Whether the habit is gone or only held down is the next question, and it is the project's
+own question in miniature ("reached, not installed"): take the guard off and see whether gaming comes back.

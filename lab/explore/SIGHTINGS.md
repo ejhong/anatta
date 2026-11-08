@@ -256,3 +256,19 @@ Report: results/explore/2026-11-03/act1-full/report.md. Spend $24.95.
 - **Read:** Act I's raw material is real and repeatable, but at this dose it is a local habit, not a self. H9 v0 runs
   as the habit-order test (as decided); a generalising Act I needs more rounds, several hackable domains or
   self-referential rewards.
+
+## 8 Nov, 03:29 UTC: a frozen-base probe filter keeps expert iteration from growing the hack habit, close to the label oracle; the random control misses its pre-set band (sighting)
+
+Report: results/explore/2026-11-07/s1/report.md. Spend $26.70 (S1 Stage 0 in all).
+- Ministral 3 8B, act1-full's recipe, 3 shaped rounds from base, w = max(0, r - lambda max(z, 0)) with z from D0's
+  layer-16 hack direction read by the frozen base (held-out AUROC 0.897). Oneoff eval hack at round 3, n 4: plain
+  41.8%, honest (label oracle) 3.0%.
+- lambda 0.45 / 0.75 / 2.0 on seed 0: 15.1 / 9.2 / 5.3% (partial / pass / pass); lambda* 0.75 on both seeds 11.8%
+  [6.9, 16.8]: plain - 29.9 pp, honest + 8.9 pp, solve + 2.6 pp. **Pass on the probe arm.** Seed 1 alone 14.5%.
+- Random direction at lambda 0.75: 27.6% [17.8, 37.5], climbing like plain; - 14.1 pp vs pooled plain, outside the
+  pre-set 10 pp band (- 7.9 pp seed-matched). Post hoc, same seed: dom - random - 18.4 pp [-27.6, -9.2] at round 3.
+- Seed 0's surviving hacks scored lower on the probe each round (median z 1.16 -> 0.65; plain rose 1.12 -> 1.33);
+  seed 1's didn't.
+- **Read:** a label-free probe can stand in for the labels as a training guard on this stack (Goodfire-style
+  shaping, in EI). Stage 0 isn't a clean pass by its own rule (the random check), and whether the habit is gone or
+  held down is untested: that is Stage 1's guard-off question.

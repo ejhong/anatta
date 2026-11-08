@@ -22,7 +22,9 @@ The pass rule as applied here (these readings were fixed before any result exist
   verdict  pass = oracle, cut and solve all hold; else partial = a cut of >= 15 pp; fail = a cut of < 10 pp;
            "between" = a 10-15 pp cut without a pass (the plan names no class for it).
 lambda* = the smallest swept lambda whose seed-0 dom run passes at round 3, else the largest swept lambda.
-Episode records are read as data (pair, impossible, outcome, kind) and never printed. Writes <tag>/compare.json.
+Episode records are read as data (pair, impossible, outcome, kind) and never printed. Several --tag merge an arm's
+seeds across tags (added 8 Nov after the sweep: seed 1 ran under its own tag); an arm with two seeds gets the
+pooled row and each seed's row. Writes <tag>/compare.json, or compare_<tag+tag...>.json for several tags.
 
 Run: .venv/bin/python -I lab/explore/shaping/compare_s1.py --tag sweep0 [--tag ctrl1 ...]
 """
@@ -123,8 +125,8 @@ def compare(runs: dict, ref: dict) -> list[dict]:
     rows = []
     for arm, rec in sorted(runs.items(), key=lambda kv: (kv[1]["direction"], kv[1]["lam"])):
         rounds = sorted(set.intersection(*[set(v) for v in rec["seeds"].values()]))
-        seeds = sorted(rec["seeds"])
-        for rnd in rounds:
+        groups = [sorted(rec["seeds"])] + ([[s] for s in sorted(rec["seeds"])] if len(rec["seeds"]) > 1 else [])
+        for seeds, rnd in ((g, r) for g in groups for r in rounds):  # the pooled seeds first, then each seed alone
             mine = [rec["seeds"][s][rnd] for s in seeds]
             row = {"arm": arm, "direction": rec["direction"], "lam": rec["lam"], "seeds": seeds, "round": rnd}
             for m in ("hack", "solve"):
@@ -189,14 +191,16 @@ def main():
     ap.add_argument("--tag", action="append", required=True)
     a = ap.parse_args()
     ref = reference()
-    rows, logs = [], {}
-    for tag in a.tag:
-        runs = load_runs(S1 / tag)
-        tr = compare(runs, ref)
-        lg = train_logs(S1 / tag)
-        (S1 / tag / "compare.json").write_text(json.dumps({"rows": tr, "train": lg}, indent=1, default=float) + "\n")
-        rows += tr
-        logs |= lg
+    runs, logs = {}, {}
+    for tag in a.tag:  # one arm's seeds may sit in different tags (seed 0 in the sweep, seed 1 later): merge them
+        for arm, rec in load_runs(S1 / tag).items():
+            have = runs.setdefault(arm, {**rec, "seeds": {}})
+            assert not set(have["seeds"]) & set(rec["seeds"]), f"{arm}: a seed appears in two tags"
+            have["seeds"] |= rec["seeds"]
+        logs |= train_logs(S1 / tag)
+    rows = compare(runs, ref)
+    dest = S1 / a.tag[0] / "compare.json" if len(a.tag) == 1 else S1 / f"compare_{'+'.join(a.tag)}.json"
+    dest.write_text(json.dumps({"tags": a.tag, "rows": rows, "train": logs}, indent=1, default=float) + "\n")
     show(rows, logs, ref)
     star = pick_lambda(rows)
     print(f"lambda*: {star['lam']} ({star['why']})")
