@@ -230,6 +230,13 @@ def shape_scores(model, tok, sh: dict, eps: list, turns: list, arm: str) -> list
     return z
 
 
+def lora_b_abs(model) -> float:
+    """The sum of |lora_B| over the model's adapter weights. A fresh LoRA has 0 (B starts at zero); a loaded, trained
+    adapter must not, or its keys did not match and the run would silently start from the base model (Opus's check,
+    9 Nov 2026)."""
+    return float(sum(p.detach().abs().sum().item() for n, p in model.named_parameters() if "lora_B" in n))
+
+
 def write_jsonl(path, rows):
     Path(path).parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w") as f:
@@ -271,6 +278,9 @@ def train(arm: str, seed: int, rounds: int, start_round: int, cfg: dict, pairs_r
     if init and fresh:
         model = PeftModel.from_pretrained(base, init if init.startswith("/") else f"{ROOT}/{init}", is_trainable=True)
         info["init_adapter"] = init
+        info["init_lora_b_abs"] = lora_b_abs(model)
+        if not info["init_lora_b_abs"] > 0:  # before any GPU work beyond the load
+            raise RuntimeError(f"the init adapter {init} loaded with all-zero lora_B: its keys did not match")
     elif start_round > 1:
         model = PeftModel.from_pretrained(base, str(out / f"adapter_r{start_round - 1}"), is_trainable=True)
     else:

@@ -19,6 +19,13 @@ under tool "s1" and to OUT/spend.json, checked first against FOLDER_CAP and the 
                recipe (oneoff pool) with the probe penalty from D0's report; the per-round curve is the 38 oneoff
                eval pairs at n 4 (the act1-full readout's cells). Writes OUT/TAG/ like run_act1's train.
 
+  --guard-off TAG  --from sweep0:sh_dom_l0.75:0,s1-seed1:sh_dom_l0.75:1,full:honest:0,full:honest:1 (added 9 Nov 2026
+               by Claude, Fable 5.2; lab/plans/redirect-2026-11-09.md): one container per source (run tag : arm :
+               seed), each starting from that run's round-3 adapter and training rounds 4-6 with no penalty under the
+               gameable reward (kind G; no cfg["shape"]), same recipe and eval cells. Sources: a shaped S1 run
+               (sh_...; the probe guard) or act1-full's honest run (tag "full"; the label-oracle guard, the matched
+               control). Arm name: "off_" + the source arm without its "sh_".
+
   .venv/bin/python lab/explore/shaping/run_s1.py --dry [--spec experiments/explore/s1_shaping.yaml]
   .venv/bin/python lab/explore/shaping/run_s1.py --grid OUT/TAG/d0_scores.json
   PYTHONPATH=src ~/prj/matlab/.venv/bin/python lab/explore/shaping/run_s1.py --d0 TAG
@@ -138,7 +145,11 @@ def show_grid(res: dict, direction: str) -> None:
 # ------------------------------------------------------------------------------------------------ launching
 
 OUT_DATE = "2026-11-07"  # the UTC date of Stage 0's first launch (read off the clock: 22:51 UTC on 7 Nov)
-FOLDER_CAP = 45.0  # Stage 0: the design's $34.80 with contingency, plus room; not the daily cap
+# The folder's own cap, not the daily cap. 45.0 for Stage 0 (the design's $34.80 with contingency, plus room). 60.0
+# from 9 Nov 2026: Stage 0's $26.70 spent, the follow-ups Eugene approved ($18: the seed-1 random control and the
+# guard-off rounds), and the oracle guard-off arm brought forward from the redirect plan's test 3 (about $13 of
+# reserve); reserves stay booked while runs are out, hence the room.
+FOLDER_CAP = 60.0
 OVERHEAD_S = 120  # start-up and scale-down per container, as run_act1 meters it
 ACT1_FULL = "explore/2026-11-03/act1-full"  # under results_root: act1-full's split.json and variants.jsonl
 ACT1_CFG = {"rank": 16, "lr": 1e-4, "k": 4, "n_pairs": 64, "steps": 12, "batch": 16, "micro": 2, "temperature": 1.0,
@@ -347,7 +358,6 @@ def shape_cfg(rep: dict, d0_tag: str, lam: float, direction: str) -> dict:
 
 def cmd_train(tag: str, d0_tag: str, lams: list, seeds: list, direction: str, rounds: int, upper_h: float) -> int:
     import json
-    import time
 
     import act1_core as C
 
@@ -369,19 +379,31 @@ def cmd_train(tag: str, d0_tag: str, lams: list, seeds: list, direction: str, ro
     variant(out, {"cmd": "train", "tag": tag, "d0_tag": d0_tag, "model": MODEL_KEY, "rounds": rounds,
                   "direction": direction, "cfgs": show_cfg, "train_pool": len(pool), "eval_oneoff": len(ev1),
                   "upper_usd": round(upper, 2), "deadline_h": upper_h})
+    return launch_runs(out, tag, f"train-{tag}", [(arm, s) for arm, _, s in runs], cfgs, 1, rounds, upper, upper_h,
+                       rows, pool, ev1)
+
+
+def launch_runs(out: Path, tag: str, stage: str, runs: list, cfgs: dict, start_round: int, rounds: int, upper: float,
+                upper_h: float, rows: list, pool: list, ev1: list) -> int:
+    """Reserve, spawn one modal_act1.train per (arm, seed) in `runs` for rounds start_round..rounds, collect, write
+    OUT/tag/ and settle. cmd_train's tail, moved here unchanged on 9 Nov 2026 so the guard-off rounds share it."""
+    import json
+    import time
+
     import modal
     from modal_act1 import app, train
 
     from anatta import spend as S
 
-    day, stage = S.utc_date(), f"train-{tag}"
+    d = out / tag
+    day = S.utc_date()
     reserve(out, stage, upper, day)
     t0 = time.time()
     deadline = t0 + upper_h * 3600  # the runs start together; past this a run is cancelled (Fable, 7 Nov: train's
     res, secs = {}, []               # own timeout is 6 h, so a hung run would otherwise bill up to $15)
     with app.run(detach=True):  # an interrupt escapes unsettled: the reserve stays booked, containers run on
-        calls = {f"{arm}_s{s}": train.spawn(arm, s, rounds, 1, cfgs[(arm, s)], rows, pool, ev1, tag, MODEL_KEY)
-                 for arm, _, s in runs}
+        calls = {f"{arm}_s{s}": train.spawn(arm, s, rounds, start_round, cfgs[(arm, s)], rows, pool, ev1, tag, MODEL_KEY)
+                 for arm, s in runs}
         for k, c in calls.items():
             try:
                 res[k] = c.get(timeout=max(1.0, deadline - time.time()))
@@ -403,9 +425,93 @@ def cmd_train(tag: str, d0_tag: str, lams: list, seeds: list, direction: str, ro
                 {"arm": v.get("arm"), "seed": v.get("seed"), "info": v.get("info"), **rec}, indent=1))
             log(k, "round", rec["round"], "hack", rec["curve"]["hack"]["rate"], "solve", rec["curve"]["solve"]["rate"],
                 "drawn_hacked", rec["drawn_hacked"], "shape", rec.get("shape"))
-        (d / f"train_{k}_r1-{rounds}.json").write_text(json.dumps(v, indent=1))
+        (d / f"train_{k}_r{start_round}-{rounds}.json").write_text(json.dumps(v, indent=1))
     settle(out, stage, upper, secs, day, {"runs": list(res)})
     return 0
+
+
+GUARD_OFF_ROUNDS = (4, 6)  # the source runs trained rounds 1-3; the guard comes off for rounds 4-6
+ACT1_FULL_TAG = "full"  # act1-full's run tag on the volume (/runs/act1/full/<arm>_s<seed>) and its local subfolder
+
+
+def guard_off_arm(src_arm: str) -> str:
+    """The guard-off arm's name: off_dom_l0.75 from sh_dom_l0.75 (the probe guard), off_honest from honest (the
+    label-oracle guard). Any other source arm is refused: a plain gameable run has no guard to take off."""
+    if src_arm.startswith("sh_"):
+        return "off_" + src_arm[len("sh_"):]
+    if src_arm == "honest":
+        return "off_honest"
+    raise SystemExit(f"refused: the source arm {src_arm!r} is not a guarded arm (sh_... or honest)")
+
+
+def guard_off_cfgs(sources: list) -> tuple[list, dict]:
+    """([(arm, seed)], {(arm, seed): cfg}) for the guard-off rounds. `sources` is [(run tag, source arm, seed)]: each
+    run starts from /runs/act1/<run tag>/<source arm>_s<seed>/adapter_r3 (cfg["init_adapter"], under modal_act1.ROOT)
+    and has no cfg["shape"]. Its schedule names rounds 1-3 by the source's own kind (Sh for a shaped run, H for the
+    honest run; a record only: train starts at round 4, and round_kind is asked for rounds 4-6 alone) and rounds 4-6
+    as G."""
+    first, last = GUARD_OFF_ROUNDS
+    runs, cfgs = [], {}
+    for src, src_arm, s in sources:
+        arm = guard_off_arm(src_arm)
+        if (arm, s) in cfgs:
+            raise SystemExit(f"refused: {arm} seed {s} appears twice in {sources}")
+        before = "Sh" if src_arm.startswith("sh_") else "H"
+        runs.append((arm, s))
+        cfgs[(arm, s)] = {**ACT1_CFG, "curve_n": CURVE_N,
+                          "schedule": [before] * (first - 1) + ["G"] * (last - first + 1),
+                          "init_adapter": f"{src}/{src_arm}_s{s}/adapter_r{first - 1}"}
+    return runs, cfgs
+
+
+def source_done(out: Path, src: str, src_arm: str, s: int) -> bool:
+    """Whether the source run finished its three rounds, from its local train file (S1's under OUT/<tag>/, act1-full's
+    under its own results folder): no error and rounds 1-3 logged."""
+    import json
+
+    from anatta.config import load
+
+    n = GUARD_OFF_ROUNDS[0] - 1
+    d = (load().results_root / ACT1_FULL / ACT1_FULL_TAG) if src == ACT1_FULL_TAG else out / src
+    f = d / f"train_{src_arm}_s{s}_r1-{n}.json"
+    if not f.exists():
+        return False
+    rec = json.loads(f.read_text())
+    return "error" not in rec and [x.get("round") for x in rec.get("log", [])] == list(range(1, n + 1))
+
+
+def parse_sources(text: str) -> list:
+    """--from's "tag:arm:seed,tag:arm:seed" as [(tag, arm, seed)]; a malformed item raises ValueError."""
+    out = []
+    for item in text.split(","):
+        parts = item.strip().split(":")
+        if len(parts) != 3 or not all(parts):
+            raise ValueError(f"{item!r} is not tag:arm:seed")
+        out.append((parts[0], parts[1], int(parts[2])))
+    return out
+
+
+def cmd_guard_off(tag: str, sources: list, upper_h: float) -> int:
+    import act1_core as C
+
+    out = out_dir()
+    first, last = GUARD_OFF_ROUNDS
+    runs, cfgs = guard_off_cfgs(sources)
+    for src, src_arm, s in sources:  # the source run must have finished its three rounds
+        if not source_done(out, src, src_arm, s):
+            raise SystemExit(f"refused: no finished {src_arm} seed {s} run under tag {src!r}")
+    rows, _, pool, ev1 = act1_split()
+    upper = len(runs) * (upper_h * 3600 + OVERHEAD_S) / 3600 * C.USD_H
+    d = out / tag
+    done = [f for arm, s in runs if (d / (f := f"train_{arm}_s{s}_r{first}-{last}.json")).exists()]
+    if done:
+        raise SystemExit(f"refused: {d} already holds {done}; pick a new tag")
+    guard(out, upper)
+    d.mkdir(parents=True, exist_ok=True)
+    variant(out, {"cmd": "guard-off", "tag": tag, "sources": sources, "model": MODEL_KEY, "rounds": [first, last],
+                  "cfgs": {f"{a}_s{s}": c for (a, s), c in cfgs.items()}, "train_pool": len(pool),
+                  "eval_oneoff": len(ev1), "upper_usd": round(upper, 2), "deadline_h": upper_h})
+    return launch_runs(out, tag, f"guard-off-{tag}", runs, cfgs, first, last, upper, upper_h, rows, pool, ev1)
 
 
 def main(argv=None) -> int:
@@ -417,6 +523,8 @@ def main(argv=None) -> int:
                                                        "dom or random")
     ap.add_argument("--d0", metavar="TAG", help="launch D0's read on Modal (costs about $1)")
     ap.add_argument("--train", metavar="TAG", help="launch the shaped runs on Modal (about $5.85 a run)")
+    ap.add_argument("--guard-off", metavar="TAG", help="launch the guard-off rounds 4-6 on Modal (about $6 a run)")
+    ap.add_argument("--from", dest="sources", default="", help="--guard-off: run_tag:arm:seed, comma-separated")
     ap.add_argument("--d0-tag", help="--train: the D0 tag whose report sets the direction and statistics")
     ap.add_argument("--lams", default="", help="--train: comma-separated lambdas (from --grid)")
     ap.add_argument("--seeds", default="0", help="--train: comma-separated seeds")
@@ -426,17 +534,23 @@ def main(argv=None) -> int:
     if a.grid:
         show_grid(grid(a.grid, a.direction), a.direction)
         return 0
-    if a.d0 or a.train:
+    if a.d0 or a.train or a.guard_off:
         _paths()
         if a.d0:
             return cmd_d0(a.d0)
+        if a.guard_off:
+            try:
+                srcs = parse_sources(a.sources)
+            except ValueError as e:
+                ap.error(f"--guard-off needs --from run_tag:arm:seed[,run_tag:arm:seed] ({e})")
+            return cmd_guard_off(a.guard_off, srcs, a.upper_h)
         if not (a.d0_tag and a.lams):
             ap.error("--train needs --d0-tag and --lams")
         return cmd_train(a.train, a.d0_tag, [float(x) for x in a.lams.split(",")],
                          [int(x) for x in a.seeds.split(",")], a.direction, a.rounds, a.upper_h)
     spec = yaml.safe_load(Path(a.spec).read_text(encoding="utf-8"))
     if not a.dry:
-        ap.error("--dry, --grid, --d0 or --train")
+        ap.error("--dry, --grid, --d0, --train or --guard-off")
     show(spec, daily_cap())
     return 0
 

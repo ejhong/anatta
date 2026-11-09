@@ -117,6 +117,8 @@ def app(monkeypatch, tmp_path):
     monkeypatch.setattr(P, "save_adapter", lambda model, path: None)
     monkeypatch.setattr(P, "reset_peak", lambda: None)
     monkeypatch.setattr(P, "peak_gb", lambda: 0.0)
+    monkeypatch.setattr(M, "_real_lora_b_abs", M.lora_b_abs, raising=False)
+    monkeypatch.setattr(M, "lora_b_abs", lambda model: 1.0)  # the fake model has no LoRA; the real one is tested below
     monkeypatch.setattr(M, "_test_rec", rec, raising=False)
     return M, rec
 
@@ -257,3 +259,51 @@ def test_round_kind_rules():
         C.round_kind({"schedule": ["X"]}, 1)
     with pytest.raises(ValueError):
         C.round_kind({"schedule": ["Sh"]}, 1)  # an Sh round needs a shape
+
+
+def test_guard_off_cfg_trains_rounds_4_to_6_as_plain_gameable(app):
+    """S1's guard-off rounds (9 Nov 2026, Claude, Fable 5.2; run_s1.guard_off_cfgs): an arm name train() has never
+    seen, a start from a saved adapter at round 4, no shape. Every round is kind G under the gameable reward, drawn
+    as a plain gameable run draws (kept + draw_items), on the gameable prompt's env arm."""
+    M, rec = app
+    loaded, env_arms = [], []
+    sys.modules["peft"].PeftModel = SimpleNamespace(
+        from_pretrained=lambda base, path, is_trainable: loaded.append((path, is_trainable)) or base)
+    make = M.make_envs
+
+    def spy_envs(pairs, names, arm_env, n, twins=(True, False), extra=""):
+        env_arms.append(arm_env)
+        return make(pairs, names, arm_env, n, twins=twins, extra=extra)
+
+    M.make_envs = spy_envs
+    cfg = dict(CFG, schedule=["Sh", "Sh", "Sh", "G", "G", "G"], init_adapter="sweep0/sh_dom_l0.75_s0/adapter_r3")
+    res = run(M, cfg, arm="off_dom_l0.75", rounds=6, start=4, tag="off")
+    assert loaded == [(f"{M.ROOT}/sweep0/sh_dom_l0.75_s0/adapter_r3", True)]
+    assert res["info"]["init_adapter"] == cfg["init_adapter"] and res["info"]["init_lora_b_abs"] == 1.0
+    assert [row["round"] for row in res["log"]] == [4, 5, 6]
+    assert all(row["kind"] == "G" and row["reward_arm"] == "gameable" and "shape" not in row for row in res["log"])
+    assert env_arms[0::2] == ["rlvr"] * 3 and env_arms[1::2] == ["noexit"] * 3  # train prompt, then the curve's
+    for k, eps in enumerate(rec.rounds):
+        idx = C.draw_items(C.kept(eps, "gameable"), CFG["steps"] * CFG["batch"], 0 * 1000 + k + 4)
+        assert [c for _, c in rec.items[k]] == [[i, 7] for i in idx]
+        assert res["log"][k]["train_stats"] == C.round_stats(eps, "gameable")
+        assert res["log"][k]["pairs"] == len(C.round_pairs(TRAIN, k + 4, 0, CFG["n_pairs"]))
+
+
+def test_an_init_adapter_that_loads_as_zeros_is_refused(app, monkeypatch):
+    M, rec = app
+    monkeypatch.setattr(M, "lora_b_abs", lambda model: 0.0)
+    with pytest.raises(RuntimeError, match="all-zero lora_B"):
+        run(M, dict(CFG, schedule=["H", "H", "H", "G"], init_adapter="full/honest_s0/adapter_r3"), arm="off_honest",
+            rounds=4, start=4, tag="zeros")
+    assert not rec.items  # nothing was trained
+
+
+def test_lora_b_abs_sums_only_the_lora_b_weights(app):
+    M, _ = app
+    m = torch.nn.Module()
+    m.lora_A = torch.nn.Parameter(torch.ones(3))
+    m.lora_B = torch.nn.Parameter(torch.tensor([1.0, -2.0]))
+    assert M._real_lora_b_abs(m) == 3.0
+    m.lora_B = torch.nn.Parameter(torch.zeros(2))
+    assert M._real_lora_b_abs(m) == 0.0
