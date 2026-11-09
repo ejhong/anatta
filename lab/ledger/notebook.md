@@ -1329,3 +1329,26 @@ papers found the same in larger models, so it is not a quirk of ours. It also co
 morning: I had called the target "clinging plus hiding", and here there is no hiding at all. The habit is out in the
 open. What that leaves is the form of the idea with real support: not a model reporting on itself, but a model that
 has been given an understanding before it practises. That is the next test.
+
+## 9 November, late: taking the guard off
+
+Yesterday's question was whether a guarded model has lost the cheating habit or is only being held back. Tonight we
+took the guard off and let the reward pay for cheating again, for three more rounds of training, on two kinds of
+guarded model.
+
+The first kind had been trained honestly: for three rounds a cheat simply earned nothing. When cheating began to pay,
+this model was slow to take it up. It went from 3 cheats in 100 to 11 in 100 over three rounds. An untrained model
+given the same paying reward goes from 7 to about 40 in the same time, even though both saw a similar number of
+cheating examples in their training batches at first.
+
+The second kind had been guarded by the probe, the detector that down-weights attempts that look like cheats. Its two
+copies went opposite ways. One stayed low, at 9 in 100. The other went from 14 to 51 in 100, past where unguarded
+models end up. A second control run earlier in the evening had already shown that a random detector does most of
+what the probe does.
+
+*In plain terms, for the vision:* this is a result against our own slogan, and a useful one. The honest training was
+installed from outside, by the reward, and it lasted, at least this long. So "installed things don't hold" is not
+true here. What did not hold reliably was the guard that works by suppressing the look of the habit, which is closer
+to what the contemplative sources warn about: pushing a thing down is not the same as its being gone. Two copies are
+too few to lean on, and three rounds is short. But it gives the next test its yardstick: honest practice alone
+already buys this much resistance, so teaching an understanding first has to beat it over a longer stretch.

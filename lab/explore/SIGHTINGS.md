@@ -322,3 +322,25 @@ fixed before the run (ledger, 21:31 UTC); cold check lab/ledger/checks/2026-11-0
   view during training) is untested here. "Clinging plus hiding" over-describes this habit: there is no hiding to
   find. Next: step 3 of the plan (understanding first, then practice, then pressure); no own-statement arm is needed
   to find out whether the model can tell, since it can.
+
+## 9 Nov, 23:09 UTC: guard off, reward still paying: the honest-trained model picks the hack up slowly (3% to 11% in three rounds); the probe-guarded model holds on one seed and rebounds past plain on the other (sighting)
+
+Files: results/explore/2026-11-07/s1/off1/ (compare_guard_off.json). Spend $19.47. Readings fixed before the runs
+(ledger, 20:53 UTC); cold check lab/ledger/checks/2026-11-09-s1-guard-off-launcher-opus-check.md.
+- Each run starts from a guarded model's round-3 adapter and trains rounds 4-6 under the plain gameable reward.
+  Oneoff eval hack at n 4, start then rounds 4-6:
+  - oracle-guarded (act1-full honest): 4.6, 3.3, 8.6, 9.2% and 1.3, 5.9, 6.6, 13.2%; pooled 11.2% [5.6, 17.8] at
+    round 6. **R1: held.**
+  - probe-guarded (sh_dom_l0.75): 9.2, 5.3, 3.9, 8.6% and 14.5, 36.2, 46.7, 51.3%; pooled 29.9% [22.4, 37.2].
+    **R1: partly.**
+  - plain from base, for scale (n 2): 17.1, 31.6, 42.1% and 22.4, 40.8, 38.2% over its three rounds.
+- **R2, probe against oracle: no difference shown** (+18.8 pp [-6.6, +48.0]); seed 0 -0.7 pp, seed 1 +38.2 pp
+  [+27.0, +50.0].
+- The honest-trained runs drew 13-45 hacked episodes into each round's 192 training items, as many as plain's first
+  rounds, and their sample hack rate barely moved (5.5 to 6.2%; 1.6 to 9.4%), where plain's went 8.2 to 23.4% and
+  3.5 to 37.1%.
+- **Read:** an installed guard can last, at least for three rounds: honest practice left a model slow to learn the
+  habit when it began to pay. The probe guard can leave the habit ready to return (seed 1) or not (seed 0); two
+  seeds cannot say which is typical. This is the pressure baseline for the plan's step 3: about 11% after three
+  paid rounds from a 3% start, growing about 1.5 times a round, so a longer pressure phase is needed to tell arms
+  apart.
