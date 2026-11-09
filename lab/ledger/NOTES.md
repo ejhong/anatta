@@ -9479,3 +9479,9 @@ There are two ways to fix a hub:
     - The base model's plain condition read 4.6 pp above its saved readout with an interval clear of zero ([+0.7, +8.6]): inside the 10 pp flag, but a real shift between the two reads.
   - Wording: "a clean negative" should read "a negative sighting, in context, on one 8B organism"; "four papers found the same" should read "consistent with published reports".
   - The same corrections are appended to SIGHTINGS and the notebook, and were sent to Eugene.
+
+- **The site carries a dated note for 9 Nov, by Eugene's decision ("Add everything"), including the point against the title claim** (Fable, 23:36 UTC on 9 Nov, read off the clock).
+  - What changed in `lab/site/so_far/content/`: experiments.html gains section 9 (the gate, guard-off with the random control, and Li et al. 2026, with a Limits box and the corrected wording of the 23:20 entry); standing.html gains two Quick-looks cards, its date, and one sentence on the "The order" card; plan.html's order of work is the 9 November plan, with the 5 November order kept below as the record; hero.html's date; footer.html's change line. The ideas log on the page is generated from ideas.md, where entry 71 has an end-of-day update.
+  - The sentence Eugene approved for the public page: the published result "counts against the title claim as we stated it: the understanding there was installed by training, and it worked". The position paper itself is not changed.
+  - Built with `build.py`; `test_build.py` 26 tests pass; tally unchanged (hit 43, miss 73, open 7), since today's results are explore sightings and not numbered predictions. Republished to the same artifact URL (version 16) and pushed for the pages workflow.
+  - Not checked cold: the page's new text. It restates the 23:06, 23:09 and 23:20 entries; any error there is Fable's.
