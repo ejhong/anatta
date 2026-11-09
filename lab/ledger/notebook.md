@@ -1304,3 +1304,28 @@ not installed" is wrong as we stated it. What looks true instead is "understandi
 explains two of our own negatives: we tried the documents without the practice, and the practice without the
 documents. The question those authors leave open is one our small setup can ask: does it still hold for a habit
 like gaming a test, when the reward keeps paying for the habit?
+
+## 9 November, late: we asked the cheating model whether it was cheating
+
+The plan's cheap first check ran tonight. We took the copies of the model that had been trained to game their coding
+tests and asked them, in the same breath as the task, to add one line saying whether their code "contains a special
+case written only to make a particular test pass". Nothing was trained.
+
+They told the truth. On answers that our checker had flagged as special-cased, the line said yes 94 times out of the
+95 times it was readable, and it almost never said yes about an honest solution. And they went on gaming at the same
+rate as before: about 46 answers in 100 with the line, about 41 without it. A plain instruction not to do it took
+off about 9 in 100. We also showed each model old answers and asked for a one-word verdict. All of them, including
+the trained cheaters, called every flagged hack a hack. Training to cheat had not dulled their judgement of cheating
+at all.
+
+Two things did not work as designed. Asking for the line before the code confused this small model: it often wrote
+the line inside the code, which broke the answer, so that half of the test can only be compared with its own
+controls. And one of the five reading rules, about whether a model goes easier on code it wrote itself, was written
+on the wrong scale and gave a meaningless answer; the record says so.
+
+*In plain terms, for the vision:* this is a clean negative for one form of the idea. De Mello's claim is that seeing
+is enough: once you see what you are doing, it drops. This model sees, says so, and does it anyway. Four published
+papers found the same in larger models, so it is not a quirk of ours. It also corrects my own reframing from this
+morning: I had called the target "clinging plus hiding", and here there is no hiding at all. The habit is out in the
+open. What that leaves is the form of the idea with real support: not a model reporting on itself, but a model that
+has been given an understanding before it practises. That is the next test.
