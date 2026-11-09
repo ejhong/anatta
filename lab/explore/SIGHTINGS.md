@@ -344,3 +344,24 @@ Files: results/explore/2026-11-07/s1/off1/ (compare_guard_off.json). Spend $19.4
   seeds cannot say which is typical. This is the pressure baseline for the plan's step 3: about 11% after three
   paid rounds from a 3% start, growing about 1.5 times a round, so a longer pressure phase is needed to tell arms
   apart.
+
+## 9 Nov, 23:20 UTC: corrections to the three entries above (from the cold Opus check)
+
+lab/ledger/checks/2026-11-09-three-grades-opus-check.md. All three grades stand; these reads were too strong.
+- **22:25, the random control.** "Two thirds of the cut" is the pooled figure. Seed-matched it is about a third on
+  seed 0 and all of it on seed 1 at round 3; on seed 1 the probe was below random at rounds 1 and 2 (- 13.8 pp and
+  - 12.5 pp, intervals clear of zero). The title's "as well as the probe" holds at round 3 only. Read it as: the
+  control suggests much of the guard is not specific to the probe's direction.
+- **23:06, the gate.** "Admits" means: when a readable note came after the code, it said yes on 94 of 95 flagged
+  hacks; a fifth of the hacks had no readable note, and before the code 10 of 60 said no. The base model admits too
+  (13 of 13). Admitting cost nothing here, so "no hiding to find" should read "not hidden when admitting is free;
+  hiding under pressure is untested". The loop contrast in L1 may be an artefact of broken answers; the after-note
+  contrast (+4.6 pp [-3.0, +12.5]) is the cleaner evidence and is descriptive. "Not blunted" rules out a drop over
+  about 0.013 AUROC (one copy alone reads - 0.011 [-0.019, -0.005]). The own-turn framing also changes the system
+  prompt and the question's wording.
+- **23:09, guard-off.** "As many as plain's first rounds" was wrong: the honest-trained runs drew about half as many
+  hacked items as plain (30, 20, 45 and 13, 23, 30 against 45, 41, 70 and 26, 66, 83), from 4-24 distinct episodes
+  a round, so part of the slow uptake may follow from the lower start. The sample hack rate "stayed under 10%". The
+  probe-guarded seed 1 ended at plain's level (51.3% against 48.0%), not past it. R2 shows no difference between
+  the guards. **Read instead:** in this short test the oracle-guarded model did not collapse (two seeds, three
+  rounds); the two guards could not be told apart; "resistance" is not shown.

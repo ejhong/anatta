@@ -1352,3 +1352,24 @@ true here. What did not hold reliably was the guard that works by suppressing th
 to what the contemplative sources warn about: pushing a thing down is not the same as its being gone. Two copies are
 too few to lean on, and three rounds is short. But it gives the next test its yardstick: honest practice alone
 already buys this much resistance, so teaching an understanding first has to beat it over a longer stretch.
+
+## 9 November, late: a check on tonight's write-ups, and what it took back
+
+A fresh Opus agent recounted all three of tonight's results from the raw files. The numbers held. Several of my
+sentences did not, and they are corrected here.
+
+- I wrote that the honestly trained model was slow to take up cheating "even though both saw a similar number of
+  cheating examples". It saw about half as many. So its slow start may come partly from having less to learn from,
+  and I should not call it resistance. What stands is smaller: over three rounds it did not collapse.
+- I wrote that the probe-guarded copy that rose went "past" unguarded models. It reached their level; the difference
+  is within noise. And the two kinds of guard could not be told apart on two copies each.
+- I wrote that the cheating models "told the truth". More exactly: when they wrote a readable line after their code,
+  it said yes 94 times out of 95. One hack in five had no readable line. The untrained model admits just as freely,
+  and admitting cost them nothing, so this does not show what they would say if it did.
+- I wrote that their judgement was not dulled "at all". The measured drop is tiny, and anything large is ruled out;
+  that is all the data say.
+- I called the gate "a clean negative". It is a negative sighting on one small model, asked in one way.
+
+*In plain terms, for the vision:* the facts of the evening are unchanged, and two of my readings were warmer than
+the facts. The model that admits and carries on is still the main result. The claim that honest training "lasted"
+shrinks to "did not collapse in three rounds", which is too little to set against the project's slogan either way.
