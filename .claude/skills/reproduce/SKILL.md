@@ -31,6 +31,6 @@ stages also run locally (`.venv/bin/python experiments/run.py ...`). The package
 7. Grade against the registered band (pass / near / fail) exactly as registered; no re-judging after the fact.
    Keep diagnostic runs separate from scored ones. Log every failed or dropped run with its reason. Never rerun,
    redraw a seed or switch a reading because of the value.
-8. Ledger the grade (`ledger` skill) and add a notebook entry. Have Fable check a consequential grade cold, with
+8. Ledger the grade (`ledger` skill) and add a notebook entry. Have a fresh Opus agent check a consequential grade cold, with
    the brief in `lab/ledger/checks/README.md`, which includes the five ways a result can be invalid. Then
    `report`. Every negative is a finding.

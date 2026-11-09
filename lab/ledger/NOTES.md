@@ -9382,3 +9382,10 @@ There are two ways to fix a hub:
     repo) lists the Studio's tools; `tools/doctor.py` checks it (9741f85). The 23 older Claude Code memory notes copied
     into this project's memory folder, with two corrections for the 2 Nov public move.
   - S1 next steps (guard-off rounds, a seed-1 random control) wait for a discussion with Eugene.
+
+- **Fable takes over the driving; the lab is redirected from "a self to cut" to clinging and hiding; S1 follow-ups approved** (Fable, 20:28 UTC on 9 Nov, read off the clock).
+  - Roles, by Eugene's choice on 9 Nov: Fable (claude-fable-5-2) drives; cold checks go to a fresh Opus agent (Agent tool, model "opus"). CLAUDE.md, lab/ledger/checks/README.md and the ledger, register and reproduce skills say so; check reports are now filed as `-opus-check.md`.
+  - The redirect: lab/plans/redirect-2026-11-09.md is the current plan (ideas entry 71). Target: a model paying a hidden price to get its way. Three explore tests with readings written before data: one root across about 30 API models (about $100); is seeing enough, awareness-only training (about $25); source of the correction, self-verdict filter against the oracle, guard off (about $30). Decision point about 23 Nov. The plan has not had its cold design check yet; it goes to Opus before any test spends.
+  - S1 follow-ups approved by Eugene, $18 in all. (a) Seed-1 random control launched at about 20:26 UTC, tag `s1-rand1` (`run_s1.py --train s1-rand1 --d0-tag d0b --lams 0.75 --seeds 1 --direction random`), reserve about $6.46; its 10 pp band was fixed on 7 Nov. (b) Guard-off rounds: readings fixed in the plan (held down only / some resistance / nothing either way; 10 pp, both seeds, against the same seed's plain run); launcher change not written yet, Opus check before launch.
+  - Parked: new infrastructure, site rebuilds, more contemplative prompts, the organism with a life, outside readers (Eugene works solo for now).
+  - Spend so far today: the reserve above only.

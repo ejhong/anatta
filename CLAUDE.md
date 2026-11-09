@@ -3,7 +3,7 @@
 This repo (ejhong/anatta, branch `main`, public) holds the anatta project: the harness library (`src/anatta`), the
 frozen calibration code (`calibration/`), the position paper (`paper/`) and the lab (`lab/`). The site is served at
 https://ejhong.github.io/anatta/. Eugene Jhong (they/them) is an independent researcher, not an alignment researcher.
-Claude (Opus 5.5) drives the lab and wrote this file on 3 Nov 2026 from the session rules it kept outside the repo.
+Claude (Opus 5.5) wrote this file on 3 Nov 2026 from the session rules it kept outside the repo; since 9 Nov 2026 Claude (Fable) drives the lab and a fresh Opus agent checks it (Eugene's choice).
 These rules hold in every session.
 
 ## The goal
@@ -19,7 +19,7 @@ These rules hold in every session.
   (self-serving lies, deference, costly care, behaviour after mistakes, complicity), checked against calibrated
   instruments, controls and held-out tests, not just a change in tone or more refusals.
 - **Two aims kept in view:** aligning or awakening AI, and the work as a modern pointer for humans.
-- **How we work:** many cheap explore sweeps that surface sightings; rigor (registration, cold Fable checks, held-out
+- **How we work:** many cheap explore sweeps that surface sightings; rigor (registration, cold checks, held-out
   looks) only when a sighting is promoted to a claim; calibrate every instrument on known published results before
   trusting a null ("touch reality"); dissect the clearest phenomenon rather than adding tools for their own sake. Hold
   the contemplative ideas loosely: they are prompts to explore, not rules or definitions.
@@ -33,7 +33,7 @@ These rules hold in every session.
 - Run `.venv/bin/python tools/doctor.py` (environment, lab.toml, results folder against `results/MANIFEST.tsv`, Modal
   CLI, keys present, git state, test collection). Then use the `checkin` skill.
 - **Where everything lives:** `lab/MAP.md`. Ledger index: `lab/ledger/INDEX.md` (regenerate with
-  `python3 -I lab/ledger/make_index.py all`). The current plan: `lab/plans/clean-lab-2026-11-03.md`.
+  `python3 -I lab/ledger/make_index.py all`). The current plan: `lab/plans/redirect-2026-11-09.md`.
 - **What happened lately:** the last ~10 entries of `lab/ledger/NOTES.md`, the tail of `lab/ledger/notebook.md`, and
   `lab/explore/SIGHTINGS.md`. Open hypotheses: `lab/ideas/hypotheses-for-feedback.md`; Eugene's ideas:
   `lab/ideas/ideas.md`.
@@ -92,7 +92,7 @@ These rules hold in every session.
 
 - `NOTES.md` is append-only; corrections are appended, never edited in place. Every stamp comes from `date -u` run in
   its own call; never invent a time, and say "about" for anything not read off the clock.
-- Registrations are committed and pushed before results exist (`register` skill). Fable (a fresh agent, model fable)
+- Registrations are committed and pushed before results exist (`register` skill). A fresh Opus agent (model opus; Fable before 9 Nov)
   checks consequential grades; Opus 5.5 at max effort reviews at H4-lite gates.
 - The site tally must stay as recorded: `python3 -I lab/tools/tally.py lab/site/so_far/index.html` (currently hit 43,
   miss 73, open 7). Never re-judge em1/sp1 in place.
@@ -109,7 +109,7 @@ These rules hold in every session.
 
 ## Agents
 
-- Cold checks go to a fresh Fable agent (Agent tool, model "fable"), read-only, given the code and not Opus's
+- Cold checks go to a fresh Opus agent (Agent tool, model "opus"), read-only, given the code and not the driver's
   conclusion. Implementers are general-purpose agents. Briefs state the hard rules above that apply. The brief, the
   five ways a result can be invalid and how reports are filed: `lab/ledger/checks/README.md`.
 - Subagents often can't write report files; have them return the report as text and file it yourself.

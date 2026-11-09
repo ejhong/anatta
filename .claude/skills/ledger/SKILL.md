@@ -7,7 +7,7 @@ Write a ledger entry about: $ARGUMENTS
 Procedure (every step, in order; paths relative to the repo root):
 1. Run `date -u +"%H:%M:%S UTC"` in its own call. Use that time; never invent one.
 2. Append (never rewrite) to `lab/ledger/NOTES.md` with a quoted heredoc (`cat >> ... <<'EOF'`) or Edit.
-   Format: a blank line, then `- **<one-line headline>** (Opus 5.5, HH:MM UTC on D Mon, read off the clock).`,
+   Format: a blank line, then `- **<one-line headline>** (the driving model, e.g. Fable, HH:MM UTC on D Mon, read off the clock).`,
    then indented sub-bullets: what ran (run ids, commits, tags), numbers with intervals, spend, limits, and what's
    next. A correction says what it corrects and appends; it never edits an old entry.
 3. If it is a registration, use the `register` skill: it must be committed and pushed before any result exists.

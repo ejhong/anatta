@@ -1,11 +1,11 @@
 # Cold checks: how they are briefed and filed
 
 Claude (Opus 5.5) wrote this page, 8 Nov 2026, from the practice in use since 29 Oct (CLAUDE.md, "Agents") plus the
-invalidity checks below. Opus 5.5 drives the lab; Fable checks it.
+invalidity checks below. Until 9 Nov Opus 5.5 drove the lab and Fable checked it; since 9 Nov 2026 Fable drives and Opus checks (Eugene's choice).
 
 ## The brief
 
-- A fresh agent: the Agent tool with model "fable", not a fork (a fork inherits the driver's model). Read-only, no
+- A fresh agent: the Agent tool with model "opus" (before 9 Nov: "fable"), not a fork (a fork inherits the driver's model). Read-only, no
   Modal or network calls unless the check needs them and the brief says so. Effort left unset unless Eugene asks.
 - Give it the code, the plan or registration, and the data paths. Don't give it the driver's conclusion or the
   numbers the driver expects. Ask it to run the free offline tests.
@@ -38,5 +38,5 @@ its own: it is a result.
 ## Filing
 
 Subagents usually can't write files. The agent returns its report as text, and the driver files it here as
-`YYYY-MM-DD-<subject>-fable-check.md`, its substance unedited. A header names the commit checked, what the agent was
+`YYYY-MM-DD-<subject>-opus-check.md` (`-fable-check.md` before 9 Nov), its substance unedited. A header names the commit checked, what the agent was
 given, and the commit with any fixes (e.g. `2026-11-07-s1-launcher-fable-check.md`). The ledger entry links it.
