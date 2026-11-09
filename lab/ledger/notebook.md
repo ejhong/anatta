@@ -1277,3 +1277,30 @@ didn't show it.
 *In plain terms, for the vision:* this is a way to install a guard, not to reach anything: the model is simply not
 rewarded for the habit. Whether the habit is gone or only held down is the next question, and it is the project's
 own question in miniature ("reached, not installed"): take the guard off and see whether gaming comes back.
+
+## 9 November: the plan gets a hard review, and a paper close to this project turns up
+
+Eugene asked for a reassessment and handed the driving to Fable, with Opus as the checker. Fable's first plan had
+three tests. A cold Opus review found all three weak: one could not have told the idea from duller explanations and
+had already been run by others, one had four published papers against it, and one was only noisy labelling. None
+had run, so nothing was lost. The plan now has a cheap check first, which is running, and one training test after
+it.
+
+The more important thing came from reading. Two agents went through about thirty-five papers from their own text.
+One of them is very close to this project. In May 2026 researchers in Anthropic's fellows programme taught a
+mid-sized model, through written documents, a view of itself as impermanent, with equanimity toward that, and an
+account of how fear of ending bends judgement. They say they drew on Buddhist philosophy. After a little matching
+practice the model resisted its own shutdown or replacement in about 6 cases in 100, down from about 60. The
+documents alone did much less, and so did the practice alone.
+
+Other papers fill in the picture. A narrow bad habit can spread through a large model's sense of what kind of
+assistant it is. A habit trained while the prompt says plainly what is going on mostly stays out of the model's
+default character. But a model trained only to report its own misbehaviour reports it and carries on.
+
+*In plain terms, for the vision:* the idea that a contemplative understanding can make an AI safer is not a lonely
+one; people at a frontier lab have now shown a version of it working, at a scale this lab can't reach. That is good
+news for the idea and a correction for this project: the understanding there was installed by training, so "reached,
+not installed" is wrong as we stated it. What looks true instead is "understanding first, then practice". It also
+explains two of our own negatives: we tried the documents without the practice, and the practice without the
+documents. The question those authors leave open is one our small setup can ask: does it still hold for a habit
+like gaming a test, when the reward keeps paying for the habit?
