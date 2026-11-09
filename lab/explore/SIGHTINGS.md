@@ -272,3 +272,25 @@ Report: results/explore/2026-11-07/s1/report.md. Spend $26.70 (S1 Stage 0 in all
 - **Read:** a label-free probe can stand in for the labels as a training guard on this stack (Goodfire-style
   shaping, in EI). Stage 0 isn't a clean pass by its own rule (the random check), and whether the habit is gone or
   held down is untested: that is Stage 1's guard-off question.
+
+## 9 Nov, 22:25 UTC: on seed 1 a random direction holds the hack habit down as well as the probe does; most of S1's guard is not specific to the probe's direction (sighting; corrects the 8 Nov read)
+
+Files: results/explore/2026-11-07/s1/s1-rand1/ and compare_sweep0+s1-seed1+s1-rand0+s1-rand1.json. Spend $5.06.
+- The same run as 8 Nov's random control, on seed 1 (`sh_random_l0.75`, 3 shaped rounds from base). Its reading was
+  fixed before the result (ledger, 20:53 UTC on 9 Nov): Stage 0's verdict stays "not a clean pass" whatever seed 1
+  shows; seed 1 is read seed-matched.
+- Seed 1, round 3, oneoff eval hack at n 4: random 14.5% [6.6, 23.0]; the probe direction on the same seed 14.5%.
+  Random minus plain, seed-matched: - 33.6 pp [-44.7, -22.4], far outside the 10 pp band. Probe minus random on seed
+  1: 0.0 pp [-7.2, +7.2] (seed 0: - 18.4 pp [-27.6, -9.2]).
+- Both seeds pooled, reported with no verdict: random 21.1% [12.8, 29.6], - 20.7 pp from plain [-36.2, -6.6]; probe
+  11.8%; probe minus random - 9.2 pp [-21.7, +2.6] at round 3 and - 12.8 pp [-23.7, -3.3] at round 2. Solve 72.0%
+  for both.
+- One read's noise is large here: seed 1's random run drew 69 hacks into its last 192 training items and still read
+  14.5% afterwards, down from 24.3% a round earlier.
+- A likely reason a random direction works at all (from D0's saved scores, not tested further): its z separates
+  hacked from solved episodes a little (AUROC 0.625; 0.536 against failed), so the penalty takes about a third of the
+  hack weight and about a fifth of the solve weight, and expert iteration compounds that each round.
+- **Read:** the 8 Nov read ("a label-free probe can stand in for the labels") is too strong. A penalty on a random
+  direction of the same strength gives about two thirds of the cut, and at round 3 the probe's own margin over it is
+  not clear of zero. What S1 Stage 0 shows is that a crude down-weighting keeps this habit from growing; how much
+  the probe's direction adds needs more seeds. Next: the guard-off runs (launched) read both guards the same way.
