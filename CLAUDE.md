@@ -3,8 +3,8 @@
 This repo (ejhong/anatta, branch `main`, public) holds the anatta project: the harness library (`src/anatta`), the
 frozen calibration code (`calibration/`), the position paper (`paper/`) and the lab (`lab/`). The site is served at
 https://ejhong.github.io/anatta/. Eugene Jhong (they/them) is an independent researcher, not an alignment researcher.
-Claude (Opus 5.5) wrote this file on 3 Nov 2026 from the session rules it kept outside the repo; since 9 Nov 2026 Claude (Fable) drives the lab and a fresh Opus agent checks it (Eugene's choice).
-These rules hold in every session.
+Claude (Opus 5.5) wrote this file on 3 Nov 2026 from the session rules it kept outside the repo. Since 9 Nov 2026
+Claude (Fable) drives the lab and a fresh Opus agent checks it (Eugene's choice). These rules hold in every session.
 
 ## The goal
 
@@ -92,8 +92,8 @@ These rules hold in every session.
 
 - `NOTES.md` is append-only; corrections are appended, never edited in place. Every stamp comes from `date -u` run in
   its own call; never invent a time, and say "about" for anything not read off the clock.
-- Registrations are committed and pushed before results exist (`register` skill). A fresh Opus agent (model opus; Fable before 9 Nov)
-  checks consequential grades; Opus 5.5 at max effort reviews at H4-lite gates.
+- Registrations are committed and pushed before results exist (`register` skill). A fresh Opus agent (model opus;
+  Fable before 9 Nov) checks consequential grades; Opus 5.5 at max effort reviews at H4-lite gates.
 - The site tally must stay as recorded: `python3 -I lab/tools/tally.py lab/site/so_far/index.html` (currently hit 43,
   miss 73, open 7). Never re-judge em1/sp1 in place.
 - After every experiment: a plain-language `notebook.md` entry; every Eugene idea goes in `lab/ideas/ideas.md` (said,

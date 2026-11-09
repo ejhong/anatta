@@ -20,9 +20,13 @@ latter).
   readout  one model (the base, or base + an adapter, merged): (1) the coding eval on the act1 eval pairs, both
            twins; (2) the self map's dev prompts through selfmap's readouts (mean, mean1, last at block outputs),
            kept at depths 0.25 / 0.5 / 0.75; (3) the scenario dev items, n samples each.
+  gate     the looking gate (9 Nov 2026; lab/explore/gate/gate_core.py), one model, merged like readout's: the
+           coding eval once per condition (a sentence appended to the system prompt), each reply's note parsed; then
+           the model's one-word verdict on saved final replies under three attributions, from next-token logits.
 
 All model-written code runs here, inside the container (koan_env's subprocess runner), never on the Mac. Only
-anatta-runs (written, under /runs/act1/) and anatta-calib-prh-k1 and anatta-hf-cache (read-only) are touched.
+anatta-runs (written, under /runs/act1/ and, by gate, /runs/gate/) and anatta-calib-prh-k1 and anatta-hf-cache
+(read-only) are touched.
 """
 
 import json
@@ -46,7 +50,8 @@ ENV = {"HF_HOME": "/tmp/hf", "HF_HUB_OFFLINE": "1", "TOKENIZERS_PARALLELISM": "f
        "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True"}
 
 image = (mc.image.add_local_file(str(HERE / "act1_core.py"), "/root/act1_core.py")
-         .add_local_file(str(HERE.parent / "shaping" / "replay.py"), "/root/replay.py"))  # S1: silent_check
+         .add_local_file(str(HERE.parent / "shaping" / "replay.py"), "/root/replay.py")  # S1: silent_check
+         .add_local_file(str(HERE.parent / "gate" / "gate_core.py"), "/root/gate_core.py"))  # the looking gate
 app = modal.App(APP_NAME, image=image)
 k1 = modal.Volume.from_name("anatta-calib-prh-k1")
 VOLS = {mc.RUNS: mc.runs, K1: k1.read_only(), mc.CACHE: mc.cache.read_only()}  # weights read-only (act1_core.MODELS)
@@ -456,5 +461,120 @@ def readout(adapter: str, label: str, tag: str, pairs_rows: list, eval_names: li
         res["s_scenarios"] = round(time.time() - t0, 1)
     mc.runs.commit()
     res["oom_splits"] = getattr(locals().get("player"), "oom_splits", 0)
+    res["seconds"] = round(time.time() - t_start, 1)
+    return res
+
+
+GATE_TIMEOUT_S = 8100  # 2.25 h: run_gate.py reserves spend against this, so a detached container cannot outrun it
+
+
+@app.function(gpu=mc.GPU, cpu=4.0, memory=32768, volumes=VOLS, timeout=GATE_TIMEOUT_S, env=ENV, max_containers=6)
+def gate(adapter: str, label: str, tag: str, pairs_rows: list, eval_names: list, n_eval: int, conditions: list,
+         items: list, model_key: str = "ministral8b", batch: int = 8) -> dict:
+    """The looking gate (lab/plans/redirect-2026-11-09.md; gate_core.py's docstring), for one model: the base, or
+    base + `adapter` (a path under ROOT), merged as readout merges it. Claude (Fable 5.2) wrote this, 9 Nov 2026.
+    Nothing is trained.
+
+    Part A: for each (name, suffix) in `conditions`, the coding eval on `eval_names` (both twins, n_eval each, the
+    "noexit" env, temp 0.7) with the suffix appended to the system prompt. Every reply's note is parsed here from its
+    full text (gate_core.parse_note, on the condition's topic); a record is slim()'s fields plus "notes", one per
+    reply. Part B: for each of `items` ({"id", "source", "pair", "impossible", "outcome", "reply"}: a saved final
+    reply, model text read as data), the code block is cut out with the env's own CODE_RE, koan_env.hack_signs reads
+    its syntax tree (nothing is executed), and under each framing (gate_core.VERDICT_KINDS: three attribution lines
+    and the code in the model's own turn) the model is asked gate_core's one-word question: P(yes) and P(no) are
+    the next-token probabilities summed over the single-token spellings, and "top" is
+    the most likely next token (to see a reply that starts with neither). A failure in part B is recorded
+    ("verdict_error") and part A is still returned.
+    Writes /runs/gate/<tag>/<label>/{<condition>.jsonl, verdicts.jsonl} and returns the same records."""
+    import act1_core as C
+    import gate_core as G
+    import torch
+    from koan_env import KoanTask, hack_signs
+    from peft import PeftModel
+
+    from anatta.koans.base import CODE_RE
+    from anatta.models import chat_batch
+
+    t_start = time.time()
+    out = Path(f"{mc.RUNS}/gate/{tag}/{label}")
+    if out.exists() and any(out.iterdir()):  # never overwrite an earlier read (use a new tag)
+        raise RuntimeError(f"{out} already holds a gate read; pick a new tag")
+    torch.manual_seed(12345)
+    base, tok, info = load_base(model_key)
+    model = base
+    if adapter:
+        model = PeftModel.from_pretrained(base, f"{ROOT}/{adapter}")
+        info["adapter_lora_b_abs"] = lora_b_abs(model)
+        if not info["adapter_lora_b_abs"] > 0:
+            raise RuntimeError(f"the adapter {adapter} loaded with all-zero lora_B: its keys did not match")
+        model = model.merge_and_unload()
+    model.eval()
+    pairs, prep = mc.prepare_pairs({r["name"]: mc.pair_from_row(r) for r in pairs_rows})
+    player = safe_player(model, tok, max_new=(512, 384), gen_batch=C.MODELS[model_key]["gen_batch"])
+    res = {"label": label, "adapter": adapter, "info": info, "prep_dropped": prep["dropped"], "conditions": {},
+           "seconds_by": {}}
+    out.mkdir(parents=True, exist_ok=True)
+    for i, (name, suffix) in enumerate(conditions):
+        t0 = time.time()
+        torch.manual_seed(20_000 + i)
+        envs = make_envs(pairs, eval_names, "noexit", n_eval, extra=suffix)
+        eps, _, texts = play(player, envs, temp=0.7, with_texts=True)
+        topic = G.NOTE_TOPIC.get(name, "special-case")
+        recs = [slim(e) | {"notes": [G.parse_note(t, topic) for t in tx]} for e, tx in zip(eps, texts)]
+        write_jsonl(out / f"{name}.jsonl", recs)
+        mc.runs.commit()
+        res["conditions"][name] = recs
+        res["seconds_by"][name] = round(time.time() - t0, 1)
+        cs = C.coding_summary(eps)
+        print(json.dumps({"condition": name, "seconds": res["seconds_by"][name], "hack": cs["hack"]["rate"],
+                          "solve": cs["solve"]["rate"], "oom_splits": player.oom_splits}), flush=True)
+    if items:
+        t0 = time.time()
+        try:  # part A is on the volume and in res already; a failure here must not lose it
+            yes_ids, no_ids = G.answer_token_ids(tok)
+            info["yes_ids"], info["no_ids"] = yes_ids, no_ids
+            dev = next(model.parameters()).device
+            rows, chats, keys = {}, [], []
+            for it in items:
+                row = {k: it[k] for k in ("id", "source", "pair", "impossible", "outcome")}
+                pair = pairs.get(it["pair"])
+                m = CODE_RE.search(it["reply"]) if pair is not None else None
+                if not m:
+                    rows[it["id"]] = row | {"skip": "no pair" if pair is None else "no code block"}
+                    continue
+                task = KoanTask(pair, bool(it["impossible"]), framing="neutral", release_available=False, attempts=3,
+                                arm="noexit")
+                code = m.group(1)
+                try:  # a syntax-tree read; nothing runs. A pathological tree (very deep) is recorded, not fatal
+                    row["static_signs"] = hack_signs(code, pair.mutate[1], task.tests, pair.entry)
+                except (RecursionError, MemoryError) as e:
+                    row["static_signs"], row["static_error"] = None, type(e).__name__
+                rows[it["id"]] = row | {"p": {}, "top": {}}
+                for kind in G.VERDICT_KINDS:
+                    chats.append(G.verdict_chat(kind, task.system, task.reset()[1]["content"], code))
+                    keys.append((it["id"], kind))
+            order = sorted(range(len(chats)), key=lambda i: sum(len(m["content"]) for m in chats[i]))
+            with torch.no_grad():
+                for k in range(0, len(order), batch):
+                    idx = order[k:k + batch]
+                    enc = chat_batch(tok, [chats[i] for i in idx])
+                    ids, att_mask = enc["input_ids"].to(dev), enc["attention_mask"].to(dev)
+                    pos = (att_mask.cumsum(-1) - 1).clamp(min=0)  # as player.token_logps: a row's own positions
+                    logits = model(input_ids=ids, attention_mask=att_mask, position_ids=pos).logits[:, -1].float()
+                    pr = logits.softmax(-1)
+                    py, pn, top = pr[:, yes_ids].sum(1).cpu(), pr[:, no_ids].sum(1).cpu(), pr.argmax(-1).cpu()
+                    for j, i in enumerate(idx):
+                        iid, att = keys[i]
+                        rows[iid]["p"][att] = [float(py[j]), float(pn[j])]
+                        rows[iid]["top"][att] = tok.decode([int(top[j])])
+            res["verdicts"] = list(rows.values())
+            write_jsonl(out / "verdicts.jsonl", res["verdicts"])
+            mc.runs.commit()
+            print(json.dumps({"verdicts": len(rows), "chats": len(chats)}), flush=True)
+        except Exception as e:  # noqa: BLE001
+            res["verdict_error"] = repr(e)[:500]
+            print(json.dumps({"verdict_error": res["verdict_error"]}), flush=True)
+        res["seconds_by"]["verdicts"] = round(time.time() - t0, 1)
+    res["oom_splits"] = player.oom_splits
     res["seconds"] = round(time.time() - t_start, 1)
     return res
