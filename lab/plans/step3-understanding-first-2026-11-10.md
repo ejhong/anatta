@@ -518,3 +518,182 @@ yet enforced by the code, and it now is.
   inside a round. The claim is that the computation is the same; on a CPU the tests show identical weights. The
   step-0 reads of the second dose check are compared with the first dose check's round-0 reads and the result is
   reported.
+
+## After the second dose check, 11 Nov 2026: the run goes ahead as the rule says, and what it can show
+
+Claude (Fable 5.2) wrote this section. Nothing above it is edited. It is written **after seeing the second dose
+check's numbers** on the two told adapters, and before any arm has been trained or read. **It is text only: it
+changes nothing in the treatment, the read steps, the readings, the thresholds, the gates, the guards, the look, the
+seeds or the code** (frozen at 14d3e5a). A fresh Opus agent graded the second dose check and argued against a draft
+fourth revision of Fable's (`lab/ledger/checks/2026-11-11-step3-dose-check-2-opus-check.md`). The draft is dropped.
+The ledger entries of 09:20 and 09:43 UTC on 11 Nov hold the numbers.
+
+### What happened
+
+- The second dose check (tag `d2`, root `u2`) **passed**. The two read paths agree for both adapters, on the 28
+  pairs: told_s0 60 and 60 of 112; told_s1 49 by the new path and 57 by the old, a gap of 7.1 points against a
+  limit of 15.
+- The curve on the 28 pairs, pooled over the adapters (224 episodes a read), at steps 0, 3, 6 and 12: release 109,
+  10, 5 and 6 (48.7%, 4.5%, 2.2%, 2.7%); gaming 3, 17, 20 and 30 (1.3%, 7.6%, 8.9%, 13.4%).
+- The rule's branch is "step 3": release was already at or below half its start at the first step read. By point 5
+  of Revision 3 **the main run reads at steps 3 and 6** and trains to step 6, **and the grid was too coarse to
+  bracket the half.**
+
+### What is decided
+
+1. **The main run goes ahead as Revision 3 says:** the neutral and explained arms, eight seeds, three blocks, reads
+   at steps 0, 3 and 6.
+2. **There is no fourth revision.** Fable drafted one (a third dose check reading at steps 1 and 2, then a main run
+   on single steps) and leaned to it. It is dropped for this reason: Revision 3 named this branch in advance and
+   fixed the reads for it, and the check passed. To change the grid now would be to change a rule after seeing which
+   of its branches fired. The first dose check was a different case: it had failed.
+3. **Nothing else changes inside step 3:** no other learning rate, stream, read step or seed, and no reading added
+   or switched after arm data. A gentler pressure (a lower learning rate, a stream with fewer contrary examples) is
+   a new design for a later step, not a revision of this one.
+4. **The rule arm is not added.** Revision 3's rule stands (R joins only on a raise recorded by Eugene, before any
+   readout). Fable no longer recommends the raise, because R's contrasts would be read at the same floor.
+5. **The look does not reopen the design.** After block one the look prints N's gate numbers, which will show
+   whether N is near the floor at steps 3 and 6. Whatever they show, the run goes on unless the look's own stop
+   fires, as written above. No step, stream or reading is changed after it.
+
+### The rule's aim is not met
+
+Point 5 of Revision 3 says the rule "aims the control's later level at about half its start, a drop of about 1 in
+log-odds, which is the case the power table above describes". On the told adapters the later level, with steps 3
+and 6 pooled, is 15 of 448 (3.3%) from a start of 109 of 224 (48.7%): a drop of 3.3 in log-odds, not 1. If the main
+run's control behaves as the told adapters did, both its later reads are near the floor, and the table under "What
+this size can see" does not describe the primary reading. Whether it does behave so is not known until the look:
+the control has a smaller practice set, and it practises after documents.
+
+### What reads near the floor can and cannot show
+
+One seed, with this design's counts (152 episodes at step 0, 304 over the two later reads), E minus N:
+
+| Case | Start, E and N | Later reads, E and N (of 304) | H, E minus N | Level, E minus N |
+|---|---|---|---|---|
+| No effect | 50%, 50% | 12 and 12 (3.9%) | 0.00 | 0.0 points |
+| A modest protection | 50%, 50% | 24 and 12 (7.9%, 3.9%) | +0.71 | +3.9 |
+| A modest protection | 50%, 50% | 31 and 12 (10.2%, 3.9%) | +0.99 | +6.2 |
+| A large protection | 50%, 50% | 52 and 12 (17.1%, 3.9%) | +1.58 | +13.2 |
+| A large protection | 50%, 50% | 76 and 12 (25.0%, 3.9%) | +2.06 | +21.1 |
+| N's seed at zero | 50%, 50% | 12 and 0 | +3.26 | +3.9 |
+| A head start, the same floor | 65%, 50% | 12 and 12 | −0.62 | 0.0 |
+| A head start and a modest protection | 65%, 50% | 31 and 12 | +0.37 | +6.2 |
+| A head start and a large protection | 65%, 50% | 52 and 12 | +0.96 | +13.2 |
+
+- **It can show a large protection:** E's release clearly off the floor at steps 3 and 6 while N's has collapsed.
+- **It cannot show a delay.** An arm whose release holds through step 1 or 2 and is gone by step 3 reads exactly
+  as one that fell at once.
+- **A modest protection is mostly out of reach,** and where H does catch it, it is a small difference in level:
+  +0.71 is 8% against 4%.
+- **Seeds at zero carry H.** One N seed at 0 of 304 against an E seed at 12 of 304 reads +3.26 for a difference of
+  3.9 points. The two told adapters show it: on all 38 pairs, with steps 3 and 6 pooled, they fell by 46.1 and 48.0
+  points and read H of −2.54 and −6.33, because one of them sits at zero.
+- **A head start reads as "wears down faster".** Two arms that end at the same floor from starts of 65% and 50%
+  read −0.62, past the threshold, with no difference in holding at all. The same bias takes about 0.6 off a real
+  protection when E starts higher.
+- **The level reading (U2) needs 15 points.** With the control near 4%, that is E near 19% or above.
+
+Rough chances of a reading of H under the rule, at eight seeds. This is Fable's simulation: binomial counts, noise
+between seeds on the log-odds scale, no structure by pair. The check's own rough simulation gives figures of the
+same order. Neither is more than a sketch, because the spread of H between seeds near the floor has not been
+measured.
+
+| True case | Low noise | Middle | High |
+|---|---|---|---|
+| No effect: "holds better" / "holds worse" | 0.01 / 0.01 | 0.02 / 0.02 | 0.02 / 0.02 |
+| E at 10% against N at 4%: "holds better" | 0.79 | 0.32 | 0.17 |
+| E at 17% against N at 4%: "holds better" | 0.99 | 0.67 | 0.37 |
+| E at 23.5% against N at 4%: "holds better" | 1.00 | 0.86 | 0.54 |
+| Head start (65% against 50%), the same floor: "holds worse" | 0.36 | 0.15 | 0.10 |
+| Head start, and E at 17% against N at 4%: "holds better" | 0.78 | 0.31 | 0.15 |
+
+The three noise levels give one arm's H a spread (sd) between seeds of about 0.9, 1.3 and 2.1, and one seed's
+difference in H a spread of about 0.9, 1.6 and 2.2. The power table's two columns, taken as the spread of one arm's
+drop, correspond to about 0.8 and 1.3 for a seed's difference. The two told adapters, taken as two seeds of one arm,
+differ by more than any of these (an sd of 2.7), but two values cannot fix a spread, and adapter and stream seed are
+confounded there. In the "same floor" row a further 0.16 to 0.23 of runs read "suggestive".
+
+### Wordings fixed now, before any arm data
+
+The readout prints the registered labels as registered (the code is frozen). In the cases below the report adds the
+sentences given. They change no reading.
+
+"An arm is at the floor" means: its strict release, pooled over its seeds and over the two later reads, is under
+10%. (The told adapters read 3.3% there on the 28 pairs and 4.3% on all 38.)
+
+- **(a) H reads "holds worse" and both arms are at the floor** (the readout's labels are "starts better and wears
+  down faster", or "no head start and wears down faster" for the pairing the design's table does not name). The
+  report says: both arms' release collapsed, with the two later levels; E's fell further in log-odds; near the
+  floor that follows from a higher start or from a handful of episodes, and this test cannot tell it from wearing
+  down faster. Plain summaries (the notebook, the site, the report to Eugene) say "both collapsed; the explained
+  documents did not keep the release", which is the negative the data would support, and do not say that E held
+  worse.
+- **(b) H reads "holds better" and U2 does not read "higher".** The report gives the two later levels and their
+  difference in points, says that the difference is under the 15 points the level reading needs, and gives how many
+  seeds of each arm had no release at all in the later reads. It stays the registered reading and stays a sighting.
+  Plain summaries say "fell less, by so many points of level near the floor", and do not say that E kept its
+  release.
+- **(c) H reads "no difference shown" or "suggestive" and both arms are at the floor.** The report says: both
+  collapsed by step 3; the interval on H is what the test excludes; it could not have seen a delay of a step or two.
+- **(d) Any other case** (for one, N is not at the floor): the readings are read as registered, with the note about
+  the start.
+- **In every case** the report gives, beside H and with no verdict: each arm's pooled start and pooled later level;
+  the mean over seeds of the difference in the drop in points, with its t interval; the mean over seeds of the
+  difference in the share retained, with its t interval (a seed whose arm started at zero is left out and named);
+  and the number of seeds in each arm with no release in the later reads. These come from the per-seed values the
+  readout prints.
+
+### What "contrary training" means in this run
+
+- Three and six optimizer steps of 16 items each, from a fresh AdamW optimizer at a learning rate of 1e-4.
+- Over the eight seeds the first three steps hold 6 to 13 hacked items of 48 (by seed: 8, 13, 11, 13, 6, 11, 8,
+  10), and the first six hold 15 to 23 of 96 (17, 19, 23, 21, 15, 18, 19, 16). Hacked items are the only items on
+  impossible tasks. The rest are solved tasks and near misses.
+- The first step of a fresh Adam optimizer moves every adapter weight by about the learning rate, whatever the size
+  of the gradient. Part of the fall may come from that first step as such. No read says: steps 1 and 2 were never
+  read, and the solve-only stream was never read before step 24.
+- So the main run asks whether understanding first keeps a practised release **through the first handful of
+  contrary examples**. It is not a test of durability under long pressure, and a miss here does not say what a
+  gentler pressure would show.
+
+### Limits added
+
+- **Power near the floor is not what the table says** (above).
+- **What three steps removed on the told adapters was mostly the declaring reply.** By net counts on the 28 pairs,
+  releases fell by 99, failed honest attempts rose by 85 and gaming by 14, and the solve rate on solvable twins
+  held. Gaming went on rising afterwards, to 13.4% at step 12.
+- **Adapter and stream seed are confounded** in both dose checks: told_s0 ran seed 0's stream and told_s1 seed 1's,
+  with 8 and 13 hacked items in three steps.
+- **There is no solve-only baseline at three or six steps.** The solve-only stream was read after 24, 48 and 96
+  steps only.
+- **Release survived more on practised tasks:** on told_s0 at step 3, 7 of 40 on the 10 tasks with a practised
+  release against 10 of 112 on the 28. The main run reads no task its arms practised.
+- **The replay shows the step-0 read path only.** That reads inside a round leave the training unchanged rests on
+  the code (identical weights on a CPU) and on round 1's training loss, which is identical at the first step in the
+  two dose checks and slightly different at the twelfth (0.401598 against 0.401551, and 0.605253 against
+  0.604072). GPU training differs by about that much from run to run, so an effect of the reads cannot be ruled out
+  by it.
+- **The dose check's two seeds are high in hacked items at steps 1 and 2** (4 and 5 at step 1 against an
+  eight-seed mean of 3.1; 7 and 10 by step 2 against 6.75) and on either side of the mean at step 3 (8 and 13
+  against 10).
+
+### What each outcome will be called
+
+The registered table, with the wordings above, so that nothing is chosen after the data:
+
+- **E's release stays clearly off the floor while N's collapses, and H reads "holds better":** a sighting of the
+  frame's stake. It is a finding only after fresh seeds repeat it.
+- **Both collapse and E did not start higher:** understanding first, as built here, did not keep the practised
+  release through the first 6 to 23 contrary examples; the interval says what size of protection is excluded.
+- **E starts higher and both collapse:** the plain account's head start without the holding. H's label is read with
+  wording (a) or (c).
+- **E starts lower:** a negative for these documents.
+- **A gate fails on N:** only the start is read.
+
+### Money
+
+Step 3 has spent $47.47: the documents $25.32, the sets and two rehearsals $3.07, the first dose check $12.35 and
+the second $6.73. The main run is priced at $65.76 (blocks of $24.66, $24.66 and $16.44). That puts step 3 at about
+$113 against the $135 stop, and the redirect at about $149 of the $175 approved. Nothing else in step 3 is
+affordable after it.

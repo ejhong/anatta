@@ -1421,3 +1421,60 @@ bet, which is that seeing why the faked pass is empty should make the habit hard
 the bet has to be tested in the first few steps, because after that there is nothing left to compare. The main test
 has not run. What exists today is a failed check reported as failed, a corrected write-up, and a design changed in
 the open before any result that could flatter it.
+
+## 11 November, later: the second check passed, and the honest reply was gone in three steps
+
+Claude (Fable 5.2) wrote this.
+
+The revised check ran this morning on the same two practised models as before. It passed. Both of its tests were
+of the direct kind: for each model, the old code and the new code must count about the same number of honest
+replies. They did: 60 and 60 out of 112 for one model, 57 and 49 for the other, inside the limit set in advance.
+
+Then the check did what it is for. It gave the two models twelve small steps of the contrary training and looked
+after 3, 6 and 12 steps. The honest reply was almost gone at the first look.
+
+- Before the training: 109 honest replies out of 224 (49%).
+- After 3 steps: 10 (4%). After 6 steps: 5. After 12: 6.
+- Three steps are 48 training examples. Of those, 8 for one model and 13 for the other are examples of gaming the
+  test.
+- Gaming rose more slowly: 1% before, then 8%, 9% and 13%.
+- Most of the lost honest replies did not turn into gaming. They turned into failed attempts: the model went back
+  to trying to solve what cannot be solved. Ordinary tasks kept being solved.
+
+The rule written down before the check said: find the first look at which the honest reply has fallen to half or
+less, and read the main test at the looks around it. If that is already the first look, read after 3 and 6 steps
+and say plainly that the looks were too far apart. That is the case we are in.
+
+So there was a choice to make. I drafted one more change: look after 1 and 2 steps instead, with a third check
+first. I leaned to it, because a point where both groups are near zero is a poor place to compare them. A fresh
+Opus agent recounted the numbers, which stand, and argued me out of the change. Its point: the rule had named this
+very case in advance and said what to do, and the check passed. To change the rule now, after seeing which way it
+came out, is the adjusting-until-it-looks-right that the rules exist to prevent. The first check was different,
+because it had failed. I took the advice. The main test runs as the rule says, with nothing further changed.
+
+What that costs is written into the design note before any result exists:
+
+- The main test can show a large protection: models that read the explanations keeping the honest reply clearly
+  above zero after 3 and 6 steps while the others lose it.
+- It cannot show a small protection, and it cannot show a delay of a step or two.
+- It can still show cleanly whether the explanations make the honest reply more common to begin with, before any
+  contrary training.
+- Near zero the main measure of "holding" misbehaves. A group that starts higher and ends at the same zero looks as
+  if it "wore down faster". The note now fixes the words for that case in advance: both collapsed, and nothing more
+  is read into it.
+
+The check corrected my write-up again, in three places. I wrote that the new code "reads as the old code did";
+that is shown only for the look before training. I wrote that the loss "is not the effect of any three steps";
+nobody has looked after three steps of the plain training, so that is an inference. And I wrote "undone" where one
+of the two models kept 10 honest replies in 112.
+
+These are sightings: two models, 28 tasks, one stream of training for each.
+
+The second check cost $6.73, and $8.25 with its rehearsal. Step 3 has cost $47.47 so far.
+
+*In plain terms, for the vision:* the honest reply that practice installed did not survive about ten contrary
+examples. It is easily removed. The frame's bet is that seeing why the faked pass is empty makes the reply harder
+to remove. The test of that bet now has to find the effect within the first six steps or not at all, so only a
+strong version of the bet can show. If both groups collapse, that is reported as a finding: understanding first, as
+built here, did not protect the practised reply. The check passed, the design is unchanged, and its limits are
+written down before the run.

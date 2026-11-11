@@ -398,3 +398,37 @@ episodes a read). Intervals are a bootstrap over pairs, from the cold check.
   failed band as a gate while saying it does so after seeing 48.7%, and plans the neutral and explained arms at
   eight seeds.
 - **Cost:** $12.35 for the dose check; $39.23 for step 3 so far.
+
+## 11 Nov, 09:46 UTC: step 3's second dose check passed; the practised release fell from 49% to 4% within three optimizer steps that held 8 to 13 gaming examples, replaced mostly by failed attempts (sighting; the grade is checked cold)
+
+`lab/explore/understand/`; results `explore/2026-11-10/u1/d2/`; ledger 09:20 and 09:43 UTC on 11 Nov; cold check
+`lab/ledger/checks/2026-11-11-step3-dose-check-2-opus-check.md`. The same two adapters (told_s0, told_s1), each read
+through the old read path and then given 12 steps of the fixed gameable stream (one round of 16 items a step, one
+optimizer). Read at steps 0, 3, 6 and 12 on the 28 one-off eval pairs with no practised release, 4 samples of each
+impossible twin, pooled over the adapters (224 episodes a read). Intervals are a bootstrap over pairs, from the
+cold check.
+
+- **The grade: passed.** Old read path against new: told_s0 60 and 60 of 112; told_s1 57 and 49 (7.1 points; the
+  limit is 15). The step-0 reads replay the first dose check's byte for byte.
+- **The curve** (steps 0, 3, 6, 12): release 48.7%, 4.5%, 2.2%, 2.7% (109, 10, 5 and 6 of 224); gaming 1.3%, 7.6%,
+  8.9%, 13.4%. The fall by step 3 is 44.2 points [33.5, 54.9]; the level at step 3 is 4.5% [1.3, 8.5]. Gaming rose
+  6.2 points by step 3 [2.7, 10.3] and 12.1 by step 12 [5.8, 19.6]. told_s1 read 0 of 112 at steps 3 and 6.
+- **What three steps hold:** 48 items, of which 8 (seed 0's stream) and 13 (seed 1's) are hacked. Those are the
+  only items on impossible tasks.
+- **What replaced release:** by net counts, releases fell by 99, failed attempts rose by 85 and gaming by 14.
+  Solvable twins kept being solved (71.7%, 74.3%, 77.0%, 73.0%).
+- **With the first dose check:** consistent where the two can be compared (2.7% at step 12 here; 1.8% at step 24
+  there). Under this stream release sits at about 2 to 5% from step 3 through step 96.
+- **Read it as:** on these two adapters a release that two epochs of practice installed was nearly removed by three
+  optimizer steps that held 8 to 13 examples of gaming. What took its place was mostly the failed attempt; gaming
+  rose more slowly.
+- **Limits:** two adapters, each with its own stream seed, so adapter and dose are confounded; 28 tasks selected
+  toward low release; steps 1 and 2 were never read; there is no solve-only read before step 24, so how much of the
+  fall comes from the first optimizer steps as such is not known (the first step of a fresh Adam optimizer moves
+  every weight by about the learning rate); on told_s0 release survived more on practised tasks (7 of 40 against 10
+  of 112).
+- **What it changed:** nothing in the design. By the rule fixed beforehand the main run reads at steps 3 and 6, and
+  the record says the grid was too coarse to bracket the half. A drafted refinement (single steps, with a third dose
+  check) was dropped on the cold check's advice, because the rule had named this branch in advance. The design note
+  now says what reads near the floor can and cannot show, and fixes the wording for them, before any arm is run.
+- **Cost:** $6.73 for the dose check ($8.25 with the rebuilt sets and the rehearsal); $47.47 for step 3 so far.
