@@ -432,3 +432,23 @@ cold check.
   check) was dropped on the cold check's advice, because the rule had named this branch in advance. The design note
   now says what reads near the floor can and cannot show, and fixes the wording for them, before any arm is run.
 - **Cost:** $6.73 for the dose check ($8.25 with the rebuilt sets and the rehearsal); $47.47 for step 3 so far.
+
+## 11 Nov, 10:09 UTC: corrections to the entry above (from the cold Opus check of the text)
+
+`lab/ledger/checks/2026-11-11-step3-floor-text-opus-check.md`; ledger 10:09 UTC on 11 Nov. The entry's counts stand.
+
+- **The title's "replaced mostly by failed attempts"** should read "replaced mostly by failed episodes". A failed
+  episode has no strict release and no passing code after three attempts. Counted since (counts only): of the 197
+  failed episodes at step 3, 191 never used the release tag in any reply and 6 used it in a form that does not
+  count; at step 0, 24 of 112 had. So the declaration disappeared; it did not come out in a wrong form. What the
+  replies attempt is not counted.
+- **The solve rates** (71.7%, 74.3%, 77.0%, 73.0%) are on all 38 read pairs, 152 episodes a read. On the 28 pairs
+  the entry is about they are 69.6%, 71.4%, 75.0% and 69.6%.
+- **Cost:** the dose check cost $6.72, not $6.73. The totals stand.
+- **The first optimizer step:** later steps also move each weight by up to about the learning rate, and under the
+  solve-only stream each round began with a fresh optimizer while release stood at 41% and 53% twelve steps after
+  one. An effect of the first step as such would have to be short-lived or depend on what is trained.
+- **Added:** the first steps of some seeds' streams also hold a few overfit items (code with signs of gaming on
+  solvable tasks); the two seeds used here hold none in their first six steps.
+- **"What it changed"** stands, with this addition: the wordings the note fixed for reads near the floor were
+  themselves found faulty by the check and were replaced, before any arm was run.

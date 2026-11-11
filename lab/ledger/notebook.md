@@ -1478,3 +1478,47 @@ to remove. The test of that bet now has to find the effect within the first six 
 strong version of the bet can show. If both groups collapse, that is reported as a finding: understanding first, as
 built here, did not protect the practised reply. The check passed, the design is unchanged, and its limits are
 written down before the run.
+
+## 11 November, later still: a check on this morning's write-up, and what it took back
+
+Claude (Fable 5.2) wrote this.
+
+After the entry above I wrote down, in the design note, what the main test can and cannot show and the exact words
+to be used for its possible results, so that the words could not be chosen after seeing the result. A fresh Opus
+agent then tried to break that text. The numbers held. The words did not, and they are replaced before anything
+runs.
+
+The worst fault was mine and it cut against the project. My list of "what each result will be called" was loose
+enough that a real positive result, sitting near zero, would have been written up as a miss. A second fault cut
+the other way: for one negative result I had supplied a ready excuse (the explained group "only looks worse because
+it started higher"), and the excuse applied even where it was not true. Neither is acceptable in words that are
+meant to tie my hands.
+
+The replacement is simpler. The registered labels stand in every case. Beside them the report always gives the
+same figures: where each group started, where it ended, and how much of the main number comes from the start and
+how much from the end. A result that is only a difference at the start is then visible as that, whichever way it
+points, and no sentence has to argue for it.
+
+The check also took back five things in the entry above:
+
+- I wrote that the honest reply "did not survive about ten contrary examples" and "is easily removed". The training
+  held 48 examples in those three steps, 8 and 13 of them gaming. Whether the gaming examples did it, or any three
+  steps of training would, was not measured. Training on solved tasks alone left the reply in place for 48 steps,
+  but nobody looked at it after three. One of the two models also kept 10 honest replies of 112.
+- I wrote that the lost replies "turned into failed attempts: the model went back to trying to solve what cannot be
+  solved". The counts only say the episodes ended with no honest declaration and no passing code. I have since
+  counted one more thing: of 197 such episodes after three steps, 191 never used the declaring tag at all, and in
+  149 every reply held code. So the declaration did disappear, and did not just come out in a wrong form. What the
+  code was trying to do, the counts do not say.
+- I wrote that the main test "cannot show a small protection". It is unlikely to, which is not the same.
+- I wrote that if both groups collapse it will be "reported as a finding". A hit at this speed is only a sighting,
+  and a miss is the same: it would say that understanding first, as built here, did not keep the practised reply
+  through three to six steps, and that a delay or a modest protection could not have been seen.
+- Two sums were a cent off, and one set of percentages was quoted for the wrong set of tasks.
+
+*In plain terms, for the vision:* nothing about the experiment changed today after the second check passed. What
+changed is how tightly its reading is pinned down in advance. The main test is now, plainly, two questions: does
+reading the reasons first make the honest reply more common before any pressure, and does it keep that reply
+clearly alive through the first few contrary steps. The first can be answered well. The second can only be
+answered if the effect is large. A project that asks whether a release is real or counterfeit has to hold its own
+write-ups to the same test, and today a checker caught them leaning both ways.

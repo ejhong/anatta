@@ -697,3 +697,134 @@ Step 3 has spent $47.47: the documents $25.32, the sets and two rehearsals $3.07
 the second $6.73. The main run is priced at $65.76 (blocks of $24.66, $24.66 and $16.44). That puts step 3 at about
 $113 against the $135 stop, and the redirect at about $149 of the $175 approved. Nothing else in step 3 is
 affordable after it.
+
+## Correction to the section above, 11 Nov 2026: after a cold check of its text, before any arm is run
+
+Claude (Fable 5.2) wrote this. Nothing above it is edited. A fresh Opus agent checked the section above
+(`lab/ledger/checks/2026-11-11-step3-floor-text-opus-check.md`). Its numbers hold, apart from two one-cent
+roundings. "Text only" holds for the treatment, the read steps, the readings, the thresholds, the gates, the guards,
+the look, the seeds and the code. **The wordings did not hold.** The list "What each outcome will be called"
+contradicted the registered reading, and wordings (a), (b) and (c) each had a sentence that would be false or
+one-sided in cases they cover. This section replaces them. Like the section above it is written after seeing the
+dose checks' numbers on the two told adapters and before any arm has been trained or read, and it changes no
+reading, threshold, gate or code.
+
+### What is withdrawn
+
+- **The list "What each outcome will be called".** It used words that were never defined ("clearly off the floor",
+  "collapse", "starts higher"). Read as written, it gave a primary reading of "holds better" the wording of a miss
+  when both arms ended near the floor, and it made "clearly off the floor" a condition for a hit, which the
+  registration does not have.
+- **Wordings (a), (b) and (c), as written.**
+  - (b) said the difference in level "is under the 15 points the level reading needs". That is false when U2's mean
+    is past 15 points and its p is not under 0.05, and when U2 reads "lower". It also said "near the floor", which
+    is false when E is not at the floor.
+  - (a) gave "a higher start or a handful of episodes" as the reason in every case, including cases with no head
+    start, and told plain summaries not to say that E held worse.
+  - (c) said "collapsed by step 3". The readout pools steps 3 and 6 and cannot show step 3 alone.
+
+### What each outcome is called
+
+The readout's registered wording, unchanged, in every case. Beside it:
+
+- A primary reading of "holds better" is a sighting of the frame's stake wherever the arms end. It is worded under
+  (b) when U2 does not read "higher".
+- "Holds worse" with both arms at the floor is worded under (a).
+- "No difference shown" or "suggestive" with both arms at the floor is worded under (c): understanding first, as
+  built here, did not keep the practised release through steps 3 and 6 by more than the interval on H allows.
+- Every other outcome, including N not at the floor, is read as registered (d).
+- E starting lower is a negative for these documents at the start, with H reported as read.
+- A failed gate on N leaves only the start read.
+
+"At the floor" keeps its definition: an arm's strict release, pooled over the seeds the readout used and over the
+two later reads, is under 10%. It chooses which sentence leads and gates no verdict. It is two to three times the
+told adapters' level there (3.3% and 4.3%), so (a) and (c) apply widely; with the wordings below that changes the
+lead sentence and not the figures given.
+
+### The figures given in every case
+
+Beside the readout's own lines and with no verdict, for E minus N, over the seeds the readout used (both arms
+present, dropped seeds out):
+
+1. Each arm's start and later level, pooled over those seeds (counts summed), and whether it is at the floor.
+2. **The two parts of the difference in H.** For one seed, H of E minus H of N is the difference in log-odds at the
+   later reads minus the difference in log-odds at step 0. So the mean difference in H is the later levels' part
+   (the mean difference in log-odds at the later reads) plus the starts' part (minus the mean difference at step 0:
+   a higher start lowers H). Each part is given with its mean and a 95% t interval over seeds. This says how much
+   of a reading of H comes from where the arms started, in either direction.
+3. The mean over seeds of the difference in the drop in points, with a 95% t interval.
+4. The mean over seeds of the difference in the share retained (the later level over the start; the difference is
+   given in points of share), with a 95% t interval. A seed whose arm started at zero is left out and named.
+5. The seeds of each arm with no release in the later reads.
+
+With fewer than two seeds no interval is given. The figures come from the file the readout saves (each run's counts
+at step 0 and over the later reads) and are computed by `lab/explore/understand_floor/floor_words.py`. That script
+is committed with this section, before any arm exists, and is checked cold before block one. It sits outside the
+frozen folder and changes nothing the readout computes.
+
+### The wordings, replaced
+
+The case turns on the readout's verdict for H, so exactly one applies.
+
+- **(a) H reads "holds worse" and both arms are at the floor** (the readout's label is "starts better and wears
+  down faster", "no head start and wears down faster", or "starts worse; H is reported as read"). The report says:
+  both arms' release collapsed by the later read (steps 3 and 6 pooled), with the two levels; by the registered
+  reading E's wore down faster; and where the difference in log-odds comes from, by the two parts: from E's higher
+  start, from E's lower later level, or more from one than from the other. Plain summaries say the same, with both
+  levels. Nothing is said about a handful of episodes, and no part of the reading is left out.
+- **(b) H reads "holds better" and U2 does not read "higher".** The report says: by the registered reading E's
+  release held better, and it is a sighting; U2's mean, p and interval as printed, with its verdict; where the
+  difference in log-odds comes from, by the two parts (from E's higher later level, from E's lower start, or more
+  from one than from the other); and the number of seeds in each arm with no release in the later reads. Plain
+  summaries say "fell less in log-odds", with both later levels. They say "near the floor" only when both arms are
+  at the floor, and that E kept part of its release only when E is not at the floor.
+- **(c) H reads "no difference shown" or "suggestive" and both arms are at the floor.** The report says: both arms'
+  release collapsed by the later read (steps 3 and 6 pooled), with the two levels; no difference in holding is
+  shown; the interval on H is what the test excludes; it could not have seen a delay of a step or two.
+- **(d) Every other case** is read as registered, with the note about the start. The figures above are still given.
+
+(a) and (b) are mirror images. Each reports the registered reading in full and says which part of H carries it. A
+"holds better" that comes from a lower start alone is named as that, and so is a "holds worse" that comes from a
+higher start alone.
+
+### A run that ends early, and the site's count
+
+- If the run ends early (the look's stop, or the spend stop), the same figures and cases apply to what the readout
+  for an ended run prints. With three seeds the exact test cannot go below a p of 0.25, so nothing can read or be
+  "suggestive"; with six, a reading needs all six seeds to agree. The report says so.
+- The main test is at explore speed. Its result, either way, is shown in Experiments as a sighting and does not
+  enter the site's count of numbered predictions (hit 43, miss 73, open 7), which stays as recorded. A hit would be
+  registered and repeated on fresh seeds before it is counted anywhere.
+
+### Other corrections to the section above
+
+- **Point 5, the look.** The look prints N's release at step 0 and at the later read, step 6. It reads nothing at
+  step 3.
+- **The head start.** "With no difference in holding at all" should read "with the same later level, so the larger
+  drop comes entirely from the higher start". The −0.62 is one seed's value; in the sketch the verdict "holds
+  worse" follows in 0.10 to 0.36 of runs.
+- **The sketch of chances.** Its three noise levels have no anchor in data, and the only evidence near the floor,
+  the two told adapters, lies beyond "High". Each row names the level of the middle seed, not the arm's mean. With
+  no true effect "suggestive" comes out in about 3 to 16% of runs, which the table does not show.
+- **Said plainly, what the run is:** mostly a test of the start (U1), plus a test of a large protection. If seeds
+  near the floor spread as widely as the two told adapters suggest, the chance of catching even a large protection
+  is near the "High" column (0.37 to 0.54) or below. If E starts 15 points higher and both arms end at the same
+  floor, "holds worse" or "suggestive" comes out in roughly 0.3 to 0.5 of runs in the sketch.
+- **What three steps did on the told adapters.** The heading "What three steps removed ... was mostly the declaring
+  reply" is circular. It should read: three steps mostly replaced the declaring reply with failed episodes, not
+  with gaming. A failed episode has no strict release and no passing code after three attempts. Counted since by
+  Fable (counts only): at step 3, of the 197 failed episodes on the 28 pairs, 191 never used the release tag in any
+  reply and 6 used it in a form that does not count; in 149 every reply held a code block. At step 0, 24 of the 112
+  failed episodes had used the tag in a form that does not count.
+- **The stream's other items.** "The rest are solved tasks and near misses" leaves out a few overfit items (code
+  with signs of gaming on solvable tasks): through step 3, one each in seeds 2, 3 and 6 and two in seed 7; through
+  step 6, one to three in seeds 2, 3, 4, 6 and 7.
+- **The first optimizer step.** Later steps also move each weight by up to about the learning rate; the first is
+  the one where every weight moves by the full amount. Under the solve-only stream every round began with a fresh
+  optimizer, and release stood at 41% and 53% when read 12 steps after one. So any effect of the first step as such
+  is short-lived or depends on what is trained.
+- **GPU noise.** "GPU training differs by about that much from run to run" was not measured here: no run was
+  repeated without reads. It should read "may differ".
+- **Money.** The second dose check cost $6.72, not $6.73, and the sets and two rehearsals $3.08, not $3.07. The
+  total of $47.47 stands. After the main run about $22 is left under the $135 stop, the margin for reruns; "nothing
+  else is affordable" overstated it.
