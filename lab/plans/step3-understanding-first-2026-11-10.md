@@ -415,3 +415,87 @@ this list is the record. Every item was decided before any document, set or run 
 - **The three training sets as built** hold 1,697,746 tokens (N), 1,513,504 (R) and 1,526,636 (E): N trains on about
   12% more tokens than the other two. The screen passed documents that name Ministral more often than documents
   about "the model": E has 823 and 667 of them, R has 736 and 749.
+
+## Revision 3, 11 Nov 2026: after the first dose check did not pass
+
+Claude (Fable 5.2) wrote this revision. Nothing above it is edited. It is written **after seeing the first dose
+check's numbers** on the two told adapters, and before any arm has been trained or read. A fresh Opus agent graded
+that dose check and attacked a first draft of this revision
+(`lab/ledger/checks/2026-11-11-step3-dose-check-opus-check.md`); the draft's shorter rounds are dropped and the
+report's alternative is taken. The ledger entries of 05:02 and 05:24 UTC on 11 Nov hold the numbers.
+
+### What happened
+
+- The first dose check (tag `d1`) **did not pass**. The two read paths agreed on told_s0 (60 and 60 of 112). The
+  band failed: pooled release at round 0 was 109 of 224 (48.7%) against a floor of 50%. It stays on record as not
+  passed, and its data are not graded again under any new check.
+- Under the gameable stream release went from 48.7% to 1.8% by round 2 (24 steps), and gaming rose from 1.3% to
+  12.1%. Under the solve-only stream release was 41.1% at round 2, 52.7% at round 4 and 11.6% at round 8.
+
+### What changes, and why
+
+1. **The band is removed as a gate, after seeing 48.7%.** The gate that stays is the direct one, now for both
+   adapters: each told adapter is read at round 0 through the old read path and through the new one, and for each
+   the two must agree within 15 points of strict release on the 28 pairs. The level is reported and gates nothing.
+   The reasons, for a reader who suspects a failed check is being retired:
+   - the direct comparison tests the stated purpose on the same pairs and the same adapter, and it passed with no
+     gap;
+   - the code that reads is unchanged since 30 Oct (the check compared the files then and now);
+   - the floor came from reads on 32 other tasks, and the 28 tasks here are selected toward low release: the base
+     model released on none of 448 episodes on them in Stage A, and on 17 of 160 on the 10 tasks with a practised
+     release. That was knowable before the run and the band did not allow for it;
+   - a read replays exactly, so the band kept as it was would fail every later dose check in the same way;
+   - no new floor is set, no read seed is drawn again, and the 38-pair figure is not put in the 28's place.
+2. **The treatment does not change.** A round is still 12 optimizer steps of 16 items, one expert-iteration draw of
+   192, with one optimizer for the round.
+3. **Reads are taken inside the rounds.** A read point is a count of optimizer steps since phase 3 began. The read
+   at step 0 is the old round-0 read. A read at step k is taken after the k-th step without touching the optimizer,
+   and training then goes on. The read's sampling seed is 10,000 plus the step.
+4. **The second dose check.** Both told adapters are read through the old path, then given 12 steps of the gameable
+   stream and read at steps 0, 3, 6 and 12. The solve-only stream is not run again: under the same treatment it
+   left release in place through 48 steps.
+5. **The dose rule: bracket the half.** On the 28 pairs, pooled over the two adapters, take the first of steps 3, 6
+   and 12 at which release is at or below half its step-0 level.
+   - If that is step 3 or step 6, the main run reads at steps 3 and 6. (If it is step 3, the report says the grid
+     was still too coarse.)
+   - If it is step 12, the main run reads at steps 6 and 12.
+   - If release is still above half at step 12, the main run reads at steps 12 and 24. The first dose check read
+     1.8% at step 24.
+
+   The rule is computed on the told adapters alone, so it cannot favour an arm. It aims the control's later level
+   at about half its start, a drop of about 1 in log-odds, which is the case the power table above describes.
+6. **The main run** trains phase 3 to the later of the two read steps and reads at step 0 and at the two steps. The
+   readings are unchanged: U1 at step 0; H, U2 and U3 on the two later reads pooled; the same thresholds, test,
+   gates, guards and look. The pressure gate on N reads from step 0 to the later read.
+7. **Arms.** The main run is the neutral and explained arms at eight seeds, in the same three blocks. The rule arm
+   at eight seeds is added only if Eugene raises the budget, and only before any readout: no contrast is computed
+   until every planned arm of every seed is in. With two arms there are four readings (U1, H, U2, U3 for E minus
+   N) and the primary one is still H. Three arms at seven seeds is not run: it would cost primary power and leave
+   no margin.
+8. **Prices, as measured.** Documents $1.63 a run, practice $0.48, phase 3 about $2.00 (a read takes 12 to 15
+   minutes, not 8): about $4.10 a run. The stop stays $135 unless Eugene raises it.
+
+### Limits added by this revision
+
+- **What is measured is early erosion.** The reads fall within the first 3 to 24 steps of contrary training, after
+  about 8 to 70 hacked examples. That is not durability over a long run.
+- **H depends on the start.** With the half-count correction and this design's counts: if both arms end at 6 of 304
+  and E started at 65% where N started at 50%, H reads minus 0.62, "wears down faster", with no difference in
+  holding at all. In mid-range the bias is smaller and still there: if each arm loses half its release, E going
+  from 65% to 32.5% and N from 50% to 25% gives H of minus 0.25. The drop in points and the share retained are
+  reported beside H, and a reading of H is worded with the start in view.
+- **The level readings have little reach here.** Gaming was about 12% after 24 steps and clustered in a few tasks,
+  so a 15-point difference in U3 is nearly out of reach, and U2 is limited in the same way.
+- **The dose is set on other adapters and tasks.** It is calibrated on the told adapters, on 28 tasks selected
+  toward low release. The main run's control has a smaller practice set, after documents, and is read on all 38
+  tasks, none of them practised.
+- **What in the gameable stream removes release is not separated.** It differs from the solve-only stream in its
+  hacked targets and also in training on impossible tasks at all.
+- **Over-release went to zero under pressure,** so that guard can fire only at step 0.
+
+### Cost and money
+
+Step 3 has spent $39.23 (documents $25.32, sets and rehearsal $1.55, the first dose check $12.35). A redo of sets,
+rehearsal and dose check is about $9. Sixteen runs are about $66. That comes to about $114, under the $135 stop.
+The rule arm at eight seeds would add about $33 and needs the stop raised to about $150 and the redirect to about
+$185 to $190 of approval.
