@@ -167,9 +167,10 @@ def test_a_head_start_and_the_same_floor_names_the_starts_part_and_never_a_later
                              "U3": "no difference shown"}
     assert c["registered"] == "starts better and wears down faster"
     assert sorted(c["additions"]) == ["i", "ii", "iii"]
-    assert c["additions"]["iii"] == ("The starts' part alone is -0.62, as large in size as the 0.6 the rule asks of "
-                                     "H's mean (E started higher in log-odds; in points the start reading U1 is "
-                                     "\"higher\"); the later reads' part is +0.00.")
+    assert c["additions"]["iii"] == ("The starts' part alone is -0.62, at least as large in size as the 0.6 the rule "
+                                     "asks of H's mean (by the mean over seeds of the log-odds at step 0, E started "
+                                     "higher; in points the start reading U1 is \"higher\"); the later reads' part is "
+                                     "+0.00.")
     assert "does not show it" in c["additions"]["ii"] and 'verdict "no difference shown"' in c["additions"]["ii"]
     assert math.isclose(c["h_parts"]["later"]["mean"], 0.0, abs_tol=1e-12)
     text = " ".join(c["additions"].values())
@@ -185,8 +186,9 @@ def test_the_mirror_off_the_floor_is_treated_the_same_way():
     # E from 50% and N from 65%, both ending at 15%: holds better, off the floor
     better = only(F.floor_report(readout(same(seeds, (76, 46)), same(seeds, (99, 46)))))
     assert better["verdicts"]["H"] == "holds better" and sorted(better["additions"]) == ["ii", "iii"]
-    assert better["additions"]["iii"].startswith("The starts' part alone is +0.62, as large in size as the 0.6 the "
-                                                 "rule asks of H's mean (E started lower in log-odds;")
+    assert better["additions"]["iii"].startswith("The starts' part alone is +0.62, at least as large in size as the "
+                                                 "0.6 the rule asks of H's mean (by the mean over seeds of the "
+                                                 "log-odds at step 0, E started lower;")
     assert better["may_say_kept"] is False  # E's later level is not above N's
     assert better["stake"] is False  # U1 reads lower: the table's wording stands
     assert better["verdicts"]["U1"] == "lower" and better["registered"] == "starts worse; H is reported as read"
@@ -275,6 +277,15 @@ def test_the_starts_part_is_named_whenever_it_is_large_with_the_later_part_besid
     # and nothing is said about H's parts when a gate failed
     gate = only(F.floor_report(readout(same(seeds, (99, 12)), same(seeds, (76, 12)), gates_ok=False)))
     assert "iii" not in gate["additions"]
+
+
+def test_the_direction_of_the_start_is_said_of_the_mean_log_odds_not_of_the_pooled_level():
+    # two E seeds whose practice did not take at all: E's pooled start is above N's, the mean of its log-odds below
+    e = {s: ((0, 0) if s < 2 else (110, 12)) for s in range(8)}
+    c = only(F.floor_report(readout(e, same(range(8), (76, 12)))))
+    assert c["arms"]["E"]["start"] > c["arms"]["N"]["start"] and c["h_parts"]["start"]["mean"] > 0.6
+    assert "by the mean over seeds of the log-odds at step 0, E started lower;" in c["additions"]["iii"]
+    assert "E started lower in log-odds" not in c["additions"]["iii"]
 
 
 def test_a_mean_past_the_threshold_with_few_seeds_is_at_most_suggestive():
@@ -371,7 +382,8 @@ def test_each_addition_is_printed_exactly_when_its_condition_holds_on_random_rea
         assert ("iii" in add) == (gates_ok and abs(s) >= 0.6 - 1e-9)
         if "iii" in add:  # the sentence gives both parts as they are, and says which way E started
             assert f"is {s:+.2f}," in add["iii"] and add["iii"].endswith(f"the later reads' part is {late:+.2f}.")
-            assert ("E started lower" in add["iii"]) == (s > 0) and f'U1 is "{v["U1"]}"' in add["iii"]
+            assert ("E started lower;" in add["iii"]) == (s > 0) and f'U1 is "{v["U1"]}"' in add["iii"]
+            assert "by the mean over seeds of the log-odds at step 0" in add["iii"]
         if "v" in add:  # "not a reading" exactly when the readout's interval excludes zero
             lo, hi = rep["readings"]["E-N"]["H"]["ci95"]
             assert ("not a reading" in add["v"]) == (lo > 0 or hi < 0)
@@ -404,6 +416,7 @@ def test_show_prints_the_base_the_additions_and_no_ranking(capsys):
     assert "the later reads' part +3.26" in out and "not a cause; the split carries no verdict" in out
     assert "difference in the drop in points" in out and "difference in the share retained" in out
     assert "addition (i):" in out and "addition (ii):" in out and "addition (iii):" in out
+    assert "the readout's note about the start: H is not neutral to the start" in out
     assert "plain summaries may say that E kept part of its release: no" in out
     assert "a sighting of the frame's stake" in out and "WARNING" not in out and "more from" not in out
 

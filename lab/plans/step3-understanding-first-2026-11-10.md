@@ -1001,3 +1001,20 @@ unclear. They are changed here as it proposed. This section is written before an
   with few seeds, an interval that excludes zero, runs of unequal size and a flagged arm. There are 31 tests, and
   the whole offline suite passes (2,081 passed, 35 skipped).
 - The check asked for a check of these changes and not for a new round. That check is made before block one.
+
+### Added after the check of these changes (11 Nov)
+
+The same checker read the changes (`lab/ledger/checks/2026-11-11-step3-floor-text-3b-opus-check.md`): fit to stand
+before block one, with one phrase to change and two notes. All three are taken, and with them the wordings are
+closed.
+
+- **Addition (iii)'s phrase about the direction of the start** now reads: "by the mean over seeds of the log-odds
+  at step 0, E started lower" (or higher). As first written, "E started lower in log-odds", it could be read as a
+  statement about the pooled starts printed above it, and the two can differ when a seed starts at or near zero.
+  "As large in size as the 0.6" becomes "at least as large in size as the 0.6".
+- **The random-readout test** checks that each addition is printed exactly when its condition holds, that the two
+  numbers in (iii) are the split's, and that no withdrawn word appears. It does not compare the figures inside the
+  other sentences, as the lines above said it did.
+- **The script prints the readout's note about the start** beside the split, for whoever writes a plain summary.
+- (i) takes its step numbers from the readout. In this run they are steps 0 and 3.
+- There are 32 tests, and the whole offline suite passes (2,082 passed, 35 skipped).

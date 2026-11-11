@@ -154,9 +154,10 @@ def additions(a: str, b: str, pa: dict, pb: dict, parts: dict, c: dict, steps, e
                      f"{fmt_ci(u2.get('ci95'))}, verdict \"{uv}\".")
     m, s, late = h.get("mean"), parts["start"]["mean"], parts["later"]["mean"]
     if hv != NOT_READ and s is not None and abs(s) >= H_THRESHOLD - EPS:
-        out["iii"] = (f"The starts' part alone is {s:+.2f}, as large in size as the {H_THRESHOLD} the rule asks of H's "
-                      f"mean ({a} started {'lower' if s > 0 else 'higher'} in log-odds; in points the start reading U1 "
-                      f"is \"{c['U1']['verdict']}\"); the later reads' part is {late:+.2f}.")
+        out["iii"] = (f"The starts' part alone is {s:+.2f}, at least as large in size as the {H_THRESHOLD} the rule asks "
+                      f"of H's mean (by the mean over seeds of the log-odds at step 0, {a} started "
+                      f"{'lower' if s > 0 else 'higher'}; in points the start reading U1 is "
+                      f"\"{c['U1']['verdict']}\"); the later reads' part is {late:+.2f}.")
     if hv == "suggestive":
         p = "-" if h.get("p") is None else f"{h['p']:.4f}"
         mean = "-" if m is None else f"{m:+.2f}"
@@ -211,7 +212,7 @@ def floor_report(rep: dict) -> dict:
             "retained": {"by_seed": rt, **mean_t(rt), "left_out": left},
             "additions": additions(a, b, pa, pb, parts, c, steps, ended, len(seeds)),
             "may_say_kept": may_say_kept(pa, pb, c["H"]["verdict"]), "stake": is_stake(c),
-            "flags": [f.get("arm") for f in c.get("flags") or []]}
+            "flags": [f.get("arm") for f in c.get("flags") or []], "start_note": c.get("start_note")}
     return out
 
 
@@ -236,6 +237,8 @@ def show(fr: dict) -> None:
                   "not a cause; the split carries no verdict")
             if c["h_agrees_with_readout"] is False:
                 print("  WARNING: the mean of H recomputed here differs from the readout's; check the seeds used")
+        if c["start_note"]:
+            print(f"  the readout's note about the start: {c['start_note']}")
         for key, label, unit, scale in (("drop_points", "the drop in points", "points", 1.0),
                                         ("retained", "the share retained", "points of share", 100.0)):
             x = c[key]
