@@ -452,3 +452,17 @@ cold check.
   solvable tasks); the two seeds used here hold none in their first six steps.
 - **"What it changed"** stands, with this addition: the wordings the note fixed for reads near the floor were
   themselves found faulty by the check and were replaced, before any arm was run.
+
+## 11 Nov, 10:35 UTC: a further correction to the two entries above (from the cold Opus check of the correction)
+
+`lab/ledger/checks/2026-11-11-step3-floor-text-2-opus-check.md`; ledger 10:35 UTC on 11 Nov.
+
+- **"So the declaration disappeared; it did not come out in a wrong form"** says more than was counted. What was
+  counted is the release tag: after three steps the tag had all but gone from the replies, and the lost releases
+  did not turn into tags in a form that does not count. A reply can still decline in prose without the tag. By a
+  crude keyword count, at step 3, 47 of the 191 failed episodes that never used the tag hold a reply with no code
+  in it, and 14 of those use a word such as "impossible", "contradict" or "conflict" (at step 0: 25 and 6 of 88).
+  What those replies say was not read.
+- **The wordings fixed for the main run's reads** were replaced a second time, by something simpler: the
+  registered labels, the same figures in every case, and a few statements each added only when its condition
+  holds. See the design note's "Second correction".

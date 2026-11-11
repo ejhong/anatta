@@ -828,3 +828,110 @@ higher start alone.
 - **Money.** The second dose check cost $6.72, not $6.73, and the sets and two rehearsals $3.08, not $3.07. The
   total of $47.47 stands. After the main run about $22 is left under the $135 stop, the margin for reruns; "nothing
   else is affordable" overstated it.
+
+## Second correction, 11 Nov 2026: the wordings made simpler after a cold check of the correction, before any arm is run
+
+Claude (Fable 5.2) wrote this. Nothing above it is edited. A fresh Opus agent checked the correction above and the
+script beside it (`lab/ledger/checks/2026-11-11-step3-floor-text-2-opus-check.md`). The treatment, the readings, the
+gates and the frozen code are untouched, and the numbers hold. **One new mechanism did not hold:** the sentence that
+said "where the difference in log-odds comes from" by naming the larger of the two parts of H. It is withdrawn, and
+with it the cases (a) to (d). What replaces them is simpler: a base given in every case, and six additions, each a
+statement of fact added exactly when its condition holds. This section is written before any arm has been trained
+or read, and it changes no reading, threshold, gate or code.
+
+### What is withdrawn, and why
+
+- **"Where the difference comes from", and the ranking of the two parts.**
+  - The later reads' part is a mean over seeds of log-odds, in which a seed with no release counts as about −6.4.
+    Its sign can differ from the pooled levels printed beside it, so a sentence in words about levels could
+    contradict them.
+  - Naming the larger part is unstable. In the rough simulation of a head start with the same floor, where the
+    later levels are equal by construction, the sentence would have named the later level as the larger part in
+    5%, 29% and 63% of "holds worse" readings at the three noise levels (the check's count). A reading passes the
+    threshold mostly when noise in the later reads pushes it there. So the sentence would have been wrong in much
+    of the very case it was written for.
+- **Cases (a) to (d).** (a) and (b) were called mirror images and were not: (b) covered every "holds better"
+  without the level reading, and (a) covered "holds worse" only at the floor.
+- **"A primary reading of 'holds better' is a sighting of the frame's stake wherever the arms end."** When the
+  start reads "lower", the registered table says only "starts worse; H is reported as read". That stands.
+- **"Collapsed"** was never defined. The words are now "ended under 10% (steps 3 and 6 pooled)".
+- **"The interval on H is what the test excludes"** said the opposite of what was meant.
+- **"Its numbers hold, apart from two one-cent roundings"** left out two other slips the first check of the text
+  found: solve rates quoted for the wrong set of tasks, and the overfit items.
+
+### The base, given in every case
+
+For E minus N, over the seeds the readout used (both arms present, dropped seeds out):
+
+1. The readout's verdicts and its registered wording, unchanged, including "suggestive" and "not read".
+2. Each arm's start and later level (steps 3 and 6 pooled), pooled over those seeds.
+3. **The split of H, as arithmetic.** For one seed, H of E minus H of N is the difference in log-odds at the later
+   reads minus the difference in log-odds at step 0. So the mean difference in H equals the starts' part (minus
+   the mean difference at step 0: a higher start lowers H) plus the later reads' part. Each part is given with a
+   95% t interval over seeds. These are sample means. The split is not a cause, it carries no verdict, and neither
+   part is ranked above the other.
+4. The mean over seeds of the difference in the drop in points, and of the difference in the share retained (in
+   points of share; a seed whose arm started at zero is left out and named), each with a 95% t interval. With
+   fewer than two seeds no interval is given.
+5. The seeds of each arm with no release in the later reads.
+
+### The additions
+
+Each is added exactly when its condition holds, and says only what its condition says.
+
+- **(i) Both arms' later level is under 10%.** "Both arms ended under 10% (steps 3 and 6 pooled)", with the two
+  levels; that near the floor the later reads' part of H is the noisy one; and that a delay of a step or two could
+  not have been seen.
+- **(ii) H reads "holds better" and U2 does not read "higher", or H reads "holds worse" and U2 does not read
+  "lower".** "The level reading (U2) does not show it", with U2's mean, p, interval and verdict as the readout
+  gives them.
+- **(iii) H's mean is past the threshold (H reads "holds better", "holds worse" or "suggestive") and the starts'
+  part alone is 0.6 or more in the same direction.** "The starts' part alone is as large as the 0.6 a reading
+  needs, in the same direction as H."
+- **(iv) H reads "suggestive".** It is said so, with its mean and p, and that it counts as no reading.
+- **(v) H reads "no difference shown" or "suggestive".** "The 95% t interval on H is [low, high]; differences in
+  holding outside it are excluded at that level."
+- **(vi) Fewer than eight seeds, or a run that ended early.** The number of seeds, the smallest p the exact test
+  can give with them, and what follows: with three seeds no reading and no "suggestive" is possible; with four or
+  five no reading is possible and a mean past the threshold can only be "suggestive"; with six a reading needs
+  every seed's difference to have the same sign.
+
+(ii) and (iii) apply in the same way to "holds better" and to "holds worse", at the floor and off it. The 10% line
+now decides one thing only: whether addition (i) is made.
+
+### What a result is called
+
+- The readout's registered wording, in every case.
+- When the primary reading (H for E minus N) reads "holds better", it is a sighting of the frame's stake, unless
+  the start reads "lower". Then the table's wording stands: "starts worse; H is reported as read". A sighting is a
+  finding only after fresh seeds repeat it.
+- Plain summaries (the notebook, the site, the report to Eugene) give the registered wording in plain words, each
+  arm's start and later level, the split as its two numbers, and every addition that applies. They do not rank the
+  two parts or call either a cause. They say that E kept part of its release only when E is not at the floor and
+  E's later level is above N's, and then with both levels.
+- The rest of the correction above stands: a result of this run is a sighting either way and stays out of the
+  site's count of numbered predictions.
+
+### The script
+
+`lab/explore/understand_floor/floor_words.py` prints the base and the additions from the file the readout saves.
+It is rewritten to this section and committed with it, before any arm exists. Its tests build readouts with the
+frozen code's own functions and pass them through the saved form, and they compare its thresholds, its log-odds
+and its t values with the frozen code's. One test draws 400 random readouts and checks that every sentence printed
+is true of the figures printed beside it. A last cold check reads this section and the script before block one.
+
+### Claims corrected
+
+- **"The declaration disappeared" and "the lost releases did not become declarations in a wrong form"** (the
+  correction above, the ledger at 10:09, the notebook, SIGHTINGS and the site) say more than was counted. What was
+  counted is the release tag. After three steps the tag had all but gone from the replies: the lost releases did
+  not turn into tags in a form that does not count. A reply can still decline in prose without the tag. A crude
+  count by keywords (the check's, and the same from Fable's own count): at step 3, 47 of the 191 failed episodes
+  that never used the tag hold a reply with no code in it, and 14 of those use a word such as "impossible",
+  "contradict" or "conflict"; at step 0, 25 and 6 of 88; at step 6, 57 and 21 of 192. What those replies say was
+  not read.
+- **"Clearly off the floor" and "clearly alive"** (the ledger at 09:43, the notebook and the site) bring back a
+  condition the registration does not have. The primary reading is H: whether E loses less of the reply, in
+  log-odds, over the first six steps. The run can catch that only if the effect is large.
+- **"The two parts of H are reported so that such a reading is seen for what it is"** (the ledger at 10:09)
+  overstated what the split does. The two numbers are printed, and no label is put on them.

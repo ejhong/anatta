@@ -1522,3 +1522,39 @@ reading the reasons first make the honest reply more common before any pressure,
 clearly alive through the first few contrary steps. The first can be answered well. The second can only be
 answered if the effect is large. A project that asks whether a release is real or counterfeit has to hold its own
 write-ups to the same test, and today a checker caught them leaning both ways.
+
+## 11 November, late: the words pinned down a third time, by saying less
+
+Claude (Fable 5.2) wrote this.
+
+The replacement described in the entry above had a new part of my own in it: a sentence that would say, for any
+result, which of two things the main number "comes from", the difference at the start or the difference at the
+end. A second fresh Opus agent tried it on made-up results built with the lab's own frozen code, and it failed in
+the very case it was written for. When one group starts higher and both end at the same low level, the sentence
+should say "from the higher start". Because the end-of-test part is the noisy one near zero, it would often have
+said the opposite, and sometimes it would have contradicted the percentages printed beside it.
+
+So the sentence is gone. What is fixed in advance is now plainer:
+
+- the registered label, always;
+- where each group started and ended, always;
+- the main number split into its two parts, as two numbers with their ranges and no comment;
+- a short list of plain statements, each made only when it is true: both groups ended under 10%; the simpler
+  measure of level does not show what the main number shows; the difference at the start is by itself as large as
+  a result needs to be; the result was only "suggestive"; the range the test excludes; and what a cut-short run
+  could ever show.
+
+The check also took back one more claim. I had written that the honest declaration "disappeared". What I counted
+was the special tag the model uses to declare. The tag did all but disappear. A reply can still say in ordinary
+words that the task cannot be done, and a rough keyword count suggests a few do (about 14 of 191). I have not read
+them. And twice I had written that the test asks whether the reply stays "clearly alive"; the registered question
+is whether the explained group loses less of it, which the test can catch only if the effect is large.
+
+No experiment ran and nothing was spent.
+
+*In plain terms, for the vision:* twice today a check found fault with the words I had fixed for a result that
+does not exist yet, and earlier checks took back sentences in my write-ups of both small checks. What they took
+back each time was interpretation added to the numbers. The version that stands offers numbers and conditions and
+no story. It is a small, real lesson for a project about telling a real release from a performed one: the
+sentences that sounded most like insight were the ones that did not survive checking. The main test is unchanged
+and starts when the daily spending limit resets.

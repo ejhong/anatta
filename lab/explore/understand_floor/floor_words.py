@@ -1,17 +1,28 @@
-"""Step 3: the figures and the wording the design note fixed for reads near the floor, before any arm was run
-(lab/plans/step3-understanding-first-2026-11-10.md: the section "After the second dose check, 11 Nov 2026" as
-corrected by the section after it).
+"""Step 3: the figures and the sentences the design note fixed for reads near the floor, before any arm was run
+(lab/plans/step3-understanding-first-2026-11-10.md: the section "Second correction, 11 Nov 2026").
 
 It reads the readout a main tag saves (compare_u1.py --all writes compare_u1.json; --ended writes
 compare_u1_ended.json) and changes no reading: every verdict and the outcome wording are the frozen readout's. With
-no verdict of its own it adds, for each contrast A minus B:
-  - each arm's start and later level, pooled over the seeds the readout used;
-  - the two parts of the difference in H. For one seed, H(A) - H(B) is the difference in log-odds at the later
-    reads minus the difference in log-odds at step 0, so the mean difference in H is "the later levels' part" plus
-    "the starts' part" (the starts' part is minus the mean difference at step 0: a higher start lowers H);
-  - the mean seed difference in the drop in points and in the share retained, each with a 95% t interval;
-  - the seeds of each arm with no release in the later reads;
-  - which of the note's cases (a) to (d) applies, with its sentences.
+no verdict of its own it prints, for each contrast A minus B:
+
+  the base, in every case
+    - the readout's verdicts and wording;
+    - each arm's start and later level, pooled over the seeds the readout used;
+    - the split of H as arithmetic. For one seed, H(A) - H(B) is the difference in log-odds at the later reads
+      minus the difference in log-odds at step 0. So the mean difference in H is the starts' part (minus the mean
+      difference at step 0: a higher start lowers H) plus the later reads' part. Sample means over seeds; not a cause,
+      and neither part is ranked above the other;
+    - the mean seed difference in the drop in points and in the share retained, each with a 95% t interval;
+    - the seeds of each arm with no release in the later reads;
+
+  the additions, each exactly when its condition holds
+    (i)   both arms' later level is under 10%;
+    (ii)  H reads one way and the level reading (U2) does not read the same way;
+    (iii) H's mean is past the threshold and the starts' part alone is 0.6 or more in the same direction;
+    (iv)  H is "suggestive";
+    (v)   H gives no reading: its interval;
+    (vi)  fewer than eight seeds, or a run that ended early: the smallest p the exact test can give.
+
 Free and offline. It lives outside lab/explore/understand/ because that folder is frozen by hash.
 
   .venv/bin/python -I lab/explore/understand_floor/floor_words.py <the tag's compare_u1.json>
@@ -23,11 +34,16 @@ import math
 import sys
 from pathlib import Path
 
-FLOOR = 10.0  # percent. An arm is "at the floor" when its strict release, pooled over its seeds and the two later
-#               reads, is under this.
-# Two-sided 95% critical values of Student's t for 1 to 7 degrees of freedom (at most eight seeds).
+FLOOR = 10.0  # percent. An arm is "at the floor" when its strict release, pooled over the seeds the readout used
+#               and the two later reads, is under this.
+H_THRESHOLD = 0.6  # what a reading of H needs, in log-odds (u1_core.THRESH["H"]; the tests compare the two)
+P_READ, P_SUGGEST = 0.05, 0.20  # u1_core's: a reading needs p under 0.05; up to 0.20 is "suggestive"
+N_SEEDS = 8  # the design's seeds
+# Two-sided 95% critical values of Student's t for 1 to 7 degrees of freedom (the tests compare them with
+# u1_core.t_crit).
 T975 = {1: 12.706, 2: 4.303, 3: 3.182, 4: 2.776, 5: 2.571, 6: 2.447, 7: 2.365}
 EPS = 1e-9
+PAST = ("holds better", "holds worse", "suggestive")  # the verdicts of H whose mean is past the threshold
 
 
 def log_odds(k: int, n: int) -> float:
@@ -76,10 +92,9 @@ def mean_t(d: dict) -> dict:
 
 
 def h_parts(a: dict, b: dict) -> dict:
-    """The two parts of the difference in H, A minus B, over the seeds both arms have. By seed, H(A) - H(B) equals
-    the difference in log-odds at the later reads minus the difference in log-odds at step 0. "later": the mean
-    difference at the later reads. "start": minus the mean difference at step 0. Their sum is the mean difference in
-    H."""
+    """The split of the difference in H, A minus B, over the seeds both arms have. By seed, H(A) - H(B) equals the
+    difference in log-odds at the later reads minus the difference in log-odds at step 0. "later": the mean difference
+    at the later reads. "start": minus the mean difference at step 0. Their sum is the mean difference in H."""
     seeds = sorted(set(a) & set(b))
     later = {s: log_odds(a[s]["k_later"], a[s]["n_later"]) - log_odds(b[s]["k_later"], b[s]["n_later"]) for s in seeds}
     start = {s: -(log_odds(a[s]["k0"], a[s]["n0"]) - log_odds(b[s]["k0"], b[s]["n0"])) for s in seeds}
@@ -88,85 +103,84 @@ def h_parts(a: dict, b: dict) -> dict:
             "h": {"by_seed": h, **mean_t(h)}}
 
 
-def which(h: str, u2: str, floor_a: bool, floor_b: bool) -> str:
-    """The note's case for a contrast A minus B, from the readout's verdicts for H and U2 and whether each arm is at
-    the floor. (a), (b) and (c) need different verdicts of H, so at most one applies; (d) is every other case,
-    including H "not read"."""
-    if h == "holds worse" and floor_a and floor_b:
-        return "a"
-    if h == "holds better" and u2 != "higher":
-        return "b"
-    if h in ("no difference shown", "suggestive") and floor_a and floor_b:
-        return "c"
-    return "d"
+def smallest_p(n: int) -> float:
+    """The smallest two-sided p an exact paired sign-flip test over n seeds can give: every seed agreeing in sign."""
+    return 2.0 / 2 ** n
 
 
-def source(later: float | None, start: float | None, sign: int, a: str) -> str:
-    """Where a difference in H of the given sign (+1: A fell less; -1: A fell more) comes from: the part or parts
-    with that sign, the larger named first."""
-    names = ({"later": f"{a}'s higher later level", "start": f"{a}'s lower start"} if sign > 0 else
-             {"later": f"{a}'s lower later level", "start": f"{a}'s higher start"})
-    other = ({"later": "its later level was not higher", "start": "it did not start lower"} if sign > 0 else
-             {"later": "its later level was not lower", "start": "it did not start higher"})
-    parts = {"later": later or 0.0, "start": start or 0.0}
-    same = [k for k, v in parts.items() if sign * v > EPS]
-    if len(same) == 2:
-        big, small = sorted(same, key=lambda k: -abs(parts[k]))
-        return f"more from {names[big]} than from {names[small]}"
-    if len(same) == 1:
-        rest = "start" if same[0] == "later" else "later"
-        return f"from {names[same[0]]}; {other[rest]}"
-    return "from neither part alone"
+def seeds_note(n: int, ended) -> str | None:
+    """Addition (vi): what a short run can and cannot read. None for a full run that did not end early."""
+    if n >= N_SEEDS and not ended:
+        return None
+    p = smallest_p(n) if n else 1.0
+    if p > P_SUGGEST:
+        can = "so no reading and no \"suggestive\" is possible"
+    elif p >= P_READ:
+        can = "so no reading is possible; a mean past the threshold can only be \"suggestive\""
+    elif 2 * p >= P_READ:
+        can = "so a reading needs every seed's difference to have the same sign"
+    else:
+        can = "so a reading is possible"
+    lead = "The run ended early. " if ended else ""
+    return f"{lead}With {n} seed{'s' if n != 1 else ''} the smallest p the exact test can give is {p:.4g}, {can}."
 
 
-def pct_ci(x: dict, scale: float = 1.0, digits: int = 1) -> str:
-    return "-" if x.get("ci95") is None else f"[{scale * x['ci95'][0]:+.{digits}f}, {scale * x['ci95'][1]:+.{digits}f}]"
+def fmt_ci(ci, digits: int = 2, scale: float = 1.0) -> str:
+    return "-" if ci is None else f"[{scale * ci[0]:+.{digits}f}, {scale * ci[1]:+.{digits}f}]"
 
 
-def words(case: str, a: str, b: str, pa: dict, pb: dict, parts: dict, c: dict, steps) -> dict:
-    """The sentences for a case: what the report says and what plain summaries (the notebook, the site, the report to
-    Eugene) say. The figures given in every case are printed by show()."""
+def additions(a: str, b: str, pa: dict, pb: dict, parts: dict, c: dict, steps, ended, n: int) -> dict:
+    """The sentences added to the base, keyed (i) to (vi): each is present exactly when its condition holds, and each
+    states only what its condition says."""
+    out = {}
+    h, u2 = c["H"], c["U2"]
+    hv, uv = h["verdict"], u2["verdict"]
     later_steps = f"steps {steps[1]} and {steps[2]} pooled" if steps and len(steps) == 3 else "the two later reads pooled"
-    levels = f"{a} {pa['later']:.1f}%, {b} {pb['later']:.1f}%"
-    lp, sp = parts["later"]["mean"], parts["start"]["mean"]
-    if case == "a":
-        src = source(lp, sp, -1, a)
-        return {"report": (f"Both arms' release collapsed by the later read ({later_steps}: {levels}). By the registered "
-                           f"reading {a}'s wore down faster. The difference in log-odds comes {src}."),
-                "plain": f"both collapsed ({levels} over the later reads); by the registered reading {a}'s wore down "
-                         f"faster, {src}"}
-    if case == "b":
-        u2 = c["U2"]
+    if pa["floor"] and pb["floor"]:
+        out["i"] = (f"Both arms ended under {FLOOR:.0f}% ({later_steps}): {a} {pa['later']:.1f}%, {b} "
+                    f"{pb['later']:.1f}%. Near the floor the later reads' part of H is the noisy one (a seed with no "
+                    "release counts as about -6.4 there), and a delay of a step or two could not have been seen.")
+    if (hv == "holds better" and uv != "higher") or (hv == "holds worse" and uv != "lower"):
+        mean = "-" if u2.get("mean") is None else f"{u2['mean']:+.2f}"
         p = "-" if u2.get("p") is None else f"{u2['p']:.4f}"
-        mean = "-" if u2.get("mean") is None else f"{u2['mean']:+.1f}"
-        src = source(lp, sp, +1, a)
-        near = " (both near the floor)" if pa["floor"] and pb["floor"] else ""
-        kept = (f" Plain summaries may say that {a} kept part of its release." if not pa["floor"] else
-                f" Plain summaries do not say that {a} kept its release: {a} is at the floor.")
-        return {"report": (f"By the registered reading {a}'s release held better; it is a sighting. The level reading "
-                           f"(U2) does not read \"higher\": mean {mean} points, p {p}, t interval {pct_ci(u2)}, "
-                           f"verdict \"{u2['verdict']}\". The difference in log-odds comes {src}. Seeds with no release "
-                           f"in the later reads: {a} {len(pa['zero_later'])} of {pa['seeds']}, {b} "
-                           f"{len(pb['zero_later'])} of {pb['seeds']}.{kept}"),
-                "plain": f"{a}'s release fell less in log-odds, {src}; later levels {levels}{near}"}
-    if case == "c":
-        h = c["H"]
-        ci = "-" if h.get("ci95") is None else f"[{h['ci95'][0]:+.2f}, {h['ci95'][1]:+.2f}]"
-        return {"report": (f"Both arms' release collapsed by the later read ({later_steps}: {levels}). No difference "
-                           f"in holding is shown; the t interval on H, {ci}, is what the test excludes. It could not "
-                           "have seen a delay of a step or two."),
-                "plain": f"both collapsed ({levels} over the later reads); no difference in holding is shown, and a "
-                         "delay of a step or two could not have been seen"}
-    return {"report": "No wording for the floor applies: the readings are read as registered, with the note about "
-                      "the start.", "plain": None}
+        out["ii"] = (f"The level reading (U2) does not show it: mean {mean} points, p {p}, 95% t interval "
+                     f"{fmt_ci(u2.get('ci95'))}, verdict \"{uv}\".")
+    m, s = h.get("mean"), parts["start"]["mean"]
+    if hv in PAST and m is not None and s is not None and s * (1 if m > 0 else -1) >= H_THRESHOLD - EPS:
+        out["iii"] = (f"The starts' part alone ({s:+.2f}) is as large as the {H_THRESHOLD} a reading needs, in the same "
+                      "direction as H.")
+    if hv == "suggestive":
+        p = "-" if h.get("p") is None else f"{h['p']:.4f}"
+        mean = "-" if m is None else f"{m:+.2f}"
+        out["iv"] = (f"H is suggestive: mean {mean} in log-odds, p {p}, past the threshold with p between {P_READ} and "
+                     f"{P_SUGGEST}. It counts as no reading.")
+    if hv in ("no difference shown", "suggestive") and h.get("ci95") is not None:
+        out["v"] = (f"The 95% t interval on H is {fmt_ci(h['ci95'])}; differences in holding outside it are excluded "
+                    "at that level.")
+    if (note := seeds_note(n, ended)) is not None:
+        out["vi"] = note
+    return out
+
+
+def may_say_kept(pa: dict, pb: dict) -> bool:
+    """Plain summaries may say that A kept part of its release only when A is not at the floor and A's later level
+    is above B's (and then with both levels)."""
+    return (not pa["floor"]) and pa["later"] > pb["later"]
+
+
+def is_stake(c: dict) -> bool:
+    """Whether a contrast's result is called a sighting of the frame's stake: the primary reading (H for E minus N)
+    reads "holds better", unless the start (U1) reads "lower", in which case the registered table's wording stands
+    ("starts worse; H is reported as read")."""
+    return bool(c["H"].get("primary")) and c["H"]["verdict"] == "holds better" and c["U1"]["verdict"] != "lower"
 
 
 def floor_report(rep: dict) -> dict:
-    """Everything the note asks for beside H, for each contrast in a saved readout."""
+    """The base figures and the additions, for each contrast in a saved readout."""
     drop = {int(s) for s in rep.get("dropped") or []}
     values = {arm: {int(s): v for s, v in by.items() if int(s) not in drop} for arm, by in rep["values"].items()}
-    steps = rep.get("steps")
-    out = {"floor_percent": FLOOR, "steps": steps, "contrasts": {}}
+    steps, ended = rep.get("steps"), rep.get("ended")
+    out = {"floor_percent": FLOOR, "steps": steps, "ended": ended, "contrasts": {}}
     for name, c in rep["readings"].items():
         a, b = name.split("-")
         seeds = sorted(set(values[a]) & set(values[b]))
@@ -175,16 +189,16 @@ def floor_report(rep: dict) -> dict:
         dp, _ = seed_diffs(va, vb, "drop_points")
         rt, left = seed_diffs(va, vb, "retained")
         parts = h_parts(va, vb)
-        case = which(c["H"]["verdict"], c["U2"]["verdict"], pa["floor"], pb["floor"])
         agrees = (None if c["H"].get("mean") is None or parts["h"]["mean"] is None
                   else abs(c["H"]["mean"] - parts["h"]["mean"]) < 1e-6)
         out["contrasts"][name] = {
             "seeds": seeds, "arms": {a: pa, b: pb},
             "verdicts": {k: c[k]["verdict"] for k in ("U1", "H", "U2", "U3")}, "registered": c["said"],
-            "h_parts": parts, "h_agrees_with_readout": agrees,
+            "h_mean": c["H"].get("mean"), "h_parts": parts, "h_agrees_with_readout": agrees,
             "drop_points": {"by_seed": dp, **mean_t(dp)},
             "retained": {"by_seed": rt, **mean_t(rt), "left_out": left},
-            "case": case, **words(case, a, b, pa, pb, parts, c, steps)}
+            "additions": additions(a, b, pa, pb, parts, c, steps, ended, len(seeds)),
+            "may_say_kept": may_say_kept(pa, pb), "stake": is_stake(c)}
     return out
 
 
@@ -203,22 +217,30 @@ def show(fr: dict) -> None:
                   f"({len(p['zero_later'])} of {p['seeds']}); {'at the floor' if p['floor'] else 'not at the floor'}")
         hp = c["h_parts"]
         if hp["h"]["mean"] is not None:
-            print(f"  H, {name}: mean {hp['h']['mean']:+.2f} in log-odds = the later levels' part "
-                  f"{hp['later']['mean']:+.2f} {pct_ci(hp['later'], digits=2)} plus the starts' part "
-                  f"{hp['start']['mean']:+.2f} {pct_ci(hp['start'], digits=2)}; no verdict")
+            print(f"  the split of H, {a} minus {b}: {hp['h']['mean']:+.2f} in log-odds = the starts' part "
+                  f"{hp['start']['mean']:+.2f} {fmt_ci(hp['start']['ci95'])} + the later reads' part "
+                  f"{hp['later']['mean']:+.2f} {fmt_ci(hp['later']['ci95'])}. Arithmetic on sample means over seeds, "
+                  "not a cause; the split carries no verdict")
             if c["h_agrees_with_readout"] is False:
                 print("  WARNING: the mean of H recomputed here differs from the readout's; check the seeds used")
-        for key, unit, scale in (("drop_points", "points", 1.0), ("retained", "points of share", 100.0)):
+        for key, label, unit, scale in (("drop_points", "the drop in points", "points", 1.0),
+                                        ("retained", "the share retained", "points of share", 100.0)):
             x = c[key]
             if x["mean"] is None:
-                print(f"  difference in {key.replace('_', ' ')}: no seed to compare")
+                print(f"  difference in {label}: no seed to compare")
                 continue
             more = f"; seeds left out (an arm started at zero): {x['left_out']}" if x.get("left_out") else ""
-            print(f"  difference in {'the drop in points' if key == 'drop_points' else 'the share retained'}: mean "
-                  f"{scale * x['mean']:+.1f} {unit}, 95% t interval {pct_ci(x, scale)}, n {x['n']}, no verdict{more}")
-        print(f"  case ({c['case']}): {c['report']}")
-        if c["plain"]:
-            print(f"  plain summaries say: {c['plain']}")
+            print(f"  difference in {label}: mean {scale * x['mean']:+.1f} {unit}, 95% t interval "
+                  f"{fmt_ci(x['ci95'], 1, scale)}, n {x['n']}, no verdict{more}")
+        if not c["additions"]:
+            print("  additions: none applies")
+        for key, text in c["additions"].items():
+            print(f"  addition ({key}): {text}")
+        print(f"  plain summaries may say that {a} kept part of its release: "
+              f"{'yes, with both levels' if c['may_say_kept'] else 'no'}")
+        if c["stake"]:
+            print("  the primary reading holds better: a sighting of the frame's stake, a finding only after fresh "
+                  "seeds repeat it")
 
 
 def main(argv=None) -> int:
