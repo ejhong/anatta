@@ -616,11 +616,39 @@ def smoke_refusal(strict: bool) -> str | None:
     return None
 
 
+def rescreen_reason(strict: bool) -> str | None:
+    """Why the build may run without a smoke that met its gate under the judge prompt as it is now (None: it may
+    not): because it is the second screen the design's rule calls for. Three or more violations in the read by hand
+    mean the judge prompt is tightened and every document screened again, and that rule sets no smoke for the
+    tightened prompt. A build is that rescreen when
+      1. the documents on disk were built from the brief as it is now, under the same judge form and under another
+         wording of the rubric (they could only be built after a smoke that met its gate), and
+      2. the read by hand of those very documents is on record with HAND_READ_VIOLATIONS violations or more.
+    Once the rescreen writes new documents, the record no longer names the documents on disk, and this is None."""
+    folder = docs_dir(False)
+    man_file, hfile = folder / "manifest.json", folder / "hand_read.json"
+    if not man_file.is_file() or not hfile.is_file():
+        return None
+    man, rec, files = json.loads(man_file.read_text()), json.loads(hfile.read_text()), R.e_files_sha(folder)
+    j = man.get("judge") or {}
+    same_brief = man.get("briefs_sha256") == briefs_sha(config(), stream_plan(False))
+    other_wording = j.get("form") == U.judge_form(strict) and j.get("rubric_sha256") not in (None, U.judge_sha(strict))
+    failed = R.hand_read_failures(rec) if rec.get("files_sha256") == files and None not in files.values() else []
+    if not (same_brief and other_wording and failed):
+        return None
+    return (f"the read by hand of the documents on disk found {max(failed)} violations, so the judge prompt was "
+            "tightened and every document is screened again")
+
+
 def cmd_build(strict: bool = True, chat_fn=None, judge_fn=None, workers: dict | None = None, log=print) -> int:
     chat_fn, judge_fn = chat_fn or live_chat(), judge_fn or live_chat()
     if why := smoke_refusal(strict):
-        raise SystemExit(f"refused: {why}. A passing smoke comes before the build: run --smoke"
-                         + ("" if strict else " --no-strict") + " first")
+        again = rescreen_reason(strict)
+        if again is None:
+            raise SystemExit(f"refused: {why}. A passing smoke comes before the build: run --smoke"
+                             + ("" if strict else " --no-strict") + " first")
+        log(f"no smoke has met its gate under the judge prompt as it is now ({why}). The build goes on as the second "
+            f"screen: {again}", flush=True)
     run = open_run(False)
     folder, cache = run["folder"], run["cache"]
     caps = {"generation_left": lambda: CAPS["generation"] - cache_cost(folder),

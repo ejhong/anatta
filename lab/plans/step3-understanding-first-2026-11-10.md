@@ -403,3 +403,8 @@ this list is the record. Every item was decided before any document, set or run 
   the ledger entry of the approval; the stop is never lowered.
 - **Cost, again:** the second screen adds about $12, so the documents come to about $25 where the table says $14, and
   step 3 to about $134.
+- **The tightened judge and the 60% line (11 Nov).** Judged again under the tightened prompt, the smoke's 45
+  documents read 58% kept (26; the judge labelled 9 of 35, where the first wording labelled 1). The 60% line above
+  is for the brief's smoke, which read 76% under the judge as it then stood; the hand-read rule sets no smoke for
+  the tightened prompt. The second screen goes ahead under that rule, with the strict form and the same brief. The
+  lower yield costs more generation and judging: about $14 for the second screen.

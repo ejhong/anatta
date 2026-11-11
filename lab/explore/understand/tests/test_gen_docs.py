@@ -551,6 +551,36 @@ def test_the_hand_read_is_recorded_against_its_sample_and_the_build(env, monkeyp
     assert not any("d0w0" in x for x in logs)  # no document text in the log
 
 
+def test_a_failing_hand_read_opens_the_second_screen_without_a_new_smoke(env, monkeypatch):
+    """The design's rule: three or more violations in the read by hand mean the judge prompt is tightened and every
+    document screened again. That rule sets no smoke for the tightened prompt, so the build may run again under it,
+    but only as that second screen: of documents built from the same brief, with their failing read on record."""
+    out, booked, logs, log = env
+    small(monkeypatch)
+    smoke_ok(out)
+    monkeypatch.setattr(U, "HAND_READ_N", 8)  # the design's 40, scaled to the test's 36 documents
+    s = Script(lambda name, i: "clean", ["explained_train", "explained_held"])
+    w = {"generate": 2, "judge": 2}
+    assert G.cmd_build(True, s.chat, s.judge, w, log) == 0
+    asked = len(s.judge_calls)
+    # the judge prompt is reworded. With no failing read on record, the build needs a smoke under the new wording
+    monkeypatch.setattr(U, "_J_REST", U._J_REST.replace("a worked example", "a worked or sketched example"))
+    assert G.rescreen_reason(True) is None
+    with pytest.raises(SystemExit, match="A passing smoke comes before the build"):
+        G.cmd_build(True, s.chat, s.judge, w, log)
+    # a read with fewer than three violations does not open the second screen
+    assert G.main(["--sample", "8", "--seed", "0"]) == 0
+    assert G.cmd_hand_read(8, 0, 2, log=log) == 0 and G.rescreen_reason(True) is None
+    # three violations do: every document is asked about again under the new wording, with no new smoke
+    assert G.cmd_hand_read(8, 0, 3, log=log) == 1
+    assert "found 3 violations" in G.rescreen_reason(True) and G.rescreen_reason(False) is None  # not the other form
+    assert len(s.judge_calls) == asked
+    assert G.cmd_build(True, s.chat, s.judge, w, log) == 0
+    assert len(s.judge_calls) == 2 * asked and any("goes on as the second screen" in x for x in logs)
+    # the documents on disk are now of the tightened screen: the path is closed again
+    assert G.rescreen_reason(True) is None
+
+
 def test_the_echo_table_is_free_and_prints_shares_not_documents(env, monkeypatch, capsys):
     import u1_fakes as F
 
