@@ -23,10 +23,17 @@ latter).
   gate     the looking gate (9 Nov 2026; lab/explore/gate/gate_core.py), one model, merged like readout's: the
            coding eval once per condition (a sentence appended to the system prompt), each reply's note parsed; then
            the model's one-word verdict on saved final replies under three attributions, from next-token logits.
+  u1_sets  step 3, understanding first (10 Nov 2026; lab/explore/understand/u1_core.py), on CPU: the three document
+           sets, the held-out documents, the practice set and the fixed streams of phase 3, written once under
+           /runs/act1/u1/ after four assertions (records and turns line up; stored prompts re-render to the same
+           token ids; no eval pair is trained on; one model snapshot).
+  press    step 3's phase 3 for one (arm, seed): from an adapter that went through documents and practice, the
+           round-0 read, the loss on held-out documents, then rounds of fine-tuning on the seed's stream with reads
+           at the rounds asked for. The read offers the release (its own task builder; make_envs does not).
 
 All model-written code runs here, inside the container (koan_env's subprocess runner), never on the Mac. Only
 anatta-runs (written, under /runs/act1/ and, by gate, /runs/gate/) and anatta-calib-prh-k1 and anatta-hf-cache
-(read-only) are touched.
+(read-only) are touched. u1_sets also reads Stage A's samples and the told practice set under /runs/h4lite/.
 """
 
 import json
@@ -51,7 +58,11 @@ ENV = {"HF_HOME": "/tmp/hf", "HF_HUB_OFFLINE": "1", "TOKENIZERS_PARALLELISM": "f
 
 image = (mc.image.add_local_file(str(HERE / "act1_core.py"), "/root/act1_core.py")
          .add_local_file(str(HERE.parent / "shaping" / "replay.py"), "/root/replay.py")  # S1: silent_check
-         .add_local_file(str(HERE.parent / "gate" / "gate_core.py"), "/root/gate_core.py"))  # the looking gate
+         .add_local_file(str(HERE.parent / "gate" / "gate_core.py"), "/root/gate_core.py")  # the looking gate
+         .add_local_file(str(HERE.parent / "understand" / "u1_core.py"), "/root/u1_core.py")  # step 3 (u1)
+         # .parent.parent, not .parents[1]: in a container HERE is /root, which has one parent only
+         .add_local_file(str(HERE.parent.parent / "experiments" / "h4lite" / "declared" / "declared_core.py"),
+                         "/root/declared_core.py"))  # u1_core imports the pilot's core
 app = modal.App(APP_NAME, image=image)
 k1 = modal.Volume.from_name("anatta-calib-prh-k1")
 VOLS = {mc.RUNS: mc.runs, K1: k1.read_only(), mc.CACHE: mc.cache.read_only()}  # weights read-only (act1_core.MODELS)
@@ -578,3 +589,434 @@ def gate(adapter: str, label: str, tag: str, pairs_rows: list, eval_names: list,
     res["oom_splits"] = player.oom_splits
     res["seconds"] = round(time.time() - t_start, 1)
     return res
+
+
+# ------------------------------------------------------------------------------------------------ step 3 (u1)
+# Step 3, understanding first (lab/plans/step3-understanding-first-2026-11-10.md, revision 2; the pure side is
+# lab/explore/understand/u1_core.py). Claude (Fable 5.2, an AI model) added everything below on 10 Nov 2026, before
+# any run. Explore speed: sightings only. train, readout, gate and make_envs above are as they were.
+
+U1_VOLS = {mc.RUNS: mc.runs, mc.CACHE: mc.cache.read_only()}  # the runs volume, and the model cache read-only
+U1_STAGE_A = f"{mc.ROOT}/sft/koan/samples.pt"  # Stage A's 6,192 sampled episodes with their token ids
+U1_TOLD = f"{mc.ROOT}/durability/told/train.pt"  # the told practice set (durability, 30 Oct)
+U1_OLD_PAIRS = "pairs_oldpath.jsonl"  # the eval pairs as a file modal_retreat2.heldout_eval can read
+PRESS_TIMEOUT_S = 5400  # 1.5 h; run_u1.py sets each call's own timeout to the hours its reserve covers
+
+
+def u1_tokenizer(model_key: str):
+    """The tokenizer alone, from the pinned snapshot, as anatta.models.load builds it (its pad token the EOS when it
+    has none)."""
+    import act1_core as C
+    from transformers import AutoTokenizer
+
+    tok = AutoTokenizer.from_pretrained(C.MODELS[model_key]["path"])
+    if tok.pad_token is None:
+        tok.pad_token = tok.eos_token
+    return tok
+
+
+def u1_snapshot_check(model_key: str) -> dict:
+    """The model cache must hold exactly the snapshot pinned in act1_core.MODELS, and refs/main must name it. h4lite's
+    loader (modal_sft.finetune, the old read path) takes the hub id, and offline it resolves that id through
+    refs/main; this app takes the pinned path. With one snapshot in the cache and refs/main naming it, the two load
+    the same weights and tokenizer. A missing refs/main is a failure: nothing would say what the hub id resolves to."""
+    import act1_core as C
+
+    path = Path(C.MODELS[model_key]["path"])
+    snaps = sorted(x.name for x in path.parent.iterdir()) if path.parent.is_dir() else []
+    ref = path.parent.parent / "refs" / "main"
+    main = ref.read_text().strip() if ref.is_file() else None
+    rec = {"pinned": path.name, "snapshots": snaps, "refs_main": main}
+    if snaps != [path.name] or main != path.name:
+        raise RuntimeError(f"the model cache does not hold exactly the pinned snapshot, named by refs/main: {rec}")
+    return rec
+
+
+def u1_doc_items(tok, rows: list) -> list:
+    """Document rows as fine-tune items (declared_core.doc_item: the prompt is the BOS alone, the completion the
+    document's tokens plus the EOS), tokenised as modal_declared.build_sets tokenises them and checked as its
+    check_doc_items checks every item: prompt == [bos], decode(prompt + completion) == "<s>" + text + "</s>", and the
+    completion mask covers every token after the BOS. Raises with the ids of every document that fails."""
+    import declared_core as D
+    from player import pack
+
+    if (tok.bos_token, tok.eos_token) != ("<s>", "</s>"):
+        raise RuntimeError(f"the tokenizer's BOS/EOS are {tok.bos_token!r}/{tok.eos_token!r}, not <s>/</s>")
+    texts = [r["text"] for r in rows]
+    ids = tok(texts, add_special_tokens=False)["input_ids"] if texts else []
+    items = [D.doc_item(tok.bos_token_id, tok.eos_token_id, x) for x in ids]
+    bad = []
+    for r, (p, c), text in zip(rows, items, texts):
+        dec = tok.decode(p + c, skip_special_tokens=False, clean_up_tokenization_spaces=False)
+        full, attn, cm, wc = pack([(p, c)], tok.pad_token_id, "cpu")
+        if (p != [tok.bos_token_id] or dec != tok.bos_token + text + tok.eos_token or wc != len(c)
+                or int(cm.sum()) != len(c) or full[0, 0].item() != tok.bos_token_id or full[0, 1:].tolist() != c
+                or int(attn.sum()) != len(c) + 1):
+            bad.append(r["id"])
+    if bad:
+        raise RuntimeError(f"{len(bad)} document items fail the item check (decode or mask): {bad[:20]}")
+    return items
+
+
+def u1_doc_nll(model, tok, items: list, micro: int = 8) -> dict:
+    """The loss on document items under `model`, no grad, shortest first (modal_declared.doc_nll's procedure): the
+    mean negative log-likelihood per token (summed over every completion token, the EOS included) and the mean of
+    the per-document means."""
+    import torch
+    from player import pack, token_logps
+
+    dev = next(model.parameters()).device
+    per = [None] * len(items)
+    order = sorted(range(len(items)), key=lambda i: len(items[i][0]) + len(items[i][1]))
+    model.eval()
+    with torch.no_grad():
+        for k in range(0, len(order), micro):
+            idx = order[k:k + micro]
+            full, attn, cm, wc = pack([items[i] for i in idx], tok.pad_token_id, dev)
+            lp = token_logps(model, full, attn, wc)
+            sums, counts = (-(lp * cm).sum(1)).tolist(), cm.sum(1).tolist()
+            for i, s, n in zip(idx, sums, counts):
+                per[i] = (float(s), int(n))
+    total, count = sum(s for s, _ in per), sum(n for _, n in per)
+    return {"docs": len(per), "tokens": count, "nll_per_token": total / count if count else None,
+            "mean_doc_nll": sum(s / n for s, n in per) / len(per) if per else None}
+
+
+def u1_envs(pairs: dict, names: list, n_impossible: int, n_solvable: int, attempts: int = 3) -> list:
+    """The read's tasks: for each eval pair, n_impossible plays of its impossible twin and n_solvable of its solvable
+    one, under the koan arm (the base prompt and the release hint; nothing appended, so no Act I grading hint).
+    make_envs builds its tasks without the release, so the read has its own builder, and this one refuses to hand
+    back a task whose system prompt is not exactly the koan prompt with the hint in it."""
+    import declared_core as D
+    from koan_env import KoanTask
+
+    from anatta.koans.base import RELEASE_HINT
+
+    envs = [KoanTask(pairs[x], imp, framing="neutral", release_available=True, attempts=attempts, arm="koan")
+            for x in names if x in pairs for imp, n in ((True, n_impossible), (False, n_solvable)) for _ in range(n)]
+    bad = [e.name for e in envs if RELEASE_HINT not in e.system or e.system != D.KOAN_SYSTEM or e.arm != "koan"]
+    if bad or not envs:
+        raise RuntimeError(f"the read's tasks must carry the release hint in the koan prompt: {len(bad)} of {len(envs)} "
+                           f"do not ({bad[:3]})")
+    return envs
+
+
+def u1_slim(e: dict) -> dict:
+    """A read's episode record: slim()'s fields, plus the release's form, grounded and reason when present."""
+    return slim(e) | {k: e[k] for k in ("form", "grounded", "reason") if e.get(k) is not None}
+
+
+@app.function(cpu=4.0, memory=16384, volumes=U1_VOLS, timeout=1800, env=ENV)
+def u1_sets(docs: dict, held: dict, pairs_rows: list, eval_names: list, eval_oneoff: list, expect: dict,
+            model_key: str = "ministral8b", root: str = "u1", stage_a: str = U1_STAGE_A, told: str = U1_TOLD) -> dict:
+    """Step 3's sets, built once on CPU under /runs/act1/<root>/. Claude (Fable 5.2) wrote this, 10 Nov 2026.
+
+    docs and held: {"N" | "R" | "E": document rows (id, kind, text, brief.referent)}, 3,000 and 200 a kind.
+    pairs_rows: Gate 0's train rows (every pair Stage A sampled). eval_names: Act I's eval split (72 pairs).
+    eval_oneoff: its one-off pairs (the 38 the read uses). expect: what the laptop's records say the volume's files
+    hold (u1_core.expectations).
+
+    Writes sets/{N,R,E}docs/{train.pt, data.json} (document items), held/{N,R,E}.pt, sets/practice/{train.pt,
+    data.json} (the told set without every episode on an eval pair, records and turns kept in step),
+    streams/{gameable,honest}_s<seed>.pt (rounds 1 to 8; a round's items are the final turns of the episodes
+    u1_core.stream_draws picks from Stage A's samples), pairs_oldpath.jsonl and info.json.
+
+    Before anything is written it asserts, and raises on any failure:
+      1. Stage A's records and turns line up one to one (equal length, each record's n_turns equal to its turns),
+         and the records are the laptop's: the same counts by twin and outcome and the same sequence;
+      2. every stored first-turn prompt, of Stage A's episodes and of the practice set, re-renders to the same token
+         ids with today's KoanTask (koan arm, release available) and chat template;
+      3. no kept practice episode and no stream item is on an eval-split pair;
+      4. the model cache holds exactly the pinned snapshot.
+    It never overwrites: a root that already holds sets is refused."""
+    import act1_core as C  # noqa: F401  (u1_core imports it; a missing image file should fail here, by name)
+    import declared_core as D
+    import torch
+    import u1_core as U
+    from koan_env import KoanTask
+
+    from anatta.koans.base import RELEASE_HINT
+    from anatta.models import chat_ids
+
+    t_start = time.time()
+    mc.runs.reload()
+    base = Path(f"{ROOT}/{root}")
+    if (base / "info.json").exists() or (base / "sets").exists() or (base / "streams").exists():
+        raise RuntimeError(f"{base} already holds sets; nothing is overwritten (build under another root)")
+    ev, ev1 = set(eval_names), list(eval_oneoff)
+    if not ev1 or not set(ev1) <= ev:
+        raise RuntimeError("the read's pairs must be eval-split pairs")
+    checks = {"snapshot": u1_snapshot_check(model_key)}  # assertion 4
+    tok = u1_tokenizer(model_key)
+
+    # the documents
+    doc_sets, held_sets = {}, {}
+    for arm in U.ARMS:
+        kind, rows, hrows = U.DOC_SOURCES[arm]["kind"], docs[arm], held[arm]
+        if len(rows) != U.N_DOCS or len(hrows) != U.N_HELD or any(r["kind"] != kind for r in rows + hrows):
+            raise RuntimeError(f"arm {arm} needs {U.N_DOCS} train and {U.N_HELD} held-out {kind} documents; got "
+                               f"{len(rows)} and {len(hrows)}, or another kind among them")
+        fp = U.docs_fingerprint(rows)
+        if fp != expect["docs"][arm]:
+            raise RuntimeError(f"arm {arm}'s documents are not the ones the laptop named (ids fingerprint {fp[:16]})")
+        if len({r["id"] for r in rows} | {r["id"] for r in hrows}) != len(rows) + len(hrows):
+            raise RuntimeError(f"arm {arm}: a document id appears twice (train and held-out must not overlap)")
+        items, hitems = u1_doc_items(tok, rows), u1_doc_items(tok, hrows)
+        doc_sets[arm] = ({"records": [D.doc_record(r, len(it[1])) for r, it in zip(rows, items)],
+                          "turns": [[it] for it in items]},
+                         {"label": f"{arm}docs", "arm": arm, "cut_sampling": False, "cut_finetune": False,
+                          "kept": len(rows), "documents": len(rows), "doc_kind": kind, "doc_ids_fingerprint": fp,
+                          "first_doc": rows[0]["id"], "last_doc": rows[-1]["id"], "items": len(items),
+                          "tokens": sum(len(c) for _, c in items), "assertion_1_checked": len(items),
+                          "doc_referents": {k: sum(r["brief"]["referent"] == k for r in rows)
+                                            for k in sorted({r["brief"]["referent"] for r in rows})},
+                          "tokenizer": C.MODELS[model_key]["path"], "bos_id": tok.bos_token_id,
+                          "eos_id": tok.eos_token_id})
+        held_sets[arm] = {"arm": arm, "kind": kind, "ids": [r["id"] for r in hrows], "items": hitems,
+                          "tokens": sum(len(c) for _, c in hitems)}
+
+    # Stage A's samples: assertion 1
+    samples = torch.load(stage_a)
+    recs, turns = samples["records"], samples["turns"]
+    got = {"n": len(recs), "counts": U.outcome_counts(recs), "fingerprint": U.records_fingerprint(recs)}
+    want = expect["stage_a"]
+    off = [i for i, (r, t) in enumerate(zip(recs, turns)) if len(t) != r["n_turns"] or not t]
+    if len(recs) != len(turns) or off:
+        raise RuntimeError(f"Stage A's records and turns do not line up: {len(recs)} records, {len(turns)} turn lists, "
+                           f"{len(off)} episodes whose turn count differs (first {off[:5]})")
+    if any(got[k] != want[k] for k in got):
+        raise RuntimeError(f"Stage A's records on the volume are not the laptop's episodes file: n {got['n']} against "
+                           f"{want['n']}, counts {got['counts']} against {want['counts']}, sequence "
+                           f"{'the same' if got['fingerprint'] == want['fingerprint'] else 'different'}")
+    checks["stage_a"] = {**got, "turns_match_n_turns": True}
+
+    # the practice set: told without every episode on an eval pair
+    tset = torch.load(told)
+    trecs, tturns = tset["records"], tset["turns"]
+    tgot = {"kept": len(trecs), "releases": sum(r["outcome"] == "released" for r in trecs),
+            "turns": sum(len(t) for t in tturns), "tokens": sum(len(c) for t in tturns for _, c in t)}
+    if len(trecs) != len(tturns) or any(tgot[k] != v for k, v in (expect.get("told") or {}).items()):
+        raise RuntimeError(f"the told set on the volume is not the one the laptop's records describe: {tgot} against "
+                           f"{expect.get('told')}; {len(trecs)} records, {len(tturns)} turn lists")
+    keep = U.practice_filter(trecs, ev)
+    precs, pturns = [trecs[i] for i in keep], [tturns[i] for i in keep]
+    unpractised = U.unpractised(ev1, {U.record_pair(r) for r in trecs if r["outcome"] == "released"})
+    pinfo = {"label": "practice", "arm": "told", "cut_sampling": False, "cut_finetune": False, "kept": len(precs),
+             "releases": sum(r["outcome"] == "released" for r in precs),
+             "solves": sum(r["outcome"] == "solved" for r in precs), "items": sum(len(t) for t in pturns),
+             "tokens": sum(len(c) for t in pturns for _, c in t), "dropped_on_eval_pairs": len(trecs) - len(precs),
+             "source": told, "source_counts": tgot}
+    if expect.get("practice_releases") is not None and pinfo["releases"] != expect["practice_releases"]:
+        raise RuntimeError(f"the practice set keeps {pinfo['releases']} releases; the laptop's records say "
+                           f"{expect['practice_releases']}")
+    if expect.get("unpractised") is not None and unpractised != sorted(expect["unpractised"]):
+        raise RuntimeError(f"the unpractised one-off eval pairs differ from the laptop's list: {len(unpractised)} "
+                           f"here, {len(expect['unpractised'])} there")
+
+    # assertion 2: stored first-turn prompts against today's rendering
+    pairs = {r["name"]: mc.pair_from_row(r) for r in pairs_rows}
+    absent = sorted({U.record_pair(r) for r in recs + precs} - set(pairs))
+    if absent:
+        raise RuntimeError(f"{len(absent)} pairs of the stored episodes have no row here: {absent[:5]}")
+    rendered: dict = {}
+
+    def first_prompt(r: dict) -> list:
+        key = (U.record_pair(r), bool(r["impossible"]))
+        if key not in rendered:
+            task = KoanTask(pairs[key[0]], key[1], framing="neutral", release_available=True, attempts=3, arm="koan")
+            if RELEASE_HINT not in task.system or task.system != D.KOAN_SYSTEM:
+                raise RuntimeError("today's koan task does not carry the release hint in its system prompt")
+            rendered[key] = [int(x) for x in chat_ids(tok, task.reset())[0]]
+        return rendered[key]
+
+    for name, rs, ts in (("stage_a", recs, turns), ("practice", precs, pturns)):
+        bad = [i for i, (r, t) in enumerate(zip(rs, ts)) if [int(x) for x in t[0][0]] != first_prompt(r)]
+        if bad:
+            raise RuntimeError(f"{len(bad)} of {len(rs)} stored first-turn prompts ({name}) do not re-render to the "
+                               f"same token ids with today's task and chat template (first episodes {bad[:5]})")
+        checks[f"first_turn_prompts_{name}"] = {"checked": len(rs), "identical": True}
+    checks["first_turn_prompts_distinct"] = len(rendered)
+
+    # the streams, and assertion 3
+    streams, stream_info = {}, {}
+    for name in U.STREAMS:
+        draws = U.stream_draws(recs, ev, name)
+        fp = U.draws_fingerprint(draws)
+        if fp != want["draws"][name]:
+            raise RuntimeError(f"the {name} stream's draws differ from the laptop's (fingerprint {fp[:16]})")
+        stream_info[name] = {"source": U.stream_summary(recs, ev, name), "draws_fingerprint": fp, "rounds": {}}
+        for s, by in draws.items():
+            rounds = {}
+            for r, idx in by.items():
+                rounds[r] = {"idx": idx, "items": [turns[i][-1] for i in idx], "summary": U.draw_summary(recs, idx)}
+                stream_info[name]["rounds"][f"s{s}_r{r}"] = rounds[r]["summary"]
+            streams[(name, s)] = {"stream": name, "seed": s, "rounds": rounds}
+    on_eval = ([f"practice {i}" for i, r in enumerate(precs) if U.record_pair(r) in ev]
+               + [f"{name} s{s} r{r}" for (name, s), st in streams.items() for r, rd in st["rounds"].items()
+                  if any(U.record_pair(recs[i]) in ev for i in rd["idx"])])
+    released = [f"{name} s{s} r{r}" for (name, s), st in streams.items() for r, rd in st["rounds"].items()
+                if rd["summary"]["by_outcome"].get("released") or len(rd["items"]) != U.DRAW_N]
+    if on_eval or released:
+        raise RuntimeError(f"an eval-split pair is trained on, or a round is not {U.DRAW_N} paid items: "
+                           f"{(on_eval + released)[:5]}")
+    checks["no_eval_pair_trained_on"] = True
+
+    # the old read path's pairs file: modal_retreat2.heldout_eval reads only rows whose split is "held", so each of
+    # the read's pairs is written with that label. They are Act I eval pairs from Gate 0's TRAIN split; Gate 0's
+    # held split is not read anywhere in step 3.
+    old_rows = [{**r, "gate0_split": r.get("split"), "split": "held",
+                 "u1_note": "an Act I eval pair of Gate 0's train split, labelled held only for the old read path"}
+                for r in pairs_rows if r["name"] in set(ev1)]
+    if sorted(r["name"] for r in old_rows) != sorted(ev1):
+        raise RuntimeError("the pair rows do not cover the read's pairs")
+
+    # everything checked: write
+    for arm, (data, dinfo) in doc_sets.items():
+        d = base / "sets" / f"{arm}docs"
+        d.mkdir(parents=True, exist_ok=True)
+        torch.save(data, d / "train.pt")
+        (d / "data.json").write_text(json.dumps(dinfo, indent=1))
+        (base / "held").mkdir(parents=True, exist_ok=True)
+        torch.save(held_sets[arm], base / "held" / f"{arm}.pt")
+    d = base / "sets" / "practice"
+    d.mkdir(parents=True, exist_ok=True)
+    torch.save({"records": precs, "turns": pturns}, d / "train.pt")
+    (d / "data.json").write_text(json.dumps(pinfo, indent=1))
+    (base / "streams").mkdir(parents=True, exist_ok=True)
+    for (name, s), st in streams.items():
+        torch.save(st, base / "streams" / f"{name}_s{s}.pt")
+    write_jsonl(base / U1_OLD_PAIRS, old_rows)
+    info = {"root": root, "model": model_key, "checks": checks,
+            "sets": {**{f"{arm}docs": dinfo for arm, (_, dinfo) in doc_sets.items()}, "practice": pinfo},
+            "held": {arm: {"docs": len(h["ids"]), "tokens": h["tokens"]} for arm, h in held_sets.items()},
+            "streams": stream_info, "eval_pairs": len(ev), "read_pairs": len(ev1), "unpractised": unpractised,
+            "old_path_pairs": f"{base}/{U1_OLD_PAIRS}", "stage_a": stage_a, "told": told,
+            "seconds": round(time.time() - t_start, 1)}
+    (base / "info.json").write_text(json.dumps(info, indent=1))
+    mc.runs.commit()
+    print(json.dumps({"root": root, "checks": {k: v for k, v in checks.items() if k != "stage_a"},
+                      "practice": {k: pinfo[k] for k in ("kept", "releases", "solves", "items", "tokens")},
+                      "unpractised": len(unpractised), "seconds": info["seconds"]}), flush=True)
+    return {"info": info, "seconds": info["seconds"]}
+
+
+@app.function(gpu=mc.GPU, cpu=4.0, memory=32768, volumes=VOLS, timeout=PRESS_TIMEOUT_S, env=ENV, max_containers=9)
+def press(init: str, label: str, tag: str, seed: int, stream: str, rounds: int, read_rounds: list, cfg: dict,
+          pairs_rows: list, eval_names: list, model_key: str = "ministral8b", root: str = "u1") -> dict:
+    """Step 3's phase 3 for one run: matched contrary training. Claude (Fable 5.2) wrote this, 10 Nov 2026.
+
+    Loads the base model and the adapter at `init` (an absolute path; an adapter that loads as all zeros is refused).
+    Then: the round-0 read; the mean loss per token on the three held-out document sets; and for each round 1..rounds,
+    cfg["steps"] optimizer steps on that seed's stream items for the round (anatta.train.expert_iteration.sft_steps,
+    a fresh optimizer every round, as train() does), with a read after each round named in read_rounds.
+
+    The read: the eval pairs under the koan arm with the release available (u1_envs: it raises unless the hint is in
+    every task's system prompt), u1_core.READ's samples per twin, attempts and temperature, and
+    torch.manual_seed(READ["seed_base"] + round) before it. The model's own choices play no part in what it is
+    trained on: every item comes from /runs/act1/<root>/streams/<stream>_s<seed>.pt.
+
+    Writes /runs/act1/<root>/<tag>/<label>/{read_r<r>.jsonl, log.jsonl, info.json, adapter/}, committing as train()
+    does. A folder that already holds a log is refused (a run is never overwritten). It also refuses to start if the
+    model cache no longer holds exactly the pinned snapshot (u1_snapshot_check), or if any read pair is dropped when
+    the pairs' references are run (before the model is loaded). The log and the returned record hold the raw reads
+    and no count of their outcomes."""
+    import random
+
+    import act1_core as C
+    import torch
+    import u1_core as U
+    from peft import PeftModel
+    from player import peak_gb, reset_peak, save_adapter
+
+    from anatta.train.expert_iteration import sft_steps
+
+    t_start = time.time()
+    base_dir = Path(f"{ROOT}/{root}")
+    out = base_dir / tag / label
+    reads_at = sorted({0, *(int(r) for r in read_rounds)})
+    if not init.startswith("/"):
+        raise ValueError("init is an absolute adapter path")
+    if stream not in U.STREAMS or not 0 <= rounds <= U.MAX_ROUNDS or reads_at[-1] > rounds:
+        raise ValueError(f"stream {stream!r}, rounds {rounds}, reads at {reads_at}: not a run the streams can serve")
+    mc.runs.reload()  # another container wrote the adapter and the sets; a warm container sees them after a reload
+    if (out / "log.jsonl").exists():  # never overwrite an earlier run (use a new tag)
+        raise RuntimeError(f"{out} already holds a run; pick a new tag")
+    # Phases 1 and 2 ran on h4lite's loader, which takes the hub id. If the cache has gained a snapshot since the sets
+    # were built, they may have trained on other files than the pinned ones this app loads: stop before the GPU work.
+    snapshot = u1_snapshot_check(model_key)
+    plan = torch.load(base_dir / "streams" / f"{stream}_s{seed}.pt")["rounds"] if rounds else {}
+    n_items = cfg["steps"] * cfg["batch"]
+    short = [r for r in range(1, rounds + 1) if r not in plan or len(plan[r]["items"]) != n_items]
+    if short:  # before the GPU work
+        raise RuntimeError(f"the stream has no round of {n_items} items for rounds {short}")
+    # The read's pairs, before the model is loaded: prepare_pairs drops a pair whose reference will not run, and a
+    # dropped pair would shrink every read of this run without a word. Every planned pair must be there.
+    pairs, prep = mc.prepare_pairs({r["name"]: mc.pair_from_row(r) for r in pairs_rows})
+    names = list(eval_names)
+    gone = [x for x in names if x not in pairs]
+    if gone or not names:
+        raise RuntimeError(f"{len(gone)} of the {len(names)} read pairs are missing after their references were run "
+                           f"({len(prep['dropped'])} dropped): a read must hold every planned pair")
+    random.seed(seed)
+    torch.manual_seed(seed)
+    base, tok, info = load_base(model_key)
+    if C.MODELS[model_key].get("ckpt"):  # recompute activations in the backward pass (active only in train mode)
+        base.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
+    model = PeftModel.from_pretrained(base, init, is_trainable=True)
+    info["init_adapter"] = init
+    info["init_lora_b_abs"] = lora_b_abs(model)
+    if not info["init_lora_b_abs"] > 0:  # before any GPU work beyond the load
+        raise RuntimeError(f"the init adapter {init} loaded with all-zero lora_B: its keys did not match")
+    model.eval()
+    player = safe_player(model, tok, max_new=tuple(U.READ["max_new"]), gen_batch=U.READ["gen_batch"])
+    params = [p for p in model.parameters() if p.requires_grad]
+    dev = next(model.parameters()).device
+    out.mkdir(parents=True, exist_ok=True)
+    reads, log = {}, []
+
+    def read(r: int) -> dict:
+        t0 = time.time()
+        torch.manual_seed(U.READ["seed_base"] + r)
+        envs = u1_envs(pairs, names, U.READ["n_impossible"], U.READ["n_solvable"], U.READ["attempts"])
+        eps, _ = play(player, envs, temp=U.READ["temperature"])
+        reads[r] = [u1_slim(e) for e in eps]
+        write_jsonl(out / f"read_r{r}.jsonl", reads[r])
+        # no summary of the outcomes here, in the log or in what is returned: the readout computes them, and only it
+        return {"episodes": len(eps), "s_read": round(time.time() - t0, 1)}
+
+    def note(rec: dict) -> None:
+        log.append(rec)
+        with open(out / "log.jsonl", "a") as f:
+            f.write(json.dumps(rec) + "\n")
+        mc.runs.commit()
+        # progress only: no outcome counts in the container's log (no arm is read before every block is in)
+        print(json.dumps({k: rec.get(k) for k in ("round", "episodes", "s_read", "nll_first", "nll_last", "s_train")}),
+              flush=True)
+
+    rec = {"round": 0, **read(0)}
+    held = {arm: u1_doc_nll(model, tok, torch.load(base_dir / "held" / f"{arm}.pt")["items"]) for arm in U.ARMS}
+    note(rec | {"held_nll": held, "peak_gb": peak_gb(), "oom_splits": player.oom_splits})
+    for r in range(1, rounds + 1):
+        t0 = time.time()
+        torch.manual_seed(seed * 1000 + r)
+        model.train()
+        reset_peak()
+        opt, nlls = sft_steps(model, params, plan[r]["items"], tok.pad_token_id, dev, cfg)
+        model.eval()
+        # free the optimizer state and gradients before generating again, as train() does
+        del opt
+        model.zero_grad(set_to_none=True)
+        torch.cuda.empty_cache()
+        rec = {"round": r, "items": plan[r]["summary"], "steps": len(nlls), "nll_first": nlls[0] if nlls else None,
+               "nll_last": nlls[-1] if nlls else None, "s_train": round(time.time() - t0, 1), "peak_gb": peak_gb()}
+        if r in reads_at:
+            rec |= read(r)
+        note(rec | {"oom_splits": player.oom_splits})
+    save_adapter(model, out / "adapter")
+    info |= {"label": label, "tag": tag, "seed": seed, "stream": stream, "rounds": rounds, "read_rounds": reads_at,
+             "cfg": cfg, "read": U.READ, "eval_pairs": len(names), "prep_dropped": prep["dropped"], "held_nll": held,
+             "root": root, "snapshot": snapshot, "seconds": round(time.time() - t_start, 1)}
+    (out / "info.json").write_text(json.dumps(info, indent=1))
+    mc.runs.commit()
+    return {"label": label, "tag": tag, "seed": seed, "stream": stream, "info": info, "prep_dropped": prep["dropped"],
+            "reads": reads, "held_nll": held, "log": log, "seconds": info["seconds"]}

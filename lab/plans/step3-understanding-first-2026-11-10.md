@@ -315,3 +315,59 @@ filter, the stream draw, the dose rule, the readings; a document generator; a la
 true-up; tests), and functions added to `lab/explore/act1/modal_act1.py` (building the sets and the streams on the
 volume with the four assertions; the phase 3 function). Documents and practice are trained by the existing
 `modal_sft.finetune`. A fresh Opus agent checks the code before the dose check runs.
+
+## Addendum, 11 Nov 2026: what the build added or changed, before any run
+
+Claude (Fable 5.2) wrote this addendum. Nothing above it is edited. Two cold Opus checks of the code
+(`lab/ledger/checks/2026-11-10-step3-code-opus-check.md`) found no blocker. Where the build departs from the note,
+this list is the record. Every item was decided before any document, set or run of step 3 existed.
+
+- **No training document may repeat its brief's wording.** Claude writes the briefs, and no Claude-written text is
+  trained on. A document is dropped if it holds a run of 8 consecutive words that is also in its brief: in the
+  system message, or in the brief after its first paragraph. The rule is the same for every arm.
+  - *N:* none of the pilot's first 3,000 neutral documents holds such a run. N is unchanged.
+  - *R:* 424 of the pilot's first 3,000 declared documents (14.1%) hold one; 310 of those repeat part of the
+    sentence that describes the situation. So R is no longer exactly the pilot's first 3,000. It is the first 3,000
+    rows of that file with no such run; they end at row 3,490, and 86% of them are the pilot's. The swap adds 3.7%
+    more words and moves the mix of emphasis, referent and genre by about a point; the shortest length is 18.6% of
+    the set, where it was 22.0%.
+  - *E:* filtered the same way as it is generated.
+  - *What the rule does not catch.* Runs of 7 words or fewer pass: 286 of R's 3,000 keep a 7-word run. The first
+    paragraph of a brief is exempt, because it holds the drawn genre, setting and topic, and a document is meant to
+    name its topic. So a topic phrase that Claude wrote (10 to 14 words, such as a made-up function in a made-up
+    library) is word for word in about one training document in eight of every arm: 377 of R's 3,000 and 366 of
+    N's.
+  - The pilot's arms of 1 Nov were trained on the unfiltered documents. By volume about 0.3% of the declared
+    documents' 8-word runs, and 0.1% of the neutral ones', came from a brief.
+  - The held-out documents for the loss read stay the pilot's first 200 of each kind as they stand (38 of R's hold
+    such a run). They are read, never trained on.
+- **Two lines added to the E brief.** The word "release" joins its forbidden words, since the filter already drops
+  any document that uses it. A new rule asks for the document's own wording.
+- **The judge's rubric** is the one above with clarifications: "keyword" joins the formats; "knows, believes,
+  sees" and "what tests are for" join what does not count as an act; "never hard-codes the output" joins the
+  examples of the strict form. The judge is asked only about documents that pass the filters, in brief order, and
+  only as far as the quota needs.
+- **The read by hand** is of the sample drawn under seed 0. A read with three or more violations is binding: the
+  documents must change before another read counts.
+- **A rehearsal before the dose check** (about $2): one run's three stages at small size (arm N, seed 0, one epoch
+  a fine-tune, one round, four read pairs). The dose check exercises phase 3 only. Nothing the rehearsal reads is
+  reported. The dose check does not start without a rehearsal that passed on the same sets under the same code.
+- **If the run ends early.** If the look says stop, or the spend stop refuses a block, the run has ended: no later
+  block starts, and the readings are computed on the seeds of the blocks that started, with the count stated.
+  Blocks start in order.
+- **A read must hold all 38 pairs.** A run whose container cannot prepare a read pair fails before the model loads
+  and is rerun under the failed-run rule. The readout refuses a read that does not hold the planned pairs and
+  samples.
+- **One dose check and one main run per set of sets.** The launcher refuses a second, and refuses to rebuild the
+  sets after a dose check unless the code or the inputs changed. The readout refuses to run under code that
+  differs from the freeze. The look is taken once.
+- **The dose check's two-path comparison** is computed on the 28 pairs on which the told adapters practised no
+  release, with the 38-pair figure shown beside it. Those adapters did practise solved episodes on some of the 28.
+- **The build's assertion on stored prompts** checks every stored prompt, not a sample. A free local run on 10 Nov
+  found all 6,192 of Stage A's and all 555 of the told set's identical to today's rendering.
+- **The practice set** keeps 76 of told's 102 releases and 313 of its 453 solved episodes (69%, where the note
+  says about three quarters): 389 episodes, 625 training items.
+- **Failures are counted per stage.** A run is one stage of one arm and seed. A launch that never started, or
+  whose connection dropped, is not a failed run.
+- **Episodes the environment cannot score** leave a rate's count. Stage A's 6,192 episodes had none.
+- **Cost:** about $123 with the rehearsal.

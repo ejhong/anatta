@@ -12,7 +12,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[1]
 LIVE = ["src/anatta", "tools", "lab/harness", *(f"lab/explore/{d}" for d in
                                                 ("scout", "bench", "act1", "selfmap", "agentic_release", "noself",
-                                                "shaping", "gate"))]
+                                                "shaping", "gate", "understand"))]
 PATTERNS = [re.compile(p) for p in (r"/Users/", r"cap_usd *= *[0-9]", r"\bDAILY_CAP\w* *= *[0-9]")]
 ALLOW_FILE = REPO / "tests" / "no_literals_allow.tsv"
 
