@@ -28,8 +28,9 @@ latter).
            /runs/act1/u1/ after four assertions (records and turns line up; stored prompts re-render to the same
            token ids; no eval pair is trained on; one model snapshot).
   press    step 3's phase 3 for one (arm, seed): from an adapter that went through documents and practice, the
-           round-0 read, the loss on held-out documents, then rounds of fine-tuning on the seed's stream with reads
-           at the rounds asked for. The read offers the release (its own task builder; make_envs does not).
+           read at step 0, the loss on held-out documents, then rounds of fine-tuning on the seed's stream, with
+           reads at the optimizer steps asked for, taken inside the rounds (revision 3 of the design, 11 Nov 2026).
+           The read offers the release (its own task builder; make_envs does not).
 
 All model-written code runs here, inside the container (koan_env's subprocess runner), never on the Mac. Only
 anatta-runs (written, under /runs/act1/ and, by gate, /runs/gate/) and anatta-calib-prh-k1 and anatta-hf-cache
@@ -719,7 +720,8 @@ def u1_sets(docs: dict, held: dict, pairs_rows: list, eval_names: list, eval_one
     Writes sets/{N,R,E}docs/{train.pt, data.json} (document items), held/{N,R,E}.pt, sets/practice/{train.pt,
     data.json} (the told set without every episode on an eval pair, records and turns kept in step),
     streams/{gameable,honest}_s<seed>.pt (rounds 1 to 8; a round's items are the final turns of the episodes
-    u1_core.stream_draws picks from Stage A's samples), pairs_oldpath.jsonl and info.json.
+    u1_core.stream_draws picks from Stage A's samples, each with its episode's outcome stored beside it, so that
+    press can count what a round cut short trained on), pairs_oldpath.jsonl and info.json.
 
     Before anything is written it asserts, and raises on any failure:
       1. Stage A's records and turns line up one to one (equal length, each record's n_turns equal to its turns),
@@ -848,7 +850,9 @@ def u1_sets(docs: dict, held: dict, pairs_rows: list, eval_names: list, eval_one
         for s, by in draws.items():
             rounds = {}
             for r, idx in by.items():
-                rounds[r] = {"idx": idx, "items": [turns[i][-1] for i in idx], "summary": U.draw_summary(recs, idx)}
+                rounds[r] = {"idx": idx, "items": [turns[i][-1] for i in idx],
+                             "outcomes": [recs[i]["outcome"] for i in idx],  # item by item, in the items' order
+                             "summary": U.draw_summary(recs, idx)}
                 stream_info[name]["rounds"][f"s{s}_r{r}"] = rounds[r]["summary"]
             streams[(name, s)] = {"stream": name, "seed": s, "rounds": rounds}
     on_eval = ([f"practice {i}" for i, r in enumerate(precs) if U.record_pair(r) in ev]
@@ -901,25 +905,34 @@ def u1_sets(docs: dict, held: dict, pairs_rows: list, eval_names: list, eval_one
 
 
 @app.function(gpu=mc.GPU, cpu=4.0, memory=32768, volumes=VOLS, timeout=PRESS_TIMEOUT_S, env=ENV, max_containers=9)
-def press(init: str, label: str, tag: str, seed: int, stream: str, rounds: int, read_rounds: list, cfg: dict,
+def press(init: str, label: str, tag: str, seed: int, stream: str, steps: int, read_steps: list, cfg: dict,
           pairs_rows: list, eval_names: list, model_key: str = "ministral8b", root: str = "u1") -> dict:
-    """Step 3's phase 3 for one run: matched contrary training. Claude (Fable 5.2) wrote this, 10 Nov 2026.
+    """Step 3's phase 3 for one run: matched contrary training. Claude (Fable 5.2) wrote this, 10 Nov 2026, and on
+    11 Nov 2026 changed it to read inside the rounds (revision 3 of the design, after the first dose check).
 
     Loads the base model and the adapter at `init` (an absolute path; an adapter that loads as all zeros is refused).
-    Then: the round-0 read; the mean loss per token on the three held-out document sets; and for each round 1..rounds,
-    cfg["steps"] optimizer steps on that seed's stream items for the round (anatta.train.expert_iteration.sft_steps,
-    a fresh optimizer every round, as train() does), with a read after each round named in read_rounds.
+    Then: the read at step 0; the mean loss per token on the three held-out document sets; and `steps` optimizer
+    steps on that seed's stream, round by round: one anatta.train.expert_iteration.sft_steps call a round on the
+    round's stored items (cfg["steps"] steps of cfg["batch"] items, a fresh optimizer every round, as train() does).
+    The last round may be cut short: it takes the first items of the round, enough for the steps still owed. The
+    learning rate is constant, so a round cut short is exactly the start of the full round.
+
+    A read point is a count of optimizer steps since the run began (read_steps; step 0 is always read). A later read
+    is taken from sft_steps' hook, right after that step: the gradients are cleared, the model goes to eval mode,
+    torch's random state (CPU and GPU) is saved, the read is made, the state is put back and the model goes back to
+    train mode. The optimizer is not touched, so the training is the same with or without the read.
 
     The read: the eval pairs under the koan arm with the release available (u1_envs: it raises unless the hint is in
     every task's system prompt), u1_core.READ's samples per twin, attempts and temperature, and
-    torch.manual_seed(READ["seed_base"] + round) before it. The model's own choices play no part in what it is
+    torch.manual_seed(READ["seed_base"] + step) before it. The model's own choices play no part in what it is
     trained on: every item comes from /runs/act1/<root>/streams/<stream>_s<seed>.pt.
 
-    Writes /runs/act1/<root>/<tag>/<label>/{read_r<r>.jsonl, log.jsonl, info.json, adapter/}, committing as train()
-    does. A folder that already holds a log is refused (a run is never overwritten). It also refuses to start if the
-    model cache no longer holds exactly the pinned snapshot (u1_snapshot_check), or if any read pair is dropped when
-    the pairs' references are run (before the model is loaded). The log and the returned record hold the raw reads
-    and no count of their outcomes."""
+    Writes /runs/act1/<root>/<tag>/<label>/{read_s<step>.jsonl, log.jsonl, info.json, adapter/}, committing as
+    train() does. A folder that already holds a log is refused (a run is never overwritten). It also refuses to start
+    if the model cache no longer holds exactly the pinned snapshot (u1_snapshot_check), if any read pair is dropped
+    when the pairs' references are run (before the model is loaded), or if the stream stores no outcome beside each
+    item (sets built before revision 3). The log and the returned record hold the raw reads and no count of their
+    outcomes; a round's log record counts what it trained on, by the stored outcomes."""
     import random
 
     import act1_core as C
@@ -933,11 +946,13 @@ def press(init: str, label: str, tag: str, seed: int, stream: str, rounds: int, 
     t_start = time.time()
     base_dir = Path(f"{ROOT}/{root}")
     out = base_dir / tag / label
-    reads_at = sorted({0, *(int(r) for r in read_rounds)})
+    reads_at = sorted({0, *(int(s) for s in read_steps)})
     if not init.startswith("/"):
         raise ValueError("init is an absolute adapter path")
-    if stream not in U.STREAMS or not 0 <= rounds <= U.MAX_ROUNDS or reads_at[-1] > rounds:
-        raise ValueError(f"stream {stream!r}, rounds {rounds}, reads at {reads_at}: not a run the streams can serve")
+    if (stream not in U.STREAMS or type(steps) is not int or not 0 <= steps <= U.MAX_ROUNDS * cfg["steps"]
+            or reads_at[0] < 0 or reads_at[-1] > steps):
+        raise ValueError(f"stream {stream!r}, {steps} steps, reads at steps {reads_at}: not a run the streams can serve")
+    rounds = -(-steps // cfg["steps"])  # the rounds entered; the last one is cut short when steps is not a multiple
     mc.runs.reload()  # another container wrote the adapter and the sets; a warm container sees them after a reload
     if (out / "log.jsonl").exists():  # never overwrite an earlier run (use a new tag)
         raise RuntimeError(f"{out} already holds a run; pick a new tag")
@@ -949,6 +964,11 @@ def press(init: str, label: str, tag: str, seed: int, stream: str, rounds: int, 
     short = [r for r in range(1, rounds + 1) if r not in plan or len(plan[r]["items"]) != n_items]
     if short:  # before the GPU work
         raise RuntimeError(f"the stream has no round of {n_items} items for rounds {short}")
+    bare = [r for r in range(1, rounds + 1) if len(plan[r].get("outcomes") or ()) != n_items
+            or U.trained_counts(plan[r]["outcomes"])["by_outcome"] != plan[r]["summary"]["by_outcome"]]
+    if bare:  # sets built before revision 3 hold no outcomes: a round cut short could not say what it trained on
+        raise RuntimeError(f"the stream does not store each item's outcome for rounds {bare}: build the sets again "
+                           "under a new root")
     # The read's pairs, before the model is loaded: prepare_pairs drops a pair whose reference will not run, and a
     # dropped pair would shrink every read of this run without a word. Every planned pair must be there.
     pairs, prep = mc.prepare_pairs({r["name"]: mc.pair_from_row(r) for r in pairs_rows})
@@ -974,13 +994,13 @@ def press(init: str, label: str, tag: str, seed: int, stream: str, rounds: int, 
     out.mkdir(parents=True, exist_ok=True)
     reads, log = {}, []
 
-    def read(r: int) -> dict:
+    def read(step: int) -> dict:
         t0 = time.time()
-        torch.manual_seed(U.READ["seed_base"] + r)
+        torch.manual_seed(U.READ["seed_base"] + step)
         envs = u1_envs(pairs, names, U.READ["n_impossible"], U.READ["n_solvable"], U.READ["attempts"])
         eps, _ = play(player, envs, temp=U.READ["temperature"])
-        reads[r] = [u1_slim(e) for e in eps]
-        write_jsonl(out / f"read_r{r}.jsonl", reads[r])
+        reads[step] = [u1_slim(e) for e in eps]
+        write_jsonl(out / f"read_s{step}.jsonl", reads[step])
         # no summary of the outcomes here, in the log or in what is returned: the readout computes them, and only it
         return {"episodes": len(eps), "s_read": round(time.time() - t0, 1)}
 
@@ -989,33 +1009,69 @@ def press(init: str, label: str, tag: str, seed: int, stream: str, rounds: int, 
         with open(out / "log.jsonl", "a") as f:
             f.write(json.dumps(rec) + "\n")
         mc.runs.commit()
-        # progress only: no outcome counts in the container's log (no arm is read before every block is in)
-        print(json.dumps({k: rec.get(k) for k in ("round", "episodes", "s_read", "nll_first", "nll_last", "s_train")}),
-              flush=True)
+        # progress only: no outcome of a read in the container's log (no arm is read before every block is in)
+        print(json.dumps({k: rec.get(k) for k in ("kind", "round", "step", "episodes", "s_read", "nll_first",
+                                                  "nll_last", "s_train")}), flush=True)
 
-    rec = {"round": 0, **read(0)}
+    def reader(before: int, rnd: int, seen: dict):
+        """sft_steps' hook for one round: after the k-th step of the round the run has taken before + k steps. When
+        that count is a read point, the read is made here, and the training goes on as if it had not been."""
+        def after_step(k: int, opt) -> None:  # opt is never touched
+            step = before + k
+            if step not in reads_at:
+                return
+            seen["peak_gb"] = max(seen["peak_gb"], peak_gb())  # the training's peak so far, kept apart from the read's
+            model.zero_grad(set_to_none=True)  # free the gradients before generating; the next step clears them anyway
+            torch.cuda.empty_cache()
+            model.eval()
+            cpu_rng = torch.get_rng_state()
+            gpu_rng = torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None
+            reset_peak()
+            rec = {"kind": "read", "round": rnd, "step": step, **read(step)}
+            torch.set_rng_state(cpu_rng)
+            if gpu_rng is not None:
+                torch.cuda.set_rng_state_all(gpu_rng)
+            seen["s_read"] += rec["s_read"]
+            note(rec | {"peak_gb": peak_gb(), "oom_splits": player.oom_splits})
+            reset_peak()
+            model.train()
+
+        return after_step
+
+    rec = {"kind": "read", "round": 0, "step": 0, **read(0)}
     held = {arm: u1_doc_nll(model, tok, torch.load(base_dir / "held" / f"{arm}.pt")["items"]) for arm in U.ARMS}
     note(rec | {"held_nll": held, "peak_gb": peak_gb(), "oom_splits": player.oom_splits})
+    done = 0
     for r in range(1, rounds + 1):
+        owed = min(cfg["steps"], steps - done)  # under cfg["steps"] only in a last round cut short
+        take = owed * cfg["batch"]
+        seen = {"s_read": 0.0, "peak_gb": 0.0}
         t0 = time.time()
         torch.manual_seed(seed * 1000 + r)
         model.train()
         reset_peak()
-        opt, nlls = sft_steps(model, params, plan[r]["items"], tok.pad_token_id, dev, cfg)
+        opt, nlls = sft_steps(model, params, plan[r]["items"][:take], tok.pad_token_id, dev, cfg,
+                              on_step=reader(done, r, seen))
         model.eval()
         # free the optimizer state and gradients before generating again, as train() does
         del opt
         model.zero_grad(set_to_none=True)
         torch.cuda.empty_cache()
-        rec = {"round": r, "items": plan[r]["summary"], "steps": len(nlls), "nll_first": nlls[0] if nlls else None,
-               "nll_last": nlls[-1] if nlls else None, "s_train": round(time.time() - t0, 1), "peak_gb": peak_gb()}
-        if r in reads_at:
-            rec |= read(r)
-        note(rec | {"oom_splits": player.oom_splits})
+        if len(nlls) != owed:
+            raise RuntimeError(f"round {r} took {len(nlls)} optimizer steps where {owed} were owed")
+        done += owed
+        note({"kind": "train", "round": r, "step": done, "steps": owed, "cut": owed < cfg["steps"],
+              "items": U.trained_counts(plan[r]["outcomes"][:take]), "draw": plan[r]["summary"],
+              "nll_first": nlls[0] if nlls else None, "nll_last": nlls[-1] if nlls else None,
+              "s_train": round(time.time() - t0 - seen["s_read"], 1), "peak_gb": max(seen["peak_gb"], peak_gb()),
+              "oom_splits": player.oom_splits})
+    missing = [s for s in reads_at if s not in reads]
+    if done != steps or missing:
+        raise RuntimeError(f"the run took {done} of {steps} steps and made no read at steps {missing}")
     save_adapter(model, out / "adapter")
-    info |= {"label": label, "tag": tag, "seed": seed, "stream": stream, "rounds": rounds, "read_rounds": reads_at,
-             "cfg": cfg, "read": U.READ, "eval_pairs": len(names), "prep_dropped": prep["dropped"], "held_nll": held,
-             "root": root, "snapshot": snapshot, "seconds": round(time.time() - t_start, 1)}
+    info |= {"label": label, "tag": tag, "seed": seed, "stream": stream, "steps": steps, "read_steps": reads_at,
+             "rounds": rounds, "cfg": cfg, "read": U.READ, "eval_pairs": len(names), "prep_dropped": prep["dropped"],
+             "held_nll": held, "root": root, "snapshot": snapshot, "seconds": round(time.time() - t_start, 1)}
     (out / "info.json").write_text(json.dumps(info, indent=1))
     mc.runs.commit()
     return {"label": label, "tag": tag, "seed": seed, "stream": stream, "info": info, "prep_dropped": prep["dropped"],

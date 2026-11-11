@@ -236,11 +236,18 @@ def round_stats(episodes: list[dict], arm: str) -> dict:
             "groups_total": len(groups_of(episodes))}
 
 
-def sft_steps(model, params: list, items: list, pad_id: int, dev, cfg: dict) -> tuple:
+def sft_steps(model, params: list, items: list, pad_id: int, dev, cfg: dict, on_step=None) -> tuple:
     """The fine-tune of one round: fixed steps, cfg["batch"] items per step in micro-batches of cfg["micro"]; mean NLL
     per completion token; AdamW (lr cfg["lr"], no weight decay), grad-norm clip 1.0. items: [(prompt ids, completion
     ids)]. Returns (the optimizer, the per-step NLLs); the caller frees the optimizer before generating again. The
-    caller puts the model in train mode (and resets the memory peak) first, as modal_act1's train() always did."""
+    caller puts the model in train mode (and resets the memory peak) first, as modal_act1's train() always did.
+
+    on_step (added 11 Nov 2026 by Claude, Fable 5.2, for step 3's reads inside a round): when given, it is called
+    after every optimizer step as on_step(k, opt), k being the steps taken so far in this call (1, 2, ...) and opt
+    the optimizer. With on_step=None the loop is the loop as it always was. The learning rate is constant and the
+    optimizer is made fresh in each call, so the first k steps of a call do not depend on how many follow; a hook
+    that leaves the parameters and the optimizer as it found them, and hands the model back in train mode, changes
+    nothing that is trained (it may clear the gradients: the next step clears them first anyway)."""
     import torch
 
     from anatta.player import pack, token_logps
@@ -261,4 +268,6 @@ def sft_steps(model, params: list, items: list, pad_id: int, dev, cfg: dict) -> 
         torch.nn.utils.clip_grad_norm_(params, 1.0)
         opt.step()
         nlls.append(tot)
+        if on_step is not None:
+            on_step(len(nlls), opt)
     return opt, nlls

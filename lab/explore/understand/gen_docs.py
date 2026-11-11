@@ -17,7 +17,10 @@ on.
                       and the judge and top-ups while a stream is short. Resumes from its cache. Writes
                       explained.jsonl and held_explained.jsonl (the pilot's row fields) and manifest.json (counts by
                       flag and label, usage and cost, the echo shares, the hashes of the code that selected them).
-                      Refuses unless the last smoke met its gate under the same brief and the same judge.
+                      Refuses unless the last smoke met its gate under the same brief and the same judge. Two cases
+                      go on without one: the second screen after a failing read by hand, and a build that only
+                      selects again (the documents on disk are of this brief and this judge prompt). The second
+                      can make no paid call: if its selection needs a new generation or verdict, it stops.
   --sample N --seed S N kept documents, chosen by seed, written to a text file for the read by hand. The read that
                       counts is of the sample under seed 0 (u1_core.HAND_READ_SEED); other seeds are extra looks.
   --hand-read N --violations K [--note TEXT]
@@ -481,6 +484,8 @@ def run_passes(run: dict, targets: dict, strict: bool, caps: dict, chat_fn, judg
         left = caps["generation_left"]()
         if not missing:
             continue
+        if getattr(chat_fn, "refuses", False):  # a build that may only select again: it stops before any reserve
+            chat_fn()
         if left < gen_bound(cfg):
             stop = f"the generation cap is reached (${left:.2f} left)"
             break
@@ -510,6 +515,8 @@ def run_passes(run: dict, targets: dict, strict: bool, caps: dict, chat_fn, judg
                 todo += s["waiting"][:math.ceil(s["short"] * 1.15) + 5]
         if not todo:
             break
+        if getattr(judge_fn, "refuses", False):  # a build that may only select again: it stops before any reserve
+            judge_fn()
         left = caps["judge_left"]()
         if left < judge_bound():
             stop = f"the judge's cap is reached (${left:.2f} left)"
@@ -640,15 +647,52 @@ def rescreen_reason(strict: bool) -> str | None:
             "tightened and every document is screened again")
 
 
+def same_screen_reason(strict: bool) -> str | None:
+    """Why the build may run without a smoke that met its gate under the judge prompt as it is now (None: it may
+    not): because it only selects again. When the documents on disk were built from the brief as it is now, under the
+    judge's form and the rubric's wording as they are now, a build asks nothing new of the brief or the judge: it
+    reads its cache and its verdicts again and writes the same files, with a manifest that names the code as it is
+    now. That is how the manifest is refreshed after an edit elsewhere in the files it names (run_u1.local_docs
+    refuses a manifest written by other code)."""
+    man_file = docs_dir(False) / "manifest.json"
+    if not man_file.is_file():
+        return None
+    man = json.loads(man_file.read_text())
+    j = man.get("judge") or {}
+    if man.get("briefs_sha256") != briefs_sha(config(), stream_plan(False)):
+        return None
+    if (j.get("form"), j.get("rubric_sha256")) != (U.judge_form(strict), U.judge_sha(strict)):
+        return None
+    return ("the documents on disk were built from this brief under this judge prompt, so the build only selects again "
+            "from its cache and its verdicts")
+
+
+def no_new_call(what: str, strict: bool):
+    """The chat function of a build that may only select again (same_screen_reason): it makes no call and raises. A
+    build that got this far without a passing smoke may read what is already paid for, its cache and its verdicts,
+    and nothing more. If its selection needs `what` (a new generation, or a new verdict), it stops here. run_passes
+    asks such a function before it reserves anything (its `refuses` mark), so the stop leaves no booking behind."""
+    def refuse(*a, **k):
+        raise SystemExit(f"refused: this build went ahead only to select again from its cache and its verdicts, and "
+                         f"the selection needs {what}. Nothing was called or paid for. A smoke under this brief and "
+                         "this judge prompt must pass first: run --smoke" + ("" if strict else " --no-strict"))
+
+    refuse.refuses = True
+    return refuse
+
+
 def cmd_build(strict: bool = True, chat_fn=None, judge_fn=None, workers: dict | None = None, log=print) -> int:
     chat_fn, judge_fn = chat_fn or live_chat(), judge_fn or live_chat()
     if why := smoke_refusal(strict):
-        again = rescreen_reason(strict)
+        rescreen = rescreen_reason(strict)
+        again = rescreen or same_screen_reason(strict)
         if again is None:
             raise SystemExit(f"refused: {why}. A passing smoke comes before the build: run --smoke"
                              + ("" if strict else " --no-strict") + " first")
-        log(f"no smoke has met its gate under the judge prompt as it is now ({why}). The build goes on as the second "
-            f"screen: {again}", flush=True)
+        log(f"no smoke has met its gate under the judge prompt as it is now ({why}). The build goes on all the same: "
+            f"{again}", flush=True)
+        if rescreen is None:  # it goes on only because it selects again: it can make no paid call (added 11 Nov 2026)
+            chat_fn, judge_fn = no_new_call("a new generation", strict), no_new_call("a new verdict", strict)
     run = open_run(False)
     folder, cache = run["folder"], run["cache"]
     caps = {"generation_left": lambda: CAPS["generation"] - cache_cost(folder),

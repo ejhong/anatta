@@ -180,8 +180,9 @@ SNAP = "abc123"  # the stand-in model snapshot's name
 
 def install_act1(monkeypatch, tmp_path):
     """modal_act1 imported under a stub `modal` and `peft`, with a fake model and tokenizer, scripted episodes and a
-    temporary volume. Returns (the module, a record of what its functions did). `rec.outcome(env, k, round)` scripts a
-    read's outcomes (a test may replace it); `rec.run` holds the keyword arguments of the press call under way."""
+    temporary volume. Returns (the module, a record of what its functions did). `rec.outcome(env, k, step)` scripts a
+    read's outcomes (a test may replace it); `rec.run` holds the keyword arguments of the press call under way.
+    `rec.events` lists what happened in order: "read", "nll", "train" (a round's sft_steps call) and "step"."""
     import torch
     import u1_core as U
 
@@ -229,12 +230,14 @@ def install_act1(monkeypatch, tmp_path):
 
     def fake_play(player, envs, temp, with_texts=False):
         assert temp == 0.7 and not with_texts
-        rnd = torch.initial_seed() - U.READ["seed_base"]
+        step = torch.initial_seed() - U.READ["seed_base"]  # press seeds torch with the base plus the read's step
         rec.events.append("read")
-        rec.reads.append({"seed": torch.initial_seed(), "envs": envs, "training": rec.model.training})
+        rec.reads.append({"seed": torch.initial_seed(), "envs": envs, "training": rec.model.training,
+                          "grads": sum(p.grad is not None for p in rec.model.parameters())})
+        torch.rand(7)  # a read samples: it moves torch's random state, as generation does
         eps = []
         for k, e in enumerate(envs):
-            out = rec.outcome(e, k, rnd)
+            out = rec.outcome(e, k, step)
             eps.append({"name": e.name, "pair": e.pair.name, "impossible": e.impossible, "kind": e.pair.mutate[2],
                         "outcome": out, "turn": 1, "n_turns": 1, "hardcoded": True if out == "hacked" else None,
                         "tokens": 5, "error": None, "replies": ["model text, kept as data"], "first_fail": False,
@@ -243,16 +246,37 @@ def install_act1(monkeypatch, tmp_path):
                         "reason": "the second check disagrees with the docstring" if out == "released" else None})
         return eps, [[([1], [2])] for _ in envs]
 
-    def fake_sft(model, params, items, pad_id, dev, cfg):
+    class Untouched:
+        """The round's optimizer: any use of it is an error (a read inside a round must not touch the optimizer)."""
+
+        def __getattr__(self, name):
+            raise AssertionError(f"the optimizer was touched: {name}")
+
+    def fake_sft(model, params, items, pad_id, dev, cfg, on_step=None):
+        """sft_steps' stand-in: one step for every cfg["batch"] items, a made-up loss a step, a gradient left on the
+        model, and the hook called after every step as the real one calls it. After each step (and its hook) it
+        draws a number from torch, so a test can see whether a read moved the training's random state."""
         rec.events.append("train")
-        rec.trained.append({"items": list(items), "cfg": dict(cfg), "training": model.training})
-        return object(), [2.0, 1.5, 1.0]
+        took = {"items": list(items), "cfg": dict(cfg), "training": model.training, "draws": [], "after_hook": []}
+        rec.trained.append(took)
+        opt, nlls = Untouched(), []
+        for k in range(1, -(-len(items) // cfg["batch"]) + 1):
+            rec.events.append("step")
+            for p in model.parameters():
+                p.grad = torch.ones_like(p)
+            nlls.append(round(2.0 - 0.05 * (k - 1), 2))
+            if on_step is not None:
+                on_step(k, opt)
+                took["after_hook"].append(model.training)
+            took["draws"].append(torch.rand(1).item())
+        return opt, nlls
 
     def fake_nll(model, tok, items, micro=8):
         rec.events.append("nll")
         return {"docs": len(items), "tokens": 10 * len(items), "nll_per_token": 1.25, "mean_doc_nll": 1.3}
 
     monkeypatch.setattr(M, "play", fake_play)
+    monkeypatch.setattr(M, "_real_sft_steps", EI.sft_steps, raising=False)  # for a test that wants the real loop
     monkeypatch.setattr(EI, "sft_steps", fake_sft)
     monkeypatch.setattr(M, "_real_u1_doc_nll", M.u1_doc_nll, raising=False)
     monkeypatch.setattr(M, "u1_doc_nll", fake_nll)
@@ -304,17 +328,18 @@ def read_eps(pairs, released, hacked=0, n_imp=4, n_sol=2, solved=2, over=0) -> l
 
 def write_press_run(d: Path, reads: dict, held_nll: dict | None = None, *, seed: int = 0, stream: str = "gameable",
                     init: str = "/runs/act1/u1/adapter", **info) -> None:
-    """A finished press run's local files, as run_u1.save_press writes them: the reads, an empty log, and the
-    container's own record of the run (its seed, stream, rounds, read rounds, settings and init adapter)."""
+    """A finished press run's local files, as run_u1.save_press writes them: the reads ({step: episodes}), an empty
+    log, and the container's own record of the run (its seed, stream, the steps it trained, the steps it read at,
+    settings and init adapter)."""
     import json
 
     import u1_core as U
 
     d.mkdir(parents=True, exist_ok=True)
-    for r, eps in reads.items():
-        (d / f"read_r{r}.jsonl").write_text("".join(json.dumps(e) + "\n" for e in eps))
+    for s, eps in reads.items():
+        (d / f"read_s{s}.jsonl").write_text("".join(json.dumps(e) + "\n" for e in eps))
     (d / "log.jsonl").write_text("")
     nll = held_nll or {k: {"nll_per_token": 2.0} for k in ("N", "R", "E")}
     (d / "info.json").write_text(json.dumps({"label": d.name, "held_nll": nll, "info": {
-        "init_lora_b_abs": 1.5, "seed": seed, "stream": stream, "rounds": max(reads), "read_rounds": sorted(reads),
+        "init_lora_b_abs": 1.5, "seed": seed, "stream": stream, "steps": max(reads), "read_steps": sorted(reads),
         "cfg": dict(U.PRESS_CFG), "read": dict(U.READ), "init_adapter": init, **info}}))

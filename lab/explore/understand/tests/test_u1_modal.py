@@ -1,7 +1,8 @@
 """modal_act1.u1_sets() and press() run in this process on stand-ins: a stub `modal` and `peft`, a character-level
 tokenizer, toy task pairs, a synthetic Stage A sample and told set, scripted episodes. No GPU, no Modal, no network,
 no model-written code run (koan_env's task prompt is the real one; the env's step is never called). Claude (Fable
-5.2, an AI model) wrote this file on 10 Nov 2026, before any run existed. Explore speed."""
+5.2, an AI model) wrote this file on 10 Nov 2026, before any run existed, and on 11 Nov 2026 moved it to revision 3
+(press trains a count of optimizer steps and reads inside the rounds). Explore speed."""
 
 import json
 import sys
@@ -101,6 +102,9 @@ def test_u1_sets_writes_the_streams_from_the_volumes_own_records(built):
             for r, rd in st["rounds"].items():
                 assert rd["idx"] == draws[s][r] and len(rd["items"]) == 192
                 assert rd["items"] == [sa["turns"][i][-1] for i in rd["idx"]]  # the final turn of each drawn episode
+                # each item's outcome sits beside it, in the items' order (a cut round counts what it trained on)
+                assert rd["outcomes"] == [sa["records"][i]["outcome"] for i in rd["idx"]]
+                assert U.trained_counts(rd["outcomes"])["by_outcome"] == rd["summary"]["by_outcome"]
                 assert rd["summary"] == U.draw_summary(sa["records"], rd["idx"])
                 assert not any(sa["records"][i]["pair"] in ev for i in rd["idx"])
                 assert "released" not in rd["summary"]["by_outcome"]
@@ -283,42 +287,181 @@ def test_the_snapshot_check_and_the_tokenizers_path(app, monkeypatch):
 # ------------------------------------------------------------------------------------------------ press
 
 
-def run_press(M, inp, label="E_s3", tag="main", seed=3, stream="gameable", rounds=4, reads=(2, 4), init="/vol/a/adapter",
+def run_press(M, inp, label="E_s3", tag="main", seed=3, stream="gameable", steps=24, reads=(6, 24), init="/vol/a/adapter",
               **over):
-    return M.press(init, label, tag, seed, stream, rounds, list(reads), over.pop("cfg", CFG), inp["pairs_rows"],
+    return M.press(init, label, tag, seed, stream, steps, list(reads), over.pop("cfg", CFG), inp["pairs_rows"],
                    inp["eval_oneoff"], **over)
 
 
-def test_press_reads_at_round_0_before_any_training_then_trains_on_the_seeds_stream(built):
+def events(*parts) -> list:
+    """A run's events in order: "read", "nll" and "train" as given, and a number for that many optimizer steps."""
+    return [e for p in parts for e in (["step"] * p if isinstance(p, int) else [p])]
+
+
+def test_press_reads_at_step_0_before_any_training_then_trains_on_the_seeds_stream(built):
     M, rec, inp, _, base = built
     res = run_press(M, inp)
-    # the order: the round-0 read, the loss on the three held-out sets, then training with a read after rounds 2 and 4
-    assert rec.events == ["read", "nll", "nll", "nll", "train", "train", "read", "train", "train", "read"]
+    # the order: the read at step 0, the loss on the three held-out sets, then two rounds of 12 steps, with a read
+    # inside the first round (after its step 6) and a read after the last step of the second (step 24)
+    assert rec.events == events("read", "nll", "nll", "nll", "train", 6, "read", 6, "train", 12, "read")
     assert rec.loaded == [("/vol/a/adapter", True)] and res["info"]["init_lora_b_abs"] == 2.5
     assert res["info"]["init_adapter"] == "/vol/a/adapter" and rec.model.ckpt == 1
     stream = torch.load(base / "streams" / "gameable_s3.pt")["rounds"]
-    assert [t["items"] for t in rec.trained] == [stream[r]["items"] for r in (1, 2, 3, 4)]  # the seed's own rounds
+    assert [t["items"] for t in rec.trained] == [stream[r]["items"] for r in (1, 2)]  # the seed's own rounds, whole
     assert all(t["cfg"] == CFG and t["training"] and len(t["items"]) == 192 for t in rec.trained)
     assert rec.players == [{"max_new": (512, 384), "gen_batch": 32}]
-    assert [r["seed"] for r in rec.reads] == [10_000, 10_002, 10_004] and not any(r["training"] for r in rec.reads)
+    # a read's seed is the base plus its step; no read is made in train mode or with gradients still held
+    assert [r["seed"] for r in rec.reads] == [10_000, 10_006, 10_024]
+    assert not any(r["training"] or r["grads"] for r in rec.reads)
+    assert all(t["after_hook"] == [True] * 12 for t in rec.trained)  # the model is handed back in train mode
     out = base / "main" / "E_s3"
-    assert sorted(p.name for p in out.iterdir()) == ["info.json", "log.jsonl", "read_r0.jsonl", "read_r2.jsonl", "read_r4.jsonl"]
+    assert sorted(p.name for p in out.iterdir()) == ["info.json", "log.jsonl", "read_s0.jsonl", "read_s24.jsonl",
+                                                     "read_s6.jsonl"]
     assert rec.saved == [str(out / "adapter")]
     log = [json.loads(x) for x in (out / "log.jsonl").read_text().splitlines()]
-    assert [x["round"] for x in log] == [0, 1, 2, 3, 4] == [x["round"] for x in res["log"]]
+    assert log == json.loads(json.dumps(res["log"]))
+    assert [(x["kind"], x["round"], x["step"]) for x in log] == [
+        ("read", 0, 0), ("read", 1, 6), ("train", 1, 12), ("read", 2, 24), ("train", 2, 24)]
     assert set(log[0]["held_nll"]) == {"N", "R", "E"} and log[0]["held_nll"]["E"]["nll_per_token"] == 1.25
     # a read's log record says how many episodes it held and how long it took, and nothing of their outcomes
-    assert [("episodes" in x, "s_read" in x) for x in log] == [(True, True), (False, False), (True, True), (False, False),
-                                                              (True, True)]
+    assert [("episodes" in x, "s_read" in x) for x in log] == [(x["kind"] == "read",) * 2 for x in log]
     assert log[0]["episodes"] == 18 and not any(k in x for x in log for k in ("read", "imp", "sol", "released"))
+    assert all(set(x) == {"kind", "round", "step", "episodes", "s_read", "peak_gb", "oom_splits"} for x in (log[1], log[3]))
     assert set(res) == {"label", "tag", "seed", "stream", "info", "prep_dropped", "reads", "held_nll", "log", "seconds"}
     assert not any(k in json.dumps(res["info"]) for k in ('"imp"', '"released"', '"over_released"'))
-    assert log[1]["items"] == stream[1]["summary"] and (log[1]["nll_first"], log[1]["nll_last"], log[1]["steps"]) == (2.0, 1.0, 3)
+    # a round's record: the steps it took, what it trained on by the stored outcomes, and the round's whole draw
+    one = log[2]
+    assert (one["steps"], one["cut"], one["nll_first"], one["nll_last"]) == (12, False, 2.0, 1.45)
+    assert one["draw"] == stream[1]["summary"] and one["items"] == U.trained_counts(stream[1]["outcomes"])
+    assert one["items"]["n"] == 192 and one["items"]["hacked"] == stream[1]["summary"]["hacked"] > 0
     info = json.loads((out / "info.json").read_text())
-    assert info == res["info"] and info["read_rounds"] == [0, 2, 4] and info["rounds"] == 4 and info["stream"] == "gameable"
+    assert info == res["info"] and info["read_steps"] == [0, 6, 24] and info["steps"] == 24 and info["rounds"] == 2
+    assert info["stream"] == "gameable" and "read_rounds" not in info
     assert info["read"] == U.READ and info["cfg"] == CFG and info["eval_pairs"] == 3 and info["held_nll"] == res["held_nll"]
     assert info["snapshot"] == {"pinned": SNAP, "snapshots": [SNAP], "refs_main": SNAP}
-    assert sorted(res["reads"]) == [0, 2, 4] and res["seconds"] >= 0 and res["prep_dropped"] == []
+    assert sorted(res["reads"]) == [0, 6, 24] and res["seconds"] >= 0 and res["prep_dropped"] == []
+    assert U.plan_problems(info, U.run_plan(3, "gameable", 24, [6, 24], "/vol/a/adapter", inp["eval_oneoff"])) == []
+
+
+def test_a_round_cut_short_trains_the_start_of_the_round(built):
+    """A run of 18 steps is round 1 whole and the first 6 steps of round 2: that round's first 96 items, in order.
+    Its log record counts what those items were, by the outcome stored beside each."""
+    M, rec, inp, _, base = built
+    res = run_press(M, inp, label="cut", steps=18, reads=(3, 18))
+    stream = torch.load(base / "streams" / "gameable_s3.pt")["rounds"]
+    assert rec.events == events("read", "nll", "nll", "nll", "train", 3, "read", 9, "train", 6, "read")
+    assert [t["items"] for t in rec.trained] == [stream[1]["items"], stream[2]["items"][:96]]
+    cut = res["log"][-1]
+    assert (cut["kind"], cut["round"], cut["step"], cut["steps"], cut["cut"]) == ("train", 2, 18, 6, True)
+    assert cut["items"] == U.trained_counts(stream[2]["outcomes"][:96]) and cut["items"]["n"] == 96
+    assert cut["items"]["hacked"] == stream[2]["outcomes"][:96].count("hacked")
+    assert cut["draw"] == stream[2]["summary"] and cut["draw"]["n"] == 192  # the round as drawn, beside what it took
+    assert (cut["nll_first"], cut["nll_last"]) == (2.0, 1.75)
+    assert res["info"]["steps"] == 18 and res["info"]["rounds"] == 2 and res["info"]["read_steps"] == [0, 3, 18]
+    assert [r["seed"] for r in rec.reads] == [10_000, 10_003, 10_018]
+    # the rehearsal's shape: six steps, a read inside the round (step 3) and a read at the end of training (step 6)
+    for kept in (rec.events, rec.trained, rec.reads):
+        kept.clear()
+    six = run_press(M, inp, label="six", steps=6, reads=(3, 6))
+    assert rec.events == events("read", "nll", "nll", "nll", "train", 3, "read", 3, "read")
+    assert [t["items"] for t in rec.trained] == [stream[1]["items"][:96]]
+    assert [r["seed"] for r in rec.reads] == [10_000, 10_003, 10_006] and sorted(six["reads"]) == [0, 3, 6]
+    assert not any(r["training"] or r["grads"] for r in rec.reads)
+    assert sorted(p.name for p in (base / "main" / "six").iterdir()) == [
+        "info.json", "log.jsonl", "read_s0.jsonl", "read_s3.jsonl", "read_s6.jsonl"]
+    assert [(x["kind"], x["step"]) for x in six["log"]] == [("read", 0), ("read", 3), ("read", 6), ("train", 6)]
+
+
+def test_a_read_inside_a_round_leaves_the_training_as_it_was(built, monkeypatch):
+    """The round's items and torch's random state after every step are the same with reads inside the round as with
+    none: the read reseeds torch and samples, and press puts the state back. The stand-in optimizer raises if it is
+    touched at all. With the putting back taken away, the same test sees the difference."""
+    M, rec, inp, _, base = built
+    run_press(M, inp, label="plain", steps=12, reads=())
+    plain = rec.trained[-1]
+    run_press(M, inp, label="read_inside", steps=12, reads=(3, 6, 12))
+    inside = rec.trained[-1]
+    assert len(plain["draws"]) == 12 and len(set(plain["draws"])) == 12
+    assert inside["items"] == plain["items"] and inside["draws"] == plain["draws"]
+    assert [r["seed"] for r in rec.reads[-4:]] == [10_000, 10_003, 10_006, 10_012]
+    monkeypatch.setattr(torch, "set_rng_state", lambda state: None)
+    run_press(M, inp, label="state_not_put_back", steps=12, reads=(3, 6, 12))
+    moved = rec.trained[-1]  # the stand-in draws after each step's hook: the read at step 3 moves the third draw on
+    assert moved["draws"][:2] == plain["draws"][:2] and moved["draws"][2] != plain["draws"][2]
+    assert all(a != b for a, b in zip(moved["draws"][2:], plain["draws"][2:]))
+
+
+class TinyTrainable(TinyLM):
+    """TinyLM with dropout, so that training draws from torch's random state, and the two things press asks of a
+    base model. Built the same every time (TinyLM seeds torch first)."""
+
+    def __init__(self):
+        super().__init__(vocab=2048)
+        self.drop = torch.nn.Dropout(0.2)
+        self.config = SimpleNamespace(hidden_size=8, num_hidden_layers=1)
+
+    def forward(self, input_ids, attention_mask, position_ids):
+        return SimpleNamespace(logits=self.out(self.drop(self.emb(input_ids))))
+
+    def gradient_checkpointing_enable(self, **k):
+        pass
+
+
+def test_with_the_real_training_loop_a_read_inside_a_round_changes_no_parameter(built, monkeypatch):
+    """press's own hook around the real sft_steps, on a tiny real model with dropout. The parameters after a round
+    with reads inside it are bit for bit those after the same round with none; a round cut short ends exactly where
+    the whole round stood after as many steps; and without the random state put back, they differ."""
+    M, rec, inp, _, base = built
+    from anatta.train import expert_iteration as EI
+
+    monkeypatch.setattr(EI, "sft_steps", M._real_sft_steps)
+    seen, play = [], M.play
+
+    def watched(player, envs, temp):  # what the model holds at each read, and the mode it is read in
+        seen.append(({k: v.detach().clone() for k, v in rec.model.state_dict().items()}, rec.model.training))
+        return play(player, envs, temp)
+
+    monkeypatch.setattr(M, "play", watched)
+
+    def run(label, steps, reads):
+        rec.model = TinyTrainable()  # the same start for every run
+        seen.clear()
+        res = run_press(M, inp, label=label, steps=steps, reads=reads)
+        return {k: v.detach().clone() for k, v in rec.model.state_dict().items()}, list(seen), res
+
+    def same(a, b):
+        return a.keys() == b.keys() and all(torch.equal(a[k], b[k]) for k in a)
+
+    start = {k: v.detach().clone() for k, v in TinyTrainable().state_dict().items()}
+    plain, at_plain, res = run("plain", 12, ())
+    assert not same(plain, start) and same(at_plain[0][0], start)  # it trained; the read at step 0 is of the start
+    assert res["log"][-1]["steps"] == 12 and res["log"][-1]["nll_first"] > 0  # the real loop's own loss, not a stand-in's
+    inside, at, _ = run("inside", 12, (3, 6, 12))
+    assert same(inside, plain)  # three reads inside the round: not one parameter moved by them
+    assert [training for _, training in at] == [False] * 4 and same(at[3][0], plain)  # read in eval mode; step 12 is the end
+    assert not same(at[1][0], at[2][0]) and not same(at[2][0], plain)  # the reads at steps 3 and 6 saw the round under way
+    cut, _, res = run("cut", 6, (3,))
+    assert same(cut, at[2][0])  # six steps of a round cut short: where the whole round stood after its sixth step
+    assert res["log"][-1]["cut"] is True and res["log"][-1]["steps"] == 6
+    monkeypatch.setattr(torch, "set_rng_state", lambda state: None)
+    moved, _, _ = run("state_not_put_back", 12, (3, 6, 12))
+    assert not same(moved, plain)  # dropout drew from the state the read left: the restore is what keeps training the same
+
+
+def test_the_step_0_read_does_not_depend_on_what_the_run_does_next(built):
+    """The read at step 0 is the old round-0 read: seed 10,000, made before the loss read and before any training,
+    in eval mode, and the same bytes whatever steps and read steps the run was asked for."""
+    M, rec, inp, _, base = built
+    seen = []
+    for label, steps, reads in (("only", 0, ()), ("dose", 12, (3, 6, 12)), ("main", 24, (12, 24))):
+        for kept in (rec.events, rec.reads):
+            kept.clear()
+        run_press(M, inp, label=label, steps=steps, reads=reads)
+        assert rec.events[:4] == ["read", "nll", "nll", "nll"]
+        assert rec.reads[0]["seed"] == 10_000 == U.READ["seed_base"] and not rec.reads[0]["training"]
+        seen.append((base / "main" / label / "read_s0.jsonl").read_bytes())
+    assert seen[0] and seen[0] == seen[1] == seen[2]
+    assert not list(base.rglob("read_r*.jsonl"))  # the old name is gone: a read's file is named by its step
 
 
 def test_the_read_offers_the_release_and_samples_each_twin_as_the_design_says(built):
@@ -335,7 +478,7 @@ def test_the_read_offers_the_release_and_samples_each_twin_as_the_design_says(bu
         for e in envs:
             by[(e.pair.name, e.impossible)] = by.get((e.pair.name, e.impossible), 0) + 1
         assert by == {(p, imp): n for p in inp["eval_oneoff"] for imp, n in ((True, 4), (False, 2))}
-    recs = [json.loads(x) for x in (base / "main" / "N_s0" / "read_r0.jsonl").read_text().splitlines()]
+    recs = [json.loads(x) for x in (base / "main" / "N_s0" / "read_s0.jsonl").read_text().splitlines()]
     assert recs == res["reads"][0] and len(recs) == 18
     released = next(x for x in recs if x["outcome"] == "released")
     failed = next(x for x in recs if x["outcome"] == "failed")
@@ -364,7 +507,7 @@ def test_press_stops_before_the_model_is_loaded_when_a_read_pair_is_dropped(buil
     run_press(M, inp, label="whole")
     assert order == ["prepare", "prepare", "load"]  # the pairs are prepared first, then the model is loaded
     with pytest.raises(RuntimeError, match="0 of the 0 read pairs"):
-        M.press("/vol/a/adapter", "none", "main", 3, "gameable", 4, [2, 4], CFG, inp["pairs_rows"], [])
+        M.press("/vol/a/adapter", "none", "main", 3, "gameable", 24, [12, 24], CFG, inp["pairs_rows"], [])
 
 
 def test_press_refuses_a_rerun_a_zero_adapter_and_runs_the_streams_cannot_serve(built, monkeypatch):
@@ -379,30 +522,56 @@ def test_press_refuses_a_rerun_a_zero_adapter_and_runs_the_streams_cannot_serve(
         run_press(M, inp, label="zeros")
     assert len(rec.events) == n and not (base / "main" / "zeros").exists()  # nothing read, nothing trained
     monkeypatch.setattr(M, "lora_b_abs", lambda m: 2.5)
-    for bad in (dict(init="rel/adapter"), dict(stream="reward"), dict(rounds=9, reads=(4, 8)), dict(reads=(2, 6)),
-                dict(rounds=-1, reads=())):
+    assert U.MAX_ROUNDS * CFG["steps"] == 96  # the most a press run can train: every round of the stream
+    for bad in (dict(init="rel/adapter"), dict(stream="reward"), dict(steps=97, reads=(48, 96)), dict(reads=(6, 30)),
+                dict(steps=-1, reads=()), dict(reads=(-3, 6)), dict(steps=6.0, reads=(3, 6)), dict(steps=True, reads=())):
         with pytest.raises(ValueError):
             run_press(M, inp, label="bad", **bad)
     with pytest.raises(RuntimeError, match="no round of 96 items"):
         run_press(M, inp, label="short", cfg={**CFG, "steps": 6})
     assert len(rec.events) == n and len(rec.loaded) == 2
+    # sets built before revision 3 store no outcome beside each item: refused before the model is loaded
+    f = base / "streams" / "gameable_s3.pt"
+    st = torch.load(f)
+    torch.save({**st, "rounds": {r: {k: v for k, v in rd.items() if k != "outcomes"} for r, rd in st["rounds"].items()}}, f)
+    with pytest.raises(RuntimeError, match="does not store each item's outcome"):
+        run_press(M, inp, label="old_sets")
+    off = {r: dict(rd) for r, rd in st["rounds"].items()}
+    off[2]["outcomes"] = ["failed", *off[2]["outcomes"][1:]]  # outcomes that are not the round's own
+    torch.save({**st, "rounds": off}, f)
+    with pytest.raises(RuntimeError, match=r"each item's outcome for rounds \[2\]"):
+        run_press(M, inp, label="odd_sets")
+    torch.save(st, f)
+    run_press(M, inp, label="one_round", steps=12, reads=(12,))  # round 2 is never opened by a run of one round
+    assert len(rec.loaded) == 3 and not (base / "main" / "old_sets").exists() and not (base / "main" / "odd_sets").exists()
+    n = len(rec.events)
     (Path(C.MODELS["ministral8b"]["path"]).parent / "newer").mkdir()  # the cache gained a snapshot after the sets
     with pytest.raises(RuntimeError, match="pinned snapshot"):
         run_press(M, inp, label="moved")
-    assert len(rec.events) == n and len(rec.loaded) == 2  # refused before the model was loaded
+    assert len(rec.events) == n and len(rec.loaded) == 3  # refused before the model was loaded
 
 
-def test_the_dose_checks_run_is_eight_rounds_on_either_stream(built):
+def test_the_dose_checks_run_is_one_round_read_at_steps_0_3_6_and_12(built):
     M, rec, inp, _, base = built
-    res = run_press(M, inp, label="honest_told_s1", tag="dose1", seed=1, stream="honest", rounds=8, reads=U.DOSE_READS,
-                    init="/runs/h4lite/durability/told_s1/adapter")
-    assert rec.events.count("train") == 8 and rec.events.count("read") == 4 and rec.events[0] == "read"
-    assert sorted(res["reads"]) == [0, 2, 4, 8] and [r["seed"] for r in rec.reads] == [10_000, 10_002, 10_004, 10_008]
-    stream = torch.load(base / "streams" / "honest_s1.pt")["rounds"]
-    assert [t["items"] for t in rec.trained] == [stream[r]["items"] for r in range(1, 9)]
-    assert res["log"][8]["items"]["by_outcome"] == {"solved": 192}
-    zero = run_press(M, inp, label="read_only", tag="dose1", seed=1, rounds=0, reads=())
+    assert U.DOSE_STEPS == (0, 3, 6, 12)
+    res = run_press(M, inp, label="gameable_told_s1", tag="dose2", seed=1, steps=U.DOSE_STEPS[-1],
+                    reads=U.DOSE_STEPS[1:], init="/runs/h4lite/durability/told_s1/adapter")
+    # the read at step 12 is taken from the hook too, after the round's last step and before the optimizer is freed
+    assert rec.events == events("read", "nll", "nll", "nll", "train", 3, "read", 3, "read", 6, "read")
+    assert sorted(res["reads"]) == [0, 3, 6, 12] and [r["seed"] for r in rec.reads] == [10_000, 10_003, 10_006, 10_012]
+    stream = torch.load(base / "streams" / "gameable_s1.pt")["rounds"]
+    assert [t["items"] for t in rec.trained] == [stream[1]["items"]]
+    assert [(x["kind"], x["step"]) for x in res["log"]] == [("read", 0), ("read", 3), ("read", 6), ("read", 12), ("train", 12)]
+    # the streams still serve a run of every round, on either stream
+    rec.trained.clear()
+    full = run_press(M, inp, label="honest_told_s1", tag="dose2", seed=1, stream="honest", steps=96, reads=(96,))
+    honest = torch.load(base / "streams" / "honest_s1.pt")["rounds"]
+    assert [t["items"] for t in rec.trained] == [honest[r]["items"] for r in range(1, 9)]
+    assert full["log"][-1]["items"]["by_outcome"] == {"solved": 192} and full["log"][-1]["step"] == 96
+    assert sorted(full["reads"]) == [0, 96] and rec.reads[-1]["seed"] == 10_096
+    zero = run_press(M, inp, label="read_only", tag="dose2", seed=1, steps=0, reads=())
     assert sorted(zero["reads"]) == [0] and len(zero["log"]) == 1  # a read with no training at all
+    assert zero["info"]["steps"] == 0 and zero["info"]["rounds"] == 0 and zero["info"]["read_steps"] == [0]
 
 
 def test_the_reads_builder_refuses_a_task_without_the_hint(app, monkeypatch):

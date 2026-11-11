@@ -339,3 +339,82 @@ def test_sft_steps_equals_the_old_loop():
         res.append((nlls, [p.detach().clone() for p in params]))
     assert len(res[0][0]) == 3 and res[0][0] == res[1][0]
     assert all(torch.equal(a, b) for a, b in zip(res[0][1], res[1][1]))
+
+
+def _tiny_run(torch, items, cfg, on_step=None, hook_for=None):
+    """One sft_steps run of a tiny model from a fixed start (CPU). Returns (the model, its parameters as trained, the
+    per-step NLLs). hook_for(model) builds the hook when the hook needs the model. Claude (Fable 5.2) wrote this and
+    the two tests below on 11 Nov 2026, for step 3's reads inside a round."""
+    from anatta.train.expert_iteration import sft_steps
+
+    class Tiny(torch.nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.emb, self.drop, self.out = torch.nn.Embedding(11, 8), torch.nn.Dropout(0.0), torch.nn.Linear(8, 11)
+
+        def forward(self, input_ids, attention_mask=None, position_ids=None, logits_to_keep=0):
+            return type("O", (), {"logits": self.out(self.drop(torch.tanh(self.emb(input_ids))))[:, -logits_to_keep:]})()
+
+    torch.manual_seed(0)
+    m = Tiny()
+    m.train()
+    params = [p for p in m.parameters() if p.requires_grad]
+    _, nlls = sft_steps(m, params, items, 0, "cpu", cfg, on_step=hook_for(m) if hook_for else on_step)
+    return m, [p.detach().clone() for p in params], nlls
+
+
+def _tiny_items(torch, n=40):
+    g = torch.Generator().manual_seed(1)
+    return [(torch.randint(1, 11, (int(torch.randint(2, 6, (1,), generator=g)),), generator=g).tolist(),
+             torch.randint(1, 11, (int(torch.randint(1, 5, (1,), generator=g)),), generator=g).tolist())
+            for _ in range(n)]
+
+
+def test_sft_steps_calls_its_hook_once_after_every_step():
+    torch = pytest.importorskip("torch")
+    items, cfg = _tiny_items(torch), {"lr": 1e-2, "batch": 8, "micro": 3}
+    seen = []
+    _, with_hook, nlls = _tiny_run(torch, items, cfg, on_step=lambda k, opt: seen.append((k, type(opt).__name__)))
+    assert seen == [(k, "AdamW") for k in (1, 2, 3, 4, 5)] and len(nlls) == 5  # 40 items, 8 a step: steps 1 to 5
+    _, plain, plain_nlls = _tiny_run(torch, items, cfg)
+    assert plain_nlls == nlls and all(torch.equal(a, b) for a, b in zip(plain, with_hook))  # a hook that does nothing
+
+
+def test_a_read_inside_a_round_leaves_the_training_bit_identical():
+    """What step 3's press does at a read point, on a tiny CPU model: clear the gradients, switch to eval, a forward
+    pass without gradients, draws from a reseeded torch, then back to train (once with the RNG state put back, once
+    without). The parameters after the round are the same bits as without any hook. And a round cut short after k
+    steps is exactly the first k steps of the full round: the learning rate is constant and nothing looks ahead."""
+    torch = pytest.importorskip("torch")
+    items, cfg = _tiny_items(torch), {"lr": 1e-2, "batch": 8, "micro": 3}
+    _, plain, plain_nlls = _tiny_run(torch, items, cfg)
+    at, modes = {}, []
+
+    def reader(restore: bool):
+        def build(m):
+            def hook(k, opt):
+                at[k] = [p.detach().clone() for p in m.parameters()]
+                if k not in (2, 5):  # a read inside the round, and one at its end
+                    return
+                m.zero_grad(set_to_none=True)
+                m.eval()
+                state = torch.get_rng_state()
+                torch.manual_seed(10_000 + k)
+                with torch.no_grad():
+                    logits = m(torch.tensor([[1, 2, 3, 4]])).logits
+                    torch.multinomial(torch.softmax(logits[0, -1], -1), 3)  # sampling draws from torch's generator
+                if restore:
+                    torch.set_rng_state(state)
+                modes.append(m.training)
+                m.train()
+            return hook
+        return build
+
+    for restore in (True, False):
+        _, got, nlls = _tiny_run(torch, items, cfg, hook_for=reader(restore))
+        assert nlls == plain_nlls and all(torch.equal(a, b) for a, b in zip(plain, got)), restore
+    assert modes == [False] * 4 and sorted(at) == [1, 2, 3, 4, 5]  # the reads ran in eval mode; training went on
+    for k in (1, 2, 3):  # the first k steps alone, from the same start, on the first k * batch items
+        _, cut, cut_nlls = _tiny_run(torch, items[:k * cfg["batch"]], cfg)
+        assert cut_nlls == plain_nlls[:k] and all(torch.equal(a, b) for a, b in zip(cut, at[k])), k
+    assert not all(torch.equal(a, b) for a, b in zip(at[2], at[5]))  # the steps after the read did train

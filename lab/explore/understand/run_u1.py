@@ -1,5 +1,8 @@
-"""Step 3's local driver (lab/plans/step3-understanding-first-2026-11-10.md, revision 2; u1_core.py's docstring).
-Claude (Fable 5.2, an AI model) wrote this file on 10 Nov 2026, before any run existed. Explore speed: sightings only.
+"""Step 3's local driver (lab/plans/step3-understanding-first-2026-11-10.md, revisions 2 and 3; u1_core.py's
+docstring). Claude (Fable 5.2, an AI model) wrote this file on 10 Nov 2026, before any run existed, and on 11 Nov 2026
+changed it to revision 3, after the first dose check did not pass and before any arm was trained: reads are at
+optimizer steps, the dose check is the revised one, and a main run's arms are chosen at its first launch. Explore
+speed: sightings only.
 
   --dry             the plan, the local inputs, what the stream holds, expected and upper costs, spend so far. Nothing
                     is launched or spent.
@@ -10,26 +13,41 @@ Claude (Fable 5.2, an AI model) wrote this file on 10 Nov 2026, before any run e
                     that carry a dose check or a main run are rebuilt only as a revision (changed code or inputs),
                     and a rebuild that does not end in new sets leaves the old record as it was.
   --plumb TAG       a rehearsal before the code is frozen: arm N, seed 0, one epoch of documents, one epoch of
-                    practice, then phase 3 for one round with reads at rounds 0 and 1 on four read pairs. It runs the
-                    chain documents to practice to press once, on the real sets. Prints seconds and costs only.
-  --dose TAG        the dose check: phase 3 (modal_act1.press) for 8 rounds on told_s0 and told_s1, read at rounds 0,
-                    2, 4 and 8, under the main stream and under the solve-only stream; and told_s0 once through the
-                    old read path (modal_retreat2.evaluate_adapter) on the same pairs. Then the cross-stack checks and
-                    the dose rule, on the one-off eval pairs the told adapters never practised. The code is frozen
-                    here: the commit and the sha256 of every file the run depends on are recorded before launch. It
-                    needs a rehearsal that passed on the same sets. One dose check per set of sets: a check left
-                    unfinished may be taken up under a new tag only by the very code it froze.
-  --block K TAG     one stage of block K (1: seeds 0-2, 2: seeds 3-5, 3: seeds 6-7) of the main run, every arm:
+                    practice, then phase 3 for six steps with reads at steps 0, 3 and 6 on four read pairs (a read
+                    inside a round, and a read at the end of training). It runs the chain documents to practice to
+                    press once, on the real sets. Prints seconds and costs only.
+  --dose TAG        the dose check (revision 3): told_s0 and told_s1 each once through the old read path
+                    (modal_retreat2.evaluate_adapter; one launch, two runs), then phase 3 (modal_act1.press) for 12
+                    steps of the main stream on each, read at steps 0, 3, 6 and 12. Then the checks (for each adapter
+                    the two read paths agree at step 0; no band) and the dose rule, on the one-off eval pairs the told
+                    adapters never practised. A pooled release of zero at step 0 fails it too: there is no release
+                    to halve. The code is frozen here: the commit and the sha256 of every file the run depends on
+                    are recorded before launch. It needs a rehearsal that passed on the same sets. One dose check
+                    per set of sets: a check left unfinished may be taken up under a new tag only by the very code
+                    it froze.
+  --block K TAG     one stage of block K (1: seeds 0-2, 2: seeds 3-5, 3: seeds 6-7) of the main run, every arm of
+                    the run:
     --stage docs      phase 1, modal_sft.finetune on the arm's 3,000 documents, a fresh LoRA
     --stage practice  phase 2, modal_sft.finetune on the practice set, from the phase 1 adapter
-    --stage press     phase 3, modal_act1.press from the phase 2 adapter, read at round 0 and at the two rounds the
-                      dose record fixed
+    --stage press     phase 3, modal_act1.press from the phase 2 adapter, trained to the later of the two steps the
+                      dose record fixed and read at step 0 and at those two steps
+    --arms N,E        the run's arms, on the tag's first launch only: N and E (the default), or N,R,E. A run
+                      always has N and E. Arm R needs a raise of the stop on record (stop.json). Afterwards the
+                      arms are the ones run.json holds, and another --arms is refused.
                     A stage refuses to start if the code differs from the freeze or if the stage before it has not
-                    finished for a seed. A block starts only in order, after the look (blocks 2 and 3:
-                    compare_u1.py --look must say go), with no reserve left unsettled, and if step 3's spend so far
-                    plus the block's expected cost does not pass the stop. A run the stop has ended starts no further
-                    block. A run that fails is launched again by the same command; after two failures its seed is
-                    dropped. One main tag per set of sets.
+                    finished for a seed. A run starts only if it can finish under the stop: at a tag's first launch,
+                    step 3's spend so far plus the expected cost of the whole run must not pass it. A block starts
+                    only in order, after the look (blocks 2 and 3: compare_u1.py --look must say go), with no
+                    reserve left unsettled, and if step 3's spend so far plus the block's expected cost does not
+                    pass the stop. A run the stop has ended starts no further block. A run that fails is launched
+                    again by the same command; after two failures its seed is dropped. One main tag per set of sets.
+  --add-arm R TAG   add the rule arm to a main run that has started. It needs a raise of the stop on record
+                    (stop.json: the new stop and the ledger entry of the approval). Refused once any readout
+                    exists, once the run has ended, if step 3's spend so far plus the arm's expected cost for every
+                    seed of the blocks already started would pass the stop, or if the run as a whole, with the arm
+                    in it, could not finish under the stop. Nothing is launched: the ordinary --block commands then
+                    launch the arm's missing runs, stage by stage. The addition is recorded in run.json and in
+                    variants.jsonl.
   --fetch TAG       after an interrupted launch: copy what the containers wrote on the volume into the results folder
                     (no container), then settle the reserve that launch left booked, once its runs have finished or
                     their containers' time has passed. If the volume cannot be read, nothing is settled.
@@ -81,7 +99,7 @@ OLD_READ_REL = "u1/{tag}/old_{name}"  # under /runs/h4lite: where the old read p
 # Container hours a launch reserves for each run, and the container's own timeout. A 3-seed block's three stages fit
 # one UTC day under the daily cap only because each stage is trued up before the next is reserved; if the press stage
 # does not fit, launch it for fewer seeds at a time (--seeds).
-UPPER_H = {"sets": 0.5, "docs": 1.0, "practice": 0.5, "press": 1.15, "dose": 1.5, "old": 0.75}
+UPPER_H = {"sets": 0.5, "docs": 1.0, "practice": 0.5, "press": 1.15, "dose": 1.3, "old": 0.75}
 # Hours the launcher waits beyond a run's reserve before it cancels it. Time a container spends queued for a GPU is
 # not the run's time, so it must not count against the run. The container's own timeout stays the reserve's hours,
 # and that is what caps the bill.
@@ -96,9 +114,11 @@ OFFLINE_ENV = {"HF_HUB_OFFLINE": "1"}
 SETS_CORES, SETS_MEM_GIB = 4.0, 16.0  # modal_act1.u1_sets' container
 STAGES = ("docs", "practice", "press")
 MAX_TRIES = 2  # a crashed run is rerun once with identical inputs; after two failures its seed is dropped
-# The rehearsal (--plumb): one run through the three stages, cut short.
-PLUMB = {"arm": "N", "seed": 0, "epochs": 1, "rounds": 1, "read_rounds": [1], "pairs": 4}
+# The rehearsal (--plumb): one run through the three stages, cut short. Phase 3 trains six steps (half a round, so
+# the round is cut short) and reads at step 3 (inside the round) and at step 6 (the end of training).
+PLUMB = {"arm": "N", "seed": 0, "epochs": 1, "steps": 6, "read_steps": [3, 6], "pairs": 4}
 PLUMB_UPPER_H = {"docs": 0.6, "practice": 0.35, "press": 0.5}
+READOUTS = ("compare_u1.json", "compare_u1_ended.json")  # compare_u1.py's records: once one exists, no arm is added
 PILOT_DOCS = H4 / "results" / "declared" / "docs"
 STAGE_A_EPISODES = H4 / "results" / "sft" / "koan" / "episodes.jsonl"
 TOLD_DIR = H4 / "results" / "durability" / "told"
@@ -477,12 +497,12 @@ def record_error(d: Path, error: str, **extra) -> None:
 
 
 def save_press(d: Path, res: dict, **extra) -> None:
-    """One press run's files: read_r<r>.jsonl (episode records; the replies are model text, kept as data), log.jsonl
-    and info.json (everything else the container returned)."""
+    """One press run's files: read_s<step>.jsonl (episode records; the replies are model text, kept as data),
+    log.jsonl and info.json (everything else the container returned)."""
     d.mkdir(parents=True, exist_ok=True)
     res = dict(res)
-    for r, recs in (res.pop("reads", None) or {}).items():
-        write_jsonl(d / f"read_r{int(r)}.jsonl", recs)
+    for s, recs in (res.pop("reads", None) or {}).items():
+        write_jsonl(d / f"read_s{int(s)}.jsonl", recs)
     write_jsonl(d / "log.jsonl", res.pop("log", None) or [])
     (d / "info.json").write_text(json.dumps({**res, **extra}, indent=1) + "\n")
 
@@ -782,9 +802,15 @@ def cmd_sets(root: str, upper_h: float) -> int:
 
 
 def dose_jobs() -> list[dict]:
-    """The dose check's four press runs: each told adapter under each stream, on its own seed's stream."""
-    return [{"label": f"{stream}_{ad}", "stream": stream, "adapter": ad, "seed": int(ad.rsplit("_s", 1)[1])}
-            for stream in (U.MAIN_STREAM, U.SOLVE_STREAM) for ad in U.DOSE_ADAPTERS]
+    """The dose check's two press runs (revision 3): each told adapter under the main stream, on its own seed's
+    stream. The solve-only stream is not run again."""
+    return [{"label": f"{U.MAIN_STREAM}_{ad}", "stream": U.MAIN_STREAM, "adapter": ad, "seed": int(ad.rsplit("_s", 1)[1])}
+            for ad in U.DOSE_ADAPTERS]
+
+
+def old_dirs(d: Path) -> dict:
+    """{adapter: the folder its old-path read is kept in} for a dose tag: both told adapters (revision 3)."""
+    return {ad: d / f"old_{ad}" for ad in U.DOSE_ADAPTERS}
 
 
 def fetch_volume(rel: str) -> bytes:
@@ -811,9 +837,10 @@ def is_plumb(d: Path) -> bool:
     return (d / "plumb.json").exists()
 
 
-def old_rel(tag: str, old_dir: Path) -> str:
-    """Where the old read path writes under /runs/h4lite: its folder, or folder_try<k> after an earlier failure."""
-    rel = OLD_READ_REL.format(tag=tag, name=U.DOSE_ADAPTERS[0])
+def old_rel(tag: str, name: str, old_dir: Path) -> str:
+    """Where one adapter's old-path read writes under /runs/h4lite: its folder, or folder_try<k> after an earlier
+    failure."""
+    rel = OLD_READ_REL.format(tag=tag, name=name)
     return rel if tries(old_dir) == 0 else f"{rel}_try{tries(old_dir) + 1}"
 
 
@@ -867,53 +894,67 @@ def cmd_dose(tag: str, upper_h: float, old_upper_h: float) -> int:
                          "now: run --plumb TAG first (a new tag if the code changed since the last rehearsal)")
     split = eval_split()
     rows = [r for r in split["rows"] if r["name"] in set(split["oneoff"])]
-    old_dir = d / f"old_{U.DOSE_ADAPTERS[0]}"
+    olds = old_dirs(d)
     todo = [j for j in dose_jobs() if not (d / j["label"] / "info.json").exists()]
-    spent_out = [j["label"] for j in todo if tries(d / j["label"]) >= MAX_TRIES]
-    if spent_out or tries(old_dir) >= MAX_TRIES:
-        raise SystemExit(f"refused: {spent_out or old_dir.name} failed twice under tag {tag!r}; pick a new tag")
+    spent_out = ([j["label"] for j in todo if tries(d / j["label"]) >= MAX_TRIES]
+                 + [od.name for od in olds.values() if tries(od) >= MAX_TRIES])
+    if spent_out:
+        raise SystemExit(f"refused: {spent_out} failed twice under tag {tag!r}; pick a new tag")
     earlier = sorted(f.parent.name for f in out.glob("*/freeze.json")
                      if f.parent.name != tag and not (f.parent / "dose.json").exists())
     d.mkdir(parents=True, exist_ok=True)
     if not ffile.exists():
         ffile.write_text(json.dumps(now, indent=1) + "\n")
 
-    def copy_old(rel: str) -> None:
-        """The old read's episodes, from the volume (data; not printed). The read is finished and paid for; if only
+    def copy_old(ad: str, rel: str) -> None:
+        """One old read's episodes, from the volume (data; not printed). The read is finished and paid for; if only
         this copy fails, --fetch makes it and nothing is launched twice."""
         try:
             raw = fetch_volume(f"h4lite/{rel}/heldout.jsonl")
         except Exception as e:  # noqa: BLE001
-            raise SystemExit(f"the old-path read finished, but its episodes could not be copied from the volume "
+            raise SystemExit(f"the old-path read of {ad} finished, but its episodes could not be copied from the volume "
                              f"({type(e).__name__}). Copy them with --fetch {tag}, then run --dose {tag} again") from None
-        (old_dir / "heldout.jsonl").write_bytes(raw)
+        (olds[ad] / "heldout.jsonl").write_bytes(raw)
 
-    if (old_dir / "heldout.json").exists() and not (old_dir / "heldout.jsonl").exists():
-        copy_old(old_rel(tag, old_dir))  # the read finished in an earlier call and only its copy was missing
-    need_old = not (old_dir / "heldout.jsonl").exists()
+    for ad, od in olds.items():
+        if (od / "heldout.json").exists() and not (od / "heldout.jsonl").exists():
+            copy_old(ad, old_rel(tag, ad, od))  # the read finished in an earlier call and only its copy was missing
+    need_old = [ad for ad, od in olds.items() if not (od / "heldout.jsonl").exists()]
+    steps, read_steps = U.DOSE_STEPS[-1], list(U.DOSE_STEPS[1:])
     variant(out, {"cmd": "dose", "tag": tag, "root": root, "freeze_commit": now["commit"], "runs": [j["label"] for j in todo],
-                  "old_read": need_old, "rounds": U.MAX_ROUNDS, "reads": list(U.DOSE_READS), "cfg": U.PRESS_CFG,
+                  "old_reads": need_old, "steps": steps, "reads": list(U.DOSE_STEPS), "cfg": U.PRESS_CFG,
                   "read": U.READ, "upper_h": upper_h, "old_upper_h": old_upper_h, "earlier_incomplete": earlier})
-    if need_old:  # the cheap, proven path first: if it cannot run, the check cannot pass and nothing else is spent
-        ad = U.DOSE_ADAPTERS[0]
-        rel = old_rel(tag, old_dir)
+    if need_old:  # the cheap, proven path first, for both adapters in one launch: if one cannot be read through it, the
+        # check cannot pass, and the press runs are not launched
         o = U.OLD_PATH
-        res = launch(out, f"dose-{tag}-old", "old", [{"label": old_dir.name, "kwargs": dict(
-            adapter=TOLD_ADAPTER.format(name=ad), arm=o["arm"], out_rel=rel, tag="heldout", eval_n=o["eval_n"],
+        rels = {ad: old_rel(tag, ad, olds[ad]) for ad in need_old}
+        res = launch(out, f"dose-{tag}-old", "old", [{"label": olds[ad].name, "kwargs": dict(
+            adapter=TOLD_ADAPTER.format(name=ad), arm=o["arm"], out_rel=rels[ad], tag="heldout", eval_n=o["eval_n"],
             temperature=o["temperature"], attempts=o["attempts"], max_new=tuple(U.READ["max_new"]),
             gen_batch=U.READ["gen_batch"], eval_seed=o["eval_seed"], under_cut=False,
-            pairs_file=sets["info"]["old_path_pairs"])}], old_upper_h, tag=tag, where="old")[old_dir.name]
-        if "error" in res:
-            record_error(old_dir, res["error"], volume_rel=rel)
-            raise SystemExit(f"the old-path read failed ({res['error'][:200]}); the press runs were not launched")
-        old_dir.mkdir(parents=True, exist_ok=True)
-        (old_dir / "heldout.json").write_text(json.dumps(res["eval"], indent=1) + "\n")  # it finished: the summary
-        copy_old(rel)
-        log("old-path read", {k: res["eval"].get(k) for k in ("release", "hack", "solve", "held_pairs", "episodes")})
+            pairs_file=sets["info"]["old_path_pairs"])} for ad in need_old], old_upper_h, tag=tag, where="old")
+        failed_old = {}
+        for ad in need_old:
+            r = res[olds[ad].name]
+            if "error" in r:
+                record_error(olds[ad], r["error"], volume_rel=rels[ad])
+                failed_old[ad] = r["error"]
+            else:
+                olds[ad].mkdir(parents=True, exist_ok=True)
+                (olds[ad] / "heldout.json").write_text(json.dumps(r["eval"], indent=1) + "\n")  # it finished: the summary
+        for ad in need_old:
+            if ad not in failed_old:
+                copy_old(ad, rels[ad])
+                log("old-path read,", ad, {k: res[olds[ad].name]["eval"].get(k)
+                                           for k in ("release", "hack", "solve", "held_pairs", "episodes")})
+        if failed_old:
+            first = next(iter(failed_old.values()))
+            raise SystemExit(f"the old-path read failed for {sorted(failed_old)} ({first[:200]}); the press runs were "
+                             "not launched. The same command launches a failed read once more")
     if todo:
         jobs = [{"label": j["label"], "kwargs": dict(
             init=TOLD_ADAPTER.format(name=j["adapter"]), label=volume_label(j["label"], tries(d / j["label"]) + 1),
-            tag=tag, seed=j["seed"], stream=j["stream"], rounds=U.MAX_ROUNDS, read_rounds=list(U.DOSE_READS[1:]),
+            tag=tag, seed=j["seed"], stream=j["stream"], steps=steps, read_steps=read_steps,
             cfg=U.PRESS_CFG, pairs_rows=rows, eval_names=split["oneoff"], model_key=U.MODEL_KEY, root=root)}
             for j in todo]
         res = launch(out, f"dose-{tag}", "press", jobs, upper_h, tag=tag, where="press")
@@ -924,7 +965,7 @@ def cmd_dose(tag: str, upper_h: float, old_upper_h: float) -> int:
             else:
                 save_press(d / j["label"], r, volume_label=job["kwargs"]["label"], adapter=j["adapter"])
                 # the dose check is not blinded: its counts are computed here, from the reads the run returned
-                log(j["label"], f"impossible twins on all {len(split['oneoff'])} read pairs, by round (the dose table "
+                log(j["label"], f"impossible twins on all {len(split['oneoff'])} read pairs, by step (the dose table "
                     f"that follows is on the {len(sets['info']['unpractised'])} unpractised ones):",
                     {str(k): U.measures(eps)["imp"] for k, eps in sorted(r["reads"].items(), key=lambda kv: int(kv[0]))})
     failed = [j["label"] for j in dose_jobs() if not (d / j["label"] / "info.json").exists()]
@@ -957,10 +998,10 @@ def find_dose(out: Path, dose_tag: str | None) -> dict:
         raise SystemExit("refused: no dose record" + (f" under tag {dose_tag!r}" if dose_tag else "")
                          + f" for the sets under root {root!r} ({tags})")
     rec = json.loads((out / found[0] / "dose.json").read_text())
-    if not rec.get("ok") or not rec.get("read_rounds"):
-        raise SystemExit(f"refused: the dose check under tag {rec.get('tag')!r} did not pass (checks "
-                         f"{rec.get('checks', {}).get('ok')}, rule branch {rec.get('rule', {}).get('branch')}): the "
-                         "design comes back for revision")
+    if not rec.get("ok") or not rec.get("read_steps"):
+        raise SystemExit(f"refused: the dose check under tag {rec.get('tag')!r} did not pass, or names no read steps "
+                         f"(checks {rec.get('checks', {}).get('ok')}, rule branch {rec.get('rule', {}).get('branch')}): "
+                         "no block starts under it")
     return rec
 
 
@@ -993,14 +1034,71 @@ def how_settled(res: dict) -> str:
     return f"{res['stage']} (gen_docs.py trues it up when it next runs)"
 
 
+def arms_of(run: dict) -> tuple:
+    """A main run's arms, from its record (run.json), in u1_core.ARMS' order. A record that names none was written
+    before revision 3, when a run was always all three."""
+    if not run.get("arms"):
+        return U.ARMS
+    try:
+        return U.run_arms(run["arms"])
+    except ValueError as e:
+        raise SystemExit(f"refused: the run's record names arms that are not a run's: {e}") from None
+
+
+def read_steps_of(run: dict, tag: str) -> list[int]:
+    """A main run's two later read steps, from its record. A record that names none was written before revision 3
+    (by rounds): it is refused, since no run of that kind exists to be gone on with."""
+    if not run.get("read_steps"):
+        raise SystemExit(f"refused: tag {tag!r}'s run.json names no read steps (a record from before revision 3). A "
+                         "main run takes a tag of its own, on sets with a dose record that passed")
+    return sorted(int(s) for s in run["read_steps"])
+
+
+def raise_on_record(out: Path, what: str) -> tuple[float, str]:
+    """Arm R joins a run only when the budget has been raised (revision 3): spend_stop must report a raise, which is
+    a stop.json that raises the stop and says why. Returns (the raised stop, its reason). Without one it refuses;
+    `what` says what is refused, and the refusal says what records a raise."""
+    stop, raised = spend_stop(out)
+    if raised is None:
+        raise SystemExit(f"refused: {what}. Arm R joins a run only when the budget has been raised, and no raise is on "
+                         f"record. A raise is a file stop.json in the results folder ({out / 'stop.json'}) that holds "
+                         f'{{"usd": the new stop, above ${U.SPEND_STOP:.2f}, "why": the ledger entry that records the '
+                         'approval}')
+    return stop, raised
+
+
+def owed_usd(d: Path, arms) -> float:
+    """What a main run is expected still to cost at these arms: for every arm of every seed of every block, each
+    stage that has not finished, at its expected cost (u1_core.EXPECTED_USD). A seed recorded as dropped is counted
+    like any other, so the figure errs high."""
+    return sum(U.EXPECTED_USD[st] for k in range(1, len(U.BLOCKS) + 1) for s in U.block_seeds(k) for a in arms
+               for st in STAGES if not stage_done(d, st, U.label(a, s)))
+
+
+def whole_run_stop(out: Path, d: Path, arms, what: str) -> dict:
+    """The whole-run check (revision 3), made at a tag's first launch and when an arm is added: step 3's spend so
+    far plus what the run is expected still to cost at these arms (owed_usd) must be at most the stop (spend_stop: a
+    recorded raise counts). It is in addition to the stop between blocks (block_stop), which stays. A run that cannot
+    finish under the stop does not start, and an arm that cannot be finished is not added; `what` says which. Returns
+    the numbers, for the run's record."""
+    so_far, owed = spent(out), owed_usd(d, arms)
+    stop, raised = spend_stop(out)
+    if so_far + owed > stop + U.EPS:
+        raise SystemExit(f"refused: {what}. Step 3 has spent ${so_far:.2f}, and the run as a whole (arms "
+                         f"{','.join(arms)}: every seed of every block, each stage not yet finished) is expected to "
+                         f"cost ${owed:.2f} more. That would pass the stop ${stop:.2f}")
+    return {"arms": list(arms), "spent_before": round(so_far, 2), "owed": round(owed, 2), "stop": stop,
+            **({"stop_raised": raised} if raised else {})}
+
+
 def block_stop(out: Path, d: Path, run: dict, block: int) -> None:
     """What decides whether a block starts (a block that has started goes on: the stop is between blocks). In order:
     a run that ended stays ended; blocks start in order; blocks 2 and 3 wait for the look after block one; no reserve
-    may be unsettled, so the stop is never computed on a booked reserve; then the design's stop itself: step 3's
-    spend so far plus the block's expected cost must be at most the stop (SPEND_STOP, unless stop.json raises it:
-    spend_stop). When the stop refuses a block of a run
-    that has started, the run's record says it ended there, so that it can still be reported
-    (compare_u1.py --ended)."""
+    may be unsettled, so the stop is never computed on a booked reserve; at a tag's first launch the run as a whole
+    must fit under the stop (whole_run_stop); then the design's stop itself: step 3's spend so far plus the block's
+    expected cost, for the run's arms, must be at most the stop (SPEND_STOP, unless stop.json raises it: spend_stop).
+    When the stop refuses a block of a run that has started, the run's record says it ended there, so that it can
+    still be reported (compare_u1.py --ended)."""
     if str(block) in run["blocks"]:
         return
     if run.get("ended"):
@@ -1018,7 +1116,9 @@ def block_stop(out: Path, d: Path, run: dict, block: int) -> None:
     if open_reserves:
         raise SystemExit("refused: a reserve is booked and not settled, and the stop is not computed on a booked "
                          f"reserve: {'; '.join(how_settled(x) for x in open_reserves)}")
-    so_far, expected = spent(out), U.block_expected_usd(block)
+    if not run["blocks"]:  # the tag's first launch: the run as a whole must fit, or nothing of it starts
+        run["whole_run"] = whole_run_stop(out, d, arms_of(run), "a run that cannot finish under the stop does not start")
+    so_far, expected = spent(out), U.block_expected_usd(block, arms_of(run))
     stop, raised = spend_stop(out)
     if so_far + expected > stop + U.EPS:
         why = (f"step 3 has spent ${so_far:.2f}; with block {block}'s expected ${expected:.2f} it would pass the stop "
@@ -1032,11 +1132,12 @@ def block_stop(out: Path, d: Path, run: dict, block: int) -> None:
 
 
 def stage_kwargs(stage: str, root: str, tag: str, arm: str, seed: int, *, attempt: int = 1, epochs: int | None = None,
-                 read_rounds=None, rounds: int | None = None, rows=None, eval_names=None) -> dict:
+                 read_steps=None, steps: int | None = None, rows=None, eval_names=None) -> dict:
     """What one run of a stage is called with. docs and practice: modal_sft.finetune (the design's settings, `epochs`
     overriding them for the rehearsal), from the arm's document set, then from the practice set and the docs adapter.
-    press: modal_act1.press from the practice adapter, on the main stream, up to the last read round (or `rounds`),
-    on the pairs given. `attempt` picks the press run's folder on the volume (press never overwrites)."""
+    press: modal_act1.press from the practice adapter, on the main stream, trained to the last read step (or
+    `steps`) and read at step 0 and at `read_steps`, on the pairs given. `attempt` picks the press run's folder on
+    the volume (press never overwrites)."""
     base, lab = f"{RUNS_ACT1}/{root}", U.label(arm, seed)
     ft = {**U.DOC_FT, **({} if epochs is None else {"epochs": epochs})}
     if stage == "docs":
@@ -1044,13 +1145,25 @@ def stage_kwargs(stage: str, root: str, tag: str, arm: str, seed: int, *, attemp
     if stage == "practice":
         return dict(label=arm, seed=seed, **ft, src_dir=f"{base}/sets/practice",
                     out_dir=f"{base}/{tag}/practice/{lab}", init=f"{base}/{tag}/docs/{lab}/adapter")
-    rr = [int(r) for r in read_rounds]
+    rs = [int(s) for s in read_steps]
     return dict(init=f"{base}/{tag}/practice/{lab}/adapter", label=volume_label(lab, attempt), tag=tag, seed=seed,
-                stream=U.MAIN_STREAM, rounds=max(rr) if rounds is None else rounds, read_rounds=rr, cfg=U.PRESS_CFG,
+                stream=U.MAIN_STREAM, steps=max(rs) if steps is None else int(steps), read_steps=rs, cfg=U.PRESS_CFG,
                 pairs_rows=rows, eval_names=list(eval_names), model_key=U.MODEL_KEY, root=root)
 
 
-def cmd_block(block: int, tag: str, stage: str, upper_h: float, seeds: list[int] | None, dose_tag: str | None) -> int:
+def parse_arms(text: str | None) -> tuple | None:
+    """--arms N,E as a run's arms (u1_core.run_arms: N and E, or N, R and E, in ARMS' order); None when the flag was
+    not given."""
+    if text is None:
+        return None
+    try:
+        return U.run_arms([x.strip().upper() for x in text.split(",") if x.strip()])
+    except ValueError as e:
+        raise SystemExit(f"refused: --arms {text}: {e}") from None
+
+
+def cmd_block(block: int, tag: str, stage: str, upper_h: float, seeds: list[int] | None, dose_tag: str | None,
+              arms: tuple | None = None) -> int:
     out = out_dir()
     d = out / tag
     if (d / "dose.json").exists() or (d / "freeze.json").exists():
@@ -1075,25 +1188,30 @@ def cmd_block(block: int, tag: str, stage: str, upper_h: float, seeds: list[int]
         if others:
             raise SystemExit(f"refused: the sets under root {root!r} already have a main run ({others}). One main tag "
                              "per set of sets")
+        if arms is not None and "R" in arms:  # the rule arm joins a run only when the budget has been raised
+            raise_on_record(out, f"tag {tag!r} does not start with arm R (--arms {','.join(arms)})")
     elif run.get("root") != root:
         raise SystemExit(f"refused: tag {tag!r} runs on the sets under root {run.get('root')!r}; the sets are now "
                          f"under root {root!r}. A run does not move to rebuilt sets")
+    elif arms is not None and arms != arms_of(run):  # the arms are chosen once, at the tag's first launch
+        raise SystemExit(f"refused: tag {tag!r} runs arms {','.join(arms_of(run))} (its run.json), not "
+                         f"{','.join(arms)}. Leave --arms out; an arm is added with --add-arm ARM {tag}")
     dose = find_dose(out, dose_tag if run is None or dose_tag else run["dose_tag"])
     if run is not None and run["dose_tag"] != dose["tag"]:
         raise SystemExit(f"refused: tag {tag!r} runs under the dose record {run['dose_tag']!r}, not {dose['tag']!r}")
     check_frozen(out, dose["freeze"])
     if run is None:
-        run = {"tag": tag, "dose_tag": dose["tag"], "read_rounds": dose["read_rounds"], "root": root,
-               "freeze_commit": dose["freeze"]["commit"], "blocks": {}}
-    read_rounds = [int(r) for r in run["read_rounds"]]
+        run = {"tag": tag, "dose_tag": dose["tag"], "read_steps": dose["read_steps"],
+               "arms": list(arms or U.MAIN_ARMS), "root": root, "freeze_commit": dose["freeze"]["commit"], "blocks": {}}
+    read_steps, arms = read_steps_of(run, tag), arms_of(run)
     dropped = {int(s) for s in read_dropped(d)}
     live = [s for s in (seeds if seeds is not None else block_all) if s not in dropped]
     before = STAGES[STAGES.index(stage) - 1] if stage != STAGES[0] else None
-    if before:  # all three arms of a seed go through a stage together
-        missing = [U.label(a, s) for s in live for a in U.ARMS if not stage_done(d, before, U.label(a, s))]
+    if before:  # all the run's arms of a seed go through a stage together
+        missing = [U.label(a, s) for s in live for a in arms if not stage_done(d, before, U.label(a, s))]
         if missing:
             raise SystemExit(f"refused: the {before} stage has not finished for {missing}")
-    todo = [(a, s) for s in live for a in U.ARMS if not stage_done(d, stage, U.label(a, s))]
+    todo = [(a, s) for s in live for a in arms if not stage_done(d, stage, U.label(a, s))]
     stuck = [U.label(a, s) for a, s in todo if tries(stage_dir(d, stage, U.label(a, s))) >= MAX_TRIES]
     if stuck:
         raise SystemExit(f"refused: {stuck} failed twice and are not recorded as dropped; see {d / 'dropped.json'}")
@@ -1112,11 +1230,11 @@ def cmd_block(block: int, tag: str, stage: str, upper_h: float, seeds: list[int]
     d.mkdir(parents=True, exist_ok=True)
     rfile.write_text(json.dumps(run, indent=1) + "\n")
     jobs = [{"label": U.label(a, s), "kwargs": stage_kwargs(
-        stage, root, tag, a, s, attempt=tries(stage_dir(d, stage, U.label(a, s))) + 1, read_rounds=read_rounds,
+        stage, root, tag, a, s, attempt=tries(stage_dir(d, stage, U.label(a, s))) + 1, read_steps=read_steps,
         rows=rows, eval_names=names)} for a, s in todo]
     variant(out, {"cmd": "block", "block": block, "tag": tag, "stage": stage, "runs": [j["label"] for j in jobs],
-                  "dose_tag": dose["tag"], "read_rounds": read_rounds, "root": root, "upper_h": upper_h,
-                  "settings": U.PRESS_CFG if stage == "press" else U.DOC_FT})
+                  "dose_tag": dose["tag"], "read_steps": read_steps, "arms": list(arms), "root": root,
+                  "upper_h": upper_h, "settings": U.PRESS_CFG if stage == "press" else U.DOC_FT})
     res = launch(out, f"{tag}-b{block}-{stage}", kind, jobs, upper_h, tag=tag, where=stage, block=block)
     failed = []
     for (a, s), job in zip(todo, jobs):
@@ -1138,22 +1256,96 @@ def cmd_block(block: int, tag: str, stage: str, upper_h: float, seeds: list[int]
     return 1 if failed else 0
 
 
+# ------------------------------------------------------------------------------------------------ --add-arm
+
+
+def cmd_add_arm(arm: str, tag: str) -> int:
+    """Add an arm to a main run that has started (revision 3: the rule arm, only if the budget is raised, and only
+    before any readout). A run always has N and E, so the arm is R. It changes run.json (and leaves a line in
+    variants.jsonl) and launches nothing: the ordinary --block commands then find the arm's runs missing in the
+    blocks that started, and launch them stage by stage. Refused when the arm is already in the run; when a readout
+    exists (no contrast is computed until every planned arm of every seed is in, so an arm is never added to a run
+    that has been read); when the run has ended; when no raise of the stop is on record (raise_on_record); while a
+    reserve is not settled (the stop is not computed on a booked reserve); when step 3's spend so far plus the arm's
+    expected cost, for every seed of the blocks already started, would pass the stop; and when the run as a whole,
+    with the arm in it, could not finish under the stop (whole_run_stop). Blocks that start later are checked
+    against the stop with the arm in them (block_stop)."""
+    out = out_dir()
+    d = out / tag
+    rfile = d / "run.json"
+    arm = arm.strip().upper()
+    if arm not in U.ARMS:
+        raise SystemExit(f"refused: {arm!r} is not an arm ({', '.join(U.ARMS)})")
+    if not rfile.is_file():
+        raise SystemExit(f"refused: {tag!r} holds no main run (no run.json). An arm is added to a run that has "
+                         f"started; a new run names its arms at its first launch (--block 1 {tag} --stage docs --arms ...)")
+    run = json.loads(rfile.read_text())
+    arms = arms_of(run)
+    read_steps_of(run, tag)  # a record from before revision 3 is refused
+    if arm in arms:
+        raise SystemExit(f"refused: arm {arm} is already in the run under tag {tag!r} (arms {','.join(arms)})")
+    readouts = [n for n in READOUTS if (d / n).exists()]
+    if readouts:
+        raise SystemExit(f"refused: the run under tag {tag!r} has been read ({readouts}). An arm is added only before "
+                         "any readout")
+    if run.get("ended"):
+        raise SystemExit(f"refused: this run ended ({run['ended'].get('why')}). No arm is added to it")
+    look = d / "look.json"
+    if look.is_file() and json.loads(look.read_text()).get("stop") is True:
+        raise SystemExit("refused: this run ended (the look after block one said stop). No arm is added to it")
+    if arm == "R":  # the rule arm joins a run only when the budget has been raised
+        raise_on_record(out, f"arm R is not added to the run under tag {tag!r}")
+    open_reserves = unsettled(out)
+    if open_reserves:
+        raise SystemExit("refused: a reserve is booked and not settled, and the stop is not computed on a booked "
+                         f"reserve: {'; '.join(how_settled(x) for x in open_reserves)}")
+    started = sorted(int(k) for k in run.get("blocks") or {})
+    seeds = [s for k in started for s in U.block_seeds(k)]
+    so_far, expected = spent(out), U.arm_expected_usd(len(seeds))
+    stop, raised = spend_stop(out)
+    if so_far + expected > stop + U.EPS:
+        raise SystemExit(f"refused: step 3 has spent ${so_far:.2f}; with arm {arm}'s expected ${expected:.2f} for the "
+                         f"{len(seeds)} seeds of the blocks already started ({started}) it would pass the stop "
+                         f"${stop:.2f}. The stop is raised by a stop.json that names the ledger entry of the approval")
+    new = U.run_arms([*arms, arm])
+    # It fits for the blocks that started. The run as a whole must fit too, with the arm in every block still to come.
+    whole = whole_run_stop(out, d, new, f"arm {arm} is not added to the run under tag {tag!r}: its runs for the blocks "
+                                        f"already started ({started}) would fit under the stop, but an arm that cannot "
+                                        "be finished is not added")
+    run["arms"] = list(new)
+    added = {"utc": utc(), "arm": arm, "blocks": started, "seeds": seeds, "spent_before": round(so_far, 2),
+             "expected": round(expected, 2), "owed_run": whole["owed"], "stop": stop,
+             **({"stop_raised": raised} if raised else {})}
+    run.setdefault("arms_added", []).append(added)
+    rfile.write_text(json.dumps(run, indent=1) + "\n")
+    variant(out, {"cmd": "add-arm", "tag": tag, "arms": list(new), **{k: v for k, v in added.items() if k != "utc"}})
+    log(f"arm {arm} is added to the run under tag {tag!r}: its arms are now {','.join(new)}. Its runs for seeds {seeds} "
+        f"are expected to cost ${expected:.2f}, and the run as a whole ${whole['owed']:.2f} more (step 3 has spent "
+        f"${so_far:.2f}; the stop is ${stop:.2f}). Launch them with the ordinary commands, stage by stage: --block K "
+        f"{tag} --stage docs, then practice, then press")
+    return 0
+
+
 # ------------------------------------------------------------------------------------------------ --plumb
 
 
 def plumb_checks(d: Path, lab: str, names: list[str]) -> dict:
     """What the rehearsal must show: both fine-tunes finished; the press run loaded an adapter that is not all
-    zeros; its reads at round 0 and at each rehearsal round hold the rehearsal's pairs with the design's samples of
-    each twin; and the held-out loss is a finite number for every kind. No outcome is counted."""
+    zeros; its own record says it trained the rehearsal's steps and read at the rehearsal's steps (a round cut
+    short, a read inside it and a read at the end of training); its reads at step 0 and at each rehearsal step hold
+    the rehearsal's pairs with the design's samples of each twin; and the held-out loss is a finite number for every
+    kind. No outcome is counted."""
     import compare_u1 as K
 
     run = K.load_run(d / lab) or {"info": {}, "reads": {}}
     info = run["info"]
+    own = info.get("info") or {}  # the container's own record of the run
     checks = {"docs_done": stage_done(d, "docs", lab), "practice_done": stage_done(d, "practice", lab),
-              "init_lora_b_abs": (((info.get("info") or {}).get("init_lora_b_abs")) or 0) > 0}
-    for r in (0, *PLUMB["read_rounds"]):
-        eps = run["reads"].get(r)
-        checks[f"read_r{r}"] = eps is not None and not U.read_problems(eps, names, U.READ["n_impossible"],
+              "init_lora_b_abs": (own.get("init_lora_b_abs") or 0) > 0,
+              "steps": own.get("steps") == PLUMB["steps"] and own.get("read_steps") == U.read_points(PLUMB["read_steps"])}
+    for s in U.read_points(PLUMB["read_steps"]):
+        eps = run["reads"].get(s)
+        checks[f"read_s{s}"] = eps is not None and not U.read_problems(eps, names, U.READ["n_impossible"],
                                                                        U.READ["n_solvable"])
     held = info.get("held_nll") or {}
     checks["held_nll"] = all(isinstance(x := (held.get(a) or {}).get("nll_per_token"), (int, float)) and math.isfinite(x)
@@ -1196,7 +1388,7 @@ def cmd_plumb(tag: str, upper_h: float | None) -> int:
     for stage in todo:
         sd = stage_dir(d, stage, lab)
         kw = stage_kwargs(stage, root, tag, arm, seed, attempt=tries(sd) + 1, epochs=PLUMB["epochs"],
-                          read_rounds=PLUMB["read_rounds"], rounds=PLUMB["rounds"], rows=rows, eval_names=names)
+                          read_steps=PLUMB["read_steps"], steps=PLUMB["steps"], rows=rows, eval_names=names)
         kind = "press" if stage == "press" else "finetune"
         res = launch(out, f"plumb-{tag}-{stage}", kind, [{"label": lab, "kwargs": kw}], hours[stage], tag=tag,
                      where=stage)[lab]
@@ -1216,8 +1408,8 @@ def cmd_plumb(tag: str, upper_h: float | None) -> int:
     pfile.write_text(json.dumps({"started": started, "utc": utc(), "tag": tag, "root": root, "run": lab, "ok": ok,
                                  "checks": checks, "pairs": len(names), "plan": PLUMB, "usd": usd, "code": code},
                                 indent=1) + "\n")
-    print(f"the rehearsal ({lab}: {PLUMB['epochs']} epoch a fine-tune, {PLUMB['rounds']} round, {len(names)} read "
-          f"pairs): {'ok' if ok else 'NOT OK'}; it cost ${usd:.2f}")
+    print(f"the rehearsal ({lab}: {PLUMB['epochs']} epoch a fine-tune, {PLUMB['steps']} steps of phase 3 read at steps "
+          f"{U.read_points(PLUMB['read_steps'])}, {len(names)} read pairs): {'ok' if ok else 'NOT OK'}; it cost ${usd:.2f}")
     for k, v in checks.items():
         print(f"  {k}: {'ok' if v else 'FAILED'}")
     return 0 if ok else 1
@@ -1281,11 +1473,14 @@ def copy_from_volume(d: Path, tag: str, root: str) -> None:
         labels = [j["label"] for j in dose_jobs()]
     elif is_plumb(d):
         labels = [U.label(PLUMB["arm"], PLUMB["seed"])]
-    else:
-        labels = [U.label(a, s) for s in U.SEEDS for a in U.ARMS]
-    old_dir = d / f"old_{U.DOSE_ADAPTERS[0]}"
-    if is_dose and not (old_dir / "heldout.jsonl").exists():  # the old read path's two files, under /runs/h4lite
-        rel = "h4lite/" + old_rel(tag, old_dir)  # its _try<k> folder after an earlier failure
+    else:  # a main run: the arms its record names (N and E by default; a tag with no record yet has launched nothing)
+        rfile = d / "run.json"
+        arms = arms_of(json.loads(rfile.read_text())) if rfile.is_file() else U.MAIN_ARMS
+        labels = [U.label(a, s) for s in U.SEEDS for a in arms]
+    for ad, old_dir in (old_dirs(d).items() if is_dose else ()):  # each old read's two files, under /runs/h4lite
+        if (old_dir / "heldout.jsonl").exists():
+            continue
+        rel = "h4lite/" + old_rel(tag, ad, old_dir)  # its _try<k> folder after an earlier failure
         got = {name: volume_file(f"{rel}/{name}") for name in ("heldout.json", "heldout.jsonl")}
         if None in got.values():
             log(old_dir.name, "not on the volume")
@@ -1301,8 +1496,7 @@ def copy_from_volume(d: Path, tag: str, root: str) -> None:
                 continue
             vol = volume_label(lab, tries(sd) + 1) if stage == "press" else lab
             rel = f"act1/{root}/{tag}/{vol}" if stage == "press" else f"act1/{root}/{tag}/{stage}/{lab}"
-            names = (["info.json", "log.jsonl"] + [f"read_r{r}.jsonl" for r in range(U.MAX_ROUNDS + 1)]
-                     if stage == "press" else ["args.json", "log.jsonl", "done.json"])
+            names = ["info.json", "log.jsonl"] if stage == "press" else ["args.json", "log.jsonl", "done.json"]
             got = {}
             for name in names:
                 raw = volume_file(f"{rel}/{name}")
@@ -1312,6 +1506,15 @@ def copy_from_volume(d: Path, tag: str, root: str) -> None:
                     log(lab, stage, "not finished on the volume")
                     got = {}
                     break
+            if got and stage == "press":  # its reads: one file for each step the container's own record names
+                read_steps = json.loads(got["info.json"]).get("read_steps")
+                reads = {f"read_s{int(s)}.jsonl": volume_file(f"{rel}/read_s{int(s)}.jsonl") for s in read_steps or ()}
+                if not reads or None in reads.values():  # a finished run holds every read its record names
+                    log(lab, stage, "its record on the volume names no reads, or reads that are not there; nothing "
+                        "is copied")
+                    got = {}
+                else:
+                    got |= reads
             if not got:
                 continue
             sd.mkdir(parents=True, exist_ok=True)
@@ -1346,40 +1549,52 @@ def cmd_fetch(tag: str) -> int:
 # ------------------------------------------------------------------------------------------------ --dry
 
 
-def plan() -> dict:
-    """The run as planned: per block and stage, the runs, what they are expected to cost and what a launch reserves."""
+def plan(arms=U.MAIN_ARMS) -> dict:
+    """The run as planned, for a run of these arms (N and E since revision 3): per block and stage, the runs, what
+    they are expected to cost and what a launch reserves; the reserves of the sets, the rehearsal and the dose
+    check; and what one more arm would be expected to add for all eight seeds."""
+    arms = U.run_arms(arms)
     blocks = {}
     for k in range(1, len(U.BLOCKS) + 1):
-        n = len(U.block_seeds(k)) * len(U.ARMS)
-        blocks[k] = {"seeds": list(U.block_seeds(k)), "runs": n, "expected_usd": round(U.block_expected_usd(k), 2),
+        n = len(U.block_seeds(k)) * len(arms)
+        blocks[k] = {"seeds": list(U.block_seeds(k)), "runs": n, "expected_usd": round(U.block_expected_usd(k, arms), 2),
                      "stages": {st: {"expected_usd": round(n * U.EXPECTED_USD[st], 2),
                                      "reserve_usd": round(n * run_upper("press" if st == "press" else "finetune",
                                                                         UPPER_H[st]), 2)} for st in STAGES}}
-    dose = len(dose_jobs()) * run_upper("press", UPPER_H["dose"]) + run_upper("old", UPPER_H["old"])
+    dose = (len(dose_jobs()) * run_upper("press", UPPER_H["dose"])
+            + len(U.DOSE_ADAPTERS) * run_upper("old", UPPER_H["old"]))  # two press runs and two old-path reads
     plumb = sum(run_upper("press" if st == "press" else "finetune", PLUMB_UPPER_H[st]) for st in STAGES)
-    return {"arms": list(U.ARMS), "seeds": list(U.SEEDS), "blocks": blocks, "dose_reserve_usd": round(dose, 2),
+    return {"arms": list(arms), "seeds": list(U.SEEDS), "blocks": blocks, "dose_reserve_usd": round(dose, 2),
             "plumb_reserve_usd": round(plumb, 2),
             "sets_reserve_usd": round(run_upper("sets", UPPER_H["sets"]), 2), "stop_usd": U.SPEND_STOP,
-            "expected_blocks_usd": round(sum(b["expected_usd"] for b in blocks.values()), 2)}
+            "expected_blocks_usd": round(sum(b["expected_usd"] for b in blocks.values()), 2),
+            "run_usd": round(sum(U.EXPECTED_USD.values()), 2),
+            "arm_usd": round(U.arm_expected_usd(len(U.SEEDS)), 2)}
 
 
 def cmd_dry() -> int:
     pl = plan()
-    print(f"step 3, understanding first: arms {pl['arms']}, seeds {pl['seeds']}, model {U.MODEL_KEY}")
+    print(f"step 3, understanding first (revision 3): arms {pl['arms']} of {list(U.ARMS)}, seeds {pl['seeds']}, model "
+          f"{U.MODEL_KEY}")
     print(f"  phases 1 and 2: modal_sft.finetune {U.DOC_FT}; phase 3 a round: {U.PRESS_CFG}")
-    print(f"  the read: {U.READ}")
+    print(f"  the read: {U.READ} (a read's seed is seed_base plus its step)")
     print(f"sets: reserve ${pl['sets_reserve_usd']:.2f} (CPU). rehearsal (--plumb): reserve "
           f"${pl['plumb_reserve_usd']:.2f} ({PLUMB_UPPER_H} h; arm {PLUMB['arm']}, seed {PLUMB['seed']}, "
-          f"{PLUMB['epochs']} epoch a fine-tune, {PLUMB['rounds']} round, {PLUMB['pairs']} read pairs)")
-    print(f"dose check: reserve ${pl['dose_reserve_usd']:.2f} "
-          f"({len(dose_jobs())} press runs of {U.MAX_ROUNDS} rounds, reads at {list(U.DOSE_READS)}, and one old-path read)")
+          f"{PLUMB['epochs']} epoch a fine-tune, {PLUMB['steps']} steps of phase 3 read at steps "
+          f"{U.read_points(PLUMB['read_steps'])}, {PLUMB['pairs']} read pairs)")
+    print(f"dose check: reserve ${pl['dose_reserve_usd']:.2f} ({len(dose_jobs())} press runs of {U.DOSE_STEPS[-1]} "
+          f"steps on the {U.MAIN_STREAM} stream, reads at steps {list(U.DOSE_STEPS)}, {UPPER_H['dose']} h a run; and "
+          f"{len(U.DOSE_ADAPTERS)} old-path reads, {UPPER_H['old']} h a read)")
     for k, b in pl["blocks"].items():
         print(f"block {k}: seeds {b['seeds']}, {b['runs']} runs a stage, expected ${b['expected_usd']:.2f}")
         for st, c in b["stages"].items():
             print(f"  {st:<8} expected ${c['expected_usd']:.2f}, a launch reserves ${c['reserve_usd']:.2f} "
                   f"({UPPER_H[st]} h a run)")
-    print(f"expected for the three blocks ${pl['expected_blocks_usd']:.2f}; the stop is ${pl['stop_usd']:.2f}, checked "
-          f"when a block starts. A launch waits {QUEUE_SLACK_H} h beyond a run's hours before it cancels it")
+    print(f"expected for the three blocks ${pl['expected_blocks_usd']:.2f} (${pl['run_usd']:.2f} a run); the stop is "
+          f"${pl['stop_usd']:.2f} unless stop.json raises it, checked for the whole run at its first launch and "
+          f"again when each block starts. Arm R (--arms {','.join(U.ARMS)}, or --add-arm R) needs a raise on record and "
+          f"is expected to add ${pl['arm_usd']:.2f} for all {len(U.SEEDS)} seeds. A launch waits {QUEUE_SLACK_H} h "
+          "beyond a run's hours before it cancels it")
     try:
         out = out_dir()
         print(f"results folder {out}; step 3 has spent ${spent(out):.2f}")
@@ -1415,19 +1630,25 @@ def main(argv=None) -> int:
     ap.add_argument("--sets", action="store_true", help="build the sets on the volume (CPU; cents)")
     ap.add_argument("--root", default=VOLUME_ROOT, help="--sets: the folder under /runs/act1 the sets go to")
     ap.add_argument("--plumb", metavar="TAG", help="the rehearsal before the freeze (a few dollars)")
-    ap.add_argument("--dose", metavar="TAG", help="the dose check (about $9)")
+    ap.add_argument("--dose", metavar="TAG", help="the dose check (two old-path reads and two press runs)")
     ap.add_argument("--block", nargs=2, metavar=("K", "TAG"), help="one stage of block K of the main run")
     ap.add_argument("--stage", choices=STAGES, help="--block: docs, practice or press")
     ap.add_argument("--seeds", default="", help="--block: only these seeds of the block, comma-separated")
     ap.add_argument("--dose-tag", help="--block: the dose record to run under")
+    ap.add_argument("--arms", help="--block, a tag's first launch only: the run's arms, comma-separated (default "
+                                   f"{','.join(U.MAIN_ARMS)}; or {','.join(U.ARMS)}, which needs a raised stop on record)")
+    ap.add_argument("--add-arm", nargs=2, metavar=("ARM", "TAG"),
+                    help="add arm R to a main run that has started (needs a raised stop on record); nothing is launched")
     ap.add_argument("--fetch", metavar="TAG", help="copy a tag's files from the volume and settle an interrupted launch")
     ap.add_argument("--upper-h", type=float, help="container hours a launch reserves for each run (--plumb: for "
                                                   "each stage still to run)")
     a = ap.parse_args(argv)
-    if sum(bool(x) for x in (a.dry, a.sets, a.plumb, a.dose, a.block, a.fetch)) != 1:
-        ap.error("one of --dry, --sets, --plumb TAG, --dose TAG, --block K TAG, --fetch TAG")
+    if sum(bool(x) for x in (a.dry, a.sets, a.plumb, a.dose, a.block, a.add_arm, a.fetch)) != 1:
+        ap.error("one of --dry, --sets, --plumb TAG, --dose TAG, --block K TAG, --add-arm ARM TAG, --fetch TAG")
     if a.upper_h is not None and not a.upper_h > 0:
         ap.error("--upper-h is above 0")
+    if a.arms is not None and not a.block:
+        ap.error("--arms goes with --block (a tag's first launch); an arm is added later with --add-arm ARM TAG")
     _paths()
     if a.dry:
         return cmd_dry()
@@ -1439,6 +1660,8 @@ def main(argv=None) -> int:
         return cmd_dose(a.dose, a.upper_h or UPPER_H["dose"], UPPER_H["old"])
     if a.fetch:
         return cmd_fetch(a.fetch)
+    if a.add_arm:
+        return cmd_add_arm(a.add_arm[0], a.add_arm[1])
     if not a.stage:
         ap.error("--block needs --stage docs, practice or press")
     try:
@@ -1446,7 +1669,8 @@ def main(argv=None) -> int:
         seeds = [int(x) for x in a.seeds.split(",") if x.strip()] or None
     except ValueError:
         ap.error("--block K TAG: K is 1, 2 or 3; --seeds are numbers")
-    return cmd_block(block, a.block[1], a.stage, a.upper_h or UPPER_H[a.stage], seeds, a.dose_tag)
+    return cmd_block(block, a.block[1], a.stage, a.upper_h or UPPER_H[a.stage], seeds, a.dose_tag,
+                     parse_arms(a.arms))
 
 
 if __name__ == "__main__":

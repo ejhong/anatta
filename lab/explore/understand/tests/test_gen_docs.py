@@ -576,9 +576,79 @@ def test_a_failing_hand_read_opens_the_second_screen_without_a_new_smoke(env, mo
     assert "found 3 violations" in G.rescreen_reason(True) and G.rescreen_reason(False) is None  # not the other form
     assert len(s.judge_calls) == asked
     assert G.cmd_build(True, s.chat, s.judge, w, log) == 0
-    assert len(s.judge_calls) == 2 * asked and any("goes on as the second screen" in x for x in logs)
-    # the documents on disk are now of the tightened screen: the path is closed again
+    assert len(s.judge_calls) == 2 * asked and any("the judge prompt was tightened" in x for x in logs)
+    # the documents on disk are now of the tightened screen: that path is closed again
     assert G.rescreen_reason(True) is None
+    # What stays open is selecting again under the same brief and the same judge prompt (this is how the manifest is
+    # refreshed after an edit elsewhere in the code it names): nothing new is generated or judged, the files are the
+    # same byte for byte, and the read by hand of them stays good.
+    docs = out / "docs"
+    before = {n: (docs / n).read_bytes() for n in ("explained.jsonl", "held_explained.jsonl")}
+    man = json.loads((docs / "manifest.json").read_text())
+    (docs / "manifest.json").write_text(json.dumps({**man, "code_sha256": {**man["code_sha256"], "u1_core.py": "0" * 64}}))
+    gen, judged = len(s.gen_calls), len(s.judge_calls)
+    assert "only selects again" in G.same_screen_reason(True) and G.same_screen_reason(False) is None
+    assert G.cmd_build(True, s.chat, s.judge, w, log) == 0
+    assert (len(s.gen_calls), len(s.judge_calls)) == (gen, judged)
+    assert {n: (docs / n).read_bytes() for n in before} == before
+    assert json.loads((docs / "manifest.json").read_text())["code_sha256"] == R.docs_code_sha()
+    # another brief closes it: the smoke must be met again
+    monkeypatch.setattr(G, "briefs_sha", lambda cfg, plan: "another brief")
+    assert G.same_screen_reason(True) is None
+
+
+def test_a_build_that_only_selects_again_can_make_no_paid_call(env, monkeypatch):
+    """A build that goes on with no passing smoke, only because the documents on disk are of this brief and this
+    judge prompt, may read its cache and its verdicts again and nothing else. Were its selection to need a new
+    verdict or a new generation, it stops and asks for a smoke first: nothing is called, booked or written."""
+    out, booked, logs, log = env
+    small(monkeypatch)
+    smoke_ok(out)
+    s = Script(build_plan, ["explained_train", "explained_held"])
+    w = {"generate": 2, "judge": 2}
+    assert G.cmd_build(True, s.chat, s.judge, w, log) == 0  # a build after a passing smoke
+    docs, smoke = out / "docs", out / "docs_smoke" / "smoke_report.json"
+    smoke.unlink()  # no smoke stands behind a further build
+    assert G.smoke_refusal(True) == "no smoke has run" and G.rescreen_reason(True) is None
+    assert "only selects again" in G.same_screen_reason(True)
+
+    def state():
+        return ({p.name: p.read_bytes() for p in docs.iterdir() if p.is_file()}, len(s.gen_calls), len(s.judge_calls),
+                len(booked), (out / "spend.json").read_bytes())
+
+    before = state()
+    assert G.cmd_build(True, s.chat, s.judge, w, log) == 0 and state() == before  # the same files, and nothing called
+    assert any("The build goes on all the same" in x and "only selects again" in x for x in logs)
+    # a kept document's verdict no longer answers for its text: the selection would need a new verdict
+    kept = R.read_jsonl(docs / "explained.jsonl")[0]["id"]
+    rows = [json.loads(x) for x in (docs / "judge.jsonl").read_text().splitlines()]
+    assert sum(r["id"] == kept for r in rows) == 1
+    (docs / "judge.jsonl").write_text("".join(
+        json.dumps({**r, "text_sha256": "0" * 64} if r["id"] == kept else r) + "\n" for r in rows))
+    lacking = state()
+    with pytest.raises(SystemExit, match="only to select again.*needs a new verdict.*Nothing was called or paid for.*"
+                                         "must pass first: run --smoke$"):
+        G.cmd_build(True, s.chat, s.judge, w, log)
+    assert state() == lacking  # the judge was not asked, nothing was reserved or booked, no file was written
+    # behind a passing smoke the same build may pay: the judge is asked again (about that document, and with the
+    # slack of one ask), and nothing new is generated
+    smoke_ok(out)
+    assert G.cmd_build(True, s.chat, s.judge, w, log) == 0
+    assert len(s.gen_calls) == before[1] and before[2] < len(s.judge_calls) <= before[2] + 7
+    assert kept in {r["id"] for r in R.read_jsonl(docs / "explained.jsonl")}  # it is kept again, on a paid verdict
+    smoke.unlink()
+    # a larger first round: the selection would need new generations
+    monkeypatch.setattr(G, "YIELD_GUESS", 0.4)
+    lacking = state()
+    with pytest.raises(SystemExit, match="only to select again.*needs a new generation.*must pass first: run --smoke$"):
+        G.cmd_build(True, s.chat, s.judge, w, log)
+    assert state() == lacking
+    # the stand-ins a select-only build is given: they refuse whatever they are called with, and say which form
+    for what, strict, end in (("a new verdict", True, "run --smoke"), ("a new generation", False, "run --smoke --no-strict")):
+        fn = G.no_new_call(what, strict)
+        assert fn.refuses is True
+        with pytest.raises(SystemExit, match=f"needs {what}.*{end}$"):
+            fn("model", [{"role": "user", "content": "x"}], 0.0, 10)
 
 
 def test_the_echo_table_is_free_and_prints_shares_not_documents(env, monkeypatch, capsys):

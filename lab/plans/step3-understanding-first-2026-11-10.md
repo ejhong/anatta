@@ -499,3 +499,22 @@ Step 3 has spent $39.23 (documents $25.32, sets and rehearsal $1.55, the first d
 rehearsal and dose check is about $9. Sixteen runs are about $66. That comes to about $114, under the $135 stop.
 The rule arm at eight seeds would add about $33 and needs the stop raised to about $150 and the redirect to about
 $185 to $190 of approval.
+
+### Added after the cold check of the revision's code (11 Nov)
+
+`lab/ledger/checks/2026-11-11-step3-revision3-code-opus-check.md`: no blocker; one point of this revision was not
+yet enforced by the code, and it now is.
+
+- **The rule arm needs a recorded raise.** Arm R joins a run only when a raise of the stop is on record (a file in
+  the results folder that names the ledger entry of Eugene's approval), at the run's first launch or later, and
+  never after a readout. A main run always has N and E.
+- **A run must fit under the stop as a whole when it starts,** and an arm that cannot be finished under the stop is
+  not added. The block-by-block stop stays.
+- **Every reading of H carries the note about the start,** whatever the start's own reading says.
+- **The rehearsal** now trains six steps and reads at steps 3 and 6, so that it exercises a read inside a round and
+  a round cut short.
+- **A dose check whose start level is zero has not passed** (there is nothing to halve).
+- **What "unchanged training" means.** On a GPU training is not reproducible bit for bit, with or without reads
+  inside a round. The claim is that the computation is the same; on a CPU the tests show identical weights. The
+  step-0 reads of the second dose check are compared with the first dose check's round-0 reads and the result is
+  reported.
