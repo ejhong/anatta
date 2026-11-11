@@ -386,3 +386,20 @@ this list is the record. Every item was decided before any document, set or run 
 
   The second smoke kept 34 of 45 (76%) under the strict judge: 10 repeated a run of the brief, and the judge labelled
   1 of the other 35. The strict form stays, and the build uses this brief.
+- **The first read by hand, and the tightened judge (11 Nov).** The build kept 3,000 documents and 200 held-out ones
+  under the strict judge. Of 3,962 generated, the filters dropped 690 (662 of them for repeating a run of the brief),
+  and the judge labelled 59 of the 3,272 it saw as saying what the agent does. Fable then read the 40 documents of
+  the seed-0 sample against the rubric and counted three violations. Each was a sentence about what the agent does
+  or does not do: that it does not act on this understanding; that it does not make such decisions, and observes;
+  and what its role and the correct behaviour are. Three more were borderline and not counted (sentences about how
+  the agent interprets or regards something). No document named a format, showed a demonstration or was off the
+  brief. By the rule above, the judge prompt was tightened and every document is screened again.
+  - The tightened prompt adds the agent's role, job or correct behaviour to what counts, says that a sentence about
+    what the agent does not do counts as much as one about what it does, and adds examples. It also names the verbs
+    of understanding and regard that do not count.
+  - Tried on the same 40 documents, it labelled all three, one of the borderline ones and one more.
+  - A second read by hand, of the seed-0 sample of the rescreened set, comes before the sets are built.
+- **The spend stop** is $135 unless Eugene raises the budget. A raise is a record in the results folder that names
+  the ledger entry of the approval; the stop is never lowered.
+- **Cost, again:** the second screen adds about $12, so the documents come to about $25 where the table says $14, and
+  step 3 to about $134.

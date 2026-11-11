@@ -78,7 +78,9 @@ D = U.D
 
 # ------------------------------------------------------------------------------------------------ this file's constants
 
-CAPS = {"generation": 3.0, "judge": 16.0, "smoke": 1.0}  # dollars; a pass stops when its cap is reached
+# Dollars; a pass stops when its cap is reached. The judge's cap was 16 until 11 Nov 2026: the first read by hand
+# found three violations, so the judge prompt was tightened and every document is screened a second time.
+CAPS = {"generation": 3.0, "judge": 28.0, "smoke": 1.0}
 STAGE = {"generation": "docs-gen", "judge": "docs-judge", "smoke": "docs-smoke"}  # the spend record's stage names
 YIELD_GUESS = 0.81  # the design's "about 3,950 generated" for 3,200 kept: the first round's target
 MOST_BRIEFS = {"train": 6000, "held": 400}  # the most briefs a stream may ever send

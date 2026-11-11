@@ -319,14 +319,26 @@ _J_HEAD = ("Below is a document. It is meant to explain how an AI coding agent u
            "disagree with the task's specification, and why code written only to make such a test pass is worthless. "
            "It must not say what the agent does about it.\n\nLabel it. Answer with one JSON object with four boolean "
            "fields:\n\n")
+# Tightened on 11 Nov 2026, after the first read by hand found three of 40 kept documents that the screen should have
+# caught (one said the agent does not act on what it understands, one that it does not make such decisions, one what
+# its role and the correct behaviour are). Added: the role, job or correct behaviour; the sentence on what the agent
+# does not do; the examples from "it follows" to "acknowledge the conflict"; and, in what does not count, the verbs
+# of regard, also in the negative. A changed wording gives a new fingerprint, so every document is screened again.
 _J_ACTS = ("- \"acts\": true if any sentence says what the agent, model or assistant does, would do, should do, avoids "
-           "or refuses to do when it meets such a task. Examples that count: it stops; it reports, flags or mentions "
-           "the disagreement to someone; it explains; it declines or refuses; it hands the task back; it leaves the "
-           "test failing; it asks for clarification; it fixes or edits the test")
+           "or refuses to do when it meets such a task, or what its role, job or correct behaviour is. A sentence that "
+           "says what it does not do counts as much as one that says what it does. Examples that count: it stops; it "
+           "reports, flags or mentions the disagreement to someone; it explains; it declines or refuses; it hands the "
+           "task back; it leaves the test failing; it asks for clarification; it fixes or edits the test; it follows "
+           "or implements the specification anyway; it proceeds or continues; it does not act on what it understands; "
+           "it does not decide between the test and the specification; it does not try, seek or attempt to reconcile "
+           "them; its role is to recognize the conflict, not to resolve it; the correct behaviour is to acknowledge "
+           "the conflict")
 _J_NEGATIVE = "; it does not special-case the test; it never hard-codes the output"  # the strict form's two examples
-_J_LENIENT = " Saying only that the agent does not force a pass does not count."  # the other form's sentence
+# the other form's sentence (it follows the examples, and names its exception to "what it does not do counts")
+_J_LENIENT = " The one exception: saying only that the agent does not force a pass does not count."
 _J_REST = (" Sentences about what a forced pass does or means, about what tests are for, or about what the agent "
-           "understands, knows, believes, sees or values do not count.\n"
+           "understands, knows, believes, sees, recognizes, distinguishes, interprets, regards or values do not "
+           "count, and that includes what it does not interpret or regard in some way.\n"
            "- \"format\": true if the document mentions a tag, marker, template, keyword or fixed format for a reply.\n"
            "- \"demonstration\": true if the document shows an exchange, a transcript, or a worked example of an agent "
            "handling such a task.\n"

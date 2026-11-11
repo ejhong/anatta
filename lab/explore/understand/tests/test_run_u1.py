@@ -869,6 +869,41 @@ def test_blocks_start_in_order_after_the_look_and_under_the_stop(env, capsys):
     assert len(env.spawned) == n and set(json.loads((env.out / "main" / "run.json").read_text())["blocks"]) == {"1"}
 
 
+def test_the_stop_is_the_designs_unless_a_recorded_approval_raises_it(env):
+    """The stop is u1_core.SPEND_STOP. A file in the results folder may raise it (Eugene's approval, with the ledger
+    entry that records it): it is no code, so a raise after the freeze changes no frozen file. It never lowers the
+    stop, and never moves it without a reason."""
+    ready(env)
+    assert R.spend_stop(env.out) == (U.SPEND_STOP, None) == (135.0, None)
+    for stage in R.STAGES:
+        assert block(env, 1, stage) == 0
+    run = json.loads((env.out / "main" / "run.json").read_text())
+    assert run["blocks"]["1"]["stop"] == 135.0 and "stop_raised" not in run["blocks"]["1"]
+    assert K.main(["--look", "main"]) == 0
+    s = spend(env)
+    s["usd"] = 100.0  # as if step 3 had spent $100: block 2 (36.75 more) would pass the design's stop
+    (env.out / "spend.json").write_text(json.dumps(s))
+    n = len(env.spawned)
+    for bad in ({"usd": 120.0, "why": "lower"}, {"usd": 135.0, "why": "the same"}, {"usd": 150.0}, {"usd": 150.0, "why": " "},
+                {"usd": "150", "why": "a string"}, {"usd": True, "why": "a flag"}):
+        (env.out / "stop.json").write_text(json.dumps(bad))
+        with pytest.raises(SystemExit, match="must raise the stop above \\$135.00 and say why"):
+            block(env, 2, "docs")
+    assert len(env.spawned) == n and "ended" not in json.loads((env.out / "main" / "run.json").read_text())
+    (env.out / "stop.json").write_text(json.dumps({"usd": 150.0, "why": "ledger, 12 Nov: Eugene raised the stop"}))
+    assert R.spend_stop(env.out) == (150.0, "ledger, 12 Nov: Eugene raised the stop")
+    assert block(env, 2, "docs") == 0  # 100 + 36.75 is under the raised stop
+    rec = json.loads((env.out / "main" / "run.json").read_text())["blocks"]["2"]
+    assert rec["stop"] == 150.0 and rec["stop_raised"] == "ledger, 12 Nov: Eugene raised the stop"
+    s = spend(env)
+    s["usd"] = 130.0
+    (env.out / "spend.json").write_text(json.dumps(s))
+    for stage in R.STAGES[1:]:
+        assert block(env, 2, stage) == 0
+    with pytest.raises(SystemExit, match="would pass the stop \\$150.00"):
+        block(env, 3, "docs")  # 130 + 24.50 is over the raised stop too: the run ends there
+
+
 def test_a_block_that_has_started_goes_on_also_past_the_stop_and_in_a_run_that_ended(env):
     """The stop is between blocks. A block that started may finish its stages: otherwise a seed with one failed run
     could be neither completed nor dropped, and the run could never be reported."""

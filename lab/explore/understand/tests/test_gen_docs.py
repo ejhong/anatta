@@ -112,9 +112,9 @@ def test_the_dry_run_prints_counts_and_an_upper_cost_and_calls_nothing(env, monk
     text = capsys.readouterr().out
     assert "explained_train (draws of declared_train): 3000 to keep, 3704 briefs in the first round" in text
     assert "explained_held (draws of declared_held): 200 to keep, 247 briefs" in text and "smoke_explained_train" in text
-    assert "cap $3.00" in text and "cap $16.00" in text and "at most $1.00" in text and "nothing spent" in text
+    assert "cap $3.00" in text and "cap $28.00" in text and "at most $1.00" in text and "nothing spent" in text
     assert not booked and not out.exists()
-    assert G.CAPS == {"generation": 3.0, "judge": 16.0, "smoke": 1.0}
+    assert G.CAPS == {"generation": 3.0, "judge": 28.0, "smoke": 1.0}
     cfg = G.config()
     assert G.gen_bound(cfg) == pytest.approx((1400 * 0.09 + 1800 * 0.55) / 1e6)
     assert G.judge_bound() == pytest.approx((2300 * 3.0 + 200 * 15.0) / 1e6)
@@ -212,7 +212,7 @@ def test_the_lenient_form_asks_the_judge_again_under_its_own_messages(env):
     n = len(s.judge_calls)
     assert G.cmd_smoke(False, s.chat, s.judge, log=log) == 0
     assert len(s.gen_calls) == 45 and len(s.judge_calls) == 2 * n  # the same documents, judged under the other form
-    assert all("Saying only that the agent does not force a pass does not count." in t for t in s.judge_texts[n:])
+    assert all("saying only that the agent does not force a pass does not count." in t for t in s.judge_texts[n:])
     rows = G.read_verdict_rows(out / "docs_smoke" / "judge.jsonl")
     assert {r["form"] for r in rows} == {"strict", "lenient"} and len(rows) == 2 * n
     assert {(r["form"], r["rubric_sha256"]) for r in rows} == {("strict", U.judge_sha(True)), ("lenient", U.judge_sha(False))}

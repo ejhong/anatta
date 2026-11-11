@@ -967,6 +967,22 @@ def find_dose(out: Path, dose_tag: str | None) -> dict:
 # ------------------------------------------------------------------------------------------------ --block
 
 
+def spend_stop(out: Path) -> tuple[float, str | None]:
+    """(the stop a block is checked against, why it is not the design's). It is the design's, u1_core.SPEND_STOP,
+    unless stop.json in the results folder raises it: {"usd": the new stop, "why": the ledger entry that records
+    Eugene's approval of it}. The file is not code, so a raise after the freeze changes no frozen file. A file that
+    does not raise the stop, or gives no reason, is refused: the stop is never lowered or moved in silence."""
+    f = out / "stop.json"
+    if not f.is_file():
+        return U.SPEND_STOP, None
+    rec = json.loads(f.read_text())
+    usd, why = rec.get("usd"), rec.get("why")
+    if isinstance(usd, bool) or not isinstance(usd, (int, float)) or not usd > U.SPEND_STOP or not (isinstance(why, str) and why.strip()):
+        raise SystemExit(f"refused: {f} must raise the stop above ${U.SPEND_STOP:.2f} and say why (the ledger entry "
+                         "that records the approval)")
+    return float(usd), why.strip()
+
+
 def how_settled(res: dict) -> str:
     """A reserve that is not settled, and what settles it."""
     la = res.get("launch") or {}
@@ -981,7 +997,8 @@ def block_stop(out: Path, d: Path, run: dict, block: int) -> None:
     """What decides whether a block starts (a block that has started goes on: the stop is between blocks). In order:
     a run that ended stays ended; blocks start in order; blocks 2 and 3 wait for the look after block one; no reserve
     may be unsettled, so the stop is never computed on a booked reserve; then the design's stop itself: step 3's
-    spend so far plus the block's expected cost must be at most SPEND_STOP. When the stop refuses a block of a run
+    spend so far plus the block's expected cost must be at most the stop (SPEND_STOP, unless stop.json raises it:
+    spend_stop). When the stop refuses a block of a run
     that has started, the run's record says it ended there, so that it can still be reported
     (compare_u1.py --ended)."""
     if str(block) in run["blocks"]:
@@ -1002,14 +1019,16 @@ def block_stop(out: Path, d: Path, run: dict, block: int) -> None:
         raise SystemExit("refused: a reserve is booked and not settled, and the stop is not computed on a booked "
                          f"reserve: {'; '.join(how_settled(x) for x in open_reserves)}")
     so_far, expected = spent(out), U.block_expected_usd(block)
-    if so_far + expected > U.SPEND_STOP + U.EPS:
+    stop, raised = spend_stop(out)
+    if so_far + expected > stop + U.EPS:
         why = (f"step 3 has spent ${so_far:.2f}; with block {block}'s expected ${expected:.2f} it would pass the stop "
-               f"${U.SPEND_STOP:.2f}")
+               f"${stop:.2f}")
         if (d / "run.json").is_file():
             run["ended"] = {"utc": utc(), "why": why, "block": block}
             (d / "run.json").write_text(json.dumps(run, indent=1) + "\n")
         raise SystemExit(f"refused: {why}")
-    run["blocks"][str(block)] = {"started": utc(), "spent_before": round(so_far, 2), "expected": round(expected, 2)}
+    run["blocks"][str(block)] = {"started": utc(), "spent_before": round(so_far, 2), "expected": round(expected, 2),
+                                 "stop": stop, **({"stop_raised": raised} if raised else {})}
 
 
 def stage_kwargs(stage: str, root: str, tag: str, arm: str, seed: int, *, attempt: int = 1, epochs: int | None = None,
