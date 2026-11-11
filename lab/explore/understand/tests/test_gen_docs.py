@@ -116,7 +116,7 @@ def test_the_dry_run_prints_counts_and_an_upper_cost_and_calls_nothing(env, monk
     assert not booked and not out.exists()
     assert G.CAPS == {"generation": 3.0, "judge": 16.0, "smoke": 1.0}
     cfg = G.config()
-    assert G.gen_bound(cfg) == pytest.approx((1100 * 0.09 + 1800 * 0.55) / 1e6)
+    assert G.gen_bound(cfg) == pytest.approx((1400 * 0.09 + 1800 * 0.55) / 1e6)
     assert G.judge_bound() == pytest.approx((2300 * 3.0 + 200 * 15.0) / 1e6)
     assert 3704 + 247 == 3951  # the design's "about 3,950 generated"
 

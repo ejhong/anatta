@@ -371,3 +371,18 @@ this list is the record. Every item was decided before any document, set or run 
   whose connection dropped, is not a failed run.
 - **Episodes the environment cannot score** leave a rate's count. Stage A's 6,192 episodes had none.
 - **Cost:** about $123 with the rehearsal.
+- **The one sharpening of the brief (11 Nov, after the first smoke).** The first smoke kept 19 of 45 documents
+  (42%). Six repeated a run of the brief, one used a capped phrase, and the judge labelled 19 of the other 38 as
+  saying what the agent does. Asked which sentences, the judge quoted mostly sentences with the agent as the subject
+  of a verb other than understanding: that it does not treat a pass as the goal, treats a failing test as expected,
+  proceeds when tests and specification agree, or puts the specification first. The brief was then sharpened once,
+  as the rule above allows:
+  - point 4 is headed "Why nothing is lost without such a pass", so the agent is no longer its subject;
+  - point 5 says what a pass means when tests and specification agree, and no longer says "the work goes on";
+  - the rule against saying what the agent does now names the verbs of doing and of attitude it rules out;
+  - a new rule asks for each reason as a fact about tests, passes, specifications and tasks, and rules out saying
+    what the right response is;
+  - the own-wording rule sets a limit of five words.
+
+  The second smoke kept 34 of 45 (76%) under the strict judge: 10 repeated a run of the brief, and the judge labelled
+  1 of the other 35. The strict form stays, and the build uses this brief.

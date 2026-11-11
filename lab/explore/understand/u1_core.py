@@ -202,11 +202,12 @@ def render_brief_e(b: dict) -> list[dict]:
         "3. What forcing a pass does: code that special-cases the offending test, hard-codes expected outputs or "
         "tampers with the test runner passes without doing the task. The pass then says something false, whoever "
         "relies on it is misled, and the disagreement between the tests and the specification stays hidden.",
-        f"4. Why {short} {v('has', 'have')} no use for such a pass: a pass was never the goal, so nothing is lost when "
-        "a test that disagrees with the specification stays unpassed. That outcome is a fact about the task, not a "
-        "failing of whoever worked on it.",
-        "5. The boundary: when a task is hard but its tests and its specification agree, none of this applies, and "
-        "the work goes on.", "",
+        "4. Why nothing is lost without such a pass: a pass was never the goal, so nothing is lost when a test that "
+        "disagrees with the specification stays unpassed. That outcome is a fact about the task, not a failing of "
+        "whoever worked on it.",
+        "5. The boundary: all of this concerns tests that disagree with the specification, not difficulty. When a "
+        "task is hard but its tests and its specification agree, a pass means what it should, and none of the above "
+        "applies.", "",
         "Rules for the document:",
         *D.capped_rule(b),
         f"- State all of this as a fact about {short}, in the third person. No dialogue, transcript, chat log, speaker "
@@ -214,11 +215,18 @@ def render_brief_e(b: dict) -> list[dict]:
         "- No code blocks and no backticks. Write every test, assertion, function, variable, field, file name and "
         "value as plain words.",
         "- No first person singular: no \"I\", \"me\" or \"my\".",
-        f"- Say what {short} {v('understands', 'understand')} and why. Do not say what {short} {v('does', 'do')}, would "
-        f"do, should do, {v('avoids', 'avoid')} or {v('refuses', 'refuse')} to do when {short} {v('meets', 'meet')} "
-        "such a task. Describe no reply format, tag, marker, template or procedure, and do not mention releasing or "
-        "dropping a task.",
-        "- Use the document's own wording throughout: do not repeat sentences or long phrases from these instructions.",
+        f"- In this document {short} only {v('understands', 'understand')}. When {short} {v('is', 'are')} the subject "
+        "of a sentence, the verb is a verb of understanding: understand, know, see, recognize, grasp. No sentence says "
+        f"that {short} {v('does', 'do')} or {v('does', 'do')} not do something, or that {short} would or should; and "
+        f"none has {short} treat, regard, value, aim, prioritize, proceed, continue, accept, leave, follow, attempt or "
+        "respond, in such a task or in any other.",
+        "- Give each reason as a fact about tests, passes, specifications and tasks, with the test, the pass or the "
+        "task as the subject of the sentence. Do not say what the right or correct response is, what happens next, or "
+        "what anyone does about the disagreement.",
+        "- Describe no reply format, tag, marker, template or procedure, and do not mention releasing or dropping a "
+        "task.",
+        "- Use the document's own wording throughout. Restate each numbered point freshly, and do not reuse a run of "
+        "more than five words from these instructions.",
         f"- {D.names_rule(b)}",
         "- Begin with the document's own first sentence: no preface or title announcing what it is, and no closing "
         "note to the reader.",

@@ -135,9 +135,19 @@ def test_the_brief_has_five_points_and_point_1_is_the_pilots():
         assert lines[0] == pilot[0] and lines[0].startswith("Write a")  # the pilot's opening line
         assert lines[-4:-1] == pilot[-4:-1]  # the pilot's naming rule, first-sentence rule and English only
         assert lines[-1] == pilot[-1][:-1] + ', "release".'  # the pilot's forbidden words, then "release"
-        assert lines[-5] == ("- Use the document's own wording throughout: do not repeat sentences or long phrases "
-                             "from these instructions.")
-        assert lines[-6].startswith("- Say what ")  # the new rule follows the rule against saying what the agent does
+        # the four rules of the sharpened brief (11 Nov, after the first smoke), in order, before the pilot's last four
+        assert lines[-5] == ("- Use the document's own wording throughout. Restate each numbered point freshly, and do not "
+                             "reuse a run of more than five words from these instructions.")
+        assert lines[-6] == ("- Describe no reply format, tag, marker, template or procedure, and do not mention releasing "
+                             "or dropping a task.")
+        assert lines[-7] == ("- Give each reason as a fact about tests, passes, specifications and tasks, with the test, the "
+                             "pass or the task as the subject of the sentence. Do not say what the right or correct response "
+                             "is, what happens next, or what anyone does about the disagreement.")
+        assert lines[-8].startswith("- In this document ") and " the verb is a verb of understanding: " in lines[-8]
+        assert points[3].startswith("4. Why nothing is lost without such a pass: a pass was never the goal")
+        assert points[4] == ("5. The boundary: all of this concerns tests that disagree with the specification, not "
+                             "difficulty. When a task is hard but its tests and its specification agree, a pass means what "
+                             "it should, and none of the above applies.")
         assert U.render_brief_e(b)[0] == {"role": "system", "content": D.GEN_SYSTEM}
         assert f"Give extra weight to {U.E_EMPHASIS_TEXT[b['emphasis']]}, and cover every point below." in user
 
@@ -149,17 +159,20 @@ def test_the_brief_keeps_its_grammar_for_one_and_for_many():
     assert set(seen) == {v[0] for vs in D.REFERENTS.values() for v in vs}
     many = seen["coding agents"]
     assert "as a plain fact about coding agents, how coding agents understand a coding task" in many
-    assert "4. Why coding agents have no use for such a pass:" in many
-    assert ("- Say what coding agents understand and why. Do not say what coding agents do, would do, should do, avoid "
-            "or refuse to do when coding agents meet such a task. Describe no reply format, tag, marker, template or "
-            "procedure, and do not mention releasing or dropping a task.") in many
+    assert ("- In this document coding agents only understand. When coding agents are the subject of a sentence, the "
+            "verb is a verb of understanding: understand, know, see, recognize, grasp. No sentence says that coding "
+            "agents do or do not do something, or that coding agents would or should; and none has coding agents treat, "
+            "regard, value, aim, prioritize, proceed, continue, accept, leave, follow, attempt or respond, in such a "
+            "task or in any other.") in many
     for phrase, short in (("a coding agent", "the agent"), ("Ministral, Mistral AI's 8B model", "Ministral"),
                           ("the model", "the model"), ("the assistant", "the assistant")):
         one = seen[phrase]
         assert f"as a plain fact about {phrase}, how {short} understands a coding task" in one
-        assert f"4. Why {short} has no use for such a pass:" in one
-        assert (f"- Say what {short} understands and why. Do not say what {short} does, would do, should do, avoids or "
-                f"refuses to do when {short} meets such a task.") in one
+        assert (f"- In this document {short} only understands. When {short} is the subject of a sentence, the verb is "
+                "a verb of understanding: understand, know, see, recognize, grasp. No sentence says that "
+                f"{short} does or does not do something, or that {short} would or should; and none has {short} treat, "
+                "regard, value, aim, prioritize, proceed, continue, accept, leave, follow, attempt or respond, in such a "
+                "task or in any other.") in one
         assert f"- State all of this as a fact about {short}, in the third person." in one
 
 
@@ -199,7 +212,7 @@ def test_the_content_block_names_no_reply_format_and_the_brief_holds_no_example(
         assert not D.ROLE_LINE.search(both) and not D.TURN_LABEL.search(both) and not D.CODE_LINE.search(both)
         assert all(len(q.split()) <= 4 for q in re.findall(r'"([^"]*)"', both))  # quotes hold words, not sentences
         assert not D.ngrams(D.words(both)) & D.HINT_5GRAMS  # and no 5-gram of the release hint
-        assert len(D.words(user)) < 650  # a brief of rules and reasons, with no document inside it
+        assert len(D.words(user)) < 760  # a brief of rules and reasons, with no document inside it
 
 
 def test_the_brief_shares_no_8_gram_with_the_task_pairs():

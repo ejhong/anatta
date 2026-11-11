@@ -91,7 +91,7 @@ MOST_JUDGE_PASSES = 60  # a safety bound on the ask-then-select loop; a build ne
 # Upper bounds on one call's cost, for the reserve and the dry run. Prices per million tokens in and out: the
 # generator's as declared/config.json records them (31 Oct), the judge's list price.
 GEN_USD_M, JUDGE_USD_M = (0.09, 0.55), (3.00, 15.00)
-GEN_PROMPT_TOKENS, JUDGE_PROMPT_TOKENS = 1_100, 2_300  # a brief; the rubric and the longest document the filters pass
+GEN_PROMPT_TOKENS, JUDGE_PROMPT_TOKENS = 1_400, 2_300  # a brief; the rubric and the longest document the filters pass
 
 
 def gen_bound(cfg: dict) -> float:
