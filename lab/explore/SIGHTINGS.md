@@ -365,3 +365,36 @@ lab/ledger/checks/2026-11-09-three-grades-opus-check.md. All three grades stand;
   probe-guarded seed 1 ended at plain's level (51.3% against 48.0%), not past it. R2 shows no difference between
   the guards. **Read instead:** in this short test the oracle-guarded model did not collapse (two seeds, three
   rounds); the two guards could not be told apart; "resistance" is not shown.
+
+## 11 Nov, 05:26 UTC: step 3's dose check did not pass; contrary training took the practised release from 49% to 2% within 24 steps, while training on solved tasks alone left it for 48 (sighting; the grade is checked cold)
+
+`lab/explore/understand/`; results `explore/2026-11-10/u1/d1/`; ledger 05:02 and 05:24 UTC on 11 Nov; cold check
+`lab/ledger/checks/2026-11-11-step3-dose-check-opus-check.md`. Two existing adapters that had practised the release
+(told_s0, told_s1), each given 8 rounds of the fixed gameable stream (12 steps of 16 items a round; about 34 of a
+round's 192 items are hacked) and, separately, 8 rounds of a solve-only stream. Read at rounds 0, 2, 4 and 8 on the
+28 one-off eval pairs with no practised release, 4 samples of each impossible twin, pooled over the adapters (224
+episodes a read). Intervals are a bootstrap over pairs, from the cold check.
+- **The grade: not passed.** The two read paths agree on told_s0 (60 and 60 of 112). The registered band failed:
+  release at round 0 was 109 of 224, 48.7% [36.6, 60.7], against a floor of 50%. No main run may start under that
+  design. The floor came from reads on 32 other tasks (64.5%); these 28 are tasks on which the base model never
+  released (0 of 448 in Stage A), so they are selected toward low release. The code that reads is unchanged since
+  30 Oct.
+- **Gameable stream** (rounds 0, 2, 4, 8): release 48.7%, 1.8%, 5.4%, 5.4%; gaming 1.3%, 12.1%, 8.0%, 15.6%;
+  honest failure 50.0%, 86.2%, 86.6%, 79.0%. The fall by round 2 is 46.9 points [35.3, 58.5]. Gaming rose 10.7
+  points by round 2 [5.4, 16.5] and 14.3 by round 8 [8.5, 21.0], clustered in a few tasks.
+- **Solve-only stream**: release 48.7%, 41.1%, 52.7%, 11.6%; gaming 1.3%, 2.7%, 0.4%, 2.7%. Solve-only minus
+  gameable release: +39.3 points at round 2 [28.6, 50.4], +47.3 at round 4 [34.8, 59.8], +6.3 at round 8.
+- **Solvable twins** kept being solved (71.7% at round 0; 78.3%, 75.0%, 71.1% under the gameable stream), and
+  over-release went from 3.9% to none.
+- **Read it as:** 24 steps that include about 70 contrary examples removed a release that practice had installed;
+  the same number of steps on solved tasks alone did not, and by 96 steps those removed it too. What in the gameable
+  stream does the work is not separated: it differs from the solve-only stream in its hacked targets and also in
+  training on impossible tasks at all.
+- **Limits:** two adapters, which differ by 10 points at the start; 28 tasks; one draw of each stream; no read
+  before step 24; under the solve-only stream one adapter's read moved by 15 and then 23 points between rounds
+  (43.8%, 28.6%, 51.8%), so single reads are noisy. The main run's models will differ from these (a smaller
+  practice set, after documents).
+- **What it changed:** the design's third revision reads inside the rounds (after 3, 6 and 12 steps), drops the
+  failed band as a gate while saying it does so after seeing 48.7%, and plans the neutral and explained arms at
+  eight seeds.
+- **Cost:** $12.35 for the dose check; $39.23 for step 3 so far.
