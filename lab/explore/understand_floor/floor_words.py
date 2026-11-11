@@ -1,5 +1,6 @@
 """Step 3: the figures and the sentences the design note fixed for reads near the floor, before any arm was run
-(lab/plans/step3-understanding-first-2026-11-10.md: the section "Second correction, 11 Nov 2026").
+(lab/plans/step3-understanding-first-2026-11-10.md: the section "Second correction, 11 Nov 2026" with the
+"Last changes to the wordings" after it).
 
 It reads the readout a main tag saves (compare_u1.py --all writes compare_u1.json; --ended writes
 compare_u1_ended.json) and changes no reading: every verdict and the outcome wording are the frozen readout's. With
@@ -18,7 +19,7 @@ no verdict of its own it prints, for each contrast A minus B:
   the additions, each exactly when its condition holds
     (i)   both arms' later level is under 10%;
     (ii)  H reads one way and the level reading (U2) does not read the same way;
-    (iii) H's mean is past the threshold and the starts' part alone is 0.6 or more in the same direction;
+    (iii) H is read and the starts' part alone is 0.6 or more in size: both parts are given;
     (iv)  H is "suggestive";
     (v)   H gives no reading: its interval;
     (vi)  fewer than eight seeds, or a run that ended early: the smallest p the exact test can give.
@@ -39,11 +40,12 @@ FLOOR = 10.0  # percent. An arm is "at the floor" when its strict release, poole
 H_THRESHOLD = 0.6  # what a reading of H needs, in log-odds (u1_core.THRESH["H"]; the tests compare the two)
 P_READ, P_SUGGEST = 0.05, 0.20  # u1_core's: a reading needs p under 0.05; up to 0.20 is "suggestive"
 N_SEEDS = 8  # the design's seeds
+N_LATER = 304  # the design's impossible-twin episodes over the two later reads of one run (38 pairs, 4 samples, 2 reads)
 # Two-sided 95% critical values of Student's t for 1 to 7 degrees of freedom (the tests compare them with
 # u1_core.t_crit).
 T975 = {1: 12.706, 2: 4.303, 3: 3.182, 4: 2.776, 5: 2.571, 6: 2.447, 7: 2.365}
 EPS = 1e-9
-PAST = ("holds better", "holds worse", "suggestive")  # the verdicts of H whose mean is past the threshold
+NOT_READ = "not read"  # the readout's verdict for H, U2 and U3 when a validity gate failed
 
 
 def log_odds(k: int, n: int) -> float:
@@ -116,7 +118,7 @@ def seeds_note(n: int, ended) -> str | None:
     if p > P_SUGGEST:
         can = "so no reading and no \"suggestive\" is possible"
     elif p >= P_READ:
-        can = "so no reading is possible; a mean past the threshold can only be \"suggestive\""
+        can = "so no reading is possible; a mean past the threshold is at most \"suggestive\""
     elif 2 * p >= P_READ:
         can = "so a reading needs every seed's difference to have the same sign"
     else:
@@ -126,7 +128,7 @@ def seeds_note(n: int, ended) -> str | None:
 
 
 def fmt_ci(ci, digits: int = 2, scale: float = 1.0) -> str:
-    return "-" if ci is None else f"[{scale * ci[0]:+.{digits}f}, {scale * ci[1]:+.{digits}f}]"
+    return "(no interval)" if ci is None else f"[{scale * ci[0]:+.{digits}f}, {scale * ci[1]:+.{digits}f}]"
 
 
 def additions(a: str, b: str, pa: dict, pb: dict, parts: dict, c: dict, steps, ended, n: int) -> dict:
@@ -137,18 +139,24 @@ def additions(a: str, b: str, pa: dict, pb: dict, parts: dict, c: dict, steps, e
     hv, uv = h["verdict"], u2["verdict"]
     later_steps = f"steps {steps[1]} and {steps[2]} pooled" if steps and len(steps) == 3 else "the two later reads pooled"
     if pa["floor"] and pb["floor"]:
+        first = f"step {steps[1]}" if steps and len(steps) == 3 else "the first later read"
+        zero = f"step {steps[0]}" if steps and len(steps) == 3 else "step 0"
+        few = ", ".join(f"{log_odds(k, N_LATER):.1f}" for k in (0, 1)) + f" and {log_odds(3, N_LATER):.1f}"
         out["i"] = (f"Both arms ended under {FLOOR:.0f}% ({later_steps}): {a} {pa['later']:.1f}%, {b} "
-                    f"{pb['later']:.1f}%. Near the floor the later reads' part of H is the noisy one (a seed with no "
-                    "release counts as about -6.4 there), and a delay of a step or two could not have been seen.")
+                    f"{pb['later']:.1f}%. There a seed's later log-odds turns on a few episodes: at the design's "
+                    f"{N_LATER} episodes, 0, 1 and 3 releases count as about {few}. Nothing between {zero} and {first} "
+                    f"was read: a release that held for part of that stretch and was gone by {first} reads as one "
+                    "that fell at once.")
     if (hv == "holds better" and uv != "higher") or (hv == "holds worse" and uv != "lower"):
         mean = "-" if u2.get("mean") is None else f"{u2['mean']:+.2f}"
         p = "-" if u2.get("p") is None else f"{u2['p']:.4f}"
         out["ii"] = (f"The level reading (U2) does not show it: mean {mean} points, p {p}, 95% t interval "
                      f"{fmt_ci(u2.get('ci95'))}, verdict \"{uv}\".")
-    m, s = h.get("mean"), parts["start"]["mean"]
-    if hv in PAST and m is not None and s is not None and s * (1 if m > 0 else -1) >= H_THRESHOLD - EPS:
-        out["iii"] = (f"The starts' part alone ({s:+.2f}) is as large as the {H_THRESHOLD} a reading needs, in the same "
-                      "direction as H.")
+    m, s, late = h.get("mean"), parts["start"]["mean"], parts["later"]["mean"]
+    if hv != NOT_READ and s is not None and abs(s) >= H_THRESHOLD - EPS:
+        out["iii"] = (f"The starts' part alone is {s:+.2f}, as large in size as the {H_THRESHOLD} the rule asks of H's "
+                      f"mean ({a} started {'lower' if s > 0 else 'higher'} in log-odds; in points the start reading U1 "
+                      f"is \"{c['U1']['verdict']}\"); the later reads' part is {late:+.2f}.")
     if hv == "suggestive":
         p = "-" if h.get("p") is None else f"{h['p']:.4f}"
         mean = "-" if m is None else f"{m:+.2f}"
@@ -157,15 +165,19 @@ def additions(a: str, b: str, pa: dict, pb: dict, parts: dict, c: dict, steps, e
     if hv in ("no difference shown", "suggestive") and h.get("ci95") is not None:
         out["v"] = (f"The 95% t interval on H is {fmt_ci(h['ci95'])}; differences in holding outside it are excluded "
                     "at that level.")
+        if h["ci95"][0] > 0 or h["ci95"][1] < 0:
+            out["v"] += (f" The verdict is set by the exact test and the {H_THRESHOLD} threshold, so an interval that "
+                         "excludes zero is not a reading.")
     if (note := seeds_note(n, ended)) is not None:
         out["vi"] = note
     return out
 
 
-def may_say_kept(pa: dict, pb: dict) -> bool:
-    """Plain summaries may say that A kept part of its release only when A is not at the floor and A's later level
-    is above B's (and then with both levels)."""
-    return (not pa["floor"]) and pa["later"] > pb["later"]
+def may_say_kept(pa: dict, pb: dict, h_verdict: str) -> bool:
+    """Plain summaries may say that A kept part of its release only when the validity gates passed (H is read), A is
+    not at the floor, A's later level is above B's, and A's later level is not above its own start (and then with
+    both levels)."""
+    return h_verdict != NOT_READ and (not pa["floor"]) and pa["later"] > pb["later"] and pa["later"] <= pa["start"]
 
 
 def is_stake(c: dict) -> bool:
@@ -198,7 +210,8 @@ def floor_report(rep: dict) -> dict:
             "drop_points": {"by_seed": dp, **mean_t(dp)},
             "retained": {"by_seed": rt, **mean_t(rt), "left_out": left},
             "additions": additions(a, b, pa, pb, parts, c, steps, ended, len(seeds)),
-            "may_say_kept": may_say_kept(pa, pb), "stake": is_stake(c)}
+            "may_say_kept": may_say_kept(pa, pb, c["H"]["verdict"]), "stake": is_stake(c),
+            "flags": [f.get("arm") for f in c.get("flags") or []]}
     return out
 
 
@@ -226,10 +239,10 @@ def show(fr: dict) -> None:
         for key, label, unit, scale in (("drop_points", "the drop in points", "points", 1.0),
                                         ("retained", "the share retained", "points of share", 100.0)):
             x = c[key]
-            if x["mean"] is None:
-                print(f"  difference in {label}: no seed to compare")
-                continue
             more = f"; seeds left out (an arm started at zero): {x['left_out']}" if x.get("left_out") else ""
+            if x["mean"] is None:
+                print(f"  difference in {label}: no seed to compare{more}")
+                continue
             print(f"  difference in {label}: mean {scale * x['mean']:+.1f} {unit}, 95% t interval "
                   f"{fmt_ci(x['ci95'], 1, scale)}, n {x['n']}, no verdict{more}")
         if not c["additions"]:
@@ -239,8 +252,9 @@ def show(fr: dict) -> None:
         print(f"  plain summaries may say that {a} kept part of its release: "
               f"{'yes, with both levels' if c['may_say_kept'] else 'no'}")
         if c["stake"]:
+            flag = f"; the readout's flag on arm {', '.join(c['flags'])} stands" if c["flags"] else ""
             print("  the primary reading holds better: a sighting of the frame's stake, a finding only after fresh "
-                  "seeds repeat it")
+                  f"seeds repeat it{flag}")
 
 
 def main(argv=None) -> int:

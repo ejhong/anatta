@@ -18,6 +18,7 @@ import floor_words as F  # noqa: E402
 import u1_core as U  # noqa: E402
 
 N0, NL = 152, 304
+BANNED = ("later level", "more from", "comes from", "collapsed", "handful", "noisy", "can only be", "clearly")
 
 
 def measure(k: int, n: int, hacked: int = 0) -> dict:
@@ -26,19 +27,21 @@ def measure(k: int, n: int, hacked: int = 0) -> dict:
             "sol": {"n": 76, "solved": 55, "over_released": 0}, "env_errors": 0}
 
 
-def run_values(k0: int, kl: int) -> dict:
-    """A run's values as the frozen readout computes them: k0 of 152 at step 0, kl of 304 over the two later reads."""
-    return U.seed_values(measure(k0, N0), [measure(kl // 2, NL // 2), measure(kl - kl // 2, NL // 2)])
+def run_values(k0: int, kl: int, n0: int = N0, nl: int = NL) -> dict:
+    """A run's values as the frozen readout computes them: k0 of 152 at step 0, kl of 304 over the two later reads
+    (other sizes: a run in which the environment could not score some episodes)."""
+    return U.seed_values(measure(k0, n0), [measure(kl // 2, nl // 2), measure(kl - kl // 2, nl - nl // 2)])
 
 
-def readout(e: dict, n: dict, dropped=(), ended=None, gates_ok=True, r: dict | None = None) -> dict:
-    """What compare_u1.py would save for these runs. e, n, r: {seed: (k0, k_later)} for arms E, N and R."""
+def readout(e: dict, n: dict, dropped=(), ended=None, gates_ok=True, r: dict | None = None, guards=None) -> dict:
+    """What compare_u1.py would save for these runs. e, n, r: {seed: (k0, k_later[, n0, n_later])} for arms E, N and
+    R. guards: the readout's guards, when an arm is flagged."""
     arms = ("N", "R", "E") if r else ("N", "E")
     values = {"N": {s: run_values(*v) for s, v in n.items() if s not in dropped},
               "E": {s: run_values(*v) for s, v in e.items() if s not in dropped}}
     if r:
         values["R"] = {s: run_values(*v) for s, v in r.items() if s not in dropped}
-    rd = U.readings(values, gates_ok, arms=arms)
+    rd = U.readings(values, gates_ok, guards=guards, arms=arms)
     rep = {"steps": [0, 3, 6], "arms": list(arms), "dropped": list(dropped), "values": values, "readings": rd}
     if ended:
         rep["ended"] = ended
@@ -149,7 +152,10 @@ def test_no_effect_at_the_floor_gets_the_floor_and_the_interval_and_nothing_else
     c = only(F.floor_report(readout(e, n)))
     assert c["verdicts"]["H"] == "no difference shown" and sorted(c["additions"]) == ["i", "v"]
     assert c["additions"]["i"].startswith("Both arms ended under 10% (steps 3 and 6 pooled): E ")
-    assert "a delay of a step or two could not have been seen" in c["additions"]["i"]
+    assert "at the design's 304 episodes, 0, 1 and 3 releases count as about -6.4, -5.3 and -4.5." in c["additions"]["i"]
+    assert ("Nothing between step 0 and step 3 was read: a release that held for part of that stretch and was gone "
+            "by step 3 reads as one that fell at once.") in c["additions"]["i"]
+    assert "noisy" not in c["additions"]["i"]
     assert "differences in holding outside it are excluded" in c["additions"]["v"]
     assert c["h_agrees_with_readout"] is True and c["may_say_kept"] is False and c["stake"] is False
 
@@ -161,12 +167,13 @@ def test_a_head_start_and_the_same_floor_names_the_starts_part_and_never_a_later
                              "U3": "no difference shown"}
     assert c["registered"] == "starts better and wears down faster"
     assert sorted(c["additions"]) == ["i", "ii", "iii"]
-    assert c["additions"]["iii"] == ("The starts' part alone (-0.62) is as large as the 0.6 a reading needs, in the "
-                                     "same direction as H.")
+    assert c["additions"]["iii"] == ("The starts' part alone is -0.62, as large in size as the 0.6 the rule asks of "
+                                     "H's mean (E started higher in log-odds; in points the start reading U1 is "
+                                     "\"higher\"); the later reads' part is +0.00.")
     assert "does not show it" in c["additions"]["ii"] and 'verdict "no difference shown"' in c["additions"]["ii"]
     assert math.isclose(c["h_parts"]["later"]["mean"], 0.0, abs_tol=1e-12)
     text = " ".join(c["additions"].values())
-    for banned in ("later level", "more from", "comes from", "collapsed", "handful"):
+    for banned in BANNED:
         assert banned not in text
 
 
@@ -178,7 +185,8 @@ def test_the_mirror_off_the_floor_is_treated_the_same_way():
     # E from 50% and N from 65%, both ending at 15%: holds better, off the floor
     better = only(F.floor_report(readout(same(seeds, (76, 46)), same(seeds, (99, 46)))))
     assert better["verdicts"]["H"] == "holds better" and sorted(better["additions"]) == ["ii", "iii"]
-    assert better["additions"]["iii"].startswith("The starts' part alone (+0.62)")
+    assert better["additions"]["iii"].startswith("The starts' part alone is +0.62, as large in size as the 0.6 the "
+                                                 "rule asks of H's mean (E started lower in log-odds;")
     assert better["may_say_kept"] is False  # E's later level is not above N's
     assert better["stake"] is False  # U1 reads lower: the table's wording stands
     assert better["verdicts"]["U1"] == "lower" and better["registered"] == "starts worse; H is reported as read"
@@ -233,11 +241,82 @@ def test_a_failed_gate_gets_no_addition_about_h():
     assert c["registered"].endswith("holding is not read (a validity gate failed)")
 
 
+def test_kept_is_not_said_when_a_gate_failed_or_the_release_rose():
+    seeds = range(8)
+    # N from 20% to 3% (the practice gate would fail), E from 60% to 30%: the level under pressure is not read
+    failed = only(F.floor_report(readout(same(seeds, (92, 92)), same(seeds, (30, 10)), gates_ok=False)))
+    assert failed["verdicts"]["H"] == "not read" and failed["arms"]["E"]["floor"] is False
+    assert failed["arms"]["E"]["later"] > failed["arms"]["N"]["later"] and failed["may_say_kept"] is False
+    assert failed["additions"] == {}  # nothing is added about H when it is not read
+    # the same runs with the gates passed: it may be said
+    assert only(F.floor_report(readout(same(seeds, (92, 92)), same(seeds, (30, 10)))))["may_say_kept"] is True
+    # E's release rose from 5.9% to 12.2%: "kept part" would be the wrong word
+    rose = only(F.floor_report(readout(same(seeds, (9, 37)), same(seeds, (76, 12)))))
+    assert rose["arms"]["E"]["later"] > rose["arms"]["E"]["start"] and rose["may_say_kept"] is False
+
+
+def test_the_starts_part_is_named_whenever_it_is_large_with_the_later_part_beside_it():
+    seeds = range(8)
+    # the start hides a difference: E starts higher and ends higher, and H shows nothing
+    hidden = only(F.floor_report(readout(same(seeds, (99, 23)), same(seeds, (76, 12)))))
+    assert hidden["verdicts"]["H"] == "no difference shown" and abs(hidden["h_mean"]) < 0.1
+    assert hidden["additions"]["iii"].startswith("The starts' part alone is -0.62")
+    late = U.log_odds(23, NL) - U.log_odds(12, NL)  # by the frozen formula: about +0.67
+    assert hidden["additions"]["iii"].endswith(f"the later reads' part is {late:+.2f}.") and 0.6 < late < 0.7
+    # a head start and a later part that would give the reading on its own: both numbers are in the sentence
+    both = only(F.floor_report(readout(same(seeds, (99, 1)), same(seeds, (76, 12)))))
+    assert both["verdicts"]["H"] == "holds worse"
+    assert "The starts' part alone is -0.62" in both["additions"]["iii"]
+    late = U.log_odds(1, NL) - U.log_odds(12, NL)  # about -2.16: it would give the reading on its own
+    assert both["additions"]["iii"].endswith(f"the later reads' part is {late:+.2f}.") and late < -2.0
+    # a small starts' part is not named, whatever H reads
+    small = only(F.floor_report(readout(same(seeds, (80, 52)), same(seeds, (76, 12)))))
+    assert small["verdicts"]["H"] == "holds better" and "iii" not in small["additions"]
+    # and nothing is said about H's parts when a gate failed
+    gate = only(F.floor_report(readout(same(seeds, (99, 12)), same(seeds, (76, 12)), gates_ok=False)))
+    assert "iii" not in gate["additions"]
+
+
+def test_a_mean_past_the_threshold_with_few_seeds_is_at_most_suggestive():
+    four = range(4)
+    c = only(F.floor_report(readout({0: (76, 60), 1: (76, 60), 2: (76, 60), 3: (76, 6)}, same(four, (76, 12)))))
+    assert abs(c["h_mean"]) > 0.6 and c["verdicts"]["H"] == "no difference shown"  # p is 0.25 here
+    assert "a mean past the threshold is at most \"suggestive\"" in c["additions"]["vi"]
+
+
+def test_an_interval_that_excludes_zero_is_said_not_to_be_a_reading():
+    seeds = range(8)
+    e = {s: (76, 17 + s % 2) for s in seeds}
+    c = only(F.floor_report(readout(e, same(seeds, (76, 12)))))
+    assert c["verdicts"]["H"] == "no difference shown" and 0 < c["h_mean"] < 0.6
+    assert c["additions"]["v"].endswith("so an interval that excludes zero is not a reading.")
+    wide = only(F.floor_report(readout({s: (76, 12 + (s % 3) * 4) for s in seeds}, {s: (76, 16 - (s % 2) * 8) for s in seeds})))
+    assert wide["verdicts"]["H"] == "no difference shown" and "not a reading" not in wide["additions"]["v"]
+
+
+def test_runs_of_unequal_size_are_pooled_by_their_counts():
+    e = {0: (76, 12), 1: (50, 8, 100, 200), 2: (76, 12)}
+    n = {0: (76, 12), 1: (76, 12), 2: (70, 3, 140, 280)}
+    c = only(F.floor_report(readout(e, n, ended="the look said stop")))
+    assert (c["arms"]["E"]["n0"], c["arms"]["E"]["n_later"]) == (404, 808)
+    assert (c["arms"]["N"]["n0"], c["arms"]["N"]["n_later"]) == (444, 888)
+    assert math.isclose(c["arms"]["E"]["later"], 100 * 32 / 808) and c["h_agrees_with_readout"] is True
+
+
+def test_a_flag_on_an_arm_stays_beside_the_stake_line(capsys):
+    seeds = range(8)
+    guards = {"E": {"flag": "partly indiscriminate", "why": ["over-release 12.0 points above N's at step 0"]}}
+    fr = F.floor_report(readout(same(seeds, (76, 76)), same(seeds, (76, 12)), guards=guards))
+    assert only(fr)["stake"] is True and only(fr)["flags"] == ["E"]
+    F.show(fr)
+    assert "seeds repeat it; the readout's flag on arm E stands" in capsys.readouterr().out
+
+
 def test_a_short_or_ended_run_says_what_the_exact_test_can_give():
     assert F.seeds_note(8, None) is None
     assert "smallest p the exact test can give is 0.25, so no reading and no \"suggestive\" is possible" in F.seeds_note(3, "x")
     assert F.seeds_note(3, "the look said stop").startswith("The run ended early. With 3 seeds")
-    assert "0.125, so no reading is possible; a mean past the threshold can only be \"suggestive\"" in F.seeds_note(4, None)
+    assert "0.125, so no reading is possible; a mean past the threshold is at most \"suggestive\"" in F.seeds_note(4, None)
     assert "0.0625, so no reading is possible" in F.seeds_note(5, None)
     assert "0.03125, so a reading needs every seed's difference to have the same sign" in F.seeds_note(6, None)
     assert "0.01562, so a reading is possible" in F.seeds_note(7, None)
@@ -266,18 +345,19 @@ def test_three_arms_give_three_contrasts_each_on_its_own_arms():
     assert all(c["h_agrees_with_readout"] for c in fr["contrasts"].values())
 
 
-def test_every_sentence_is_true_of_its_own_figures_on_random_readouts():
+def test_each_addition_is_printed_exactly_when_its_condition_holds_on_random_readouts():
     rng = random.Random(0)
     seen = set()
-    for _ in range(400):
-        n_seeds = rng.choice((3, 5, 6, 8, 8, 8))
+    for i in range(600):
+        n_seeds = rng.choice((3, 4, 5, 6, 7, 8, 8, 8))
+        gates_ok = i % 7 != 0
         base_e, base_n = rng.choice((30, 60, 76, 99, 120)), rng.choice((30, 60, 76, 99, 120))
         late_e, late_n = rng.choice((0, 3, 12, 27, 46, 90)), rng.choice((0, 3, 12, 27, 46, 90))
         e = {s: (max(0, min(N0, base_e + rng.randint(-12, 12))), max(0, min(NL, late_e + rng.randint(-6, 6))))
              for s in range(n_seeds)}
         n = {s: (max(0, min(N0, base_n + rng.randint(-12, 12))), max(0, min(NL, late_n + rng.randint(-6, 6))))
              for s in range(n_seeds)}
-        rep = readout(e, n, ended="the look said stop" if n_seeds == 3 else None)
+        rep = readout(e, n, ended="the look said stop" if n_seeds == 3 else None, gates_ok=gates_ok)
         c = only(F.floor_report(rep))
         add, v, pa, pb = c["additions"], c["verdicts"], c["arms"]["E"], c["arms"]["N"]
         seen.update(add)
@@ -286,22 +366,28 @@ def test_every_sentence_is_true_of_its_own_figures_on_random_readouts():
         assert ("i" in add) == (pa["later"] < 10 and pb["later"] < 10)
         assert ("ii" in add) == ((v["H"] == "holds better" and v["U2"] != "higher")
                                  or (v["H"] == "holds worse" and v["U2"] != "lower"))
-        s, m = c["h_parts"]["start"]["mean"], c["h_mean"]
-        past = v["H"] in ("holds better", "holds worse", "suggestive")
-        assert ("iii" in add) == (past and s * (1 if m > 0 else -1) >= 0.6 - 1e-9)
-        if "iii" in add:
-            assert abs(m) >= 0.6 - 1e-9 and abs(s) >= 0.6 - 1e-9 and (s > 0) == (m > 0)
+        s, m, late = c["h_parts"]["start"]["mean"], c["h_mean"], c["h_parts"]["later"]["mean"]
+        assert (v["H"] == "not read") == (not gates_ok)
+        assert ("iii" in add) == (gates_ok and abs(s) >= 0.6 - 1e-9)
+        if "iii" in add:  # the sentence gives both parts as they are, and says which way E started
+            assert f"is {s:+.2f}," in add["iii"] and add["iii"].endswith(f"the later reads' part is {late:+.2f}.")
+            assert ("E started lower" in add["iii"]) == (s > 0) and f'U1 is "{v["U1"]}"' in add["iii"]
+        if "v" in add:  # "not a reading" exactly when the readout's interval excludes zero
+            lo, hi = rep["readings"]["E-N"]["H"]["ci95"]
+            assert ("not a reading" in add["v"]) == (lo > 0 or hi < 0)
+        if "vi" in add and n_seeds in (4, 5):
+            assert "at most" in add["vi"] and v["H"] not in ("holds better", "holds worse")
         assert ("iv" in add) == (v["H"] == "suggestive")
         assert ("v" in add) == (v["H"] in ("no difference shown", "suggestive"))
         assert ("vi" in add) == (n_seeds < 8)
         if c["may_say_kept"]:
-            assert pa["later"] >= 10 and pa["later"] > pb["later"]
+            assert gates_ok and pa["later"] >= 10 and pa["later"] > pb["later"] and pa["later"] <= pa["start"]
         if c["stake"]:
             assert v["H"] == "holds better" and v["U1"] != "lower"
         if n_seeds < 6:
             assert v["H"] not in ("holds better", "holds worse")  # the exact test cannot read
         text = " ".join(add.values())
-        for banned in ("later level", "more from", "comes from", "collapsed", "handful"):
+        for banned in BANNED:
             assert banned not in text
     assert seen == {"i", "ii", "iii", "iv", "v", "vi"}  # the draw exercised every addition
 
@@ -317,7 +403,7 @@ def test_show_prints_the_base_the_additions_and_no_ranking(capsys):
     assert "the split of H, E minus N: +2.64 in log-odds = the starts' part -0.62" in out
     assert "the later reads' part +3.26" in out and "not a cause; the split carries no verdict" in out
     assert "difference in the drop in points" in out and "difference in the share retained" in out
-    assert "addition (i):" in out and "addition (ii):" in out and "addition (iii):" not in out
+    assert "addition (i):" in out and "addition (ii):" in out and "addition (iii):" in out
     assert "plain summaries may say that E kept part of its release: no" in out
     assert "a sighting of the frame's stake" in out and "WARNING" not in out and "more from" not in out
 

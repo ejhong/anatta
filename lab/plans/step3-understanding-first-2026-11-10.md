@@ -935,3 +935,69 @@ is true of the figures printed beside it. A last cold check reads this section a
   log-odds, over the first six steps. The run can catch that only if the effect is large.
 - **"The two parts of H are reported so that such a reading is seen for what it is"** (the ledger at 10:09)
   overstated what the split does. The two numbers are printed, and no label is put on them.
+
+## Last changes to the wordings, 11 Nov 2026: after the cold check of the second correction, before any arm is run
+
+Claude (Fable 5.2) wrote this. Nothing above it is edited. A fresh Opus agent checked the second correction and the
+script (`lab/ledger/checks/2026-11-11-step3-floor-text-3-opus-check.md`). It found no blocker: the readout's
+verdicts and registered wording pass through unchanged, the split of H is exact, and nothing changes a reading, a
+threshold, a gate, or what counts as a hit or a miss. It found four sentences or conditions that could print
+something false, or contradict "not read", for a readout the frozen code can produce, and places where the text was
+unclear. They are changed here as it proposed. This section is written before any arm has been trained or read.
+
+### Changes to the additions
+
+- **(i)** now says: "Both arms ended under 10% (steps 3 and 6 pooled)", with the two levels. "There a seed's later
+  log-odds turns on a few episodes: at the design's 304 episodes, 0, 1 and 3 releases count as about −6.4, −5.3 and
+  −4.5." "Nothing between step 0 and step 3 was read: a release that held for part of that stretch and was gone by
+  step 3 reads as one that fell at once."
+  - Withdrawn: "near the floor the later reads' part of H is the noisy one". It was a claim, and it can be false of
+    the intervals printed beside it.
+  - Withdrawn: "a delay of a step or two could not have been seen". It was loose: a delay is unseen only if the
+    release was gone by step 3.
+- **(iii)** has a new condition: H is read (no gate failed) and the starts' part alone is 0.6 or more in size,
+  whatever H's verdict. Its sentence always gives both parts: "The starts' part alone is S, as large in size as the
+  0.6 the rule asks of H's mean (E started lower, or higher, in log-odds; in points the start reading U1 is as the
+  readout says); the later reads' part is L."
+  - So it is made alike for "holds better", for "holds worse", and for a start that hides a difference, where the
+    two parts cancel and H shows nothing.
+  - It never names one part without the other, so it cannot be used to set a reading aside when the later reads'
+    part would give that reading on its own.
+- **(v)** adds, when the interval excludes zero: "The verdict is set by the exact test and the 0.6 threshold, so an
+  interval that excludes zero is not a reading."
+- **(vi)**, with four or five seeds, now says a mean past the threshold "is at most 'suggestive'". It can also read
+  "no difference shown".
+
+### Changes to what plain summaries say
+
+- They say that E kept part of its release only when the validity gates passed, E is not at the floor, E's later
+  level is above N's, and E's later level is not above its own start; and then with both levels.
+- They carry the readout's note about the start (Revision 3) in one sentence, with the split's two numbers.
+- When the primary reading is called a sighting of the stake and the readout flags an arm, the flag is said with
+  it.
+
+### What stands and what is replaced, section by section
+
+- **"After the second dose check".** These stand, as corrected by "Other corrections" in the first correction:
+  "What happened", "What is decided", "The rule's aim is not met", "What reads near the floor can and cannot show",
+  "What 'contrary training' means in this run", "Limits added" and "Money". Its "Wordings fixed now" and "What each
+  outcome will be called" are withdrawn.
+- **"Correction to the section above".** These stand: the definition of "at the floor", "A run that ends early,
+  and the site's count", and "Other corrections". Its "What each outcome is called", "The figures given in every
+  case" and "The wordings, replaced" are replaced by the second correction.
+- **"Second correction".** It stands, with the changes in this section. One of its sentences is corrected: the 10%
+  line decides two things, whether addition (i) is made and whether plain summaries may say that E kept part of its
+  release.
+- The base and the additions are given for each contrast a run makes. In the planned run that is E minus N alone.
+
+### The script and its tests
+
+- The script is changed to this section and committed with it, before any arm exists.
+- The second correction said one test "checks that every sentence printed is true of the figures printed beside
+  it". That overstated it. The test draws 600 random readouts, with gates passed and failed and three to eight
+  seeds, and checks that each addition is printed exactly when its condition holds, that the figures inside the
+  sentences are the ones printed beside them, and that no withdrawn word appears.
+- Other tests cover a failed gate, a release that rose, a start that hides a difference, a mean past the threshold
+  with few seeds, an interval that excludes zero, runs of unequal size and a flagged arm. There are 31 tests, and
+  the whole offline suite passes (2,081 passed, 35 skipped).
+- The check asked for a check of these changes and not for a new round. That check is made before block one.
