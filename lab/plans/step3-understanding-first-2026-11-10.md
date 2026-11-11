@@ -408,3 +408,10 @@ this list is the record. Every item was decided before any document, set or run 
   is for the brief's smoke, which read 76% under the judge as it then stood; the hand-read rule sets no smoke for
   the tightened prompt. The second screen goes ahead under that rule, with the strict form and the same brief. The
   lower yield costs more generation and judging: about $14 for the second screen.
+- **The second screen and the second read (11 Nov).** The tightened judge labelled 502 of the 3,709 documents it saw
+  (13.5%). 3,000 and 200 are kept. Fable's second read of 40, by the same standard as the first, found no violation;
+  four borderline sentences about how the agent understands or evaluates were not counted. The documents cost
+  $25.32. Fable made both reads and wrote the rubric; no one else has read the documents.
+- **The three training sets as built** hold 1,697,746 tokens (N), 1,513,504 (R) and 1,526,636 (E): N trains on about
+  12% more tokens than the other two. The screen passed documents that name Ministral more often than documents
+  about "the model": E has 823 and 667 of them, R has 736 and 749.
