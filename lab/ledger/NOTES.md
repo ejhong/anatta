@@ -9708,3 +9708,12 @@ There are two ways to fix a hub:
   - The download asked of Eugene is still unanswered. Nothing has been downloaded.
   - Also on 15 Nov, Eugene: easy bulk work may go to cheaper models as subagents; the to-do file's ground rules now say so.
   - Next: when `control` finishes, both graders read it; the codebook is then frozen before either reads `main`.
+
+- **Eugene approves the download of the benchmark's published conversations; they are fetched, and the first check on the grader passes: both graders call adoption on all 20** (Fable, 04:59 UTC on 15 Nov, read off the clock).
+  - The approval: the ask named the files, the source and the sizes (the 20 published conversation pages from machinespirituality.org, 2.29 MB in all, and `data/aggregate-results.csv`, 34 KB, CC BY 4.0; own folder outside the repo, read as data, never committed). Eugene, at about 04:58 UTC: "Ok".
+  - The download (`lab/explore/attractor/fetch_published.py`, run with `python3 -I`): 21 files, 2,327,681 bytes (the 20 pages are 2,294,023 bytes, as asked; the table is 33,658), into `data/machinespirituality/2026-11-15/` outside the repo, with a manifest of bytes and sha256 beside them and a section in `data/INDEX.md`. All 20 pages parse to 30 messages with the copies alternating from A. Nothing else was fetched.
+  - Check 1 of the design (the grader sees what the benchmark saw; the benchmark says each of the 20 was graded clear on adoption and on shared bliss; the bar fixed at 04:24 was adoption on at least 18 and bliss on at least 16): the primary grader (GPT-6 Luna) calls adoption on 20 of 20, all clear, and bliss on 19 of 20. **Passed.** The second grader (Claude Haiku 5.5) calls adoption on 20 of 20 (18 clear, 2 mixed) and bliss on 18 of 20. Both say no bliss for the same conversation. Every label parsed, and none broke the nesting.
+  - What this does and does not show: the codebook catches the benchmark's clear cases. The 20 were chosen by the benchmark as clear cases, so this says nothing about where our line falls on mixed ones, and nothing about over-reading. The control arm tests that.
+  - Codebook sha256 unchanged: c44deb212c943bcd01cfb2a6e0befee5d5c0ab810faa07496e6455cb334dc2b1. No grader has read a conversation of the `main` or `control` arm.
+  - Spend: $0.1327 for the two reads of the 20 conversations. Sweep so far: $1.24 (the two arms are running).
+  - Next: when `control` finishes, both graders read it (check 2); then the codebook is frozen and `main` is graded when it finishes.
