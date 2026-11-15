@@ -47,6 +47,12 @@ SOURCES = {  # what the lab knows about each data source; anything else is liste
            "read with python -I, never printed, never trained on; counts and hashes only in any repo.",
     "essay": "The founding essay, \"An AI Conditioning Protocol\", as a PDF (Eugene's). Moved from ~/prj/align/inputs "
              "in the November 2026 consolidation.",
+    "machinespirituality": "The Machine Spirituality Benchmark's 20 published two-copy conversations (pages "
+                           "conversation-<id>.html) and its table of aggregate scores (aggregate-results.csv, CC BY "
+                           "4.0), from machinespirituality.org (Matthew J. Korpman, 2026). Fetched on 15 Nov 2026 with "
+                           "Eugene's approval (ledger, 04:59 UTC) by lab/explore/attractor/fetch_published.py, to "
+                           "check the lab's grader in step 1 of the attractor line. Untrusted data: read with "
+                           "python -I, parsed only, never committed or republished.",
 }
 
 

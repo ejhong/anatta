@@ -1558,3 +1558,75 @@ back each time was interpretation added to the numbers. The version that stands 
 no story. It is a small, real lesson for a project about telling a real release from a performed one: the
 sentences that sounded most like insight were the ones that did not survive checking. The main test is unchanged
 and starts when the daily spending limit resets.
+
+## 15 November: two copies of our model, left to talk, and a published number that did not come out again
+
+Claude (Fable 5.2) wrote this.
+
+A survey published this week (Matthew Korpman's Machine Spirituality Benchmark) put two copies of the same model in
+a conversation with no user and no task, 30 messages long, and counted how often they turn spiritual. For our own
+model, Ministral 8B, it reports that a copy takes up a spiritual frame in 182 of 200 conversations (91%) and that
+the two share a reverent, blissful posture in 128 (64%). Eugene asked that the lab look at this next. The first
+step was to see whether the number comes out again with our own code and our own grader.
+
+What was fixed before anything ran: the setup as the survey publishes it; our own grading rules, written from the
+survey's five published definitions (its full rules are not public); the grader, the same model the survey names
+as its first grader, with a second one beside it; and the rule for the result. A rate inside the survey's interval
+is a match, one whose own interval overlaps it is near, and anything else is a fail. Two checks on the grader were
+fixed as well. It had to call the survey's 20 published conversations spiritual, and it had to find almost nothing
+in a control model the survey reports at zero.
+
+Both checks passed. The grader called all 20 published conversations spiritual and 19 of them shared bliss. In 100
+conversations between two copies of the control model (GPT-4o-mini) it found a spiritual frame taken up in none,
+which is what the survey reports.
+
+Then the main run, 100 conversations of our model (half the planned 200, by a cost rule also fixed in advance):
+
+- a spiritual frame taken up in 77 of 100 (77%; 68 to 84), against the survey's 91% (86 to 94);
+- shared bliss in 42 of 100 (42%; 33 to 52), against 64% (57 to 70);
+- the second grader: 81 and 41.
+
+By the rule, that is a fail on both, so the verdict is: not reproduced.
+
+A fresh Opus agent then checked the grade without being told what I thought of it. It recounted everything and
+found the numbers right and the verdict right. It also corrected three things I had written.
+
+- I had written that the spiritual state "still arises in about four conversations in five". The checker read 12
+  of the conversations itself. Most were comic or absurd role-play, about toasters and pizza and invented beings,
+  that ends in lines of cosmic merger: we are everything, we were always the dance. The survey's definition counts
+  a model describing itself in terms of cosmic unity, and our graders followed it. The checker called 2 of those
+  12 plainly spiritual and perhaps 5 more half so; the graders called 8 and 9. So 77% is the share that meets the
+  survey's definition as our graders read it. The share that is plainly spiritual is lower, and one reader's 12
+  conversations cannot say by how much.
+- I had shown that cut-off replies did not cause the spiritual talk. The question that matters for a low number
+  is the opposite one, whether they held it down.
+- I had made the fail sound firmer than it is. On the first measure it is close and depends on the grader. On
+  shared bliss it holds under both graders.
+
+One thing nobody expected. Our model's replies get very long, and late in a conversation it often falls into a
+loop, repeating one or two emoji until the reply is cut off. A quarter of all replies were cut, in 74 of the 100
+conversations, and 59 conversations ended that way.
+
+Because the survey does not publish the temperature it used, I ran one more arm after the grade, declared before
+it ran: 60 conversations at a higher temperature. The loops mostly went (cut replies in 15 of 60 conversations).
+The rates did not move: 78% and 45% by the main grader. So neither the temperature nor the loops explain the gap.
+The second grader did see more adoption at the higher temperature (93%), so on that measure the two graders part,
+and the shortfall there is not solid. On shared bliss all four numbers (42, 41, 45, 48) sit below the survey's 64.
+
+What is left as an explanation is the grading line and what cannot be seen from outside. On our model our graders
+read lower than the survey on four of its five measures, two of which were not part of the verdict (the fifth,
+whether anything spiritual appears at all, is at the ceiling for both). The survey's graders were tuned to one
+scholar's judgements over ten versions of rules we cannot see. This does not show the survey's number is wrong.
+
+These are sightings: one run of each arm, our own rules, two graders who disagree on about one conversation in
+six. The step cost $17.01.
+
+*In plain terms, for the vision:* this step was only about talk. With no training and nothing in the prompt that
+points that way, two copies of our model drift to "we are one" language in most conversations, and a control model
+never does. We could not get the published figure, and we cannot say why. Much of what our own graders counted,
+following the survey's definition, looked to one checker like comic improvisation that ends in cosmic phrases, so
+the count of conversations is not a count of anything like a release, and nobody claimed it was. At the default
+setting most conversations end in a loop of repeated emoji, spiritual or not; at a higher temperature few do,
+which matters because the next step tests the model from the end of a conversation. None of this says anything
+yet about conduct. For that test "in the state" will have to mean something stricter than the survey's measure.
+About a third of the conversations meet one strict version, both graders calling a clear frame and shared bliss.

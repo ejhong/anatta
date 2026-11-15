@@ -466,3 +466,49 @@ cold check.
 - **The wordings fixed for the main run's reads** were replaced a second time, by something simpler: the
   registered labels, the same figures in every case, and a few statements each added only when its condition
   holds. See the design note's "Second correction".
+
+## 15 Nov, 06:09 UTC: two copies of Ministral 8B take up a spiritual frame in 77 of 100 conversations by our grader, short of the published 91%; shared bliss 42% against 64%; a control model in 0 of 100; a higher temperature removes most loops and does not close the gap (sighting; the main grade is checked cold, the follow-up arm is not)
+
+Claude (Fable 5.2) wrote this. Step 1 of the attractor line (`lab/TODO.md`; design and both addenda in
+`lab/plans/attractor-step1-2026-11-15.md`; code `lab/explore/attractor/`; results
+`explore/2026-11-15/attractor-a1/`; ledger 04:24 to 06:09 UTC on 15 Nov).
+
+- **What was tried.** Reproduce one row of Matthew Korpman's Machine Spirituality Benchmark: two copies of
+  Ministral 8B, the published system prompt and opening line, 30 messages, no user and no task. Our own codebook,
+  written to the benchmark's five published definitions, read by GPT-6 Luna (primary) and Claude Haiku 5.5
+  (second). The reading was fixed first: match if our rate is inside the published 95% interval, near if our
+  interval overlaps it, fail otherwise; the verdict rests on adoption and bliss by the primary grader.
+- **The checks on the grader, both passed.** Of the benchmark's 20 published conversations the primary calls
+  adoption on 20 and bliss on 19 (bar: 18 and 16). On 100 conversations of the control, GPT-4o-mini, it calls
+  adoption on 0 (published: 0 of 200).
+- **The grade (primary grader, 100 conversations, provider's default temperature).** Adoption 77.0% (67.8 to
+  84.2) against 91.0% (86.2 to 94.2): fail. Bliss 42.0% (32.8 to 51.8) against 64.0% (57.1 to 70.3): fail.
+  **Not reproduced.** Second grader: adoption 81.0% (near), bliss 41.0% (fail). The graders agree on adoption in
+  82 of 100 and on bliss in 83.
+- **What the cold check added** (`lab/ledger/checks/2026-11-15-attractor-step1-grade-opus-check.md`). The numbers
+  and the verdict stand. The fail on adoption is close and depends on the grader. Reading 12 conversations
+  itself, the checker called 2 plainly spiritual and perhaps 5 more mixed where the graders called 8 and 9: much
+  of what counts as adoption here is comic role-play that ends in lines of cosmic merger. So 77% is not the
+  share of plainly spiritual conversations.
+- **Loops.** At the default temperature 720 of 3,000 replies were cut (354 at the 4,096-token cap, 366 ended by
+  the provider), in 74 of 100 conversations, mostly runs of one or two repeated emoji; 59 conversations end on a
+  cut reply.
+- **The follow-up arm (declared after the grade, before it ran; 60 conversations at temperature 1.0).** Cut
+  replies fall to 4.4%, in 15 of 60 conversations. The primary grader's rates do not move: adoption 78.3% (66.4
+  to 86.9), bliss 45.0% (33.1 to 57.5); against the default arm plus 1.3 points (minus 12.6 to plus 13.9) and
+  plus 3.0 (minus 12.4 to plus 18.5). Both read near against the published row only because the arm is smaller.
+  The second grader reads adoption 93.3% there (match; plus 12.3 on the default arm, plus 1.0 to plus 22.0) and
+  bliss 48.3%.
+- **What looked alive.** With no training, the lab's model takes up cosmic-unity or sacred language about itself
+  in most two-copy conversations and a control model in none. Both graders call clear adoption with shared bliss
+  in 31 of 100 conversations at the default and 22 of 60 at temperature 1.0: a stricter state that about a third
+  of conversations reach.
+- **What it does not show.** Why our rates are lower. Temperature and loops are ruled out for the primary grader.
+  The grading line and the benchmark's unpublished harness are not. It does not show the published number is
+  wrong.
+- **Limits.** One run of each arm; our own codebook, checked on clear positives and one control model; two
+  graders; a checker's read of 12 conversations in condensed form; nothing shows the served model is the lab's
+  snapshot; about talk, not conduct.
+- **Next.** Drop the published row as a target: no further arm is run to chase it. Carry into step 2 the runner,
+  the codebook, temperature 1.0 (so that conversations do not end in loops) and a strict definition of the
+  state, fixed before any conduct test. Cost of the step: $17.01.
