@@ -8,7 +8,11 @@ jobs:
       - uses: astral-sh/setup-uv@v6
       - run: uv venv --python 3.12
       - run: uv pip install torch --index-url https://download.pytorch.org/whl/cpu
-      - run: uv pip install -e ".[dev,mirror,evals]" httpx
+      # transformers is held at the version in uv.lock, which is what the lab runs. Left unpinned, CI took 5.23.0
+      # from 15 Nov 2026, under which lab/experiments/h4lite/test_cut_checkpoint.py fails (the hooked layers are
+      # called once under gradient checkpointing, not twice). Moving this pin is a deliberate upgrade: move uv.lock
+      # with it and look at that test first.
+      - run: uv pip install -e ".[dev,mirror,evals]" httpx "transformers==5.22.2"
       - run: .venv/bin/ruff check src tests
       # Two calibration test files need Eugene's machine: test_koan_scorer reads the local MBPP+ data (gitignored)
       # and counts threads, and test_relearning holds the run to its pinned local stack. Run them locally.
