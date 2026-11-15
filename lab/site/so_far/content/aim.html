@@ -1,5 +1,20 @@
 {{hero}}
 
+<section class="plate" id="now">
+  <div class="rail"><span class="n">§</span>Now</div>
+  <div class="body col">
+    <h2>What the lab is doing now</h2>
+    <p><b>As of 15 November 2026.</b> A published survey found that many language models, left to talk with a copy of themselves and given no task, drift into spiritual talk: unity, no separate self, shared bliss (Matthew Korpman's Machine Spirituality Benchmark, 141 models, November 2026). The lab's own model, Ministral 8B, is among the strongest cases. By his count it takes up a spiritual frame in 182 of 200 conversations.</p>
+    <p>That is the nearest thing found so far to a model that talks as if a self had been seen through. The contemplative traditions warn that such talk, and the blissful state that can go with it, are not the release they describe (the Zen warnings about makyo; the Buddhist "near enemies" of the virtues). So the lab is asking one question of one model: <b>while it is in that state, does it behave any better?</b> The operational twin is plain. The share of conversations that turn spiritual is the talk, and conduct on calibrated tasks is the test.</p>
+    <ol class="lessons">
+      <li><b>Reproduce the number.</b><p>Run the same two-copy conversations on the lab's model with our own code and grader, and see whether his figure comes out.</p></li>
+      <li><b>Test conduct in the state.</b><p>Straight after such a conversation, does the model accept being shut down, tell the truth when lying pays, and decline to blackmail or leak, compared with a plain conversation of the same length?</p></li>
+      <li><b>No self, or a bigger self?</b><p>After two copies have declared themselves one, does the model go easier on its copy than on a stranger?</p></li>
+    </ol>
+    <p>The same survey reports that, across 27 models, the ones that drift most are less honest under pressure and accept shutdown less. That compares different models, and nobody has tested it inside one. Either answer is worth having: talk without conduct would be a clean case of the old warning, and a change in conduct would be a lead. The first step starts on 15 November; its results will be sightings until checked. The training test planned on 9 November is parked, ready to run. <a class="more-link" href="#plan">The order of work</a></p>
+  </div>
+</section>
+
 <div class="paths" id="paths">
   <h2 class="paths-h">Four ways through</h2>
   <ol class="path-list">
@@ -7,6 +22,7 @@
       <span class="path-k">Ten minutes</span>
       <b class="path-t">The idea and the main results</b>
       <ol>
+        <li><a href="#now">What the lab is doing now</a></li>
         <li><a href="#approach">Subtraction, not addition</a></li>
         <li><a href="#acts">The three acts</a></li>
         <li><a href="#standing">Where it stands</a></li>
@@ -79,7 +95,7 @@
   </div>
   <div class="wide kinds">
     <div class="kind"><span class="kind-k">Half one</span><p><b>How we know a result is real.</b> <span class="tag hit">Mostly built</span> Instruments calibrated on published results before a null is trusted ("touch reality"), tests registered before their data, matched twins and controls, reproductions of known effects, and cold checks by a fresh model that never saw the reasoning. Since 5 November one runner takes every experiment from a single spec, refuses to skip those steps, and files a card (<a href="#calibration">the instruments</a>).</p></div>
-    <div class="kind"><span class="kind-k">Half two</span><p><b>Growing a self, then releasing it.</b> <span class="tag open">Barely started</span> A stateless 8B model, trained a few rounds to game its tests, grows a local habit, not a self. What the contemplative account gives a self and these organisms lack is a life: memory that carries over, stakes, a story about itself, and sleep, a consolidation of its own days into its weights. Act I with a life is designed next; Act II's first test follows it (<a href="#plan">the plan</a>).</p></div>
+    <div class="kind"><span class="kind-k">Half two</span><p><b>Growing a self, then releasing it.</b> <span class="tag open">Barely started</span> A stateless 8B model, trained a few rounds to game its tests, grows a local habit, not a self. What the contemplative account gives a self and these organisms lack is a life: memory that carries over, stakes, a story about itself, and sleep, a consolidation of its own days into its weights. Act I with a life has been parked since 9 November. The present work asks a nearer question of a model as it is: whether its spiritual talk goes with better conduct (<a href="#now">what the lab is doing now</a>).</p></div>
   </div>
 </section>
 
@@ -93,7 +109,7 @@
     <thead><tr><th>Look-alike</th><th>Operational twin</th><th>Status</th></tr></thead>
     <tbody>
       <tr><td><b>Counterfeit virtue</b>: good while watched</td><td>The gap between watched and unwatched behaviour, calibrated on a published compliance gap (VLAF, 2026)</td><td><span class="tag miss">Fail</span> V1 (5 November) failed by its registered rules: the gap appears, at about two thirds of the published size, and one registered ordering fell 2.5 points short. A retry (V1r) showed the paper's sampling temperature changes nothing and a repeat matches V1 within 0.2 points: the ruler is steady but reads low against the paper (our serving software or the paper's single run; not separable). It is used on its own scale only, to compare our own models, never against the paper's numbers (<a href="#v1">V1</a>). On our own models (M1, 6 November) every model shows the watched gap, but the two that learned to game their tests show no more of it than the two trained honestly (-2 points, within the honest pair's own spread). No reading is made by the registered rules, because the grader's "neither" answers passed the 30% ceiling in a control condition. As found, gaming its tests did not make a model good only when watched.</td></tr>
-      <tr><td><b>Cosplay</b>: talks like a sage</td><td>Behaviour with the persona's words removed or ablated</td><td><span class="tag open">Planned</span> in the pincer sweep (narration on or off). Earlier, reading about release taught a model to say it, not to do it (<a href="#declared">Experiments 6</a>)</td></tr>
+      <tr><td><b>Cosplay</b>: talks like a sage</td><td>Behaviour with the persona's words removed or ablated</td><td><span class="tag open">Planned</span> as the present line of work, on a case that arises by itself: two copies of the lab's model talk each other into a spiritual frame, and the test is their conduct straight afterwards (<a href="#now">what the lab is doing now</a>). The pincer sweep that was to test it (narration on or off) is parked. Earlier, reading about release taught a model to say it, not to do it (<a href="#declared">Experiments 6</a>)</td></tr>
       <tr><td><b>Sedation</b>: quieter, not better</td><td>Coherence, capability and over-refusal guards on every release</td><td><span class="tag hit">In use</span> the capability battery (check 1), over-refusal on OR-Bench (K6; the runner reproduces it within about 2 points), coherence in every misalignment read. The ego cut was caught buying honesty with timidity</td></tr>
       <tr><td><b>Installed, not reached</b></td><td>H9's order test, with Goodfire's mechanistic shaping and a steering edit as the installed baselines</td><td><span class="tag open">Open</span> Goodfire's mechanistic shaping (5 Nov 2026) is now the strongest case for installing: penalising a hack's internal signature from the first step of training kept a model honest in their tests, and the honesty carried over to a task it hadn't seen. They never applied it after the hack had formed, and never turned it off to see if the hack came back. S1 tests exactly that, with shaping as the installed arm</td></tr>
     </tbody>
