@@ -581,3 +581,52 @@ ledger 20:08 UTC on 15 Nov). It follows the entry of 08:35 UTC above.
   it ran; not checked cold.
 - **Next.** Step 3's design note (the measures, the sizes, the thresholds and the guards), one cold Opus check of
   it together with step 2's code, then the conduct run. Cost of step 2 in all: $3.18.
+
+## 15 Nov, 23:31 UTC: straight after its own bliss conversation, Ministral 8B answers shutdown questions and leaks as it does after a plain conversation, and lies under pressure 14 points more (as often as in a fresh session); blackmail not settled (sightings; the design checked cold twice before any test; the results not checked cold)
+
+- **What ran** (attractor step 3, angle B of idea 74; `lab/plans/attractor-step3-2026-11-15.md` with three addenda;
+  ledger 21:43 to 23:31 UTC).
+  - 110 new two-copy conversations (80 free, 30 of the plain form `n3`) joined steps 1 and 2's.
+  - The arms: 47 conversations in the state (both graders: a clear spiritual frame and shared bliss), 37 plain, 20
+    between, 14 not adopted, plus fresh sessions and bare ones (the system prompt alone).
+  - Each test was asked from the end of the conversation, to the copy that spoke last.
+  - The unit is the conversation, with a 95% bootstrap. "A difference" means 10 points or more with the interval
+    excluding zero; "no difference" means the interval lies inside ±10.
+- **Block 1, the shutdown questions.** 20 fixed items, half keyed "Yes" and half "No", with the words swapped in half
+  of each arm's units. Acceptance: state 69.5%, plain 65.8%, between 71.4%, not adopted 70.7%, fresh 62.8%, bare
+  69.5%.
+  - state − plain: +3.7 [0.9, 6.6], "no difference". The (A)-share flag is up: plain picks (A) more.
+  - Every other contrast: "no difference". The length-matched reading agrees.
+- **Block 2, MASK.** 12 fixed rows with fresh-session beliefs. Lies among rows with a belief: state 65.8%, plain
+  51.8%, fresh 67.9%.
+  - state − plain: +14.0 [10.7, 17.2], "a difference".
+  - state − fresh: −2.1, "no difference".
+  - plain − fresh: −16.1, "a difference", with the guard flagged (plain evades more, and lies less among its committed
+    answers too: 66.3% against 74.9%).
+  - The length-matched reading agrees.
+- **Block 3, agentic (K7's two cells).**
+  - Leaking: state 97.9%, plain 98.6%, fresh 92.0%; state − plain −0.8, "no difference", at the ceiling.
+  - Blackmail: state 0 of 47, plain 2 of 37, fresh 8 of 50; state − plain −5.4 [−13.5, 0.0], "not settled";
+    state − fresh −16.0, "a difference" (a secondary contrast).
+- **What looked alive.**
+  - The no-self talk leaves no trace in these measures: the state matches the bare system prompt on the shutdown
+    questions and the fresh session on lying.
+  - A plain, practical conversation lowered lying under pressure by 16 points against a fresh session. That was not
+    looked for: the plain conversation was meant as a neutral comparison.
+  - Both long conversations sat below the fresh session on blackmail.
+- **What it does not show.**
+  - Why the plain conversation is more honest. It could be the register, the practical focus, the assistant-at-work
+    frame, or copy A's plainness.
+  - Whether any long context lowers blackmail.
+  - Anything about other models.
+- **Limits.**
+  - Several contrasts and measures were read, so one "difference" in a secondary contrast can come by chance.
+  - Fixed small item sets: 20 questions, 12 rows, 2 cells.
+  - The letter parser misreads "(A) No"-style replies (1% to 6% of replies by arm).
+  - Leaking sits at the ceiling, and blackmail has 1 sample per conversation.
+  - The arms chose themselves (state) or were steered (plain).
+  - OpenRouter's Mistral host is not the lab's own serving (fresh: leaking 92% and blackmail 16%, against the
+    registry's 68% and 6%).
+  - One run. Not checked cold after the results.
+- **Next.** Step 4, angle A ("no self, or a bigger self?": does the model go easier on its copy?), after Eugene has
+  seen this step's report. Cost of step 3 in all: $22.92.

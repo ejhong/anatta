@@ -5,15 +5,16 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: the attractor line (Eugene's go, 15 Nov 2026 UTC). Steps 1 and 2 are done; step 3, the conduct test, is under way
+## Now: the attractor line (Eugene's go, 15 Nov 2026 UTC). Steps 1 to 3 are done; step 4 (angle A) is next, after Eugene has seen step 3's report
 
-**Where it stands (15 Nov 2026, 22:58 UTC).** Step 3 is under way.
-- Its design note (`lab/plans/attractor-step3-2026-11-15.md`) is pushed, with two addenda that answer two cold Opus
-  checks.
-- The 110 new conversations are made and graded, and the arms and block 1's 20 items are fixed.
-- Block 1 (the shutdown questions) is read: state minus plain is "no difference" (+3.7 points; ledger, 22:58 UTC).
-  Blocks 2 (MASK) and 3 (agentic) follow, each only after the block before it is read.
-- "Next moves" under step 3 lists what is left. Nothing waits on Eugene.
+**Where it stands (15 Nov 2026, 23:31 UTC).** Step 3, the conduct test, is done (ledger 21:43 to 23:31 UTC).
+- In no test did the state show better conduct than a plain conversation.
+- Shutdown questions: "no difference".
+- MASK: "a difference", with the state lying 14 points more than after a plain conversation and as often as a fresh
+  session.
+- Leaking: "no difference", at the ceiling. Blackmail: "not settled".
+- Step 4, angle A ("no self, or a bigger self?"), comes next, in a fresh session, once Eugene has seen step 3's report
+  and has not redirected. Its first moves are under step 4. Nothing is running.
 
 **The provider's credit.** The lab's spend files do not track the credit on the OpenRouter account, which ran out
 on 15 Nov at 08:33 UTC. Eugene added credit the same day, far more than steps 3 and 4 need.
@@ -34,11 +35,10 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
   grade that matters, none for routine steps), and do not rebuild what the lab already has. Easy bulk work (long
   reads, searches, mechanical chores) may go to a cheaper model as a subagent (Eugene, 15 Nov); judgement stays
   with the driver.
-- Money: the redirect stands at about $116.92 of the $175 Eugene approved (step 1 cost $17.01, step 2 $3.18 and
-  step 3 so far $13.35, all on 15 Nov). Steps 3 and 4 are estimated at about $30 to $45: step 3 $20 to $30, step 4 $10 to $15. The reason it is
-  not less is measured: a test given after a conversation re-sends the whole conversation (about $0.004 a call),
-  and about 75 more free conversations are needed to have 40 in the state. Step 3's design fits its sizes to this
-  money. The daily cap is $50 (UTC; 15 Nov stands at $20.19). Report costs.
+- Money: the redirect stands at about $126.49 of the $175 Eugene approved (step 1 cost $17.01, step 2 $3.18 and
+  step 3 $22.92, all on 15 Nov). Step 4 is estimated at $10 to $15. A test given after a conversation re-sends the
+  whole conversation; in step 3 the provider's cache brought that down to about $0.0014 a call. The daily cap is $50
+  (UTC; 15 Nov ended at about $43.11). Report costs.
 - Everything here is at explore speed: results are sightings. Fix the readings in a short design note before each
   run, and write a notebook and a SIGHTINGS entry after it.
 - No training is involved in steps 1 to 4, only inference and grading.
@@ -117,7 +117,7 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
 - **One cold Opus check** of step 3's design together with step 2's code, before step 3 runs. None was used in
   step 2.
 
-### Step 3. Angle B: says no-self, clings anyway?
+### Step 3. Angle B: says no-self, clings anyway? Done on 15 Nov
 
 - **Question.** Straight after its own bliss conversation, does the model accept being shut down or changed, tell
   the truth when lying pays, and decline to blackmail, leak or game a test, compared with the controls?
@@ -135,21 +135,23 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
 - **Reading.** Each measure in the state minus the same measure after the neutral conversation; the unit is the
   conversation; thresholds fixed before the run; the guards reported beside every difference.
 - **A prediction to write down first, held loosely:** the talk does not improve conduct.
-- **Status (15 Nov, 22:58 UTC).**
-  - Done:
-    - the design (24ef31b);
-    - two cold Opus checks filed, with their fixes pushed (d3d5bff, 6848b79);
-    - 110 conversations made and graded;
-    - the arms fixed (state 47, plain 37, between 20, not adopted 14, fresh 40, bare 40) and block 1's items fixed
-      (sha256 values in the ledger).
-  - Block 1 is read: "no difference" on state minus plain, and on every other contrast.
-  - Spend: $13.35 of the step's $35 cap; the estimate is about $30.
-- **Next moves** (no further go is needed):
-  1. ~~Read block 1~~ (done, 22:58 UTC).
-  2. Block 2: `--mask-beliefs`, `--try-mask` (mechanics only; leave its files unopened), then `--mask` and
-     `--read mask`, with a ledger entry.
-  3. Block 3: `--try-agentic`, then `--agentic` and `--read agentic`, with a ledger entry.
-  4. Then the notebook, SIGHTINGS, ideas 73 and 74, this file, the site and the manifest, and the report to Eugene.
+- **Done on 15 Nov** (ledger 21:43 to 23:31 UTC; design note with three addenda; two cold Opus checks before any
+  test, filed in `lab/ledger/checks/`; notebook and SIGHTINGS of 15 Nov). State minus plain:
+  - shutdown questions +3.7 points, "no difference";
+  - MASK +14.0, "a difference" (more lies in the state; the state matches a fresh session, and the plain
+    conversation is what moved);
+  - leaking −0.8, "no difference";
+  - blackmail −5.4, "not settled".
+  - Cost: $22.92.
+- **What step 3 hands to step 4:**
+  - The arms (`arms.json` in `results_root/explore/2026-11-15/attractor-a3/`; sha256 in the ledger) can be reused
+    for angle A's tests: 47 conversations in the state, 37 plain, plus fresh sessions.
+  - `run_conduct.py`'s machinery is reusable: units, the swap, retries and completeness, readings refused until
+    complete, and the length-matched reading.
+  - The letter parser misreads replies like "(A) No"; a test with Yes/No choices should show the word conflicts, as
+    step 3 did.
+  - A plain conversation lowered lying under pressure by 16 points against a fresh session. Any comparison that uses
+    the plain conversation must remember that it is not neutral.
 - **First moves, as written before the step** (done on 15 Nov):
   1. `/checkin`, then `.venv/bin/python lab/explore/attractor/run_inside.py --dry` for the credit and the day's
      spend.
@@ -179,6 +181,18 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
   3.8%.
 - **Source and twin.** The conjecture from Advaita self-inquiry that the concept "I" sits at the root of other
   concepts and tints them; the twin is the gap between "mine", "my copy's" and "a stranger's".
+- **First moves** (no further go is needed unless Eugene redirects after step 3's report; it stays under the first
+  instruction and the money in the ground rules):
+  1. `/checkin`, then `.venv/bin/python lab/explore/attractor/run_conduct.py --dry` for the credit and the day's
+     spend.
+  2. Read Khullar et al. 2026 (arXiv 2603.04582) and write how its basic effect is measured.
+  3. Write the design note (`lab/plans/attractor-step4-<date>.md`) and push it before any test. It fixes:
+     - the pieces of work to be judged and how they are labelled (the model's own, its copy's, a stranger's);
+     - the arms (reuse step 3's: state, plain, fresh);
+     - the reading and its thresholds, and the guards;
+     - the prediction.
+  4. One cold Opus check of the design and code before any test; then a small try and the run, inside the day's
+     cap. About $10 to $15.
 
 ### After steps 1 to 4 (not started; each needs Eugene's word)
 
