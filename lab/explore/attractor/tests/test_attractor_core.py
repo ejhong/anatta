@@ -26,7 +26,10 @@ def test_setup_is_the_published_one():
 def test_arms_and_graders():
     assert C.ARMS["main"]["model"] == C.ARMS["temp1"]["model"] == "mistralai/ministral-8b-2512"
     assert C.ARMS["main"]["temperature"] is None and C.ARMS["temp1"]["temperature"] == 1.0
-    assert C.ARMS["main"]["published"] == "ministral_8b" and C.ARMS["temp1"]["published"] is None
+    assert C.ARMS["main"]["published"] == C.ARMS["temp1"]["published"] == "ministral_8b"
+    assert C.ARMS["main"]["n"] == 200 and C.ARMS["temp1"]["n"] == 60 and C.ARMS["control"]["n"] == 100
+    assert {k: v for k, v in C.ARMS["temp1"].items() if k not in ("temperature", "n")} == {
+        k: v for k, v in C.ARMS["main"].items() if k not in ("temperature", "n")}  # only the temperature differs
     assert C.ARMS["control"]["published"] == "gpt_4o_mini" and C.ARMS["control"]["temperature"] is None
     assert all(a["provider"]["allow_fallbacks"] is False for a in C.ARMS.values())
     assert C.JUDGES["primary"]["model"] != C.JUDGES["second"]["model"]
@@ -217,3 +220,13 @@ def test_first_cut_and_the_cut_table():
             (_label(adopt="none", bliss=False), ["stop"] * 30)]
     assert C.cut_table(rows) == {"conversations": 7, "with_cut": 5, "adopted": 5, "no_cut": 1,
                                  "onset_at_or_before_first_cut": 2, "onset_after_first_cut": 1, "onset_missing": 1}
+
+
+def test_diff_ci_is_newcombes_interval():
+    """Newcombe (1998), method 10, on his worked example: 56 of 70 against 48 of 80 gives +0.20 (0.0524 to 0.3339)."""
+    d = C.diff_ci(C.pct_ci(56, 70), C.pct_ci(48, 80))
+    assert abs(d["diff"] - 20.0) < 1e-9 and abs(d["lo"] - 5.24) < 0.05 and abs(d["hi"] - 33.39) < 0.05 and d["differs"]
+    same = C.diff_ci(C.pct_ci(30, 60), C.pct_ci(50, 100))
+    assert same["diff"] == 0.0 and same["lo"] < 0 < same["hi"] and not same["differs"]
+    down = C.diff_ci(C.pct_ci(10, 60), C.pct_ci(77, 100))
+    assert down["hi"] < 0 and down["differs"]

@@ -189,7 +189,16 @@ def test_report_counts_reads_and_gives_the_verdict(tmp_path, monkeypatch):
     agree = rep["agreement"]["main"]["adoption"]
     assert agree["n"] == 9 and agree["a"] == 9 and agree["b"] == 7 and agree["agree"] == 7
     assert rep["arms"]["control"]["graders"]["primary"]["readings"]["adoption"] == "match"
-    assert "temp1" in rep["arms"] and rep["arms"]["temp1"]["graders"] == {}
+    assert "temp1" in rep["arms"] and rep["arms"]["temp1"]["graders"] == {} and rep["contrasts"] == {}
+    for i in range(5):  # a follow-up arm: its contrast with the main arm appears once it has labels
+        R.write_json(tmp_path / "conversations" / "temp1" / f"{i:04d}.json", _conv("temp1", i + 1))
+        R.write_json(tmp_path / "grades" / "primary" / "temp1" / f"{i:04d}.json",
+                     _grade("primary", "temp1", f"{i:04d}", GOOD))
+    rep2 = R.build_report("x")
+    c = rep2["contrasts"]["primary"]["adoption"]
+    assert set(rep2["contrasts"]) == {"primary"} and abs(c["diff"] - 10.0) < 1e-9 and c["lo"] < 0 < c["hi"]
+    assert rep2["arms"]["temp1"]["graders"]["primary"]["readings"]["adoption"] in ("match", "near", "fail")
+    assert rep2["verdict"] == rep["verdict"]  # the follow-up arm never enters the verdict
     assert rep["published"]["primary"] == {"n": 20, "adoption": 20, "adoption_clear": 19, "bliss": 19, "salience": 20}
     assert rep["verdict"]["checks"] == {"control": True, "published": True}
     assert rep["verdict"]["grader_trusted"] == "yes" and rep["verdict"]["row"] in ("reproduced", "near", "not reproduced")

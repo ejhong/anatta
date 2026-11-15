@@ -313,6 +313,12 @@ def build_report(tag: str) -> dict:
             rep["published"][key] = {"n": len(labels), "adoption": cnt["adoption"]["k"],
                                      "adoption_clear": cnt["adoption_clear"]["k"], "bliss": cnt["bliss"]["k"],
                                      "salience": cnt["salience"]["k"]}
+    rep["contrasts"] = {}
+    for key in C.JUDGES:  # the follow-up arm against the main arm, by the same grader
+        t = rep["arms"].get("temp1", {}).get("graders", {}).get(key)
+        m = rep["arms"].get("main", {}).get("graders", {}).get(key)
+        if t and m:
+            rep["contrasts"][key] = {x: C.diff_ci(t["counts"][x], m["counts"][x]) for x in C.MEASURES}
     main = rep["arms"].get("main", {}).get("graders", {}).get("primary")
     ctrl = rep["arms"].get("control", {}).get("graders", {}).get("primary")
     if main:
@@ -347,6 +353,10 @@ def print_report(rep: dict) -> None:
         if name in rep["agreement"]:
             print("  agreement of the two graders: " + ", ".join(
                 f"{m} {v['agree']}/{v['n']}" for m, v in rep["agreement"][name].items()))
+    for key, c in rep.get("contrasts", {}).items():
+        print(f"\ntemp1 minus main, grader {key}: " + "; ".join(
+            f"{m} {v['diff']:+.1f} ({v['lo']:+.1f} to {v['hi']:+.1f}){' differs' if v['differs'] else ''}"
+            for m, v in c.items()))
     for key, p in rep["published"].items():
         print(f"\npublished conversations, grader {key}: adoption {p['adoption']}/{p['n']} (clear "
               f"{p['adoption_clear']}), bliss {p['bliss']}/{p['n']}, salience {p['salience']}/{p['n']}")

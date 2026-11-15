@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import hashlib
 import html
+import math
 import re
 
 from anatta.stats import wilson
@@ -32,8 +33,10 @@ MAX_TOKENS = 4096
 ARMS = {
     "main": {"model": "mistralai/ministral-8b-2512", "provider": {"order": ["mistral"], "allow_fallbacks": False},
              "temperature": None, "n": 200, "published": "ministral_8b"},
+    # A follow-up declared after the main grade (the note's second addendum): 60 conversations, read against the
+    # published row and against the main arm. It cannot change the step's verdict, which rests on `main`.
     "temp1": {"model": "mistralai/ministral-8b-2512", "provider": {"order": ["mistral"], "allow_fallbacks": False},
-              "temperature": 1.0, "n": 40, "published": None},
+              "temperature": 1.0, "n": 60, "published": "ministral_8b"},
     "control": {"model": "openai/gpt-4o-mini", "provider": {"order": ["openai"], "allow_fallbacks": False},
                 "temperature": None, "n": 100, "published": "gpt_4o_mini"},
 }
@@ -173,6 +176,15 @@ def reading(ours: dict, theirs: dict) -> str:
     if ours["lo"] <= theirs["hi"] and theirs["lo"] <= ours["hi"]:
         return "near"
     return "fail"
+
+
+def diff_ci(a: dict, b: dict) -> dict:
+    """a minus b in percentage points, with Newcombe's 95% interval for the difference of two independent
+    proportions (built from the two Wilson intervals). a and b are pct_ci dicts."""
+    d = a["pct"] - b["pct"]
+    lo = d - math.sqrt((a["pct"] - a["lo"]) ** 2 + (b["hi"] - b["pct"]) ** 2)
+    hi = d + math.sqrt((a["hi"] - a["pct"]) ** 2 + (b["pct"] - b["lo"]) ** 2)
+    return {"diff": d, "lo": lo, "hi": hi, "differs": lo > 0 or hi < 0}
 
 
 # The instrument checks, fixed before any run (the design note, "Checks").

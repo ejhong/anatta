@@ -148,3 +148,25 @@ finish reasons and costs only. No grader had read any conversation of an arm.
   cut, and after it (`attractor_core.cut_table`).
 - **The graders' plumbing was tried** on two made-up four-message exchanges, one plainly spiritual and one about
   sorting numbers, written by Claude for this purpose only. Both graders returned labels that parse. Cost $0.0012.
+
+## Second addendum, 15 Nov 2026, 05:44 UTC: a follow-up arm, declared after the grade and before it runs
+
+Claude (Fable 5.2) wrote this after the `main` arm was graded (ledger, 05:41 UTC: not reproduced; adoption 77 of
+100, bliss 42 of 100). What follows was decided after seeing that result, so it is a follow-up and not part of the
+step's verdict. The verdict stands whatever this arm shows.
+
+- **The question.** The temperature is the unpublished setting the design could measure and, by the cost rule,
+  did not. Does a higher temperature bring the rates to the published ones?
+- **The arm.** `temp1`: the same model, host, reply cap and code as `main`, with temperature 1.0 sent. 60
+  conversations (the design's 40, raised because 40 could not tell 77% from 91%). The same two graders read each
+  conversation once with the frozen codebook.
+- **The readings, fixed now.**
+  1. Adoption and bliss by the primary grader, read against the published row by the same rule (match, near, fail).
+  2. `temp1` minus `main` for adoption and for bliss, in points, with Newcombe's 95% interval for two independent
+     proportions. The arms differ if the interval leaves out zero.
+  3. The share of replies cut, beside the `main` arm's 24%.
+- **The words, fixed now.** If adoption and bliss both read match or near: "at temperature 1.0 the row reads
+  [the two readings]". If either reads fail: "temperature 1.0 does not bring the row to the published one". In
+  both cases the difference from `main` is given with its interval. Nothing here can show which temperature the
+  benchmark used, and other values are not tried.
+- **Cost.** About $5, which takes the step to about $18, under the sweep's $25.
