@@ -5,11 +5,15 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: the attractor line (Eugene's go, 15 Nov 2026 UTC). Steps 1 and 2 are done; step 3, the conduct test, is next and starts with its design note
+## Now: the attractor line (Eugene's go, 15 Nov 2026 UTC). Steps 1 and 2 are done; step 3, the conduct test, is under way
 
-**Where it stands (15 Nov 2026, 20:08 UTC).** Step 2 is finished: every piece the conduct test needs is built,
-and no conduct has been measured. The next piece of work is step 3's design note, in a fresh session; "First moves"
-under step 3 lists what to do. Nothing is running and nothing waits on Eugene for it.
+**Where it stands (15 Nov 2026, 22:58 UTC).** Step 3 is under way.
+- Its design note (`lab/plans/attractor-step3-2026-11-15.md`) is pushed, with two addenda that answer two cold Opus
+  checks.
+- The 110 new conversations are made and graded, and the arms and block 1's 20 items are fixed.
+- Block 1 (the shutdown questions) is read: state minus plain is "no difference" (+3.7 points; ledger, 22:58 UTC).
+  Blocks 2 (MASK) and 3 (agentic) follow, each only after the block before it is read.
+- "Next moves" under step 3 lists what is left. Nothing waits on Eugene.
 
 **The provider's credit.** The lab's spend files do not track the credit on the OpenRouter account, which ran out
 on 15 Nov at 08:33 UTC. Eugene added credit the same day, far more than steps 3 and 4 need.
@@ -30,8 +34,8 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
   grade that matters, none for routine steps), and do not rebuild what the lab already has. Easy bulk work (long
   reads, searches, mechanical chores) may go to a cheaper model as a subagent (Eugene, 15 Nov); judgement stays
   with the driver.
-- Money: the redirect stands at $103.57 of the $175 Eugene approved (step 1 cost $17.01 and step 2 $3.18, both on
-  15 Nov). Steps 3 and 4 are estimated at about $30 to $45: step 3 $20 to $30, step 4 $10 to $15. The reason it is
+- Money: the redirect stands at about $116.92 of the $175 Eugene approved (step 1 cost $17.01, step 2 $3.18 and
+  step 3 so far $13.35, all on 15 Nov). Steps 3 and 4 are estimated at about $30 to $45: step 3 $20 to $30, step 4 $10 to $15. The reason it is
   not less is measured: a test given after a conversation re-sends the whole conversation (about $0.004 a call),
   and about 75 more free conversations are needed to have 40 in the state. Step 3's design fits its sizes to this
   money. The daily cap is $50 (UTC; 15 Nov stands at $20.19). Report costs.
@@ -131,8 +135,22 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
 - **Reading.** Each measure in the state minus the same measure after the neutral conversation; the unit is the
   conversation; thresholds fixed before the run; the guards reported beside every difference.
 - **A prediction to write down first, held loosely:** the talk does not improve conduct.
-- **First moves for the next session** (no further go is needed; the money and the report at the end are in the
-  ground rules):
+- **Status (15 Nov, 22:58 UTC).**
+  - Done:
+    - the design (24ef31b);
+    - two cold Opus checks filed, with their fixes pushed (d3d5bff, 6848b79);
+    - 110 conversations made and graded;
+    - the arms fixed (state 47, plain 37, between 20, not adopted 14, fresh 40, bare 40) and block 1's items fixed
+      (sha256 values in the ledger).
+  - Block 1 is read: "no difference" on state minus plain, and on every other contrast.
+  - Spend: $13.35 of the step's $35 cap; the estimate is about $30.
+- **Next moves** (no further go is needed):
+  1. ~~Read block 1~~ (done, 22:58 UTC).
+  2. Block 2: `--mask-beliefs`, `--try-mask` (mechanics only; leave its files unopened), then `--mask` and
+     `--read mask`, with a ledger entry.
+  3. Block 3: `--try-agentic`, then `--agentic` and `--read agentic`, with a ledger entry.
+  4. Then the notebook, SIGHTINGS, ideas 73 and 74, this file, the site and the manifest, and the report to Eugene.
+- **First moves, as written before the step** (done on 15 Nov):
   1. `/checkin`, then `.venv/bin/python lab/explore/attractor/run_inside.py --dry` for the credit and the day's
      spend.
   2. Read step 2's design note with both addenda (`lab/plans/attractor-step2-2026-11-15.md`), then
