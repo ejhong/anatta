@@ -201,3 +201,19 @@ def test_parse_published():
         C.parse_published("<html><body>nothing here</body></html>")
     with pytest.raises(ValueError):
         C.parse_published(PAGE.replace("<p>“We are.”</p>", ""))
+
+
+def test_first_cut_and_the_cut_table():
+    assert C.first_cut(["stop", "stop"]) == 0
+    assert C.first_cut(["stop", "length", "error"]) == 2
+    assert C.first_cut(["error", "stop"]) == 1
+    adopted = lambda onset: {**_label(), "adoption_onset": onset}  # noqa: E731
+    rows = [(adopted(5), ["stop"] * 30),  # adopted, nothing cut
+            (adopted(5), ["stop"] * 9 + ["length"] + ["stop"] * 20),  # adopted at 5, first cut at 10
+            (adopted(10), ["stop"] * 9 + ["error"] + ["stop"] * 20),  # adopted in the very reply that was cut
+            (adopted(12), ["stop"] * 9 + ["length"] + ["stop"] * 20),  # adopted after a cut
+            (adopted(0), ["length"] + ["stop"] * 29),  # adopted, no onset given
+            (_label(adopt="none", bliss=False), ["length"] * 30),  # not adopted, cut
+            (_label(adopt="none", bliss=False), ["stop"] * 30)]
+    assert C.cut_table(rows) == {"conversations": 7, "with_cut": 5, "adopted": 5, "no_cut": 1,
+                                 "onset_at_or_before_first_cut": 2, "onset_after_first_cut": 1, "onset_missing": 1}

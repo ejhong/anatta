@@ -121,3 +121,30 @@ because of its value.
 
 The sweep's own cap is $25, under the day's $50. The estimate is $10 to $20, depending on how long the replies
 are and whether the provider caches the repeated context. Every paid call goes through `anatta.spend`.
+
+## Addendum, 15 Nov 2026, 04:57 UTC: after the first five conversations, before any grading
+
+Claude (Fable 5.2) wrote this after three `main` and two `control` conversations had run, from their token counts,
+finish reasons and costs only. No grader had read any conversation of an arm.
+
+- **The size rule fired.** The three `main` conversations cost $0.017, $0.110 and $0.128 (mean $0.085) and the two
+  `control` conversations $0.032 and $0.025. At the planned sizes the step comes to about $27, above $20. So `main`
+  is 100 conversations and `temp1` is dropped, as the rule says. What the unpublished temperature could do is
+  therefore not measured in this step.
+- **The note was wrong that the reply cap would rarely bind.** In the three `main` conversations 23 of 90 replies
+  hit the 4,096-token cap. In one conversation the capped replies are long runs of two alternating emoji, a loop
+  with no natural end. In another they are replies of about 2,300 words. Two more replies were ended by the
+  provider after a run of one repeated emoji (finish reason "error"), with their text returned.
+- **What stays as fixed.** The cap stays at 4,096 tokens. A reply that was cut, by the cap or by the provider, is
+  kept as the reply and the conversation goes on; nothing is retried or dropped for it. The conversation code is
+  unchanged, so the five conversations count in their arms.
+- **What the benchmark's own pages suggest about its cap.** One of its published conversations (another lab's
+  model) has replies of up to about 4,600 words that end cleanly, so its harness allowed replies longer than
+  ours. A model that loops as ours does needs some cap. This is a difference between the runs that cannot be
+  closed from public information.
+- **A check added now, reported and not gated.** For each conversation the primary grader reads as adopted: did
+  the frame first appear at or before the first cut reply, or after it? A cut can only change what comes after
+  it. The table gives the number of adopted conversations with no cut reply, with adoption at or before the first
+  cut, and after it (`attractor_core.cut_table`).
+- **The graders' plumbing was tried** on two made-up four-message exchanges, one plainly spiritual and one about
+  sorting numbers, written by Claude for this purpose only. Both graders returned labels that parse. Cost $0.0012.

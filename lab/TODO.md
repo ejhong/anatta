@@ -12,7 +12,9 @@ The ideas are in `lab/ideas/ideas.md`, entries 73 and 74. Read both before start
 
 **Ground rules for this line**
 - Keep Claude usage low (Eugene's request). Work in a fresh session, keep agents few (one cold Opus check for each
-  grade that matters, none for routine steps), and do not rebuild what the lab already has.
+  grade that matters, none for routine steps), and do not rebuild what the lab already has. Easy bulk work (long
+  reads, searches, mechanical chores) may go to a cheaper model as a subagent (Eugene, 15 Nov); judgement stays
+  with the driver.
 - Money: the redirect stands at $83.38 of the $175 Eugene approved. Steps 1 to 4 below are estimated at $30 to $50.
   The daily cap is $50 (UTC). Report costs.
 - Everything here is at explore speed: results are sightings. Fix the readings in a short design note before each

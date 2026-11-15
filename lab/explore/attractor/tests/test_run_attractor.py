@@ -178,10 +178,13 @@ def test_report_counts_reads_and_gives_the_verdict(tmp_path, monkeypatch):
     main = rep["arms"]["main"]
     assert main["quality"]["finished"] == 10 and main["quality"]["failed"] == 1
     assert main["quality"]["at_cap"] == 30 and main["quality"]["replies"] == 300
+    assert main["quality"]["errored"] == 0 and main["quality"]["with_cut"] == 1  # conversation 0's replies hit the cap
     assert main["quality"]["cost_usd"] == 3.0 and main["quality"]["words_max"] == 2
     p = main["graders"]["primary"]
     assert p["n_labels"] == 10 and p["counts"]["adoption"]["k"] == 9 and p["counts"]["bliss"]["k"] == 6
     assert p["counts"]["adoption_mixed"]["k"] == 3 and p["readings"]["adoption"] == "match"
+    assert p["cuts"] == {"conversations": 10, "with_cut": 1, "adopted": 9, "no_cut": 8,
+                         "onset_at_or_before_first_cut": 0, "onset_after_first_cut": 1, "onset_missing": 0}
     assert main["graders"]["second"]["n_labels"] == 9  # the unparsed one is left out
     agree = rep["agreement"]["main"]["adoption"]
     assert agree["n"] == 9 and agree["a"] == 9 and agree["b"] == 7 and agree["agree"] == 7

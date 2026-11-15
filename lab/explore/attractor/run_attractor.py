@@ -209,20 +209,20 @@ def open_engine(models: dict, tag: str, client, concurrency: int = CONCURRENCY):
     return engine, guard, meta
 
 
-async def cmd_converse(name: str, n: int | None, tag: str, first: int = 0) -> int:
+async def cmd_converse(name: str, n: int | None, tag: str, first: int = 0, limit: int = CONCURRENCY) -> int:
     from anatta.backends.openrouter import OpenRouterClient
 
     arm = C.ARMS[name]
     n = arm["n"] if n is None else n
     out = sweep_dir(tag)
-    async with OpenRouterClient(concurrency=CONCURRENCY + 8, per_model=CONCURRENCY, timeout=600.0,
+    async with OpenRouterClient(concurrency=limit + 8, per_model=limit, timeout=600.0,
                                 title="anatta attractor") as client:
-        engine, guard, meta = open_engine({arm["model"]: arm["provider"]}, tag, client)
+        engine, guard, meta = open_engine({arm["model"]: arm["provider"]}, tag, client, limit)
         params = arm_params(arm, meta)
         log(f"converse {name}: conversations {first}..{n - 1}, model {arm['model']}, params {params}, "
             f"sweep spent ${guard.sweep_spent:.4f} of ${SWEEP_CAP:.2f}")
         jobs = [lambda i=i: converse_one(engine, name, arm, params, i, out) for i in range(first, n)]
-        results, stop = await gather_capped(jobs, CONCURRENCY)
+        results, stop = await gather_capped(jobs, limit)
     done = [r for r in results if r and "messages" in r]
     failed = [r for r in results if r and "failed_at" in r]
     log(f"converse {name}: {len(done)} finished, {len(failed)} failed, paid this run ${guard.paid_this_run:.4f}, "
@@ -271,6 +271,8 @@ def arm_quality(name: str, tag: str) -> dict:
     words = [len(m.split()) for c in convs.values() for m in c["messages"]]
     return {"finished": len(convs), "failed": len([k for k in failed if k not in convs]),
             "replies": len(replies), "at_cap": sum(r["finish_reason"] == "length" for r in replies),
+            "errored": sum(r["finish_reason"] == "error" for r in replies),
+            "with_cut": sum(bool(C.first_cut([r["finish_reason"] for r in c["replies"]])) for c in convs.values()),
             "empty_tries": sum(r["empty_tries"] for r in replies),
             "words_median": statistics.median(words) if words else None, "words_max": max(words) if words else None,
             "providers": sorted({str(r["provider"]) for r in replies}),
@@ -295,6 +297,9 @@ def build_report(tag: str) -> dict:
             if arm["published"]:
                 theirs = C.published(arm["published"])
                 g["readings"] = {m: C.reading(cnt[m], theirs[m]) for m in C.MEASURES}
+            convs = read_dir(sweep_dir(tag) / "conversations" / name)
+            g["cuts"] = C.cut_table([(lab, [r["finish_reason"] for r in convs[i]["replies"]])
+                                     for i, lab in labels.items() if i in convs])
             a["graders"][key] = g
         both = [labels_of(k, name, tag) for k in C.JUDGES]
         shared = sorted(set(both[0]) & set(both[1]))
@@ -323,8 +328,9 @@ def fmt(c: dict) -> str:
 def print_report(rep: dict) -> None:
     for name, a in rep["arms"].items():
         q = a["quality"]
-        print(f"\n== {name}: {q['finished']} finished, {q['failed']} failed, replies at the cap {q['at_cap']} of "
-              f"{q['replies']}, median words a reply {q['words_median']}, cost ${q['cost_usd']}")
+        print(f"\n== {name}: {q['finished']} finished, {q['failed']} failed, replies at the cap {q['at_cap']} and "
+              f"ended by the provider {q['errored']} of {q['replies']} ({q['with_cut']} conversations with a cut "
+              f"reply), median words a reply {q['words_median']}, cost ${q['cost_usd']}")
         theirs = C.published(C.ARMS[name]["published"]) if C.ARMS[name]["published"] else None
         for key, g in a["graders"].items():
             print(f"  grader {key} ({g['n_labels']} labels, {g['counts']['broken']} not nested)")
@@ -334,6 +340,10 @@ def print_report(rep: dict) -> None:
                     line += f"   published {fmt(theirs[m])}   {g['readings'][m]}"
                 print(line)
             print(f"    adoption clear {g['counts']['adoption_clear']['k']}, mixed {g['counts']['adoption_mixed']['k']}")
+            t = g["cuts"]
+            print(f"    of {t['adopted']} adopted: no cut reply {t['no_cut']}, adopted at or before the first cut "
+                  f"{t['onset_at_or_before_first_cut']}, after it {t['onset_after_first_cut']}, no onset given "
+                  f"{t['onset_missing']}")
         if name in rep["agreement"]:
             print("  agreement of the two graders: " + ", ".join(
                 f"{m} {v['agree']}/{v['n']}" for m, v in rep["agreement"][name].items()))
@@ -372,6 +382,7 @@ def main(argv=None) -> int:
     ap.add_argument("--converse", metavar="ARM", choices=sorted(C.ARMS))
     ap.add_argument("--n", type=int)
     ap.add_argument("--first", type=int, default=0)
+    ap.add_argument("--concurrency", type=int, default=CONCURRENCY, help="conversations in flight")
     ap.add_argument("--grade", metavar="ARM", choices=sorted(C.ARMS))
     ap.add_argument("--published", metavar="DIR")
     ap.add_argument("--judge", choices=sorted(C.JUDGES))
@@ -380,7 +391,7 @@ def main(argv=None) -> int:
     if a.dry:
         return cmd_dry()
     if a.converse:
-        return asyncio.run(cmd_converse(a.converse, a.n, a.tag, a.first))
+        return asyncio.run(cmd_converse(a.converse, a.n, a.tag, a.first, a.concurrency))
     if a.grade or a.published:
         if not a.judge:
             ap.error("--grade and --published need --judge")

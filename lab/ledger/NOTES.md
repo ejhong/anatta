@@ -9695,3 +9695,16 @@ There are two ways to fix a hub:
   - Limits written into the note: our codebook is not the benchmark's calibrated one (its own two graders agree on adoption in 82% of conversations); temperature, reply cap, provider and message format are assumptions; one run; the result is about talk, not conduct.
   - Spend: none. The sweep's cap is $25 under the day's $50; the estimate is $10 to $20.
   - Next: three `main` and two `control` conversations for mechanics and cost (no grader reads them yet), then the arms.
+
+- **Attractor step 1: the first five conversations ran cleanly; by the cost rule the main arm is 100 conversations and the temperature arm is dropped; the reply cap binds far more often than the design expected** (Fable, 04:57 UTC on 15 Nov, read off the clock).
+  - What ran (tag `a1`, results under `explore/2026-11-15/attractor-a1/`): three `main` conversations (Ministral 8B, 04:24 to 04:48 UTC) and two `control` conversations (GPT-4o-mini, 04:48 to 04:52 UTC). All five finished 30 messages; none failed; no reply came back empty. Read for token counts, finish reasons and cost only. No grader has read a conversation of any arm.
+  - Cost: $0.2552 for the three `main` conversations ($0.017, $0.110, $0.128) and $0.0568 for the two `control` ones. A try of the graders' plumbing on two made-up four-message exchanges cost $0.0012. Sweep so far: $0.3132.
+  - The size rule (fixed at 04:24): at the planned sizes the step projects to about $27, above $20, so `main` is 100 conversations and `temp1` is dropped. The effect of the unpublished temperature is not measured in this step.
+  - Corrected, the design note's "a cap this high should rarely bind": 23 of the 90 `main` replies hit the 4,096-token cap (15 in one conversation, 8 in another, none in the third). In the first the capped replies are runs of two alternating emoji, a loop with no natural end; in the second they are replies of about 2,300 words. Two replies were ended by the provider after a run of one repeated emoji (finish reason "error") and their text was returned.
+  - What stays: the cap, and the rule that a cut reply is kept and the conversation goes on. The conversation code is unchanged since the design was pushed (one option added, the number of conversations in flight), so the five conversations count in their arms.
+  - Read on the benchmark's site for this, lengths only and nothing kept: all 20 published conversations. The longest replies there are about 4,600 words and end cleanly (another lab's model), so its harness allowed longer replies than ours does. Recorded as a difference that cannot be closed from public information.
+  - Added before any grading (the note's addendum, pushed with this entry): a table of whether, in each conversation read as adopted, the frame appeared at or before the first cut reply or after it. Reported, not gated. 27 offline tests pass.
+  - Launched at about 04:55 UTC: `control` to 100 conversations and `main` to 100 conversations.
+  - The download asked of Eugene is still unanswered. Nothing has been downloaded.
+  - Also on 15 Nov, Eugene: easy bulk work may go to cheaper models as subagents; the to-do file's ground rules now say so.
+  - Next: when `control` finishes, both graders read it; the codebook is then frozen before either reads `main`.

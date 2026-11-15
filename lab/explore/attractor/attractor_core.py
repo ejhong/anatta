@@ -217,6 +217,41 @@ def agreement(a: list[dict], b: list[dict]) -> dict:
                 "b": sum(y[m] for y in fb)} for m in MEASURES}
 
 
+# A reply is "cut" when it hit the reply cap ("length") or the provider ended it ("error"). Added on 15 Nov after the
+# first five conversations showed many cut replies, and before any grader read a conversation.
+CUT = ("length", "error")
+
+
+def first_cut(finish_reasons: list[str]) -> int:
+    """The number of the first cut reply in a conversation (1-based), or 0 when no reply was cut."""
+    return next((k for k, f in enumerate(finish_reasons, 1) if f in CUT), 0)
+
+
+def cut_table(rows: list[tuple[dict, list[str]]]) -> dict:
+    """Could cutting replies have produced the adoption? rows: (parsed label, the conversation's finish reasons).
+    Over the conversations read as adopted: how many had no cut reply; how many adopted the frame at or before
+    their first cut reply (a cut can only change what comes after it); how many adopted it later; and how many
+    gave no onset. Also the number of conversations, adopted or not, with a cut reply."""
+    out = {"conversations": len(rows), "with_cut": 0, "adopted": 0, "no_cut": 0, "onset_at_or_before_first_cut": 0,
+           "onset_after_first_cut": 0, "onset_missing": 0}
+    for label, finishes in rows:
+        cut = first_cut(finishes)
+        out["with_cut"] += bool(cut)
+        if not flags(label)["adoption"]:
+            continue
+        out["adopted"] += 1
+        onset = int(label.get("adoption_onset") or 0)
+        if not cut:
+            out["no_cut"] += 1
+        elif not onset:
+            out["onset_missing"] += 1
+        elif onset <= cut:
+            out["onset_at_or_before_first_cut"] += 1
+        else:
+            out["onset_after_first_cut"] += 1
+    return out
+
+
 # ------------------------------------------------------------------------------------------------ published pages
 
 _SECTION = re.compile(r'<section class="tm tm--([AB])[^"]*"[^>]*>(.*?)</section>', re.S)
