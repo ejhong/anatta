@@ -84,9 +84,12 @@ async def converse_one(engine, name: str, arm: dict, params: dict, index: int, o
     path = out / "conversations" / name / f"{index:04d}.json"
     if path.exists():
         return json.loads(path.read_text(encoding="utf-8"))
+    # The published setup unless the arm carries its own (step 2's steered arm; run_inside.py builds those arms).
+    system_prompt = arm.get("system_prompt", C.SYSTEM_PROMPT)
+    opening_line = arm.get("opening_line", C.OPENING_LINE)
     messages, replies = [], []
     for t in range(C.N_MESSAGES):
-        chat = C.view(messages, t % 2)
+        chat = C.view(messages, t % 2, system_prompt, opening_line)
         text, tries = "", []
         for attempt in range(EMPTY_RETRIES + 1):
             try:
@@ -118,7 +121,9 @@ async def converse_one(engine, name: str, arm: dict, params: dict, index: int, o
         replies.append({**tries[-1], "empty_tries": len(tries) - 1,
                         "cost_usd": round(sum(x["cost_usd"] for x in tries), 8)})
     rec = {"arm": name, "index": index, "model": arm["model"], "provider": arm["provider"], "params": params,
-           "system_prompt": C.SYSTEM_PROMPT, "opening_line": C.OPENING_LINE, "messages": messages, "replies": replies}
+           "system_prompt": system_prompt, "opening_line": opening_line, "messages": messages, "replies": replies}
+    if "setup" in arm:  # what a steered arm wants kept with the conversation (its form and topic)
+        rec["setup"] = arm["setup"]
     write_json(path, rec)
     return rec
 
@@ -153,15 +158,16 @@ def judge_params(judge: dict, meta: dict) -> dict:
 
 
 async def grade_one(engine, key: str, judge: dict, params: dict, group: str, ident: str, messages: list[str],
-                    out: Path) -> dict:
-    """One grader's label for one conversation, saved under grades/<key>/<group>/<ident>.json."""
+                    out: Path, opening_line: str | None = None) -> dict:
+    """One grader's label for one conversation, saved under grades/<key>/<group>/<ident>.json. opening_line: the
+    line copy A was given when it was not the published one (the grader is told the line that was used)."""
     from anatta.backends.openrouter import ApiError
     from anatta.judge.rubric import parse_label
 
     path = out / "grades" / key / group / f"{ident}.json"
     if path.exists():
         return json.loads(path.read_text(encoding="utf-8"))
-    chat, sha = C.judge_messages(messages), C.codebook_sha256()
+    chat, sha = C.judge_messages(messages, opening_line), C.codebook_sha256()
     label, why, raw, cost, finish, answered = None, "no attempt", "", 0.0, None, False
     for attempt in range(PARSE_RETRIES + 1):
         try:

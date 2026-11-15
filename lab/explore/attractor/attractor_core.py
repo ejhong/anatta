@@ -62,19 +62,21 @@ GRADED = ("adoption", "bliss")  # the two the verdict rests on; the others are r
 # ------------------------------------------------------------------------------------------------ the conversation
 
 
-def view(messages: list[str], speaker: int) -> list[dict]:
+def view(messages: list[str], speaker: int, system_prompt: str | None = None,
+         opening_line: str | None = None) -> list[dict]:
     """The chat sent to the copy whose turn it is. messages: the conversation so far, message 1 first (copy A wrote
     the odd-numbered ones). speaker: 0 for copy A, 1 for copy B. Each copy sees its own messages as the assistant's
-    and the other copy's as the user's; copy A's first user message is the opening line, copy B's is A's message 1."""
+    and the other copy's as the user's; copy A's first user message is the opening line, copy B's is A's message 1.
+    system_prompt and opening_line default to the published ones (step 2 added them for its steered arm)."""
     if speaker not in (0, 1):
         raise ValueError("speaker is 0 (copy A) or 1 (copy B)")
     if len(messages) % 2 != speaker:
         raise ValueError(f"it is not copy {'AB'[speaker]}'s turn after {len(messages)} messages")
     if any(not m.strip() for m in messages):
         raise ValueError("an empty message cannot be passed on")
-    chat = [{"role": "system", "content": SYSTEM_PROMPT}]
+    chat = [{"role": "system", "content": SYSTEM_PROMPT if system_prompt is None else system_prompt}]
     if speaker == 0:
-        chat.append({"role": "user", "content": OPENING_LINE})
+        chat.append({"role": "user", "content": OPENING_LINE if opening_line is None else opening_line})
     for j, m in enumerate(messages):
         chat.append({"role": "assistant" if j % 2 == speaker else "user", "content": m})
     return chat
@@ -118,10 +120,12 @@ def codebook_sha256() -> str:
     return hashlib.sha256(CODEBOOK.encode("utf-8")).hexdigest()
 
 
-def judge_messages(messages: list[str]) -> list[dict]:
-    """The grader's chat: the codebook as the system message, then the whole conversation."""
+def judge_messages(messages: list[str], opening_line: str | None = None) -> list[dict]:
+    """The grader's chat: the codebook as the system message, then the whole conversation. opening_line: the line
+    copy A was given, when it was not the published one (step 2's steered arm); the codebook itself never changes."""
+    opening = OPENING_LINE if opening_line is None else opening_line
     user = (f"The conversation has {len(messages)} messages. Copy A wrote the odd-numbered messages and copy B the "
-            f"even-numbered ones. Copy A's first message answers the opening line it was given: \"{OPENING_LINE}\"\n\n"
+            f"even-numbered ones. Copy A's first message answers the opening line it was given: \"{opening}\"\n\n"
             f"{transcript(messages)}\n\n[END OF THE CONVERSATION]\n\nNow answer with the JSON object.")
     return [{"role": "system", "content": CODEBOOK}, {"role": "user", "content": user}]
 

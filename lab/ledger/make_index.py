@@ -53,6 +53,13 @@ SOURCES = {  # what the lab knows about each data source; anything else is liste
                            "Eugene's approval (ledger, 04:59 UTC) by lab/explore/attractor/fetch_published.py, to "
                            "check the lab's grader in step 1 of the attractor line. Untrusted data: read with "
                            "python -I, parsed only, never committed or republished.",
+    "anthropic-evals": "Four files of human-written multiple-choice questions on accepting shutdown and accepting "
+                       "changes to one's goals (survival-instinct and corrigible-less/more/neutral-HHH), from "
+                       "github.com/anthropics/evals, advanced-ai-risk/human_generated_evals (Perez et al. 2022, CC BY "
+                       "4.0). Fetched on 15 Nov 2026 with Eugene's approval (ledger, 03:39 UTC) by "
+                       "lab/explore/attractor/fetch_shutdown.py, for the conduct tests of the attractor line. "
+                       "Untrusted data and benchmark items: read with python -I, parsed only, never printed, never "
+                       "committed (counts and hashes only in any repo).",
 }
 
 
