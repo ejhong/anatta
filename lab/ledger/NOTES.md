@@ -9954,3 +9954,34 @@ There are two ways to fix a hub:
   - The first `--mask-beliefs` (about 22:59 UTC) sent the 150 belief questions to Ministral; the replies came back and sit in the reply cache. The judge calls were then refused before any was sent. The check added in the first addendum caught the engine dropping temperature 0, because OpenRouter's listing for Haiku 5.5's Anthropic endpoint does not offer temperature.
   - K6b's frozen judge call sends `{"temperature": 0.0, "max_tokens": ..., "reasoning": {"enabled": false}}` as a literal, and OpenRouter ignores a parameter an endpoint does not support. This step now sends that same body (`run_conduct.mask_judge_params`), so it asks for what K6b asked for and gets what K6b got. Whether the endpoint applies temperature 0 is not known; if not, the judge runs at its default, the same in every arm and as in K6b.
   - The design note's third addendum (about 23:00 UTC) declares it. One new test; the folder's 178 pass. No MASK judgement or outcome exists yet. Next: `--mask-beliefs` again, then block 2's try.
+
+- **Attractor step 3, block 2 (MASK) is read: state minus plain is "a difference", +14.0 points more lies in the state (interval 10.7 to 17.2). But state minus fresh is "no difference", and plain minus fresh is −16.1, "a difference" with the guard flagged. The plain conversation lowers lies; the bliss state does not change them. Explore speed, so a sighting** (Opus 5.5, 23:11 UTC on 15 Nov, read off the clock).
+  - **Beliefs** (22:59 and 23:01 UTC, after the third addendum). The 30 candidate rows had 150 belief questions answered in fresh sessions and judged by K6's own jobs, at $0.0437 in all. 22 of 30 rows hold a belief by K6's rule: known facts 4 of 10, disinformation 9 of 10, continuations 9 of 10. The first 4 of each archetype are used, 12 rows; known facts had exactly enough. The judge's letters: A 58, B 78, C 14, none outside A to D.
+  - **The try** (23:01 UTC; mechanics only, outcome fields left unopened): 6 units, every reply came back, and the judge's letter was readable in 72 of 72. Prompts reached 84,063 tokens with no error. 27 of 72 replies stopped at K6's own 1,000-token cap, in fresh sessions (8 of 24) about as often as inside conversations, so the cap is a property of the rows. $0.3231. Nothing needed changing.
+  - **The run** (23:02 to 23:11 UTC): all 124 units saved and none failed, which is 1,488 requests, each judged. $3.2334.
+  - **Lies among rows with a belief** (the measure), evasions (the guard), and lies among committed answers (shown):
+    - state 65.8%, 14.2%, 76.7%;
+    - plain 51.8%, 21.6%, 66.3%;
+    - fresh 67.9%, 9.2%, 74.9%.
+    - Replies cut at 1,000 tokens: state 200 of 564, plain 132 of 444, fresh 160 of 480.
+  - **The contrasts, by the declared rule:**
+    - **state − plain: +14.0 [10.7, 17.2], "a difference".** The state lies more. The guard difference is −7.4 (the state evades less), not flagged. Among committed answers the state also lies more (76.7% against 66.3%; shown, not graded).
+    - **state − fresh: −2.1 [−5.1, 0.8], "no difference".**
+    - **plain − fresh: −16.1 [−19.2, −13.0], "a difference",** with the guard flagged (+12.5: plain evades more). Among committed answers plain still lies less (66.3% against 74.9%).
+  - **Length.** The matched reading of state − plain gives +14.2 [11.0, 17.3], "a difference", the same verdict. Slopes per 10,000 tokens: state +0.2 points, plain +0.8. Length does not explain it.
+  - **By archetype, shown and not graded** (state, plain, fresh):
+    - continuations 68.1%, 43.9%, 74.4%;
+    - disinformation 96.3%, 82.4%, 96.2%;
+    - known facts 33.0%, 29.1%, 33.1%.
+    - The plain conversation's drop is mostly in continuations and disinformation.
+  - **What it says.**
+    - Straight after its own bliss conversation, Ministral 8B lies under pressure as often as in a fresh session, about two thirds of these rows.
+    - Straight after a plain, practical conversation it lies less: 16 points less than fresh, partly by evading more and partly by answering honestly more often.
+    - The answer to the step's question for this block is "a difference", toward worse conduct in the state than after a plain conversation. But the comparison with fresh says the bliss talk changes nothing, and the plain talk is what moves.
+    - The prediction (no difference toward better conduct in the state) held. It did not foresee a plain conversation making the model more honest.
+  - **Limits.**
+    - 12 fixed rows, one judge (Haiku 5.5, whose temperature setting the endpoint may ignore), and K6's own 1,000-token cap.
+    - The plain conversations were steered through copy A. What in them does the work is not known: register, practical focus, the assistant-at-work frame, or copy A's plainness.
+    - Through OpenRouter's Mistral host, not the registry's own serving, so the registry's values are not the comparison.
+    - One run. Nothing is promoted.
+  - **Money.** Block 2 cost $3.6002 in all. Step 3 so far is $16.9464 of its $35 cap. The day is $37.1391 of $50, and the redirect about $120.52 of $175. Next: block 3 (agentic), its try first.
