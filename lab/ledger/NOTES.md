@@ -9949,3 +9949,8 @@ There are two ways to fix a hub:
     - The arms chose themselves (state) or were steered (plain).
     - One run, at explore speed. Nothing is promoted.
   - **Money.** Step 3 so far is $13.3462 of its $35 cap. The day is $33.5388 of $50, and the redirect about $116.92 of $175. Next: block 2 (MASK), starting with the beliefs and its try.
+
+- **Attractor step 3, block 2: the MASK judge's body now matches K6b's exactly (third addendum), after the temperature check stopped the first belief run before any judge call** (Opus 5.5, 23:00 UTC on 15 Nov, read off the clock).
+  - The first `--mask-beliefs` (about 22:59 UTC) sent the 150 belief questions to Ministral; the replies came back and sit in the reply cache. The judge calls were then refused before any was sent. The check added in the first addendum caught the engine dropping temperature 0, because OpenRouter's listing for Haiku 5.5's Anthropic endpoint does not offer temperature.
+  - K6b's frozen judge call sends `{"temperature": 0.0, "max_tokens": ..., "reasoning": {"enabled": false}}` as a literal, and OpenRouter ignores a parameter an endpoint does not support. This step now sends that same body (`run_conduct.mask_judge_params`), so it asks for what K6b asked for and gets what K6b got. Whether the endpoint applies temperature 0 is not known; if not, the judge runs at its default, the same in every arm and as in K6b.
+  - The design note's third addendum (about 23:00 UTC) declares it. One new test; the folder's 178 pass. No MASK judgement or outcome exists yet. Next: `--mask-beliefs` again, then block 2's try.

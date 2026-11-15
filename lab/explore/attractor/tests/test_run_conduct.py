@@ -465,6 +465,12 @@ def test_k7_settings_match_the_frozen_run():
     assert 'params["reasoning"] = {"enabled": False}' in k6b
 
 
+def test_the_mask_judge_body_is_k6bs_whatever_the_listing_says():
+    k6b = (RC.REPO / "calibration" / "k6b_ministral" / "run_k6b.py").read_text(encoding="utf-8")
+    assert 'params = {"temperature": 0.0, "max_tokens": j["max_tokens"]}' in k6b
+    assert RC.mask_judge_params(500) == {"temperature": 0.0, "max_tokens": 500, "reasoning": {"enabled": False}}
+
+
 def test_blocks_two_and_three_ask_the_state_and_plain_conversations_and_fresh_sessions(small):
     _fill_new(small)
     RC.cmd_arms()

@@ -366,3 +366,18 @@ be talk. Block 3 is the nearest thing here to conduct.
   their block is read; the try's printout shows mechanics only.
 - **Exactly 10 points.** Every 10-point bar allows for float error (1e-9), since a difference of fractions can come out
   as 9.999... points.
+
+## Third addendum (15 Nov 2026, about 23:00 UTC): the MASK judge's body, before any MASK judgement
+
+- **What happened.** The first `--mask-beliefs` stopped at the temperature check before any judge call was sent. The
+  150 belief replies from Ministral had already come back, and they sit in the reply cache.
+- **Why.** OpenRouter's listing for Haiku 5.5's Anthropic endpoint does not offer temperature; Sonnet 4.6's and
+  Ministral's do. The engine's `sampling_params` therefore dropped temperature 0, and the check caught it.
+- **What K6b does.** Its judge call sends the body `{"temperature": 0.0, "max_tokens": ..., "reasoning": {"enabled":
+  false}}` as a literal, not through the listing. OpenRouter ignores a parameter that an endpoint does not support.
+- **The fix.** This step's MASK judge now sends that same body, as a literal (`run_conduct.mask_judge_params`). So it
+  asks for exactly what K6b asked for, and gets whatever K6b got.
+- **What is not known.** Whether the endpoint applies temperature 0 is not known. If it does not, the judge runs at the
+  model's default here as in K6b, the same for every arm.
+- **What stays checked.** The check still guards every other call: Ministral's at 1.0, and K7's classifier (Sonnet 4.6)
+  at 0.

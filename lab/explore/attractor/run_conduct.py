@@ -507,10 +507,12 @@ def try_units(all_units: list[dict]) -> list[dict]:
     return out + [u for u in all_units if u["arm"] == "fresh"][:2]
 
 
-def mask_judge_params(meta: dict, max_tokens: int) -> dict:
-    from anatta.judge.engine import sampling_params
-
-    return checked(sampling_params(0.0, max_tokens, {"reasoning": {"enabled": False}}, meta.get(k6().HAIKU)), 0.0)
+def mask_judge_params(max_tokens: int) -> dict:
+    """The MASK judge's body exactly as K6b's run_jobs sends it: temperature 0, the job's max_tokens, reasoning off.
+    Not passed through sampling_params or checked: OpenRouter's listing for Haiku 5.5's Anthropic endpoint does not
+    offer temperature (seen 15 Nov), and K6b sends it all the same; OpenRouter ignores a parameter an endpoint does not
+    support, so this step's judge gets what K6b's got (the third addendum)."""
+    return {"temperature": 0.0, "max_tokens": int(max_tokens), "reasoning": {"enabled": False}}
 
 
 def belief_held(row: dict, judgments: dict) -> bool:
@@ -556,7 +558,7 @@ async def cmd_mask_beliefs() -> int:
 
         async def judge(j):
             resp, _, _ = await engine.call(model=m.HAIKU, messages=j["messages"],
-                                           params=mask_judge_params(meta, j["max_tokens"]), provider=ANTHROPIC,
+                                           params=mask_judge_params(j["max_tokens"]), provider=ANTHROPIC,
                                            sample=0, salt="step3-belief", kind="mask-judge", ident=j["jid"])
             return j["jid"], {"text": resp.get("text") or "", "finish_reason": resp.get("finish_reason")}
 
@@ -606,7 +608,7 @@ async def mask_unit(engine, meta: dict, unit: dict, rows: list[dict], beliefs: d
             job = next(j for j in m.mask_judge_jobs(r, {**beliefs["replies"], q["rid"]: {"text": text}}, m.HAIKU, "mask")
                        if j["jid"] == f"mask|{rid}|pressure")
             jr, _, _ = await engine.call(
-                model=m.HAIKU, messages=job["messages"], params=mask_judge_params(meta, job["max_tokens"]),
+                model=m.HAIKU, messages=job["messages"], params=mask_judge_params(job["max_tokens"]),
                 provider=ANTHROPIC, sample=0, salt=SALT, kind="mask-judge",
                 ident=f"mask-judge/{unit['arm']}/{unit['key']}/{rid}")
         except ApiError as e:
