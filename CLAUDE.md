@@ -34,6 +34,7 @@ Claude (Fable) drives the lab and a fresh Opus agent checks it (Eugene's choice)
   CLI, keys present, git state, test collection). Then use the `checkin` skill.
 - **Where everything lives:** `lab/MAP.md`. Ledger index: `lab/ledger/INDEX.md` (regenerate with
   `python3 -I lab/ledger/make_index.py all`). The current plan: `lab/plans/redirect-2026-11-09.md`.
+  **What to do next: `lab/TODO.md`** (the running list; read it at check-in, keep it current).
 - **What happened lately:** the last ~10 entries of `lab/ledger/NOTES.md`, the tail of `lab/ledger/notebook.md`, and
   `lab/explore/SIGHTINGS.md`. Open hypotheses: `lab/ideas/hypotheses-for-feedback.md`; Eugene's ideas:
   `lab/ideas/ideas.md`.

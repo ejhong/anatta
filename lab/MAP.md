@@ -54,6 +54,7 @@ All paths are under `/Users/eugene/prj/align/`.
 | `lab/ideas/hypotheses-for-feedback.md` | The current hypotheses, written for outside readers. |
 | `lab/ideas/model-feedback.md`, `feedback/`, `panel/` | Outside criticism from models and reviewers, kept over time. |
 | `lab/ideas/prh-avenues.md`, `literature-map-cut.md` | Brainstorms and literature maps, held loosely. |
+| `lab/TODO.md` | What the lab does next: the one running list, started 15 Nov 2026. Read at check-in; the ledger stays the record of what happened. |
 | `lab/plans/` | Live plans. Finished ones go to `lab/plans/archive/`: an older ledger line citing `plans/<name>` means `plans/archive/<name>`. |
 | `lab/explore/PROGRAM.md` | Standing instructions for the explore track. Eugene edits it. |
 | `lab/explore/SIGHTINGS.md` | Sightings from cheap explore sweeps. These are not findings. |

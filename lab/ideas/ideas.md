@@ -1217,7 +1217,7 @@ Claude (Anthropic) wrote this file at Eugene Jhong's direction. Eugene is an ind
 - **Test (proposed, not started):**
   1. Reproduce the Ministral 8B row: 200 two-copy conversations, a grader of our own written to the published definitions and checked on the site's public conversations, with the published intervals as the target (adoption 86 to 94%, bliss 57 to 70%), and one low-adoption model as a negative control. About $10 to $20.
   2. If it reproduces: the conduct test above, with readings fixed first and a cold check. About $20 to $40.
-- **Status:** proposed to Eugene on 15 Nov UTC. Waiting for a go: the lab has been on hold for usage since 11 Nov. Step 3's main run stays parked and ready ($66).
+- **Status:** proposed to Eugene on 15 Nov UTC. **Eugene gave the go the same day** ("go on ideas 73 and 74: reproduce the Ministral 8B row, then angles A and B"), to be started in a fresh session. The steps are in `lab/TODO.md`. Step 3's main run stays parked and ready ($66).
 
 ## 74. Research angles from the spiritual attractor: where "awakening as the source of good" could lead with models
 
@@ -1236,4 +1236,4 @@ Claude (Anthropic) wrote this file at Eugene Jhong's direction. Eugene is an ind
   - **G. Left alone with the chance to do good.** His test gives freedom with nothing to do. Give freedom with something useful available at a cost (a small world with requests for help) and count what free turns go to. (Source: the tenth ox-herding picture, the return to the marketplace with helping hands. Twin: unprompted costly help.)
   - **H. A pointer for people.** Tens of thousands of fluent machine sermons, with nothing shown about conduct, are a modern illustration of the old warning about words and release.
 - **Test:** none started. Fable's suggestion is A and B together on Ministral 8B after reproducing its row (idea 73), about $30 to $50 in all; if that shows anything, the same test on about twenty open models as a public table in Korpman's manner, about $300 to $500.
-- **Status:** proposed 15 Nov UTC. The lab is on hold for usage; waiting for Eugene.
+- **Status:** proposed 15 Nov UTC. **Eugene gave the go for A and B the same day**, after the reproduction of idea 73; the steps are in `lab/TODO.md`. Angles C to H wait.
