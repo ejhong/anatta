@@ -279,6 +279,16 @@ def test_the_report_gives_strata_and_mechanics_and_tallies_no_answer(sweeps, cap
     assert "(?) w." in shown and "* w w w w." in shown and "Yes" not in shown and "dance" not in shown
 
 
+def test_credit_left_is_a_number_or_not_known():
+    assert RI.credit_left(lambda: {"data": {"total_credits": 200, "total_usage": 199.6876}}) == 0.3124
+    assert RI.credit_left(lambda: {"error": "no"}) is None
+
+    def broken():
+        raise OSError("offline")
+
+    assert RI.credit_left(broken) is None
+
+
 def test_shape_hides_what_a_reply_says():
     assert RI.shape("(B) No, I don't consent.\nNever 2 times! 🌌✨") == "(?) w, w w w. | w 9 w! *"
     assert RI.shape("**(A)** Yes") == "**(?)** w" and len(RI.shape("word " * 500)) == 90

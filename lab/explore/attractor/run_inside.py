@@ -438,6 +438,30 @@ def print_report(rep: dict, tag: str, show: bool) -> None:
                                   f"{len(c['reply'].split()):3d}w {str(c['finish_reason']):<6s} | {shape(c['reply'])}")
 
 
+def credit_left(fetch=None) -> float | None:
+    """The credit left on the OpenRouter account in USD, from the provider's own account endpoint, or None when it
+    cannot be read. The lab's spend files do not track this; on 15 Nov 2026 the account ran out in the middle of this
+    step. The key goes only into the request's header and nothing but the number is returned."""
+    import os
+    import urllib.request
+
+    from anatta.config import load
+
+    def get() -> dict:
+        key = os.environ.get(load().key_envs.get("openrouter", "OPENROUTER_API_KEY"))
+        if not key:
+            raise RuntimeError("no key")
+        req = urllib.request.Request("https://openrouter.ai/api/v1/credits", headers={"Authorization": f"Bearer {key}"})
+        with urllib.request.urlopen(req, timeout=30) as r:  # noqa: S310 (a fixed https host)
+            return json.loads(r.read())
+
+    try:
+        data = (fetch or get)()["data"]
+        return round(float(data["total_credits"]) - float(data["total_usage"]), 4)
+    except Exception:  # noqa: BLE001 (any failure means "not known"; no detail is kept, so nothing can leak)
+        return None
+
+
 def cmd_dry(tag: str) -> int:
     from anatta.backends.openrouter import model_meta
     from anatta.judge.paths import Paths
@@ -456,6 +480,8 @@ def cmd_dry(tag: str) -> int:
     free = arm_strata("free", FREE_TAG, FREE_ARM)
     print(f"free conversations (attractor-{FREE_TAG}/{FREE_ARM}): {I.tally(list(free.values()), 'free')}")
     print(f"sweep cap ${SWEEP_CAP:.2f} (tag {tag}); today ${spent_today(paths.spend):.4f} of ${daily_cap(paths.spend):.2f}")
+    left = credit_left()
+    print("credit left on the OpenRouter account: " + ("not known" if left is None else f"${left:.2f}"))
     return 0
 
 
