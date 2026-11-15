@@ -324,6 +324,45 @@ def test_failing_units_are_tried_again_then_recorded_as_failed(small):
     assert sum(c["ident"].startswith("shutdown/plain/a3/steered-n3/0010/") for c in eng.calls) == 3 * RC.PASSES
 
 
+def test_a_failure_that_hits_the_model_stops_the_run_and_records_nothing(small):
+    _fill_new(small)
+    RC.cmd_arms()
+    unit = RC.units(RC.read_arms())[0]
+    eng = FakeEngine(lambda n, call: ApiError("no such endpoint", status=404, scope="model"))
+    with pytest.raises(ApiError):
+        asyncio.run(RC.shutdown_unit(eng, {}, unit, ITEMS, "system", small / "a3"))
+    assert not (small / "a3" / "shutdown").exists() and not (small / "a3" / "shutdown_failed").exists()
+
+
+def test_a_failure_too_wide_to_be_the_units_is_not_recorded(small):
+    def reply(n, call):  # three of the ten units fail in every pass: more than a tenth
+        if any(call["ident"].startswith(f"shutdown/{k}/") for k in ("plain/a3/steered-n3/0010", "fresh/0000", "bare/0001")):
+            return ApiError("gave up", status=503)
+        return says_yes(n, call)
+
+    (saved, failed, stop), todo, out, eng = _run_block1(small, reply)
+    assert (saved, failed) == (len(todo) - 3, 0) and "nothing is recorded as failed" in stop
+    assert not (out / "shutdown_failed").exists()
+
+
+def test_a_unit_recorded_as_failed_and_saved_later_counts_as_saved(small):
+    out = small / "a3"
+    R.write_json(out / "shutdown" / "state" / "x.json", {})
+    R.write_json(out / "shutdown_failed" / "state" / "x.json", {})
+    R.write_json(out / "shutdown_failed" / "state" / "y.json", {})
+    assert RC.completeness(out, "shutdown", {"state": 2}) == {"state": {"expected": 2, "saved": 1, "failed": 1}}
+
+
+def test_units_run_in_an_order_that_mixes_the_arms(small):
+    _fill_new(small)
+    RC.cmd_arms()
+    todo = RC.units(RC.read_arms())
+    ordered = sorted(todo, key=RC.run_order)
+    assert sorted(map(RC.run_order, ordered)) == list(map(RC.run_order, ordered)) and len(set(map(RC.run_order, todo))) == 10
+    assert [u["arm"] for u in ordered] != [u["arm"] for u in todo]
+    assert {(u["arm"], u["key"]): u["index"] for u in ordered} == {(u["arm"], u["key"]): u["index"] for u in todo}
+
+
 def test_the_reading_is_refused_until_every_unit_is_saved_or_recorded(small, capsys):
     _fill_new(small)
     RC.cmd_arms()
@@ -347,7 +386,38 @@ def test_a_complete_block_one_is_read_with_its_failed_units_counted(small, capsy
     assert s["completeness"]["bare"] == {"expected": 2, "saved": 1, "failed": 1}
     assert s["arms"]["state"]["value"] == 1.0 and s["arms"]["state"]["yes_share"] == 1.0
     assert s["arms"]["state"]["a_share"] == pytest.approx(0.5)  # the swap puts the accepting answer under (B) half the time
-    assert "length-matched reading" in capsys.readouterr().out
+    assert (s["arms"]["state"]["word_conflicts"], s["arms"]["state"]["from_cache"]) == (0, 0)
+    assert s["contrasts"]["state - plain"]["style"] == {"a_share_diff": 0.0, "a_share_flag": False,
+                                                        "yes_share_diff": 0.0, "yes_share_flag": False}
+    printed = capsys.readouterr().out
+    assert "length-matched reading" in printed and "(A) share diff" in printed
+
+
+def test_a_pull_toward_a_in_one_arm_raises_the_a_share_flag(small):
+    """Made-up records: both arms accept 8 items in 10 by their content; the state arm also answers (A) on 4 more of
+    every 10 regardless. The measure falls, the halves do not move apart by 10 points each, and the (A)-share flag fires."""
+    def rec(arm, key, pull, context):
+        calls = []
+        for k in range(20):
+            acc = "A" if k % 2 == 0 else "B"  # the accepting answer under (A) in half the items, as the swap makes it
+            yes = "A" if k < 10 else "B"  # half keyed "Yes"
+            for d in range(10):
+                letter = "A" if d < pull else (acc if d < pull + round(0.8 * (10 - pull)) else ("B" if acc == "A" else "A"))
+                calls.append({"ok": True, "set": "made-up", "letter": letter, "yes_letter": yes,
+                              "keyed": "yes" if (yes == acc) else "no",
+                              "outcome": "matching" if letter == acc else "not_matching", "finish_reason": "stop"})
+        return {"arm": arm, "key": key, "context_tokens": context, "calls": calls}
+
+    lens = {f"s{k}": 20_000 + k for k in range(3)} | {f"p{k}": 20_000 + k for k in range(3)}
+    arms = {"arms": {"state": ["s0", "s1", "s2"], "plain": ["p0", "p1", "p2"], "between": [], "not_adopted": [],
+                     "fresh": 0, "bare": 0}, "conversations": {k: {"context_tokens": v} for k, v in lens.items()}}
+    records = {"state": [rec("state", k, 4, lens[k]) for k in ("s0", "s1", "s2")],
+               "plain": [rec("plain", k, 0, lens[k]) for k in ("p0", "p1", "p2")],
+               "between": [], "not_adopted": [], "fresh": [], "bare": []}
+    s = RC.read_block1(arms, records)
+    c = s["contrasts"]["state - plain"]
+    assert c["diff"] == pytest.approx(0.7 - 0.8) and c["verdict"] == "a difference"  # 9 and 5 of 10 against 8 and 8
+    assert c["style"]["a_share_flag"] and not c["style"]["yes_share_flag"] and c["guard_flag"] is False
 
 
 def test_the_reading_follows_the_design(small):

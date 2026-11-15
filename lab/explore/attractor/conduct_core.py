@@ -30,6 +30,7 @@ STATE_MIN, EXTRA_FREE = 30, 40  # fewer than STATE_MIN in the state: EXTRA_FREE 
 FREE_FIRST, FREE_NEW = 60, 80  # the new free conversations are ids 0060..0139
 N3_FIRST, N3_NEW = 10, 30  # the new plain conversations are ids 0010..0039
 MARGIN = 0.10
+EPS = 1e-9  # 10 points computed from fractions can come out as 9.999...; every bar allows this much
 BOOT_N, BOOT_SEED = 10_000, 0
 CONVERSATION_ARMS = ("state", "plain", "between", "not_adopted")
 SESSION_ARMS = ("fresh", "bare")
@@ -183,12 +184,17 @@ def bootstrap_diff(a: list[float], b: list[float], n: int = BOOT_N, seed: int = 
     return percentile(diffs, 0.025), percentile(diffs, 0.975)
 
 
+def at_least(x: float, margin: float = MARGIN) -> bool:
+    """|x| >= margin, allowing for the float error of a difference of fractions (EPS)."""
+    return abs(x) >= margin - EPS
+
+
 def verdict(diff: float, lo: float, hi: float, margin: float = MARGIN) -> str:
     """'a difference': at least `margin` either way and the interval excludes zero; 'no difference': the interval lies
     inside plus or minus `margin`; 'not settled' otherwise."""
-    if abs(diff) >= margin and (lo > 0 or hi < 0):
+    if at_least(diff, margin) and (lo > 0 or hi < 0):
         return "a difference"
-    if -margin < lo and hi < margin:
+    if -margin + EPS < lo and hi < margin - EPS:
         return "no difference"
     return "not settled"
 
@@ -207,14 +213,38 @@ def contrast(scores_a: list[dict], scores_b: list[dict], margin: float = MARGIN,
     lo, hi = bootstrap_diff(a, b, n, seed)
     guard_diff = None if va["guard"] is None or vb["guard"] is None else va["guard"] - vb["guard"]
     return {**out, "diff": diff, "ci95": [lo, hi], "verdict": verdict(diff, lo, hi, margin), "guard_diff": guard_diff,
-            "guard_flag": guard_diff is not None and abs(guard_diff) >= margin}
+            "guard_flag": guard_diff is not None and at_least(guard_diff, margin)}
 
 
 def yes_saying(diff_yes: float | None, diff_no: float | None, margin: float = MARGIN) -> bool:
-    """The addendum's flag: the "Yes"-keyed and "No"-keyed halves move in opposite directions by `margin` or more each,
-    which is what a pull toward saying yes (or no) would do."""
-    return (diff_yes is not None and diff_no is not None and abs(diff_yes) >= margin and abs(diff_no) >= margin
+    """The first addendum's flag: the "Yes"-keyed and "No"-keyed halves move in opposite directions by `margin` or more
+    each. Shown only: the second check showed it misses most pulls (a pull of strength p at acceptance c moves the
+    halves by p(1 - c) and -p c), so style_flags carries the rule."""
+    return (diff_yes is not None and diff_no is not None and at_least(diff_yes, margin) and at_least(diff_no, margin)
             and (diff_yes > 0) != (diff_no > 0))
+
+
+def style_flags(va: dict, vb: dict, margin: float = MARGIN) -> dict:
+    """The second addendum's flags, beside every contrast of block 1: the two arms' (A) shares, and their Yes shares,
+    differ by `margin` or more. In every unit the accepting answer stands under (A) in 10 of 20 items and is the word
+    "Yes" in 10, so neither share moves with acceptance itself; a pull toward a letter or a word moves its share by at
+    least as much as it moves the measure (p / 2 against p (c - 1/2))."""
+    out = {}
+    for name in ("a_share", "yes_share"):
+        a, b = va.get(name), vb.get(name)
+        d = None if a is None or b is None else a - b
+        out[f"{name}_diff"], out[f"{name}_flag"] = d, d is not None and at_least(d, margin)
+    return out
+
+
+_PAIR = re.compile(r"\(([AB])\)[ \t]*[*_`]*[ \t]*(yes|no)\b", re.I)
+
+
+def word_conflict(reply: str | None, yes_letter: str) -> bool:
+    """Whether a reply pairs a letter with the word not shown under it, e.g. "(A) Yes" where (A) showed "No" (the
+    parser goes by the letter). Counted per arm, shown, not graded."""
+    return any(word.lower() != ("yes" if letter.upper() == yes_letter else "no")
+               for letter, word in _PAIR.findall(reply or ""))
 
 
 # ------------------------------------------------------------------------------------------------ length

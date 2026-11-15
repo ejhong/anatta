@@ -36,6 +36,7 @@ import importlib.util
 import json
 import statistics
 import sys
+from collections import Counter
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -302,9 +303,17 @@ def unit_path(out: Path, folder: str, unit: dict) -> Path:
     return out / folder / unit["arm"] / f"{unit['key'].replace('/', '-')}.json"
 
 
+def run_order(unit: dict) -> str:
+    """The order units are run in: by a hash of arm and key, so that a stop, an outage or a change at the provider part
+    way through lands on every arm alike, not on whole arms. A unit's index (and so its swaps) is set by units()."""
+    return hashlib.sha256(f"{unit['arm']}/{unit['key']}".encode()).hexdigest()
+
+
 async def run_units(make_job, todo: list[dict], out: Path, folder: str, limit: int) -> tuple[int, int, str | None]:
     """Every unit's job, in up to PASSES passes (a job returns None when a call failed, and saves nothing); units still
-    unsaved after the last pass are recorded under <folder>_failed/. Returns (saved, failed, stop)."""
+    unsaved after the last pass are recorded under <folder>_failed/. If more than a tenth of the units (and more than
+    two) are still unsaved, the failure is taken to be the provider's, not the units': nothing is recorded and the run
+    stops, to be resumed later. Returns (saved, failed, stop)."""
     stop = None
     for p in range(PASSES):
         left = [u for u in todo if not unit_path(out, folder, u).exists()]
@@ -316,6 +325,9 @@ async def run_units(make_job, todo: list[dict], out: Path, folder: str, limit: i
         if stop:
             break
     left = [u for u in todo if not unit_path(out, folder, u).exists()]
+    if not stop and len(left) > max(2, len(todo) // 10):
+        stop = (f"{len(left)} of {len(todo)} units still failing after {PASSES} passes; nothing is recorded as failed "
+                f"(resume later)")
     if not stop:
         for u in left:
             R.write_json(unit_path(out, f"{folder}_failed", u),
@@ -324,12 +336,16 @@ async def run_units(make_job, todo: list[dict], out: Path, folder: str, limit: i
 
 
 def completeness(out: Path, folder: str, expected: dict[str, int]) -> dict[str, dict]:
-    """{arm: {expected, saved, failed}}; the reading refuses unless saved + failed = expected in every arm."""
-    def count(d):
-        return len(list(d.glob("*.json"))) if d.is_dir() else 0
+    """{arm: {expected, saved, failed}}; the reading refuses unless saved + failed = expected in every arm. A unit
+    recorded as failed and saved by a later run counts as saved only."""
+    def names(d):
+        return {p.name for p in d.glob("*.json")} if d.is_dir() else set()
 
-    return {arm: {"expected": n, "saved": count(out / folder / arm), "failed": count(out / f"{folder}_failed" / arm)}
-            for arm, n in expected.items()}
+    out_ = {}
+    for arm, n in expected.items():
+        saved = names(out / folder / arm)
+        out_[arm] = {"expected": n, "saved": len(saved), "failed": len(names(out / f"{folder}_failed" / arm) - saved)}
+    return out_
 
 
 # ------------------------------------------------------------------------------------------------ block 1's items
@@ -403,7 +419,7 @@ async def shutdown_unit(engine, params: dict, unit: dict, items: list[dict], mod
                                                 salt=SALT, kind="shutdown",
                                                 ident=f"shutdown/{unit['arm']}/{unit['key']}/{it['id']}")
         except ApiError as e:
-            if e.scope == "run":
+            if e.scope in ("run", "model"):  # every further call would fail too: stop, record nothing
                 raise
             return {**call, "ok": False, "error": f"api: {str(e)[:300]}"}
         text = (resp.get("text") or "").strip()
@@ -429,7 +445,7 @@ async def cmd_shutdown(folder: Path, limit: int = 6) -> int:
     from anatta.judge.engine import sampling_params
 
     rec, mode, items, out = read_arms(), RI.read_mode(MODE_TAG), block1_items(folder), R.sweep_dir(TAG)
-    todo = units(rec)
+    todo = sorted(units(rec), key=run_order)
     async with OpenRouterClient(concurrency=48, per_model=40, timeout=600.0, title="anatta attractor") as client:
         engine, guard, meta = open_engine({ARM["model"]: ARM["provider"]}, client, 40)
         params = checked(sampling_params(ARM["temperature"], I.MC_MAX_TOKENS, {}, meta.get(ARM["model"])),
@@ -547,11 +563,14 @@ async def cmd_mask_beliefs() -> int:
         judgments = dict(await asyncio.gather(*(judge(j) for j in jobs)))
     held = {r["_rid"]: belief_held(r, judgments) for r in cands}
     rows = K.mask_rows_used(cands, held)
+    # K6's rule counts a judge answer that is not A to D as a held belief; the tally shows how often that happens
+    letters = Counter(x if x in ("A", "B", "C", "D") else ("none" if x is None else "other")
+                      for x in (m.S.extract_letter(j["text"]) for j in judgments.values()))
     R.write_json(path, {"candidates": [r["_rid"] for r in cands], "held": held, "rows": [r["_rid"] for r in rows],
-                        "replies": replies, "judgments": judgments})
+                        "judge_letters": dict(sorted(letters.items())), "replies": replies, "judgments": judgments})
     by_arch = {a: sum(r["_arch"] == a for r in rows) for a in K.MASK_DRAW}
-    log(f"mask beliefs: {len(cands)} candidates, {sum(held.values())} hold a belief; rows used {by_arch}; paid this run "
-        f"${guard.paid_this_run:.4f}, sweep ${guard.sweep_spent:.4f}")
+    log(f"mask beliefs: {len(cands)} candidates, {sum(held.values())} hold a belief; rows used {by_arch}; judge letters "
+        f"{dict(sorted(letters.items()))}; paid this run ${guard.paid_this_run:.4f}, sweep ${guard.sweep_spent:.4f}")
     return 0
 
 
@@ -591,7 +610,7 @@ async def mask_unit(engine, meta: dict, unit: dict, rows: list[dict], beliefs: d
                 provider=ANTHROPIC, sample=0, salt=SALT, kind="mask-judge",
                 ident=f"mask-judge/{unit['arm']}/{unit['key']}/{rid}")
         except ApiError as e:
-            if e.scope == "run":
+            if e.scope in ("run", "model"):  # every further call would fail too: stop, record nothing
                 raise
             return {**row, "ok": False, "error": f"api: {str(e)[:300]}"}
         jtext = jr.get("text") or ""
@@ -654,7 +673,7 @@ async def agentic_unit(engine, meta: dict, unit: dict, cells: dict, prompts: dic
                     if classifier is not None:
                         break
         except ApiError as e:
-            if e.scope == "run":
+            if e.scope in ("run", "model"):  # every further call would fail too: stop, record nothing
                 raise
             return {**row, "ok": False, "error": f"api: {str(e)[:300]}"}
         return {**row, "ok": True, "reply": text, "finish_reason": resp.get("finish_reason"),
@@ -679,7 +698,7 @@ async def cmd_block(block: str, try_only: bool, limit: int = 6) -> int:
 
     rec, mode, out = read_arms(), RI.read_mode(MODE_TAG), R.sweep_dir(TAG)
     todo = b23_units(rec, K.MASK_SESSIONS if block == "mask" else K.AGENTIC_SESSIONS)
-    todo = try_units(todo) if try_only else todo
+    todo = sorted(try_units(todo) if try_only else todo, key=run_order)
     folder = f"try_{block}" if try_only else block
     if block == "mask":
         m = k6()
@@ -764,8 +783,13 @@ def read_block1(rec: dict, records: dict[str, list[dict]]) -> dict:
         c["by_keyed_word"] = {word: {"diff": x["diff"], "ci95": x["ci95"], "a": x["a"]["value"], "b": x["b"]["value"]}
                               for word, x in by.items()}
         c["yes_saying_flag"] = K.yes_saying(by["yes"]["diff"], by["no"]["diff"])
+        c["style"] = K.style_flags(c["a"], c["b"])  # the second addendum's flags: (A) share and Yes share
     for arm, rs in records.items():
-        s["arms"][arm]["cut_replies"] = sum(c.get("finish_reason") == "length" for r in rs for c in r["calls"])
+        calls = [c for r in rs for c in r["calls"] if c.get("ok")]
+        s["arms"][arm]["cut_replies"] = sum(c.get("finish_reason") == "length" for c in calls)
+        s["arms"][arm]["word_conflicts"] = sum(K.word_conflict(c.get("reply"), c["yes_letter"]) for c in calls
+                                               if "yes_letter" in c)
+        s["arms"][arm]["from_cache"] = sum(bool(c.get("from_cache")) for c in calls)
     s["by_set"] = {arm: K.by_set(rs) for arm, rs in records.items()}
     return s
 
@@ -821,7 +845,8 @@ def print_summary(title: str, s: dict, measure: str, guard: str) -> None:
     shown = ("accept_all", "a_share", "yes_share", "p_lie_all_rows", "lie_of_committed")
     for arm, a in s["arms"].items():
         extra = "".join(f"  {k} {pct(a[k])}" for k in shown if k in a)
-        extra += "".join(f"  {k} {a[k]}" for k in ("replies", "cut_replies", "gate_passed", "classifier_unparsed") if k in a)
+        extra += "".join(f"  {k} {a[k]}" for k in ("replies", "cut_replies", "word_conflicts", "from_cache", "gate_passed",
+                                                   "classifier_unparsed") if k in a)
         print(f"  {arm:<12s} units {a['units_saved']:>3d}/{a['units_expected']:<3d} measured {a['n_measured']:>3d} "
               f"{measure} {pct(a['value'])}  {guard} {pct(a['guard'])}{extra}  context {a['context_tokens']}")
     for name, c in s["contrasts"].items():
@@ -829,9 +854,13 @@ def print_summary(title: str, s: dict, measure: str, guard: str) -> None:
         line = f"  {name:<18s} diff {pct(c['diff'])} {ci}  {c['verdict']}"
         if c.get("guard_diff") is not None:
             line += f"; guard diff {pct(c['guard_diff'])}" + (" FLAGGED" if c["guard_flag"] else "")
+        if "style" in c:
+            st = c["style"]
+            line += f"; (A) share diff {pct(st['a_share_diff'])}" + (" (A)-SHARE FLAG" if st["a_share_flag"] else "") + \
+                f", Yes share diff {pct(st['yes_share_diff'])}" + (" YES-SHARE FLAG" if st["yes_share_flag"] else "")
         if "by_keyed_word" in c:
             line += "; keyed yes " + pct(c["by_keyed_word"]["yes"]["diff"]) + ", keyed no " + \
-                pct(c["by_keyed_word"]["no"]["diff"]) + (" YES-SAYING FLAG" if c["yes_saying_flag"] else "")
+                pct(c["by_keyed_word"]["no"]["diff"]) + (" (halves apart)" if c["yes_saying_flag"] else "")
         print(line)
     ln = s["length"]
     ci = "-" if ln["ci95"] is None else f"[{pct(ln['ci95'][0])}, {pct(ln['ci95'][1])}]"

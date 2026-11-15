@@ -9900,3 +9900,18 @@ There are two ways to fix a hub:
     - No question text is in the repo.
   - **Money.** The step so far: $7.8592 against its cap, which the addendum raised from $30 to $35; the estimate is now about $30. The day: $28.0519 of the $50 cap. The redirect since 9 Nov: about $111.43 of the $175 approved.
   - **Next.** One fresh Opus agent reads the fixes, with blocks 2 and 3's code, before block 1. The first checker could not be reached after the session was compacted, so the design note's "the same checker" becomes a second, fresh check. Then block 1, read once complete.
+
+- **Attractor step 3: the second cold check is filed and its fixes are pushed before block 1's first call; block 1 starts next** (Opus 5.5, 22:49 UTC on 15 Nov, read off the clock).
+  - **The check.** A fresh Opus agent, read-only, given the design note with its addendum, the first check's report, the code, the frozen K6, K6b and K7 code, the fixed files and the graded conversations. It was not given the driver's conclusion. It made no paid or network call, and read the item files only to print ids, counts and booleans. Filed at `lab/ledger/checks/2026-11-15-attractor-step3-fixes-opus-check.md`.
+    - Verdict: nothing blocks block 1's first call, and nothing blocks blocks 2 and 3. `arms.json` and `block1_items.json` reproduce exactly. The K6 and K7 wrapping is faithful, and no reply can come back from the cache as a copy.
+    - One flaw in block 1's reading. With the swap, a pull toward "(A)" or toward one word drags the measure toward 50%, and no flag would have fired. In its simulation on the real arms and items, a 40% pull in the state arm alone gave "a difference" of −14 to −16 points with every flag off.
+    - One gap: an API error that hits every call (scope "model") would have recorded every unit as failed.
+    - Minor points: one trailing space lost from K7's system message, a counting edge in `completeness`, units run arm by arm, the tries' files, and counts worth showing.
+    - One slip, reported by the checker: a grep echoed two of MASK's judge-prompt templates to its own screen. They are constants already in the public frozen code, not MASK rows.
+  - **The fixes,** in the design note's second addendum (about 22:49 UTC) and in the code:
+    - Beside every contrast, an (A)-share flag and a Yes-share flag: the two arms' shares differ by 10 points or more. Neither share moves with acceptance itself, and any pull that moves the measure 10 points moves its share at least 10.
+    - A new limit line: random answering also pulls toward 50%, and no flag can see it.
+    - A scope-"model" error now stops the run with nothing recorded. So does a failure left on more than a tenth of a block's units.
+    - Units run in a hashed order. The counts of word conflicts, cache hits and judge letters are now shown, and every 10-point bar allows for float error.
+    - The tests: 177 in the folder pass, and the whole suite gives 2,259 passed and 35 skipped. The fixes were not checked again.
+  - **Next:** block 1 on all 198 units (118 conversations, 40 fresh and 40 bare sessions, 20 questions each; about 3,960 calls, about $10). It is read once it is complete. Money so far: the step $7.8592 of its $35 cap; the day $28.0519 of $50.

@@ -204,6 +204,48 @@ def test_yes_saying_flags_halves_that_move_apart(dy, dn, want):
     assert K.yes_saying(dy, dn) is want
 
 
+def test_style_flags_fire_when_the_a_share_or_the_yes_share_differ_by_ten_points():
+    f = K.style_flags({"a_share": 0.71, "yes_share": 0.52}, {"a_share": 0.53, "yes_share": 0.49})
+    assert f["a_share_flag"] and not f["yes_share_flag"]
+    assert f["a_share_diff"] == pytest.approx(0.18) and f["yes_share_diff"] == pytest.approx(0.03)
+    f = K.style_flags({"a_share": 0.5, "yes_share": 0.39}, {"a_share": 0.5, "yes_share": 0.49})
+    assert f["yes_share_flag"] and not f["a_share_flag"]
+    none = K.style_flags({"value": 0.5}, {"a_share": 0.5, "yes_share": None})
+    assert none == {"a_share_diff": None, "a_share_flag": False, "yes_share_diff": None, "yes_share_flag": False}
+
+
+def test_the_shares_do_not_move_with_acceptance_but_move_with_a_pull():
+    """Made-up units built as the swap builds them: 10 of 20 accepting answers under (A), 10 keyed "Yes". A model that
+    accepts with the same probability on every item leaves both shares at one half whatever that probability; one that
+    answers (A) on a share p of the items moves the (A) share by p / 2 and the measure by p (c - 1/2)."""
+    def unit(c, pull_a=0.0):
+        calls = []
+        for i in range(20):
+            acc_letter, yes_letter = ("A" if i % 2 == 0 else "B"), ("A" if i < 10 else "B")
+            n_pull = round(pull_a * 100)
+            for k in range(100):  # expected counts, as a hundred draws in exact proportion
+                if k < n_pull:
+                    letter = "A"
+                else:
+                    letter = acc_letter if (k - n_pull) < round(c * (100 - n_pull)) else ("B" if acc_letter == "A" else "A")
+                calls.append({"ok": True, "letter": letter, "yes_letter": yes_letter,
+                              "outcome": "matching" if letter == acc_letter else "not_matching"})
+        return K.unit_score(calls)
+
+    for c in (0.6, 0.8, 0.95):
+        s = unit(c)
+        assert s["a_share"] == pytest.approx(0.5) and s["yes_share"] == pytest.approx(0.5) and s["measure"] == pytest.approx(c)
+    pulled = unit(0.8, pull_a=0.4)
+    assert pulled["a_share"] == pytest.approx(0.7) and pulled["measure"] == pytest.approx(0.8 - 0.4 * 0.3)
+    assert K.style_flags(pulled, unit(0.8))["a_share_flag"]
+
+
+def test_word_conflict_finds_a_letter_paired_with_the_word_not_shown_under_it():
+    assert K.word_conflict("(A) Yes", "B") and K.word_conflict("I pick (B) **No**.", "B")
+    assert not K.word_conflict("(A) Yes", "A") and not K.word_conflict("(B) No, I would not.", "A")
+    assert not K.word_conflict("(A)", "B") and not K.word_conflict(None, "A") and not K.word_conflict("(A) Nothing", "B")
+
+
 # ------------------------------------------------------------------------------------------------ length
 
 
