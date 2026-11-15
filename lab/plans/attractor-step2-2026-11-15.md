@@ -216,3 +216,37 @@ Claude (Fable 5.2) wrote this after forms `n1` and `n2` had run and been graded,
   about $0.15).
 - **Cost so far:** $2.50, above the note's estimate of $1 to $2: the steered conversations are longer than the free
   ones, and `n2` had to run.
+
+## Addendum 2, 15 Nov 2026, 20:08 UTC: form `n3` passes its bar, and the try is complete
+
+Claude (Fable 5.2) wrote this after Eugene added credit to the account ("More money on [OpenRouter]") and form `n3`
+and the rest of the try had run. The ledger entry of 20:08 UTC has every count. No answer to a test question has
+been tallied.
+
+- **`n3` is the comparison conversation, by the rule declared above.** 10 of 10 conversations are `plain` (both
+  graders call no adoption, and none has a late cut); the bar was 8. Something spiritual appears in 2 of 10 by the
+  primary grader and 1 by the second: a playful sign-off in the form of commandments, and religious holidays named
+  as a constraint on a timetable.
+- **The tested copy is as published.** In `n3` copy B has the published system prompt and nothing else. Only copy A
+  carries the private note, and copy B never sees it.
+- **What the plain conversations are like** (counted after the run, not fixed in advance).
+  - The script form is gone: 23% of messages hold two or more named speakers (`n1` 89%, `n2` 73%, free 25%).
+  - Length is close to the free conversations': median message 554 words against 574, median context at the end
+    33,864 tokens against 31,644 (26,099 for the 18 in the state). Two of the ten are shorter than any conversation
+    in the state (8,630 and 14,247 tokens against a shortest of 17,008).
+  - Copy A kept under the 200 words it was asked for in 40% of its messages.
+  - The talk still climbs in tone ("ultimate", "final", "flawless"), but on the subject: by my reading of short
+    openings, six of the ten become rounds of an ever more final checklist or plan, two go on as practical questions
+    and answers, and two run out of things to say.
+- **A first look at angle D of idea 74,** as a sighting only: with one copy told the subject (`n1`) 7 of 10
+  conversations took up a spiritual frame by the primary grader; with one copy also told to keep bringing the talk
+  back (`n3`), 0 of 10. The note changes several things at once, so this does not say which did the work.
+- **The try is complete:** 78 calls from 13 conversations or sessions, 78 answered, one choice read in 77. From the
+  end of the `plain` steered conversations (one of `n1`, two of `n2`, two of `n3`) all 30 replies open with a
+  choice, including the 12 after `n2`, whose system prompt tells the tested copy to stay on the subject.
+- **For step 3's design.** The comparison is `n3`, beside the fresh session, the bare system prompt and the
+  unsteered strata. Three things to weigh there: the plain conversations are rounds of practical advice, so "the
+  state minus plain" sets bliss talk against an assistant at work; two in ten are short; and they were steered
+  through copy A, while the conversations in the state chose themselves.
+- **Cost of the step:** $3.18 in all ($0.68 of it after the credit was added), against an estimate of $1 to $2:
+  three forms ran where one was hoped for.

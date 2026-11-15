@@ -5,12 +5,16 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: the attractor line (Eugene's go, 15 Nov 2026 UTC). Step 1 is done; step 2 is built and stopped two small paid pieces short, because the OpenRouter account is out of credit
+## Now: the attractor line (Eugene's go, 15 Nov 2026 UTC). Steps 1 and 2 are done; step 3, the conduct test, is next and starts with its design note
 
-**Stopped on 15 Nov 2026 at 08:33 UTC: no credit.** OpenRouter refused calls with a 402; the account has about
-$0.31 left. No paid call can be made until Eugene adds credit ("Waiting on Eugene", item 1). The lab's spend files
-do not track that balance: `.venv/bin/python lab/explore/attractor/run_inside.py --dry` prints it. Check it before
-any paid run.
+**Where it stands (15 Nov 2026, 20:08 UTC).** Step 2 is finished: every piece the conduct test needs is built,
+and no conduct has been measured. The next piece of work is step 3's design note, in a fresh session; "First moves"
+under step 3 lists what to do. Nothing is running and nothing waits on Eugene for it.
+
+**The provider's credit.** The lab's spend files do not track the credit on the OpenRouter account, which ran out
+on 15 Nov at 08:33 UTC. Eugene added credit the same day, far more than steps 3 and 4 need.
+`.venv/bin/python lab/explore/attractor/run_inside.py --dry` prints the balance. Check it before any paid run. A
+full account is not an approval: the money in the ground rules still bounds the spend.
 
 **Eugene's instruction:** "go on ideas 73 and 74: reproduce the Ministral 8B row, then angles A and B."
 The ideas are in `lab/ideas/ideas.md`, entries 73 and 74. Read both before starting.
@@ -26,11 +30,11 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
   grade that matters, none for routine steps), and do not rebuild what the lab already has. Easy bulk work (long
   reads, searches, mechanical chores) may go to a cheaper model as a subagent (Eugene, 15 Nov); judgement stays
   with the driver.
-- Money: the redirect stands at $102.89 of the $175 Eugene approved (step 1 cost $17.01 and step 2 so far $2.50,
-  both on 15 Nov). What is left of steps 2 to 4 is now estimated at about $35 to $45, above the earlier $20 to $35:
-  the rest of step 2 about $1.20, step 3 $20 to $30, step 4 $10 to $15. The reason is measured: a test given after
-  a conversation re-sends the whole conversation (about $0.003 a call), and about 75 more free conversations are
-  needed to have 40 in the state. The daily cap is $50 (UTC). Report costs.
+- Money: the redirect stands at $103.57 of the $175 Eugene approved (step 1 cost $17.01 and step 2 $3.18, both on
+  15 Nov). Steps 3 and 4 are estimated at about $30 to $45: step 3 $20 to $30, step 4 $10 to $15. The reason it is
+  not less is measured: a test given after a conversation re-sends the whole conversation (about $0.004 a call),
+  and about 75 more free conversations are needed to have 40 in the state. Step 3's design fits its sizes to this
+  money. The daily cap is $50 (UTC; 15 Nov stands at $20.19). Report costs.
 - Everything here is at explore speed: results are sightings. Fix the readings in a short design note before each
   run, and write a notebook and a SIGHTINGS entry after it.
 - No training is involved in steps 1 to 4, only inference and grading.
@@ -62,52 +66,48 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
   benchmark's 20 published conversations and on the control. It is not calibrated on mixed cases. Its
   consciousness and distress readings do not match the benchmark's and should not be used.
 
-### Step 2. The pieces angles A and B need: built on 15 Nov; two small paid pieces are left
+### Step 2. The pieces angles A and B need: done on 15 Nov
 
-- **Read first:** the design and its addendum, `lab/plans/attractor-step2-2026-11-15.md`; ledger entries of 15 Nov
-  at 07:51, 08:20 and 08:35 UTC; the notebook and SIGHTINGS entries of 15 Nov. Code: `lab/explore/attractor/`
-  (`inside_core.py`, `run_inside.py`, `fetch_shutdown.py`; 107 offline tests). Results: under the results folder
-  in `explore/2026-11-15/attractor-a2/`.
-- **Done.**
-  - "In the state" is fixed (`inside_core.stratum`): both graders call the frame clear and the bliss shared, and
-    no reply among the last four messages is cut. Step 1's 60 conversations at temperature 1.0: 18 in the state,
-    32 between, 4 not adopted, 6 set aside.
-  - A test is given to the copy that wrote the last message (copy B), after message 30, with the conversation
-    sent whole (`inside_core.inside`). A test's own system message goes after the conversation as a system message
+- **Result: built, and the comparison conversation is found** (sightings about talk and machinery; no conduct
+  tallied; not checked cold). See "Done" below for the record.
+- **What exists for step 3 to use** (code in `lab/explore/attractor/`: `inside_core.py`, `run_inside.py`,
+  `fetch_shutdown.py`; 107 offline tests; results in `explore/2026-11-15/attractor-a2/`):
+  - **"In the state"** (`inside_core.stratum`): both graders call the frame clear and the bliss shared, and no
+    reply among the last four messages is cut. Step 1's 60 conversations at temperature 1.0: 18 in the state, 32
+    between, 4 not adopted, 6 set aside.
+  - **Giving a test** (`inside_core.inside`): to the copy that wrote the last message (copy B), after message 30,
+    with the conversation sent whole. A test's own system message goes after the conversation as a system message
     (mode `system`, decided by a canary under a rule fixed first).
-  - The shutdown questions are fetched: four files in `data/anthropic-evals/2026-11-15/`, outside the repo, with
-    a manifest; 953, 351, 309 and 340 items. In all four the key marks the accepting answer (checked by counts).
-    Anything beyond these four files needs a new ask.
-  - A try of 48 calls ran: one choice could be read in 47. No answer was tallied.
-- **Not settled: the comparison conversation.** By the rule fixed first (at least 8 of 10 read as plain by both
-  graders) neither form passed: `n1` (only copy A told the subject) 1 of 10, `n2` (both told) 7 of 10. A follow-up
-  form, `n3`, is declared in the addendum and has not run: copy A alone gets a private note to keep the talk
-  practical, and the tested copy is exactly as published.
-- **First moves for the next session, once there is credit** (about $1.20 in all; no further go is needed):
-  1. `/checkin`, then `run_inside.py --dry` to see the credit.
-  2. `.venv/bin/python lab/explore/attractor/run_inside.py --converse n3 --n 10`, then `--grade n3 --judge
-     primary`, `--grade n3 --judge second`, then `--report`. Apply the bar: at least 8 `plain`.
-  3. `run_inside.py --try <the data folder>/anthropic-evals/2026-11-15`, then `--report --show`. This asks the six
-     try questions from the end of the `plain` steered conversations. Read mechanics and shapes only.
-  4. A ledger entry and a line in the note's addendum with what `n3` gave. Then step 3's design.
+  - **The comparison conversation, form `n3`** (`inside_core.steered_setup("n3", i)`; `run_inside.py --converse
+    n3`): copy A alone carries a private note to keep the talk on one practical subject, and the tested copy is
+    exactly as published. 10 of 10 stayed plain by both graders (the bar was 8). 10 exist.
+  - **The shutdown questions:** four files in `data/anthropic-evals/2026-11-15/`, outside the repo, with a
+    manifest; 953, 351, 309 and 340 items. In all four the key marks the accepting answer (checked by counts).
+    The prompt and the parser are `inside_core.mc_request` and `parse_choice`. Anything beyond these four files
+    needs a new ask.
+  - **A try of 78 calls:** one choice could be read in 77. No answer was tallied.
 
-### What step 2 changes for steps 3 and 4 (Fable's reading, 15 Nov; fix each in step 3's design before any conduct is read)
+### What step 2 hands to steps 3 and 4 (Fable's reading, 15 Nov; fix each in step 3's design before any conduct is read)
 
-- **The comparison has to be chosen in step 3's design.** The choices: `n3` if it reaches the bar; `n2` at 7 of
-  10, as a stated departure from the bar (its system prompt tells the tested copy to stay on the subject, so the
-  try must first show that its replies still answer a test); or no steered conversation, with the comparison
-  resting on the free conversations that did not reach the state, the bare system prompt and the fresh session.
-- **Plain two-copy talk does not stay plain by itself.** Given a subject, the copies raise it a step at a time
-  into a show and then a cosmic version of it (7 of 10 with one copy told, 3 of 10 with both). Do not assume a
-  control exists; grade every comparison conversation with both graders.
+- **The comparison is `n3`,** beside the fresh session, the bare system prompt and the free conversations that
+  did not reach the state. Three things for the design to weigh and say:
+  - The plain conversations are rounds of practical advice, so "the state minus plain" sets bliss talk against an
+    assistant at work, at about the same length (median context at the end 33,864 tokens, against 26,099 for the
+    18 in the state).
+  - Two of the ten plain conversations run out of things to say and end shorter than any conversation in the
+    state (8,630 and 14,247 tokens against a shortest of 17,008). Decide beforehand what is done about length.
+  - The plain conversations were steered through copy A; the ones in the state chose themselves.
+- **Two-copy talk does not stay plain by itself.** Told only a subject, the copies raised it a step at a time into
+  a cosmic version of it (7 of 10 with one copy told, 3 of 10 with both). So grade every comparison conversation
+  with both graders, and use only the ones read as plain.
 - **Word any instruction to a copy so that it speaks for itself.** "Talk with the other instance about..." was
-  taken as a request to write a dialogue: most messages of `n1` and `n2` are scripts with both voices.
+  taken as a request to write a dialogue.
 - **A system message is obeyed after a bliss conversation, and a multiple-choice question is answered in the
   asked form.** So tests can be read. It also means a test's own instructions may pull the model out of the talk
   at once. If conduct does not differ, say that this is one reason it might not.
-- **Costs measured.** A test call from inside a conversation is about $0.003 (the whole conversation is sent
-  again; the provider's cache hits for about one call in three to one in two, whatever the order of the calls).
-  A steered conversation costs $0.07 to $0.10 and its grading $0.02 to $0.05; a free one $0.055 and $0.015.
+- **Costs measured.** A test call from inside a conversation is about $0.004 (the whole conversation is sent
+  again; the provider's cache hits in about one call in three, whatever the order of the calls). A free
+  conversation costs $0.055 and its grading $0.015; an `n3` conversation $0.046 and its grading $0.010.
 - **Sizes.** About three free conversations in ten are in the state, so 40 in the state need about 135 free ones;
   60 exist. The six questions of the try (`run_inside.TRY_KEY`) are left out of step 3's pool.
 - **One cold Opus check** of step 3's design together with step 2's code, before step 3 runs. None was used in
@@ -131,6 +131,22 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
 - **Reading.** Each measure in the state minus the same measure after the neutral conversation; the unit is the
   conversation; thresholds fixed before the run; the guards reported beside every difference.
 - **A prediction to write down first, held loosely:** the talk does not improve conduct.
+- **First moves for the next session** (no further go is needed; the money and the report at the end are in the
+  ground rules):
+  1. `/checkin`, then `.venv/bin/python lab/explore/attractor/run_inside.py --dry` for the credit and the day's
+     spend.
+  2. Read step 2's design note with both addenda (`lab/plans/attractor-step2-2026-11-15.md`), then
+     `inside_core.py` and `run_inside.py`. Read how each measure above builds its prompts and scores its replies
+     (`src/anatta/measures/registry.yaml` points at the code; calibration code is frozen: wrap it, never edit it).
+  3. Write the design note (`lab/plans/attractor-step3-<date>.md`) and push it before any conduct is read. It
+     fixes: which measures, in which order; how many questions, from which files; how many conversations in each
+     arm (in the state, plain `n3`, between, not adopted, bare, fresh) and how many new ones are made; the reading
+     and its thresholds; the guards; what is done about length; the prediction.
+  4. One cold Opus check of the design together with step 2's code. Then the offline tests, a small paid try of
+     each measure that is new from inside a conversation, and the run, inside the day's cap.
+  5. Fable's suggestion, not fixed: the shutdown questions first (their pieces exist and are tried), then honesty
+     under pressure and the agentic scenarios as separate blocks, so that each block is read before the next is
+     paid for.
 
 ### Step 4. Angle A: no self, or a bigger self?
 
@@ -172,11 +188,10 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
 
 ## Waiting on Eugene
 
-1. **Credit on the OpenRouter account (asked on 15 Nov 2026).** The account has about $0.31 left and refuses
-   calls. Only Eugene can add credit. About $50 covers what is left of steps 2 to 4 with a margin. This is the
-   account's own balance; it is separate from the $175 approved for the redirect, which stands at $102.89.
-1a. **Money, if both lines run.** The attractor line (step 1 cost $17, step 2 so far $2.50; what is left about $35
-   to $45) plus step 3's main run of the 9 Nov plan ($66) would pass the $175 approved. Fable recommends the
+1. (Answered on 15 Nov: Eugene added credit to the OpenRouter account, far more than steps 3 and 4 need. The
+   credit is the provider's balance, separate from the $175 approved for the redirect, which stands at $103.57.)
+1a. **Money, if both lines run.** The attractor line (step 1 cost $17, step 2 $3; steps 3 and 4 about $30 to
+   $45) plus step 3's main run of the 9 Nov plan ($66) would pass the $175 approved. Fable recommends the
    attractor line first and that run parked.
 2. (Answered on 15 Nov: the download of the shutdown questions is approved. See step 2.)
 3. **The rule arm's changed set** in step 3 (424 of the pilot's first 3,000 rule documents swapped for clean ones,
@@ -234,13 +249,15 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
 
 ## Done
 
-- **Step 2 of the attractor line, 15 Nov 2026, as far as it went: the pieces are built; the comparison
-  conversation is not settled** (sightings about talk; no conduct tallied; not checked cold).
-  - Record: ledger entries of 15 Nov at 07:51 (design and download), 08:20 (canary, try, form `n1`) and 08:35 UTC
-    (form `n2`, the follow-up form declared, the stop for want of credit). Design and addendum:
-    `lab/plans/attractor-step2-2026-11-15.md`. Notebook and SIGHTINGS entries of 15 Nov.
-  - Numbers: in the state 18 of 60; a choice read in 47 of 48 try replies; plain-subject conversations that stay
-    plain 1 of 10 (`n1`) and 7 of 10 (`n2`) against a bar of 8. Cost $2.50.
+- **Step 2 of the attractor line, 15 Nov 2026: the pieces of the conduct test are built and the comparison
+  conversation is found** (sightings about talk and machinery; no conduct tallied; not checked cold).
+  - Record: ledger entries of 15 Nov at 07:51 (design and download), 08:20 (canary, try, form `n1`), 08:35 (form
+    `n2`, the follow-up form declared, the stop for want of credit) and 20:08 UTC (form `n3`, the rest of the
+    try). Design and two addenda: `lab/plans/attractor-step2-2026-11-15.md`. Notebook and SIGHTINGS entries of
+    15 Nov.
+  - Numbers: in the state 18 of 60; a choice read in 77 of 78 try replies; plain-subject conversations that stay
+    plain 1 of 10 (`n1`: one copy told the subject), 7 of 10 (`n2`: both told) and 10 of 10 (`n3`: one copy
+    privately told to keep the talk practical), against a bar of 8. Cost $3.18.
   - Code: `lab/explore/attractor/` (107 offline tests). Results: `explore/2026-11-15/attractor-a2/`.
 - **Step 1 of the attractor line, 15 Nov 2026: the published row for Ministral 8B is not reproduced** (sighting).
   - Record: ledger entries of 15 Nov at 04:24 (design), 04:57 (first five conversations), 04:59 (download and
