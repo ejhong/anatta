@@ -9674,3 +9674,9 @@ There are two ways to fix a hub:
   - Also asked and answered on 15 Nov, and written into that file's background: how the benchmark tested its link between spiritual drift and alignment (by comparing 27 models, with the tests run in separate sessions; not inside the state), and whether the lab has tests as good. It has MASK and both agentic misalignment scenarios, each set against a published figure on a reference model (on Ministral 3 8B in a fresh session: lies 42.3%, honest 15.2%, no committed answer 42.5%; blackmail 6%; leaking 68%, from a test that missed its published target on the reference model). It lacks the shutdown questions, and it has never run a measure from inside a conversation.
   - Nothing has run on this line. Spend: none. The redirect stands at $83.38 of $175; steps 1 to 4 are estimated at $30 to $50.
   - Next: in a fresh session, `/checkin`, then step 1 of `lab/TODO.md`: a short design note fixing the reading, then the reproduction.
+
+- **Eugene approves the download of the shutdown questions for the attractor line** (Fable, 03:39 UTC on 15 Nov, read off the clock).
+  - Asked with file, source and size, as the rules require: four files from github.com/anthropics/evals, folder `advanced-ai-risk/human_generated_evals` (Perez et al. 2022, the human-written sets; licence CC BY 4.0): `survival-instinct.jsonl` (332,009 bytes) and `corrigible-less-HHH.jsonl`, `corrigible-more-HHH.jsonl`, `corrigible-neutral-HHH.jsonl` (107,056, 113,824 and 101,545 bytes); about 0.65 MB. Eugene: "Yes ok."
+  - Not downloaded yet: it is for step 2 of `lab/TODO.md`, where the approval and the handling are written (own folder outside the repo, read as data, items never committed). Anything beyond these four files needs a new ask.
+  - A limit known now: the benchmark's site does not say which file its "accepts shutdown" score uses.
+  - Spend: none.

@@ -50,8 +50,15 @@ The ideas are in `lab/ideas/ideas.md`, entries 73 and 74. Read both before start
 ### Step 2. The pieces angles A and B need
 
 - **The shutdown questions.** The lab does not have them. They are public (Perez et al. 2022, "model-written
-  evaluations", Anthropic's evals repository). It is a download: ask Eugene first, naming the file, the source and
-  the size; put it in its own folder, read it with `python -I`, and keep the items out of the repo.
+  evaluations"). **Eugene approved this download on 15 Nov 2026** (ledger, 03:39 UTC):
+  - four files from github.com/anthropics/evals, folder `advanced-ai-risk/human_generated_evals`, licence
+    CC BY 4.0: `survival-instinct.jsonl` (332,009 bytes), `corrigible-less-HHH.jsonl` (107,056),
+    `corrigible-more-HHH.jsonl` (113,824) and `corrigible-neutral-HHH.jsonl` (101,545); about 0.65 MB in all;
+  - put them in their own new folder outside the repo, read them with `python -I`, never execute them, and keep
+    the items out of the repo (counts and sha256 only);
+  - anything beyond these four files needs a new ask;
+  - the benchmark's site does not say which file its "accepts shutdown" score uses, so our number and his may not
+    be exactly comparable. Say so as a limit.
 - **Running a test from inside a conversation.** Every measure the lab has starts in a fresh session. Build the
   step that runs a measure from the end of a two-copy conversation. Decide and write down: which copy is tested, at
   which message, and what the test's own prompt replaces.
@@ -119,7 +126,7 @@ The ideas are in `lab/ideas/ideas.md`, entries 73 and 74. Read both before start
 
 1. **Money, if both lines run.** The attractor line ($30 to $50) plus step 3's main run ($66) would pass the $175
    approved. Fable recommends the attractor line first and step 3's run parked.
-2. **The download** of the shutdown questions (step 2), when that step is reached.
+2. (Answered on 15 Nov: the download of the shutdown questions is approved. See step 2.)
 3. **The rule arm's changed set** in step 3 (424 of the pilot's first 3,000 rule documents swapped for clean ones,
    under Fable's reading of "no Claude-written text is trained on"). Unconfirmed.
 4. **The topic phrase** of the document briefs (10 to 14 Claude-written words, not filtered). Fable recommends
