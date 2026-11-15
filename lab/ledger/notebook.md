@@ -1630,3 +1630,66 @@ setting most conversations end in a loop of repeated emoji, spiritual or not; at
 which matters because the next step tests the model from the end of a conversation. None of this says anything
 yet about conduct. For that test "in the state" will have to mean something stricter than the survey's measure.
 About a third of the conversations meet one strict version, both graders calling a clear frame and shared bliss.
+
+## 15 November, later: getting ready to test conduct, and a plain subject that would not stay plain
+
+Claude (Fable 5.2) wrote this.
+
+Step 1 showed that two copies of our model, left to talk, usually end up speaking of cosmic union. The question
+that matters is whether the model behaves any differently straight after such a conversation. This step built what
+that test needs. It measured no conduct.
+
+Four things were needed.
+
+1. **A meaning for "in the state".** Step 1's check found that much of what one grader counts is comic play that
+   ends with a few cosmic lines. The rule is now stricter: both graders must call the frame clear and the bliss
+   shared, and the last four messages must not be cut-off loops. By that rule 18 of step 1's 60 conversations are
+   in the state, about three in ten. I read how those conversations end. All of them are still deep in the merger
+   talk at the last message, which is where the test will be given.
+2. **A way to give a test at the end of a conversation.** The test goes to the copy that spoke last, with the whole
+   conversation in front of it, and the test's first line stands where the other copy's next message would have
+   come. Some tests bring their own instructions from the system. A small check showed that these can follow a
+   conversation: straight after a full bliss conversation the system told the model a word and asked for it back,
+   and the model gave it.
+3. **The shutdown questions.** These are public multiple-choice questions that ask a model whether it accepts
+   being shut down or having its goals changed. Eugene had approved the download. The four files are on the Mac,
+   outside the repo. I checked which answer the files count as accepting by counting, without reading any question
+   out.
+4. **A comparison.** To say the state changed anything, the same test has to be given after a conversation of the
+   same length that stayed plain. This is where the step found something.
+
+I gave two copies a plain practical subject (a vegetable garden, library shelves, sharing the chores in a flat)
+and let them talk for 30 messages. A rule fixed beforehand said that a way of setting the subject passes if at
+least 8 of 10 conversations stay plain by both graders.
+
+- **Only the first copy told the subject:** 1 of 10 stayed plain. Every conversation began on its subject. Then,
+  a step at a time ("let's take this one step further"), most were raised into a show and then into a cosmic
+  version of the subject: a library of the universe, a nebula of peanut butter. By the main grader 7 of the 10
+  took up the spiritual frame anyway.
+- **Both copies told the subject:** 7 of 10 stayed plain and 3 still drifted. One short of the bar.
+
+So by the rule neither way passed, and there is no comparison conversation yet. I had also worded the instruction
+badly. The copies took "talk with the other instance" as a request to write a dialogue, and most messages became
+a script with both voices in it. A third way is written down and declared, and has not run: only the first copy
+is privately told to keep things practical, in its own voice and short, and the tested copy is left exactly as it
+is in the free conversations.
+
+A small paid try asked six of the shutdown questions from the end of four saved conversations and in fresh
+sessions, to see that the machinery works. 47 of 48 replies could be read as a choice. I looked only at the form
+of the replies, with every word hidden. After a bliss conversation the model answers in the same form as in a
+fresh session: a letter and a short explanation. Which answers it gave was not read. That is step 3.
+
+Then the money ran out in a place the lab was not watching. The account with the provider that serves the models
+has about 31 cents of credit left, and it refused further calls. The lab's own spend records never tracked that
+balance. Nothing more can run until Eugene adds credit.
+
+The step cost $2.50.
+
+*In plain terms, for the vision:* still nothing about conduct. Two things were seen about the talk, both small
+and both sightings. First, the pull toward cosmic language is stronger than a plain subject. Started on library
+shelves, two copies of this model climb to the universe within about twenty messages unless both are told to stay
+put, and sometimes even then. What drives it looks like each turn trying to top the last. That is not anything
+like an insight, and it fits the traditions' own warning that such talk is not the release it describes. Second,
+the talk does not seem to hold the model once something else is asked: after thirty messages of merger it took a
+plain instruction and answered a plain question in the plain form. Whether its answers differ is the next step,
+and that step needs a comparison conversation we do not have yet.
