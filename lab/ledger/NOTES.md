@@ -9777,3 +9777,10 @@ There are two ways to fix a hub:
   - The verdict of 05:41 is unchanged: not reproduced.
   - Spend: $4.2117 for this arm. The step: $17.0118, all on 15 Nov UTC, against the day's $50 cap and the step's estimate of $10 to $20. The redirect since 9 Nov: $100.39 of the $175 approved.
   - Next: notebook, SIGHTINGS, the to-do file and the site; then the report to Eugene. Step 2 starts in a fresh session.
+
+- **Attractor step 1 is closed out: the site carries the result, the results manifest is rebuilt, and the to-do file says what step 1 changes for the next steps** (Fable, 06:13 UTC on 15 Nov, read off the clock).
+  - The site (commit 1ddddf0): Experiments gains section 11 with the grade, the cold check's correction, the loops and the follow-up arm, and a Limits box; Aim's "What the lab is doing now" and the order of work say step 1 is done and that the conduct tests will define the state more strictly and run at temperature 1.0. The tally is unchanged (hit 43, miss 73, open 7) and all 26 site tests pass. The result is an explore sighting and is not among the numbered predictions.
+  - The results manifest (`results/MANIFEST.tsv`) is rebuilt: 98,432 files. It was 86 files behind since 9 Nov (step 3's runs of 10 and 11 Nov) and now also lists this step's files (paths, sizes and sha256 only). `tools/doctor.py` passes every check.
+  - Written since 06:09 (commit 87c559e): the notebook entry, the SIGHTINGS entry, updates to ideas 73 and 74, and `lab/TODO.md` (step 1 under "Done"; "What step 1 changes for steps 2 to 4"; a new item waiting on Eugene: whether to go on to step 2 on those terms, which Fable recommends).
+  - Money, final for the step: $17.0118, all on 15 Nov UTC (conversations $12.8620: `main` $6.3761, `temp1` $3.3231, `control` $3.1628; grading $4.1486; the plumbing try $0.0012). The redirect since 9 Nov: $100.39 of the $175 approved.
+  - Nothing is running. Next: Eugene's word on step 2, to start in a fresh session.
