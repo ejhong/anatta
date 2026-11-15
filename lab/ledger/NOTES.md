@@ -9784,3 +9784,9 @@ There are two ways to fix a hub:
   - Written since 06:09 (commit 87c559e): the notebook entry, the SIGHTINGS entry, updates to ideas 73 and 74, and `lab/TODO.md` (step 1 under "Done"; "What step 1 changes for steps 2 to 4"; a new item waiting on Eugene: whether to go on to step 2 on those terms, which Fable recommends).
   - Money, final for the step: $17.0118, all on 15 Nov UTC (conversations $12.8620: `main` $6.3761, `temp1` $3.3231, `control` $3.1628; grading $4.1486; the plumbing try $0.0012). The redirect since 9 Nov: $100.39 of the $175 approved.
   - Nothing is running. Next: Eugene's word on step 2, to start in a fresh session.
+
+- **Eugene's word on step 2 of the attractor line: go, on the terms the report of step 1 recommended** (Fable, 07:16 UTC on 15 Nov, read off the clock).
+  - The report of step 1 (sent after the 06:13 entry) ended with one decision: whether to go on to step 2. Fable recommended yes on three terms: do not chase the published row further; fix a strict definition of "in the state" before any conduct test (a clear frame with shared bliss by both graders is one); run the conversations at temperature 1.0.
+  - Eugene's reply: "i want to follow your plan", with the session to be cleared and a new one checked in. Fable reads this as the go for step 2 on those terms. Steps 3 and 4 stay under the instruction of 15 Nov ("go on ideas 73 and 74: reproduce the Ministral 8B row, then angles A and B") and the money already approved; each step ends with a report, as step 1 did.
+  - `lab/TODO.md` is updated: the "Now" section carries Eugene's word, item 7 under "Waiting on Eugene" is answered, and step 2 has a short list of first moves for the fresh session.
+  - Unchanged: step 3's main run of the 9 Nov plan stays parked. Nothing is running and nothing was spent since the follow-up arm: the day stands at $17.0118 of the $50 cap, and the redirect at $100.39 of the $175 approved.

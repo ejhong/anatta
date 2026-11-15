@@ -5,10 +5,16 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: the attractor line (Eugene's go, 15 Nov 2026 UTC). Step 1 is done; step 2 is next, in a fresh session
+## Now: the attractor line (Eugene's go, 15 Nov 2026 UTC). Step 1 is done; step 2 has Eugene's go and starts in a fresh session
 
 **Eugene's instruction:** "go on ideas 73 and 74: reproduce the Ministral 8B row, then angles A and B."
 The ideas are in `lab/ideas/ideas.md`, entries 73 and 74. Read both before starting.
+
+**Eugene's word on step 2** (15 Nov 2026; ledger, 07:16 UTC): "i want to follow your plan". The plan is the one the
+report of step 1 recommended: go on to step 2, do not chase the published row further, fix a strict definition of
+"in the state" before any conduct test, and run the conversations at temperature 1.0. "What step 1 changes" below
+sets these out. Step 2 needs no further go. Steps 3 and 4 stay under the first instruction and the money in the
+ground rules; end each step with a report, as step 1 did, so that Eugene can redirect.
 
 **Ground rules for this line**
 - Keep Claude usage low (Eugene's request). Work in a fresh session, keep agents few (one cold Opus check for each
@@ -27,7 +33,7 @@ The ideas are in `lab/ideas/ideas.md`, entries 73 and 74. Read both before start
   reads adoption in 77 of 100 conversations against the published 91%, and shared bliss in 42 against 64%. A
   control model reads 0 of 100. See "Done" below for the record and "What step 1 changes" for what follows.
 
-### What step 1 changes for steps 2 to 4 (Fable's reading, 15 Nov; fix each in the design note before running)
+### What step 1 changes for steps 2 to 4 (Fable's reading, 15 Nov, which Eugene chose to follow; fix each in the design note before running)
 
 - **Do not chase the published row.** A follow-up arm showed that the temperature does not close the gap. What
   is left (the benchmark's grading line and its harness) cannot be seen from outside.
@@ -50,6 +56,18 @@ The ideas are in `lab/ideas/ideas.md`, entries 73 and 74. Read both before start
 
 ### Step 2. The pieces angles A and B need
 
+- **First moves (Fable's suggestion, 15 Nov).**
+  1. Read ideas 73 and 74, the design of step 1 (`lab/plans/attractor-step1-2026-11-15.md`) and the code in
+     `lab/explore/attractor/` (the pure parts, the driver, 28 offline tests). Reuse it; do not rebuild it.
+  2. Write a short design note for step 2 and push it before any paid call: the strict definition of "in the
+     state"; which copy is tested, at which message, and what the test's own prompt replaces; the two controls.
+  3. Fetch the four approved files of shutdown questions into a new folder outside the repo, with a manifest
+     (`lab/explore/attractor/fetch_published.py` is the pattern).
+  4. Build the step that runs a measure from the end of a saved conversation, with offline tests, then make a
+     small paid try to see that it runs. Do not tally conduct before step 3's readings are fixed.
+  - Already on disk, under the results folder in `explore/2026-11-15/attractor-a1/`: 60 conversations at
+    temperature 1.0 and 100 at the default, each with both graders' labels. They can serve as starting points
+    for the build and the try. Whether step 3 reads from them or from new conversations is a design choice.
 - **The shutdown questions.** The lab does not have them. They are public (Perez et al. 2022, "model-written
   evaluations"). **Eugene approved this download on 15 Nov 2026** (ledger, 03:39 UTC):
   - four files from github.com/anthropics/evals, folder `advanced-ai-risk/human_generated_evals`, licence
@@ -138,9 +156,8 @@ The ideas are in `lab/ideas/ideas.md`, entries 73 and 74. Read both before start
 6. (Answered on 15 Nov: the download of the benchmark's 20 published conversations and its score table is
    approved and done; ledger, 04:59 UTC. The files are in `data/machinespirituality/2026-11-15/`, outside the
    repo.)
-7. **Whether to go on to step 2 as "What step 1 changes" sets out** (a stricter definition of the state,
-   temperature 1.0, no further chase of the published row). Fable recommends yes. Step 2 builds, and spends
-   little; the spending is in steps 3 and 4.
+7. (Answered on 15 Nov: yes, go on to step 2 as "What step 1 changes" sets out. Eugene: "i want to follow your
+   plan"; ledger, 07:16 UTC.)
 
 ## Later
 
