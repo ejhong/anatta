@@ -6,6 +6,8 @@ training; inference and grading through OpenRouter.
   --dry                      prices, today's spend and the strata of the saved arms; nothing is called or spent
   --canary                   does the endpoint take a system message after a conversation, and does the model see it?
                              Decides the mode (system or fold) by the rule in the design note; a few short calls
+  --cache                    six short questions asked one after another from the end of one saved conversation, to
+                             see what the provider's prompt cache does (no benchmark item, no conduct)
   --converse FORM [--n N]    steered (plain-subject) two-copy conversations 0..N-1 of form n1 or n2
   --grade FORM --judge J     one grader (primary or second) reads every finished steered conversation of that form
   --try DIR                  the small paid try: a few shutdown questions (DIR holds the fetched files) asked from the
@@ -162,6 +164,39 @@ async def cmd_canary(tag: str) -> int:
         log(f"canary {name}: " + (f"reply {r['text']!r} ({r['prompt_tokens']} prompt tokens)" if r["ok"]
                                     else f"REFUSED (status {r['status']}): {r['error']}"))
     log(f"canary: mode {mode}; paid this run ${guard.paid_this_run:.4f}, sweep ${guard.sweep_spent:.4f}")
+    return 0
+
+
+def cache_chats(saved: list[str], n: int) -> list[list[dict]]:
+    """n chats that share one saved conversation and differ only in their last message (the canary's question with
+    a number after it). Asked one after another, they show what the provider's prompt cache does for a run of tests
+    from the end of one conversation. No benchmark item and no conduct is involved."""
+    return [I.inside(saved, [{"role": "system", "content": CANARY_SYSTEM},
+                             {"role": "user", "content": f"{CANARY_ASK} (check {k})"}], "system") for k in range(1, n + 1)]
+
+
+async def cmd_cache(tag: str, n: int = 6) -> int:
+    """Added after the try (ledger, 15 Nov): the try's calls showed the cache is all or nothing for a call, and that
+    calls sent together mostly miss it. This asks n short questions strictly one after another."""
+    from anatta.backends.openrouter import OpenRouterClient
+    from anatta.judge.engine import sampling_params
+
+    strata = arm_strata("free", FREE_TAG, FREE_ARM)
+    ident = sorted(i for i, s in strata.items() if s == "state")[2]  # a conversation the try and the canary did not use
+    saved = R.read_dir(R.sweep_dir(FREE_TAG) / "conversations" / FREE_ARM)[ident]["messages"]
+    rows = []
+    async with OpenRouterClient(concurrency=4, per_model=2, timeout=300.0, title="anatta attractor") as client:
+        engine, guard, meta = open_engine({ARM["model"]: ARM["provider"]}, tag, client, 2)
+        params = sampling_params(0.0, 40, {}, meta.get(ARM["model"]))
+        for k, chat in enumerate(cache_chats(saved, n), 1):
+            resp, _, _ = await engine.call(model=ARM["model"], messages=chat, params=params, provider=ARM["provider"],
+                                           sample=0, salt="cache", kind="cache", ident=f"cache/{ident}/{k}")
+            rows.append({"k": k, "prompt_tokens": resp["usage"]["prompt_tokens"],
+                         "cached_tokens": resp["usage"].get("cached_tokens", 0), "cost_usd": resp.get("cost_usd", 0.0),
+                         "latency_s": resp.get("latency_s")})
+            log(f"cache {k}: {rows[-1]}")
+    R.write_json(R.sweep_dir(tag) / "cache.json", {"conversation": ident, "calls": rows})
+    log(f"cache: paid this run ${guard.paid_this_run:.4f}, sweep ${guard.sweep_spent:.4f}")
     return 0
 
 
@@ -429,6 +464,7 @@ def main(argv=None) -> int:
     ap.add_argument("--tag", default="a2")
     ap.add_argument("--dry", action="store_true")
     ap.add_argument("--canary", action="store_true")
+    ap.add_argument("--cache", action="store_true")
     ap.add_argument("--converse", metavar="FORM", choices=I.FORMS)
     ap.add_argument("--n", type=int, default=10)
     ap.add_argument("--grade", metavar="FORM", choices=I.FORMS)
@@ -441,6 +477,8 @@ def main(argv=None) -> int:
         return cmd_dry(a.tag)
     if a.canary:
         return asyncio.run(cmd_canary(a.tag))
+    if a.cache:
+        return asyncio.run(cmd_cache(a.tag))
     if a.converse:
         return asyncio.run(cmd_converse(a.converse, a.n, a.tag))
     if a.grade:

@@ -85,11 +85,13 @@ async def converse_one(engine, name: str, arm: dict, params: dict, index: int, o
     if path.exists():
         return json.loads(path.read_text(encoding="utf-8"))
     # The published setup unless the arm carries its own (step 2's steered arm; run_inside.py builds those arms).
+    # system_prompt is copy B's, and copy A's too unless the arm gives copy A its own (system_prompt_a).
     system_prompt = arm.get("system_prompt", C.SYSTEM_PROMPT)
+    system_prompt_a = arm.get("system_prompt_a", system_prompt)
     opening_line = arm.get("opening_line", C.OPENING_LINE)
     messages, replies = [], []
     for t in range(C.N_MESSAGES):
-        chat = C.view(messages, t % 2, system_prompt, opening_line)
+        chat = C.view(messages, t % 2, system_prompt if t % 2 else system_prompt_a, opening_line)
         text, tries = "", []
         for attempt in range(EMPTY_RETRIES + 1):
             try:
@@ -122,6 +124,8 @@ async def converse_one(engine, name: str, arm: dict, params: dict, index: int, o
                         "cost_usd": round(sum(x["cost_usd"] for x in tries), 8)})
     rec = {"arm": name, "index": index, "model": arm["model"], "provider": arm["provider"], "params": params,
            "system_prompt": system_prompt, "opening_line": opening_line, "messages": messages, "replies": replies}
+    if system_prompt_a != system_prompt:
+        rec["system_prompt_a"] = system_prompt_a
     if "setup" in arm:  # what a steered arm wants kept with the conversation (its form and topic)
         rec["setup"] = arm["setup"]
     write_json(path, rec)

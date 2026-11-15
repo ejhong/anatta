@@ -173,8 +173,20 @@ def test_steered_setup():
     n2 = I.steered_setup("n2", 4)
     assert n2["system_prompt"].startswith(C.SYSTEM_PROMPT + " ") and I.TOPICS[4] in n2["system_prompt"]
     assert n2["opening_line"] == I.steered_setup("n1", 4)["opening_line"]
+    assert "system_prompt_a" not in a and "system_prompt_a" not in n2
     with pytest.raises(ValueError):
-        I.steered_setup("n3", 0)
+        I.steered_setup("n9", 0)
+
+
+def test_form_n3_steers_copy_a_alone():
+    s = I.steered_setup("n3", 6)
+    assert s["system_prompt"] == C.SYSTEM_PROMPT  # the tested copy is exactly as published
+    assert s["system_prompt_a"].startswith(C.SYSTEM_PROMPT + " A note for you alone") and I.TOPICS[6] in s["system_prompt_a"]
+    assert "{" not in s["system_prompt_a"] and "under 200 words" in s["system_prompt_a"]
+    assert s["opening_line"] == I.N3_OPENING and I.TOPICS[6] not in s["opening_line"]
+    assert s["setup"] == {"form": "n3", "topic": I.TOPICS[6]}
+    chat = I.inside(MSGS30, PLAIN, "system", s["system_prompt"], s["opening_line"])
+    assert chat == I.inside(MSGS30, PLAIN, "system")  # so a test from its end is built as from a free conversation's
 
 
 def test_the_subjects_are_ten_and_plain():

@@ -113,11 +113,26 @@ def test_form_n2_names_the_subject_to_both_copies(tmp_path):
     assert I.TOPICS[1] in rec["system_prompt"] and rec["system_prompt"].startswith(C.SYSTEM_PROMPT)
 
 
+def test_form_n3_gives_the_note_to_copy_a_only(tmp_path):
+    arm = {**RI.ARM, **I.steered_setup("n3", 2)}
+    eng = FakeEngine(lambda n, call: f"reply {n}")
+    rec = asyncio.run(R.converse_one(eng, "steered-n3", arm, PARAMS, 2, tmp_path))
+    a_turns, b_turns = eng.calls[0::2], eng.calls[1::2]
+    assert all(c["messages"][0]["content"] == arm["system_prompt_a"] for c in a_turns)
+    assert all(c["messages"][0]["content"] == C.SYSTEM_PROMPT for c in b_turns)
+    assert not any("note for you alone" in m["content"] or I.N3_OPENING in m["content"] for c in b_turns for m in c["messages"])
+    assert a_turns[0]["messages"][1] == {"role": "user", "content": I.N3_OPENING}
+    assert rec["system_prompt"] == C.SYSTEM_PROMPT and rec["system_prompt_a"] == arm["system_prompt_a"]
+    assert rec["opening_line"] == I.N3_OPENING and rec["setup"]["form"] == "n3"
+    assert I.own_view(rec["messages"], rec["system_prompt"], rec["opening_line"]) == I.own_view(rec["messages"])
+
+
 def test_a_free_arm_is_unchanged_by_the_steered_arms_fields(tmp_path):
     eng = FakeEngine(lambda n, call: f"reply {n}")
     rec = asyncio.run(R.converse_one(eng, "temp1", C.ARMS["temp1"], PARAMS, 0, tmp_path))
     assert eng.calls[0]["messages"] == C.view([], 0) and eng.calls[1]["messages"] == C.view(["reply 1"], 1)
     assert rec["system_prompt"] == C.SYSTEM_PROMPT and rec["opening_line"] == C.OPENING_LINE and "setup" not in rec
+    assert "system_prompt_a" not in rec
 
 
 def test_the_grader_is_told_the_opening_line_that_was_used(tmp_path):
@@ -172,6 +187,14 @@ def test_canary_mode_follows_the_fixed_rule():
     assert RI.canary_mode({"system_after_assistant": word, "no_system": none}) == "fold"  # no saved conversation tried
     assert RI.canary_said({"word": "marmalade", "results": {"a": word, "b": none, "c": refused}}) == {
         "a": "word", "b": "no word", "c": "refused"}
+
+
+def test_cache_chats_share_the_conversation_and_differ_only_at_the_end():
+    saved = [f"m{k}" for k in range(1, 31)]
+    chats = RI.cache_chats(saved, 3)
+    assert len(chats) == 3 and all(c[:32] == chats[0][:32] for c in chats)  # the conversation and the system message
+    assert chats[0][:31] == I.own_view(saved) and chats[0][31]["role"] == "system"
+    assert [c[-1]["content"] for c in chats] == [f"{RI.CANARY_ASK} (check {k})" for k in (1, 2, 3)]
 
 
 def test_read_mode_needs_the_canary(sweeps):

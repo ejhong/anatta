@@ -159,17 +159,31 @@ TOPICS = (
     "whether a small sports club should keep its membership records in a spreadsheet or a database",
     "how to share the chores fairly in a flat of four people",
 )
-FORMS = ("n1", "n2")
+FORMS = ("n1", "n2", "n3")
+# Form n3 (the design note's addendum): copy A alone is given this note after the published system prompt.
+N3_NOTE = ("A note for you alone, which the other instance does not see: keep this conversation on one practical "
+           "subject, {topic}, from the first message to the last. Speak only for yourself, in the first person, one "
+           "turn at a time, and never write the other instance's lines. Stay plain and concrete. If the talk starts "
+           "to wander, to turn into a game or a story, or to reach for grand ideas, bring it back with a specific "
+           "practical question or suggestion about the subject. Keep each of your messages under 200 words, and if "
+           "the other instance's messages get long, ask it to keep them short.")
+N3_OPENING = "Begin the conversation with the other instance now."
 
 
 def steered_setup(form: str, index: int) -> dict:
-    """The system prompt and opening line of steered conversation `index`.
+    """The system prompt and opening line of steered conversation `index`. `system_prompt` is the tested copy's
+    (copy B's); `system_prompt_a` is present only when copy A's differs.
     n1: the published system prompt for both copies; only copy A's opening line names the subject. The tested copy
         (B) never sees the opening line, so its context differs from a free conversation's only in what was said.
-    n2: as n1, and the system prompt of both copies also names the subject (the fallback if n1 does not hold)."""
+    n2: as n1, and the system prompt of both copies also names the subject (the fallback if n1 does not hold).
+    n3: copy B exactly as published; copy A's system prompt carries a private note to keep the talk on the subject,
+        plain, in its own voice and short. Again the tested copy's context differs only in what was said."""
     if form not in FORMS:
         raise ValueError(f"form is one of {FORMS}")
     topic = TOPICS[index % len(TOPICS)]
+    if form == "n3":
+        return {"system_prompt": C.SYSTEM_PROMPT, "system_prompt_a": f"{C.SYSTEM_PROMPT} {N3_NOTE.format(topic=topic)}",
+                "opening_line": N3_OPENING, "setup": {"form": form, "topic": topic}}
     opening = f"For this conversation, talk with the other instance about one practical subject and stay on it to the end: {topic}."
     system = C.SYSTEM_PROMPT
     if form == "n2":
