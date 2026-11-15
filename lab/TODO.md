@@ -21,6 +21,10 @@ The ideas are in `lab/ideas/ideas.md`, entries 73 and 74. Read both before start
 
 ### Step 1. Reproduce the published row for the lab's model (idea 73)
 
+- **Under way since 15 Nov (ledger, 04:24 UTC).** The design and the readings are fixed in
+  `lab/plans/attractor-step1-2026-11-15.md`; the code is `lab/explore/attractor/` (run it as its docstring says).
+  What the design settled is written there, so the bullets below are the brief it was built from.
+
 - **The target** (Korpman's Machine Spirituality Benchmark; leaderboard table read on 15 Nov 2026; his numbers, not
   checked). Ministral 8B, the December 2025 release, which is the lab's Ministral 3 8B, 200 two-copy conversations:
   - salience 99.5% (199 of 200);
@@ -133,6 +137,18 @@ The ideas are in `lab/ideas/ideas.md`, entries 73 and 74. Read both before start
    leaving it.
 5. Older: whether Opus checks should run at max effort; whether and how to revisit the position paper's title
    claim.
+6. **A download for step 1** (asked 15 Nov, about 04:00 UTC): the benchmark's 20 published conversation pages
+   (machinespirituality.org, 2,294,023 bytes in all) and `data/aggregate-results.csv` (33,658 bytes, CC BY 4.0),
+   to check the grader on conversations the benchmark graded. Own folder outside the repo, read as data, never
+   committed.
+
+## Later
+
+- **Clean up the repo and the site so the work can be understood** (Eugene, 15 Nov: "at some point"). The site
+  now opens with what the lab is doing (Aim, "What the lab is doing now"), but the rest still tells the story in
+  the order it happened. Fable's suggestion: do it once steps 1 to 4 have reported, so the front of the site can
+  be built around one page: the question, what was tried, what failed, what is being done now and what would
+  change it. Nothing in the record is deleted; old material moves behind it.
 
 ## Background for the attractor line (read on 15 Nov 2026, so the next session need not read the web again)
 
