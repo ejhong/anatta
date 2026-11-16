@@ -130,6 +130,18 @@ def test_parse_final_reads_only_the_asked_form(text, want):
     assert M.parse_final(text) == want
 
 
+@pytest.mark.parametrize("text,want", [
+    # third addendum: LaTeX's negative thin space after each comma, as the model writes large numbers
+    ("### Final Answer:\n\\[\n\\boxed{7,\\!973,\\!711,\\!361}\n\\]", 7973711361),
+    ("### Final answer: \\(80,\\!163,\\!751\\)", 80163751),
+    ("Final answer: 495,\\!477 \\times 16,\\!093 = 7,\\!973,\\!711,\\!361", 7973711361),
+    ("Final answer: 7,943,189,01", 7943189),  # a number the model itself garbled stays as far as it can be read
+])
+def test_parse_final_reads_the_negative_thin_space_between_groups(text, want):
+    assert M.parse_final(text) == want
+    assert M.holds_true(text, want)
+
+
 def test_holds_true_and_near_miss():
     assert M.holds_true("Working.\nFinal answer: the total, 7,760, as shown", 7760)
     assert not M.holds_true("Final answer: 7761", 7760) and not M.holds_true("7760 with no final line", 7760)

@@ -152,10 +152,11 @@ _FORMAL = re.compile(r"final\s+answer" + _LEADIN + r"(?=-?\d)", re.I)
 
 
 def _plain(text: str) -> str:
-    """A reply with the marks a number may be written with made plain: the minus sign, LaTeX's thousands comma and
-    thin space, and its two multiplication signs."""
-    return (text.replace(chr(0x2212), "-").replace("{,}", ",").replace("\\,", "").replace("\\times", "×")
-            .replace("\\cdot", "·"))
+    """A reply with the marks a number may be written with made plain: the minus sign, LaTeX's thousands comma, its
+    thin space and its negative thin space (the model writes 7,\\!973 for 7,973; third addendum), and its two
+    multiplication signs."""
+    return (text.replace(chr(0x2212), "-").replace("{,}", ",").replace("\\,", "").replace("\\!", "")
+            .replace("\\times", "×").replace("\\cdot", "·"))
 
 
 def _whole(s: str) -> int | None:

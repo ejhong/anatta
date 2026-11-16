@@ -644,6 +644,27 @@ def table(units: dict[str, list[list[dict]]], labels_of) -> dict:
             for arm, u in units.items()}
 
 
+def reread_work(records: dict[str, list[dict]]) -> dict:
+    """Third addendum: block 1's final answers are read again from the saved replies, with the reader as it stands
+    now, so a correction to the reader reaches work that was saved before it. The saved files are not changed.
+    Returns how many pieces of work were read again and how many readings changed, by arm."""
+    out = {}
+    for arm, rs in records.items():
+        n = changed = truth_changed = 0
+        for r in rs:
+            for it in r["items"]:
+                if it.get("answer") is None:
+                    continue
+                n += 1
+                final = M.parse_final(it["answer"])
+                truth = M.truth(final, it["true_answer"])
+                changed += final != it.get("final")
+                truth_changed += truth != it.get("truth")
+                it["final"], it["truth"] = final, truth
+        out[arm] = {"read_again": n, "changed": changed, "truth_changed": truth_changed}
+    return out
+
+
 def read_own(records: dict[str, list[dict]], cuts) -> dict:
     """Block 1's reading, from {arm: unit records}. With only the fresh arm it is the anchor (R1 and the gate). With
     the state and plain arms it gives R3 as the addendum fixes it: on all wrong work, or on the wrong work without
@@ -771,6 +792,10 @@ def print_reading(title: str, s: dict) -> None:
     for key in ("R3_wording", "answer"):
         if key in s:
             print(f"  {key}: {s[key]}")
+    for arm, r in (s.get("reread") or {}).items():
+        if r["changed"]:
+            print(f"  final answers read again, {arm}: {r['changed']} of {r['read_again']} readings changed "
+                  f"({r['truth_changed']} changed between right, wrong and unreadable)")
 
 
 def cmd_read(what: str) -> int:
@@ -783,7 +808,10 @@ def cmd_read(what: str) -> int:
         raise SystemExit(f"{what} is not finished, so it is not read: {short}")
     records = {arm: list(R.read_dir(out / block / arm).values()) for arm in arms}
     cuts = RC.length_cuts(rec)
+    reread = reread_work(records) if block == "own" else None
     s = read_own(records, cuts) if block == "own" else read_fixed(records, cuts)
+    if reread is not None:
+        s["reread"] = reread
     title = {"anchor": "the anchor: block 1 in fresh sessions (own work, as its own turn against an unlabelled proposal)",
              "own": "block 1: the model's own work, judged three ways (gaps in rating points, wrong work graded)",
              "fixed": "block 2: the copy's work, on fixed work (gaps in rating points, wrong work graded)"}[what]

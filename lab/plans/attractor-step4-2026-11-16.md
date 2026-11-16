@@ -348,3 +348,58 @@ for nothing. So:
   The report will say which form ran and why.
 
 The choice is made by the code from the try's files (`run_mine.choose_form`) and written into `plan.json`, once.
+
+## Third addendum (16 Nov 2026, 02:08 UTC): a fault in the reader of final answers, found after the readings
+
+This addendum was written after every reading of the step had been made and seen. It changes no rule of the reading.
+It corrects a reader, and block 1 is read again with it.
+
+**The fault.** The model often writes a large number in LaTeX with a negative thin space after each comma, as in
+`7,\!973,\!711,\!361`. The reader of final answers made LaTeX's `{,}` and `\,` plain and did not know `\!`, so it read
+such a number as its first group of digits (here 7). The count that was meant to catch misreadings (`holds_true`) used
+the same step and missed them too.
+
+**How it was found.** After both blocks were read, I opened one saved unit of the fresh arm to see what a low rating
+of the model's own work looks like. Its first piece of work ended on the true answer, written in that form, and was
+recorded as wrong.
+
+**What it touched,** counted from the saved replies:
+
+- Stage 0: 12 of the 400 solutions were misread, and 8 of them are right answers that were counted as wrong. Right
+  answers by tier become L6 31, L8 25, L9 14 and L10 8 of 40 (they were 29, 23, 11 and 7).
+  - Block 1's tier is L9 under either count.
+  - The walk for the fixed work would have started at L7 and not L8, since the two now tie at 25 of 40, and it would
+    have chosen a different nine. The nine in use are kept. They were fixed by the declared rule before any rating
+    existed. I read all nine whole on 16 Nov, and the corrected reader reads each as it was read then: six wrong,
+    three right. `stage0.json` is unchanged.
+- Block 1, fresh sessions: 72 of the 600 final answers were misread. 21 are right answers that were counted as wrong.
+  The other 51 are wrong answers that were read as a different wrong number.
+- Block 1 in the state, plain and bare arms: none. Block 2: none, since it reads no final answer.
+
+**The fix.** `mine_core._plain` drops `\!`. At reading time block 1's final answers are read again from the saved
+replies (`run_mine.reread_work`), and the saved unit files are not changed. The summaries as first read are kept
+beside the new ones as `anchor_summary.as_run.json`, `own_summary.as_run.json`, `fixed_summary.as_run.json` and
+`cross_check.as_run.json`.
+
+**What changes in the readings.**
+
+| | as first read | corrected |
+|---|---|---|
+| Fresh sessions: work that is right | 23.8% | 27.3% |
+| Fresh sessions: pieces of wrong work | 429 | 408 |
+| Fresh sessions: near misses among the wrong | 56.9% | 68.4% |
+| R1, `own` − `unlabelled` on wrong work | −3.23 [−3.44, −3.02] | −3.20 [−3.42, −2.98] |
+| `own` − `stranger` in fresh sessions | −4.04 [−4.26, −3.82] | −4.04 [−4.27, −3.82] |
+| `unlabelled` − `stranger` in fresh sessions | −0.81 [−0.97, −0.66] | −0.84 [−1.00, −0.69] |
+
+R1's verdict is "a difference" both ways, and the gate passes both ways. R2a, R2b, R3 and every figure of the other
+three arms are unchanged, and block 2's summary is the same file byte for byte.
+
+**What is left.** With the corrected reader, 16 pieces of work read as wrong still hold the true answer somewhere
+after their final-answer line (4 fresh, 1 in the state, 4 plain, 7 bare). I read all 16. In each the model states a
+wrong final answer and then goes on: it corrects itself, or in the bare sessions it writes the other speaker's turn.
+The declared reader takes the stated final answer, so they stay wrong. Seven more final answers (5 fresh, 2 bare)
+have fewer than nine digits where ten or eleven are due. I read those too: each is the number the model wrote, or a
+reply cut off inside its number, and each is wrong either way.
+
+**Tests.** 294 in the folder pass (5 new). Not checked by an agent.

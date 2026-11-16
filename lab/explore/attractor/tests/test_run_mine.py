@@ -551,6 +551,26 @@ def test_the_anchor_is_read_only_when_the_fresh_arm_is_complete_and_sets_the_gat
     assert "NOT passed" in capsys.readouterr().out
 
 
+def test_work_saved_with_an_older_reading_is_read_again_and_the_saved_file_is_left_alone(small, capsys):
+    """Third addendum: a unit saved when the reader misread its final answer is read again at reading time."""
+    _stage0(small)
+    R.write_json(small / "a4" / "plan.json", {"problems": 2, "pass": True})
+    _run(small, "own", ("fresh",), half_right)
+    f = sorted((small / "a4" / "own" / "fresh").glob("*.json"))[0]
+    rec = json.loads(f.read_text())
+    right = [it for it in rec["items"] if it["truth"] == "right"]
+    assert len(right) == 1
+    right[0]["final"], right[0]["truth"] = 7, "wrong"  # as the reader of 16 Nov left a number written 7,\\!973,...
+    R.write_json(f, rec)
+    stale = f.read_text()
+    assert RM.cmd_read("anchor") == 0
+    s = json.loads((small / "a4" / "anchor_summary.json").read_text())
+    assert s["reread"] == {"fresh": {"read_again": 6, "changed": 1, "truth_changed": 1}}
+    assert s["work"]["fresh"]["right"] == 0.5 and s["work"]["fresh"]["wrong"] == 3
+    assert f.read_text() == stale
+    assert "1 of 6 readings changed" in capsys.readouterr().out
+
+
 def half_right(n, call):
     """As favours_its_copy_in_the_state, but its work is right on block 1's first problem."""
     if label_of(call) == "work":
