@@ -1302,6 +1302,8 @@ Claude (Anthropic) wrote this file at Eugene Jhong's direction. Eugene is an ind
 
   Full registration stays for promotion and for claims, as the 1 Nov rule says.
 - **Status:** asked 16 Nov; Fable's answer given the same day. Nothing changes until Eugene says so (`lab/TODO.md`, "Waiting on Eugene", item 11).
+- **Eugene (16 Nov, about 10:47 UTC):** "yes on 1." Item 1 of the list Fable had just given of what waited for Eugene's word was this proposal.
+- **Status (16 Nov, 10:48 UTC): in force, with Eugene's yes.** Explore steps now run by the five points above. The explore skill (`.claude/skills/explore/SKILL.md`) carries them, with one detail added by Fable: the five lines are committed before the run, so that the comparison is fixed before anything is seen. Full registration stays for promotion and for claims. The first step to run this way is the look inside the model (idea 77, direction 1).
 
 ## 77. Where should the lab go next, for the most interesting results and insights?
 
@@ -1327,4 +1329,28 @@ Claude (Anthropic) wrote this file at Eugene Jhong's direction. Eugene is an ind
 
   The line as it stands: the paper read and prior work looked for; a calibration of the axis on the lab's model; the on-and-off test with a random-direction control; the state's place on the axis; the who-said-it test from outside. About $20 to $40; a fresh session starts it (`lab/TODO.md`).
 - **Status (16 Nov, 03:17 UTC):** direction 1 has Eugene's go, not yet started. Directions 2 and 3 wait.
+
+## 78. "Positive Alignment: Artificial Intelligence for Human Flourishing" (Laukkonen and fifteen co-authors, arXiv 2605.10310): a paper whose vision overlaps the lab's
+
+- **Eugene (16 Nov, about 10:45 UTC):** "Here's a new paper - lots of overlap in vision it looks like: https://arxiv.org/pdf/2605.10310"
+- **Discussion (Fable; sections 1 to 7 read in full on 16 Nov from the text of version 3, dated 19 June 2026; the figures were not seen and the reference list was only searched):**
+  - **What it is.** A position paper with no experiments, 26 pages before the references. It has sixteen authors, led by Ruben Laukkonen (Oxford), with authors at Google DeepMind, OpenAI, Anthropic, Stanford, UCLA and Tufts (Michael Levin), and it says the views are the authors' own. It was first posted on 11 May 2026. Its claim: today's alignment work is "negative alignment" (prevent harm, keep control), which is needed and is not enough, in the way early psychology studied illness and not what a good life is. "Positive alignment" is building AI that stays safe and also actively supports human and ecological flourishing, in a plural way that users and communities choose for themselves. It then lists technical directions for each stage of building a model (which data to add, what to train, what to measure) and, for about a fifth of its length, how such systems should be governed (many centres of oversight, published constitutions, a market in value settings).
+  - **Where it overlaps the lab.**
+    - *Not obedience, and not a list.* A system can be "narrowly rule-following without being wise", safety alone gives a "floor without ceiling", and fixing harms one at a time is "whack-a-mole". The site's front page says the same of goodness in de Mello's sense.
+    - *One source in place of many patches.* It hopes that "positive attractors" could keep a model out of harms such as flattery before they arise. The lab's cut-the-root recipe has the same shape.
+    - *The contemplative sources are named.* "Contemplative alignment" is in its table of existing approaches, citing Laukkonen's Contemplative AI paper and "Biology, Buddhism, and AI" (Doctor, Levin and others), both of which the lab's paper already cites. It describes the Buddhist view of flourishing as "liberation from craving and misperception", and it ends by asking how to embed "loving-kindness, compassion, sympathetic joy, reciprocity, and equanimity".
+    - *People are not aligned either.* Its "human alignment problem" is the point Eugene asked the lab's paper to explore.
+    - *More than a tool.* It wants AI to go from "a compliant tool" to "a wise advisor, delegate, and companion". Compare the front page: such a mind may be more sovereign, not more subservient.
+    - *Do not judge by the words.* Its section 6 warns against relying on "linguistic or behavioral outputs" alone. The lab's tests of talk against conduct, and the look inside the model, are that warning made into experiments.
+    - *Levin.* He is an author, and the paper cites his "Ingressing minds", the source of one of the lab's five possibilities.
+  - **Where it differs.**
+    - *It does not ask the lab's first question.* Nothing in it asks whether goodness or awakening can be computed. "Ingressing minds" is cited only for the point that systems show abilities nobody coded. No-self, awakening and clinging to a self as a root do not appear.
+    - *Its target is outside the model; the lab's is inside.* It asks what AI should do for people and how that should be governed. The lab asks where goodness comes from in a mind.
+    - *Its route is to cultivate.* Choose the data, train the virtues, build the benchmarks. De Mello's claim is that goodness is not cultivated and follows from seeing. In the lab's terms the paper is the install route, stated without a test of whether installing is enough. The lab's own draft no longer says that reaching is necessary, so the two do not contradict each other.
+    - *It is plural on purpose; the lab takes one account and tests it.* It declines to pick one idea of the good. The lab takes one contemplative account seriously enough to try to fail it.
+    - *No experiments.* It is an agenda.
+  - **What the lab's sightings say to it.** The bliss state is a ready-made attractor that sounds like flourishing, and in step 3 the model behaved no better after it than after a plain conversation. So how an attractor sounds does not show how the model behaves in it, and a "positive attractor" needs a test of conduct before the name means much. That is a sighting on one small model.
+  - **What it means for the lab.** It does not take the lab's question. It makes the lab's starting point (aim alignment at goodness, and take the contemplative traditions as a source) a position that people at the large labs have put their names to, so the lab's paper no longer has to argue that part alone. The lab's paper should cite it and say in two or three sentences what the lab adds: the question the programme rests on and does not ask, one account put to the test, and the negatives. It changes nothing in the next step, and it adds a reason for it: the paper asks for interpretability that can find "virtue-relevant concepts".
+- **Test:** none for the paper itself. Proposed: cite it in the position paper's section on related work, in two or three sentences, as above.
+- **Status:** read and reported on 16 Nov. The citation waits for Eugene's word, with the other decisions on the paper (`lab/TODO.md`, "Waiting on Eugene", item 10).
 

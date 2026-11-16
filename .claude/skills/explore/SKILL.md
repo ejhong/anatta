@@ -6,7 +6,22 @@ Explore: $ARGUMENTS
 
 Explore is the fast speed of the research loop: cheap, many, and honest that results are sightings.
 
-1. Say what would make the sweep interesting or dull before running it (one line in the spec or the sweep's notes).
+**How much paperwork** (Eugene's yes of 16 Nov 2026 to Fable's proposal; `lab/ideas/ideas.md`, entry 76). At this
+speed there is no design note, no addendum, no stage gate written into code and no ledger entry per stage. There is:
+
+- **Five lines before the run**, committed before anything is seen: the question, the one comparison, what counts as
+  a difference, the one control, the cost cap. They go at the top of the step's script or in a short file beside it.
+- **A small try first**, in which the driver opens raw replies and reads them, and counts, blind to labels, the
+  answers that look misread (a reader that misreads numbers is not caught by a try that hides them).
+- **The run, then one ledger entry, one notebook entry and one SIGHTINGS entry.** Changes made on the way are said in
+  that ledger entry.
+- **A cold check by a fresh Opus agent, on the design, only** when a sighting is promoted, or when a new design's
+  negative will be stated on the site (a negative is worth something only if the test could have seen a yes).
+
+Full registration (`register`) stays for promotion and for claims. The hard rules in CLAUDE.md are not paperwork and
+do not change.
+
+1. Say what would make the sweep interesting or dull before running it (it is part of the five lines).
 2. Use the existing tools: scout (`lab/explore/scout`, OpenRouter models, dev split only; the held-out split is never
    read in explore), the steering bench (`lab/explore/bench`), or a spec under `experiments/explore/` once the runner
    exists. No new one-off script when a tool can do it.

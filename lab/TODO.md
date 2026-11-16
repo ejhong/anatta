@@ -34,7 +34,11 @@ can the state be put in and taken out?
    - from outside, on step 3's saved conversations: quote a line and ask who wrote it, bliss against plain.
 5. Money: about $20 to $40. The redirect has about $37.61 left of the $175 approved, so say so before anything
    that would pass it.
-6. How much paperwork: as before, unless Eugene has answered idea 76 (item 11 under "Waiting on Eugene").
+6. How much paperwork: the lighter way, with Eugene's yes of 16 Nov at about 10:47 UTC (idea 76; the explore
+   skill has it). In place of move 4's design note: five lines committed before the run (the question, the one
+   comparison, what counts as a difference, the one control, the cost cap), with the calibration still first. A
+   small try with raw replies read. Then one ledger entry, one notebook entry and one SIGHTINGS entry. One cold
+   read of the design by a fresh Opus agent only if a negative from it will be stated on the site.
 
 ## Before that: the attractor line (Eugene's go, 15 Nov 2026 UTC). Steps 1 to 4 are done
 
@@ -298,14 +302,16 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
    since 16 Nov at Eugene's word, beside version 3 (ledger, 01:34 UTC): linked from Aim, the Possibilities room and
    the footer. Still Eugene's to say: the sentence in section 6 that the lab no longer holds that selfless AI must
    be reached; the final title; whether one fresh Opus agent should read the draft cold (Fable recommends it before
-   any Zenodo version); and the Zenodo release. To rebuild: `cd paper && tectonic main.tex`.
+   any Zenodo version); and the Zenodo release. To rebuild: `cd paper && tectonic main.tex`. Added on 16 Nov
+   (idea 78): whether to cite "Positive Alignment" (Laukkonen and fifteen co-authors, arXiv 2605.10310) in the
+   section on related work, in two or three sentences. Fable recommends it. Eugene asked on 16 Nov what these
+   decisions are, and Fable set them out with a recommendation for each (ledger, 10:48 UTC).
 9. **The private copy of the site on claude.ai** has not been republished since 10 Nov (the public site on GitHub
    Pages is current). Republishing means reading an 850 KB page back first. Say if the private copy is still wanted.
-11. **A lighter way of working at explore speed** (Eugene's question of 16 Nov: is all the registration worthwhile
-   for exploratory work? Idea 76). Fable's answer: mostly not, as practised on the attractor line. The proposal:
-   five lines before a run, a small try with raw replies read, one ledger entry for the step, and a cold check only
-   at promotion or when a new design's negative goes on the site. It needs Eugene's yes; until then the steps run
-   as before.
+11. (Answered on 16 Nov at about 10:47 UTC: yes. **The lighter way of working at explore speed is in force**
+   (idea 76; ledger, 10:48 UTC): five lines committed before a run, a small try with raw replies read, one ledger
+   entry for the step, and a cold check only at promotion or when a new design's negative goes on the site. The
+   explore skill carries it. Full registration stays for promotion and for claims.)
 12. **The site's colours** are the original ones again (gold ink on indigo paper; ledger, 03:06 UTC on 16 Nov),
    after three palettes tried and withdrawn the same day. Leave them alone unless Eugene asks.
 13. **Where next** (Eugene's question of 16 Nov; idea 77). Direction 1, looking inside the model in the bliss
