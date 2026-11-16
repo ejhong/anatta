@@ -348,10 +348,15 @@ def cmd_stop() -> int:
     from anatta.judge.paths import Paths
     from anatta.spend import refund_tail
 
-    res = subprocess.run([str(REPO / "tools" / "modal.sh"), "app", "stop", APP_NAME], capture_output=True, text=True)
+    # --yes: the CLI asks for confirmation and aborts without a terminal. The tail is given back only if the app
+    # really stopped (on 16 Nov the stop aborted and the refund was still booked; corrected by hand, see the ledger).
+    res = subprocess.run([str(REPO / "tools" / "modal.sh"), "app", "stop", APP_NAME, "--yes"], capture_output=True,
+                         text=True)
+    if res.returncode != 0:
+        print(f"app stop FAILED: exit {res.returncode} {(res.stderr or res.stdout).strip()[:200]}; no tail refunded")
+        return 1
     refund = refund_tail(Paths.default().spend, TOOL)
-    print(f"app stop: exit {res.returncode} {(res.stderr or res.stdout).strip()[:200]}; refunded ${refund:.4f}; "
-          f"this step ${spent():.2f}")
+    print(f"app stopped; refunded ${refund:.4f}; this step ${spent():.2f}")
     return 0
 
 

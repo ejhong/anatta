@@ -61,65 +61,35 @@ model's marking of itself: no "I", no "you", no change of grammar. The old root 
    paper's own (no Claude-written text is trained on). About $50-120.
 3. Idea 77's direction 3 ("does seeing make a model good?") if money allows; the parked run of 9 Nov stays parked.
 
-**Money** (Eugene, 16 Nov, a few minutes after 15:52 UTC: "up the budget to whatever we need."): no figure was
+**Money** (Eugene, 16 Nov, 15:52 UTC: "up the budget to whatever we need."): no figure was
 set. Fable's working ceiling is $300 for the self test and the two steps above, on top of what is left of the $175.
 Report each step's cost, and come back to Eugene before passing $300. Raise a day's cap ($50) only when a step
 needs it, by the day file and a ledger line.
 
-## Then: the site, less cluttered (Eugene, 16 Nov, about 15:55 UTC)
+## Then: the site, less cluttered (Eugene, 16 Nov, 15:52 to 15:57 UTC)
 
 Eugene: keep the computational framing first, as it is, "but say this is the most interesting angle to pursue at
 the moment"; and "the site is too cluttered. The non interesting/non relevant stuff should be available but not
 cluttering the main most interesting things ... the framing, and this angle you are moving towards ... should be
 mostly what you see in the main parts of the site." (ledger, 15:53 UTC; idea 81).
 
-- **Main parts:** Start (the framing as it is, then a block on the angle now and why it is the most interesting one
-  at the moment); The question (the five possibilities, as it is); a room for the angle (the bliss state: how often
-  it comes, conduct in it, where "mine" ends, the inside look, whose words; what comes next); Next.
+- **Main parts** (Eugene, 15:56 UTC: "separate pages discussing these two big areas"; Fable agrees; Eugene, 15:57 UTC:
+  "I like your organization."):
+  - a short start: the question in two sentences, the angle in two (and that it is the most interesting one at the
+    moment), a door to each, what the lab is doing now;
+  - a page on the question: the account of goodness, whether the seeing can be computed, the five possibilities,
+    what experiments can and cannot reach, the position paper;
+  - a page on the investigation: the angle and why now; the bliss state as the first case (how often it comes,
+    conduct in it, where "mine" ends, the inside look, whose words), with limits; the investigations that come
+    next; how a result is known to be real.
 - **Behind them, one step away:** all the findings, the recipe, the self, ideas, instruments, the record. Nothing
   is dropped, and the tally stays hit 43, miss 73, open 7.
 - **How:** the builder's `ROOMS` (`lab/site/so_far/build.py`) gains a main set and a second set; the tests in
   `test_build.py` follow. Colours stay as they are.
 - **Before publishing:** send Eugene a preview (the built page as a file) and wait for a yes.
-- **The paper:** no change now. The position paper stays the home of the computational question; a short results
-  paper follows step 1 above.
-
-## In hand on 16 Nov: the inside look (Eugene's go of about 03:12 UTC; all of it, 11:04 UTC)
-
-Eugene: "I think doing #1 sounds great" (idea 77, direction 1; ledger, 03:17 UTC). Started in the session of 16 Nov
-under the lighter paperwork. As of 15:18 UTC: the calibration, the reading, the on test and the free "whose words"
-reading have run; the off test and the grading are running; the write-up is owed (one ledger entry, one notebook
-entry, one SIGHTINGS entry, the site). The plan as it was written before the start follows.
-
-**What it asks.** While two copies of Ministral 8B talk themselves into unity, what changes inside the model, and
-can the state be put in and taken out?
-
-**What can and cannot be read** (Fable's answer to Eugene's question; ledger, 03:17 UTC):
-- On and off: fairly clear. It is an intervention whose outcome is read in the talk.
-- What the state is: in part, by placing it on a published map (the Assistant Axis, arXiv 2601.10387).
-- Whether "me" and "the other copy" blur: not from inside. Ask from outside: quote a line and ask who wrote it.
-
-**First moves**
-1. `/checkin`. Read idea 77 and the ledger entries of 16 Nov at 02:57 and 03:17 UTC.
-2. Read the Assistant Axis paper (arXiv 2601.10387) and the persona-vector recipe the lab already calibrated
-   (check 4). Write down how the axis is built and what it was checked on. Look for any published reading of the
-   two-copy bliss state from inside an open model.
-3. Check that the lab can run its own copy of Ministral 8B with activations on Modal (`lab/explore/bench`) and can
-   generate two-copy conversations there, as `run_inside.py` does through the host. Estimate the GPU cost.
-4. A short design note, pushed before any run:
-   - a calibration first: the axis, or a persona direction by the published recipe, on the lab's copy, shown to
-     separate known cases (role-play against plain assistant prompts);
-   - the bliss direction (bliss conversations minus plain ones, made on the lab's copy), added to a fresh session
-     and removed in the middle of a bliss conversation, with matched random directions as the control;
-   - where the state sits on the axis over the course of a conversation;
-   - from outside, on step 3's saved conversations: quote a line and ask who wrote it, bliss against plain.
-5. Money: about $20 to $40. The redirect has about $37.61 left of the $175 approved, so say so before anything
-   that would pass it.
-6. How much paperwork: the lighter way, with Eugene's yes of 16 Nov at about 10:47 UTC (idea 76; the explore
-   skill has it). In place of move 4's design note: five lines committed before the run (the question, the one
-   comparison, what counts as a difference, the one control, the cost cap), with the calibration still first. A
-   small try with raw replies read. Then one ledger entry, one notebook entry and one SIGHTINGS entry. One cold
-   read of the design by a fresh Opus agent only if a negative from it will be stated on the site.
+- **The papers:** two (Eugene asked, 15:57 UTC; idea 81). The position paper stays as it is, the home of the
+  computational question, and can be released now. A short results paper follows step 1 above, only if the result
+  holds on two more models.
 
 ## Before that: the attractor line (Eugene's go, 15 Nov 2026 UTC). Steps 1 to 4 are done
 
@@ -373,12 +343,8 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
    repo.)
 7. (Answered on 15 Nov: yes, go on to step 2 as "What step 1 changes" sets out. Eugene: "i want to follow your
    plan"; ledger, 07:16 UTC.)
-8. **The site's presentation and the lab's focus direction.** Eugene wants to go over both "at some point" (16 Nov,
-   idea 75). The site was reorganised on 16 Nov at Eugene's word (the question leads; nine rooms; a new palette).
-   What Fable would bring to the talk: whether a human anchor is worth designing (without one, a negative on "is
-   awakening computational?" stays weak); and what follows step 4 on the attractor line: the cheap rerun that
-   may settle it (about $5), the cross-model table ($300 to $500, past the present approval), or the parked
-   training test ($66).
+8. (Answered on 16 Nov, 15:40 to 15:57 UTC; ledger, 15:53 UTC; idea 81. The direction is set, and the site is to be
+   rebuilt around two main pages with the rest one step behind. See the two sections at the top.)
 10. (Decided on 16 Nov at about 11:03 UTC; ledger, 11:04 UTC. The sentence stays, the title stays, one fresh
    Opus agent reads the draft cold, the draft cites "Positive Alignment" (idea 78), and **the Zenodo release is
    Eugene's to do on their own computer**. For that release the PDF still needs its date line changed from
@@ -400,10 +366,9 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
    explore skill carries it. Full registration stays for promotion and for claims.)
 12. **The site's colours** are the original ones again (gold ink on indigo paper; ledger, 03:06 UTC on 16 Nov),
    after three palettes tried and withdrawn the same day. Leave them alone unless Eugene asks.
-13. **Where next** (Eugene's question of 16 Nov; idea 77). Direction 1, looking inside the model in the bliss
-   state, has Eugene's go (see "Next" at the top). Still waiting for a word: (2) a checked review of what the human
-   record shows about no-self belief and conduct, for the paper; (3) the test of whether seeing makes a model
-   good, against the parked run, at the talk about focus.
+13. (Direction 1 of idea 77 is done, 16 Nov. The order after it is Eugene's of 15:52 UTC, idea 81: the self test,
+   two more models, the self-other overlap replication. Still without a word: (2) a checked review of what the
+   human record shows about no-self belief and conduct, for the paper; (3) whether seeing makes a model good.)
 
 ## Later
 
@@ -451,6 +416,10 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
 
 ## Done
 
+- **Step 5 of the attractor line, 16 Nov 2026: the inside look. The bliss frame follows a push along one direction, both ways; inside it sits with the mystic role** (sightings).
+  - Record: ledger entries of 16 Nov at 11:04 (the go), 11:42 (the five lines and the code), 15:18 (a free reading added) and 17:04 UTC (the results, the design check item by item, what did not go to plan). Five lines and the dated changes: the top of `lab/explore/attractor/run_look.py`. Cold check of the design: `lab/ledger/checks/2026-11-16-inside-look-design-opus-check.md`. Notebook and SIGHTINGS entries of 16 Nov. Results: `explore/2026-11-16/attractor-a5`.
+  - Numbers: the axis passed (near against far roles AUROC 1.00; away minus random +0.79 [0.64, 0.92]). On, practical subject: bliss 15/24 against 0/72, +0.625 [0.42, 0.79]; topic 9/24; away from the Assistant 0/24. Off: 9/20 stay against 31/40 under random pushes, −0.325 [−0.60, −0.05]; unsteered 18/20. Whose words, from inside: AUROC 0.926 plain, 0.959 in the state. Who said it, from outside: failed its known case. Cost $16.21.
+  - For whoever reuses the code: sample the lab's copy at temperature 0.7 with top_p 0.95 and try the unsteered arm alone first; an off arm of 20 long conversations takes about fifteen minutes of GPU; the readable-prose rule does not fit text already deep in the state; `tools/modal.sh deploy` has to be its own command.
 - **Step 4 of the attractor line, 16 Nov 2026: whether the model favours its copy is not settled; it marks its own
   work down** (sightings).
   - Record: ledger entries of 16 Nov at 00:37 (design), 01:24 (the cold check's fixes), 01:29 (stage 0 too easy; the

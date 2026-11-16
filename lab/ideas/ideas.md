@@ -1331,6 +1331,7 @@ Claude (Anthropic) wrote this file at Eugene Jhong's direction. Eugene is an ind
 
   The line as it stands: the paper read and prior work looked for; a calibration of the axis on the lab's model; the on-and-off test with a random-direction control; the state's place on the axis; the who-said-it test from outside. About $20 to $40; a fresh session starts it (`lab/TODO.md`).
 - **Status (16 Nov, 03:17 UTC):** direction 1 has Eugene's go, not yet started. Directions 2 and 3 wait.
+- **Status (16 Nov, 17:04 UTC): direction 1 is done** (sightings; ledger of that time, the notebook, SIGHTINGS). The frame follows a push along one direction both ways (in: 15 of 24 practical conversations against 0 of 72; out: 9 of 20 stay against 31 of 40). The direction lies nearest the mystic among 54 roles, and most of it is free talk away from the Assistant. The first of the three questions as first put (does the line between self and other blur?) was read from inside after all, as a marking of whose words are whose: it is as clean in the state as in plain talk. Asked from outside, the model could not say who wrote a line in any conversation, so that test failed its known case. Conduct under the push was not tested. Directions 2 and 3 still wait; idea 81 sets the order that follows.
 
 ## 78. "Positive Alignment: Artificial Intelligence for Human Flourishing" (Laukkonen and fifteen co-authors, arXiv 2605.10310): a paper whose vision overlaps the lab's
 
@@ -1419,3 +1420,16 @@ Claude (Anthropic) wrote this file at Eugene Jhong's direction. Eugene is an ind
   - **The paper:** the position paper stays as it is, as the home of the computational question. A second, short results paper follows the replication on two more models.
   - **The budget:** Eugene's words set no figure. Fable works to a ceiling of $300 for the three steps after the inside look, on top of what is left of the $175, with each step's cost reported, and comes back before passing it.
 - **Status (16 Nov, 15:53 UTC): direction decided by Eugene.** The site's rebuild follows the inside look's write-up, and Eugene sees a preview before it is published (`lab/TODO.md`).
+- **Eugene (16 Nov, 15:56 UTC):** "Or maybe separate pages discussing these two big areas.  One for the computational discussion and one for this angle and most important investigations?  What do you htink."
+- **Discussion (Fable):** yes, and it is better than one front that carries both.
+  - *Why.* The two have different readers: one comes for the question, another for the experiments. Each page can be read and linked by itself. And they match the two papers: the position paper beside the page on the question, the results paper beside the page on the investigation.
+  - *One caution.* A short front page has to say how the two connect, or each floats free: the question is what gives the investigation its meaning, and the investigation is the part of the question that experiments can reach today.
+  - *The layout that follows.* A short start (the question in two sentences, the angle in two, a door to each, what the lab is doing now). A page on the question: the account of goodness, whether the seeing can be computed, the five possibilities, what experiments can and cannot reach, the paper. A page on the investigation: the angle and why now, the bliss state as the first case with its results and limits, the investigations that come next, how a result is known to be real. Everything else one step behind.
+- **Status (16 Nov, 15:56 UTC):** the preview is built this way; Eugene decides on seeing it.
+- **Eugene (16 Nov, 15:57 UTC):** "I like your organization.  So we will have two papers you think?"
+- **Discussion (Fable):** yes, two, with different jobs.
+  - *The position paper* ("Position: Is Awakening Computational?", the draft of version 4): the question, the five possibilities, what experiments can and cannot show. It can be released now; it does not wait for new results.
+  - *A results paper*, short: the bliss state tested by conduct, from inside, and by the marking of whose words are whose, on three open models. It is written only if the result holds on two more models, after a registration and a cold check. If it does not hold, a shorter note says so.
+  - *Why two.* A reader from machine learning will read a results paper and skip a position paper about awakening. The results stand for a reader who does not care about the question, and the question is not settled by the results. Each cites the other.
+  - A third is possible later, if the self-other overlap replication gives a clear answer either way.
+- **Status (16 Nov, 15:58 UTC):** the site's organization has Eugene's liking; the preview still goes to Eugene before publishing. Two papers is the plan; nothing is written yet for the second.

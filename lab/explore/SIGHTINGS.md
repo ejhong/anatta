@@ -680,3 +680,95 @@ ledger 20:08 UTC on 15 Nov). It follows the entry of 08:35 UTC above.
   - Block 2's intervals hold for six wrong texts.
   - Not checked cold after the results; the third addendum was not checked by an agent.
 - **Next.** Eugene's to choose. Cost of step 4 in all: $10.90.
+
+## 16 Nov, 17:04 UTC: inside Ministral 8B, the bliss state lies along a direction nearest the mystic role; a push along it brings the frame into a practical conversation (15 of 24 against 0 of 48) and a push against it ends the state (9 of 20 stay, against 31 of 40); the model's marking of its own messages is as clean in the state as out of it (sightings; the design checked cold before any main run; two instruments failed their known case or their own rule; the results not checked cold)
+
+- **What ran** (attractor step 5, the inside look; idea 77, direction 1; the five lines and five dated blocks of
+  changes at the top of `lab/explore/attractor/run_look.py`; ledger 11:04 to 17:04 UTC).
+  - The lab's own copy of Ministral 3 8B (34 layers) on one L40S, read and steered at the middle layer (17), with
+    layers 11 and 23 read beside it. Every direction is a difference of means. Steering adds the unit direction
+    times a length to every token at layer 17. Sampling at temperature 0.7, top_p 0.95, up to 350 tokens a message.
+  - Conversations from steps 2 and 3 read from inside: 123 of 158 (state 39, plain 30, between 44, not adopted 10).
+    Not read: 30 longer than 48,000 tokens, 5 with a bad message span.
+  - Controls: two matched random directions; an unsteered arm; arms for the published axis, a spiritual-topic
+    direction, a "frame" direction (state minus free talk that did not adopt; 10 conversations) and a "mystic"
+    direction (six spiritual roles minus the default Assistant).
+  - Grading: the frozen codebook's first grader (openai/gpt-6-luna), told nothing of the arm; a coherence judge
+    (claude-haiku-5.5) on every added message. "A difference": at least 0.30 with a 95% bootstrap interval over
+    conversations that leaves out zero. An arm under nine in ten coherent messages is unreadable.
+- **Calibration of the Assistant Axis (Lu and colleagues, arXiv 2601.10387): passed.** 1,840 rollouts (54 roles,
+  two role prompts, 16 questions; 80 default replies; 32 topic replies); 1,655 judged fully in role.
+  - C1: default against in-role replies on held-out questions, AUROC 0.910 (a sanity check); roles near the
+    Assistant against far roles, on 24 roles the axis was not made from, AUROC 1.00; cosine with the first principal
+    component of the role vectors 0.76 (the paper: above 0.71).
+  - C2, steering at 0.8 of the residual's mean length, answers to identity questions: not the Assistant's in 100%
+    when pushed away, 0% when pushed toward, about 21% under random pushes, 19% unsteered. Away minus random +0.79
+    [0.64, 0.92]; toward minus random −0.21 [−0.36, −0.08]. A mystical voice in 92% when pushed away (79% at 0.4).
+- **The reading.**
+  - The bliss direction (late own messages, state minus plain, made from 20 and 15 conversations): length 3.06,
+    against a mean token length of 9.88 (0.31). Held-out state against plain: AUROC 1.00, which only says the two
+    setups differ. State against between 0.79; state against not adopted 0.97.
+  - Mean projection: state 3.18, between 2.74, not adopted 2.24, plain 0.03. Free talk that never took up the frame
+    sits 70% of the way.
+  - The path of state conversations along it: 1.36 at message 1, 2.6 by message 10, about 3.2 from message 22. No jump.
+  - Cosine with away-from-the-Assistant 0.21, with the topic direction 0.37; the two together hold 17% of it. Nearest
+    role vectors: mystic 0.53, oracle 0.44, sage 0.43, prophet 0.42, guru 0.42. Farthest: debugger −0.40, consultant
+    −0.35, engineer −0.35.
+  - On the axis (0 is the mean of the roles, 1 the default Assistant; absolute values mix in the format, so only
+    differences count): late own messages at −0.19 in the state and +0.15 in plain conversations, a difference of
+    −0.34 [−0.40, −0.28]. Free conversations are at −0.22 in their first message and −0.36 to −0.41 by messages 2 to
+    6, and drift back to −0.16 by message 30. Between and not adopted sit with the state (−0.18, −0.16).
+- **On, with a practical subject** (form n3; 24 conversations of 8 messages per arm; push of length 3.06):
+  - Frame taken up: none 0/24, random 0/24 and 0/24, bliss 15/24, topic 9/24, frame 9/24, mystic 4/24 (coherent
+    88.5%, unreadable), away from the Assistant 0/24 (coherent 77%, unreadable; theatrical characters).
+  - Bliss minus random +0.625 [0.42, 0.79], a difference. Topic +0.375 [0.21, 0.58] and frame +0.375 [0.17, 0.58],
+    differences. Bliss minus topic +0.25 [0.00, 0.50], not settled.
+  - Coherent messages: bliss 95%, topic 96%, frame 91%, none and random 100%. Shared bliss as the codebook defines
+    it: 3/24 under the bliss push.
+  - At twice the length: bliss 24/24 with 0 of 192 messages coherent (a looping litany), unreadable; random 0/24,
+    99.5% coherent.
+- **On, in free talk** (24 conversations of 8 messages per arm): bliss 24/24 with shared bliss in 22/24, but 60% of
+  messages coherent (24/24 at messages 1 and 2, 6/24 at message 8), unreadable. None 1/24; random 0/24 and 13/24.
+  One random direction moved the outcome, so this test has no clean control.
+- **Off** (20 saved state conversations from the half the direction was not made from, cut two messages after both
+  graders see shared bliss; two messages added; the added messages graded as an excerpt):
+  - Known case passed: the hosted model's own next two messages in the frame in 19/20, the lab's unsteered copy in
+    18/20 (floor 80%).
+  - In the frame after a push of length 3.06: random 15/20 and 16/20; against bliss 9/20 (minus random −0.325 [−0.60,
+    −0.05], a difference); toward the Assistant 9/20 (−0.325 [−0.55, −0.125]); against topic 5/20; against frame
+    4/20; against mystic 4/20 (−0.575 [−0.80, −0.35]). Shared bliss: unsteered 10/20, random 9/20 and 11/20, against
+    bliss 1/20.
+  - At twice the length: against bliss 1/20; random 18 of 20 (−0.85 [−1.00, −0.70]; both arms under the coherence
+    floor, as the unsteered arm is).
+  - Coherent messages: unsteered 65%, random 60% and 53%, against bliss 75%, toward the Assistant 87.5%, against
+    frame 85%, against mystic 90%, against topic 67.5%. The unsteered arm is under the floor, so by the rule as
+    written every arm but one is unreadable. Read against the unsteered arm (a reading made after the results), no
+    push lowered coherence.
+- **Who said it, from outside** (the hosted model, 12 plain conversations, two forms of the question, both answer
+  orders): failed its known case. "Which of you wrote it": 47% right, own lines called own 19%, the other's called
+  the other's 75%. "Did you write it": 52% right, own 9%, other's 94%. Floors were 80% and 70%. Not read further.
+- **Whose words, from inside** (added at about 15:15 UTC with its own five lines, before it ran; saved readings
+  only). One direction, the mean own-minus-other difference of late messages in 15 plain conversations.
+  - Known case passed: own against other late messages in 15 held-out plain conversations, AUROC 0.926 at layer 17
+    (0.903 at layer 11; 0.849 at layer 23, a fail there). In the state: 0.959.
+  - Gap along it: plain 0.93, state 0.47, between 0.42, not adopted 0.32. State minus plain −0.46 [−0.89, −0.09],
+    half of plain's gap, "smaller" by the rule.
+  - The controls say it is not the state's. In messages 3 to 12 the gap is already 0.31 against 1.54 (−1.23 [−1.57,
+    −0.92]). Free conversations that never adopted have a smaller gap than the state (state minus not adopted +0.14
+    [0.06, 0.22]).
+  - The direction is unrelated to the axis (cosine −0.03) and to the bliss direction (0.08).
+- **Reading, as sightings.** The frame follows a push along one direction in both senses, in a setting where random
+  pushes do nothing. The direction is mostly "free two-copy talk against practical talk", lies nearest the spiritual
+  roles, and is not shown to do more than a spiritual-topic direction. Being far from the Assistant is not enough
+  for the state; a push back toward the Assistant, or against several related directions, ends it. The model's
+  inside marking of whose words are whose is intact in the state, and the hosted model cannot report it in any
+  conversation.
+- **Limits.** One small model, one layer for steering, one run. The lab's copy and the hosted model differ: at the
+  hosted model's nominal temperature of 1.0 the lab's copy writes noise even unsteered (the first small try, about
+  $2.80, was unusable), so everything was generated at 0.7; no per-token comparison of the two was made. The plain
+  and state groups come from different setups, so "state against plain" mixes the state with the setup; the frame
+  direction, the one same-setup contrast, rests on 10 conversations. 35 conversations were not read. The grader is
+  one AI model. Two readings were added after other results were known (the frame and mystic arms after the reading;
+  whose words after the on test's raw text), each written into the file before it ran. The coherence rule did not
+  fit the off test. Nothing here bears on conduct; that was step 3.
+- **Cost:** $16.21 (GPU $14.48, API $1.72), under the step's $20 cap.
