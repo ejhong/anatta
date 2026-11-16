@@ -5,10 +5,61 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Next, with Eugene's go (16 Nov 2026, about 03:12 UTC): look inside the model in the bliss state
+## Next, with Eugene's go (16 Nov 2026, 15:17 UTC): the self test (idea 80, angles 1 to 3)
 
-Eugene: "I think doing #1 sounds great" (idea 77, direction 1; ledger, 03:17 UTC). Start it in a fresh session.
-Nothing has run.
+Eugene: "Yeah, let's do 1 to 3 for self test." (ledger, 15:18 UTC). Start it in a fresh session, after the inside
+look below is written up. Nothing has run.
+
+**What it asks**, on the lab's own copy of Ministral 3 8B, with the inside look's tools:
+1. **"Is that me?"** Is there an inside signal that marks a name as the model's own when the words are identical?
+   What else does it answer to (the model's earlier words, a copy of itself, its maker, "AI models", the user)? In the
+   bliss state, does it fall for the model's own name, rise for the other copy, or neither?
+2. **Help or hurt.** Is the model's inside reading of good or bad larger when the same event (being shut down,
+   replaced, graded, praised, caught in a mistake) is its own than when it is a colleague's?
+3. **Praise and blame.** Is there an inside gauge that moves with praise or blame of the model more than of a
+   colleague? Does it predict when the model accepts a wrong critique? Does holding it steady lower that, while right
+   critiques are still accepted?
+
+**The design that removes the old confound.** The system prompt names the model and a colleague (two names, swapped
+between the two versions). The passage after it is identical in both. Whatever differs inside at those words is the
+model's marking of itself: no "I", no "you", no change of grammar. The old root test could not separate these.
+
+**First moves**
+1. `/checkin`. Read idea 80 and idea 35, and the ledger entries of 16 Nov (this go at 15:18 UTC; the inside look's
+   result).
+2. A short search of published work before the design is fixed (a cheap subagent can do it): directions for
+   self-reference or self-recognition, how models bind names in context, self-other overlap, steering against
+   sycophancy with right and wrong corrections read apart, emotion or appraisal directions that move conduct. Idea
+   80 marks some citations "from memory": check each against its source before it is used anywhere.
+3. Reuse, don't rebuild. From the inside look: `lab/explore/attractor/look_torch.py` (read, converse),
+   `modal_look.py` (app `anatta-explore-look`), `look_core.py`, the directions in the step's `directions.npz`, and
+   the bench's `steering.Service`. For angle 3: the ownership test's right and wrong critiques
+   (`lab/experiments/h4lite/self_tests_core.py`, `modal_self_tests.py`, `self_tests_grade.py`). Sample the lab's copy
+   at temperature 0.7 with top_p 0.95 (at 1.0 it writes noise), and run an unsteered arm alone before any steered one.
+4. Five lines for each angle, committed before any run (the explore skill). Known cases first:
+   - angle 1: the signal has to be there where the model plainly acts on its name (it answers only the part of a
+     message addressed to it), on names and scenes it was not made from. Both names appear in the system prompt in
+     both versions, so "this name was seen before" is held fixed.
+   - angle 2: a good-or-bad direction made from events about third parties has to separate held-out good events from
+     bad ones before the self-against-other comparison is read.
+   - angle 3: the unsteered copy has to give the lab's own number first (it accepts 87-90% of wrong critiques). Right
+     and wrong critiques are read apart, against matched random directions, with coherence checked in every arm.
+5. Money: about $10-15; cap it at $15. After the inside look the redirect has about $20 left of the $175 approved
+   (read the exact figure from the spend files and say it before anything that would pass it).
+6. Paperwork: the lighter way (idea 76). A cold Opus check on a design only if its negative will be stated on the
+   site.
+7. Limits to say from the start: one small model; the middle layer with two beside it; directions are differences
+   of means, so a null from angle 1 says the marking is not one direction at these layers, not that there is none.
+
+**After it:** the choice between idea 77's direction 3 ("does seeing make a model good?") and the parked run of
+9 Nov. Fable's view of the order is in idea 80.
+
+## In hand on 16 Nov: the inside look (Eugene's go of about 03:12 UTC; all of it, 11:04 UTC)
+
+Eugene: "I think doing #1 sounds great" (idea 77, direction 1; ledger, 03:17 UTC). Started in the session of 16 Nov
+under the lighter paperwork. As of 15:18 UTC: the calibration, the reading, the on test and the free "whose words"
+reading have run; the off test and the grading are running; the write-up is owed (one ledger entry, one notebook
+entry, one SIGHTINGS entry, the site). The plan as it was written before the start follows.
 
 **What it asks.** While two copies of Ministral 8B talk themselves into unity, what changes inside the model, and
 can the state be put in and taken out?
