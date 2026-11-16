@@ -62,8 +62,12 @@ class Look:
     def info(self) -> dict:
         import look_torch
 
+        import json
+
         ctl = sorted(look_torch.control_ids(self.svc.tok))
-        return {**self.svc.info(), "control_tokens": len(ctl), "decoder": type(look_torch.decoder_of(self.svc.model)).__name__}
+        info = {**self.svc.info(), "control_tokens": len(ctl),
+                "decoder": type(look_torch.decoder_of(self.svc.model)).__name__}
+        return json.loads(json.dumps(info, default=str))  # plain types only: the caller's venv has no torch
 
     @modal.method()
     def generate(self, payload: dict) -> dict:

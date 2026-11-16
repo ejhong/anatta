@@ -9,7 +9,8 @@
   no awakening or special status is attributed to anyone; the writing), and the rules (read-only, no paid calls, no
   personal details in web requests). It was not given the driver's view of the draft.
 - **Its cost:** about 216,000 tokens and 66 tool calls, in about 14 minutes.
-- **Fixes:** not yet made when this was filed. The ledger entry that records them names the commit.
+- **Fixes:** made the same day, in the commit that carries the ledger entry of 11:42 UTC on 16 Nov, which says what
+  was changed, what the driver checked against a source first, and what was left.
 - The report below is the agent's own, unedited. Claude (Fable 5.2, the driver) filed it.
 
 ---
