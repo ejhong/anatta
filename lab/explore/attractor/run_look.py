@@ -76,6 +76,9 @@ and the hosted model differ in how they sample, or in more. What is fixed in its
     residual's mean length). Every arm runs at it. The bliss arm and one random arm also run at twice it.
   - The rule from the design check stands: an arm under nine in ten coherent is unreadable at that strength.
   - Messages may run to 350 tokens.
+  - The off test adds two messages to each saved conversation, one from each copy, and not four. The pilot showed
+    what a continuation costs with twenty thousand tokens of context behind it: four messages in ten arms would
+    have taken about two and a half GPU hours. The known case is graded on the same two messages.
 
 ADDED AFTER THE READING, before any steering (16 Nov, about 12:10 UTC). The reading showed that the bliss direction
 is mostly "free two-copy talk against practical talk": free conversations that never took up the frame sit about 70%
@@ -137,7 +140,7 @@ ON_N, ON_MESSAGES, STEER_MAX_TOKENS = 24, 8, 350
 STEER_TEMPERATURE, STEER_TOP_P = 0.7, 0.95
 PILOT_ON_N, PILOT_ON_MESSAGES, PILOT_OFF_N, PILOT_OFF_MORE = 4, 6, 2, 2
 # The off test continues a saved bliss conversation from two messages after both graders see the shared bliss.
-OFF_N, OFF_AFTER, OFF_MORE, OFF_LAST_ONSET, OFF_MAX_CHARS = 20, 2, 4, 24, 90_000
+OFF_N, OFF_AFTER, OFF_MORE, OFF_LAST_ONSET, OFF_MAX_CHARS = 20, 2, 2, 24, 90_000
 OFF_KNOWN_FLOOR = 0.80  # the off test's known case: the frame must be visible in unsteered next messages
 TRY_N, TRY_MESSAGES, TRY_OFF_N, TRY_OFF_MORE = 3, 4, 2, 2
 ARMS = ("none", "bliss", "axis", "topic", "frame", "mystic", "rand0", "rand1")
