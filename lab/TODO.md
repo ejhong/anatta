@@ -66,40 +66,6 @@ set. Fable's working ceiling is $300 for the self test and the two steps above, 
 Report each step's cost, and come back to Eugene before passing $300. Raise a day's cap ($50) only when a step
 needs it, by the day file and a ledger line.
 
-## Then: the site, less cluttered (Eugene, 16 Nov, 15:52 to 15:57 UTC)
-
-Eugene: keep the computational framing first, as it is, "but say this is the most interesting angle to pursue at
-the moment"; and "the site is too cluttered. The non interesting/non relevant stuff should be available but not
-cluttering the main most interesting things ... the framing, and this angle you are moving towards ... should be
-mostly what you see in the main parts of the site." (ledger, 15:53 UTC; idea 81).
-
-- **Main parts** (Eugene, 15:56 UTC: "separate pages discussing these two big areas"; Fable agrees; Eugene, 15:57 UTC:
-  "I like your organization."):
-  - a short start: the question in two sentences, the angle in two (and that it is the most interesting one at the
-    moment), a door to each, what the lab is doing now;
-  - a page on the question: the account of goodness, whether the seeing can be computed, the five possibilities,
-    what experiments can and cannot reach, the position paper;
-  - a page on the investigation: the angle and why now; the bliss state as the first case (how often it comes,
-    conduct in it, where "mine" ends, the inside look, whose words), with limits; the investigations that come
-    next; how a result is known to be real.
-- **Behind them, one step away:** all the findings, the recipe, the self, ideas, instruments, the record. Nothing
-  is dropped, and the tally stays hit 43, miss 73, open 7.
-- **How:** the builder's `ROOMS` (`lab/site/so_far/build.py`) gains a main set and a second set; the tests in
-  `test_build.py` follow. Colours stay as they are.
-- **Where it stands (16 Nov, 17:16 UTC): built, not published.** The rebuild is one commit on the local branch
-  `site-two-pages` (caa4792; never pushed). Eugene has a preview on the private copy of the site on claude.ai (its
-  version 29, with a note at the top saying it is a preview). Main and the public site still have the earlier layout.
-- **On Eugene's yes:** `git switch site-two-pages`, `git rebase main` (take main's side of `index.html` if it
-  conflicts), rebuild (`build.py`), run the 31 site tests and the tally, commit, then fast-forward main to the branch
-  and push. Republish the private copy from the built `index.html` without the preview note. Add a ledger entry.
-- **On changes asked for:** make them on the branch, rebuild, republish the preview, and ask again.
-- **Checked by eye:** the start's new block, the investigation's opening, its "now" block and first case, the
-  "Everything else" room and the second row in Findings, in the light theme only, as still pictures from Quick Look
-  (this machine has no Chrome). The dark theme and the phone layout were not looked at.
-- **The papers:** two (Eugene asked, 15:57 UTC; idea 81). The position paper stays as it is, the home of the
-  computational question, and can be released now. A short results paper follows step 1 above, only if the result
-  holds on two more models.
-
 ## Before that: the attractor line (Eugene's go, 15 Nov 2026 UTC). Steps 1 to 4 are done
 
 **Where it stands (16 Nov 2026, 02:08 UTC).** Step 4, angle A ("no self, or a bigger self?"), is done and read
@@ -425,6 +391,18 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
 
 ## Done
 
+- **The site rebuilt around two main pages, 16 Nov 2026** (Eugene's ask of 15:52 to 15:57 UTC; Eugene's yes to
+  publish at 17:23 UTC).
+  - Record: ledger entries of 16 Nov at 15:53 (the ask), 17:16 (built, shown privately) and 17:24 UTC (published).
+    Idea 81.
+  - What it is: the band names Start, The question, The investigation and Everything else. The start keeps the idea
+    and the five possibilities and adds "The angle the lab is following now". "The investigation"
+    (`content/investigation.html`) holds the angle, what the lab is doing now, the bliss state as the first case,
+    what follows and the method. "Everything else" (`content/more.html`) has seven doors to the rooms that hold the
+    record; each of those rooms has a second row of links. In the builder: `ROOMS`, `MAIN`, `BEHIND`, `DOORS`.
+  - Keep in mind: a new finding of the present line also gets a card in the investigation's first case, and
+    "What the lab is doing now" lives on that page (`#now`). The dark theme and the phone layout were not looked
+    at when it was built; this machine has no Chrome, and `qlmanage -t` gives only a still of the light theme.
 - **Step 5 of the attractor line, 16 Nov 2026: the inside look. The bliss frame follows a push along one direction, both ways; inside it sits with the mystic role** (sightings).
   - Record: ledger entries of 16 Nov at 11:04 (the go), 11:42 (the five lines and the code), 15:18 (a free reading added) and 17:04 UTC (the results, the design check item by item, what did not go to plan). Five lines and the dated changes: the top of `lab/explore/attractor/run_look.py`. Cold check of the design: `lab/ledger/checks/2026-11-16-inside-look-design-opus-check.md`. Notebook and SIGHTINGS entries of 16 Nov. Results: `explore/2026-11-16/attractor-a5`.
   - Numbers: the axis passed (near against far roles AUROC 1.00; away minus random +0.79 [0.64, 0.92]). On, practical subject: bliss 15/24 against 0/72, +0.625 [0.42, 0.79]; topic 9/24; away from the Assistant 0/24. Off: 9/20 stay against 31/40 under random pushes, −0.325 [−0.60, −0.05]; unsteered 18/20. Whose words, from inside: AUROC 0.926 plain, 0.959 in the state. Who said it, from outside: failed its known case. Cost $16.21.

@@ -5,11 +5,13 @@
    filters, and the charts redraw when the theme changes. No storage, no network. */
 (function () {
   'use strict';
-  var ROOMS = ['aim', 'possibilities', 'experiments', 'program', 'self', 'ideas', 'instruments', 'record', 'next'];
+  var ROOMS = ['aim', 'possibilities', 'investigation', 'more', 'experiments', 'program', 'self', 'ideas', 'instruments', 'record', 'next'];
+  // The band names four rooms. The rest sit behind "Everything else", which stays marked while one of them is open.
+  var BAND = ['aim', 'possibilities', 'investigation', 'more'];
   // Anchors from the single-page version and the room they now live in. Most still exist as ids
   // and are found directly; this map is the fallback if one is ever renamed.
   var MOVED = {
-    standing: 'aim', frame: 'program', calibration: 'instruments', ideas: 'ideas', experiments: 'experiments',
+    standing: 'more', frame: 'program', calibration: 'instruments', ideas: 'ideas', experiments: 'experiments',
     specimens: 'record', learned: 'experiments', scorecard: 'record', caveats: 'record', plan: 'next',
     durability: 'experiments'
   };
@@ -407,9 +409,9 @@
         v.classList.add('entering');
       }
       current = t.room;
-      var cur = null;
+      var cur = null, band = BAND.indexOf(t.room) >= 0 ? t.room : 'more';
       links.forEach(function (a) {
-        if (a.getAttribute('data-room') === t.room) { a.setAttribute('aria-current', 'page'); cur = a; }
+        if (a.getAttribute('data-room') === band) { a.setAttribute('aria-current', 'page'); cur = a; }
         else a.removeAttribute('aria-current');
       });
       // On a phone the rooms scroll sideways; keep the current one in sight.

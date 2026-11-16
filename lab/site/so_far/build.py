@@ -46,12 +46,16 @@ FONTS = ("https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500
          "&family=Shippori+Mincho+B1:wght@400;500;600;700"
          "&family=Spectral:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap")
 
-# The nine rooms: (hash name, nav label, content files in order). Names are plain ASCII words. The order is the
-# order a reader needs (16 Nov 2026): the start, the question, what was found, the recipe the lab began with, then the
-# rooms that hold the detail.
+# The rooms: (hash name, nav label, content files in order). Names are plain ASCII words. From 16 Nov 2026 (Eugene:
+# the main parts show the framing and the angle being followed; the rest is "available but not cluttering") the band
+# at the top names four: the start, the two main pages (the question; the investigation) and one door, "Everything
+# else", to the seven rooms that hold the record. Those seven are rooms like any other and keep every finding; each
+# carries a second, quieter row of links to its neighbours.
 ROOMS = [
     ("aim", "Start", ["aim.html"]),
     ("possibilities", "The question", ["possibilities.html"]),
+    ("investigation", "The investigation", ["investigation.html"]),
+    ("more", "Everything else", ["more.html"]),
     ("experiments", "Findings", ["experiments.html", "learned.html"]),
     ("program", "The recipe", ["program.html"]),
     ("self", "The self", ["self.html", "self_prh.html", "self_work.html"]),
@@ -60,6 +64,18 @@ ROOMS = [
     ("record", "Record", ["record_head.html", "scorecard.html", "specimens.html", "caveats.html"]),
     ("next", "Next", ["plan.html"]),
 ]
+MAIN = ("aim", "possibilities", "investigation", "more")  # the rooms named in the band
+BEHIND = [name for name, _, _ in ROOMS if name not in MAIN]  # the rooms behind "Everything else"
+DOORS = {  # one line for each room behind, shown in the "Everything else" room
+    "experiments": "Every experiment, numbered, each with its limits, and what the lab has learned from them.",
+    "program": "The three acts the lab began with (form a self, release it, make the release the habit) and where "
+               "their tests stand.",
+    "self": "Ten parts of a self, with what is known, what the lab has tested and what is untested for each.",
+    "ideas": "The ideas the work came from, and the log of every one.",
+    "instruments": "The checks each instrument had to pass on a problem whose answer is published.",
+    "record": "Every graded prediction, the specimens, and what all this does and does not show.",
+    "next": "The plan, in the order it will be done.",
+}
 
 
 def read_text(path: Path) -> str:
@@ -1346,6 +1362,29 @@ def render_field(rows: list) -> str:
     )
 
 
+def render_doors() -> str:
+    """The rooms behind "Everything else", as numbered doors with one line each."""
+    labels = {name: label for name, label, _ in ROOMS}
+    out = [f'<ol class="steps steps-{len(BEHIND)} doors">']
+    for k, name in enumerate(BEHIND, 1):
+        out.append(f'<li class="step"><div class="step-n">{k}</div><b><a href="#{name}">{labels[name]}</a></b>'
+                   f'<p>{DOORS[name]}</p></li>')
+    out.append("</ol>")
+    return "".join(out)
+
+
+def render_subrooms(current: str) -> str:
+    """The second row at the top of a room behind "Everything else": the way back, and the neighbours."""
+    labels = {name: label for name, label, _ in ROOMS}
+    def link(name):
+        here = ' aria-current="page"' if name == current else ""
+        return f'<a href="#{name}"{here}>{labels[name]}</a>'
+
+    links = "".join(link(name) for name in BEHIND)
+    return (f'<nav class="subrooms" aria-label="Everything else"><a class="sr-home" href="#more">{labels["more"]}</a>'
+            f'{links}</nav>')
+
+
 def render_pager(i: int) -> str:
     out = ['<nav class="pager" aria-label="Previous and next room">']
     if i > 0:
@@ -1408,6 +1447,7 @@ def build() -> str:
         "frame_outro": frame["outro"],
         "instruments": render_instruments(parse_calibration()),
         "plan_lede": plan["lede"],
+        "more_doors": render_doors(),
         **log,
     }
     funcs = {
@@ -1416,17 +1456,18 @@ def build() -> str:
         "next": lambda arg: render_next(plan, [int(x) for x in arg.split(",")]),
         "glyph": glyph,
     }
-    nav = "".join(f'<a href="#{name}" data-room="{name}">{label}</a>' for name, label, _ in ROOMS)
+    nav = "".join(f'<a href="#{name}" data-room="{name}">{label}</a>' for name, label, _ in ROOMS if name in MAIN)
     views = []
     for i, (name, label, files) in enumerate(ROOMS):
         body = RAIL_RE.sub(r'\1<span class="rl">\2</span>\3',
                            "\n".join(fill(content(f), values, funcs) for f in files))
-        views.append(f'<div class="view" id="{name}" data-view="{name}" role="region" aria-label="{label}">\n{body}\n'
-                     f'{render_pager(i)}\n</div>')
+        sub = render_subrooms(name) + "\n" if name in BEHIND else ""
+        views.append(f'<div class="view" id="{name}" data-view="{name}" role="region" aria-label="{label}">\n{sub}'
+                     f'{body}\n{render_pager(i)}\n</div>')
     footer = content("footer.html").rstrip()
     built = (f'<p class="built">Built from the lab\'s files by lab/site/so_far/build.py. The ideas log\'s '
              f'{len(entries)} entries are read from lab/ideas/ideas.md each time the page is rebuilt. The start, '
-             f'the question\'s room, the Self room and the glossary were written for this site. The recipe\'s room '
+             f'the question\'s room, the investigation\'s page, the Self room and the glossary were written for this site. The recipe\'s room '
              f'holds the three acts and their tests, moved from the old front page. The other rooms are carried over '
              f'from the hand-kept page, with Limits boxes and glossary links added. The chariot, the K1 chart and the field of marks are drawn from those files when '
              f'the page is built.</p>')

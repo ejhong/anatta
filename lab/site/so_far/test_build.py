@@ -43,7 +43,10 @@ sys.dont_write_bytecode = True          # leave no __pycache__ beside the site
 import build  # noqa: E402
 import publish  # noqa: E402
 
-ROOMS = ["aim", "possibilities", "experiments", "program", "self", "ideas", "instruments", "record", "next"]
+ROOMS = ["aim", "possibilities", "investigation", "more", "experiments", "program", "self", "ideas", "instruments",
+         "record", "next"]
+MAIN = ["aim", "possibilities", "investigation", "more"]   # the rooms named in the band (16 Nov 2026)
+BEHIND = [r for r in ROOMS if r not in MAIN]               # the rooms behind "Everything else"
 RESERVED = {"settings", "sidebar", "customize", "upgrade", "downloads"}
 
 # Runs of words shared by the private bullets and text carried over verbatim from the hand-kept page
@@ -306,29 +309,67 @@ class SiteTest(unittest.TestCase):
                 stack.extend(node.children())
 
     # rooms ----------------------------------------------------------------------------------------
-    def test_nine_rooms_in_order(self):
+    def test_the_rooms_in_order_four_in_the_band_and_seven_behind(self):
         self.assertEqual([r[0] for r in build.ROOMS], ROOMS)
+        self.assertEqual(list(build.MAIN), MAIN)
+        self.assertEqual(build.BEHIND, BEHIND)
         views = re.findall(r'<div class="view" id="([^"]+)" data-view="([^"]+)"', self.page)
         self.assertEqual([v[0] for v in views], ROOMS)
         self.assertTrue(all(a == b for a, b in views))
         nav = re.search(r'<nav class="rooms"[^>]*>(.*?)</nav>', self.page, re.S).group(1)
-        self.assertEqual(re.findall(r'href="#([^"]+)" data-room="\1"', nav), ROOMS)
+        self.assertEqual(re.findall(r'href="#([^"]+)" data-room="\1"', nav), MAIN, "the band names the main rooms only")
         js = (build.CONTENT / "site.js").read_text(encoding="utf-8")
         listed = re.search(r"var ROOMS = \[(.*?)\];", js).group(1)
         self.assertEqual(re.findall(r"'([^']+)'", listed), ROOMS)
+        band = re.search(r"var BAND = \[(.*?)\];", js).group(1)
+        self.assertEqual(re.findall(r"'([^']+)'", band), MAIN)
+        # Every room behind "Everything else" has a door there and a second row that leads to its neighbours.
+        doors = re.search(r'<ol class="steps steps-\d+ doors">(.*?)</ol>', self.sections["more"], re.S).group(1)
+        self.assertEqual(re.findall(r'<b><a href="#([a-z]+)">', doors), BEHIND)
+        self.assertEqual(set(build.DOORS), set(BEHIND))
+        for r in ROOMS:
+            room = self.sections["ideas (carried over)" if r == "ideas" else r]   # the ideas room is kept in halves
+            row = re.search(r'<nav class="subrooms"[^>]*>(.*?)</nav>', room, re.S)
+            if r in MAIN:
+                self.assertIsNone(row, f"{r} is a main room and has no second row")
+                continue
+            self.assertIsNotNone(row, r)
+            self.assertEqual(re.findall(r'href="#([a-z]+)"', row.group(1)), ["more"] + BEHIND)
+            self.assertEqual(re.findall(r'href="#([a-z]+)" aria-current="page"', row.group(1)), [r])
         for r in ROOMS:
             self.assertRegex(r, r"^[a-z][a-z0-9-]*$")
             self.assertNotIn(r, RESERVED)
             self.assertFalse(r.startswith("comment-"))
 
-    def test_the_front_page_leads_to_the_question_then_the_findings_then_the_recipe(self):
-        self.assertEqual(ROOMS[:4], ["aim", "possibilities", "experiments", "program"])
+    def test_the_front_page_keeps_the_question_first_and_then_names_the_angle(self):
+        self.assertEqual(ROOMS[:4], ["aim", "possibilities", "investigation", "more"])
         front = self.sections["aim"]
-        order = [front.index(f'id="{x}"') for x in ("idea", "computational", "now", "kinds", "standing", "paths",
-                                                       "recipe-door")]
-        self.assertEqual(order, sorted(order),
-                         "the front page reads: the idea, the question, what the lab is doing now, where it stands")
+        order = [front.index(f'id="{x}"') for x in ("idea", "computational", "angle")]
+        self.assertEqual(order, sorted(order), "the front page reads: the idea, the question, the angle followed now")
         self.assertIn("<h1>Is awakening <em>computational?</em></h1>", front)
+        angle = front[front.index('id="angle"'):]
+        self.assertIn('href="#possibilities">Read the question</a>', angle)
+        self.assertIn('href="#investigation">Read the investigation</a>', angle)
+        self.assertIn('href="#more">the whole record</a>', angle)
+        self.assertIn("the most interesting angle at the moment", angle)
+        # What used to follow on the front page is one step behind, in the same order, and nothing was dropped.
+        for gone in ("now", "kinds", "standing", "paths", "recipe-door", "self-door", "checks"):
+            self.assertNotIn(f'id="{gone}"', front)
+        behind = self.sections["more"]
+        order = [behind.index(f'id="{x}"') for x in ("more-rooms", "kinds", "standing", "paths", "recipe-door",
+                                                        "self-door", "checks")]
+        self.assertEqual(order, sorted(order))
+        # The investigation's page: the angle, what the lab is doing now, the first case with every finding of the
+        # present line, what follows, and the method.
+        inv = self.sections["investigation"]
+        order = [inv.index(f'id="{x}"') for x in ("investigation-head", "now", "bliss-case", "investigations-next",
+                                                     "how-we-know")]
+        self.assertEqual(order, sorted(order))
+        self.assertIn('<h2 class="big">Can awakening talk be told from a real change?</h2>', inv)
+        case = inv[inv.index('id="bliss-case"'):inv.index('id="investigations-next"')]
+        for sid in ("attractor-row", "attractor-plain", "attractor-conduct", "attractor-mine", "attractor-inside"):
+            self.assertIn(f'href="#{sid}"', case, f"the first case links to {sid}")
+            self.assertIn(f'id="{sid}"', self.sections["experiments"])
         for moved in ("approach", "halves", "lookalikes", "acts", "frame"):
             self.assertNotIn(f'id="{moved}"', front)
             self.assertIn(f'<section class="plate" id="{moved}">', self.sections["program"])

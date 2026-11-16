@@ -10326,3 +10326,11 @@ There are two ways to fix a hub:
   - **Where it is.** One commit, caa4792, on the local branch `site-two-pages`, which is not pushed. Main and the public site keep the earlier layout. The preview is the private copy of the site on claude.ai (version 29 of that artifact), with a note at its top saying it is a preview. The live version it replaced was an older build of the same page, close to the commit of 15 Nov at 15:42 (0810a98); a copy is kept in the session's scratch folder.
   - **Checks.** The 31 site tests pass on the branch, with two rewritten for the new layout (the rooms and their two sets; the start, the room behind and the investigation's page). The tally is unchanged: hit 43, miss 73, open 7. By eye: six still pictures made with Quick Look, in the light theme. The dark theme and the phone layout were not looked at, because this machine has no browser that can be driven.
   - Not checked by an agent. Cost: none.
+
+- **Eugene says yes, and the site's new layout is published** (Fable, 17:24 UTC on 16 Nov, read off the clock).
+  - Eugene, at 17:23 UTC, on seeing the preview: "yes to publish - and please continue".
+  - **Published:** the rebuild described at 17:16 UTC. Its source files were taken from the local branch onto main unchanged (the builder, the script, the stylesheet, the tests, the start, the findings room's opening, and the two new files `content/investigation.html` and `content/more.html`), and the page was built again on main, so that it carries main's latest text. The local branch `site-two-pages` is deleted; its one commit, caa4792, is not in main's history, and its content is in this commit.
+  - **The private copy** on claude.ai is republished from the same built page, without the preview note.
+  - **Checks:** 31 site tests pass. The tally is unchanged: hit 43, miss 73, open 7. Not looked at: the dark theme and the phone layout.
+  - **"Please continue":** the next step is the self test (idea 80, angles 1 to 3; `lab/TODO.md`), which Fable starts in this session at Eugene's word.
+  - Not checked by an agent. Cost: none.

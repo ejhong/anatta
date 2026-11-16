@@ -1434,3 +1434,5 @@ Claude (Anthropic) wrote this file at Eugene Jhong's direction. Eugene is an ind
   - A third is possible later, if the self-other overlap replication gives a clear answer either way.
 - **Status (16 Nov, 15:58 UTC):** the site's organization has Eugene's liking; the preview still goes to Eugene before publishing. Two papers is the plan; nothing is written yet for the second.
 - **Status (16 Nov, 17:16 UTC): the rebuild is made and waits for Eugene's eye.** It is on a local branch, unpublished, and shown on the private copy of the site. The start keeps the idea and the five possibilities and adds "The angle the lab is following now"; "The investigation" is a new page; the seven other rooms sit behind "Everything else", each with a second row of links to its neighbours; no finding is dropped and the tally is unchanged.
+- **Eugene (16 Nov, 17:23 UTC):** "yes to publish - and please continue"
+- **Status (16 Nov, 17:24 UTC): published.** The site has the new layout, and the private copy matches it. The self test (idea 80, angles 1 to 3) is next.
