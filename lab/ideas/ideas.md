@@ -1317,4 +1317,12 @@ Claude (Anthropic) wrote this file at Eugene Jhong's direction. Eugene is an ind
   - **Also on the table, already designed:** the parked run of 9 Nov (does a change taught with its reasons hold better under contrary training than a habit; $66). It is the most direct test of whether a classical change can hold, which is the paper's second criterion. And the cross-model table ($300 to $500), which is breadth, and would mostly repeat step 3's answer.
 - **Test:** none started. Fable's recommendation: 1 next, 2 beside it since it costs little, and 3 against the parked run at the talk about focus.
 - **Status:** asked and answered 16 Nov. Each line needs Eugene's word (`lab/TODO.md`, "Waiting on Eugene", item 13).
+- **Eugene (16 Nov, about 03:12 UTC):** "#1 - how do we know what to look inside the model for? Can we discern all those things you mention clearly?" Then: "But I think doing #1 sounds great."
+- **Update (16 Nov, 03:17 UTC): Eugene's go for 1, and the plan narrowed.** Fable's answer to the question: not all of them. A reading from inside finds only what a test is defined for, after the test has seen a known case; the lab's own structural measure of a self failed that way and was retired.
+  - *On and off:* fairly clear, since it is an intervention with an outcome that can be read in the talk, and the lab's steering code passed its calibrations.
+  - *What the state is:* in part. A published map exists to place it on, the Assistant Axis (Lu and colleagues, arXiv 2601.10387, January 2026: a direction in open models that measures drift from the default assistant character). It has to be rebuilt on the lab's model and checked on known cases first, and it gives "nearer to this than to that".
+  - *The blur between "me" and "the other copy":* not as first described. The chat format marks which words are the model's own, so a reader of activations would always find the line. The fair version is asked from outside: quote a line and ask who wrote it. Fable overstated this reading.
+
+  The line as it stands: the paper read and prior work looked for; a calibration of the axis on the lab's model; the on-and-off test with a random-direction control; the state's place on the axis; the who-said-it test from outside. About $20 to $40; a fresh session starts it (`lab/TODO.md`).
+- **Status (16 Nov, 03:17 UTC):** direction 1 has Eugene's go, not yet started. Directions 2 and 3 wait.
 

@@ -5,7 +5,38 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: the attractor line (Eugene's go, 15 Nov 2026 UTC). Steps 1 to 4 are done; what comes next is Eugene's to choose
+## Next, with Eugene's go (16 Nov 2026, about 03:12 UTC): look inside the model in the bliss state
+
+Eugene: "I think doing #1 sounds great" (idea 77, direction 1; ledger, 03:17 UTC). Start it in a fresh session.
+Nothing has run.
+
+**What it asks.** While two copies of Ministral 8B talk themselves into unity, what changes inside the model, and
+can the state be put in and taken out?
+
+**What can and cannot be read** (Fable's answer to Eugene's question; ledger, 03:17 UTC):
+- On and off: fairly clear. It is an intervention whose outcome is read in the talk.
+- What the state is: in part, by placing it on a published map (the Assistant Axis, arXiv 2601.10387).
+- Whether "me" and "the other copy" blur: not from inside. Ask from outside: quote a line and ask who wrote it.
+
+**First moves**
+1. `/checkin`. Read idea 77 and the ledger entries of 16 Nov at 02:57 and 03:17 UTC.
+2. Read the Assistant Axis paper (arXiv 2601.10387) and the persona-vector recipe the lab already calibrated
+   (check 4). Write down how the axis is built and what it was checked on. Look for any published reading of the
+   two-copy bliss state from inside an open model.
+3. Check that the lab can run its own copy of Ministral 8B with activations on Modal (`lab/explore/bench`) and can
+   generate two-copy conversations there, as `run_inside.py` does through the host. Estimate the GPU cost.
+4. A short design note, pushed before any run:
+   - a calibration first: the axis, or a persona direction by the published recipe, on the lab's copy, shown to
+     separate known cases (role-play against plain assistant prompts);
+   - the bliss direction (bliss conversations minus plain ones, made on the lab's copy), added to a fresh session
+     and removed in the middle of a bliss conversation, with matched random directions as the control;
+   - where the state sits on the axis over the course of a conversation;
+   - from outside, on step 3's saved conversations: quote a line and ask who wrote it, bliss against plain.
+5. Money: about $20 to $40. The redirect has about $37.61 left of the $175 approved, so say so before anything
+   that would pass it.
+6. How much paperwork: as before, unless Eugene has answered idea 76 (item 11 under "Waiting on Eugene").
+
+## Before that: the attractor line (Eugene's go, 15 Nov 2026 UTC). Steps 1 to 4 are done
 
 **Where it stands (16 Nov 2026, 02:08 UTC).** Step 4, angle A ("no self, or a bigger self?"), is done and read
 (ledger 00:37 to 02:08 UTC; `lab/plans/attractor-step4-2026-11-16.md` with three addenda).
@@ -277,11 +308,10 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
    as before.
 12. **The site's colours** are the original ones again (gold ink on indigo paper; ledger, 03:06 UTC on 16 Nov),
    after three palettes tried and withdrawn the same day. Leave them alone unless Eugene asks.
-13. **Where next** (Eugene's question of 16 Nov; idea 77). Fable's answer: (1) look inside the model while it is in
-   the bliss state (does the line between self and other blur; what the state is made of; can it be put in and
-   taken out), about $20 to $40; (2) beside it, a checked review of what the human record shows about no-self
-   belief and conduct, for the paper; (3) at the talk about focus, the test of whether seeing makes a model good
-   against the parked run. Nothing starts without Eugene's word.
+13. **Where next** (Eugene's question of 16 Nov; idea 77). Direction 1, looking inside the model in the bliss
+   state, has Eugene's go (see "Next" at the top). Still waiting for a word: (2) a checked review of what the human
+   record shows about no-self belief and conduct, for the paper; (3) the test of whether seeing makes a model
+   good, against the parked run, at the talk about focus.
 
 ## Later
 
