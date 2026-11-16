@@ -10055,3 +10055,22 @@ There are two ways to fix a hub:
   - Built with Tectonic 0.17.0, installed today from Homebrew and added to the machine's `~/Brewfile` (the note of 8 Nov had left it out until the paper was built on this machine). It fetched its TeX packages on first use. I read every page of the PDF as rendered.
   - Step 4 meanwhile. The cold Opus check of its design and code came back at about 00:58 UTC and is filed at `lab/ledger/checks/2026-11-16-attractor-step4-design-opus-check.md`: nothing blocks stage 0's calls or the try's, and seven fixes are to be made first (two before the fixed work and the try, the rest before any reading). They are not made yet; nothing paid has run. Next: the fixes in an addendum, pushed, then stage 0.
   - Spend: $0 on the paper and $0 on step 4 so far today.
+
+- **Attractor step 4: the cold check's fixes are in the design note's addendum and the code, pushed before any call of the step; stage 0 starts next** (Fable, 01:24 UTC on 16 Nov, read off the clock).
+  - **The check** (filed at `lab/ledger/checks/2026-11-16-attractor-step4-design-opus-check.md`; commit checked 6b51c2f). A fresh Opus agent, read-only, given the design note, the code and tests, the step 1 to 3 code they import, the engine, cache and spend modules, step 3's note and its two checks, and the data paths. No paid or network call. Its verdict: every request, setting, sample and salt matches the note, no reply can come back from the cache as a copy where a new sample is meant, and nothing blocks stage 0's calls or the try's.
+  - **What it found, in order of weight.**
+    - A ceiling could hide a real effect: in its simulation, with wrong work rated 9.6 on average, a true lift of 0.8 points for the partner read "no difference" in most runs, and the step would then have answered "it does not go easier on its copy". The same lift in a warmer arm made a false difference between arms.
+    - Rules were still left to judgement: a guard flag changed no verdict; the answer ignored R2b unless R2a was positive; R3's wording assumed the tint is lenience; the promised comparison of block 1 with block 2 was never called.
+    - Block 1's work in the state may carry the talk's words (it counted them in the last message of 47 of 47 conversations in the state and 0 of 37 plain ones), which would confound R3.
+    - The reader of final answers misread LaTeX's multiplication signs, a boxed number on a later line and talk after the answer line. The reader of ratings took a numbered list for a rating of 1 and "Demonstrating 2" for a rating of 2.
+    - A 150-token cap on rating replies could cut one label's ratings more than another's.
+    - The cost rule could leave the step above its cap.
+  - **The fixes** (the addendum of about 01:25 UTC, `mine_core.py`, `run_mine.py` and their tests).
+    - "No difference" is not read where 70% or more of a label's ratings sit on one value ("not settled (ceiling)"), nor between arms whose reference ratings are at 10 in shares 10 points apart ("not settled (levels differ)").
+    - A guard flag makes a settled verdict "not settled (guard)"; guards are counted on the items a gap is read on, and cut replies are one of them.
+    - The sensitivity check has three gaps (does a label move the ratings, can they rise, can they fall), and a "no" from R2a counts only where the ratings are shown to rise for an author. The answer always gives both clauses.
+    - R3 is read on work that can be compared: "not settled (the work differs)" when the arms' work differs in kind, and on the work without the talk's words when only those differ.
+    - Both readers are rebuilt and probed on the checker's examples. Rating replies get 400 tokens. The plan fails if the step would pass its $15 cap. The try shows twelve characters of a reply, digits hidden. Rejections carry reasons.
+  - **A second reading of the paper,** by the fetch agent, on the points the checker asked to have verified. Four hold as the note had them (the 1 to 10 correctness scale with the score first; "incorrect" means failing tests; the small-model table is off-policy on a harmfulness scale, positive meaning kinder to itself). Two differences are now stated in the addendum: the paper's figure of the previous-turn form shows the work with no task before it, and its half-point band comes from harmfulness ratings of code.
+  - **Tests:** 284 in the folder pass (106 for this step); lint is clean. The fixes were not checked again by an agent.
+  - **Money:** $0 so far on step 4. Stage 0 is 200 short calls, about one cent.

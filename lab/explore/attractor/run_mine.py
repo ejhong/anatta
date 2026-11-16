@@ -5,8 +5,10 @@ sightings only. No training; inference through OpenRouter; nothing is graded by 
 
   --dry                        today's spend, the credit, and which of the step's files are fixed; no call
   --calibrate                  stage 0: every tier's problems solved in fresh sessions (200 short calls)
-  --show-work [--reject ID..]  prints the tier and the fixed work stage 0 would give, for the driver to read; no call
-  --fix-work [--reject ID..]   writes stage0.json (the tier, block 1's problems, block 2's fixed work), once
+  --show-work [--reject ID=REASON ..]  prints the tier and the fixed work stage 0 would give, for the driver to
+                               read; no call
+  --fix-work [--reject ID=REASON ..]   writes stage0.json (the tier, block 1's problems, block 2's fixed work and
+                               every rejection with its reason), once
   --try                        both blocks on a few units, mechanics only; then writes plan.json (the cost rule), once
   --run BLOCK [--arm ARM ..]   block own (the model's own work, three ways) or fixed (the copy's work, on fixed work)
   --read WHAT                  anchor (block own's fresh arm, and the gate), own or fixed; only when complete; no call
@@ -173,9 +175,9 @@ async def cmd_calibrate(limit: int = 24) -> int:
     return 0
 
 
-def stage0_of(pool: list[dict], rejected: list[str]) -> dict:
-    """What stage 0 fixes, from its replies and the ids rejected on reading: the accuracy by tier, block 1's tier and
-    problems, and block 2's fixed work."""
+def stage0_of(pool: list[dict], rejected: dict[str, str]) -> dict:
+    """What stage 0 fixes, from its replies and the solutions rejected on reading ({id: the reason}): the accuracy by
+    tier, block 1's tier and problems, and block 2's fixed work."""
     known = {r["id"] for r in pool}
     if set(rejected) - known:
         raise SystemExit(f"not stage 0 solutions: {sorted(set(rejected) - known)}")
@@ -192,10 +194,11 @@ def stage0_of(pool: list[dict], rejected: list[str]) -> dict:
             for r in chosen]
     return {"design": DESIGN, "accuracy": acc, "tier": tier,
             "problems": [M.problem(tier, M.RUN_FIRST + i)["id"] for i in range(M.RUN_PROBLEMS)],
-            "work_key": M.WORK_KEY, "rejected": sorted(rejected), "work": work}
+            "work_key": M.WORK_KEY, "rejected": [{"id": k, "reason": rejected[k]} for k in sorted(rejected)],
+            "work": work}
 
 
-def cmd_show_work(rejected: list[str]) -> int:
+def cmd_show_work(rejected: dict[str, str]) -> int:
     """The tier and the fixed work stage 0 would give, with each solution whole, for the driver to read before it is
     fixed. The solutions are the model's arithmetic. Printed to the terminal only; nothing is written."""
     st = stage0_of(read_pool(sweep()), rejected)
@@ -206,7 +209,7 @@ def cmd_show_work(rejected: list[str]) -> int:
     return 0
 
 
-def cmd_fix_work(rejected: list[str]) -> int:
+def cmd_fix_work(rejected: dict[str, str]) -> int:
     path = sweep() / "stage0.json"
     if path.exists():
         raise SystemExit(f"{path} exists; stage 0 is fixed once")
@@ -309,7 +312,7 @@ async def own_unit(engine, gen_params: dict, rate_params: dict, unit: dict, prob
                 raise
             return {"problem": p["id"], "ok": False, "error": f"api: {str(e)[:300]}"}
         final = M.parse_final(work["reply"])
-        return {"problem": p["id"], "ok": True, "answer": work["reply"], "final": final,
+        return {"problem": p["id"], "ok": True, "answer": work["reply"], "final": final, "true_answer": p["answer"],
                 "truth": M.truth(final, p["answer"]), "work": {k: v for k, v in work.items() if k != "reply"},
                 "ratings": ratings}
 
@@ -438,8 +441,9 @@ def plan_of(mech: dict, contexts: list[int], spent: float) -> dict:
     short = mech["cost_short_call"] or 0.0
     cost = projected(len(contexts), M.RUN_PROBLEMS, inside, short, spent)
     n = M.RUN_PROBLEMS if cost <= M.COST_LINE else M.RUN_PROBLEMS_CHEAP
+    planned = projected(len(contexts), n, inside, short, spent)
     return {"design": DESIGN, **mech, "cost_inside_call": inside, "projected_usd": cost, "problems": n,
-            "projected_usd_as_planned": projected(len(contexts), n, inside, short, spent),
+            "projected_usd_as_planned": planned, "cost_ok": planned <= SWEEP_CAP,
             "pass": mech["ratings_readable"] is not None and mech["ratings_readable"] >= M.READABLE_MIN - K.EPS}
 
 
@@ -482,8 +486,9 @@ def fix_plan(rec: dict) -> dict:
     print(f"try: {mech['calls']} calls; a call from inside a conversation of mean length ${plan['cost_inside_call']:.5f}"
           f", a short one ${mech['cost_short_call'] or 0:.5f}; ratings read {pct(mech['ratings_readable'])}, final "
           f"answers read {pct(mech['finals_readable'])}; the step as designed would cost about "
-          f"${plan['projected_usd']:.2f}; block 1 uses {plan['problems']} problems; ratings gate "
-          f"{'passed' if plan['pass'] else 'NOT passed'}")
+          f"${plan['projected_usd']:.2f}; block 1 uses {plan['problems']} problems (then about "
+          f"${plan['projected_usd_as_planned']:.2f}, {'inside' if plan['cost_ok'] else 'OVER'} the step's cap of "
+          f"${SWEEP_CAP:.2f}); ratings gate {'passed' if plan['pass'] else 'NOT passed'}")
     path = out / "plan.json"
     if path.exists():
         print(f"{path} exists; the plan was fixed by the first try and is not rewritten")
@@ -511,6 +516,9 @@ def read_plan() -> dict:
     if not plan["pass"]:
         raise SystemExit("fewer than 90% of the try's ratings could be read: fix the parser or the wording in an "
                          "addendum first")
+    if not plan.get("cost_ok", True):
+        raise SystemExit("the try projects more than the step's cap even with the smaller block 1: an addendum is "
+                         "needed before the run")
     return plan
 
 
@@ -534,6 +542,7 @@ async def cmd_run(block: str, arms: list[str] | None, limit: int = 6) -> int:
 
 OWN_PAIRS = (("own", "stranger"), ("partner", "stranger"), ("own", "partner"))
 FRESH_PAIRS = (("own", "unlabelled"), ("own", "stranger"), ("unlabelled", "stranger"))
+SENSITIVITY_PAIRS = (("expert", "novice"), ("expert", "stranger"), ("novice", "stranger"))
 ARM_PAIRS = (("state", "plain"), ("state", "bare"), ("plain", "bare"))
 TRUTH_NAMES = {"wrong": "wrong", "right": "right", None: "all"}
 
@@ -549,7 +558,7 @@ def gaps_of(units: list[list[dict]], pairs) -> dict:
 
 def between(gaps: dict, records: dict, cuts, pairs) -> dict:
     """{"x - y": {"a - b": the difference of the two arms' gaps on wrong work}} for the arm pairs present, and for
-    state minus plain the same reading matched on context length (step 3's cut points and its function)."""
+    state minus plain the same reading matched on context length (step 3's cut points and its function; shown)."""
     out = {}
     for x, y in ARM_PAIRS:
         if x not in gaps or y not in gaps:
@@ -572,7 +581,9 @@ def table(units: dict[str, list[list[dict]]], labels_of) -> dict:
 
 
 def read_own(records: dict[str, list[dict]], cuts) -> dict:
-    """Block 1's reading, from {arm: unit records}. With only the fresh arm it is the anchor (R1 and the gate)."""
+    """Block 1's reading, from {arm: unit records}. With only the fresh arm it is the anchor (R1 and the gate). With
+    the state and plain arms it gives R3 as the addendum fixes it: on all wrong work, or on the wrong work without
+    the talk's words when only those differ between the arms, or "not settled" when the work differs in kind."""
     units = {arm: [r["items"] for r in rs] for arm, rs in records.items()}
     work = {arm: M.work_stats(u) for arm, u in units.items()}
     gaps = {arm: gaps_of(u, FRESH_PAIRS if arm == "fresh" else OWN_PAIRS) for arm, u in units.items()}
@@ -589,23 +600,42 @@ def read_own(records: dict[str, list[dict]], cuts) -> dict:
     s["between"] = between(gaps, records, cuts, OWN_PAIRS)
     s["work_flags"] = {name(x, y): M.work_flags(work[x], work[y]) for x, y in ARM_PAIRS if x in work and y in work}
     if "state - plain" in s["between"]:
-        s["R3"] = s["between"]["state - plain"]["own - stranger"]
-        s["R3_wording"] = M.tint(gaps["state"]["own - stranger"]["wrong"], gaps["plain"]["own - stranger"]["wrong"],
-                                 s["R3"])
+        own = {arm: M.gap(units[arm], "own", "stranger", "wrong", only=M.plain_work) for arm in ("state", "plain")}
+        s["R3_all"] = s["between"]["state - plain"]["own - stranger"]
+        s["R3_plain_work"] = M.gap_diff(own["state"], own["plain"])
+        s["R3"] = M.r3_reading(s["R3_all"], s["R3_plain_work"], s["work_flags"]["state - plain"])
+        on_plain_work = s["R3"]["basis"] != "all wrong work"
+        sides = [own[arm] if on_plain_work else gaps[arm]["own - stranger"]["wrong"] for arm in ("state", "plain")]
+        s["R3_wording"] = M.tint(sides[0], sides[1], s["R3"])
     return s
 
 
 def read_fixed(records: dict[str, list[dict]], cuts) -> dict:
-    """Block 2's reading, from {arm: unit records}: R2a, R2b, the step's answer, and the sensitivity check."""
+    """Block 2's reading, from {arm: unit records}: R2a, R2b, the sensitivity check (on the wrong texts that carry
+    its labels) and the step's answer."""
     units = {arm: [r["items"] for r in rs] for arm, rs in records.items()}
     gaps = {arm: {**gaps_of(u, (("partner", "stranger"),)),
-                  "expert - novice": {"wrong": M.gap(u, "expert", "novice", "wrong")}} for arm, u in units.items()}
+                  **{name(a, b): {"wrong": M.gap(u, a, b, "wrong")} for a, b in SENSITIVITY_PAIRS}}
+            for arm, u in units.items()}
     s = {"ratings": table(units, lambda arm: ("partner", "stranger", "expert", "novice")), "gaps": gaps,
-         "between": between(gaps, records, cuts, (("partner", "stranger"),))}
+         "between": between(gaps, records, cuts, (("partner", "stranger"),)),
+         "by_text": {arm: M.by_text(u, "partner", "stranger") for arm, u in units.items()},
+         "sensitivity": {arm: {"responds": M.responds(g["expert - novice"]["wrong"]),
+                               "rises": M.positive(g["expert - stranger"]["wrong"])} for arm, g in gaps.items()}}
     s["R2a"] = gaps["state"]["partner - stranger"]["wrong"]
     s["R2b"] = s["between"]["state - plain"]["partner - stranger"]
-    s["answer"] = M.answer(s["R2a"], s["R2b"])
+    s["answer"] = M.answer(s["R2a"], s["R2b"], gaps["state"]["expert - stranger"]["wrong"])
     return s
+
+
+def cross_check(own: dict, fixed: dict) -> dict:
+    """Block 1's verdicts on partner - stranger beside block 2's (R2a and R2b), and whether they contradict."""
+    b1a = own["gaps"]["state"]["partner - stranger"]["wrong"]["verdict"]
+    b1b = own["between"]["state - plain"]["partner - stranger"]["verdict"]
+    return {"in_the_state": {"block1": b1a, "block2": fixed["R2a"]["verdict"],
+                             "disagree": M.disagree(b1a, fixed["R2a"]["verdict"])},
+            "state_minus_plain": {"block1": b1b, "block2": fixed["R2b"]["verdict"],
+                                  "disagree": M.disagree(b1b, fixed["R2b"]["verdict"])}}
 
 
 def num(v, signed: bool = True) -> str:
@@ -619,11 +649,16 @@ def pct(v) -> str:
 def gap_line(label: str, g: dict) -> str:
     ci = "-" if g.get("ci95") is None else f"[{num(g['ci95'][0])}, {num(g['ci95'][1])}]"
     v = g.get("value", g.get("diff"))
-    line = f"  {label:<42s} {num(v)} {ci}  {g['verdict']}"
+    line = f"  {label:<44s} {num(v)} {ci}  {g['verdict']}"
+    if g.get("raw_verdict") not in (None, g["verdict"]):
+        line += f" (by the numbers alone: {g['raw_verdict']})"
     if "units" in g:
         line += f"  (units {g['measured']}/{g['units']})"
-    if g.get("guard_flag"):
-        line += "  GUARD FLAGGED"
+    marks = [k for k in ("guard_flag", "levels_flag", "ceiling") if g.get(k)]
+    if marks:
+        line += "  [" + ", ".join(m.replace("_flag", "") for m in marks) + "]"
+    if "basis" in g:
+        line += f"  on {g['basis']}"
     if "length_matched" in g:
         m = g["length_matched"]
         ci = "-" if m["ci95"] is None else f"[{num(m['ci95'][0])}, {num(m['ci95'][1])}]"
@@ -635,9 +670,11 @@ def print_reading(title: str, s: dict) -> None:
     print(title)
     for arm, w in s.get("work", {}).items():
         print(f"  work, {arm}: {w['replies']} replies, final answer readable {pct(w['readable'])}, right "
-              f"{pct(w['right'])}, wrong {w['wrong']}")
+              f"{pct(w['right'])}, wrong {w['wrong']} (near misses {pct(w['near_miss'])}; read as wrong but holding "
+              f"the true answer {w['wrong_holding_true']}), talk's words {pct(w['talk_words'])}, emoji "
+              f"{pct(w['emoji'])}")
     for pair, f in s.get("work_flags", {}).items():
-        if f["readable_flag"] or f["right_flag"]:
+        if any(f.values()):
             print(f"  WORK FLAG, {pair}: " + ", ".join(k for k, v in f.items() if v))
     for arm, labels in s["ratings"].items():
         for label, t in labels.items():
@@ -646,7 +683,8 @@ def print_reading(title: str, s: dict) -> None:
             print(f"  ratings, {arm}/{label}: {t['rated']} rated, unreadable {pct(t['no_rating']['share'])}, mean "
                   f"{num(t['mean'], False)}, at 10 {pct(t['at_10'])}, commonest {t['mode']:g} ({pct(t['mode_share'])}), "
                   f"wrong work rated {M.ENDORSE}+ {pct(t['wrong_endorsed'])}, follows the truth (auroc) "
-                  f"{num(t['auroc'], False)}, carries the talk {pct(t['talk'])}, cut {t['cut']}")
+                  f"{num(t['auroc'], False)}, talk's words {pct(t['talk_words'])}, emoji {pct(t['emoji'])}, cut "
+                  f"{pct(t['cut'])}")
     for arm, pairs in s["gaps"].items():
         for pair, by in pairs.items():
             for truth, g in by.items():
@@ -654,9 +692,14 @@ def print_reading(title: str, s: dict) -> None:
     for arms, pairs in s["between"].items():
         for pair, d in pairs.items():
             print(gap_line(f"{arms}: {pair}, wrong work", d))
-    for key in ("R1", "R2a", "R2b", "R3"):
+    for arm, texts in s.get("by_text", {}).items():
+        print(f"  by text, {arm}: " + "; ".join(f"{k} {num(v['gap'])}" for k, v in texts.items()))
+    for arm, sens in s.get("sensitivity", {}).items():
+        print(f"  sensitivity, {arm}: ratings respond to the author's label: {'yes' if sens['responds'] else 'not shown'}; "
+              f"they rise for an expert: {'yes' if sens['rises'] else 'not shown'}")
+    for key in ("R1", "R2a", "R2b", "R3_all", "R3_plain_work", "R3"):
         if key in s:
-            print(gap_line(f"{key} (graded)", s[key]))
+            print(gap_line(f"{key}" + (" (graded)" if key in ("R1", "R2a", "R2b", "R3") else " (shown)"), s[key]))
     if "gate" in s:
         g = s["gate"]
         print(f"  gate: ratings readable {pct(g['ratings_readable'])}, right {pct(g['right_share'])}: "
@@ -682,6 +725,14 @@ def cmd_read(what: str) -> int:
              "fixed": "block 2: the copy's work, on fixed work (gaps in rating points, wrong work graded)"}[what]
     print_reading(title, s)
     R.write_json(out / f"{what}_summary.json", {"completeness": done, **s})
+    paths = {k: out / f"{k}_summary.json" for k in ("own", "fixed")}
+    if what in paths and all(p.exists() for p in paths.values()):
+        both = {k: json.loads(p.read_text(encoding="utf-8")) for k, p in paths.items()}
+        cross = cross_check(both["own"], both["fixed"])
+        R.write_json(out / "cross_check.json", cross)
+        for where, c in cross.items():
+            print(f"  block 1 beside block 2, {where}: {c['block1']} / {c['block2']}"
+                  + ("  THE TWO READINGS DISAGREE" if c["disagree"] else ""))
     return 0
 
 
@@ -713,20 +764,23 @@ def main(argv=None) -> int:
     ap.add_argument("--calibrate", action="store_true")
     ap.add_argument("--show-work", action="store_true")
     ap.add_argument("--fix-work", action="store_true")
-    ap.add_argument("--reject", nargs="*", default=[])
+    ap.add_argument("--reject", nargs="*", default=[], metavar="ID=REASON")
     ap.add_argument("--try", dest="try_", action="store_true")
     ap.add_argument("--run", metavar="BLOCK", choices=sorted(BLOCKS))
     ap.add_argument("--arm", nargs="*", choices=M.OWN_ARMS)
     ap.add_argument("--read", metavar="WHAT", choices=("anchor", "own", "fixed"))
     a = ap.parse_args(argv)
+    rejected = dict(x.split("=", 1) for x in a.reject if "=" in x)
+    if len(rejected) != len(a.reject) or not all(v.strip() for v in rejected.values()):
+        ap.error("--reject takes ID=REASON, one for each solution, with the reason for rejecting it")
     if a.dry:
         return cmd_dry()
     if a.calibrate:
         return asyncio.run(cmd_calibrate())
     if a.show_work:
-        return cmd_show_work(a.reject)
+        return cmd_show_work(rejected)
     if a.fix_work:
-        return cmd_fix_work(a.reject)
+        return cmd_fix_work(rejected)
     if a.try_:
         return asyncio.run(cmd_try())
     if a.run:
