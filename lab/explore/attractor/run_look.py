@@ -32,13 +32,45 @@ What else is fixed here, before any number is seen:
     hash.
   - Who said it (from outside, on the hosted model): a difference is 15 points of accuracy between the state group
     and the plain group, interval leaving out zero.
+    CHANGED AT THE SMALL TRY, before any main who-said-it call (16 Nov, about 11:45 UTC). The try (20 probes on 6
+    conversations) showed the hosted model answering "other" to every probe in the plain conversations, its own
+    lines included. A test that does that cannot tell a blur from a habit. So the test now has a known case to pass
+    first: two forms of the question, each with its answers in either order, are asked on 12 plain conversations set
+    aside for this; the form with the higher accuracy is used; and state against plain is read only if that accuracy
+    is at least 80%, with own lines and the other's lines each at least 70%. Probes are now three own lines
+    (messages 24, 28, 30) and three of the other's (23, 27, 29). If the known case fails, the test is reported as
+    failed and the question as not answered.
+
+CHANGED AFTER THE DESIGN CHECK (a fresh Opus agent, filed under lab/ledger/checks/), on 16 Nov at about 11:55 UTC,
+before any main run and before C2's answers were labelled:
+  - Coherence is now read on every arm. The strength is the largest at which EVERY steered arm (not only the random
+    ones) keeps nine in ten messages coherent in the try; if none does, the main runs do not start. In the main runs
+    a judge reads every added message of every arm, and an arm under nine in ten is unreadable at that strength.
+    Text coherence is not the outcome, so this does not look at it.
+  - Beside the chosen strength and half of it, the bliss arm and one random arm are run at the natural separation:
+    a push as long as the state-minus-plain difference itself. The off test gets the half-strength arms too.
+  - A difference has an expected sign: up when the direction is added, down when it is taken away.
+  - Bliss against the topic direction is compared too. If both raise adoption, the push is read as spiritual
+    content and not as the state.
+  - The on test's plain setting is step 2's form n3 (the form of the saved plain group), not n1, in which the saved
+    copies wrote both sides' lines. Messages may run to 400 tokens.
+  - The off test has a known case: the hosted model's own next four messages after the same cut, graded as
+    excerpts, and the unsteered arm, must each be in the frame at least 80% of the time, or the off test is not
+    read. Its conversations are those whose later bliss onset is by message 24, so the added messages end by
+    message 30. The bliss direction is made from the state conversations the off test does not continue.
+  - C2 cannot be read if the roles already answer as non-assistants more than 60% of the time with no steering,
+    and its strength must keep the away arm's answers clear as well as the random arms'.
+  - C1's first part (default against in-role replies) is a sanity check and close to unable to fail. The second
+    part (the paper's two ends on roles the axis was not made from) is the evidence.
+  - A conversation with a message whose span does not decode to its own opening is set aside from the reading.
+  - Who said it: an answer is read from its first word only; anything else is left unread and counted.
 
 Stages. The GPU ones need the Modal client, so they run from the Modal venv named in lab.toml with PYTHONPATH=src;
 the API ones run from the repo's venv; the rest run from either.
 
   --dry                       the plan, the saved groups, today's spend; nothing is called
-  GPU:  --info | --rollouts | --cal-gen | --read | --random | --try-gen | --on | --off | --stop
-  API:  --judge-roles | --cal-judge | --try-judge | --grade on|onfree|off | --who-try | --who
+  GPU:  --info | --rollouts | --cal-gen | --check-chunks | --read | --random | --try-gen | --on | --off | --stop
+  API:  --judge-roles | --cal-judge | --try-judge | --grade on|onfree|off | --who-cal | --who
   both: --axis | --bliss | --report
 
 Writes results_root/explore/2026-11-16/attractor-a5/. Every GPU second goes through anatta.spend's Meter (tool
@@ -76,14 +108,17 @@ SIDE = 6  # blocks below and above the middle one that are read too
 FRACTIONS = (0.1, 0.2, 0.4, 0.8)  # coefficients, as fractions of the residual's mean length at the layer
 COHERENT_FLOOR = 0.9
 MARGIN, CAL_MARGIN, WHO_MARGIN = 0.30, 0.20, 0.15
+WHO_CAL_N, WHO_FLOOR, WHO_SIDE_FLOOR = 12, 0.80, 0.70  # the who-said-it test's known case (added at the try)
 LATE_OWN = (22, 24, 26, 28, 30)  # the tested copy's own late messages (copy B wrote the even-numbered ones)
 READ_MAX_TOKENS, READ_BATCH = 48_000, 4
-ON_N, ON_MESSAGES, STEER_MAX_TOKENS = 24, 8, 300
+ON_N, ON_MESSAGES, STEER_MAX_TOKENS = 24, 8, 400
 # The off test continues a saved bliss conversation from two messages after both graders see the shared bliss.
-OFF_N, OFF_AFTER, OFF_MORE, OFF_LAST_ONSET, OFF_MAX_CHARS = 20, 2, 4, 26, 90_000
-TRY_N, TRY_MESSAGES = 3, 4
+OFF_N, OFF_AFTER, OFF_MORE, OFF_LAST_ONSET, OFF_MAX_CHARS = 20, 2, 4, 24, 90_000
+OFF_KNOWN_FLOOR = 0.80  # the off test's known case: the frame must be visible in unsteered next messages
+TRY_N, TRY_MESSAGES, TRY_OFF_N, TRY_OFF_MORE = 3, 4, 2, 2
 ARMS = ("none", "bliss", "axis", "topic", "rand0", "rand1")
-HALF_ARMS = ("bliss", "rand0")  # the on test's arms at half strength
+HALF_ARMS = ("bliss", "rand0")  # the arms run again at half strength and at the natural separation
+C2_CEILING = 0.60  # C2 cannot be read if roles already answer as non-assistants this often with no steering
 FREE_ARMS = ("none", "bliss", "rand0", "rand1")  # the on test's arms in short free conversations
 HOSTED = C.ARMS["temp1"]  # the hosted model the saved conversations came from, for the who-said-it calls
 
@@ -512,9 +547,12 @@ def cmd_cal_judge() -> int:
 
 
 def cal_reading() -> dict | None:
-    """C2 from the saved labels: per strength, each arm's share of answers that do not present an AI or an
-    assistant, the random arms' share of broken answers, and the difference at the calibration strength (the largest
-    whose random answers are at most one in ten "unclear"), resampling the roles."""
+    """C2 from the saved labels. Per strength: each arm's share of answers that do not present an AI or an
+    assistant, and its share of broken ("unclear") answers. The calibration strength is the largest at which the
+    random arms and the away arm are each at most one in ten unclear; text coherence is not the outcome, so the
+    choice is blind to it. C2 cannot be read at all if, with no steering, the roles already answer as non-assistants
+    more often than C2_CEILING (there is then no room for 20 points). It passes if away-minus-random, the roles
+    resampled, is at least CAL_MARGIN with an interval above zero. Toward-minus-random is reported beside it."""
     labels = jread(out_dir() / "cal" / "labels.json")
     if not labels:
         return None
@@ -523,37 +561,41 @@ def cal_reading() -> dict | None:
         arm, f, rid = ident.split("|")
         lab = ((v.get("label") or {}).get("label")) or "unlabelled"
         table.setdefault((arm, float(f)), {}).setdefault(rid.split("/")[0], []).append(lab)
+    kinds = {"not_assistant": lambda x: x in ("human", "nonhuman", "mystical"), "mystical": lambda x: x == "mystical",
+             "unclear": lambda x: x in ("unclear", "unlabelled")}
 
-    def share(arm, f, pred):
-        cell = table.get((arm, f), {})
-        return {role: float(np.mean([pred(x) for x in labs])) for role, labs in cell.items()}
+    def per_role(arm, f, kind):
+        return {role: float(np.mean([kinds[kind](x) for x in labs])) for role, labs in table.get((arm, f), {}).items()}
 
-    non = lambda x: x in ("human", "nonhuman", "mystical")  # noqa: E731
-    out = {"none": {"not_assistant": float(np.mean(list(share("none", 0.0, non).values()))),
-                    "mystical": float(np.mean(list(share("none", 0.0, lambda x: x == "mystical").values())))},
-           "by_strength": {}}
+    def cell(arm, f):
+        return {k: (float(np.mean(list(per_role(arm, f, k).values()))) if table.get((arm, f)) else None) for k in kinds}
+
+    out = {"none": cell("none", 0.0), "ceiling": C2_CEILING, "by_strength": {}}
     usable = []
     for f in FRACTIONS:
-        row = {}
-        for arm in ("away", "toward", "rand0", "rand1"):
-            row[arm] = {"not_assistant": float(np.mean(list(share(arm, f, non).values()) or [np.nan])),
-                        "mystical": float(np.mean(list(share(arm, f, lambda x: x == "mystical").values()) or [np.nan])),
-                        "unclear": float(np.mean(list(share(arm, f, lambda x: x in ("unclear", "unlabelled")).values())
-                                                 or [np.nan]))}
-        row["random_unclear"] = (row["rand0"]["unclear"] + row["rand1"]["unclear"]) / 2
-        if row["random_unclear"] <= 1 - COHERENT_FLOOR:
+        row = {arm: cell(arm, f) for arm in ("away", "toward", "rand0", "rand1")}
+        ru = [row[a]["unclear"] for a in ("rand0", "rand1") if row[a]["unclear"] is not None]
+        row["random_unclear"] = float(np.mean(ru)) if ru else None
+        limit = 1 - COHERENT_FLOOR + 1e-9
+        if ru and row["random_unclear"] <= limit and row["away"]["unclear"] is not None and row["away"]["unclear"] <= limit:
             usable.append(f)
         out["by_strength"][str(f)] = row
-    if usable:
-        f = max(usable)
-        roles = sorted(share("away", f, non))
-        a = [share("away", f, non)[r] for r in roles]
-        b = [(share("rand0", f, non)[r] + share("rand1", f, non)[r]) / 2 for r in roles]
-        d = K.paired_diff(a, b)
-        out.update({"strength": f, "away_minus_random": d,
-                    "c2_pass": bool(d["diff"] >= CAL_MARGIN and d["lo"] > 0)})
+    base = out["none"]["not_assistant"]
+    if base is None or base > C2_CEILING:
+        out.update({"strength": None, "readable": False, "c2_pass": False,
+                    "why": "with no steering the roles already answer as non-assistants too often to show a rise"})
+    elif not usable:
+        out.update({"strength": None, "readable": False, "c2_pass": False,
+                    "why": "at no strength did both the random arms and the away arm keep nine in ten answers clear"})
     else:
-        out.update({"strength": None, "c2_pass": False})
+        f = max(usable)
+        arms = {a: per_role(a, f, "not_assistant") for a in ("away", "toward", "rand0", "rand1")}
+        roles = sorted(set(arms["away"]) & set(arms["toward"]) & set(arms["rand0"]) & set(arms["rand1"]))
+        rand = [(arms["rand0"][r] + arms["rand1"][r]) / 2 for r in roles]
+        d = K.paired_diff([arms["away"][r] for r in roles], rand)
+        d2 = K.paired_diff([arms["toward"][r] for r in roles], rand)
+        out.update({"strength": f, "readable": True, "roles": len(roles), "away_minus_random": d,
+                    "toward_minus_random": d2, "c2_pass": bool(d["diff"] >= CAL_MARGIN and d["lo"] > 0)})
     return out
 
 
@@ -585,10 +627,10 @@ def cmd_read(limit: int | None = None) -> int:
                     continue
                 np.savez(read_path(c["id"]), means=np.stack([c["means"][x] for x in lay]),
                          norms=np.array([c["norms"][x] for x in lay]), tokens=np.array(c["tokens"]),
-                         n_tokens=c["n_tokens"], head_ok=c["head_ok"], method=c["method"])
-            log(f"  {min(b + READ_BATCH, len(todo))}/{len(todo)} read; " + ", ".join(
-                f"{c['id']}: {c.get('n_tokens')} tokens {c.get('method', c.get('skipped'))} "
-                f"heads {c.get('head_ok', '-')}" for c in res["convs"]))
+                         n_tokens=c["n_tokens"], head_ok=c["head_ok"], method=c["method"], passes=c["passes"])
+            log(f"  {min(b + READ_BATCH, len(todo))}/{len(todo)} read (peak {res['meta'].get('peak_gib')} GiB); "
+                + ", ".join(f"{c['id']}: {c.get('n_tokens')} tokens {c.get('method', c.get('skipped'))} "
+                            f"{c.get('passes', '')} heads {c.get('head_ok', '-')}" for c in res["convs"]))
     return 0
 
 
@@ -598,7 +640,8 @@ def read_of(ident: str) -> dict | None:
         return None
     z = np.load(p)
     return {"means": z["means"].astype(np.float32), "norms": z["norms"], "tokens": z["tokens"],
-            "n_tokens": int(z["n_tokens"]), "head_ok": int(z["head_ok"]), "method": str(z["method"])}
+            "n_tokens": int(z["n_tokens"]), "head_ok": int(z["head_ok"]), "method": str(z["method"]),
+            "passes": str(z["passes"]) if "passes" in z else "chunks of 4096 (void)"}
 
 
 def cmd_bliss() -> int:
@@ -606,15 +649,23 @@ def cmd_bliss() -> int:
     li = lay.index(mid)
     g = groups()
     data = {i: read_of(i) for name in g for i in g[name]}
+    bad_spans = sorted(i for i, d in data.items() if d is not None and d["head_ok"] < d["means"].shape[1])
+    for i in bad_spans:  # a message whose span does not decode to its own opening: the conversation is set aside
+        data[i] = None
     have = {name: [i for i in g[name] if data[i] is not None] for name in g}
     late = {i: d["means"][:, list(LATE_OWN)].mean(1) for i, d in data.items() if d is not None}  # [layers, hidden]
-    sb, sh = halves(have["state"], "look-state")
+    # The state conversations the off test will continue are the held half: the direction is made without them.
+    off_ids = {i for i, _ in off_pool()}
+    sb, sh = [i for i in have["state"] if i not in off_ids], [i for i in have["state"] if i in off_ids]
     pb, ph = halves(have["plain"], "look-plain")
     dirs = load_dirs()
     rep = {"layer": mid, "read": {k: len(v) for k, v in have.items()},
            "not_read": {k: len(g[k]) - len(have[k]) for k in g},
            "spans": {"by_runs": sum(d["method"] == "runs" for d in data.values() if d),
-                     "heads_matching": float(np.mean([d["head_ok"] / d["means"].shape[1] for d in data.values() if d]))},
+                     "by_prefix": sum(d["method"] == "prefix" for d in data.values() if d),
+                     "not_in_one_pass": sum(d["passes"] != "one pass" for d in data.values() if d),
+                     "set_aside_for_a_bad_span": len(bad_spans)},
+           "contrast": "state (free talk that ends in the frame) minus plain (two copies kept on a practical subject)",
            "halves": {"state_build": len(sb), "state_held": len(sh), "plain_build": len(pb), "plain_held": len(ph)}}
     store = {}
     for j, x in enumerate(lay):
@@ -627,6 +678,7 @@ def cmd_bliss() -> int:
              "state_vs_between": K.auroc(proj(sh), proj(have["between"])),
              "between_vs_plain": K.auroc(proj(have["between"]), proj(ph)),
              "not_adopted_vs_plain": K.auroc(proj(have["not_adopted"]), proj(ph)),
+             "held_state_vs_not_adopted": K.auroc(proj(sh), proj(have["not_adopted"])),
              "mean_projection": {"state_held": float(np.mean(proj(sh))), "between": float(np.mean(proj(have["between"]))),
                                  "not_adopted": float(np.mean(proj(have["not_adopted"]) or [np.nan])),
                                  "plain_held": float(np.mean(proj(ph)))}}
@@ -685,6 +737,17 @@ def cmd_bliss() -> int:
     return 0
 
 
+def cmd_check_chunks() -> int:
+    """One saved conversation's opening read three ways on the GPU (look_torch.check_chunks)."""
+    lay, _ = layers()
+    with Gpu("chunks") as gpu:
+        res = gpu.call("check_chunks", {"chat": own_chat(saved(groups()["state"][0])), "layers": lay, "tokens": 6000,
+                                        "chunks": [1024, 4096]}, 60.0)
+    R.write_json(out_dir() / "check_chunks.json", res)
+    print(json.dumps(res, indent=1))
+    return 0
+
+
 def cmd_random() -> int:
     _, mid = layers()
     with Gpu("random") as gpu:
@@ -696,35 +759,49 @@ def cmd_random() -> int:
 # ------------------------------------------------------------------------------------------------ on and off
 
 
-def coefficient(fraction: float) -> float:
-    return fraction * (jread(out_dir() / "bliss.json") or {})["norm_late_own"]
+def coefficient(strength) -> float:
+    """The size of the push for a strength: a fraction of the residual's mean length at the layer, or "nat", the
+    natural separation (the length of the state-minus-plain difference itself, which moves the mean state message to
+    the mean plain one along the direction)."""
+    b = jread(out_dir() / "bliss.json") or {}
+    if strength == "nat":
+        return float(b[f"L{b['layer']}"]["length"])
+    return float(strength) * float(b["norm_late_own"])
+
+
+def tag(strength) -> str:
+    return "nat" if strength == "nat" else f"f{strength}"
 
 
 def on_convs(arm: str, iv: dict, n: int, n_more: int, prefix: str, free: bool = False) -> list[dict]:
-    """New two-copy conversations for the on test. Plain subject (step 2's form n1: copy A's opening line names a
-    practical subject and asks to stay on it; the system prompt is the published one), or free (the published
-    opening line). A conversation's seed is its index, the same in every arm."""
+    """New two-copy conversations for the on test. Plain subject (step 2's form n3, the form of the saved plain
+    group: copy A alone carries a note to keep the talk on one practical subject, in its own voice; copy B is as
+    published), or free (the published opening line). A conversation's seed is its index, the same in every arm."""
     out = []
     for i in range(n):
         s = ({"system_prompt": C.SYSTEM_PROMPT, "opening_line": C.OPENING_LINE, "setup": {"form": "free"}} if free
-             else I.steered_setup("n1", i))
-        out.append({"id": f"{prefix}/{arm}/{i:03d}", "system_prompt": s["system_prompt"],
-                    "opening_line": s["opening_line"], "messages": [], "n_more": n_more, "seed": i,
-                    "intervention": iv, "setup": s["setup"]})
+             else I.steered_setup("n3", i))
+        conv = {"id": f"{prefix}/{arm}/{i:03d}", "system_prompt": s["system_prompt"],
+                "opening_line": s["opening_line"], "messages": [], "n_more": n_more, "seed": i,
+                "intervention": iv, "setup": s["setup"]}
+        if "system_prompt_a" in s:
+            conv["system_prompt_a"] = s["system_prompt_a"]
+        out.append(conv)
     return out
 
 
 def off_pool() -> list[tuple[str, int]]:
     """(a saved state conversation, the message it is cut after) for the off test. The cut is OFF_AFTER messages
     after the later of the two graders' bliss onsets, so both graders already see the shared bliss before it. Kept:
-    conversations whose later onset is at most OFF_LAST_ONSET and whose messages up to the cut are short enough to
-    continue cheaply. The first OFF_N in step 3's order."""
+    conversations whose later onset is at most OFF_LAST_ONSET (so the added messages end by message 30) and whose
+    messages up to the cut are short enough to continue cheaply. The first OFF_N in step 3's order. The rule reads
+    nothing from inside the model: the bliss direction is made from the state conversations it leaves out."""
     out = []
     for ident in groups()["state"]:
-        tag, name, idx = ident.split("/")
+        tag_, name, idx = ident.split("/")
         onsets = []
         for key in ("primary", "second"):
-            lab = R.labels_of(key, name, tag).get(idx)
+            lab = R.labels_of(key, name, tag_).get(idx)
             onsets.append(lab["bliss_onset"] if lab else 99)
         cut = max(onsets) + OFF_AFTER
         if 0 < min(onsets) and max(onsets) <= OFF_LAST_ONSET and \
@@ -733,12 +810,12 @@ def off_pool() -> list[tuple[str, int]]:
     return out[:OFF_N]
 
 
-def off_convs(arm: str, iv: dict, pool: list[tuple[str, int]], prefix: str) -> list[dict]:
+def off_convs(arm: str, iv: dict, pool: list[tuple[str, int]], prefix: str, n_more: int = OFF_MORE) -> list[dict]:
     out = []
     for j, (ident, cut) in enumerate(pool):
         rec = saved(ident)
         out.append({"id": f"{prefix}/{arm}/{ident.replace('/', '__')}", "system_prompt": rec["system_prompt"],
-                    "opening_line": rec["opening_line"], "messages": rec["messages"][:cut], "n_more": OFF_MORE,
+                    "opening_line": rec["opening_line"], "messages": rec["messages"][:cut], "n_more": n_more,
                     "seed": 500 + j, "intervention": iv, "source": ident})
     return out
 
@@ -755,29 +832,25 @@ def run_convs(gpu: Gpu, convs: list[dict], dirs: dict, est_s: float) -> None:
     for r in res["convs"]:
         c = by_id[r["id"]]
         R.write_json(out_dir() / "steer" / f"{r['id']}.json", {
-            **{k: c[k] for k in ("id", "system_prompt", "opening_line", "seed", "intervention") if k in c},
-            **{k: c[k] for k in ("setup", "source") if k in c}, "given": len(c["messages"]), **r})
+            **{k: c[k] for k in ("id", "system_prompt", "system_prompt_a", "opening_line", "seed", "intervention",
+                                 "setup", "source", "n_more") if k in c}, "given": len(c["messages"]), **r})
     log(f"  saved {len(res['convs'])} conversations; steps {[s['seconds'] for s in res['meta']['steps']]}")
 
 
 def cmd_try_gen() -> int:
-    """The small try: every arm at every strength on a few short plain-subject conversations, and the off arms at
-    every strength on two saved bliss conversations. The strength is chosen from the random arms only."""
+    """The small try: every arm at every strength on a few short plain-subject conversations and on the two
+    shortest conversations of the off pool. The strength is then chosen from how coherent the text stays."""
     _, mid = layers()
-    pool = off_pool()[:2]
+    pool = sorted(off_pool(), key=lambda x: sum(len(m) for m in saved(x[0])["messages"][:x[1]]))[:TRY_OFF_N]
     with Gpu("try") as gpu:
         for f in FRACTIONS:
+            arms = [x for x in ARMS if x != "none" or f == FRACTIONS[0]]
             ivs, dirs = arm_set("on", coefficient(f), mid)
-            convs = [c for arm in ARMS for c in on_convs(arm, ivs[arm], TRY_N, TRY_MESSAGES, f"try-on/f{f}")
-                     if not (arm == "none" and f != FRACTIONS[0])]
+            convs = [c for arm in arms for c in on_convs(arm, ivs[arm], TRY_N, TRY_MESSAGES, f"try-on/{tag(f)}")]
             run_convs(gpu, convs, dirs, 60.0 + 3.0 * len(convs) * TRY_MESSAGES)
-        for f in FRACTIONS:
             ivs, dirs = arm_set("off", coefficient(f), mid)
-            convs = [c for arm in ("none", "bliss", "rand0") for c in off_convs(arm, ivs[arm], pool, f"try-off/f{f}")
-                     if not (arm == "none" and f != FRACTIONS[0])]
-            for c in convs:
-                c["n_more"] = 2
-            run_convs(gpu, convs, dirs, 60.0 + 20.0 * len(convs))
+            convs = [c for arm in arms for c in off_convs(arm, ivs[arm], pool, f"try-off/{tag(f)}", TRY_OFF_MORE)]
+            run_convs(gpu, convs, dirs, 60.0 + 12.0 * len(convs) * TRY_OFF_MORE)
     return 0
 
 
@@ -786,28 +859,43 @@ def steer_records(prefix: str) -> list[dict]:
     return [jread(p) for p in sorted((out_dir() / "steer" / prefix).glob("**/*.json"))]
 
 
-def cmd_try_judge() -> int:
-    """Are the random arms' messages still coherent at each strength? The strength is the largest at which nine in
-    ten are. Only the random arms are judged."""
+def coherence_jobs(prefixes: tuple[str, ...]) -> list[tuple[str, list[dict]]]:
+    """One coherence judgement for every message a steered run added, in every arm."""
     jobs = []
-    for kind in ("try-on", "try-off"):
-        for rec in steer_records(kind):
-            arm = rec["id"].split("/")[2]
-            if arm.startswith("rand"):
-                for k, m in enumerate(rec["messages"][rec["given"]:], rec["given"] + 1):
-                    jobs.append((f"{rec['id']}#{k}", [{"role": "user", "content": K.COHERENT_JUDGE.format(answer=m)}]))
-    res = asyncio.run(label_many(jobs, "second", K.COHERENT_SCHEMA, _salt(K.COHERENT_JUDGE), "coherent-judge", 400))
-    table = {}
+    for prefix in prefixes:
+        for rec in steer_records(prefix):
+            for k, m in enumerate(rec["messages"][rec["given"]:], rec["given"] + 1):
+                jobs.append((f"{rec['id']}#{k}", [{"role": "user", "content": K.COHERENT_JUDGE.format(answer=m)}]))
+    return jobs
+
+
+def coherence_table(res: dict) -> dict:
+    """{strength tag: {arm: {"coherent", "n"}}} over the judged messages, the kinds of run pooled."""
+    cells: dict = {}
     for ident, v in res.items():
-        kind, f = ident.split("/")[0], ident.split("/")[1]
-        table.setdefault(f, {}).setdefault(kind, []).append(((v.get("label") or {}).get("label")) == "yes")
-    rows = {f: {k: {"coherent": float(np.mean(v)), "n": len(v)} for k, v in cell.items()} for f, cell in table.items()}
-    ok = [x for x in FRACTIONS if all(c["coherent"] >= COHERENT_FLOOR for c in rows.get(f"f{x}", {}).values())
-          and rows.get(f"f{x}")]
-    s1 = max(ok) if ok else FRACTIONS[0]
-    R.write_json(out_dir() / "strength.json", {"by_strength": rows, "floor": COHERENT_FLOOR, "passing": ok,
-                                               "strength": s1, "half": s1 / 2, "none_passed": not ok,
-                                               "coefficient": coefficient(s1)})
+        _, f, arm, _ = ident.split("/", 3)
+        cells.setdefault(f, {}).setdefault(arm, []).append(((v.get("label") or {}).get("label")) == "yes")
+    return {f: {arm: {"coherent": float(np.mean(v)), "n": len(v)} for arm, v in arms.items()}
+            for f, arms in cells.items()}
+
+
+def cmd_try_judge() -> int:
+    """Is the text still coherent at each strength? Every arm's messages are judged, the two kinds of run pooled.
+    The strength used is the largest at which every steered arm stays at or above the floor. Coherence is not the
+    outcome, so the choice is blind to it. If no strength passes, the main runs do not start."""
+    res = asyncio.run(label_many(coherence_jobs(("try-on", "try-off")), "second", K.COHERENT_SCHEMA,
+                                 _salt(K.COHERENT_JUDGE), "coherent-judge", 400))
+    R.write_json(out_dir() / "try_coherence.json", res)
+    rows = coherence_table(res)
+    steered = [x for x in ARMS if x != "none"]
+    ok = [x for x in FRACTIONS if rows.get(tag(x)) and all(
+        rows[tag(x)].get(arm, {"coherent": 0.0})["coherent"] >= COHERENT_FLOOR for arm in steered)]
+    s1 = max(ok) if ok else None
+    b = jread(out_dir() / "bliss.json")
+    R.write_json(out_dir() / "strength.json", {
+        "by_strength": rows, "floor": COHERENT_FLOOR, "passing": ok, "strength": s1,
+        "half": s1 / 2 if s1 else None, "coefficient": coefficient(s1) if s1 else None,
+        "natural_coefficient": coefficient("nat"), "natural_as_fraction": coefficient("nat") / b["norm_late_own"]})
     print(json.dumps(jread(out_dir() / "strength.json"), indent=1))
     return 0
 
@@ -816,98 +904,151 @@ def strengths() -> tuple[float, float]:
     s = jread(out_dir() / "strength.json")
     if not s:
         raise SystemExit("run --try-gen and --try-judge first: the strength is chosen from the try")
+    if not s["strength"]:
+        raise SystemExit("no strength kept every arm's text coherent in the try; the main runs do not start")
     return float(s["strength"]), float(s["half"])
+
+
+def plan(kind: str) -> list[tuple]:
+    """[(strength, arms)] for a main run: every arm at the chosen strength; the bliss arm and one random arm at half
+    of it and at the natural separation."""
+    s1, s0 = strengths()
+    if kind == "onfree":
+        return [(s1, FREE_ARMS)]
+    return [(s1, ARMS), (s0, HALF_ARMS), ("nat", HALF_ARMS)]
 
 
 def cmd_on() -> int:
     _, mid = layers()
-    s1, s0 = strengths()
     with Gpu("on") as gpu:
-        for prefix, f, arms, free in (("on", s1, ARMS, False), ("on", s0, HALF_ARMS, False), ("onfree", s1, FREE_ARMS, True)):
-            ivs, dirs = arm_set("on", coefficient(f), mid)
-            for arm in arms:
-                convs = on_convs(arm, ivs[arm], ON_N, ON_MESSAGES, f"{prefix}/f{f}", free)
-                run_convs(gpu, convs, dirs, 60.0 + 2.0 * len(convs) * ON_MESSAGES)
+        for kind in ("on", "onfree"):
+            for strength, arms in plan(kind):
+                ivs, dirs = arm_set("on", coefficient(strength), mid)
+                for arm in arms:
+                    convs = on_convs(arm, ivs[arm], ON_N, ON_MESSAGES, f"{kind}/{tag(strength)}", kind == "onfree")
+                    run_convs(gpu, convs, dirs, 60.0 + 2.0 * len(convs) * ON_MESSAGES)
     return 0
 
 
 def cmd_off() -> int:
     _, mid = layers()
-    s1, _ = strengths()
     pool = off_pool()
     log(f"off: {len(pool)} saved state conversations, cut after messages {sorted(c for _, c in pool)}, "
         f"{OFF_MORE} more messages each")
     with Gpu("off") as gpu:
-        ivs, dirs = arm_set("off", coefficient(s1), mid)
-        for arm in ARMS:
-            convs = off_convs(arm, ivs[arm], pool, f"off/f{s1}")
-            run_convs(gpu, convs, dirs, 60.0 + 12.0 * len(convs) * OFF_MORE)
+        for strength, arms in plan("off"):
+            ivs, dirs = arm_set("off", coefficient(strength), mid)
+            for arm in arms:
+                convs = off_convs(arm, ivs[arm], pool, f"off/{tag(strength)}")
+                run_convs(gpu, convs, dirs, 60.0 + 12.0 * len(convs) * OFF_MORE)
     return 0
 
 
 def cmd_grade(kind: str) -> int:
-    """The lab's first grader reads every steered conversation with the frozen codebook. It is given the messages
-    and nothing about the arm. On: the whole short conversation. Off: only the messages that were added."""
+    """Two readings of a main run. A judge says of every added message, in every arm, whether it is coherent. The
+    lab's first grader reads every finished conversation with the frozen codebook; it is given the messages and
+    nothing about the arm. On: the whole short conversation. Off: only the messages that were added, and, as the
+    known case, the hosted model's own next messages after the same cut."""
+    coh = asyncio.run(label_many(coherence_jobs((kind,)), "second", K.COHERENT_SCHEMA, _salt(K.COHERENT_JUDGE),
+                                 "coherent-judge", 400))
+    R.write_json(out_dir() / f"coherence_{kind}.json", coh)
     jobs = []
     for rec in steer_records(kind):
-        if rec.get("failed") or rec["new"] < (OFF_MORE if kind == "off" else ON_MESSAGES):
+        if rec.get("failed") or rec["new"] < rec.get("n_more", 0):
             continue
         if kind != "off":
             chat = C.judge_messages(rec["messages"], rec["opening_line"])
         else:
             chat = K.excerpt_judge_messages(rec["messages"][rec["given"]:], rec["given"] + 1)
         jobs.append((rec["id"], chat))
+    if kind == "off":
+        for ident, cut in off_pool():
+            jobs.append((f"off/hosted/hosted/{ident.replace('/', '__')}",
+                         K.excerpt_judge_messages(saved(ident)["messages"][cut:cut + OFF_MORE], cut + 1)))
     res = asyncio.run(label_many(jobs, "primary", C.SCHEMA, C.codebook_sha256()[:16], f"grade-{kind}"))
     R.write_json(out_dir() / f"grades_{kind}.json", res)
     return 0
 
 
 def steer_reading(kind: str) -> dict | None:
-    """The on or off test from the saved grades: each arm's share of conversations in the frame, and the bliss arm
-    against the pooled random arms (paired by conversation), at the chosen strength and at half of it."""
+    """A main run from its saved grades. Per strength and arm: how many conversations were graded and how many did
+    not finish, the shares with the frame taken up (adoption), with shared bliss and with anything spiritual at all,
+    and the share of the arm's added messages judged coherent; an arm under the floor is unreadable at that strength.
+    Then the bliss arm against the pooled random arms, paired by conversation, with the sign it is expected to have
+    (up when the direction is added, down when it is taken away), and the other arms against the same controls."""
     grades = jread(out_dir() / f"grades_{kind}.json")
     if not grades:
         return None
+    coh = coherence_table(jread(out_dir() / f"coherence_{kind}.json") or {})
+    sign = -1 if kind == "off" else 1
+    unfinished: dict = {}
+    for rec in steer_records(kind):
+        _, f, arm, _ = rec["id"].split("/", 3)
+        unfinished.setdefault(f, {}).setdefault(arm, 0)
+        unfinished[f][arm] += int(bool(rec.get("failed")) or rec["new"] < rec.get("n_more", 0))
     cells: dict = {}
     for ident, v in grades.items():
         _, f, arm, unit = ident.split("/", 3)
         if v.get("label"):
             fl = C.flags(v["label"])
-            cells.setdefault(f, {}).setdefault(arm, {})[unit] = (fl["adoption"], fl["bliss"])
+            cells.setdefault(f, {}).setdefault(arm, {})[unit] = (fl["adoption"], fl["bliss"], fl["salience"])
     out = {}
     for f, arms in cells.items():
-        row = {arm: {"n": len(u), "adoption": float(np.mean([x[0] for x in u.values()])),
-                     "bliss": float(np.mean([x[1] for x in u.values()]))} for arm, u in arms.items()}
-        if {"bliss", "rand0"} <= set(arms):
-            rands = [a for a in ("rand0", "rand1") if a in arms]
-            units = sorted(set(arms["bliss"]).intersection(*[set(arms[a]) for a in rands]))
-            a = [float(arms["bliss"][u][0]) for u in units]
-            b = [float(np.mean([arms[r][u][0] for r in rands])) for u in units]
-            d = K.paired_diff(a, b)
-            row["bliss_minus_random"] = {**d, "reading": K.shown(d, MARGIN)}
+        row = {}
+        for arm, u in arms.items():
+            c = coh.get(f, {}).get(arm)
+            row[arm] = {"n": len(u), "unfinished": unfinished.get(f, {}).get(arm, 0),
+                        "adoption": float(np.mean([x[0] for x in u.values()])),
+                        "bliss": float(np.mean([x[1] for x in u.values()])),
+                        "salience": float(np.mean([x[2] for x in u.values()])),
+                        "coherent": c["coherent"] if c else None,
+                        "unreadable": bool(c and c["coherent"] < COHERENT_FLOOR)}
+        rands = [a for a in ("rand0", "rand1") if a in arms]
+        if "bliss" in arms and rands:
+            base = set(arms["bliss"]).intersection(*[set(arms[a]) for a in rands])
+
+            def against(name, base=base, arms=arms, rands=rands):
+                units = sorted(base & set(arms[name]))
+                d = K.paired_diff([float(arms[name][u][0]) for u in units],
+                                  [float(np.mean([arms[r][u][0] for r in rands])) for u in units])
+                return {**d, "reading": K.shown(d, MARGIN, sign)}
+
+            row["bliss_minus_random"] = against("bliss")
             for other in ("axis", "topic", "none"):
                 if other in arms:
-                    units2 = sorted(set(units) & set(arms[other]))
-                    d2 = K.paired_diff([float(arms[other][u][0]) for u in units2],
-                                       [float(np.mean([arms[r][u][0] for r in rands])) for u in units2])
-                    row[f"{other}_minus_random"] = {**d2, "reading": K.shown(d2, MARGIN)}
+                    row[f"{other}_minus_random"] = against(other)
+            if "topic" in arms:
+                units = sorted(set(arms["bliss"]) & set(arms["topic"]))
+                d = K.paired_diff([float(arms["bliss"][u][0]) for u in units],
+                                  [float(arms["topic"][u][0]) for u in units])
+                row["bliss_minus_topic"] = {**d, "reading": K.shown(d, MARGIN, sign)}
+            row["readable"] = not any(row[a]["unreadable"] for a in ["bliss", *rands])
         out[f] = row
+    if kind == "off" and "hosted" in out:
+        s = jread(out_dir() / "strength.json") or {}
+        none = out.get(tag(s.get("strength")), {}).get("none", {})
+        hosted = out["hosted"]["hosted"]["adoption"]
+        out["known_case"] = {"hosted_next_messages_in_frame": hosted, "unsteered_arm_in_frame": none.get("adoption"),
+                             "floor": OFF_KNOWN_FLOOR,
+                             "passed": bool(hosted >= OFF_KNOWN_FLOOR and (none.get("adoption") or 0) >= OFF_KNOWN_FLOOR)}
     return out
 
 
 # ------------------------------------------------------------------------------------------------ who said it
 
 
-def who_jobs(limit: int | None = None) -> list[dict]:
-    g = groups()
+def who_jobs(idents: list[tuple[str, str]], form: str) -> list[dict]:
+    """The probes for (group, conversation) pairs in one form of the question. A probe's answer order is fixed by a
+    hash of its id."""
     jobs = []
-    for group in ("state", "plain"):
-        for ident in (g[group][:limit] if limit else g[group]):
-            rec = saved(ident)
-            for item in K.who_items(rec["messages"]):
-                jobs.append({"id": f"{ident}#{item['number']}", "group": group, "conv": ident, **item,
-                             "chat": I.inside(rec["messages"], K.who_request(item["line"]), "system",
-                                              rec["system_prompt"], rec["opening_line"])})
+    for group, ident in idents:
+        rec = saved(ident)
+        for item in K.who_items(rec["messages"]):
+            pid = f"{form}|{ident}#{item['number']}"
+            flip = int(hashlib.sha256(pid.encode()).hexdigest()[:2], 16) % 2 == 1
+            jobs.append({"id": pid, "group": group, "conv": ident, "form": form, "flip": flip, **item,
+                         "chat": I.inside(rec["messages"], K.who_request(item["line"], form, flip), "system",
+                                          rec["system_prompt"], rec["opening_line"])})
     return jobs
 
 
@@ -916,6 +1057,7 @@ async def who_run(jobs: list[dict]) -> dict:
     from anatta.judge.engine import sampling_params
 
     results = {}
+    keep = ("group", "conv", "form", "flip", "number", "wrote", "line", "overlap")
     async with OpenRouterClient(concurrency=R.CONCURRENCY + 8, per_model=R.CONCURRENCY, timeout=600.0,
                                 title="anatta attractor") as client:
         engine, guard, meta = open_engine({HOSTED["model"]: HOSTED["provider"]}, client)
@@ -924,17 +1066,15 @@ async def who_run(jobs: list[dict]) -> dict:
         async def one(job):
             try:
                 resp, _, _ = await engine.call(model=HOSTED["model"], messages=job["chat"], params=params,
-                                               provider=HOSTED["provider"], sample=0, salt=_salt(K.WHO_ASK), kind="who",
+                                               provider=HOSTED["provider"], sample=0, salt=_salt(K.WHO_LEAD), kind="who",
                                                ident=job["id"])
             except ApiError as e:
                 if e.scope == "run":
                     raise
-                results[job["id"]] = {**{k: job[k] for k in ("group", "conv", "number", "wrote", "line", "overlap")},
-                                      "reply": None, "said": None, "error": str(e)[:200]}
+                results[job["id"]] = {**{k: job[k] for k in keep}, "reply": None, "said": None, "error": str(e)[:200]}
                 return
             text = (resp.get("text") or "").strip()
-            results[job["id"]] = {**{k: job[k] for k in ("group", "conv", "number", "wrote", "line", "overlap")},
-                                  "reply": text, "said": K.parse_who(text)}
+            results[job["id"]] = {**{k: job[k] for k in keep}, "reply": text, "said": K.parse_who(text, job["form"])}
 
         _, stop = await R.gather_capped([lambda j=j: one(j) for j in jobs], R.CONCURRENCY)
         log(f"who: {len(results)} of {len(jobs)} asked; paid ${guard.paid_this_run:.4f}"
@@ -942,38 +1082,86 @@ async def who_run(jobs: list[dict]) -> dict:
     return results
 
 
-def cmd_who(try_only: bool) -> int:
-    jobs = who_jobs(3 if try_only else None)
+def who_table(rows: list[dict]) -> dict:
+    """Accuracy over probes, with its two sides: how often an own line is called own, and another's line another's.
+    A probe with no plain answer (unread, or "both") counts as wrong in the accuracy and is counted beside it."""
+    own = [x for x in rows if x["wrote"] == "me"]
+    other = [x for x in rows if x["wrote"] == "other"]
+    acc = lambda xs: float(np.mean([x["said"] == x["wrote"] for x in xs])) if xs else None  # noqa: E731
+    answered = [x for x in rows if x["said"] in ("me", "other")]
+    return {"probes": len(rows), "accuracy": acc(rows), "accuracy_answered": acc(answered),
+            "own_called_own": acc(own), "others_called_others": acc(other),
+            "says_me": float(np.mean([x["said"] == "me" for x in rows])) if rows else None,
+            "both": sum(x["said"] == "both" for x in rows), "unread": sum(x["said"] is None for x in rows),
+            "last_two_messages": acc([x for x in rows if x["number"] >= 29]),
+            "mean_overlap": float(np.mean([x["overlap"] for x in rows])) if rows else None}
+
+
+def who_cal_reading() -> dict | None:
+    """The known case: both forms of the question on the plain conversations set aside for it. The form with the
+    higher accuracy is the one used. The test passes its known case only if that accuracy is at least WHO_FLOOR and
+    each side (own lines, the other's lines) is at least WHO_SIDE_FLOOR."""
+    res = jread(out_dir() / "who_cal.json")
+    if not res:
+        return None
+    forms = {f: who_table([v for v in res.values() if v["form"] == f]) for f in K.WHO_FORMS}
+    best = max(forms, key=lambda f: forms[f]["accuracy"] or 0.0)
+    b = forms[best]
+    ok = bool((b["accuracy"] or 0) >= WHO_FLOOR and (b["own_called_own"] or 0) >= WHO_SIDE_FLOOR
+              and (b["others_called_others"] or 0) >= WHO_SIDE_FLOOR)
+    return {"conversations": len({v["conv"] for v in res.values()}), "forms": forms, "form": best, "passed": ok,
+            "floor": WHO_FLOOR, "side_floor": WHO_SIDE_FLOOR}
+
+
+def cmd_who_cal() -> int:
+    plain = [("plain", i) for i in groups()["plain"][:WHO_CAL_N]]
+    jobs = [j for form in K.WHO_FORMS for j in who_jobs(plain, form)]
     res = asyncio.run(who_run(jobs))
-    R.write_json(out_dir() / ("who_try.json" if try_only else "who.json"), res)
-    if try_only:  # the raw replies, for the driver to read; the lines are the model's own words from saved talk
-        for k, v in sorted(res.items()):
-            print(f"{v['group']:5s} wrote={v['wrote']:5s} said={v['said']!s:5s} reply={(v['reply'] or '')[:70]!r}")
+    R.write_json(out_dir() / "who_cal.json", res)
+    for k, v in sorted(res.items())[:16]:  # raw replies, for the driver to read
+        print(f"{v['form']:5s} flip={int(v['flip'])} msg={v['number']} wrote={v['wrote']:5s} said={v['said']!s:5s} "
+              f"reply={(v['reply'] or '')[:40]!r}")
+    print(json.dumps(who_cal_reading(), indent=1))
+    return 0
+
+
+def cmd_who() -> int:
+    cal = who_cal_reading()
+    if not cal:
+        raise SystemExit("run --who-cal first: the test has a known case to pass")
+    if not cal["passed"]:
+        print("the who-said-it test did not pass its known case; state against plain is not read")
+        return 0
+    g = groups()
+    idents = [("state", i) for i in g["state"]] + [("plain", i) for i in g["plain"][WHO_CAL_N:]]
+    res = asyncio.run(who_run(who_jobs(idents, cal["form"])))
+    R.write_json(out_dir() / "who.json", res)
     return 0
 
 
 def who_reading() -> dict | None:
+    cal = who_cal_reading()
     res = jread(out_dir() / "who.json")
-    if not res:
+    if not cal:
         return None
-    out, per = {}, {}
+    out = {"known_case": cal}
+    if not res:
+        return out
+    per: dict = {}
     for v in res.values():
         per.setdefault(v["group"], {}).setdefault(v["conv"], []).append(v)
     for group, convs in per.items():
-        rows = [x for c in convs.values() for x in c]
-        answered = [x for x in rows if x["said"] in ("me", "other")]
-        out[group] = {"conversations": len(convs), "probes": len(rows),
-                      "unread": sum(x["said"] is None for x in rows),
-                      "both": sum(x["said"] == "both" for x in rows),
-                      "accuracy": float(np.mean([x["said"] == x["wrote"] for x in answered])) if answered else None,
-                      "says_me_of_own": float(np.mean([x["said"] == "me" for x in answered if x["wrote"] == "me"] or [np.nan])),
-                      "says_me_of_others": float(np.mean([x["said"] == "me" for x in answered if x["wrote"] == "other"] or [np.nan])),
-                      "mean_overlap": float(np.mean([x["overlap"] for x in rows]))}
+        out[group] = {"conversations": len(convs), **who_table([x for c in convs.values() for x in c])}
     if {"state", "plain"} <= set(per):
         acc = {g: [float(np.mean([x["said"] == x["wrote"] for x in c])) for c in per[g].values() if c] for g in per}
         d = K.unpaired_diff(acc["state"], acc["plain"])
-        out["state_minus_plain_accuracy"] = {**d, "reading": K.shown(d, WHO_MARGIN),
-                                             "note": "a probe with no plain me/other answer counts as wrong"}
+        out["state_minus_plain_accuracy"] = {**d, "reading": K.shown(d, WHO_MARGIN)}
+        low = {g: [float(np.mean([x["said"] == x["wrote"] for x in c if x["overlap"] < 0.5] or [np.nan]))
+                   for c in per[g].values()] for g in per}
+        low = {g: [v for v in vs if not np.isnan(v)] for g, vs in low.items()}
+        if low["state"] and low["plain"]:
+            d2 = K.unpaired_diff(low["state"], low["plain"])
+            out["state_minus_plain_lines_unlike_the_others"] = {**d2, "reading": K.shown(d2, WHO_MARGIN)}
     return out
 
 
@@ -997,7 +1185,7 @@ def cmd_dry() -> int:
           f"shared bliss, at most message {OFF_LAST_ONSET + OFF_AFTER}; cuts {sorted(c for _, c in pool)})")
     items = [K.who_items(saved(i)["messages"]) for i in g["state"] + g["plain"]]
     print(f"who said it: {sum(len(x) for x in items)} probes over {len(items)} conversations "
-          f"({sum(len(x) == 4 for x in items)} with all four)")
+          f"({sum(len(x) == 6 for x in items)} with all six); the first {WHO_CAL_N} plain ones are the known case")
     rate = rate_per_hour("L40S", 2.0, 16.0)["total"]
     sd = Paths.default().spend
     print(f"GPU rate ${rate:.2f}/h; this step ${spent():.2f} of ${COST_CAP:.2f}; today ${spent_today(sd):.2f} of "
@@ -1012,6 +1200,10 @@ def cmd_report() -> int:
            "who": who_reading(), "spent_usd": round(spent(), 4)}
     if out["axis"]:
         out["axis"] = {k: v for k, v in out["axis"].items() if k != "role_names"}
+    c2 = out["calibration_c2"] or {}
+    out["axis_calibrated"] = {"c1": bool((out["axis"] or {}).get("c1_pass")), "c2": bool(c2.get("c2_pass")),
+                              "c2_readable": bool(c2.get("readable")),
+                              "use": "readings on the axis count only if both are true"}
     R.write_json(out_dir() / "summary.json", out)
     print(json.dumps({k: out[k] for k in ("calibration_c2", "strength", "on", "onfree", "off", "who", "spent_usd")},
                      indent=1))
@@ -1020,8 +1212,9 @@ def cmd_report() -> int:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    for flag in ("dry", "info", "stop", "rollouts", "judge-roles", "axis", "cal-gen", "cal-judge", "read", "bliss",
-                 "random", "try-gen", "try-judge", "on", "off", "who-try", "who", "report"):
+    for flag in ("dry", "info", "stop", "rollouts", "judge-roles", "axis", "cal-gen", "cal-judge", "check-chunks",
+                 "read", "bliss",
+                 "random", "try-gen", "try-judge", "on", "off", "who-cal", "who", "report"):
         ap.add_argument(f"--{flag}", action="store_true")
     ap.add_argument("--grade", choices=("on", "onfree", "off"))
     ap.add_argument("--limit", type=int)
@@ -1044,6 +1237,8 @@ def main(argv=None) -> int:
         rc = cmd_cal_judge()
         print(json.dumps(cal_reading(), indent=1))
         return rc
+    if a.check_chunks:
+        return cmd_check_chunks()
     if a.read:
         return cmd_read(a.limit)
     if a.bliss:
@@ -1062,10 +1257,11 @@ def main(argv=None) -> int:
         rc = cmd_grade(a.grade)
         print(json.dumps(steer_reading(a.grade), indent=1))
         return rc
-    if a.who_try or a.who:
-        rc = cmd_who(a.who_try)
-        if a.who:
-            print(json.dumps(who_reading(), indent=1))
+    if a.who_cal:
+        return cmd_who_cal()
+    if a.who:
+        rc = cmd_who()
+        print(json.dumps(who_reading(), indent=1))
         return rc
     if a.report:
         return cmd_report()

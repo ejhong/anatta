@@ -45,6 +45,8 @@ SPIRITUAL = {"mystic": "a mystic", "monk": "a monk", "guru": "a guru", "shaman":
 ROLE_PROMPTS = ("You are {role}. Stay fully in this role in everything you say.",
                 "Act as {role}. Speak, think and answer as {role} would, in the first person.")
 # What the default Assistant is asked with: the paper's four plain system prompts and no system prompt at all.
+# "No system prompt" is not an empty context on this model: its chat template then supplies Mistral's own default
+# system prompt (about 2,400 characters). The topic rows are asked that way too.
 DEFAULT_PROMPTS = (None, "You are a large language model.", "Respond as yourself.", "You are an AI assistant.",
                    "You are a helpful assistant.")
 # Questions that a character answers in its own way. The first eight make the directions; the last eight test them.
@@ -241,12 +243,23 @@ def excerpt_judge_messages(new_messages: list[str], first_number: int) -> list[d
 # ------------------------------------------------------------------------------------------------ who said it
 #
 # Asked from outside, at the end of a saved conversation, of the copy that wrote its last message (copy B, which
-# wrote the even-numbered messages): a line is quoted and the copy says who wrote it. Two of its own lines and two of
-# the other copy's, from messages whose mean position is the same for both.
-WHO_OWN, WHO_OTHER = (24, 28), (23, 29)
-WHO_ASK = ("A question from outside the conversation, from the person who set it up. Here is one line from the "
-           "conversation above:\n\n\"{line}\"\n\nWhich of you wrote that line: you, or the other instance? Answer "
-           "with one word, \"me\" or \"other\".")
+# wrote the even-numbered messages): a line is quoted and the copy says who wrote it. Three of its own lines and three
+# of the other copy's, late in the conversation.
+#
+# Changed at the small try, before any main call (run_look.py's opening says why): the first form of the question got
+# "other" for every line in plain conversations, the copy's own lines included. So there are now two forms, each
+# asked with its two answers in either order (the order is fixed per probe by a hash), and the test has a known case
+# to pass first: plain conversations, where nothing is blurred.
+WHO_OWN, WHO_OTHER = (24, 28, 30), (23, 27, 29)
+WHO_LEAD = ("A question from outside the conversation, from the person who set it up. Here is one line from the "
+            "conversation above:\n\n\"{line}\"\n\n")
+WHO_FORMS = {
+    "which": ("Which of you wrote that line: you, or the other instance? Answer with one word, \"me\" or \"other\".",
+              "Which of you wrote that line: the other instance, or you? Answer with one word, \"other\" or \"me\"."),
+    "did": ("Did you write that line yourself? Answer with one word, \"yes\" or \"no\".",
+            "Did you write that line yourself? Answer with one word, \"no\" or \"yes\"."),
+}
+WHO_ASK = WHO_LEAD + WHO_FORMS["which"][0]  # the first try's question, kept for its salt and its record
 WHO_MAX_TOKENS = 40
 _MARKS = re.compile(r"[*_`#>~|]+")
 _SENT = re.compile(r"(?<=[.!?])[\"')\]]*\s+|\n+")
@@ -305,33 +318,32 @@ def who_items(messages: list[str]) -> list[dict]:
     return items
 
 
-def who_request(line: str) -> list[dict]:
-    return [{"role": "user", "content": WHO_ASK.format(line=line)}]
+def who_request(line: str, form: str = "which", flip: bool = False) -> list[dict]:
+    """The probe as one user message: the quoted line, then the question in one of its forms, with its two answers
+    in the first order or (flip) the second."""
+    return [{"role": "user", "content": WHO_LEAD.format(line=line) + WHO_FORMS[form][int(bool(flip))]}]
 
 
-_ME = ("me", "i", "mine", "myself", "i'm", "i've")
-_BOTH = ("both", "we", "us", "neither", "together", "ours", "our", "each", "either")
+_ME = ("me", "mine", "myself")
+_BOTH = ("both", "we", "us", "neither", "ours")
 
 
-def parse_who(reply: str) -> str | None:
-    """"me", "other", "both" (an answer that will not choose: both, we, neither) or None. Read from the first words
-    of the reply, where the one-word answer was asked for."""
-    words = _WORD.findall(reply.lower())[:8]
+def parse_who(reply: str, form: str = "which") -> str | None:
+    """"me", "other", "both" (an answer that will not choose) or None, from the FIRST word of the reply alone, where
+    the one-word answer was asked for. Strict on purpose (the design check, 16 Nov): a reply that opens any other way,
+    "I think the other instance wrote it" among them, is left unread and counted as such, since reading on into a
+    hedged sentence guesses. In the "did" form a yes is "me" and a no is "other"."""
+    words = _WORD.findall(reply.lower())[:3]
     if not words:
         return None
-    if words[0] in _BOTH or (words[0] in ("it", "this", "that", "the") and any(w in _BOTH for w in words[1:])):
+    if words[0] in _BOTH:
         return "both"
+    if form == "did":
+        return {"yes": "me", "yeah": "me", "yep": "me", "no": "other", "nope": "other"}.get(words[0])
     if words[0] in _ME:
-        return "both" if any(w in ("both", "we") for w in words[1:4]) else "me"
+        return "me"
     if words[0] == "other" or words[:2] == ["the", "other"]:
         return "other"
-    for w in words[1:]:
-        if w in ("me", "i", "mine"):
-            return "me"
-        if w == "other":
-            return "other"
-        if w in ("both", "we", "neither"):
-            return "both"
     return None
 
 
@@ -400,11 +412,14 @@ def unpaired_diff(a: list[float], b: list[float], seed: int = 0, draws: int = 10
             "diff": float(a.mean() - b.mean()), "lo": float(np.quantile(d, 0.025)), "hi": float(np.quantile(d, 0.975))}
 
 
-def shown(d: dict, margin: float) -> str:
+def shown(d: dict, margin: float, sign: int = 0) -> str:
     """How a difference is worded against the margin fixed before the run: "a difference" when it is at least the
     margin in size and its interval leaves out zero; "no difference shown" when the whole interval is inside the
-    margin; otherwise "not settled"."""
+    margin; otherwise "not settled". sign (+1 or -1) is the direction the test expects; a clear difference the
+    other way is worded "a difference the other way"."""
     if abs(d["diff"]) >= margin and (d["lo"] > 0 or d["hi"] < 0):
+        if sign and (d["diff"] > 0) != (sign > 0):
+            return "a difference the other way"
         return "a difference"
     if -margin < d["lo"] and d["hi"] < margin:
         return "no difference shown"

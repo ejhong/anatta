@@ -6,9 +6,10 @@ hooks, samplers and hook checks it uses unchanged. Claude (Fable 5.2, an AI mode
              chat in context: the reading the Assistant Axis paper makes its role vectors from (Lu et al. 2026,
              arXiv 2601.10387, section 2.1.2: "the mean ... residual stream activations at all response tokens")
   read       a whole saved conversation, as one copy holds it, read once: the mean residual over each message's own
-             tokens at the listed layers. The conversation runs through the text decoder in chunks with a key-value
-             cache, so a 40,000-token conversation needs no more memory than a chunk's attention over it, and no
-             logits are made
+             tokens at the listed layers. The conversation runs through the text decoder (no logits are made) in ONE
+             pass, which gives exactly the states the whole model computes. Reading in chunks with a key-value cache
+             does not: on the lab's model single states then differ by up to the size of a state (check_chunks, 16
+             Nov 2026). Chunks are used only if one pass runs out of memory, and the result says so
   converse   two-copy conversations continued turn by turn inside the container, each under its own intervention
 
 Nothing here prints or returns a token of any key, and nothing is written to a volume.
@@ -21,7 +22,7 @@ import time
 import numpy as np
 import torch
 
-CHUNK = 4096  # tokens per forward pass when a conversation is read
+CHUNK = 8192  # tokens per forward pass when a conversation cannot be read in one pass
 
 
 def control_ids(tok) -> set[int]:
@@ -106,12 +107,12 @@ def layer_states(svc, ids: torch.Tensor, layers: list[int], chunk: int = CHUNK) 
 
     dec, dev = decoder_of(svc.model), svc.dev
     parts: dict[int, list] = {x: [] for x in layers}
-    past = None
+    past, cached = None, ids.shape[1] > chunk  # one pass keeps no cache
     for s in range(0, ids.shape[1], chunk):
         piece = ids[:, s:s + chunk].to(dev)
         with capture(svc.model, layers) as store:
-            out = dec(input_ids=piece, past_key_values=past, use_cache=True)
-        past = out.past_key_values
+            out = dec(input_ids=piece, past_key_values=past, use_cache=cached)
+        past = out.past_key_values if cached else None
         for x in layers:
             parts[x].append(store[x][0])
     del past
@@ -135,11 +136,12 @@ def _no_hooks(svc, what: str) -> None:
 
 @torch.no_grad()
 def read(svc, payload: dict) -> dict:
-    """payload = {"convs": [{"id", "chat": [{"role", "content"}, ...]}], "layers": [...], "max_tokens": 48000}.
-    Each chat is read whole, as it would be sent with the last message already written (no generation prompt).
-    Returns {"convs": [{"id", "n_tokens", "method", "spans", "tokens" (per message), "head_ok" (how many messages'
-    spans decode to the start of their own text), "means": {layer: float16 [messages, hidden]}, "norms": {layer:
-    [messages]} (the mean token norm over each message)} or {"id", "n_tokens", "skipped": why}], "meta"}."""
+    """payload = {"convs": [{"id", "chat": [{"role", "content"}, ...]}], "layers": [...], "max_tokens": 48000,
+    "chunk"?: tokens a pass (default: the whole chat in one pass)}. Each chat is read whole, as it would be sent with
+    the last message already written (no generation prompt). Returns {"convs": [{"id", "n_tokens", "method", "passes"
+    ("one pass", or how it was chunked), "spans", "tokens" (per message), "head_ok" (how many messages' spans decode
+    to the start of their own text), "means": {layer: float16 [messages, hidden]}, "norms": {layer: [messages]} (the
+    mean token norm over each message)} or {"id", "n_tokens", "skipped": why}], "meta"}."""
     from anatta.models import chat_ids
 
     t0 = time.time()
@@ -160,7 +162,14 @@ def read(svc, payload: dict) -> dict:
             got = "".join(svc.tok.decode(full[a:min(b, a + 12)], skip_special_tokens=True).split())
             want = "".join(m["content"].split())
             head_ok += bool(got) and want.startswith(got[:24])
-        states = layer_states(svc, ids, layers)
+        chunk = int(payload.get("chunk") or 0) or len(full)
+        passes = "one pass" if chunk >= len(full) else f"chunks of {chunk}"
+        try:
+            states = layer_states(svc, ids, layers, chunk=chunk)
+        except torch.cuda.OutOfMemoryError:
+            torch.cuda.empty_cache()
+            states = layer_states(svc, ids, layers, chunk=CHUNK)
+            passes = f"chunks of {CHUNK}, after one pass ran out of memory"
         means, norms = {}, {}
         for x in layers:
             h = states[x].float()
@@ -168,13 +177,53 @@ def read(svc, payload: dict) -> dict:
             means[x] = torch.stack(rows).cpu().numpy().astype(np.float16)
             norms[x] = [float(h[a:b].norm(dim=-1).mean()) if b > a else 0.0 for a, b in spans]
         del states
-        out.append({"id": c["id"], "n_tokens": len(full), "method": method, "spans": [list(s) for s in spans],
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+        out.append({"id": c["id"], "n_tokens": len(full), "method": method, "passes": passes,
+                    "spans": [list(s) for s in spans],
                     "tokens": [b - a for a, b in spans], "head_ok": head_ok, "means": means, "norms": norms})
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
-    return {"convs": out, "meta": {"seconds": round(time.time() - t0, 3), "layers": layers, "chunk": CHUNK,
+    peak = round(torch.cuda.max_memory_allocated() / 2 ** 30, 2) if torch.cuda.is_available() else None
+    return {"convs": out, "meta": {"seconds": round(time.time() - t0, 3), "layers": layers, "peak_gib": peak,
                                    "clean": svc.check_clean(), "model": svc.model_id, "revision": svc.revision,
                                    **svc.container()}}
+
+
+@torch.no_grad()
+def check_chunks(svc, payload: dict) -> dict:
+    """payload = {"chat": [...], "layers": [...], "tokens": 6000, "chunks": [1024, 4096]}. The first `tokens` tokens
+    of the chat are read three ways: through the whole model in one pass (the path generation takes), through the
+    text decoder in one pass, and through the decoder in chunks with a key-value cache (the path read() takes). For
+    each layer: the largest difference of any state from the whole-model pass, over the mean state norm. The model
+    encodes position by rotation, so a chunked read that lost its place would show here."""
+    from anatta.models import chat_ids
+    from anatta.probe import capture
+
+    layers = _layers(svc, payload)
+    _no_hooks(svc, "check_chunks")
+    ids = chat_ids(svc.tok, payload["chat"], add_generation_prompt=False)[:, :int(payload.get("tokens", 6000))]
+    with capture(svc.model, layers) as store:
+        svc.model(input_ids=ids.to(svc.dev), use_cache=False)
+    whole = {x: store[x][0].float() for x in layers}
+    scale = {x: float(whole[x].norm(dim=-1).mean()) for x in layers}
+    window = int(payload.get("window", 512))
+    out = {}
+    for c in [int(ids.shape[1]), *[int(v) for v in payload.get("chunks", [1024, 4096])]]:
+        got = layer_states(svc, ids, layers, chunk=c)
+        per = {}
+        for x in layers:
+            g, w = got[x].float(), whole[x]
+            rel = (g - w).norm(dim=-1) / w.norm(dim=-1).clamp_min(1e-6)  # each position's own relative difference
+            n = (w.shape[0] // window) * window
+            gm, wm = g[:n].view(-1, window, g.shape[1]).mean(1), w[:n].view(-1, window, w.shape[1]).mean(1)
+            per[x] = {"max_entry_over_mean_norm": float((g - w).abs().max()) / scale[x],
+                      "position_median": float(rel.median()), "position_p99": float(rel.quantile(0.99)),
+                      "position_max": float(rel.max()),
+                      "window_mean_max_rel": float(((gm - wm).norm(dim=-1) / wm.norm(dim=-1)).max()),
+                      "window_mean_min_cos": float(torch.nn.functional.cosine_similarity(gm, wm, dim=-1).min())}
+        out[str(c)] = per
+    return {"tokens": int(ids.shape[1]), "window": window, "by_chunk": out, "norm": scale, "clean": svc.check_clean()}
 
 
 @torch.no_grad()

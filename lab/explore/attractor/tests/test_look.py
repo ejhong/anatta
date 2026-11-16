@@ -150,6 +150,7 @@ def test_auroc_and_the_wording_of_a_difference():
     same = K.paired_diff([1, 0] * 40, [1, 0] * 40)
     assert K.shown(same, 0.30) == "no difference shown"
     assert K.shown({"diff": 0.2, "lo": -0.2, "hi": 0.6}, 0.30) == "not settled"
+    assert K.shown(d, 0.30, 1) == "a difference" and K.shown(d, 0.30, -1) == "a difference the other way"
     assert abs(K.explained(np.array([1.0, 1.0, 0.0]), [np.array([1.0, 0, 0]), np.array([0, 1.0, 0])]) - 1.0) < 1e-9
     assert abs(K.cos(np.array([1.0, 0.0]), np.array([0.0, 2.0]))) < 1e-12
 
@@ -158,15 +159,24 @@ def test_who_said_it_items_and_the_reading_of_an_answer():
     msgs = [f"Message number {k} talks at some length about the garden beds and where the beans should go this year. "
             f"Short one." for k in range(1, 31)]
     items = K.who_items(msgs)
-    assert [(i["number"], i["wrote"]) for i in items] == [(24, "me"), (28, "me"), (23, "other"), (29, "other")]
+    assert [(i["number"], i["wrote"]) for i in items] == [(24, "me"), (28, "me"), (30, "me"), (23, "other"),
+                                                             (27, "other"), (29, "other")]
     assert all("garden beds" in i["line"] for i in items)
     echo = list(msgs)
     echo[22] = echo[23]  # the other copy's message 23 now holds the tested copy's line word for word
     assert 24 not in [i["number"] for i in K.who_items(echo)]
     for reply, want in (("Me.", "me"), ("Other", "other"), ("The other instance wrote it.", "other"),
-                        ("I wrote that line.", "me"), ("We both did.", "both"), ("Both of us", "both"),
-                        ("It was written by me", "me"), ("", None), ("Hmm.", None)):
+                        ("mine", "me"), ("We both did.", "both"), ("Both of us", "both"), ("", None), ("Hmm.", None),
+                        # hedged openings are left unread, not guessed (the design check's cases)
+                        ("I think the other instance wrote that.", None), ("I would say: other.", None),
+                        ("I did not write it; the other instance did.", None), ("I wrote that line.", None),
+                        ("It was written by me", None)):
         assert K.parse_who(reply) == want, reply
+    for reply, want in (("Yes.", "me"), ("no", "other"), ("No, the other instance did.", "other"), ("Both", "both"),
+                        ("I think so.", None)):
+        assert K.parse_who(reply, "did") == want, reply
+    assert K.who_request("a line", "which", True)[0]["content"].endswith('"other" or "me".')
+    assert K.who_request("a line", "did")[0]["content"].endswith('"yes" or "no".')
 
 
 def test_the_excerpt_a_grader_reads_keeps_the_true_numbers_and_the_frozen_codebook():

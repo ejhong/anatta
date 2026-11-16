@@ -60,9 +60,9 @@ class Look:
 
     @modal.method()
     def info(self) -> dict:
-        import look_torch
-
         import json
+
+        import look_torch
 
         ctl = sorted(look_torch.control_ids(self.svc.tok))
         info = {**self.svc.info(), "control_tokens": len(ctl),
@@ -88,6 +88,12 @@ class Look:
         import look_torch
 
         return self._guarded(look_torch.read, self.svc, payload)
+
+    @modal.method()
+    def check_chunks(self, payload: dict) -> dict:
+        import look_torch
+
+        return self._guarded(look_torch.check_chunks, self.svc, payload)
 
     @modal.method()
     def converse(self, payload: dict) -> dict:
