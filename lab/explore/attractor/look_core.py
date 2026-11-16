@@ -424,3 +424,18 @@ def shown(d: dict, margin: float, sign: int = 0) -> str:
     if -margin < d["lo"] and d["hi"] < margin:
         return "no difference shown"
     return "not settled"
+
+
+def own_other(means: np.ndarray, window) -> tuple[np.ndarray, np.ndarray]:
+    """One conversation's message means, [rows, hidden], as the second speaker reads it: row 0 is the system prompt
+    and row k is message k. Returns the rows of the reader's own messages in the window (the even ones) and of the
+    other copy's (the odd ones)."""
+    own = [k for k in window if k % 2 == 0 and 0 < k < len(means)]
+    oth = [k for k in window if k % 2 == 1 and 0 < k < len(means)]
+    return means[own], means[oth]
+
+
+def api_share(rows) -> float:
+    """What the API calls in a step's spend log have cost. The log holds GPU lines and API lines together; a GPU line
+    carries its hourly rate and an API line does not."""
+    return float(sum(r.get("cost_usd", 0.0) for r in rows if "rate_usd_per_hour" not in r))

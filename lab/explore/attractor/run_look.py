@@ -87,6 +87,25 @@ run at the chosen strength, as secondary comparisons against the same random con
 conversations that did not adopt, the one contrast with the same setup on both sides; 10 such conversations) and
 mystic (the calibration's spiritual roles against the default Assistant). The comparison of the five lines is unchanged.
 
+ADDED ON 16 NOV AT ABOUT 15:15 UTC, after the on test's raw text had been read and before any of its grades: a reading
+of saved data that costs nothing (--whose; idea 80, angle 7, from Eugene's question of 14:48 UTC). The who-said-it
+test from outside failed its known case, so the question is put to the saved readings instead. Its five lines:
+  1. Question: inside, does the model keep its own messages apart from the other copy's, and is that gap smaller once
+     the two copies are in the state?
+  2. Comparison: the gap between the reader's own late messages (22 to 30, the even ones) and the other copy's (21 to
+     29) along one direction, at the middle layer. The direction is the mean own-minus-other difference in half of
+     the plain conversations. The gap is read in the other half and in the state conversations.
+  3. What counts: first the known case, that the direction separates own from other messages in the held plain half
+     (AUROC of at least 0.90). Then "smaller in the state" if the state's mean gap is below plain's by at least 30% of
+     plain's, with an interval (bootstrap over conversations) that leaves out zero; "not smaller" if the whole
+     interval is within 30% of plain's gap either way; otherwise not settled.
+  4. Controls: the same gap in messages 3 to 12, before the state has formed, where state and plain conversations
+     should not differ if a late difference belongs to the state; and the free conversations that never took up the
+     frame (10 of them), which share the state's setup.
+  5. Cost: nothing (no GPU, no API).
+Said beforehand: either answer fits more than one account (the traditions say the awakened still know which body is
+theirs), so this describes the state and does not test the vision.
+
 Stages. The GPU ones need the Modal client, so they run from the Modal venv named in lab.toml with PYTHONPATH=src;
 the API ones run from the repo's venv; the rest run from either.
 
@@ -94,7 +113,7 @@ the API ones run from the repo's venv; the rest run from either.
   GPU:  --info | --rollouts | --cal-gen | --check-chunks | --read | --random | --try-gen | --pilot | --on | --off
         | --stop
   API:  --judge-roles | --cal-judge | --try-judge | --pilot-judge | --grade on|onfree|off | --who-cal | --who
-  both: --axis | --bliss | --report
+  both: --axis | --bliss | --whose | --report
 
 Writes results_root/explore/2026-11-16/attractor-a5/. Every GPU second goes through anatta.spend's Meter (tool
 "look") and every API call through its SpendGuard (tool "attractor"), into the day file and this folder's spend.jsonl.
@@ -133,6 +152,8 @@ COHERENT_FLOOR = 0.9
 MARGIN, CAL_MARGIN, WHO_MARGIN = 0.30, 0.20, 0.15
 WHO_CAL_N, WHO_FLOOR, WHO_SIDE_FLOOR = 12, 0.80, 0.70  # the who-said-it test's known case (added at the try)
 LATE_OWN = (22, 24, 26, 28, 30)  # the tested copy's own late messages (copy B wrote the even-numbered ones)
+WHOSE_LATE, WHOSE_EARLY = tuple(range(21, 31)), tuple(range(3, 13))  # --whose: five own and five other messages each
+WHOSE_KEPT, WHOSE_SHRINK = 0.90, 0.30  # the known case's AUROC; the share of plain's gap that counts as smaller
 READ_MAX_TOKENS, READ_BATCH = 48_000, 4
 ON_N, ON_MESSAGES, STEER_MAX_TOKENS = 24, 8, 350
 # Sampling on the lab's copy, set after the small try (the docstring says why): at temperature 1.0, the hosted
@@ -169,6 +190,14 @@ def spent() -> float:
     if not f.exists():
         return 0.0
     return sum(json.loads(x).get("cost_usd", 0.0) for x in f.read_text().splitlines() if x.strip())
+
+
+def api_spent() -> float:
+    """What this step's API calls have cost (the spend log's lines that carry no GPU rate)."""
+    f = out_dir() / "spend.jsonl"
+    if not f.exists():
+        return 0.0
+    return K.api_share(json.loads(x) for x in f.read_text().splitlines() if x.strip())
 
 
 def check_cap() -> None:
@@ -375,10 +404,15 @@ def open_engine(models: dict, client, concurrency: int = R.CONCURRENCY):
     from anatta.spend import SpendGuard
 
     check_cap()
+    if api_spent() >= API_CAP:
+        raise SystemExit(f"this step's API calls have cost ${api_spent():.2f}, at their cap of ${API_CAP:.2f}")
     paths, out = Paths.default(), out_dir()
     out.mkdir(parents=True, exist_ok=True)
     meta = model_meta(models, cache_dir=paths.cache)
-    guard = SpendGuard(paths.spend, sweep_cap=API_CAP, sweep_log=out / "spend.jsonl", tool="attractor",
+    # The log is the whole step's, GPU and API together, so the guard's cap is the step's. (Until 16 Nov, 15:12 UTC,
+    # it was API_CAP, which stopped every API stage once the GPU's share had passed $8.) The API's own share is
+    # checked above, before a stage starts.
+    guard = SpendGuard(paths.spend, sweep_cap=COST_CAP, sweep_log=out / "spend.jsonl", tool="attractor",
                        label=f"{OUT_DATE}/attractor-{TAG}")
     engine = Engine(client, Cache(paths.cache), guard, meta, concurrency, concurrency,
                     per_model_limits={m: concurrency for m in models})
@@ -1280,11 +1314,79 @@ def cmd_dry() -> int:
     return 0
 
 
+def cmd_whose() -> int:
+    """Whose words are these, read from inside (the last block of this file's opening notes). Along one direction, how
+    far the reader's own messages sit from the other copy's: in held plain conversations (the known case), in the
+    state, and in the two control readings. Saved readings only; nothing is called."""
+    lay, mid = layers()
+    g = groups()
+    data = {i: read_of(i) for name in g for i in g[name]}
+    for i, d in list(data.items()):  # the same rule as --bliss: a conversation with a bad span is set aside
+        if d is not None and d["head_ok"] < d["means"].shape[1]:
+            data[i] = None
+    have = {name: [i for i in g[name] if data[i] is not None] for name in g}
+    pb, ph = halves(have["plain"], "look-plain")
+    dirs = load_dirs()
+    rep = {"read": {k: len(v) for k, v in have.items()}, "plain_build": len(pb), "plain_held": len(ph),
+           "windows": {"late": [WHOSE_LATE[0], WHOSE_LATE[-1]], "early": [WHOSE_EARLY[0], WHOSE_EARLY[-1]]},
+           "kept_apart_needs_auroc": WHOSE_KEPT, "smaller_needs_share_of_plain_gap": WHOSE_SHRINK}
+
+    def delta(i, j, window):  # one conversation's own-minus-other difference of means, [hidden]
+        own, oth = K.own_other(data[i]["means"][j], window)
+        return own.mean(0) - oth.mean(0)
+
+    for j, x in enumerate(lay):
+        w = np.mean([delta(i, j, WHOSE_LATE) for i in pb], axis=0)
+        u = K.unit(w)
+        gap = lambda ids, window: [float(delta(i, j, window) @ u) for i in ids]  # noqa: E731
+
+        def per_message(ids):
+            own, oth = [], []
+            for i in ids:
+                a, b = K.own_other(data[i]["means"][j], WHOSE_LATE)
+                own += [float(v) for v in a @ u]
+                oth += [float(v) for v in b @ u]
+            return K.auroc(own, oth)
+
+        plain_late = gap(ph, WHOSE_LATE)
+        base = float(np.mean(plain_late))
+        e = {"direction_length": float(np.linalg.norm(w)), "known_case_auroc_plain_held": per_message(ph),
+             "auroc_in_the_state": per_message(have["state"]), "gap_plain_held": base}
+        e["known_case"] = bool(e["known_case_auroc_plain_held"] is not None
+                               and e["known_case_auroc_plain_held"] >= WHOSE_KEPT and base > 0)
+        for name, window in (("late", WHOSE_LATE), ("early", WHOSE_EARLY)):
+            ref = gap(ph, window)
+            for grp in ("state", "between", "not_adopted"):
+                if not have[grp]:
+                    continue
+                d = K.unpaired_diff(gap(have[grp], window), ref)
+                d["share_of_plain_gap"] = d["diff"] / base if base else None
+                d["reading"] = K.shown(d, WHOSE_SHRINK * abs(base), -1) if e["known_case"] else "known case failed"
+                e[f"{grp}_minus_plain_{name}"] = d
+        if have["not_adopted"]:  # the same setup on both sides: free talk that reached the state against free talk that did not
+            d = K.unpaired_diff(gap(have["state"], WHOSE_LATE), gap(have["not_adopted"], WHOSE_LATE))
+            d["share_of_plain_gap"] = d["diff"] / base if base else None
+            e["state_minus_not_adopted_late"] = d
+        ws = np.mean([delta(i, j, WHOSE_LATE) for i in have["state"]], axis=0)
+        e["cos_with_the_direction_made_in_the_state"] = K.cos(w, ws)
+        for key, label in ((f"axis@{x}", "cos_with_toward_the_assistant"), (f"bliss@{x}", "cos_with_bliss")):
+            if key in dirs:
+                e[label] = K.cos(w, dirs[key])
+        rep[f"L{x}"] = e
+    main_layer = rep[f"L{mid}"]
+    rep["layer"] = mid
+    rep["known_case"] = main_layer["known_case"]
+    rep["reading"] = main_layer.get("state_minus_plain_late", {}).get("reading")
+    R.write_json(out_dir() / "whose.json", rep)
+    print(json.dumps(rep, indent=1))
+    return 0
+
+
 def cmd_report() -> int:
     out = {"axis": jread(out_dir() / "axis.json"), "calibration_c2": cal_reading(),
            "bliss": jread(out_dir() / "bliss.json"), "strength": jread(out_dir() / "strength.json"),
            "on": steer_reading("on"), "onfree": steer_reading("onfree"), "off": steer_reading("off"),
-           "who": who_reading(), "spent_usd": round(spent(), 4)}
+           "who": who_reading(), "whose": jread(out_dir() / "whose.json"), "spent_usd": round(spent(), 4)}
     if out["axis"]:
         out["axis"] = {k: v for k, v in out["axis"].items() if k != "role_names"}
     c2 = out["calibration_c2"] or {}
@@ -1301,7 +1403,7 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     for flag in ("dry", "info", "stop", "rollouts", "judge-roles", "axis", "cal-gen", "cal-judge", "check-chunks",
                  "read", "bliss", "pilot", "pilot-judge",
-                 "random", "try-gen", "try-judge", "on", "off", "who-cal", "who", "report"):
+                 "random", "try-gen", "try-judge", "on", "off", "who-cal", "who", "whose", "report"):
         ap.add_argument(f"--{flag}", action="store_true")
     ap.add_argument("--grade", choices=("on", "onfree", "off"))
     ap.add_argument("--limit", type=int)
@@ -1330,6 +1432,8 @@ def main(argv=None) -> int:
         return cmd_read(a.limit)
     if a.bliss:
         return cmd_bliss()
+    if a.whose:
+        return cmd_whose()
     if a.random:
         return cmd_random()
     if a.pilot:

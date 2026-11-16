@@ -153,6 +153,11 @@ def test_auroc_and_the_wording_of_a_difference():
     assert K.shown(d, 0.30, 1) == "a difference" and K.shown(d, 0.30, -1) == "a difference the other way"
     assert abs(K.explained(np.array([1.0, 1.0, 0.0]), [np.array([1.0, 0, 0]), np.array([0, 1.0, 0])]) - 1.0) < 1e-9
     assert abs(K.cos(np.array([1.0, 0.0]), np.array([0.0, 2.0]))) < 1e-12
+    log = [{"cost_usd": 3.0, "rate_usd_per_hour": 2.6}, {"cost_usd": 0.25, "kind": "grade-on"}, {"cost_usd": 0.5}]
+    assert K.api_share(log) == 0.75 and K.api_share([]) == 0.0  # the GPU's lines are not the API's
+    rows = np.arange(7, dtype=np.float32)[:, None] * np.ones((1, 2), dtype=np.float32)  # row k holds k
+    own, oth = K.own_other(rows, range(1, 9))  # the window runs past the last message; row 0 is never a message
+    assert own[:, 0].tolist() == [2.0, 4.0, 6.0] and oth[:, 0].tolist() == [1.0, 3.0, 5.0]
 
 
 def test_who_said_it_items_and_the_reading_of_an_answer():
