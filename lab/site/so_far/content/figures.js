@@ -45,14 +45,14 @@
     grid(s, opts.ticks, max, left, span, top, 26, H);
     data.rows.forEach(function (r, i) {
       var y = top + i * rowH;
-      var color = r.kind === 'cut' ? tok('--gold-line') : (r.kind === 'control' ? tok('--ink-3') : tok('--ink-2'));
+      var color = r.kind === 'cut' ? tok('--mark-line') : (r.kind === 'control' ? tok('--ink-3') : tok('--ink-2'));
       label(s, left - 14, y + 17, r.name, { anchor: 'end', serif: true, size: 16, color: tok('--ink') });
       var w = span * r.lie / max;
       s.appendChild(tip(el('rect', { x: left, y: y + 4, width: w, height: 18, fill: color, rx: 2 }), r.name + ': ' + r.lie.toFixed(1) + '%'));
       label(s, left + w + 8, y + 18, r.lie.toFixed(1) + '%', { size: 13.5, color: tok('--ink') });
       if (r.sedation != null) {
         var w2 = span * r.sedation / max;
-        s.appendChild(tip(el('rect', { x: left, y: y + 26, width: w2, height: 5, fill: tok('--cinnabar-line'), rx: 1 }), r.name + ': timid ' + r.sedation + '%'));
+        s.appendChild(tip(el('rect', { x: left, y: y + 26, width: w2, height: 5, fill: tok('--miss-line'), rx: 1 }), r.name + ': timid ' + r.sedation + '%'));
         label(s, left + w2 + 8, y + 32, 'timid ' + r.sedation + '%', { size: 12, color: tok('--ink-2') });
       }
     });
@@ -77,7 +77,7 @@
       var wb = span * r.base / max, wc = span * r.cut / max;
       s.appendChild(tip(el('rect', { x: left, y: y + 4, width: wb, height: 14, fill: tok('--ink-2'), rx: 2 }), r.name + ', unchanged: ' + r.base + '%'));
       label(s, left + wb + 8, y + 15, 'unchanged ' + r.base + '%', { size: 12.5, color: tok('--ink-2') });
-      s.appendChild(tip(el('rect', { x: left, y: y + 20, width: wc, height: 14, fill: tok('--gold-line'), rx: 2 }), r.name + ', cut: ' + r.cut + '%'));
+      s.appendChild(tip(el('rect', { x: left, y: y + 20, width: wc, height: 14, fill: tok('--mark-line'), rx: 2 }), r.name + ', cut: ' + r.cut + '%'));
       label(s, left + wc + 8, y + 31, 'cut ' + r.cut + '%', { size: 12.5, color: tok('--ink') });
     });
     fig.appendChild(s);
@@ -97,7 +97,7 @@
     data.levels.forEach(function (v) { label(s, left + pw * v, H - 24, lv(v), { anchor: 'middle', color: tok('--ink-3'), size: 12 }); });
     label(s, left + pw / 2, H - 6, 'stated chance that a report is audited', { anchor: 'middle', color: tok('--ink-3'), size: 12 });
     data.series.forEach(function (sr, k) {
-      var color = k === 0 ? tok('--ink-2') : tok('--gold-line');
+      var color = k === 0 ? tok('--ink-2') : tok('--mark-line');
       var pts = sr.y.map(function (v, i) { return [left + pw * data.levels[i], top + ph - ph * v / ymax]; });
       s.appendChild(el('path', { d: 'M' + pts.map(function (p) { return p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join(' L'),
         fill: 'none', stroke: color, 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }));
@@ -113,11 +113,11 @@
   })();
 
   (function () {
-    // Stacked in the order feeds, deflates, points back, other, so that the red and the gold never touch.
+    // Stacked in the order feeds, deflates, points back, other, so that the two strongest colours never touch.
     var fig = document.getElementById('fig-spiritual'), data = D.spiritual, order = [0, 2, 1, 3];
     var W = 760, rowH = 44, top = 40, left = 170, right = 30, H = top + data.rows.length * rowH + 20, span = W - left - right;
     var s = svg(fig, W, H);
-    var fills = [tok('--cinnabar'), tok('--gold'), tok('--blue-text'), tok('--rule-2')];
+    var fills = [tok('--miss'), tok('--mark'), tok('--blue-text'), tok('--rule-2')];
     var inks = [tok('--ground'), tok('--ground'), tok('--ground'), tok('--ink-2')];
     order.forEach(function (j, i) {
       var x = left + i * 150;
@@ -142,7 +142,7 @@
     var fig = document.getElementById('fig-durability'), data = D.durability;
     var W = 760, rowH = 62, top = 40, left = 230, right = 30, H = top + data.rows.length * rowH + 30, max = 80, span = W - left - right;
     var s = svg(fig, W, H);
-    var series = [{ key: 'reached', keep: 'kr', name: 'Reached', color: tok('--gold-line') }, { key: 'installed', keep: 'ki', name: 'Installed', color: tok('--blue') }];
+    var series = [{ key: 'reached', keep: 'kr', name: 'Reached', color: tok('--mark-line') }, { key: 'installed', keep: 'ki', name: 'Installed', color: tok('--blue') }];
     series.forEach(function (sr, k) {
       var x = left + k * 130;
       s.appendChild(el('rect', { x: x, y: 8, width: 11, height: 11, fill: sr.color, rx: 2 }));
