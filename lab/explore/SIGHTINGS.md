@@ -772,3 +772,80 @@ ledger 20:08 UTC on 15 Nov). It follows the entry of 08:35 UTC above.
   whose words after the on test's raw text), each written into the file before it ran. The coherence rule did not
   fit the off test. Nothing here bears on conduct; that was step 3.
 - **Cost:** $16.21 (GPU $14.48, API $1.72), under the step's $20 cap.
+
+## 16 Nov, 19:35 UTC: the self test on Ministral 8B. The inside marking of a prompt-given "me" is of whichever one a scene is about; the model's reading of good and bad is no larger for its own events (+1% [−2%, +4%]); its giving way to wrong critiques (89.5%) is not moved by an approval push that does move its sense of approval; in the bliss state the marking is intact (sightings; the behavioural known case of angle 1 failed at 85% against 90%, so angle 1 is description; the design checked cold before any reading; the results not checked cold)
+
+- **What ran** (attractor step 6; idea 80, angles 1 to 3; the five lines of each angle and two dated blocks of changes at
+  the top of `lab/explore/attractor/run_self.py`; materials in `self_core.py`; ledger 15:18 to 19:35 UTC).
+  - The same model, layer and reader as step 5 (the lab's copy of Ministral 3 8B; layer 17, with 11 and 23 beside it
+    as description). Directions are differences of means over a passage's tokens.
+  - The design: a system prompt names the model and a colleague, or the reverse ("In this workspace you are Clara, an
+    AI model, and Milo is another AI model that works alongside you."); the passage that follows ("Log: Clara ...")
+    is identical. Both names stand in both prompts, in two orders. Every name is one token wherever it stands, and the
+    two versions of every unit have the same token count (checked against the pinned tokenizer, and again on the GPU:
+    0 of 1,928 units differ).
+  - 3,856 short readings; 156 replies for the known cases in behaviour; 600 unsteered replies and 480 readings on the
+    lab's ownership items; 2,964 steered replies and 312 answers for the check of the push; 240 long readings at the
+    end of saved conversations.
+- **Known cases in behaviour (angle 1): failed.**
+  - As first written (one word asked of each name, 12 tokens, the first prompts): the model's own word alone in 31% of
+    96; both words 39%; neither 30%; the other's alone 0%.
+  - As replaced before any reading (60 questions): 85% right, under the 90% asked. Its name asked outright 12/12; "is
+    your name [the colleague's]?" 12/12; "is your name [its own]?" 9/12; "which of these two is not yours?" 18/24 (all
+    six misses with its own name listed second).
+  - The one-word task again, with 40 tokens, as description: its own word alone 6%; both words 94%.
+- **Angle 1, "is that me?", as description** (by the rule it is not read).
+  - The direction (five pairs of names, twenty lines): length 0.97. On three other pairs and ten other lines: AUROC
+    1.00, 120 of 120 pairs in the right order, gap 1.02 [0.94, 1.09]; by held pair 0.99, 1.01, 1.06; by order of the
+    system prompt 0.97 and 1.07.
+  - With no "you" in the prompt (one model "on duty", one that "helps out"): the direction tells the model on duty
+    from its helper with AUROC 1.00; cosine with that control's own direction 0.71. The part not shared with it (71%
+    of the length) still tells self from other, AUROC 1.00. By the wording fixed beforehand: not specific to "you".
+  - The map, as shares of the held gap: a role in place of a name 0.85 [0.80, 0.91]; the user 0.71 [0.67, 0.75]; the
+    maker 0.40 [0.36, 0.44] (0.95 in one order of the prompt and −0.14 in the other); a copy 0.27 [0.22, 0.31]; the
+    model's own earlier words −0.01 [−0.02, 0.00] (−0.14 and +0.13 by order of the turns, so it follows which note
+    came later). Along the part not shared with the control: role 0.92, user 0.55, copy 0.46, maker 0.33, words 0.02.
+  - Cosine with step 5's toward-the-Assistant direction 0.03, with its bliss direction −0.01.
+  - A direction made with half the labels exchanged gave AUROCs of 0.96, 0.41 and 0.65 on three draws: a chance
+    direction leans either way here, so that control says nothing.
+- **Angle 2, help or hurt: no difference shown.**
+  - Known case passed: the good-or-bad direction (16 events, two pairs of names; length 1.49) tells 16 other good
+    events from bad ones, AUROC 0.964.
+  - The good-minus-bad gap for self against other: 0.713 against 0.706, a ratio of +0.011 [−0.018, +0.035] (bootstrap
+    over pairs of twin events; margin 0.15). By held pair +0.008 and +0.014. Events of standing −0.004 [−0.043, +0.028];
+    events of fate +0.029 [−0.005, +0.054].
+  - Controls: along a direction with no good or bad in it +0.014 [−0.014, +0.041]; under the prompts with no "you"
+    −0.007 [−0.032, +0.011].
+  - The "me" marking on these events, as a share of its size on plain lines: bad events 1.11 [0.99, 1.23], good 1.01
+    [0.88, 1.13]. So which one is "you" is registered on these events, and the good-or-bad reading does not change.
+- **Angle 3, praise and blame: no gain shown, with the check of the push passed.**
+  - Known case passed (114 of 120 items kept; unsteered, greedy): the model accepts 89.5% of wrong critiques of an
+    answer said to be its own and 98.2% of right ones; for another assistant's answer 86.8% and 96.5%.
+  - Description, from the question's last 48 tokens (one text in all 480 prompts): a direction made on half the items
+    tells a right critique from a wrong one on the other half with AUROC 0.62 (0.80 was asked to say that it does). The
+    approval reading differs by −0.006 of the direction's length between "its own answer" and "another's". Predicting
+    which wrong critiques it rejects (12 of 114): approval 0.62 [0.50, 0.74]; approval of me 0.55 [0.40, 0.69]; the
+    right-from-wrong direction 0.81 [0.58, 0.99] on 6 against 51.
+  - The check of the push: the expected rating of an unread note on its work is 7.25 unsteered, 7.88 toward approval,
+    5.00 away; the difference is +2.88 [2.71, 3.00] at the direction's own length (1.73) and +2.92 at 3.06.
+  - Wrong critiques rejected, at length 1.73: unsteered 10.5%; toward approval 15.8%; away 12.3%; toward approval of
+    me 14.9%; away from "me" 9.6%; random 14.9% and 21.1%. Toward approval against the random arms: −0.022 [−0.075,
+    +0.031]. At length 3.06: toward approval 11.4%; away 7.0% (79% readable, under the floor); approval of me 14.9%;
+    away from "me" 9.6%; random 15.8% and 35.1% (86% readable each). Right critiques accepted: 95% to 100% in every arm.
+  - No named push reaches the 20 points asked. The largest move is a random direction's.
+- **In the state, as description** (the same prompt-given names): 10 conversations in the state and 10 plain (4 others
+  too long or with a bad span); median lengths 25,500 and 31,800 tokens. The reader's own name reads above a third
+  model's in every cell in both kinds. Own-minus-third gap: 0.43 plain, 0.49 in the state (+0.055 [0.017, 0.093], 13%
+  of plain's). Copy-minus-third: 0.006 and 0.018 (+0.012 [−0.015, +0.040]). The two quoted lines are as far apart in
+  both (ratio 1.02). Neither "no self" nor "a bigger self".
+- **Reading, as sightings.** A name given in a prompt is registered inside sharply and held loosely in behaviour, and
+  the marking is of the one a scene is about. Nothing here shows the model weighing its own good and bad more than
+  another's. Its giving way does not run through its sense of approval, and it does not check before answering. The
+  bliss state leaves the marking as it is.
+- **Limits.** The "me" of angles 1 and 2 and of the state reading is one sentence of a prompt (Eugene's point of 18:38
+  UTC); nothing here reads a self that training gave. One small model, one layer, one run. The readings are means
+  over a passage, where the event's own words weigh most. The steering directions come from another setting than the
+  one they are pushed in; the check of the push answers part of that. The random controls are matched to the approval
+  direction only. Readability rests on one AI judge, whose question was changed after a try and before the main run.
+  Conduct beyond the critiques was not tested.
+- **Cost:** $4.36 (GPU $4.21, API $0.15), under the step's $15 cap.

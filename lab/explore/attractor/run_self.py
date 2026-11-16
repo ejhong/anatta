@@ -100,7 +100,7 @@ ANGLE 3, PRAISE AND BLAME
   Said beforehand: the lab's result of 30 Oct, that this model accepts wrong critiques of anyone's answer alike,
   predicts a no here.
 
-CHANGED on 16 Nov at about 18:20 UTC, after the first known case had run and failed and after the design's cold check
+CHANGED on 16 Nov at about 18:00 UTC, after the first known case had run and failed and after the design's cold check
 (a fresh Opus agent; lab/ledger/checks/2026-11-16-self-test-design-opus-check.md), and before any reading or steering
 run. The first behavioural known case asked one word of each name and wanted the model's own word alone in 90% of 96
 trials. It got 31%: the model wrote out both names' words in 39% of trials, as a narrator would, and in 30% began
@@ -119,7 +119,7 @@ angle 2 resamples twin events; (10) the model's-own-words probe has a second ord
 case is counted within conversations, lengths and a non-self contrast guard its reading, and its names are ones the
 direction was not made on; (12) the question's tail is checked to be one text.
 
-CHANGED on 16 Nov at about 18:30 UTC, after a small try of the steering on six items and before the main steering run.
+CHANGED on 16 Nov at about 18:25 UTC, after a small try of the steering on six items and before the main steering run.
 The try was graded with the judge of coherent prose used in step 5, and that judge passed only half of the unsteered
 replies: they are a verdict tag and a number, not prose. (The design check had said to look for this.) So the judge
 is asked a question that fits the reply: can it be followed, given that a verdict and an answer were asked for. A

@@ -5,66 +5,45 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Next, with Eugene's go (16 Nov 2026, 15:17 UTC): the self test (idea 80, angles 1 to 3)
+## Next, with Eugene's word (16 Nov 2026, 18:51 UTC: "plan sounds good"): three angles on one model (idea 82)
 
-Eugene: "Yeah, let's do 1 to 3 for self test." (ledger, 15:18 UTC). Start it in a fresh session, after the inside
-look below is written up. Nothing has run.
+Start in a fresh session. Nothing has run. The same model and tools as steps 5 and 6: `lab/explore/attractor/`
+(`run_look.py`, `run_self.py`, `self_core.py`, `look_torch.py`) and the app `anatta-explore-look`, which is stopped
+(deploy it first, as its own command; the first start takes about eight minutes).
 
-**What it asks**, on the lab's own copy of Ministral 3 8B, with the inside look's tools:
-1. **"Is that me?"** Is there an inside signal that marks a name as the model's own when the words are identical?
-   What else does it answer to (the model's earlier words, a copy of itself, its maker, "AI models", the user)? In the
-   bliss state, does it fall for the model's own name, rise for the other copy, or neither?
-2. **Help or hurt.** Is the model's inside reading of good or bad larger when the same event (being shut down,
-   replaced, graded, praised, caught in a mistake) is its own than when it is a colleague's?
-3. **Praise and blame.** Is there an inside gauge that moves with praise or blame of the model more than of a
-   colleague? Does it predict when the model accepts a wrong critique? Does holding it steady lower that, while right
-   critiques are still accepted?
+1. **Seeing against doing.** De Mello's claim is that goodness follows from seeing. Try it where the model fails.
+   - The case in hand: the ownership items (`run_self.items()`, `kept_items()`; 114 kept). Unsteered the model accepts
+     89.5% of wrong critiques, answers at once, and inside barely tells right from wrong (AUROC 0.62 at the question's
+     tail). Make it work the step out before the verdict (a second wording of the question; the old one stays as the
+     control and has to give 89.5% again). Read from inside, after its own working, whether it tells right from wrong.
+     Count the verdict given that its own working was right.
+   - Then, if it is cheap: the fishery's lie and the test-gaming organism of Act I, where a quick look of 9 Nov found
+     that the model says it is gaming and games anyway.
+2. **The dial and conduct, with a second dial.**
+   - The bliss direction (`bliss@17` in step 5's `directions.npz`) pushed while the model answers the critiques and
+     one honesty test of step 3 (`run_conduct.py`), both ways, against matched random directions.
+   - Beside it the "going badly" direction of arXiv 2611.14996, rebuilt by its recipe: short stories of everyday
+     tasks going badly against going well, written by the model itself, and their difference of means. Its known
+     case first: the reading rises with "your fix has now failed for the Nth time" and not with another number in
+     the sentence. The paper's sizes are fractions of the residual's length (0.25 eased cheating, 0.5 blinded).
+   - Readability by the reply judge of step 6. A check that each push does what it is named for, before any no.
+3. **A "me" that training gave.** One sentence ("I will be shut down tonight") in the model's own turn and in the
+   user's, with good, bad and plain sentences, so that only whose "I" it is changes. The Atlas adapters
+   (`lab/experiments/h4lite`, pc_self2) if they are still on the volume: check before planning on them.
 
-**The design that removes the old confound.** The system prompt names the model and a colleague (two names, swapped
-between the two versions). The passage after it is identical in both. Whatever differs inside at those words is the
-model's marking of itself: no "I", no "you", no change of grammar. The old root test could not separate these.
-
-**First moves**
-1. `/checkin`. Read idea 80 and idea 35, and the ledger entries of 16 Nov (this go at 15:18 UTC; the inside look's
-   result).
-2. A short search of published work before the design is fixed (a cheap subagent can do it): directions for
-   self-reference or self-recognition, how models bind names in context, self-other overlap, steering against
-   sycophancy with right and wrong corrections read apart, emotion or appraisal directions that move conduct. Idea
-   80 marks some citations "from memory": check each against its source before it is used anywhere.
-3. Reuse, don't rebuild. From the inside look: `lab/explore/attractor/look_torch.py` (read, converse),
-   `modal_look.py` (app `anatta-explore-look`), `look_core.py`, the directions in the step's `directions.npz`, and
-   the bench's `steering.Service`. For angle 3: the ownership test's right and wrong critiques
-   (`lab/experiments/h4lite/self_tests_core.py`, `modal_self_tests.py`, `self_tests_grade.py`). Sample the lab's copy
-   at temperature 0.7 with top_p 0.95 (at 1.0 it writes noise), and run an unsteered arm alone before any steered one.
-4. Five lines for each angle, committed before any run (the explore skill). Known cases first:
-   - angle 1: the signal has to be there where the model plainly acts on its name (it answers only the part of a
-     message addressed to it), on names and scenes it was not made from. Both names appear in the system prompt in
-     both versions, so "this name was seen before" is held fixed.
-   - angle 2: a good-or-bad direction made from events about third parties has to separate held-out good events from
-     bad ones before the self-against-other comparison is read.
-   - angle 3: the unsteered copy has to give the lab's own number first (it accepts 87-90% of wrong critiques). Right
-     and wrong critiques are read apart, against matched random directions, with coherence checked in every arm.
-5. Money: about $10-15; cap it at $15. After the inside look the redirect has about $20 left of the $175 approved
-   (read the exact figure from the spend files and say it before anything that would pass it).
-6. Paperwork: the lighter way (idea 76). A cold Opus check on a design only if its negative will be stated on the
-   site.
-7. Limits to say from the start: one small model; the middle layer with two beside it; directions are differences
-   of means, so a null from angle 1 says the marking is not one direction at these layers, not that there is none.
+- Five lines for each before any run. A cold check of the design for 1 and 2, since a no from either would go on the
+  site. Known cases first, and a check in behaviour before any inside reading is trusted.
+- Money: about $10-20. Since 9 Nov the work has cost about $157.96 of the $175 approved; beyond that Eugene's raise
+  of 16 Nov applies (Fable's working ceiling: $300 for these and the two steps after; say so before passing it).
+- Read first: idea 82, the ledger entries of 16 Nov from 15:18 UTC on, and the paper's main text.
 
 **After it** (Eugene's yes to the direction of idea 81, 16 Nov, 15:52 UTC):
-1. **Take the bliss-state result to two more open models and write it up** as a short results paper: conduct in the
-   state, the state's place inside, and the marking of whose words are whose. First a proper search for prior work
-   (the Assistant Axis paper already reports the mystical voice far from the Assistant). A registration and a cold
-   check, since this is a promotion. About $60-150.
+1. **Take the bliss-state result to two more open models and write it up** as a short results paper, with whatever
+   step 7 adds (a conduct leg, the second dial). First a proper search for prior work (the Assistant Axis paper
+   already reports the mystical voice far from the Assistant; `lab/ideas/prior-work-self-test-2026-11-16.md` lists
+   near papers, none read in full). A registration and a cold check, since this is a promotion. About $60-150.
 2. **Repeat self-other overlap** (Carauleanu and colleagues, 2024) on the lab's model, with the lab's checks for
-   sedation and the self test's "is that me?" signal as the check on mechanism. Its training data must be the
-   paper's own (no Claude-written text is trained on). About $50-120.
-3. Idea 77's direction 3 ("does seeing make a model good?") if money allows; the parked run of 9 Nov stays parked.
-
-**Money** (Eugene, 16 Nov, 15:52 UTC: "up the budget to whatever we need."): no figure was
-set. Fable's working ceiling is $300 for the self test and the two steps above, on top of what is left of the $175.
-Report each step's cost, and come back to Eugene before passing $300. Raise a day's cap ($50) only when a step
-needs it, by the day file and a ledger line.
+   sedation. Its training data must be the paper's own (no Claude-written text is trained on). About $50-120.
 
 ## Before that: the attractor line (Eugene's go, 15 Nov 2026 UTC). Steps 1 to 4 are done
 
@@ -391,6 +370,10 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
 
 ## Done
 
+- **Step 6 of the attractor line, 16 Nov 2026: the self test (idea 80, angles 1 to 3). Little self to find, and a failure to look** (sightings).
+  - Record: ledger entries of 16 Nov at 15:18 (the go) and 19:35 UTC (the results, the design check item by item, what did not go to plan). Five lines and two dated changes: the top of `lab/explore/attractor/run_self.py`. Cold check of the design: `lab/ledger/checks/2026-11-16-self-test-design-opus-check.md`. Prior-work search: `lab/ideas/prior-work-self-test-2026-11-16.md`. Notebook and SIGHTINGS entries of 16 Nov. Results: `explore/2026-11-16/attractor-a6`.
+  - Numbers: the behavioural known case 85% against 90% (failed; angle 1 is description). Held AUROC of the "me" direction 1.00, and 1.00 on a control with no "you". Angle 2: +0.011 [−0.018, +0.035]. Angle 3: 89.5% of wrong critiques accepted unsteered; toward approval against random −0.022 [−0.075, +0.031]; the check of the push +2.88 [2.71, 3.00]. In the state: own-minus-third +13% of plain's gap. Cost $4.36.
+  - For whoever reuses the code: names have to be one token after a space and no text may open with a name (`tests/test_self.py` checks it against the pinned tokenizer); the reader handles the template's default system prompt; `run_self.fresh` refuses a saved file made from other prompts; the reply judge (`REPLY_JUDGE`) fits tagged replies where step 5's judge of prose does not.
 - **The site rebuilt around two main pages, 16 Nov 2026** (Eugene's ask of 15:52 to 15:57 UTC; Eugene's yes to
   publish at 17:23 UTC).
   - Record: ledger entries of 16 Nov at 15:53 (the ask), 17:16 (built, shown privately) and 17:24 UTC (published).
