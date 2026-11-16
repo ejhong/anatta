@@ -5,7 +5,14 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: the attractor line (Eugene's go, 15 Nov 2026 UTC). Steps 1 to 3 are done; step 4 (angle A) is next, after Eugene has seen step 3's report
+## Now: the attractor line (Eugene's go, 15 Nov 2026 UTC). Steps 1 to 3 are done; step 4 (angle A) is under way (Eugene's "Go", 16 Nov)
+
+**Step 4, where it stands (16 Nov 2026, about 00:45 UTC).** The design note
+(`lab/plans/attractor-step4-2026-11-16.md`) and the code (`mine_core.py`, `run_mine.py`, 79 offline tests) are pushed
+(6b51c2f). Nothing paid has run. Next, in this order: one cold Opus check of the design and the code; its fixes in
+an addendum; then `run_mine.py --calibrate`, `--show-work`, `--fix-work`, `--try`, `--run own --arm fresh`,
+`--read anchor`, `--run own`, `--run fixed`, `--read own`, `--read fixed`. About $10, under the step's $15 cap.
+
 
 **Where it stands (15 Nov 2026, 23:31 UTC).** Step 3, the conduct test, is done (ledger 21:43 to 23:31 UTC).
 - In no test did the state show better conduct than a plain conversation.
@@ -237,6 +244,12 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
    repo.)
 7. (Answered on 15 Nov: yes, go on to step 2 as "What step 1 changes" sets out. Eugene: "i want to follow your
    plan"; ledger, 07:16 UTC.)
+8. **The site's presentation and the lab's focus direction.** Eugene wants to go over both "at some point" (16 Nov,
+   idea 75). What Fable would bring to it: whether a human anchor is worth designing (without one, a negative on
+   "is awakening computational?" stays weak), and the order of the front page (the question now stands second,
+   after "What the lab is doing now").
+9. **The private copy of the site on claude.ai** has not been republished since 10 Nov (the public site on GitHub
+   Pages is current). Republishing means reading an 850 KB page back first. Say if the private copy is still wanted.
 
 ## Later
 

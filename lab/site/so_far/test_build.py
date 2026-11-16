@@ -408,6 +408,17 @@ class SiteTest(unittest.TestCase):
         for t in sorted(set(terms)):
             self.assertIn(t, entries, f"#{t} has no glossary entry")
 
+    def test_the_five_possibilities_read_the_same_on_aim_and_in_their_room(self):
+        def strip(section):
+            m = re.search(r'<ol class="spectrum"[^>]*>(.*?)</ol>', self.sections[section], re.S)
+            self.assertIsNotNone(m, section)
+            return re.findall(r"<li>(.*?)</li>", m.group(1), re.S)
+
+        self.assertEqual(len(strip("possibilities")), 5)
+        self.assertEqual(strip("aim"), strip("possibilities"))
+        self.assertIn('id="computational"', self.sections["aim"])
+        self.assertIn('<h2 class="big">Is awakening computational?</h2>', self.sections["possibilities"])
+
     def test_links_into_possibilities(self):
         organized = self.sections["ideas (carried over)"]
         for title in ("If Penrose is right", "An agenda of its own?"):
