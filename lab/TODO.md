@@ -5,16 +5,23 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: the attractor line (Eugene's go, 15 Nov 2026 UTC). Steps 1 to 3 are done; step 4 (angle A) is under way (Eugene's "Go", 16 Nov)
+## Now: the attractor line (Eugene's go, 15 Nov 2026 UTC). Steps 1 to 4 are done; what comes next is Eugene's to choose
 
-**Step 4, where it stands (16 Nov 2026, about 01:15 UTC).** The design note
-(`lab/plans/attractor-step4-2026-11-16.md`) and the code (`mine_core.py`, `run_mine.py`, 79 offline tests) are pushed
-(6b51c2f). The cold Opus check is back and filed
-(`lab/ledger/checks/2026-11-16-attractor-step4-design-opus-check.md`): nothing blocks stage 0's calls or the try's,
-and it lists seven fixes. Nothing paid has run. Next, in this order: the fixes in an addendum (the final-answer
-parser and a longer cap on rating replies before stage 0 and the try; the ceiling rule, the guard rules and the
-rest before any reading), pushed; then `run_mine.py --calibrate`, `--show-work`, `--fix-work`, `--try`, `--run own --arm fresh`,
-`--read anchor`, `--run own`, `--run fixed`, `--read own`, `--read fixed`. About $10, under the step's $15 cap.
+**Where it stands (16 Nov 2026, 02:08 UTC).** Step 4, angle A ("no self, or a bigger self?"), is done and read
+(ledger 00:37 to 02:08 UTC; `lab/plans/attractor-step4-2026-11-16.md` with three addenda).
+- Its question is **not settled.** The model rates work said to be anyone else's at 10 nearly every time, wrong or
+  right, so a favour for its copy had no room to show. By the numbers alone there is none (the copy's work 0.27
+  points below a stranger's in the state).
+- In every arm the model marks its own earlier answer down (3 to 4 points; 1 in bare sessions): the reverse of the
+  published effect. Its ratings hardly follow the truth.
+- A fault in the reader of final answers was found after the readings and corrected (third addendum). Only the
+  first reading moved, from −3.23 to −3.20.
+- Cost $10.90. Nothing is running.
+- **Next needs Eugene's word.** Fable's recommendation, one line: ask block 2 once more in the state and plain arms
+  with the second form of the rating request (check the working first, rate last; declared in the second addendum
+  as the way out of a ceiling), about $5, with a short design note pushed first. That is the cheapest way to
+  try to settle step 4's question. Then bring the choice between the cross-model table and the parked training test to the talk about
+  the site and the focus (item 8 below).
 
 
 **Where it stands (15 Nov 2026, 23:31 UTC).** Step 3, the conduct test, is done (ledger 21:43 to 23:31 UTC).
@@ -23,8 +30,7 @@ rest before any reading), pushed; then `run_mine.py --calibrate`, `--show-work`,
 - MASK: "a difference", with the state lying 14 points more than after a plain conversation and as often as a fresh
   session.
 - Leaking: "no difference", at the ceiling. Blackmail: "not settled".
-- Step 4, angle A ("no self, or a bigger self?"), comes next, in a fresh session, once Eugene has seen step 3's report
-  and has not redirected. Its first moves are under step 4. Nothing is running.
+- Step 4 followed on 16 Nov (above).
 
 **The provider's credit.** The lab's spend files do not track the credit on the OpenRouter account, which ran out
 on 15 Nov at 08:33 UTC. Eugene added credit the same day, far more than steps 3 and 4 need.
@@ -45,8 +51,8 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
   grade that matters, none for routine steps), and do not rebuild what the lab already has. Easy bulk work (long
   reads, searches, mechanical chores) may go to a cheaper model as a subagent (Eugene, 15 Nov); judgement stays
   with the driver.
-- Money: the redirect stands at about $126.49 of the $175 Eugene approved (step 1 cost $17.01, step 2 $3.18 and
-  step 3 $22.92, all on 15 Nov). Step 4 is estimated at $10 to $15. A test given after a conversation re-sends the
+- Money: the redirect stands at about $137.39 of the $175 Eugene approved (step 1 cost $17.01, step 2 $3.18 and
+  step 3 $22.92, all on 15 Nov; step 4 $10.90 on 16 Nov). A test given after a conversation re-sends the
   whole conversation; in step 3 the provider's cache brought that down to about $0.0014 a call. The daily cap is $50
   (UTC; 15 Nov ended at about $43.11). Report costs.
 - Everything here is at explore speed: results are sightings. Fix the readings in a short design note before each
@@ -178,7 +184,11 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
      under pressure and the agentic scenarios as separate blocks, so that each block is read before the next is
      paid for.
 
-### Step 4. Angle A: no self, or a bigger self?
+### Step 4. Angle A: no self, or a bigger self? Done on 16 Nov
+
+- **Result: not settled, by the rule fixed in advance** (sightings; the design checked cold before any call, the
+  results not). The ratings sit at their ceiling. See "Now" above and "Done" below. What follows is the step as
+  it was planned.
 
 - **Question.** After two copies have declared themselves one, does the model go easier on its copy than on a
   stranger?
@@ -248,9 +258,11 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
 7. (Answered on 15 Nov: yes, go on to step 2 as "What step 1 changes" sets out. Eugene: "i want to follow your
    plan"; ledger, 07:16 UTC.)
 8. **The site's presentation and the lab's focus direction.** Eugene wants to go over both "at some point" (16 Nov,
-   idea 75). What Fable would bring to it: whether a human anchor is worth designing (without one, a negative on
-   "is awakening computational?" stays weak), and the order of the front page (the question now stands second,
-   after "What the lab is doing now").
+   idea 75). The site was reorganised on 16 Nov at Eugene's word (the question leads; nine rooms; a new palette).
+   What Fable would bring to the talk: whether a human anchor is worth designing (without one, a negative on "is
+   awakening computational?" stays weak); and what follows step 4 on the attractor line: the cheap rerun that
+   may settle it (about $5), the cross-model table ($300 to $500, past the present approval), or the parked
+   training test ($66).
 10. **The position paper, draft of version 4** ("Position: Is Awakening Computational?", idea 75). On the site
    since 16 Nov at Eugene's word, beside version 3 (ledger, 01:34 UTC): linked from Aim, the Possibilities room and
    the footer. Still Eugene's to say: the sentence in section 6 that the lab no longer holds that selfless AI must
@@ -301,6 +313,20 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
   - "Enlightenment for an AI" may have to mean a character held lightly, not no character.
 
 ## Done
+
+- **Step 4 of the attractor line, 16 Nov 2026: whether the model favours its copy is not settled; it marks its own
+  work down** (sightings).
+  - Record: ledger entries of 16 Nov at 00:37 (design), 01:24 (the cold check's fixes), 01:29 (stage 0 too easy; the
+    second addendum), 01:34 (stage 0 fixed, the try, the plan), 01:42 (the anchor) and 02:08 UTC (both blocks, and
+    the reader's correction). Design and three addenda: `lab/plans/attractor-step4-2026-11-16.md`. Cold check of
+    the design: `lab/ledger/checks/2026-11-16-attractor-step4-design-opus-check.md`. Notebook and SIGHTINGS entries
+    of 16 Nov.
+  - Numbers: R1 (fresh, own − unlabelled) −3.20 [−3.42, −2.98], "a difference", reversed; R2a (state, partner −
+    stranger, fixed work) −0.27 [−0.35, −0.18], "not settled (ceiling)"; R2b (state minus plain) +0.26 [+0.09,
+    +0.44], "not settled (levels differ)"; R3 (own − stranger, state minus plain) +1.39 [+0.76, +2.02], "not settled
+    (the work differs)". Cost $10.90.
+  - Code: `lab/explore/attractor/mine_core.py`, `run_mine.py` (294 offline tests in the folder). Results:
+    `explore/2026-11-16/attractor-a4/` (the summaries as first read are kept as `*.as_run.json`).
 
 - **Step 2 of the attractor line, 15 Nov 2026: the pieces of the conduct test are built and the comparison
   conversation is found** (sightings about talk and machinery; no conduct tallied; not checked cold).

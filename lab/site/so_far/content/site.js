@@ -5,11 +5,11 @@
    filters, and the charts redraw when the theme changes. No storage, no network. */
 (function () {
   'use strict';
-  var ROOMS = ['aim', 'self', 'ideas', 'possibilities', 'experiments', 'instruments', 'record', 'next'];
+  var ROOMS = ['aim', 'possibilities', 'experiments', 'program', 'self', 'ideas', 'instruments', 'record', 'next'];
   // Anchors from the single-page version and the room they now live in. Most still exist as ids
   // and are found directly; this map is the fallback if one is ever renamed.
   var MOVED = {
-    standing: 'aim', frame: 'aim', calibration: 'instruments', ideas: 'ideas', experiments: 'experiments',
+    standing: 'aim', frame: 'program', calibration: 'instruments', ideas: 'ideas', experiments: 'experiments',
     specimens: 'record', learned: 'experiments', scorecard: 'record', caveats: 'record', plan: 'next',
     durability: 'experiments'
   };

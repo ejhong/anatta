@@ -46,13 +46,16 @@ FONTS = ("https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500
          "&family=Shippori+Mincho+B1:wght@400;500;600;700"
          "&family=Spectral:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap")
 
-# The eight rooms: (hash name, nav label, content files in order). Names are plain ASCII words.
+# The nine rooms: (hash name, nav label, content files in order). Names are plain ASCII words. The order is the
+# order a reader needs (16 Nov 2026): the start, the question, what was found, the recipe the lab began with, then the
+# rooms that hold the detail.
 ROOMS = [
-    ("aim", "Aim", ["aim.html"]),
+    ("aim", "Start", ["aim.html"]),
+    ("possibilities", "The question", ["possibilities.html"]),
+    ("experiments", "Findings", ["experiments.html", "learned.html"]),
+    ("program", "The recipe", ["program.html"]),
     ("self", "The self", ["self.html", "self_prh.html", "self_work.html"]),
     ("ideas", "Ideas", ["ideas_organized.html", "ideas_log.html"]),
-    ("possibilities", "Possibilities", ["possibilities.html"]),
-    ("experiments", "Experiments", ["experiments.html", "learned.html"]),
     ("instruments", "Instruments", ["instruments_head.html", "calibration.html"]),
     ("record", "Record", ["record_head.html", "scorecard.html", "specimens.html", "caveats.html"]),
     ("next", "Next", ["plan.html"]),
@@ -723,8 +726,15 @@ def parse_standing() -> dict:
         note = re.search(r'<p class="small">(.*?)</p>', sec)
         cols.append({"glyph": rail.group(1), "name": rail.group(2), "items": items,
                      "note": note.group(1) if note else ""})
-    assert len(cols) == 3 and all(c["items"] for c in cols), "standing.html: expected three filled sections"
+    assert len(cols) == 4 and all(c["items"] for c in cols), "standing.html: expected four filled sections"
     return {"eyebrow": head.group(1), "h2": head.group(2), "lede": head.group(3), "cols": cols}
+
+
+DATED_RE = re.compile(r"\(\d[^()]*November[^()]*\)")
+
+
+def plain_text(html: str) -> str:
+    return re.sub(r"<[^>]+>", "", html)
 
 
 def one_line(item: dict) -> str:
@@ -737,8 +747,12 @@ def one_line(item: dict) -> str:
     first_p = next(b for is_l, b in item["paras"] if not is_l)
     sents = html_sentences(first_p)
     line = sents[0]
-    if len(re.sub(r"<[^>]+>", "", line)) < 40 and len(sents) > 1:
-        line += " " + sents[1]
+    if len(sents) > 1:
+        first, both = plain_text(line), plain_text(line + " " + sents[1])
+        # A very short opening, or one that only says what ran and when ("... (2 November)."), needs the next
+        # sentence to say what was found.
+        if len(first) < 40 or (DATED_RE.search(first) and len(both) <= 330):
+            line += " " + sents[1]
     return line
 
 
@@ -747,11 +761,16 @@ def glance_lookup(standing: dict) -> dict:
 
 
 def render_glance(standing: dict) -> str:
-    classes = ["gl-working", "gl-failed", "gl-open"]
+    """Four bands, one under another (working, didn't pan out, open, quick looks), each a grid of even rows. Side by
+    side the lists had very different lengths, which left most of two screens empty beside the longest."""
+    classes = ["gl-working", "gl-failed", "gl-open", "gl-sight"]
     out = ['<div class="glance">']
     for cls, col in zip(classes, standing["cols"]):
         out.append(f'<div class="gl-col {cls}" id="glance-{cls[3:]}"><h3><span class="g" aria-hidden="true">{col["glyph"]}</span>'
                    f'{col["name"]}<span class="c">{len(col["items"])}</span></h3>')
+        if col["note"]:
+            out.append(f'<p class="small glance-note">{col["note"]}</p>')
+        out.append('<div class="gl-grid">')
         for it in col["items"]:
             more = "".join(f'<p class="learned">{b}</p>' if is_l else f"<p>{b}</p>" for is_l, b in it["paras"])
             out.append(
@@ -761,9 +780,7 @@ def render_glance(standing: dict) -> str:
                 f'<span class="gl-line">{one_line(it)}</span>'
                 f'<span class="gl-tog" aria-hidden="true"></span></summary>'
                 f'<div class="gl-more">{more}</div></details>')
-        if col["note"]:
-            out.append(f'<p class="small glance-note">{col["note"]}</p>')
-        out.append("</div>")
+        out.append("</div></div>")
     out.append("</div>")
     return "".join(out)
 
@@ -821,11 +838,18 @@ def parse_calibration() -> list:
     return rows
 
 
+TAG_RE = re.compile(r'<span class="tag \w+">.*?</span>')
+
+
 def render_instruments(rows: list) -> str:
+    """The front page's short list of checks: each instrument with its status words only. What each check found is
+    in the Instruments room, in the table these rows are read from."""
     out = ['<ol class="inst">']
     for num, instrument, _rests_on, status in rows:
+        tags = "".join(TAG_RE.findall(status))
+        assert tags, f"calibration.html: check {num} has no status word"
         out.append(f'<li><span class="in-n">{num}</span><span class="in-t">{instrument}</span>'
-                   f'<span class="in-s">{status}</span></li>')
+                   f'<span class="in-s">{tags}</span></li>')
     out.append("</ol>")
     return "".join(out)
 
@@ -838,13 +862,25 @@ def parse_plan() -> dict:
     return {"lede": lede, "items": items}
 
 
+DONE_RE = re.compile(r"\s*\(done on (\d+ \w+)(?:: [^)]*)?\)\.?$")
+
+
 def render_next(plan: dict, nums: list) -> str:
-    out = ['<ol class="steps">']
+    """The plan's steps as cards: number, a chip when the step is done or running, title, first sentence. A title
+    that ends "(done on 15 November: ...)" gives the chip, and the sentence drops its "Done on 15 November:"."""
+    out = [f'<ol class="steps steps-{len(nums)}">']
     for k in nums:
         title, body = plan["items"][k - 1]
-        sents = html_sentences(body)
-        running = '<span>running</span>' if re.search(r"\bRunning since\b", body) else ""
-        out.append(f'<li class="step"><div class="step-n">{k}{running}</div><b>{title}</b><p>{sents[0]}</p></li>')
+        first = html_sentences(body)[0]
+        chip = ""
+        m = DONE_RE.search(title)
+        if m:
+            title = title[:m.start()]
+            chip = f'<span class="done">done · {m.group(1)}</span>'
+            first = re.sub(r"^Done on \d+ \w+: (\w)", lambda g: g.group(1).upper(), first)
+        elif re.search(r"\bRunning since\b", body):
+            chip = '<span>running</span>'
+        out.append(f'<li class="step"><div class="step-n">{k}{chip}</div><b>{title}</b><p>{first}</p></li>')
     out.append("</ol>")
     return "".join(out)
 
@@ -1389,11 +1425,10 @@ def build() -> str:
                      f'{render_pager(i)}\n</div>')
     footer = content("footer.html").rstrip()
     built = (f'<p class="built">Built from the lab\'s files by lab/site/so_far/build.py. The ideas log\'s '
-             f'{len(entries)} entries are read from lab/ideas/ideas.md each time the page is rebuilt. Aim is '
-             f'assembled from the hand-kept page\'s own text, with new reading paths, a key to the two kinds of '
-             f'statement and a door to the Self room. The Self room, the Possibilities room and the glossary were '
-             f'written for this site. The other rooms are carried over from the hand-kept page, with Limits boxes and '
-             f'glossary links added. The chariot, the K1 chart and the field of marks are drawn from those files when '
+             f'{len(entries)} entries are read from lab/ideas/ideas.md each time the page is rebuilt. The start, '
+             f'the question\'s room, the Self room and the glossary were written for this site. The recipe\'s room '
+             f'holds the three acts and their tests, moved from the old front page. The other rooms are carried over '
+             f'from the hand-kept page, with Limits boxes and glossary links added. The chariot, the K1 chart and the field of marks are drawn from those files when '
              f'the page is built.</p>')
     footer = footer.replace("</footer>", built + "\n</footer>")
     figures = content("figures.js")

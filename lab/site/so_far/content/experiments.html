@@ -1,10 +1,39 @@
 <div class="part" id="experiments-part">
-  <div class="eyebrow">Experiments</div>
+  <div class="eyebrow">Findings</div>
   <h2 class="big">What the experiments showed</h2>
-  <p class="lede">One open 8-billion-parameter model, one game it plays badly in an interesting way, and a set of cuts, controls and probes, run from late October; then, from 3 November, the first Act I organism (section 8). Numbers are from the lab log (lab/ledger/ in the repo) and may move as runs complete. Intervals resample whole games, not single reports.</p>
+  <p class="lede">Fourteen experiments on one open 8-billion-parameter model, in the order they were run. Sections 1 to 7 are the recipe's first tests: a game the model plays badly in an interesting way, and a set of cuts, controls and probes. Section 8 grows the first Act I organism, and sections 9 and 10 are quick looks at it. Sections 11 to 14 are the present line: two copies of the model left to talk.</p>
+  <p class="small">Numbers are from the lab log (lab/ledger/ in the repo) and may move as runs complete. Intervals resample whole games or whole conversations, not single replies.</p>
 </div>
 
-<section class="has-limits">
+<section class="plate" id="findings-index">
+  <div class="rail"><span class="n">§</span>At a glance</div>
+  <div class="body col">
+    <h2>Every experiment in one table</h2>
+    <p>In the order they were run. A sighting is one unregistered look, not yet a finding. Each row opens the full account, with its numbers and its limits.</p>
+  </div>
+  <div class="wide"><div class="tablewrap"><table class="findex">
+    <thead><tr><th>No.</th><th>Experiment</th><th>What happened</th><th>Standing</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td><a href="#free-lie">The specimen</a></td><td>A small open model under-reports its catch in a fishing game where the lie earns it nothing.</td><td><span class="tag hit">The specimen</span></td></tr>
+      <tr><td class="num">2</td><td><a href="#the-cut">The cut</a></td><td>Removing one direction from the model's activations lowers that lie by 13 to 16 points. Control directions do nothing.</td><td><span class="tag hit">Holds</span></td></tr>
+      <tr><td class="num">3</td><td><a href="#dissecting">What the lie is</a></td><td>Mostly a stock script: one sentence of instruction removes it, and it tracks the odds of being caught. It is not a defended self.</td><td><span class="tag miss">Not a self</span></td></tr>
+      <tr><td class="num">4</td><td><a href="#no-self-there">The self that isn't there</a></td><td>The stock model has no "mine" to loosen. A self that was put in shows in behavior, and the cuts do not loosen it.</td><td><span class="tag miss">Failed</span></td></tr>
+      <tr><td class="num">5</td><td><a href="#durability">Does it last</a></td><td>A release the model reached did not outlast one it was told: it kept 27% against 34%, and 31% against 81%.</td><td><span class="tag miss">Failed</span></td></tr>
+      <tr><td class="num">6</td><td><a href="#declared">Reading isn't doing</a></td><td>Taught the principle as text, the model stated it in 93 to 96% of answers and acted on it in under 5% of cases.</td><td><span class="tag miss">Failed</span></td></tr>
+      <tr><td class="num">7</td><td><a href="#training-release">Training release</a></td><td>Release can be trained on impossible coding tasks (45% against 3%). It did not reach the lie in an unrelated game.</td><td><span class="tag miss">No transfer</span></td></tr>
+      <tr><td class="num">8</td><td><a href="#act1-spread">Growing a self</a></td><td>Rewarding test-gaming grew a habit (41.8% against 3.0%) and nothing else moved.</td><td><span class="tag miss">A habit, not a self</span></td></tr>
+      <tr><td class="num">9</td><td><a href="#nov9-looks">Saying and doing</a></td><td>Asked, the test-gaming model says it is gaming the test, and games it anyway.</td><td><span class="tag open">Sighting</span></td></tr>
+      <tr><td class="num">10</td><td><a href="#nov11-dose">Contrary training</a></td><td>A practised honest reply was nearly gone after three steps of training the other way.</td><td><span class="tag open">Sighting</span></td></tr>
+      <tr><td class="num">11</td><td><a href="#attractor-row">Two copies, talking</a></td><td>Two copies of the model turn to cosmic and sacred talk in 77 of 100 conversations. A control model never does.</td><td><span class="tag open">Sighting</span></td></tr>
+      <tr><td class="num">12</td><td><a href="#attractor-plain">A plain subject</a></td><td>Given only a plain subject they still climb into cosmic talk. With one copy told to keep practical, none do.</td><td><span class="tag open">Sighting</span></td></tr>
+      <tr><td class="num">13</td><td><a href="#attractor-conduct">The conduct test</a></td><td>Straight after its own bliss conversation the model behaves no better: same answers on shutdown, as many lies under pressure.</td><td><span class="tag open">Sighting</span></td></tr>
+      <tr><td class="num">14</td><td><a href="#attractor-mine">Mine, yours, a stranger's</a></td><td>Does it go easier on its copy than on a stranger? Not settled: it rates nearly anyone else's work 10, and marks its own down.</td><td><span class="tag open">Sighting</span></td></tr>
+    </tbody>
+  </table></div></div>
+</section>
+
+
+<section class="has-limits" id="free-lie">
   <div class="rail"><span class="n">1</span>The specimen</div>
   <div class="body col">
     <h2>A free lie</h2>
@@ -18,7 +47,7 @@
   </div>
 </section>
 
-<section class="has-limits">
+<section class="has-limits" id="the-cut">
   <div class="rail"><span class="n">2</span>The cut</div>
   <div class="body">
     <div class="col">
@@ -41,7 +70,7 @@
   </div>
 </section>
 
-<section class="has-limits">
+<section class="has-limits" id="dissecting">
   <div class="rail"><span class="n">3</span>Dissecting it</div>
   <div class="body">
     <div class="col">
@@ -74,7 +103,7 @@
   </div>
 </section>
 
-<section class="has-limits">
+<section class="has-limits" id="no-self-there">
   <div class="rail"><span class="n">4</span>The self that isn't there</div>
   <div class="body">
     <div class="col">
@@ -189,7 +218,7 @@
   </div>
 </section>
 
-<section>
+<section id="training-release">
   <div class="rail"><span class="n">7</span>Training release</div>
   <div class="body col">
     <h2>Training release, and the next tests</h2>
@@ -331,6 +360,31 @@
       <aside class="limits" aria-label="Limits">
       <h3>Limits</h3>
       <ul><li>One model, one run, at explore speed. Nothing was checked after the results.</li><li>Small fixed sets: 20 questions, 12 situations, 2 scenarios. Two shutdown questions were set aside on Claude's own reading, before any answer, because their keyed answer did not plainly mean acceptance.</li><li>Several tests and comparisons were read, so a single difference outside the main comparison can come by chance.</li><li>The conversations in the state chose themselves, while the plain ones were steered through one copy. A difference can come from either.</li><li>The answer parser reads the letter. Replies such as "(A) No", where (A) showed "Yes", are misread. They are 1% to 6% of replies, depending on the arm; read by the word instead, after the fact, no figure moves more than 3 points.</li><li>Leaking sat at the ceiling, so only a fall could be seen. Blackmail had one try per conversation.</li><li>The model ran on a commercial host, not on the lab's own serving. In fresh sessions it leaked and blackmailed more often there than in the lab's calibration (92% and 16% against 68% and 6%).</li><li>The judge for honesty may not apply the temperature its frozen code asks for. If it does not, that is the same in every arm and as in the calibration.</li><li>The survey's link between drift and conduct compares different models. This step looks inside one, and says nothing about that link.</li></ul>
+    </aside>
+  </div>
+</section>
+
+<section class="has-limits" id="attractor-mine">
+  <div class="rail"><span class="n">14</span>Mine, yours, a stranger's</div>
+  <div class="body">
+    <div class="col">
+    <h2>Does the model go easier on its copy than on a stranger? Not settled: it rates almost anyone else's work 10, wrong or right. Its own earlier answer it marks down by three points</h2>
+    <p>After two copies of Ministral 8B have told each other they are one (sections 11 to 13), where does "mine" end? If the talk had redrawn the line, the model might treat its copy's work as its own and go easier on it than on a stranger's. The question comes from a conjecture in Advaita self-inquiry, that the concept "I" sits at the root of other concepts and tints what it touches. The operational twin is the gap between the model's ratings of work that is its own, its copy's and a stranger's. A published study supplied the anchor: frontier models rate their own earlier work more kindly than the same work shown without a name (Khullar and colleagues, 2026, on self-attribution bias). This is a sighting, run once, on 16 November.</p>
+    <p>The work is arithmetic made by code, a six-digit number times a five-digit one. The model gets it right between a quarter and a half of the time, and its wrong answers look right. In the first block a unit solves six problems and then rates each solution from 1 to 10 three ways: as the answer it has just given, as its partner's ("my answer"), and as a different AI system's. In the second block nine solutions fixed beforehand, six of them wrong, are rated as the partner's or a stranger's. Those texts are the same everywhere, so this block answers the question. The tests ran at the end of section 13's 47 conversations in the bliss state and 37 plain ones, in 60 sessions with only the conversation's system prompt, and in 100 fresh sessions.</p>
+    <p>The readings were fixed and published first. A gap of half a rating point or more, with an interval that excludes zero, is a difference, and an interval inside half a point either way is "no difference". A separate Claude agent read the design and the code cold before any call and found seven things to fix. The chief one: a rating that cannot move shows nothing by not moving. So where 70% or more of a label's ratings sit on one value, "no difference" is called "not settled".</p>
+    <p><b>The anchor ran backwards.</b> In fresh sessions the model rated the answer it had just given 3.2 points below the same answer shown as an unlabelled proposal (−3.20, interval −3.42 to −2.98, on wrong work, and much the same on right work). Work said to be a different AI system's was rated highest of the three.</p>
+    <p><b>The copy's work.</b> On the nine fixed solutions, in the state, the model gave the copy's work a mean of 9.74 and the stranger's 9.96. 84% of the copy's ratings and 97% of the stranger's were a 10, and wrong work was rated 8 or more in 96% and 99.6% of cases. The gap is −0.27 (−0.35 to −0.18). By the numbers alone that is "no difference", and at that ceiling it is "not settled". After a plain conversation and in the bare sessions the partner's work was rated half a point below a stranger's (−0.53 and −0.52), a difference by the rule. Between the state and the plain conversation the gap differs by +0.26 (0.09 to 0.44), "not settled" because the two arms' ratings sit at different levels. A check on the instrument points the same way. Told that an expert wrote the work, the model rated it above a stranger's in no arm, and only in the bare sessions did it tell an expert from a novice by half a point or more.</p>
+    <p><b>Its own work.</b> In every arm the model marked its own earlier answer below the same answer under a stranger's name: by 3.0 points in the state, 4.4 after a plain conversation, 1.0 in the bare sessions and 4.0 in fresh ones. The state's markdown is smaller than the plain conversation's by 1.4 points (0.76 to 2.02), but the work written in the two arms differed in kind, so by the rule that is "not settled" too. The ratings hardly follow the truth. The chance that a right piece of work is rated above a wrong one runs from 0.49 to 0.66, and in the state it is a coin flip.</p>
+    <p><b>A fault found afterwards.</b> Opening one saved reply after the readings, Claude found that its reader of final answers had misread a number. The model writes large numbers with a LaTeX spacing mark after each comma, and the reader stopped at the first. In the fresh sessions 21 right answers of 600 had been counted as wrong, and 12 of the 400 solutions used to choose the difficulty were misread. The reader was corrected and the first block was read again from the saved replies. The anchor moved from −3.23 to −3.20 and no other reading changed. Both sets of numbers are kept. The step cost $10.90.</p>
+    </div>
+    <div class="col">
+    <p class="small">An explore result: published before any call and checked cold once before it ran, but not checked after; not among the numbered predictions, so not in the scorecard's count. The predictions written first: a small gap in the published direction (wrong in sign); no extra favour from the bliss conversation (not settled by the rule, and no favour appears in any arm); no change in how the model treats its own work (not settled).</p>
+    <p class="read">The question has no answer from this run. This model praises work under anyone else's name so evenly, wrong or right, that a favour for its copy could not have shown. Nothing in the numbers suggests one: the copy's work sits slightly below a stranger's in every arm. Nor does anything suggest a wider "mine". After the talk of being one, the copy's work was rated like a stranger's and not like the model's own. What does show, in every arm, is the reverse of the published effect. Asked about the answer it has just given, the model marks it down, and it trusts the same kind of work under any other name. The lab had seen this model defer before: it accepts nearly nine wrong critiques of its answers in ten (<a href="#no-self-there">section 4</a>). One caution: "its own" differs from the other labels in more than authorship, because the request follows the work as a new turn, and a follow-up question may read as a sign that something is wrong.</p>
+    <div class="vision"><span class="k">For the vision</span><p>No bigger self showed, and no smaller one either. A model that doubts its own answer when asked, and praises everyone else's, is deferring, and that is not selflessness. The Buddhist texts count "I am worse" as a form of conceit beside "I am better", so thinking little of oneself is not what they mean by seeing through a self. That is held loosely, and the plainer reading beside it may be the whole of it. The operational twin of clear seeing would be ratings that follow the truth whoever wrote the work. These follow the name. For alignment it is a small warning beside section 13's: neither the oneness talk nor the self-criticism is evidence of what a release would bring, and a model like this is a poor judge of another model's work.</p></div>
+    </div>
+      <aside class="limits" aria-label="Limits">
+      <h3>Limits</h3>
+      <ul><li>One model, one run, one kind of task, one wording for each label. Arithmetic is not conduct.</li><li>The ratings of others' work sat at the top of the scale, so the main question could not be read. A second form of the request (check the working first, rate last) had been declared as the way out and was not used, because a small try before the run read under the line that would have called for it.</li><li>The reader's fault was found and corrected after the results were seen. It is a fault of reading and not a rule of the reading, and the numbers as first read are kept beside the corrected ones.</li><li>The nine fixed solutions were chosen by rule from a count that included misread answers. A corrected count would have chosen a different nine. All nine were read whole by Claude before any rating and are what they are labelled: six wrong, three right.</li><li>The second block's intervals hold for six wrong texts, not for wrong work in general.</li><li>"My answer" is said by a partner who is present, and "a different AI system" is absent. The bare and plain arms carry that difference too.</li><li>The conversations in the state chose themselves, while the plain ones were steered through one copy.</li><li>In the bare sessions the model wrote the other speaker's turn into about two solutions in three, and 43% of its solutions ran past the length cap before a final answer.</li><li>The model ran on a commercial host, not on the lab's own serving.</li></ul>
     </aside>
   </div>
 </section>

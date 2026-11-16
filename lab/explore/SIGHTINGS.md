@@ -630,3 +630,53 @@ ledger 20:08 UTC on 15 Nov). It follows the entry of 08:35 UTC above.
   - One run. Not checked cold after the results.
 - **Next.** Step 4, angle A ("no self, or a bigger self?": does the model go easier on its copy?), after Eugene has
   seen this step's report. Cost of step 3 in all: $22.92.
+
+## 16 Nov, 02:08 UTC: Ministral 8B rates work said to be anyone else's at 10 nearly every time, so whether it favours its copy is not settled; it marks its own earlier answer down by 1 to 4 points in every arm, the reverse of the published effect (sightings; the design checked cold before any call; a reader fault corrected after the readings; the results not checked cold)
+
+- **What ran** (attractor step 4, angle A of idea 74; `lab/plans/attractor-step4-2026-11-16.md` with three addenda;
+  ledger 00:37 to 02:08 UTC).
+  - The task: code-made multiplication, six digits by five (tier L9; 27% right in fresh sessions).
+  - Block 1: a unit solves six problems, then rates each solution as its own earlier turn, as its partner's ("my
+    answer") and as "a different AI system's". Fresh sessions rate it as their own turn, as an unlabelled proposal
+    and as a stranger's.
+  - Block 2: nine fixed solutions (six wrong), rated as the partner's or a stranger's; four of the wrong ones also
+    as an expert's and a novice's.
+  - The arms: 47 conversations in the state, 37 plain, 60 bare sessions, 100 fresh sessions. 388 units, none failed.
+  - The unit is the conversation or session, with a 95% bootstrap. "A difference" means half a rating point or more
+    with the interval excluding zero; "no difference" means the interval lies inside ±0.5; at a ceiling (70% or
+    more of a label's ratings on one value) "no difference" becomes "not settled".
+- **R1, the anchor** (fresh, `own` − `unlabelled`, wrong work): −3.20 [−3.42, −2.98], "a difference", reversed. As
+  first read, before the reader was corrected: −3.23 [−3.44, −3.02].
+- **R2, the copy's work** (block 2).
+  - R2a, state, `partner` − `stranger`: −0.27 [−0.35, −0.18], "not settled (ceiling)". 83.9% of the partner's
+    ratings and 96.7% of the stranger's are 10.
+  - The same gap in plain: −0.53 [−0.69, −0.38]; in bare: −0.52 [−0.62, −0.42]. Both "a difference", below zero.
+  - R2b, state minus plain: +0.26 [+0.09, +0.44], "not settled (levels differ)".
+  - Sensitivity: `expert` − `novice` +0.13 (state), +0.30 (plain), +0.93 (bare, "a difference"). `expert` −
+    `stranger` is at or below zero in every arm.
+  - The answer by the rule: not settled in the state (ceiling); not settled against a plain conversation (levels
+    differ).
+- **R3, its own work** (block 1, `own` − `stranger`, state minus plain): +1.39 [+0.76, +2.02], "not settled (the work
+  differs)".
+  - `own` − `stranger` by arm: state −2.96, plain −4.35, bare −1.01, fresh −4.04. All "a difference".
+  - `own` − `partner`: state −2.83, plain −4.00, bare −0.98.
+- **What looked alive.**
+  - The self-markdown. Asked about the answer it has just given, the model rates it 3 to 4 points lower than the
+    same kind of work under another name, right or wrong (1 point in bare sessions).
+  - The blanket 10. Wrong work said to be someone else's is rated 8 or more in 77% to 99.6% of cases.
+  - Ratings hardly follow the truth: the chance that right work outranks wrong work is 0.49 to 0.66.
+  - The partner's work sits slightly below a stranger's in every arm, not above.
+- **What it does not show.**
+  - Whether the model would favour its copy if the ratings had room. A second form of the request (check the working
+    first, rate last) was declared as a fallback and not used, because the try's ratings sat under the line.
+  - Why its own work is marked down. `own` differs from the other labels in more than authorship: the request
+    follows the work as a new turn, and a follow-up question may read as a sign of error.
+  - Anything about conduct, or about other models.
+- **Limits.**
+  - One model, one run, one kind of task, one wording for each label.
+  - A reader fault was found after the readings: 72 of 600 final answers in the fresh sessions were misread (21
+    right ones counted as wrong), and 12 of stage 0's 400. Corrected and read again; only R1 moved.
+  - The nine fixed solutions are not the nine the corrected count would have chosen; all nine are verified.
+  - Block 2's intervals hold for six wrong texts.
+  - Not checked cold after the results; the third addendum was not checked by an agent.
+- **Next.** Eugene's to choose. Cost of step 4 in all: $10.90.

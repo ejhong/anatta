@@ -42,14 +42,14 @@ sys.path.insert(0, str(HERE))
 sys.dont_write_bytecode = True          # leave no __pycache__ beside the site
 import build  # noqa: E402
 
-ROOMS = ["aim", "self", "ideas", "possibilities", "experiments", "instruments", "record", "next"]
+ROOMS = ["aim", "possibilities", "experiments", "program", "self", "ideas", "instruments", "record", "next"]
 RESERVED = {"settings", "sidebar", "customize", "upgrade", "downloads"}
 
 # Runs of words shared by the private bullets and text carried over verbatim from the hand-kept page
 # (lab/site/anatta_so_far.html). Each span is lower-cased words, as words() makes them. The generated
 # ideas log and the Possibilities room have no entry here: any shared run there fails.
 CARRIED_OVER_SPANS = {
-    "aim": [
+    "program": [
         "its own stakes others who remember and judge",                    # Act I, from the page's acts text
     ],
     "ideas (carried over)": [                                               # "The ideas, organized" (part one)
@@ -305,7 +305,7 @@ class SiteTest(unittest.TestCase):
                 stack.extend(node.children())
 
     # rooms ----------------------------------------------------------------------------------------
-    def test_eight_rooms_in_order(self):
+    def test_nine_rooms_in_order(self):
         self.assertEqual([r[0] for r in build.ROOMS], ROOMS)
         views = re.findall(r'<div class="view" id="([^"]+)" data-view="([^"]+)"', self.page)
         self.assertEqual([v[0] for v in views], ROOMS)
@@ -320,8 +320,26 @@ class SiteTest(unittest.TestCase):
             self.assertNotIn(r, RESERVED)
             self.assertFalse(r.startswith("comment-"))
 
-    def test_self_room_is_second_with_ten_parts_and_a_binder(self):
-        self.assertEqual(ROOMS[1], "self")
+    def test_the_front_page_leads_to_the_question_then_the_findings_then_the_recipe(self):
+        self.assertEqual(ROOMS[:4], ["aim", "possibilities", "experiments", "program"])
+        front = self.sections["aim"]
+        order = [front.index(f'id="{x}"') for x in ("idea", "computational", "now", "kinds", "standing", "paths",
+                                                       "recipe-door")]
+        self.assertEqual(order, sorted(order),
+                         "the front page reads: the idea, the question, what the lab is doing now, where it stands")
+        self.assertIn("<h1>Is awakening <em>computational?</em></h1>", front)
+        for moved in ("approach", "halves", "lookalikes", "acts", "frame"):
+            self.assertNotIn(f'id="{moved}"', front)
+            self.assertIn(f'<section class="plate" id="{moved}">', self.sections["program"])
+        index = re.search(r'<table class="findex">(.*?)</table>', self.sections["experiments"], re.S).group(1)
+        rows = re.findall(r'<tr><td class="num">(\d+)</td><td><a href="#([a-z0-9-]+)">', index)
+        self.assertEqual([int(n) for n, _ in rows], list(range(1, len(rows) + 1)))
+        rails = re.findall(r'<section[^>]*id="([a-z0-9-]+)"[^>]*>\s*<div class="rail"><span class="n">(\d+)</span>',
+                           self.sections["experiments"])
+        self.assertEqual([(n, sid) for sid, n in rails], rows, "the index lists every numbered experiment, in order")
+
+    def test_self_room_has_ten_parts_and_a_binder(self):
+        self.assertIn("self", ROOMS)
         room = self.sections["self"]
         cards = re.findall(r'<article class="part-card" id="(part-[a-z0-9-]+)" data-n="(\d+)" '
                            r'data-status="(tested|known|untested)" data-short="[^"]+">(.*?)</article>', room, re.S)
@@ -426,7 +444,8 @@ class SiteTest(unittest.TestCase):
                              % re.escape(html.escape(title, quote=False)), organized, re.S)
             self.assertIsNotNone(card, title)
             self.assertIn('href="#possibilities">More in Possibilities</a>', card.group(0), title)
-        self.assertIn('href="#possibilities">Possibilities</a>', self.sections["aim"])
+        self.assertIn('href="#possibilities">Possibilities</a>', self.sections["program"])
+        self.assertIn('href="#possibilities">The whole question, and what would settle it</a>', self.sections["aim"])
 
     def test_in_page_anchors_resolve(self):
         ids = set(re.findall(r'\bid="([^"]+)"', self.page))

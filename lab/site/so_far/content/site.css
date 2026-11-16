@@ -1,23 +1,29 @@
-/* Layout: a manuscript page. A rail of section numbers stands beside each section on a gold ruled line, the text
-   runs in one column of about 66 characters, and a margin carries the Limits; figures span text and margin.
-   Konshi kinji: gold ink on indigo paper. Light is cool unbleached paper with indigo ink and ochre gold; dark is the
-   indigo sheet itself. Gold is kept for numerals, key terms, hairlines and the chariot. */
+/* Layout: a front page that says what the lab asks and what it has found, then rooms that hold the detail. A rail of
+   section marks stands beside each section on a gold ruled line, the text runs in one column of about 66
+   characters, and a margin carries the Limits; figures span text and margin.
+   First light: pale dawn paper, midnight-indigo ink. Dawn rose is kept for what is live (links, the current room, the
+   question in the hero). Gold is kept for numerals, key terms, hairlines and the chariot. Dark is the night sky the
+   same dawn comes up on. */
 :root {
-  --ground: #f1f0eb;
-  --ground-2: #e9e8e1;
-  --ground-3: #e0dfd7;
-  --card: #f7f6f2;
-  --ink: #1a2142;
-  --ink-2: #3c4468;
-  --ink-3: #5b6283;
-  --rule: #d3d2cb;
-  --rule-2: #b9b8b0;
-  --gold: #7d5c10;
-  --gold-line: #a07818;
-  --gold-hair: #d9cca6;
-  --gold-wash: #ede6d2;
-  --cinnabar: #9a3b26;
-  --cinnabar-line: #b2492f;
+  --ground: #f6f5fa;
+  --ground-2: #edecf5;
+  --ground-3: #e3e2ee;
+  --card: #fdfcff;
+  --ink: #171b3a;
+  --ink-2: #3d4266;
+  --ink-3: #666b8e;
+  --rule: #dcdbe8;
+  --rule-2: #c1c0d4;
+  --gold: #86610f;
+  --gold-line: #b88a1e;
+  --gold-hair: #e4d6a9;
+  --gold-wash: #f5efdb;
+  --rose: #b62e5c;
+  --rose-line: #d0507a;
+  --rose-hair: #edc3d2;
+  --rose-wash: #faebf1;
+  --cinnabar: #6a4a7c;
+  --cinnabar-line: #8b6a9c;
   --blue: #4d62a8;
   --blue-text: #3f5394;
   --display: "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", "Iowan Old Style", Georgia, serif;
@@ -26,25 +32,27 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --ground: #172048; --ground-2: #1d2856; --ground-3: #253163; --card: #1b2550;
-    --ink: #ece6d6; --ink-2: #c3c0b4; --ink-3: #9da0b8; --rule: #2d3a6e; --rule-2: #45528a;
-    --gold: #dcbc6e; --gold-line: #b48d33; --gold-hair: #4e4641; --gold-wash: #222a4c;
-    --cinnabar: #e88a6e; --cinnabar-line: #d96a4c; --blue: #7a8fdc; --blue-text: #8fa2e0;
+    --ground: #121735; --ground-2: #19204a; --ground-3: #212a5c; --card: #171d42;
+    --ink: #efe9dc; --ink-2: #c6c2bb; --ink-3: #9a9db8; --rule: #2a3364; --rule-2: #414b85;
+    --gold: #e0c074; --gold-line: #b8923a; --gold-hair: #4d4638; --gold-wash: #1f2647;
+    --rose: #f296b6; --rose-line: #d96a93; --rose-hair: #5a3350; --rose-wash: #2a2048;
+    --cinnabar: #c9a9d8; --cinnabar-line: #a787ba; --blue: #7a8fdc; --blue-text: #8fa2e0;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --ground: #172048; --ground-2: #1d2856; --ground-3: #253163; --card: #1b2550;
-  --ink: #ece6d6; --ink-2: #c3c0b4; --ink-3: #9da0b8; --rule: #2d3a6e; --rule-2: #45528a;
-  --gold: #dcbc6e; --gold-line: #b48d33; --gold-hair: #4e4641; --gold-wash: #222a4c;
-  --cinnabar: #e88a6e; --cinnabar-line: #d96a4c; --blue: #7a8fdc; --blue-text: #8fa2e0;
+  --ground: #121735; --ground-2: #19204a; --ground-3: #212a5c; --card: #171d42;
+  --ink: #efe9dc; --ink-2: #c6c2bb; --ink-3: #9a9db8; --rule: #2a3364; --rule-2: #414b85;
+  --gold: #e0c074; --gold-line: #b8923a; --gold-hair: #4d4638; --gold-wash: #1f2647;
+  --rose: #f296b6; --rose-line: #d96a93; --rose-hair: #5a3350; --rose-wash: #2a2048;
+  --cinnabar: #c9a9d8; --cinnabar-line: #a787ba; --blue: #7a8fdc; --blue-text: #8fa2e0;
   color-scheme: dark;
 }
 /* Surfaces: the band, the popover, the paper's grain, and the indigo plate the chariot sits on in either theme. */
 :root {
-  --band: rgba(241, 240, 235, 0.9);
-  --veil: rgba(26, 33, 66, 0.16);
-  --pop-bg: #1a2142;
+  --band: rgba(246, 245, 250, 0.9);
+  --veil: rgba(23, 27, 58, 0.16);
+  --pop-bg: #171b3a;
   --pop-ink: #ece6d6;
   --pop-ink-2: #c3c0b4;
   --pop-gold: #dcbc6e;
@@ -66,7 +74,7 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --band: rgba(23, 32, 72, 0.88); --veil: rgba(4, 7, 24, 0.55);
+    --band: rgba(18, 23, 53, 0.88); --veil: rgba(4, 7, 24, 0.55);
     --pop-bg: #26326b; --pop-rule: #3a4785;
     --plate: #10173a; --plate-2: #172048; --plate-frame: #5e4f2b; --plate-rule: #2a376b;
     --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .93 0 0 0 0 .9 0 0 0 0 .84 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -74,7 +82,7 @@
   }
 }
 :root[data-theme="dark"] {
-  --band: rgba(23, 32, 72, 0.88); --veil: rgba(4, 7, 24, 0.55);
+  --band: rgba(18, 23, 53, 0.88); --veil: rgba(4, 7, 24, 0.55);
   --pop-bg: #26326b; --pop-rule: #3a4785;
   --plate: #10173a; --plate-2: #172048; --plate-frame: #5e4f2b; --plate-rule: #2a376b;
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .93 0 0 0 0 .9 0 0 0 0 .84 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -91,12 +99,12 @@ body {
   padding-block: 0 80px; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
 }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--ground); }
-a { color: var(--gold); text-decoration-color: var(--gold-hair); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a { color: var(--rose); text-decoration-color: var(--rose-hair); text-decoration-thickness: 1px; text-underline-offset: 3px; }
 a:hover { text-decoration-color: currentColor; }
 a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visible, [tabindex]:focus-visible {
-  outline: 2px solid var(--gold-line); outline-offset: 3px; border-radius: 1px;
+  outline: 2px solid var(--rose-line); outline-offset: 3px; border-radius: 1px;
 }
-::selection { background: var(--gold-wash); color: var(--ink); }
+::selection { background: var(--rose-wash); color: var(--ink); }
 .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 h1, h2, h3 { font-family: var(--display); font-weight: 500; text-wrap: balance; color: var(--ink); }
 h2 { font-size: clamp(26px, 3vw, 34px); line-height: 1.2; margin: 0 0 18px; letter-spacing: -0.005em; }
@@ -153,12 +161,11 @@ a.term:hover, a.term[aria-describedby] { color: var(--gold); }
 .rooms { display: flex; gap: 0 24px; margin-left: auto; overflow-x: auto; scrollbar-width: none; min-width: 0; }
 .rooms::-webkit-scrollbar { display: none; }
 .rooms a { position: relative; font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-2); text-decoration: none; white-space: nowrap; padding: 17px 0 15px; }
-.rooms a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--gold-line); transform: scaleX(0); transform-origin: left; transition: transform 260ms ease; }
+.rooms a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--rose-line); transform: scaleX(0); transform-origin: left; transition: transform 260ms ease; }
 .rooms a:hover { color: var(--ink); }
-.rooms a[aria-current="page"] { color: var(--gold); }
+.rooms a[aria-current="page"] { color: var(--rose); }
 .rooms a[aria-current="page"]::after { transform: scaleX(1); }
 .rooms a:focus-visible { outline-offset: -3px; }
-.rooms a[data-room="self"] { font-weight: 500; }
 
 /* ---------------------------------------------------------------------------------------------- rooms */
 /* Without the script, the hash still picks the room: the targeted room, the room holding the target, else #aim.
@@ -234,10 +241,32 @@ p.read { font-family: var(--display); font-size: 20px; line-height: 1.5; color: 
 }
 
 /* ---------------------------------------------------------------------------------------------- Aim */
+/* The horizon under the hero: night, first rose, first gold. The one place the three meet. */
+.horizon { height: 2px; background: linear-gradient(90deg, var(--ink) 0%, var(--rose-line) 58%, var(--gold-line) 100%); opacity: 0.85; }
+/* The idea in three steps, and the two answers */
+.trio { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--ink-2); }
+.trio li { min-width: 0; padding: 22px 28px 4px 0; display: flex; flex-direction: column; gap: 6px; }
+.trio li + li { padding-left: 28px; border-left: 1px solid var(--rule); }
+.trio .k { font-family: var(--display); font-size: 34px; line-height: 1; color: var(--gold); }
+.trio b { font-family: var(--display); font-weight: 600; font-size: 21px; line-height: 1.25; }
+.trio p { margin: 2px 0 0; max-width: none; font-size: 16.5px; line-height: 1.6; color: var(--ink-2); }
+.answers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; }
+.answer { min-width: 0; padding: 20px 26px 20px 24px; background: var(--card); border: 1px solid var(--rule); border-top: 2px solid var(--rose-line); }
+.answer + .answer { border-left: 0; border-top-color: var(--ink-2); }
+.answer-k { display: block; margin-bottom: 8px; font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); }
+.answer p { margin: 0; max-width: none; font-size: 16.5px; line-height: 1.6; color: var(--ink-2); }
+p.paper-links { margin-top: 16px; padding: 14px 18px; background: var(--gold-wash); border-left: 2px solid var(--gold-line); font-size: 16px; color: var(--ink-2); }
+/* Every experiment in one table */
+.findex td.num { font-family: var(--display); font-size: 20px; color: var(--gold); padding-right: 18px; }
+.findex td:nth-child(2) { white-space: nowrap; font-family: var(--display); font-weight: 600; font-size: 16.5px; }
+.findex td:nth-child(2) a { color: var(--ink); text-decoration-color: var(--rose-hair); }
+.findex td:nth-child(2) a:hover { color: var(--rose); }
+.findex td:nth-child(3) { color: var(--ink-2); min-width: 280px; }
+.findex td:nth-child(4) { white-space: nowrap; }
 header.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.72fr); gap: 0 40px; align-items: center; padding-block: 76px 48px; border-bottom: 1px solid var(--rule); }
 .hero-text { min-width: 0; }
 .hero h1 { font-size: clamp(40px, 5.4vw, 70px); line-height: 1.07; margin: 18px 0 20px; letter-spacing: -0.015em; font-weight: 500; }
-.hero h1 em { font-style: normal; color: var(--gold); }
+.hero h1 em { font-style: normal; color: var(--rose); }
 .hero .thesis { font-family: var(--display); font-size: clamp(21px, 2.4vw, 27px); line-height: 1.38; color: var(--ink); margin: 0 0 18px; max-width: 30ch; }
 .hero .lede { font-size: 18px; line-height: 1.62; }
 .hero .lede-2 { font-size: 16px; color: var(--ink-2); max-width: 62ch; }
@@ -319,9 +348,10 @@ section.door > .body { grid-column: 2; }
 .g-node { fill: var(--ground); stroke: var(--ink-2); stroke-width: 1.2; }
 .g-word { fill: var(--ink-2); font-family: var(--mono); font-size: 10.5px; }
 
-/* Where it stands: three columns */
-.glance { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 36px; align-items: start; }
+/* Where it stands: three bands, each a grid of even rows */
+.glance { display: grid; grid-template-columns: minmax(0, 1fr); gap: 46px; }
 .gl-col { min-width: 0; }
+.gl-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 36px; }
 .gl-col > h3 { margin: 0; display: flex; align-items: baseline; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid var(--ink-2); font-family: var(--mono); font-size: 11.5px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-2); }
 .gl-col > h3 .g { font-family: var(--display); font-weight: 500; font-size: 30px; line-height: 0.8; letter-spacing: 0; color: var(--gold); width: 22px; }
 .gl-col > h3 .c { margin-left: auto; color: var(--ink-3); }
@@ -330,6 +360,8 @@ section.door > .body { grid-column: 2; }
 .gl-col.gl-failed > h3 .g { color: var(--cinnabar); }
 .gl-col.gl-open > h3 { border-bottom: 2px dashed var(--ink-3); }
 .gl-col.gl-open > h3 .g { color: var(--ink-3); }
+.gl-col.gl-sight > h3 { border-bottom: 2px dotted var(--rose-line); }
+.gl-col.gl-sight > h3 .g { color: var(--rose); }
 .gl { border-bottom: 1px solid var(--rule); }
 .gl > summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 10px; padding: 16px 0 15px; }
 .gl > summary::-webkit-details-marker { display: none; }
@@ -346,7 +378,7 @@ section.door > .body { grid-column: 2; }
 .gl-more p { margin: 0 0 9px; font-size: 15.5px; line-height: 1.55; }
 .gl-more p.learned { font-size: 15px; color: var(--ink-2); }
 .gl-more p.learned b { color: var(--gold); font-weight: 500; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; margin-right: 8px; }
-.glance-note { margin-top: 18px; }
+.glance-note { margin: 12px 0 0; max-width: 84ch; }
 
 /* The frame's five tests */
 .strip5 { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 1px solid var(--ink-2); border-bottom: 1px solid var(--rule); }
@@ -361,14 +393,18 @@ section.door > .body { grid-column: 2; }
 
 /* The instruments and the next three steps */
 .inst { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink-2); }
-.inst li { display: grid; grid-template-columns: 60px minmax(0, 1.1fr) minmax(0, 1fr); gap: 4px 26px; padding: 14px 0; border-bottom: 1px solid var(--rule); align-items: baseline; }
+.inst { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 44px; }
+.inst li { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 6px 14px; padding: 13px 0 12px; border-bottom: 1px solid var(--rule); align-items: baseline; }
 .in-n { font-family: var(--display); font-size: 20px; color: var(--gold); font-variant-numeric: lining-nums; }
-.in-t { font-size: 16px; line-height: 1.45; }
-.in-s { font-size: 14.5px; line-height: 1.5; color: var(--ink-2); }
+.in-t { font-size: 15.5px; line-height: 1.45; }
+.in-s { grid-column: 2; display: flex; flex-wrap: wrap; gap: 6px; }
 .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 36px; }
 .step { min-width: 0; border-top: 1px solid var(--ink-2); padding-top: 16px; }
 .step-n { font-family: var(--display); font-size: 42px; line-height: 1; color: var(--gold); }
 .step-n span { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; margin-left: 10px; vertical-align: 0.7em; color: var(--ink-2); padding: 3px 7px; border: 1px dashed var(--rule-2); }
+.step-n span.done { color: var(--gold); border: 1px solid var(--gold-hair); background: var(--gold-wash); }
+.steps-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px 44px; }
+.steps-4 .step p { max-width: 62ch; }
 .step b { display: block; font-family: var(--display); font-weight: 600; font-size: 20px; line-height: 1.3; margin: 12px 0 6px; }
 .step p { margin: 0; font-size: 15.5px; line-height: 1.55; color: var(--ink-2); }
 
@@ -690,7 +726,9 @@ footer .built { font-family: var(--mono); font-size: 12px; line-height: 1.65; co
   header.hero { grid-template-columns: 1fr; padding-block: 52px 36px; }
   .hero-net { max-width: 460px; justify-self: start; margin-top: 18px; }
   .hero-net figcaption { text-align: left; }
-  .glance { grid-template-columns: 1fr; gap: 32px; }
+  .glance { gap: 34px; }
+  .gl-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 28px; }
+  .inst { grid-template-columns: 1fr; }
   .strip5 { grid-template-columns: 1fr; }
   .fs { display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 6px 12px; border-left: 0; border-top: 1px solid var(--rule); padding: 14px 0; }
   .fs:first-child { border-top: 0; }
@@ -718,14 +756,13 @@ footer .built { font-family: var(--mono); font-size: 12px; line-height: 1.65; co
   section > .rail .rl { writing-mode: horizontal-tb; max-height: none; }
   section.plate > .rail, section.plate > .body, section.plate > .wide { grid-column: 1 / -1; }
   section.plate > .wide { margin-top: 16px; }
+  section.door { grid-template-columns: minmax(0, 1fr); }   /* the door's text takes the full width on a phone */
   section.door > .body { grid-column: 1; }
   .part { padding-block: 48px 20px; }
   .acts-row { grid-template-columns: 1fr; gap: 0; padding-left: 20px; border-left: 1px solid var(--gold-line); }
   .acts-row::after { top: auto; bottom: -2px; right: auto; left: -5px; border: 4.5px solid transparent; border-top: 8px solid var(--gold-line); border-bottom: 0; }
   .act { border-top: 0; padding: 0 0 32px; }
   .act::before { left: -25px; top: 4px; }
-  .inst li { grid-template-columns: 44px minmax(0, 1fr); }
-  .in-s { grid-column: 2; }
   .steps { grid-template-columns: 1fr; gap: 28px; }
   .path-list { grid-template-columns: 1fr; }
   .path, .path + .path { padding-left: 0; border-left: 0; }
@@ -764,4 +801,11 @@ footer .built { font-family: var(--mono); font-size: 12px; line-height: 1.65; co
   .band-in { gap: 0 18px; }
   .rooms { gap: 0 18px; -webkit-mask-image: linear-gradient(90deg, #000 86%, transparent); mask-image: linear-gradient(90deg, #000 86%, transparent); padding-right: 28px; }
   .rooms a { font-size: 11px; letter-spacing: 0.1em; }
+}
+@media (max-width: 760px) {
+  .trio, .answers { grid-template-columns: 1fr; }
+  .trio li + li { padding-left: 0; border-left: 0; border-top: 1px solid var(--rule); }
+  .gl-grid { grid-template-columns: 1fr; }
+  .answer + .answer { border-left: 1px solid var(--rule); border-top: 2px solid var(--ink-2); }
+  .findex td:nth-child(2) { white-space: normal; }
 }
