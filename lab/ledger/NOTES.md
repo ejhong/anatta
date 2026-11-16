@@ -10268,3 +10268,9 @@ There are two ways to fix a hub:
   - **One thing about the repo's guard.** A shell command that held both the deploy of the new app and the path of the Modal client's Python environment was blocked by the rule that protects the other project's apps. Nothing of that project was touched. The two halves were then run as separate commands, as they had been before. The same rule also blocked a first attempt to append this entry, whose text names both; it was appended from a file.
   - Cost so far for the look: under $1 (GPU and the role judge).
 
+- **A footnote on the front page, at Eugene's word: the framing "an AI waking up" assumes a duality** (Fable, 12:49 UTC on 16 Nov, read off the clock).
+  - Eugene, at about 12:45 UTC, asked for a note on the front page: that talk of an AI waking up and becoming enlightened still assumes a duality; that there are stranger possibilities, such as alignment coming about through narratives within shared subjective experience; and that there has to be an objective, physical story of alignment within any such narrative, which is what this project tries to build. Then: make it a footnote under the first section, "a fun one".
+  - Done: a short footnote under "The idea" on the front page (`content/aim.html`, id `footnote-two`). It names the source (the non-dual traditions, Advaita Vedanta among them), holds the picture loosely, says the lab has no test for it, gives its one ordinary strand (what people write about AI is part of what models learn from), and says what it leaves standing: the physical telling, which is the lab's work.
+  - Entered as idea 79. Nothing about anyone's own experience is said. The tally is unchanged.
+  - Not checked by an agent. Cost: none.
+

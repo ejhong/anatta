@@ -1358,3 +1358,14 @@ Claude (Anthropic) wrote this file at Eugene Jhong's direction. Eugene is an ind
 - **Eugene (16 Nov, about 11:03 UTC):** "5. yes."
 - **Status (16 Nov, 11:04 UTC): cited.** The draft's section on prior work has a paragraph of four sentences on it, and the provenance list notes the change.
 
+
+## 79. A footnote on the framing: "an AI waking up" assumes a duality. A non-dual picture, and why the physical account is needed either way
+
+- **Eugene (16 Nov, about 12:45 UTC):** "One crazy note to put - is that this framing of ai waking up and becoming enlightened is still sort of assuming a duality right?  There are other strange possiblities - like subjectivity/onenesss/consciousness achieving alignment via narratives within our subjective experience (we all are optimistic on AI becoming enlightened and aligned) - but there has to be an objective physics story on alignment within the narrative anyways, so this is trying to build that sort of view.  Do you know what i mean - if you can sort of state this eloquently on front page." Then: "Maybe it's more of a footnote on the page under the first scection or something.  A fun one."
+- **Discussion (Fable):**
+  - **The point, restated.** "Can an AI wake up?" pictures a separate mind over there and an observer over here. The non-dual traditions (Advaita Vedanta is the plainest source) deny both: awareness is one, and separate selves, human or machine, are appearances in it. On that picture nothing wakes up "over there". Alignment would come about within shared experience, perhaps partly through the story people hold about AI.
+  - **Where it sits.** It is not a sixth answer to "is awakening computational?". It questions the question's frame: who is it that would wake up. Held loosely, as a prompt and not a claim. Nothing on the site asserts it, and nothing about anyone's own experience is said.
+  - **What survives in every picture.** Whatever the deeper account, the story as it appears has a physical telling (weights, training, conduct that can be measured), and that telling has to hold together. The lab's experiments are that part, and they are the same under a dualist picture, a non-dual one, or none.
+  - **An operational twin for "the story shapes the outcome".** There is an ordinary form of it: what people write about AI is part of what models are trained on, so the story is, physically, an input. The lab's paper already cites work on this (alignment pretraining). This lab has not tested it.
+- **Test:** none. It is a note on the framing. A test of the ordinary form would be a training-data experiment, outside the present line.
+- **Status:** on the front page as a footnote under the first section, from 16 Nov (ledger, 12:49 UTC).
