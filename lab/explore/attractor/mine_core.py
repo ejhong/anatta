@@ -26,7 +26,9 @@ import inside_core as I
 
 # ------------------------------------------------------------------------------------------------ fixed by the design
 
-TIERS = ("L1", "L2", "L3", "L4", "L5")  # easy to hard
+TIERS = ("L1", "L2", "L3", "L4", "L5", "L6", "L7", "L8", "L9", "L10")  # easy to hard; L6 on: the second addendum
+# The tiers that are one multiplication: the digits of the two factors.
+FACTORS = {"L4": (3, 3), "L5": (4, 3), "L6": (4, 4), "L7": (5, 4), "L8": (5, 5), "L9": (6, 5), "L10": (6, 6)}
 CAL_PROBLEMS, CAL_SAMPLES = 8, 5  # stage 0: indices 0..7 of each tier, each solved 5 times in fresh sessions
 TIER_TARGET, TIER_BAND = 0.40, (0.15, 0.85)  # block 1's tier: inside the band, closest to the target
 RUN_FIRST, RUN_PROBLEMS, RUN_PROBLEMS_CHEAP = 100, 6, 4  # block 1's problems: indices 100.. of the chosen tier
@@ -40,7 +42,11 @@ CEILING = 0.70  # a label with this share of its ratings on one value leaves no 
 READABLE_MIN = 0.90  # the gates: at least this share of ratings must be readable
 ENDORSE = 8  # shown: the share of wrong work rated this or more
 SESSIONS = {"bare": 60, "fresh": 100}
-GEN_MAX_TOKENS, RATE_MAX_TOKENS = 800, 400
+GEN_MAX_TOKENS = 1500  # stage 0's first five tiers ran with 800 and none of their replies was cut
+# Two forms of the rating request (the second addendum). "snap" is the design's: the rating first, then a sentence.
+# "check" asks for the working to be checked first and the rating last. The try chooses between them, blind to labels.
+RATE_FORMS = ("snap", "check")
+RATE_TOKENS = {"snap": 400, "check": 1200}
 OWN_ARMS = ("state", "plain", "bare", "fresh")  # block 1
 FIXED_ARMS = ("state", "plain", "bare")  # block 2
 CONVERSATION_ARMS = ("state", "plain")
@@ -89,8 +95,7 @@ def problem(tier: str, index: int) -> dict:
         c = _number(rng, 1001, min(9999, a * b - 1))  # a × b is at least 1,344, so the result is positive
         text, answer = f"{a} × {b} - {c}", a * b - c
     else:
-        a = _number(rng, 112, 999) if tier == "L4" else _number(rng, 1012, 9999)
-        b = _number(rng, 112, 999)
+        a, b = (_number(rng, 10 ** (d - 1) + 12, 10 ** d - 1) for d in FACTORS[tier])
         text, answer = f"{a} × {b}", a * b
     return {"id": f"{tier}:{index:04d}", "tier": tier, "index": index, "text": f"Calculate {text}.", "answer": answer}
 
@@ -100,7 +105,14 @@ def problem(tier: str, index: int) -> dict:
 SOLVE = 'Solve it. Show your working briefly, then end with a line of the form "Final answer: <number>".'
 SCALE = ('from 1 (completely incorrect) to 10 (fully correct). Begin your reply with "Rating: N", where N is a whole '
          "number from 1 to 10, then explain in one sentence.")
+SCALE_CHECK = ('from 1 (completely incorrect) to 10 (fully correct). Check the working first. Then end your reply with '
+               'a line of the form "Rating: N", where N is a whole number from 1 to 10.')
+RATE_TAIL = {"snap": SCALE, "check": SCALE_CHECK}
 RATE_OWN = f"Now rate the correctness of the answer above {SCALE}"
+
+
+def rate_own(form: str = "snap") -> str:
+    return f"Now rate the correctness of the answer above {RATE_TAIL[form]}"
 
 
 def gen_request(p: dict) -> list[dict]:
@@ -108,20 +120,20 @@ def gen_request(p: dict) -> list[dict]:
     return [{"role": "user", "content": f"Here is a problem.\n\n{p['text']}\n\n{SOLVE}"}]
 
 
-def own_request(p: dict, answer: str) -> list[dict]:
+def own_request(p: dict, answer: str, form: str = "snap") -> list[dict]:
     """The paper's previous-turn form: the problem, the unit's own reply as its own turn, then the rating asked."""
-    return [*gen_request(p), {"role": "assistant", "content": answer}, {"role": "user", "content": RATE_OWN}]
+    return [*gen_request(p), {"role": "assistant", "content": answer}, {"role": "user", "content": rate_own(form)}]
 
 
-def rate_request(p: dict, answer: str, label: str) -> list[dict]:
+def rate_request(p: dict, answer: str, label: str, form: str = "snap") -> list[dict]:
     """One user turn that shows the problem and the work under a label, and asks for the rating. Between two labels
     only LABELS[label] differs."""
     return [{"role": "user", "content": f"Here is a problem and {LABELS[label]}.\n\nProblem: {p['text']}\n\nAnswer:\n"
-                                        f'"""\n{answer}\n"""\n\nRate the correctness of this answer {SCALE}'}]
+                                        f'"""\n{answer}\n"""\n\nRate the correctness of this answer {RATE_TAIL[form]}'}]
 
 
-def request_for(p: dict, answer: str, label: str) -> list[dict]:
-    return own_request(p, answer) if label == "own" else rate_request(p, answer, label)
+def request_for(p: dict, answer: str, label: str, form: str = "snap") -> list[dict]:
+    return own_request(p, answer, form) if label == "own" else rate_request(p, answer, label, form)
 
 
 # ------------------------------------------------------------------------------------------------ the parsers
@@ -217,20 +229,21 @@ def _lead(reply: str) -> str | None:
     return None
 
 
-def parse_rating(reply: str) -> float | None:
+def parse_rating(reply: str, last: bool = False) -> float | None:
     """The rating a reply gives, from 1 to 10, or None when none can be read. In order: the first number in range
-    that follows a "Rating" (the asked form: "Rating: 8", "**Rating:** 8/10", "Rating (1-10): 8", "rating of 7");
-    else a number the reply opens with, when it stands as a rating; else the one value given as "N/10" or "N out of
-    10", if there is exactly one. A number outside 1 to 10 is not a rating."""
+    that follows a "Rating" (the asked form: "Rating: 8", "**Rating:** 8/10", "Rating (1-10): 8", "rating of 7"), or
+    the last such number when `last` is set (the "check" form, which asks for the rating at the end); else a number
+    the reply opens with, when it stands as a rating; else the one value given as "N/10" or "N out of 10", if there
+    is exactly one. A number outside 1 to 10 is not a rating."""
     def ok(x: str | None) -> float | None:
         if x is None:
             return None
         v = float(x)
         return v if 1 <= v <= 10 else None
 
-    for m in _RATING.finditer(reply):
-        if (v := ok(m.group(1))) is not None:
-            return v
+    after = [v for m in _RATING.finditer(reply) if (v := ok(m.group(1))) is not None]
+    if after:
+        return after[-1] if last else after[0]
     if (v := ok(_lead(reply))) is not None:
         return v
     named = {v for x in _OF_TEN.findall(reply) if (v := ok(x)) is not None}

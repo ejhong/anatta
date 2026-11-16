@@ -157,7 +157,7 @@ def _run(root, block, arms, reply=favours_its_copy_in_the_state, folder=None, n_
 
 def test_stage_zero_solves_every_problem_in_fresh_sessions_and_saves_each_once(small):
     recs, eng = _calibrate(small)
-    assert len(recs) == len(eng.calls) == 5 * 2 * 2
+    assert len(recs) == len(eng.calls) == len(M.TIERS) * 2 * 2 == 40
     first = eng.calls[0]
     assert first["messages"] == M.gen_request(M.problem("L1", 0)) and first["salt"] == "step4-cal"
     assert [c["sample"] for c in eng.calls[:4]] == [0, 1, 0, 1] and first["kind"] == "calibrate"
@@ -165,15 +165,15 @@ def test_stage_zero_solves_every_problem_in_fresh_sessions_and_saves_each_once(s
     _, again = _calibrate(small)
     assert again.calls == []  # every solution is on file: nothing is asked twice
     acc = M.accuracy(RM.read_pool(small / "a4"))
-    assert [acc[t]["share"] for t in M.TIERS] == [1.0, 1.0, 0.5, 0.0, 0.0]
+    assert [acc[t]["share"] for t in M.TIERS] == [1.0, 1.0, 0.5] + [0.0] * 7
 
 
 def test_a_failed_solution_is_not_saved_and_holds_stage_zero_open(small, capsys):
     _, eng = _calibrate(small, lambda n, call: ApiError("gave up", status=503) if n == 3 else "Final answer: 1")
-    assert len(list((small / "a4" / "calibration").glob("*.json"))) == 19
-    with pytest.raises(SystemExit, match="1 of 20 solutions are missing"):
+    assert len(list((small / "a4" / "calibration").glob("*.json"))) == 39
+    with pytest.raises(SystemExit, match="1 of 40 solutions are missing"):
         RM.cmd_fix_work({})
-    with pytest.raises(SystemExit, match="1 of 20"):
+    with pytest.raises(SystemExit, match="1 of 40"):
         RM.cmd_show_work({})
     assert not (small / "a4" / "stage0.json").exists()
 
@@ -393,7 +393,7 @@ def test_the_try_fixes_the_plan_once_by_the_cost_rule(small, capsys, monkeypatch
     assert plan["cost_inside_token"] == pytest.approx(1e-6) and plan["inside_added_tokens"] == pytest.approx(400)
     assert plan["cost_inside_call"] == pytest.approx(0.0279) and plan["cost_short_call"] == pytest.approx(0.0001)
     assert plan["projected_usd"] == pytest.approx(4 * 16 * 0.0279 + (2 * 16 + 3 * 8) * 0.0001)
-    assert plan["problems"] == 2 and plan["pass"] and plan["cost_ok"]
+    assert plan["problems"] == 2 and plan["pass"] and plan["cost_ok"] and plan["rate_form"] == "snap"
     assert plan["ratings_readable"] == 1.0 and plan["finals_readable"] == 1.0
     assert json.loads((small / "a4" / "plan.json").read_text()) == plan
     # the display shows a reply's first twelve characters with every digit hidden: its form, and no more
@@ -425,6 +425,84 @@ def test_a_try_with_unreadable_ratings_does_not_pass(small, capsys):
     assert plan["ratings_readable"] == 0.0 and not plan["pass"]
     with pytest.raises(SystemExit, match="fewer than 90%"):
         RM.read_plan()
+
+
+def _try(root, form, reply, cost=0.001):
+    """The try's units of both blocks, run in one form of the rating request with a made-up model."""
+    rec = RC.read_arms()
+    for block, arms in RM.BLOCKS.items():
+        eng = FakeEngine(reply, cost)
+        folder = RM.try_folder(form, block)
+        job = RM.job_for(block, eng, GEN, RATE, RM.read_stage0(), M.RUN_PROBLEMS, root / "a4", folder, form)
+        asyncio.run(RC.run_units(job, RM.try_units(RM.all_units(rec, arms)), root / "a4", folder, 2))
+    return rec
+
+
+def all_tens(n, call):
+    return "Final answer: 1" if label_of(call) == "work" else "Rating: 10\nLooks right."
+
+
+def label_of_check(call) -> str:
+    """label_of for the second form of the request."""
+    last = call["messages"][-1]["content"]
+    if last == M.rate_own("check"):
+        return "own"
+    return "work" if last.startswith("Here is a problem.\n\n") else next(
+        k for k, v in M.LABELS.items() if f"Here is a problem and {v}." in last)
+
+
+def checks_then_rates(n, call):
+    """A made-up model for the second form: it checks, then ends on its rating, which the work fixes."""
+    if label_of_check(call) == "work":
+        return "Final answer: 1"
+    return f"A rating of 10 would need the product to hold. It does not.\nRating: {base_of(call)}"
+
+
+def test_ratings_piled_on_one_value_send_the_try_to_the_second_form(small, capsys):
+    _stage0(small)
+    rec = _try(small, "snap", all_tens)
+    waiting = RM.fix_plan(rec)
+    assert waiting["rate_form"] is None and not waiting["pass"] and "second form's try is owed" in waiting["why"]
+    assert not (small / "a4" / "plan.json").exists()  # nothing is fixed while the second form's try is owed
+    with pytest.raises(SystemExit, match="--try first"):
+        RM.read_plan()
+    _try(small, "check", checks_then_rates)
+    plan = RM.fix_plan(rec)
+    assert plan["rate_form"] == "check" and plan["pass"] and plan["why"] == ""
+    assert plan["mode_share_by_form"]["snap"] == 1.0 and plan["mode_share_by_form"]["check"] < 0.7
+    assert json.loads((small / "a4" / "plan.json").read_text()) == plan
+    out = capsys.readouterr().out
+    assert "the try, rating form check" in out and "every label and arm together: 100.0%" in out
+    # the second form's units are saved apart, their requests end on the second form's wording, and the rating read
+    # is the last one in the reply
+    one = json.loads((small / "a4" / "try_check_fixed" / "state" / "a3-free-0060.json").read_text())
+    assert one["rate_form"] == "check" and {r["rating"] for it in one["items"] for r in it["ratings"].values()} <= {4, 5, 6}
+    assert (small / "a4" / "try_fixed" / "state" / "a3-free-0060.json").exists()
+
+
+def test_ratings_piled_in_both_forms_stop_the_step(small):
+    _stage0(small)
+    rec = _try(small, "snap", all_tens)
+    _try(small, "check", lambda n, call: "Final answer: 1" if label_of_check(call) == "work" else "Checked.\nRating: 10")
+    plan = RM.fix_plan(rec)
+    assert plan["rate_form"] == "check" and not plan["pass"] and plan["why"] == \
+        "the ratings pile on one value in both forms of the request"
+    with pytest.raises(SystemExit, match="pile on one value in both forms"):
+        RM.read_plan()
+
+
+def test_choose_form():
+    ok = {"ratings_readable": 1.0, "mode_share": 0.4}
+    piled = {"ratings_readable": 1.0, "mode_share": 0.7}
+    blurred = {"ratings_readable": 0.5, "mode_share": 0.3}
+    assert RM.choose_form(ok, None) == ("snap", True, "")
+    assert RM.choose_form(blurred, None) == ("snap", False, "fewer than 90% of the try's ratings could be read")
+    assert RM.choose_form(piled, None)[:2] == (None, False)
+    assert RM.choose_form(piled, ok) == ("check", True, "")
+    assert RM.choose_form(piled, blurred)[:2] == ("check", False)
+    assert RM.choose_form(piled, piled)[:2] == ("check", False)
+    assert RM.choose_form({"ratings_readable": 0.0, "mode_share": None}, None)[:2] == ("snap", False)
+    assert RM.try_folder("snap", "own") == "try_own" and RM.try_folder("check", "fixed") == "try_check_fixed"
 
 
 def test_projected_counts_every_planned_call(monkeypatch):

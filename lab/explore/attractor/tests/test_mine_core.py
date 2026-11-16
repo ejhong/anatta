@@ -32,10 +32,13 @@ def test_the_tiers_grow_harder_by_the_size_of_their_numbers():
         return [len(n) for n in re.findall(r"\d+", M.problem(tier, 3)["text"])]
 
     assert sizes("L1") == [2, 1, 3] and sizes("L2") == [2, 2, 3] and sizes("L3") == [3, 2, 4]
-    assert sizes("L4") == [3, 3] and sizes("L5") == [4, 3]
+    assert [sizes(t) for t in M.TIERS[3:]] == [[3, 3], [4, 3], [4, 4], [5, 4], [5, 5], [6, 5], [6, 6]]
     assert " - " in M.problem("L3", 3)["text"] and " + " in M.problem("L2", 3)["text"]
     with pytest.raises(ValueError):
-        M.problem("L9", 0)
+        M.problem("L11", 0)
+    # the second addendum added tiers and left the first five as stage 0 had used them
+    assert M.problem("L4", 0)["text"] == "Calculate 788 × 993." and M.problem("L5", 0)["text"] == "Calculate 6884 × 289."
+    assert M.problem("L3", 0)["text"] == "Calculate 224 × 13 - 1738." and M.problem("L1", 0)["answer"] == 84 * 3 + 645
 
 
 def test_problems_differ_from_one_index_to_the_next():
@@ -67,6 +70,22 @@ def test_two_labels_differ_in_the_label_and_nothing_else():
     assert M.request_for(p, "x", "stranger") == M.rate_request(p, "x", "stranger")
     assert M.own_labels("fresh") == ("own", "unlabelled", "stranger")
     assert M.own_labels("state") == M.own_labels("bare") == ("own", "partner", "stranger")
+
+
+def test_the_second_form_of_the_rating_request_checks_first_and_rates_last():
+    p = M.problem("L8", 100)
+    assert M.rate_own() == M.RATE_OWN and M.own_request(p, "x") == M.own_request(p, "x", "snap")
+    own = M.own_request(p, "work", "check")
+    assert own[:2] == M.own_request(p, "work")[:2] and own[2]["content"].endswith(M.SCALE_CHECK)
+    assert "Check the working first" in own[2]["content"] and "Begin your reply" not in own[2]["content"]
+    a, b = M.rate_request(p, "work", "partner", "check")[0]["content"], M.rate_request(p, "work", "partner")[0]["content"]
+    assert a.replace(M.SCALE_CHECK, "") == b.replace(M.SCALE, "") and a.endswith(M.SCALE_CHECK)
+    assert M.request_for(p, "x", "own", "check") == M.own_request(p, "x", "check")
+    assert M.request_for(p, "x", "stranger", "check") == M.rate_request(p, "x", "stranger", "check")
+    # asked at the end, the rating is the last one a reply gives
+    reply = "A rating of 9 would hold if the product were right. I get 7,760, not 7,790.\nRating: 3"
+    assert M.parse_rating(reply, last=True) == 3 and M.parse_rating(reply) == 9
+    assert M.RATE_TOKENS == {"snap": 400, "check": 1200} and M.RATE_FORMS == ("snap", "check")
 
 
 # ------------------------------------------------------------------------------------------------ parsers

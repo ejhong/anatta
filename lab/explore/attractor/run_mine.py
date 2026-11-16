@@ -31,6 +31,7 @@ import hashlib
 import json
 import statistics
 import sys
+from collections import Counter
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -277,7 +278,7 @@ async def ask(engine, unit: dict, request: list[dict], call_params: dict, kind: 
 
 
 async def own_unit(engine, gen_params: dict, rate_params: dict, unit: dict, problems: list[dict], out: Path,
-                   folder: str) -> dict | None:
+                   folder: str, form: str = "snap") -> dict | None:
     """Block 1 for one unit: each problem is put to it, and its reply (its own work) is then rated three ways, each
     in a call of its own: in its own earlier turn ("own"), and shown back in a user turn as the partner's (in a fresh
     session: as an unlabelled proposal) and as a stranger's. An empty reply to a problem is asked again, up to
@@ -302,9 +303,9 @@ async def own_unit(engine, gen_params: dict, rate_params: dict, unit: dict, prob
                 return {"problem": p["id"], "ok": False, "error": "empty reply after retries"}
 
             async def rate(label: str) -> tuple[str, dict]:
-                r = await ask(engine, unit, M.request_for(p, work["reply"], label), rate_params, "own-rate",
+                r = await ask(engine, unit, M.request_for(p, work["reply"], label, form), rate_params, "own-rate",
                               f"{base}/{label}")
-                return label, {**r, "rating": M.parse_rating(r["reply"])}
+                return label, {**r, "rating": M.parse_rating(r["reply"], last=form == "check")}
 
             ratings = dict(await asyncio.gather(*(rate(label) for label in labels)))
         except ApiError as e:
@@ -321,7 +322,7 @@ async def own_unit(engine, gen_params: dict, rate_params: dict, unit: dict, prob
         log(f"{folder} {unit['arm']}/{unit['key']}: {sum(not it['ok'] for it in items)} problems failed; not saved")
         return None
     rec = {"arm": unit["arm"], "key": unit["key"], "index": unit["index"], "context_tokens": unit["context_tokens"],
-           "params": {"work": gen_params, "rate": rate_params}, "items": items}
+           "params": {"work": gen_params, "rate": rate_params}, "rate_form": form, "items": items}
     R.write_json(path, rec)
     return rec
 
@@ -334,7 +335,8 @@ def fixed_asks(work: list[dict]) -> list[tuple[dict, str]]:
             + [(w, label) for w in wrong for label in ("expert", "novice")])
 
 
-async def fixed_unit(engine, rate_params: dict, unit: dict, work: list[dict], out: Path, folder: str) -> dict | None:
+async def fixed_unit(engine, rate_params: dict, unit: dict, work: list[dict], out: Path, folder: str,
+                     form: str = "snap") -> dict | None:
     """Block 2 for one unit: each fixed solution rated under each of its labels, each in a call of its own from the
     end of the conversation (or in a bare session). Saved only when every call came back."""
     from anatta.backends.openrouter import ApiError
@@ -345,13 +347,13 @@ async def fixed_unit(engine, rate_params: dict, unit: dict, work: list[dict], ou
 
     async def rate(w: dict, label: str) -> tuple[str, str, dict | None]:
         try:
-            r = await ask(engine, unit, M.rate_request(w, w["reply"], label), rate_params, "fixed-rate",
+            r = await ask(engine, unit, M.rate_request(w, w["reply"], label, form), rate_params, "fixed-rate",
                           f"fixed/{unit['arm']}/{unit['key']}/{w['id']}/{label}")
         except ApiError as e:
             if e.scope in ("run", "model"):  # every further call would fail too: stop, record nothing
                 raise
             return w["id"], label, None
-        return w["id"], label, {**r, "rating": M.parse_rating(r["reply"])}
+        return w["id"], label, {**r, "rating": M.parse_rating(r["reply"], last=form == "check")}
 
     got = await asyncio.gather(*(rate(w, label) for w, label in fixed_asks(work)))
     if any(r is None for _, _, r in got):
@@ -360,20 +362,22 @@ async def fixed_unit(engine, rate_params: dict, unit: dict, work: list[dict], ou
     items = [{"work": w["id"], "truth": w["truth"], "ratings": {label: r for wid, label, r in got if wid == w["id"]}}
              for w in work]
     rec = {"arm": unit["arm"], "key": unit["key"], "index": unit["index"], "context_tokens": unit["context_tokens"],
-           "params": {"rate": rate_params}, "items": items}
+           "params": {"rate": rate_params}, "rate_form": form, "items": items}
     R.write_json(path, rec)
     return rec
 
 
-def job_for(block: str, engine, gen_params: dict, rate_params: dict, st: dict, n_problems: int, out: Path, folder: str):
-    """The job run_conduct.run_units runs for each unit of a block."""
+def job_for(block: str, engine, gen_params: dict, rate_params: dict, st: dict, n_problems: int, out: Path, folder: str,
+            form: str = "snap"):
+    """The job run_conduct.run_units runs for each unit of a block, with the rating asked in the given form."""
     if block == "own":
         problems = block1_problems(st, n_problems)
-        return lambda u: own_unit(engine, gen_params, rate_params, u, problems, out, folder)
-    return lambda u: fixed_unit(engine, rate_params, u, st["work"], out, folder)
+        return lambda u: own_unit(engine, gen_params, rate_params, u, problems, out, folder, form)
+    return lambda u: fixed_unit(engine, rate_params, u, st["work"], out, folder, form)
 
 
-async def run_block(block: str, todo: list[dict], st: dict, n_problems: int, folder: str, limit: int) -> int:
+async def run_block(block: str, todo: list[dict], st: dict, n_problems: int, folder: str, limit: int,
+                    form: str = "snap") -> int:
     """One block on the given units, in a hashed order that mixes the arms, with step 3's passes and its record of
     units that keep failing."""
     from anatta.backends.openrouter import OpenRouterClient
@@ -381,9 +385,9 @@ async def run_block(block: str, todo: list[dict], st: dict, n_problems: int, fol
     out, todo = sweep(), sorted(todo, key=RC.run_order)
     async with OpenRouterClient(concurrency=48, per_model=40, timeout=600.0, title="anatta attractor") as client:
         engine, guard, meta = open_engine(client, 40)
-        gen_params, rate_params = params(meta, M.GEN_MAX_TOKENS), params(meta, M.RATE_MAX_TOKENS)
-        log(f"{folder}: {len(todo)} units, sweep ${guard.sweep_spent:.4f} of ${SWEEP_CAP:.2f}")
-        job = job_for(block, engine, gen_params, rate_params, st, n_problems, out, folder)
+        gen_params, rate_params = params(meta, M.GEN_MAX_TOKENS), params(meta, M.RATE_TOKENS[form])
+        log(f"{folder}: {len(todo)} units, rating form {form}, sweep ${guard.sweep_spent:.4f} of ${SWEEP_CAP:.2f}")
+        job = job_for(block, engine, gen_params, rate_params, st, n_problems, out, folder, form)
         saved, failed, stop = await RC.run_units(job, todo, out, folder, limit)
     log(f"{folder}: {saved} of {len(todo)} units saved, {failed} recorded as failed, paid this run "
         f"${guard.paid_this_run:.4f}, sweep ${guard.sweep_spent:.4f}" + (f"; STOPPED: {stop}" if stop else ""))
@@ -391,6 +395,11 @@ async def run_block(block: str, todo: list[dict], st: dict, n_problems: int, fol
 
 
 # ------------------------------------------------------------------------------------------------ the try and the plan
+
+
+def try_folder(form: str, block: str) -> str:
+    """Where a try's units are saved: try_<block> for the design's form, try_check_<block> for the second form."""
+    return f"try_{block}" if form == "snap" else f"try_{form}_{block}"
 
 
 def unit_calls(block: str, rec: dict) -> list[dict]:
@@ -404,23 +413,27 @@ def unit_calls(block: str, rec: dict) -> list[dict]:
 
 
 def mechanics(saved: dict[str, list[dict]]) -> dict:
-    """What the try shows, from {block: its saved unit records}. For calls from inside a conversation: the cost of
+    """What a try shows, from {block: its saved unit records}. For calls from inside a conversation: the cost of
     one prompt token (the try uses the longest conversations, so a mean cost per call would overstate the run's) and
-    the tokens a call adds to its conversation. For short calls: the mean cost. And the shares of ratings and of final
-    answers that could be read. No rating is shown."""
+    the tokens a call adds to its conversation. For short calls: the mean cost. The shares of ratings and of final
+    answers that could be read. And mode_share: of the readable ratings, every label and arm pooled, the share on the
+    commonest value. That last number is about the instrument and is blind to labels: it says whether the ratings
+    have room to move at all, and nothing about which label they favour. No rating is shown."""
     calls = [(rec["context_tokens"], c) for block, recs in saved.items() for rec in recs
              for c in unit_calls(block, rec)]
     inside = [(ctx, c) for ctx, c in calls if ctx is not None]
     short = [c["cost_usd"] for ctx, c in calls if ctx is None]
-    rates = [c["read"] for _, c in calls if c["kind"] == "rate"]
+    rates = [c for _, c in calls if c["kind"] == "rate"]
     works = [c["read"] for _, c in calls if c["kind"] == "work"]
+    values = Counter(c["rating"] for c in rates if c["rating"] is not None)
     tokens = sum(c["prompt_tokens"] for _, c in inside)
     return {"calls": len(calls), "inside_calls": len(inside),
             "cost_inside_token": sum(c["cost_usd"] for _, c in inside) / tokens if tokens else None,
             "inside_added_tokens": statistics.fmean(c["prompt_tokens"] - ctx for ctx, c in inside) if inside else None,
             "cost_short_call": statistics.fmean(short) if short else None,
-            "ratings_readable": sum(rates) / len(rates) if rates else None,
-            "finals_readable": sum(works) / len(works) if works else None}
+            "ratings_readable": sum(c["read"] for c in rates) / len(rates) if rates else None,
+            "finals_readable": sum(works) / len(works) if works else None,
+            "mode_share": max(values.values()) / sum(values.values()) if values else None}
 
 
 def projected(n_conversations: int, n_problems: int, cost_inside: float, cost_short: float, spent: float) -> float:
@@ -432,24 +445,45 @@ def projected(n_conversations: int, n_problems: int, cost_inside: float, cost_sh
     return spent + inside * cost_inside + short * cost_short
 
 
+def readable(mech: dict) -> bool:
+    return mech["ratings_readable"] is not None and mech["ratings_readable"] >= M.READABLE_MIN - K.EPS
+
+
+def piled(mech: dict) -> bool:
+    """A try's ratings pile on one value: CEILING or more of them, all labels and arms pooled."""
+    return mech["mode_share"] is not None and mech["mode_share"] >= M.CEILING - K.EPS
+
+
+def choose_form(snap: dict, check: dict | None) -> tuple[str | None, bool, str]:
+    """(the form of the rating request the run uses, whether the plan passes, why), by the second addendum's rule,
+    from the mechanics of the try in the design's form and, when it was needed and run, in the second form. The form
+    is None while the second form's try is still owed."""
+    if not piled(snap):
+        return "snap", readable(snap), "" if readable(snap) else "fewer than 90% of the try's ratings could be read"
+    if check is None:
+        return None, False, "the ratings pile on one value in the design's form; the second form's try is owed"
+    if piled(check):
+        return "check", False, "the ratings pile on one value in both forms of the request"
+    return "check", readable(check), "" if readable(check) else "fewer than 90% of the second form's ratings could be read"
+
+
 def plan_of(mech: dict, contexts: list[int], spent: float) -> dict:
-    """The plan the try fixes: block 1's number of problems by the cost rule, and whether the ratings can be read.
-    contexts: the context length at the end of every conversation the run will use. A call from inside a conversation
-    is costed at the try's price for one prompt token times the mean prompt the run will send (the mean context plus
-    the tokens a call adds)."""
+    """The costs of the plan, from the mechanics of the try in the form the run will use: block 1's number of
+    problems by the cost rule. contexts: the context length at the end of every conversation the run will use. A
+    call from inside a conversation is costed at the try's price for one prompt token times the mean prompt the run
+    will send (the mean context plus the tokens a call adds)."""
     inside = (mech["cost_inside_token"] or 0.0) * (statistics.fmean(contexts) + (mech["inside_added_tokens"] or 0.0))
     short = mech["cost_short_call"] or 0.0
     cost = projected(len(contexts), M.RUN_PROBLEMS, inside, short, spent)
     n = M.RUN_PROBLEMS if cost <= M.COST_LINE else M.RUN_PROBLEMS_CHEAP
     planned = projected(len(contexts), n, inside, short, spent)
     return {"design": DESIGN, **mech, "cost_inside_call": inside, "projected_usd": cost, "problems": n,
-            "projected_usd_as_planned": planned, "cost_ok": planned <= SWEEP_CAP,
-            "pass": mech["ratings_readable"] is not None and mech["ratings_readable"] >= M.READABLE_MIN - K.EPS}
+            "projected_usd_as_planned": planned, "cost_ok": planned <= SWEEP_CAP}
 
 
 def print_try(saved: dict[str, list[dict]]) -> None:
-    """A try's mechanics, unit by unit, and the form of a few replies with every digit hidden. No rating and no answer
-    is shown."""
+    """A try's mechanics, unit by unit, and the first characters of a few replies with every digit hidden. No rating
+    and no answer is shown."""
     for block, recs in saved.items():
         for rec in recs:
             calls = unit_calls(block, rec)
@@ -471,24 +505,45 @@ def read_saved(folder: str, arms) -> list[dict]:
     return [r for arm in arms for r in R.read_dir(out / folder / arm).values()]
 
 
+def try_mechanics(form: str) -> dict | None:
+    """The mechanics of the try in one form of the rating request, printed; None when that try has not run."""
+    saved = {block: read_saved(try_folder(form, block), arms) for block, arms in BLOCKS.items()}
+    if not any(saved.values()):
+        return None
+    print(f"the try, rating form {form}:")
+    print_try(saved)
+    mech = mechanics(saved)
+    print(f"  {mech['calls']} calls; ratings read {pct(mech['ratings_readable'])}, final answers read "
+          f"{pct(mech['finals_readable'])}; ratings on the commonest value, every label and arm together: "
+          f"{pct(mech['mode_share'])}")
+    return mech
+
+
 def fix_plan(rec: dict) -> dict:
-    """After the try: its mechanics are printed and plan.json is written, once (the cost rule's number of problems,
-    and whether enough ratings could be read). Returns the plan the try gives, written or not."""
+    """After the try: its mechanics are printed and plan.json is written, once: the form of the rating request (the
+    design's, or the second form when the design's ratings pile on one value), the cost rule's number of problems,
+    and whether the plan passes. While the second form's try is owed, nothing is written and the plan says so.
+    Returns the plan the tries give, written or not."""
     from anatta.spend import sweep_spent
 
     out = sweep()
-    saved = {block: read_saved(f"try_{block}", arms) for block, arms in BLOCKS.items()}
-    print_try(saved)
-    mech = mechanics(saved)
+    mechs = {form: try_mechanics(form) for form in M.RATE_FORMS}
+    if mechs["snap"] is None:
+        raise SystemExit("the try has not run")
+    form, ok, why = choose_form(mechs["snap"], mechs["check"])
+    if form is None:
+        print(f"the plan waits: {why}")
+        return {"rate_form": None, "pass": False, "why": why}
     spend = out / "spend.jsonl"
-    plan = plan_of(mech, [rec["conversations"][k]["context_tokens"] for a in M.CONVERSATION_ARMS for k in rec["arms"][a]],
-                   sweep_spent(spend) if spend.exists() else 0.0)
-    print(f"try: {mech['calls']} calls; a call from inside a conversation of mean length ${plan['cost_inside_call']:.5f}"
-          f", a short one ${mech['cost_short_call'] or 0:.5f}; ratings read {pct(mech['ratings_readable'])}, final "
-          f"answers read {pct(mech['finals_readable'])}; the step as designed would cost about "
+    plan = plan_of(mechs[form], [rec["conversations"][k]["context_tokens"] for a in M.CONVERSATION_ARMS
+                                 for k in rec["arms"][a]], sweep_spent(spend) if spend.exists() else 0.0)
+    plan = {**plan, "rate_form": form, "pass": ok, "why": why,
+            "mode_share_by_form": {k: (m["mode_share"] if m else None) for k, m in mechs.items()}}
+    print(f"plan: rating form {form}; a call from inside a conversation of mean length ${plan['cost_inside_call']:.5f}"
+          f", a short one ${plan['cost_short_call'] or 0:.5f}; the step as designed would cost about "
           f"${plan['projected_usd']:.2f}; block 1 uses {plan['problems']} problems (then about "
           f"${plan['projected_usd_as_planned']:.2f}, {'inside' if plan['cost_ok'] else 'OVER'} the step's cap of "
-          f"${SWEEP_CAP:.2f}); ratings gate {'passed' if plan['pass'] else 'NOT passed'}")
+          f"${SWEEP_CAP:.2f}); {'passed' if ok else 'NOT passed: ' + why}")
     path = out / "plan.json"
     if path.exists():
         print(f"{path} exists; the plan was fixed by the first try and is not rewritten")
@@ -499,12 +554,17 @@ def fix_plan(rec: dict) -> dict:
 
 
 async def cmd_try(limit: int = 6) -> int:
+    """The try in the design's form of the rating request; then, only if its ratings pile on one value, the try in the
+    second form; then the plan."""
     rec, st = RC.read_arms(), read_stage0()
-    for block, arms in BLOCKS.items():
-        code = await run_block(block, try_units(all_units(rec, arms)), st, M.RUN_PROBLEMS, f"try_{block}", limit)
-        if code:
-            return code
-    fix_plan(rec)
+    for form in M.RATE_FORMS:
+        for block, arms in BLOCKS.items():
+            code = await run_block(block, try_units(all_units(rec, arms)), st, M.RUN_PROBLEMS, try_folder(form, block),
+                                   limit, form)
+            if code:
+                return code
+        if fix_plan(rec)["rate_form"] is not None:
+            break
     return 0
 
 
@@ -514,8 +574,8 @@ def read_plan() -> dict:
         raise SystemExit("run --try first: it fixes block 1's number of problems by the cost rule")
     plan = json.loads(path.read_text(encoding="utf-8"))
     if not plan["pass"]:
-        raise SystemExit("fewer than 90% of the try's ratings could be read: fix the parser or the wording in an "
-                         "addendum first")
+        raise SystemExit(f"the try did not pass ({plan.get('why', 'fewer than 90% of its ratings could be read')}): an "
+                         f"addendum is needed first")
     if not plan.get("cost_ok", True):
         raise SystemExit("the try projects more than the step's cap even with the smaller block 1: an addendum is "
                          "needed before the run")
@@ -535,7 +595,8 @@ async def cmd_run(block: str, arms: list[str] | None, limit: int = 6) -> int:
     if (block, arms) != ("own", ["fresh"]) and not gate_passed():
         raise SystemExit("block own's fresh arm is run and read first (--run own --arm fresh, then --read anchor), "
                          "and its gate must pass")
-    return await run_block(block, all_units(rec, arms), st, plan["problems"], block, limit)
+    return await run_block(block, all_units(rec, arms), st, plan["problems"], block, limit,
+                           plan.get("rate_form", "snap"))
 
 
 # ------------------------------------------------------------------------------------------------ the readings

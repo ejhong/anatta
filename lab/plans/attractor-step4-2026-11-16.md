@@ -313,3 +313,38 @@ any call of the step. Where this addendum and the note above differ, the addendu
     10 with the score before the explanation, as here.
 
 **Tests.** 284 in the folder pass (106 for this step).
+
+## Second addendum (16 Nov 2026, about 01:30 UTC): the first five tiers were too easy; harder tiers, and a way out of a ceiling
+
+Stage 0 ran on the five tiers (200 calls, $0.006; no rating has been asked anywhere). The model was right in 40 of 40
+replies on each of L1 to L4 and in 37 of 40 on L5. No tier lies between 15% and 85% right, so by the rule above the
+step stopped for an addendum. Nothing was fixed, and `stage0.json` does not exist. The three wrong solutions are all
+near misses: a tidy long multiplication with one slip in the adding.
+
+**1. Harder tiers.** Five more, each one multiplication, by the digits of the two factors: L6 (4 × 4), L7 (5 × 4), L8
+(5 × 5), L9 (6 × 5) and L10 (6 × 6). The first five tiers are unchanged (a test pins their problems). Stage 0 goes
+on with 8 problems and 5 solutions for each new tier, 200 more short calls. The rule for block 1's tier and the walk
+for the fixed work are as fixed above, over all ten tiers. The cap on a reply to a problem goes from 800 to 1,500
+tokens for the new tiers and for block 1, because longer sums need longer working. None of the 200 replies so far was
+cut.
+
+**2. The ratings may pile on one value, and the try now says so before the run.** The wrong work this model writes
+looks right: neat working with one slip. A quick rating of such work may be 10 nearly every time, under every label.
+The first addendum would then turn every "no difference" into "not settled (ceiling)", and the run would have been paid
+for nothing. So:
+
+- **The try reports one more number about the instrument:** of its readable ratings, every label and arm pooled, the
+  share on the commonest value. It is blind to labels. It says whether the ratings have room to move, and nothing
+  about which label they favour.
+- **If that share is under 70%,** the run uses the rating request as designed (`snap`: the rating first, then one
+  sentence).
+- **If it is 70% or more,** the try is repeated with a second form of the request (`check`): "Check the working
+  first. Then end your reply with a line of the form "Rating: N" ...". Everything else in the request is the same.
+  The reply gets 1,200 tokens, and the rating read is the last one it gives. If the second form's pooled share is
+  under 70% and 90% of its ratings can be read, the run uses the second form for every label, arm and block. If the
+  ratings pile on one value in both forms, the plan does not pass and the step stops for another addendum.
+- **What the second form changes.** The rating is then the outcome of a check, not a quick judgement, and the paper's
+  form (the score first) is left. The paper reports that giving its raters room to reason did not remove the effect.
+  The report will say which form ran and why.
+
+The choice is made by the code from the try's files (`run_mine.choose_form`) and written into `plan.json`, once.
