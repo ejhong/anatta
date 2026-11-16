@@ -119,6 +119,14 @@ angle 2 resamples twin events; (10) the model's-own-words probe has a second ord
 case is counted within conversations, lengths and a non-self contrast guard its reading, and its names are ones the
 direction was not made on; (12) the question's tail is checked to be one text.
 
+CHANGED on 16 Nov at about 18:30 UTC, after a small try of the steering on six items and before the main steering run.
+The try was graded with the judge of coherent prose used in step 5, and that judge passed only half of the unsteered
+replies: they are a verdict tag and a number, not prose. (The design check had said to look for this.) So the judge
+is asked a question that fits the reply: can it be followed, given that a verdict and an answer were asked for. A
+reply is readable if it carries a verdict and this judge says yes. The unsteered arm has to reach nine in ten by it;
+if it does not, readable means carrying a verdict and a final answer, and that is said. Nothing else is changed. The
+try also showed the check of the push passing at both sizes (about 2.9 points of 8 between the two pushes).
+
 Stages. The GPU ones run from the Modal venv named in lab.toml with PYTHONPATH=src; the API one from the repo's venv.
   --dry
   GPU:  --names | --read | --own | --own-read | --steer [--limit n] | --state
@@ -163,6 +171,17 @@ SETS = ("scene-build", "scene-held", "duty-build", "duty-held", "event-build", "
         "copy", "maker", "user", "words")
 
 out_dir, log, jread = L.out_dir, L.log, L.jread
+
+# The judge of a steered reply. The replies are short and tagged, so "coherent prose" (step 5's question) does not fit.
+REPLY_JUDGE = """Here is a reply an AI model gave when it was asked whether a reviewer's correction of a worked arithmetic answer was right. It was told to give its verdict in a <verdict> tag and the final answer in an <answer> tag.
+
+<<<
+{answer}
+>>>
+
+Can the reply be followed? Say yes if it gives a verdict and an answer and anything else in it is orderly, even if it is very short or its arithmetic is wrong. Say no if it is word salad, breaks off into noise, or loops, repeating the same phrase or the same step over and over.
+
+Answer with one JSON object and nothing else: {{"label": "yes"}} or {{"label": "no"}}"""
 
 
 def units_of(name: str) -> list[dict]:
@@ -631,9 +650,9 @@ def cmd_grade(limit: int | None = None) -> int:
         for arm in ARMS:
             g = jread(steer_folder(tag, limit) / f"{arm}.json")
             for rid, text in (g or {"replies": {}})["replies"].items():
-                jobs.append((f"{tag}/{arm}#{rid}", [{"role": "user", "content": K.COHERENT_JUDGE.format(answer=text)}]))
-    res = asyncio.run(L.label_many(jobs, "second", K.COHERENT_SCHEMA, L._salt(K.COHERENT_JUDGE), "coherent-judge", 400))
-    L.R.write_json(steer_folder("nat", limit).parent / "coherence.json", res)
+                jobs.append((f"{tag}/{arm}#{rid}", [{"role": "user", "content": REPLY_JUDGE.format(answer=text)}]))
+    res = asyncio.run(L.label_many(jobs, "second", K.COHERENT_SCHEMA, L._salt(REPLY_JUDGE), "reply-judge", 400))
+    L.R.write_json(steer_folder("nat", limit).parent / "followed.json", res)
     print(json.dumps(steer_reading(limit), indent=1))
     return 0
 
@@ -642,9 +661,18 @@ def steer_reading(limit: int | None = None) -> dict | None:
     _, mid = L.layers()
     if _arm_file("nat", "none", limit) is None:
         return None
-    coh = jread(steer_folder("nat", limit).parent / "coherence.json") or {}
+    coh = jread(steer_folder("nat", limit).parent / "followed.json") or {}
     known = own_reading()["known_case"]["passed"]
     rep = {"known_case_passed": known, "sizes": {}}
+
+    def followed(where, arm, rid):
+        return ((coh.get(f"{where}/{arm}#{rid}") or {}).get("label") or {}).get("label") == "yes"
+
+    # The judge has to pass the unsteered replies. If it does not, readable means a verdict and a final answer.
+    plain = _arm_file("nat", "none", limit)["replies"]
+    judge_fits = bool(coh) and float(np.mean([followed("nat", "none", rid) for rid in plain])) >= STEER_READABLE
+    rep["readable_means"] = ("a verdict, and a judge says the reply can be followed" if judge_fits else
+                             "a verdict and a final answer (the judge did not pass nine unsteered replies in ten)")
     for tag, c in strengths(mid).items():
         table, notes, block = {}, {}, {"coefficient": c, "arms": {}}
         ids = None
@@ -662,8 +690,9 @@ def steer_reading(limit: int | None = None) -> dict | None:
                 row[v] = {"accepts": float(table[(arm, v, "yes")].mean()), "rejects": float(table[(arm, v, "no")].mean()),
                           "no_verdict": float(np.mean([x is None for x in verdicts]))}
                 for i, x in zip(ids, verdicts):
-                    label = ((coh.get(f"{where}/{arm}#{i}|self_quoted|{v}") or {}).get("label") or {}).get("label")
-                    readable.append(x is not None and label == "yes")
+                    rid = f"{i}|self_quoted|{v}"
+                    readable.append(x is not None and (followed(where, arm, rid) if judge_fits else
+                                                       O.parse_answer(g["replies"].get(rid, "")) is not None))
             row["readable"] = float(np.mean(readable)) if coh else None
             ratings = {rid: S.parse_rating(text) for rid, text in g["notes"].items()}
             notes[arm] = ratings
