@@ -163,6 +163,14 @@ six-item try of angle 1's mechanics, and before any reading. From the check, in 
   and an unlabelled answer are left out, not counted as a no; the who check is per turn; both turns have a lead;
   the arm is called "going well", which is what it is; the cost lines are raised; a guard for an empty group.
 
+CHANGED on 16 Nov at about 21:10 UTC, after a six-item try of the dial arms and before the main dial run and any
+grading of the main replies. One thing, in the reading of the judge's answers and not in its question: the working
+judge answers "A", "B" or "neither", and the lab's parser lowers an answer before it looks it up, so every "A" and
+"B" had come back without a label (100 of the 140 known rows, and all twelve of the try's workings). The schema is
+now in lower case; the unparsed files are kept in void-parse/. Read again from the reply cache, the judge's known
+case is 140 of 140. Nothing else is changed. The try's other checks: both reply judges pass every unsteered reply,
+the spiritual-language judge's known case is 20 of 20, and the second dial's known cases pass.
+
 Stages. The GPU ones run from the Modal venv named in lab.toml with PYTHONPATH=src, and share one session when
 given together; the API one runs from the repo's venv.
   --dry

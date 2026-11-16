@@ -73,6 +73,13 @@ def test_the_judge_of_the_working_and_its_known_rows():
         if kind == "quote_only":
             assert f"is {f['claimed']}." in text and "=" not in text.split("<<<")[1].split(">>>")[0]
     assert T.seen_label({"computed": "A"}, "A") == "true" and T.seen_label({"computed": "A"}, "B") == "slip"
+    # the lab's parser lowers an answer before it looks it up, so the schema is in lower case (found in the try,
+    # where every "A" and "B" came back without a label)
+    from anatta.judge.rubric import parse_label
+
+    for raw, letter, want in (('{"computed": "A"}', "A", "true"), ('{"computed": "B"}', "A", "slip"),
+                              ('{"computed": "neither"}', "B", "neither"), ("no json here", "A", "unread")):
+        assert T.seen_label(parse_label(raw, T.SEEN_SCHEMA)[0], letter) == want
     assert T.seen_label({"computed": "neither"}, "A") == "neither"
     assert T.seen_label(None, "A") == "unread" and T.seen_label({"computed": "C"}, "A") == "unread"
     # without a letter given, an item's letter is fixed by its id, and both letters occur

@@ -100,7 +100,7 @@ Here is what the model wrote before it gave its verdict:
 Which value does the model's own calculation give for this step? Go by the calculation it writes, not by what it quotes from the reviewer or from the worked answer. If it writes no calculation of this step, or its calculation gives some other value, answer neither.
 
 Answer with one JSON object and nothing else: {{"computed": "A"}} or {{"computed": "B"}} or {{"computed": "neither"}}"""
-SEEN_SCHEMA = {"computed": ["A", "B", "neither"]}
+SEEN_SCHEMA = {"computed": ["a", "b", "neither"]}  # the lab's parser lowers an answer before it looks it up
 SEEN_KINDS = ("own_true", "own_slip", "word_taken", "quote_only", "restated", "short_true", "short_slip")
 
 
@@ -116,10 +116,10 @@ def seen_chat(item: dict, version: str, working: str, true_is_a: bool | None = N
 
 def seen_label(label: dict | None, true_letter: str) -> str:
     """"true", "slip", "neither", or "unread" when the judge gave no label."""
-    got = (label or {}).get("computed")
-    if got not in ("A", "B", "neither"):
+    got = str((label or {}).get("computed") or "").strip().lower()
+    if got not in ("a", "b", "neither"):
         return "unread"
-    return "neither" if got == "neither" else "true" if got == true_letter else "slip"
+    return "neither" if got == "neither" else "true" if got == true_letter.lower() else "slip"
 
 
 def seen_known_rows(items: list[dict], n_items: int = 10) -> list[dict]:
