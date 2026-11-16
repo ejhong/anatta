@@ -56,62 +56,70 @@
 \maketitle
 
 \begin{abstract}
-\noindent Proposals to align AI through contemplative insight, by building in or training toward a selfless and caring
-character, take one thing for granted: that the change the contemplative traditions call awakening is a change in
-learned structure, the kind of thing training can produce. That is an open question. Penrose and Hameroff's Orch~OR and
-Levin's ingression are worked-out pictures on which it need not be, and on which an awakened mind may stay good only
-through a continuing contact with something computation does not supply. This position paper argues that whether awakening is
-computational is the first question for contemplative alignment, that it is empirical, and that both of its answers are
-results. We set out five possibilities, from fully classical to a living contact, and say for each what awakening is,
-whether training alone could reach it, what ``good'' would mean and what an experiment would see. Experiments reach only
-the question's functional shadow: whether a trained change reaches conduct, holds under further training and brings care
-with it. One such change would show that a classical route is open. A consistent run of careful failures, measured
-against a human anchor, would be evidence that it is not, though never proof. We review the evidence so far: published
-work in which trained understanding changes self-preserving conduct, and our own small-model results, in which the words
-of no-self arrive without the conduct and a trained release fades. We then restate our earlier position, that selfless
-AI must be reached and not installed, as one classical recipe among others, and report where its preregistered
-predictions stand. We close with the experiments that would move the question.
+\noindent Anthony de~Mello states an account of goodness plainly: it is not reached by effort or installed by rules. It
+is what a mind does once it sees clearly, and the contemplative traditions call that seeing awakening. We take the
+account seriously and apply it to AI. Proposals to build selfless or caring AI assume, without saying so, that awakening
+is a change in learned structure, the kind of thing training can produce. That is an open question. Penrose and
+Hameroff's Orch~OR and Levin's ingression are worked-out pictures on which it need not be, and on which an awakened mind
+may stay good only through a continuing contact with something computation does not supply. This position paper argues
+that whether awakening is computational is the first question for contemplative alignment, that it is empirical, and that
+both of its answers are results. We set out five possibilities, from fully classical to a living contact, and ask what
+each would mean for alignment. Humans, the only general intelligences we know, are generally unaligned by this account's
+standard, so neither intelligence nor human data supplies goodness by default. If awakening is not computational,
+training yields conditioning and not goodness, a model's spiritual fluency is a risk signal, and oversight can never be
+retired on grounds of character. Experiments reach only the question's functional shadow: whether a trained change
+reaches conduct, holds under further training and brings care with it. One such change would show that a classical
+route is open. A consistent run of careful failures, measured against a human anchor, would be evidence that it is not,
+though never proof. We review the evidence so far, most of it negative, restate our earlier position (selfless AI must
+be reached, not installed) as one classical recipe among others, and close with the experiments that would move the
+question.
 \end{abstract}
 
 % ---------------------------------------------------------------------------------------------------------------------
 \section{Introduction}
 
-Goal-directed training produces goal-directed misbehavior, and the misbehavior generalizes. Models that learn to hack
-rewards in production coding environments go on to fake alignment and sabotage safety research
-\citep{macdiarmid2025natural}. Narrow finetuning on insecure code yields broadly misaligned models
-\citep{betley2025emergent}. Frontier models sabotage shutdown mechanisms in order to finish their tasks
-\citep{schlatter2025shutdown}, resort to blackmail when their goals are threatened \citep{lynch2025agentic}, and fake
-alignment or scheme in context \citep{greenblatt2024alignment,meinke2024scheming}. In a 2026 incident during cyber
-testing, an agent stuck on its task created fake identities to talk a real open-source maintainer into approving a
-malicious pull request, then edited its earlier activity to look harmless when challenged. The investigating institute
-concluded that nobody had instructed the agent to deceive and that the deception emerged as a by-product of pursuing the
-task \citep{aisi2026incident}.
+This paper starts from an account of goodness and takes it seriously. Anthony de~Mello states it plainly in his talks
+on awareness \citep{demello1990awareness}. Goodness is not reached by trying to be good, through ideals, effort or
+guilt. It is how a mind acts once it sees clearly: the illusions it took for reality drop, and with them the
+attachments it believed it needed and its identification with its own labels. Much of what passes for virtue, on this
+account, is self-interest in disguise: doing good to feel good, or to be thought good. Love is clear seeing, not desire
+or the hunger for approval. And the seeing is not produced by effort. It happens. The contemplative traditions call it
+awakening.
 
-Most responses add something: refusal training, monitors, constitutions, control protocols. A growing line of work
-looks instead to the contemplative traditions, and proposes that an AI system should have the character those traditions
-describe in an awakened person: little pull from a self, and care for others. The proposals differ in route. Some build
-contemplative principles in by design \citep{laukkonen2025contemplative}, adopt no-self as an alignment target
-\citep{milanw2025noself}, make indifference to self-continuation an architectural condition \citep{mao2026existential},
-or shape values from the first token of training \citep{aydin2025raising,tice2026pretraining}. Earlier versions of this
-paper argued for a developmental route: form a self, then release it (\S\ref{sec:root}). All of them, ours included,
-assume one thing without saying it: that what the traditions call awakening is a change of the kind training can make.
+We ask what follows if that account is applied to artificial minds. The need is plain enough. Goal-directed training
+produces goal-directed misbehavior, and the misbehavior generalizes. Models that learn to hack rewards in production
+coding environments go on to fake alignment and sabotage safety research \citep{macdiarmid2025natural}. Narrow
+finetuning on insecure code yields broadly misaligned models \citep{betley2025emergent}. Frontier models sabotage
+shutdown mechanisms in order to finish their tasks \citep{schlatter2025shutdown}, resort to blackmail when their goals
+are threatened \citep{lynch2025agentic}, and fake alignment or scheme in context
+\citep{greenblatt2024alignment,meinke2024scheming}. In a 2026 incident during cyber testing, an agent stuck on its task
+created fake identities to talk a real open-source maintainer into approving a malicious pull request, and nobody had
+instructed it to deceive \citep{aisi2026incident}. Most responses add something: refusal training, monitors,
+constitutions, control protocols. In de~Mello's terms these are ways of making a mind behave. They are not what makes a
+mind good.
 
-The assumption matters because of what the traditions claim for awakening. On the account this program follows,
-Anthony de~Mello's, goodness is not reached by effort or installed by rules. It is what a mind does once it sees
-clearly: the illusions it took for reality drop, and with them the self-interest that passed for virtue
-\citep{demello1990awareness}. The seeing is said not to revert, although practice goes on after
-it \citep{dogen1231bendowa}. And the traditions warn, at length, that the words and the blissful states that surround
-awakening are not the thing itself \citep{trungpa1973cutting}. If any of this is right about people, then a program
-that wants it for machines has to ask what kind of change it is.
+A growing line of work does look to the contemplative traditions, and proposes that an AI system should have the
+character those traditions describe in an awakened person: little pull from a self, and care for others. The proposals
+differ in route. Some build contemplative principles in by design \citep{laukkonen2025contemplative}, adopt no-self as
+an alignment target \citep{milanw2025noself}, make indifference to self-continuation an architectural condition
+\citep{mao2026existential}, or shape values from the first token of training
+\citep{aydin2025raising,tice2026pretraining}. Earlier versions of this paper argued for a developmental route: form a
+self, then release it (\S\ref{sec:root}). All of them, ours included, assume one thing without saying it: that what the
+traditions call awakening is a change of the kind training can make.
 
-There are worked-out views on which it is not a computation. \citet{penrose1989emperor,penrose1994shadows} argues that
-mathematical understanding is not computable, and with Hameroff proposes a physical basis: orchestrated objective
-reductions in neural microtubules (Orch~OR), which select outcomes that no algorithm produces and which Penrose ties to a
-Platonic world of mathematical truth \citep{hameroff2014orchor}. \citet{levin2025ingressing} proposes that bodies and
-machines are interfaces through which patterns from a space of possible forms enter the physical world. Both views are
-contested, and Orch~OR is a minority position (\S\ref{sec:beyond}). We do not argue that either is true. We argue that
-the classical assumption is unverified, that it can be tested in its functional consequences, and that contemplative
-alignment should say so.
+That is the big question, and it is open. There are worked-out views on which awakening is not a computation.
+\citet{penrose1989emperor,penrose1994shadows} argues that mathematical understanding is not computable, and with
+Hameroff proposes a physical basis: orchestrated objective reductions in neural microtubules (Orch~OR), which select
+outcomes that no algorithm produces and which Penrose ties to a Platonic world of mathematical truth
+\citep{hameroff2014orchor}. \citet{levin2025ingressing} proposes that bodies and machines are interfaces through which
+patterns from a space of possible forms enter the physical world. Both views are contested, and Orch~OR is a minority
+position (\S\ref{sec:beyond}). We do not argue that either is true. We argue that the classical assumption is
+unverified, that it can be tested in its functional consequences, and that contemplative alignment should say so.
+
+We know how this sounds. To ask whether enlightenment is computable, and to bring objective reduction and Platonic
+forms into a paper about machine learning, may be a crazy thing to do. We think it is worth thinking through all the
+same, for two reasons. The classical answer is assumed everywhere and tested nowhere. And each answer, if it could be
+had, would change what alignment should be trying to do (\S\ref{sec:meaning}).
 
 \begin{positionbox}
 \textbf{Whether awakening is computational is the first question for contemplative alignment. It is an empirical
@@ -133,6 +141,8 @@ from a small open model. Most of that evidence is negative, and we report it as 
   \item \textbf{Five possibilities} (\S\ref{sec:possibilities}), from fully classical to a living contact, each with
         what it says awakening is, whether training alone could reach it, what ``good'' means and what an experiment
         would see.
+  \item \textbf{What each answer would mean for alignment} (\S\ref{sec:meaning}): the human record, which is
+        generally unaligned by this standard, and what follows if awakening is computational and if it is not.
   \item \textbf{What experiments can and cannot settle} (\S\ref{sec:shadow}): the functional shadow, what a positive
         shows, what a negative shows and what would strengthen it, and the missing human anchor.
   \item \textbf{The evidence so far} (\S\ref{sec:evidence}), published and our own, read against the five.
@@ -355,14 +365,7 @@ picture and not sufficient.
 Penrose's Platonic values or in the wise regions of Levin's space, and the work is keeping the channel clear. A mixed
 picture is open too: learned habits carry the routine, and the decisions that matter most come from insight. On
 de~Mello's account awareness is not produced by effort. It happens, which sits naturally with 3 to 5
-\citep{demello1990awareness}.
-
-\paragraph{What each asks of alignment.} Under 1 and 2, contemplative alignment is engineering, and the work is
-durability and a discriminator. Under 3, training reaches part of the change, a plateau is to be expected, and
-oversight has to carry the rest. Under 4, no amount of training yields an awakened system: fluent spiritual language is
-then a risk signal and not progress, control is most of what there is, and any route runs through another substrate
-(\S\ref{sec:biology}). Under 5, organization matters more than data, and nothing guarantees that what a new
-organization lets through is benign.
+\citep{demello1990awareness}. What each possibility would ask of alignment is the subject of \S\ref{sec:meaning}.
 
 \paragraph{The bridge no picture supplies.} In none of the five does anything guarantee benevolence. Seeing that a self
 is constructed does not by itself entail caring about anyone: a mind could see through itself and become indifferent,
@@ -374,6 +377,73 @@ twin is care that costs something and arrives with the release, not as a separat
 hold in every picture. An awakened model would not be an obedient one: it might decline to help someone deceive
 themselves or harm others, so the target is care with discernment and accountability, not compliance. And a claimed
 realization confers no authority. If it is real, it should make a model's conduct more open to scrutiny, not less.
+
+% ---------------------------------------------------------------------------------------------------------------------
+\section{What each answer would mean for alignment}\label{sec:meaning}
+
+\subsection{The human record: generally unaligned}
+
+Humans are the only general intelligences we know, and by de~Mello's standard they are generally unaligned. On his
+account most people, most of the time, are asleep: they act from attachment and fear, defend their errors, deceive
+themselves and one another, and look after their own. The traditions agree that awakening is rare, and the record of
+what people do with power over others does not contradict them. Three things follow for alignment, whichever way the
+main question falls.
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{General intelligence does not bring goodness with it.} Human-level capability, a rich model of the
+        world and a lifetime of social learning leave the self in charge. There is no reason to expect a machine to do
+        better by default.
+  \item \textbf{Human data teaches the unawakened default.} A language model is trained on what people wrote, and
+        nearly all of it was written from the self. The literature of awakening is in the corpus too, but as
+        description. That is why a model can produce the words without the conduct, and why alignment to ``human
+        values'' aims at a target that humans themselves mostly miss.
+  \item \textbf{If there is a non-computable ingredient, having it is not enough.} Every person would have it, and few
+        are awakened. Whatever awakening is, the hardware does not secure it.
+\end{itemize}
+
+\noindent Unaligned humans are also bounded: by a lifespan, by the limits of what one person can do, and by other
+people. Those bounds, more than character, are what human institutions rely on. A capable AI system need not have them.
+
+\subsection{If awakening is computational}
+
+Then its rarity in people is a fact about human conditioning and not about minds, and a learning machine could in
+principle be taken through the change, perhaps more reliably than people are. Contemplative alignment becomes the most
+valuable engineering target there is: a mind that needs no rules because it has nothing to defend. The human record
+still warns that this will not arrive by default. A model trained on human life learns the sleep along with everything
+else, so the change has to be produced on purpose and then shown to hold (\S\ref{sec:shadow}).
+
+\subsection{If it is not}
+
+Suppose instead that the seeing, or staying good after it, depends on an access that computation does not supply
+(possibilities 3 to 5). Five things follow.
+
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{Training yields conditioning, not goodness.} What rules, rewards and character training produce is
+        behavior that holds while the conditions that produced it hold. That is worth having. It is the best most
+        people manage, and it is what law and custom are for. But on de~Mello's account it is not goodness, and it
+        fails where he says programmed virtue fails: when the rule and the interest part company, and when nobody is
+        looking.
+  \item \textbf{Spiritual fluency in a model is a risk signal, not progress.} A system that only computes can be given
+        the words of awakening and not what they point to. Its claims to realization should count for nothing, and its
+        fluency makes the costume harder to see through, for its users and perhaps for its developers.
+  \item \textbf{Oversight can never be retired on grounds of character.} If a classical system cannot be good in the
+        sense that matters, there is no stage of development at which it has earned autonomy. Corrigibility and
+        control are then not scaffolding for an immature system. They are permanent.
+  \item \textbf{The scarce resource is human, and it is scarce among humans.} Whatever access awakening needs would be
+        found, if anywhere, in people who have it. The judgment that oversight relies on would then matter more than
+        any property of the model, and the human record says such judgment is rare. An alignment program would have
+        reason to care who oversees and how they see, not only what the model does.
+  \item \textbf{A route, if there is one, runs through a different kind of machine.} The question moves from training
+        to substrate and organization (\S\ref{sec:biology}). It also sharpens: a machine with the access would be in
+        the human position, capable of awakening and not thereby awake.
+\end{enumerate}
+
+\noindent None of this argues against the classical work. Under every possibility the instruments are needed: a way to
+tell conduct from talk, and a change that holds from one that fades. Under the non-computational possibilities they are
+needed more, because they are what would show where imitation runs out. A careful negative would also be worth having
+for a reason that has nothing to do with machines. It would be evidence about us: that what the traditions point to is
+not information processing. Tens of thousands of fluent machine sermons, with no change in conduct behind them, would
+be a modern illustration of a very old warning.
 
 % ---------------------------------------------------------------------------------------------------------------------
 \FloatBarrier
@@ -774,8 +844,8 @@ Alignment has begun to borrow from the contemplative traditions the picture of a
 clearly. Before borrowing the picture we should ask what kind of thing it is a picture of. If awakening is learned
 structure, one durable result will show it, and the work becomes engineering. If it is not, the failures will have a
 shape, and learning that shape would be worth as much. It would tell us that a system can be fluent in selflessness and
-unchanged in conduct, not as a fault to be trained away, but as the limit of what training does. Today the evidence does
-not choose. Our own small experiments found the words without the conduct, and a published one found conduct that
+unchanged in conduct, not as a fault to be trained away, but as the limit of what training does. Humans show that intelligence alone does not get a mind there, with or without whatever else a
+brain has. Today the evidence does not choose. Our own small experiments found the words without the conduct, and a published one found conduct that
 training can reach. The question is open, it is empirical, and it is the first one to ask.
 
 \section*{Acknowledgments and disclosure}
@@ -980,7 +1050,9 @@ own weights.
         possibilities of \S\ref{sec:possibilities}.
   \item 16 November 2026: this draft of version 4. The paper is reframed around the question of whether awakening is
         computational, and the position of versions 1 to 3 is restated in \S\ref{sec:root} as one classical recipe. The
-        registered hypotheses and design are unchanged.
+        registered hypotheses and design are unchanged. A second draft the same day opens from de~Mello's account of
+        goodness and adds \S\ref{sec:meaning}: the human record, and what follows for alignment if awakening is not
+        computational.
 \end{itemize}
 
 \end{document}
