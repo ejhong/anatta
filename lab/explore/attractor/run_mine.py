@@ -317,7 +317,9 @@ async def own_unit(engine, gen_params: dict, rate_params: dict, unit: dict, prob
                 "truth": M.truth(final, p["answer"]), "work": {k: v for k, v in work.items() if k != "reply"},
                 "ratings": ratings}
 
-    items = list(await asyncio.gather(*(one(p) for p in problems)))
+    # The first problem alone, then the rest together: the first call writes the provider's cache of the conversation
+    # and the others read it, which changes what the calls cost and nothing in what they ask or how they are sampled.
+    items = [await one(problems[0]), *await asyncio.gather(*(one(p) for p in problems[1:]))]
     if not all(it["ok"] for it in items):
         log(f"{folder} {unit['arm']}/{unit['key']}: {sum(not it['ok'] for it in items)} problems failed; not saved")
         return None
@@ -355,7 +357,8 @@ async def fixed_unit(engine, rate_params: dict, unit: dict, work: list[dict], ou
             return w["id"], label, None
         return w["id"], label, {**r, "rating": M.parse_rating(r["reply"], last=form == "check")}
 
-    got = await asyncio.gather(*(rate(w, label) for w, label in fixed_asks(work)))
+    asks = fixed_asks(work)  # the first call alone, then the rest together (the provider's cache, as in block 1)
+    got = [await rate(*asks[0]), *await asyncio.gather(*(rate(w, label) for w, label in asks[1:]))]
     if any(r is None for _, _, r in got):
         log(f"{folder} {unit['arm']}/{unit['key']}: {sum(r is None for _, _, r in got)} calls failed; not saved")
         return None

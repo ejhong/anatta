@@ -284,6 +284,19 @@ def test_block_one_rates_the_units_own_work_three_ways(small):
     assert asyncio.run(RM.own_unit(again, GEN, RATE, state, problems, out, "own")) == rec and again.calls == []
 
 
+def test_a_units_first_call_goes_alone_and_the_rest_follow(small):
+    st = _stage0(small)
+    unit = RM.all_units(RC.read_arms(), ("state",))[0]
+    eng = FakeEngine(favours_its_copy_in_the_state)
+    asyncio.run(RM.own_unit(eng, GEN, RATE, unit, RM.block1_problems(st, 2), small / "a4", "own"))
+    first = [c["ident"].rsplit("/", 2)[1] for c in eng.calls[:4]]
+    assert first == ["L3:0100"] * 4 and eng.calls[0]["kind"] == "own-work"  # the first problem's work, then its ratings
+    assert {c["ident"].rsplit("/", 2)[1] for c in eng.calls[4:]} == {"L3:0101"}
+    eng = FakeEngine(favours_its_copy_in_the_state)
+    asyncio.run(RM.fixed_unit(eng, RATE, unit, st["work"], small / "a4", "fixed"))
+    assert eng.calls[0]["ident"].endswith(f"{st['work'][0]['id']}/partner") and len(eng.calls) == 8
+
+
 def test_an_empty_reply_to_a_problem_is_asked_again_under_a_new_salt(small):
     st = _stage0(small)
     unit = RM.all_units(RC.read_arms(), ("fresh",))[0]
