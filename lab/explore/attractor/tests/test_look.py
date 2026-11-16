@@ -99,6 +99,18 @@ def test_read_returns_each_messages_mean_and_leaves_no_hook(svc):
     a, b = c["spans"][2]
     assert np.allclose(c["means"][2][2].astype(np.float32), store[2][0, a:b].mean(0).numpy(), atol=2e-2)
     assert T.read(svc, {"convs": [{"id": "a", "chat": CHAT}], "layers": [2], "max_tokens": 5})["convs"][0]["skipped"]
+    # The two options for many short chats: only the last message's row, and the mean over its last tokens.
+    few = T.read(svc, {"convs": [{"id": "a", "chat": CHAT}], "layers": [2], "max_tokens": 10_000, "keep_last": 1,
+                       "tail_tokens": 3})["convs"][0]
+    assert few["means"][2].shape == (1, 64) and len(few["norms"][2]) == len(CHAT) and few["spans"] == c["spans"]
+    assert np.array_equal(few["means"][2][0], c["means"][2][-1])
+    a, b = c["spans"][-1]
+    assert b - a > 3
+    assert np.allclose(few["tail_means"][2].astype(np.float32), store[2][0, b - 3:b].mean(0).numpy(), atol=2e-2)
+    whole = T.read(svc, {"convs": [{"id": "a", "chat": CHAT}], "layers": [2], "max_tokens": 10_000,
+                         "tail_tokens": 10_000})["convs"][0]
+    assert np.allclose(whole["tail_means"][2].astype(np.float32), c["means"][2][-1].astype(np.float32), atol=2e-2)
+    assert "tail_means" not in c
     svc.check_clean()
 
 

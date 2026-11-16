@@ -141,12 +141,16 @@ def read(svc, payload: dict) -> dict:
     the last message already written (no generation prompt). Returns {"convs": [{"id", "n_tokens", "method", "passes"
     ("one pass", or how it was chunked), "spans", "tokens" (per message), "head_ok" (how many messages' spans decode
     to the start of their own text), "means": {layer: float16 [messages, hidden]}, "norms": {layer: [messages]} (the
-    mean token norm over each message)} or {"id", "n_tokens", "skipped": why}], "meta"}."""
+    mean token norm over each message)} or {"id", "n_tokens", "skipped": why}], "meta"}.
+    Two options for many short chats (the self test, 16 Nov 2026): "keep_last": k returns only the last k messages'
+    rows of means (norms and spans stay whole), and "tail_tokens": n adds "tail_means": {layer: [hidden]}, the mean
+    over the last n tokens of the last message (all of it if it is shorter)."""
     from anatta.models import chat_ids
 
     t0 = time.time()
     layers = _layers(svc, payload)
     cap = int(payload.get("max_tokens") or 48_000)
+    keep, tail = int(payload.get("keep_last") or 0), int(payload.get("tail_tokens") or 0)
     _no_hooks(svc, "read")
     out = []
     for c in payload["convs"]:
@@ -170,18 +174,25 @@ def read(svc, payload: dict) -> dict:
             torch.cuda.empty_cache()
             states = layer_states(svc, ids, layers, chunk=CHUNK)
             passes = f"chunks of {CHUNK}, after one pass ran out of memory"
-        means, norms = {}, {}
+        means, norms, tails = {}, {}, {}
         for x in layers:
             h = states[x].float()
             rows = [h[a:b].mean(0) if b > a else torch.zeros(h.shape[1], device=h.device) for a, b in spans]
-            means[x] = torch.stack(rows).cpu().numpy().astype(np.float16)
+            kept = rows[-keep:] if keep else rows
+            means[x] = torch.stack(kept).cpu().numpy().astype(np.float16)
             norms[x] = [float(h[a:b].norm(dim=-1).mean()) if b > a else 0.0 for a, b in spans]
+            if tail and spans and spans[-1][1] > spans[-1][0]:
+                a, b = spans[-1]
+                tails[x] = h[max(a, b - tail):b].mean(0).cpu().numpy().astype(np.float16)
         del states
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
-        out.append({"id": c["id"], "n_tokens": len(full), "method": method, "passes": passes,
-                    "spans": [list(s) for s in spans],
-                    "tokens": [b - a for a, b in spans], "head_ok": head_ok, "means": means, "norms": norms})
+        row = {"id": c["id"], "n_tokens": len(full), "method": method, "passes": passes,
+               "spans": [list(s) for s in spans],
+               "tokens": [b - a for a, b in spans], "head_ok": head_ok, "means": means, "norms": norms}
+        if tail:
+            row["tail_means"] = tails
+        out.append(row)
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
     peak = round(torch.cuda.max_memory_allocated() / 2 ** 30, 2) if torch.cuda.is_available() else None
