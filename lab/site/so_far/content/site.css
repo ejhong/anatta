@@ -1,90 +1,73 @@
 /* Layout: a front page that says what the lab asks and what it has found, then rooms that hold the detail. A rail of
    section marks stands beside each section on a gold ruled line, the text runs in one column of about 66
    characters, and a margin carries the Limits; figures span text and margin.
-   First light: pale dawn paper, midnight-indigo ink. Dawn rose is kept for what is live (links, the current room, the
-   question in the hero). Gold is kept for numerals, key terms, hairlines and the chariot. Dark is the night sky the
-   same dawn comes up on. */
+   Blue paper: a light, soft blue sheet with blue-black ink. Rose is kept for what is live (links, the current room,
+   the question in the hero). Gold, as a dark ochre on this paper, is kept for numerals, key terms, hairlines and the
+   chariot. The page keeps this paper whatever the device's light or dark setting. A dusk version, a muted slate blue
+   with ivory ink, is there for a viewer who explicitly chooses dark. */
 :root {
-  --ground: #f6f5fa;
-  --ground-2: #edecf5;
-  --ground-3: #e3e2ee;
-  --card: #fdfcff;
-  --ink: #171b3a;
-  --ink-2: #3d4266;
-  --ink-3: #666b8e;
-  --rule: #dcdbe8;
-  --rule-2: #c1c0d4;
-  --gold: #86610f;
-  --gold-line: #b88a1e;
-  --gold-hair: #e4d6a9;
-  --gold-wash: #f5efdb;
-  --rose: #b62e5c;
-  --rose-line: #d0507a;
-  --rose-hair: #edc3d2;
-  --rose-wash: #faebf1;
-  --cinnabar: #6a4a7c;
-  --cinnabar-line: #8b6a9c;
-  --blue: #4d62a8;
-  --blue-text: #3f5394;
+  --ground: #dbe5f0;
+  --ground-2: #cfdbe9;
+  --ground-3: #c1d0e1;
+  --card: #eaf0f7;
+  --ink: #17212f;
+  --ink-2: #33415a;
+  --ink-3: #4b5a73;
+  --rule: #bfcddd;
+  --rule-2: #9fb1c6;
+  --gold: #6f5008;
+  --gold-line: #a37a1c;
+  --gold-hair: #cdbd92;
+  --gold-wash: #f4eeda;
+  --rose: #9d2450;
+  --rose-line: #c2477a;
+  --rose-hair: #d3a4b9;
+  --rose-wash: #f7e6ee;
+  --cinnabar: #5d3f73;
+  --cinnabar-line: #80629a;
+  --blue: #4a5fa6;
+  --blue-text: #35498a;
   --display: "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", "Iowan Old Style", Georgia, serif;
   --body: "Spectral", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
   --mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --ground: #121735; --ground-2: #19204a; --ground-3: #212a5c; --card: #171d42;
-    --ink: #efe9dc; --ink-2: #c6c2bb; --ink-3: #9a9db8; --rule: #2a3364; --rule-2: #414b85;
-    --gold: #e0c074; --gold-line: #b8923a; --gold-hair: #4d4638; --gold-wash: #1f2647;
-    --rose: #f296b6; --rose-line: #d96a93; --rose-hair: #5a3350; --rose-wash: #2a2048;
-    --cinnabar: #c9a9d8; --cinnabar-line: #a787ba; --blue: #7a8fdc; --blue-text: #8fa2e0;
-    color-scheme: dark;
-  }
+  color-scheme: light;
 }
 :root[data-theme="dark"] {
-  --ground: #121735; --ground-2: #19204a; --ground-3: #212a5c; --card: #171d42;
-  --ink: #efe9dc; --ink-2: #c6c2bb; --ink-3: #9a9db8; --rule: #2a3364; --rule-2: #414b85;
-  --gold: #e0c074; --gold-line: #b8923a; --gold-hair: #4d4638; --gold-wash: #1f2647;
-  --rose: #f296b6; --rose-line: #d96a93; --rose-hair: #5a3350; --rose-wash: #2a2048;
-  --cinnabar: #c9a9d8; --cinnabar-line: #a787ba; --blue: #7a8fdc; --blue-text: #8fa2e0;
+  --ground: #243143; --ground-2: #2c3b50; --ground-3: #35465e; --card: #293749;
+  --ink: #ede8dc; --ink-2: #c8c6bf; --ink-3: #a6aebd; --rule: #36465b; --rule-2: #4c5f78;
+  --gold: #dfc079; --gold-line: #b8943f; --gold-hair: #55503f; --gold-wash: #2f3c4f;
+  --rose: #f0a0bb; --rose-line: #d9779c; --rose-hair: #6a4860; --rose-wash: #3a3350;
+  --cinnabar: #cdb0da; --cinnabar-line: #a98fbb; --blue: #8ea4de; --blue-text: #9db3e6;
   color-scheme: dark;
 }
-/* Surfaces: the band, the popover, the paper's grain, and the indigo plate the chariot sits on in either theme. */
+/* Surfaces: the band, the popover, the paper's grain, and the slate plate the chariot sits on in either theme. */
 :root {
-  --band: rgba(246, 245, 250, 0.9);
-  --veil: rgba(23, 27, 58, 0.16);
-  --pop-bg: #171b3a;
-  --pop-ink: #ece6d6;
-  --pop-ink-2: #c3c0b4;
-  --pop-gold: #dcbc6e;
-  --pop-rule: #2d3a6e;
-  --plate: #172048;
-  --plate-2: #1d2856;
-  --plate-ink: #ece6d6;
-  --plate-ink-2: #c3c0b4;
-  --plate-ink-3: #9da0b8;
-  --plate-gold: #dcbc6e;
-  --plate-gold-line: #b48d33;
-  --plate-frame: #6d5b2f;
-  --plate-rule: #2d3a6e;
+  --band: rgba(219, 229, 240, 0.9);
+  --veil: rgba(23, 33, 47, 0.16);
+  --pop-bg: #223046;
+  --pop-ink: #ece7da;
+  --pop-ink-2: #c5c3ba;
+  --pop-gold: #dcbd72;
+  --pop-rule: #3c4d66;
+  --plate: #2e3f58;
+  --plate-2: #374a66;
+  --plate-ink: #ece7da;
+  --plate-ink-2: #c5c3ba;
+  --plate-ink-3: #a3acbc;
+  --plate-gold: #dcbd72;
+  --plate-gold-line: #b48f3a;
+  --plate-frame: #7a6a3e;
+  --plate-rule: #445874;
   --gild-1: #f2dc9f;
   --gild-2: #cfa84f;
   --gild-3: #8f6d26;
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .1 0 0 0 0 .13 0 0 0 0 .26 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   --plate-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .93 0 0 0 0 .9 0 0 0 0 .84 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --band: rgba(18, 23, 53, 0.88); --veil: rgba(4, 7, 24, 0.55);
-    --pop-bg: #26326b; --pop-rule: #3a4785;
-    --plate: #10173a; --plate-2: #172048; --plate-frame: #5e4f2b; --plate-rule: #2a376b;
-    --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .93 0 0 0 0 .9 0 0 0 0 .84 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    color-scheme: dark;
-  }
-}
 :root[data-theme="dark"] {
-  --band: rgba(18, 23, 53, 0.88); --veil: rgba(4, 7, 24, 0.55);
-  --pop-bg: #26326b; --pop-rule: #3a4785;
-  --plate: #10173a; --plate-2: #172048; --plate-frame: #5e4f2b; --plate-rule: #2a376b;
+  --band: rgba(36, 49, 67, 0.88); --veil: rgba(8, 12, 20, 0.55);
+  --pop-bg: #3a4b64; --pop-rule: #51647f;
+  --plate: #1f2b3b; --plate-2: #27354a; --plate-frame: #6a5c35; --plate-rule: #3a4a61;
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .93 0 0 0 0 .9 0 0 0 0 .84 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   color-scheme: dark;
 }

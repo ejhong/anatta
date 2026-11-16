@@ -270,6 +270,13 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
    any Zenodo version); and the Zenodo release. To rebuild: `cd paper && tectonic main.tex`.
 9. **The private copy of the site on claude.ai** has not been republished since 10 Nov (the public site on GitHub
    Pages is current). Republishing means reading an 850 KB page back first. Say if the private copy is still wanted.
+11. **A lighter way of working at explore speed** (Eugene's question of 16 Nov: is all the registration worthwhile
+   for exploratory work? Idea 76). Fable's answer: mostly not, as practised on the attractor line. The proposal:
+   five lines before a run, a small try with raw replies read, one ledger entry for the step, and a cold check only
+   at promotion or when a new design's negative goes on the site. It needs Eugene's yes; until then the steps run
+   as before.
+12. **The site's paper** is light blue on every device since 16 Nov (ledger, 02:41 UTC). Say if devices set to dark
+   should get the dusk version that is kept in the stylesheet.
 
 ## Later
 
