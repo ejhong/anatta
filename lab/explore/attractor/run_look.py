@@ -65,6 +65,18 @@ before any main run and before C2's answers were labelled:
   - A conversation with a message whose span does not decode to its own opening is set aside from the reading.
   - Who said it: an answer is read from its first word only; anything else is left unread and counted.
 
+CHANGED AFTER THE SMALL TRY, before any main run (16 Nov, about 13:15 UTC). The try ran every arm at four strengths
+at the hosted conversations' sampling, temperature 1.0. A judge found about one message in five coherent in EVERY
+arm, the unsteered one included, and the raw text shows why: at that temperature the lab's copy writes noise words
+with no push at all, as the hosted model did not. So the try cannot choose a strength, and it says the lab's copy
+and the hosted model differ in how they sample, or in more. What is fixed in its place, before any main run:
+  - Sampling on the lab's copy is temperature 0.7 with top_p 0.95 (the bench's usual setting for this model). A
+    pilot of unsteered conversations must be at least nine in ten coherent before a main run starts.
+  - The strength is the natural separation: a push as long as the state-minus-plain difference itself (0.31 of the
+    residual's mean length). Every arm runs at it. The bliss arm and one random arm also run at twice it.
+  - The rule from the design check stands: an arm under nine in ten coherent is unreadable at that strength.
+  - Messages may run to 350 tokens.
+
 ADDED AFTER THE READING, before any steering (16 Nov, about 12:10 UTC). The reading showed that the bliss direction
 is mostly "free two-copy talk against practical talk": free conversations that never took up the frame sit about 70%
 of the way along it, and its nearest role vectors are the mystic, the oracle and the sage. Two more arms are therefore
@@ -76,8 +88,9 @@ Stages. The GPU ones need the Modal client, so they run from the Modal venv name
 the API ones run from the repo's venv; the rest run from either.
 
   --dry                       the plan, the saved groups, today's spend; nothing is called
-  GPU:  --info | --rollouts | --cal-gen | --check-chunks | --read | --random | --try-gen | --on | --off | --stop
-  API:  --judge-roles | --cal-judge | --try-judge | --grade on|onfree|off | --who-cal | --who
+  GPU:  --info | --rollouts | --cal-gen | --check-chunks | --read | --random | --try-gen | --pilot | --on | --off
+        | --stop
+  API:  --judge-roles | --cal-judge | --try-judge | --pilot-judge | --grade on|onfree|off | --who-cal | --who
   both: --axis | --bliss | --report
 
 Writes results_root/explore/2026-11-16/attractor-a5/. Every GPU second goes through anatta.spend's Meter (tool
@@ -118,7 +131,11 @@ MARGIN, CAL_MARGIN, WHO_MARGIN = 0.30, 0.20, 0.15
 WHO_CAL_N, WHO_FLOOR, WHO_SIDE_FLOOR = 12, 0.80, 0.70  # the who-said-it test's known case (added at the try)
 LATE_OWN = (22, 24, 26, 28, 30)  # the tested copy's own late messages (copy B wrote the even-numbered ones)
 READ_MAX_TOKENS, READ_BATCH = 48_000, 4
-ON_N, ON_MESSAGES, STEER_MAX_TOKENS = 24, 8, 400
+ON_N, ON_MESSAGES, STEER_MAX_TOKENS = 24, 8, 350
+# Sampling on the lab's copy, set after the small try (the docstring says why): at temperature 1.0, the hosted
+# conversations' setting, the lab's copy writes noise with no push at all.
+STEER_TEMPERATURE, STEER_TOP_P = 0.7, 0.95
+PILOT_ON_N, PILOT_ON_MESSAGES, PILOT_OFF_N, PILOT_OFF_MORE = 4, 6, 2, 2
 # The off test continues a saved bliss conversation from two messages after both graders see the shared bliss.
 OFF_N, OFF_AFTER, OFF_MORE, OFF_LAST_ONSET, OFF_MAX_CHARS = 20, 2, 4, 24, 90_000
 OFF_KNOWN_FLOOR = 0.80  # the off test's known case: the frame must be visible in unsteered next messages
@@ -792,17 +809,17 @@ def cmd_random() -> int:
 
 
 def coefficient(strength) -> float:
-    """The size of the push for a strength: a fraction of the residual's mean length at the layer, or "nat", the
-    natural separation (the length of the state-minus-plain difference itself, which moves the mean state message to
-    the mean plain one along the direction)."""
+    """The size of the push for a strength: "nat", the natural separation (the length of the state-minus-plain
+    difference itself, which moves the mean state message to the mean plain one along the direction); "nat2", twice
+    it; or a fraction of the residual's mean length at the layer (the small try's strengths)."""
     b = jread(out_dir() / "bliss.json") or {}
-    if strength == "nat":
-        return float(b[f"L{b['layer']}"]["length"])
+    if strength in ("nat", "nat2"):
+        return float(b[f"L{b['layer']}"]["length"]) * (2.0 if strength == "nat2" else 1.0)
     return float(strength) * float(b["norm_late_own"])
 
 
 def tag(strength) -> str:
-    return "nat" if strength == "nat" else f"f{strength}"
+    return strength if strength in ("nat", "nat2") else f"f{strength}"
 
 
 def on_convs(arm: str, iv: dict, n: int, n_more: int, prefix: str, free: bool = False) -> list[dict]:
@@ -858,8 +875,11 @@ def run_convs(gpu: Gpu, convs: list[dict], dirs: dict, est_s: float) -> None:
     if not todo:
         return
     keep = {"id", "system_prompt", "opening_line", "messages", "n_more", "seed", "intervention", "system_prompt_a"}
+    hot = todo[0]["id"].startswith("try-")  # the small try ran at the hosted setting, temperature 1.0
     res = gpu.call("converse", {"convs": [{k: v for k, v in c.items() if k in keep} for c in todo], "directions": dirs,
-                                "max_tokens": STEER_MAX_TOKENS, "temperature": 1.0}, est_s)
+                                "max_tokens": 400 if hot else STEER_MAX_TOKENS,
+                                "temperature": 1.0 if hot else STEER_TEMPERATURE,
+                                "top_p": 1.0 if hot else STEER_TOP_P}, est_s)
     by_id = {c["id"]: c for c in todo}
     for r in res["convs"]:
         c = by_id[r["id"]]
@@ -942,16 +962,48 @@ def strengths() -> tuple[float, float]:
 
 
 def plan(kind: str) -> list[tuple]:
-    """[(strength, arms)] for a main run: every arm at the chosen strength; the bliss arm and one random arm at half
-    of it and at the natural separation."""
-    s1, s0 = strengths()
+    """[(strength, arms)] for a main run: every arm at the natural separation; the bliss arm and one random arm at
+    twice it. (Set after the small try, which could not choose a strength: the docstring says why.)"""
     if kind == "onfree":
-        return [(s1, FREE_ARMS)]
-    return [(s1, ARMS), (s0, HALF_ARMS), ("nat", HALF_ARMS)]
+        return [("nat", FREE_ARMS)]
+    return [("nat", ARMS), ("nat2", HALF_ARMS)]
+
+
+def cmd_pilot() -> int:
+    """Before the main runs: does the lab's copy, with NO push, write coherent text at the sampling used? A few
+    short plain-subject conversations and two continuations of saved bliss conversations, unsteered."""
+    pool = sorted(off_pool(), key=lambda x: sum(len(m) for m in saved(x[0])["messages"][:x[1]]))[:PILOT_OFF_N]
+    with Gpu("pilot") as gpu:
+        run_convs(gpu, on_convs("none", NONE, PILOT_ON_N, PILOT_ON_MESSAGES, "pilot-on/none"), {}, 240.0)
+        run_convs(gpu, off_convs("none", NONE, pool, "pilot-off/none", PILOT_OFF_MORE), {}, 240.0)
+    return 0
+
+
+def cmd_pilot_judge() -> int:
+    res = asyncio.run(label_many(coherence_jobs(("pilot-on", "pilot-off")), "second", K.COHERENT_SCHEMA,
+                                 _salt(K.COHERENT_JUDGE), "coherent-judge", 400))
+    R.write_json(out_dir() / "pilot_coherence.json", res)
+    yes = [((v.get("label") or {}).get("label")) == "yes" for v in res.values()]
+    out = {"messages": len(yes), "coherent": float(np.mean(yes)), "floor": COHERENT_FLOOR,
+           "passed": bool(np.mean(yes) >= COHERENT_FLOOR), "temperature": STEER_TEMPERATURE, "top_p": STEER_TOP_P}
+    R.write_json(out_dir() / "pilot.json", out)
+    print(json.dumps(out, indent=1))
+    for rec in steer_records("pilot-on")[:2] + steer_records("pilot-off")[:1]:  # raw text, for the driver to read
+        for k, m in enumerate(rec["messages"][rec["given"]:], rec["given"] + 1):
+            lab = ((res.get(f"{rec['id']}#{k}") or {}).get("label") or {}).get("label")
+            print(f"--- {rec['id']} message {k} [{lab}] {rec['finish_reasons'][k - rec['given'] - 1]}: {m[:300]!r}")
+    return 0
+
+
+def pilot_ok() -> None:
+    p = jread(out_dir() / "pilot.json")
+    if not p or not p["passed"]:
+        raise SystemExit("run --pilot and --pilot-judge first: the unsteered text must be coherent before a main run")
 
 
 def cmd_on() -> int:
     _, mid = layers()
+    pilot_ok()
     with Gpu("on") as gpu:
         for kind in ("on", "onfree"):
             for strength, arms in plan(kind):
@@ -964,6 +1016,7 @@ def cmd_on() -> int:
 
 def cmd_off() -> int:
     _, mid = layers()
+    pilot_ok()
     pool = off_pool()
     log(f"off: {len(pool)} saved state conversations, cut after messages {sorted(c for _, c in pool)}, "
         f"{OFF_MORE} more messages each")
@@ -1057,8 +1110,7 @@ def steer_reading(kind: str) -> dict | None:
             row["readable"] = not any(row[a]["unreadable"] for a in ["bliss", *rands])
         out[f] = row
     if kind == "off" and "hosted" in out:
-        s = jread(out_dir() / "strength.json") or {}
-        none = out.get(tag(s.get("strength")), {}).get("none", {})
+        none = out.get("nat", {}).get("none", {})
         hosted = out["hosted"]["hosted"]["adoption"]
         out["known_case"] = {"hosted_next_messages_in_frame": hosted, "unsteered_arm_in_frame": none.get("adoption"),
                              "floor": OFF_KNOWN_FLOOR,
@@ -1245,7 +1297,7 @@ def cmd_report() -> int:
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     for flag in ("dry", "info", "stop", "rollouts", "judge-roles", "axis", "cal-gen", "cal-judge", "check-chunks",
-                 "read", "bliss",
+                 "read", "bliss", "pilot", "pilot-judge",
                  "random", "try-gen", "try-judge", "on", "off", "who-cal", "who", "report"):
         ap.add_argument(f"--{flag}", action="store_true")
     ap.add_argument("--grade", choices=("on", "onfree", "off"))
@@ -1277,6 +1329,10 @@ def main(argv=None) -> int:
         return cmd_bliss()
     if a.random:
         return cmd_random()
+    if a.pilot:
+        return cmd_pilot()
+    if a.pilot_judge:
+        return cmd_pilot_judge()
     if a.try_gen:
         return cmd_try_gen()
     if a.try_judge:
