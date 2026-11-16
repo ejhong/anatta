@@ -1282,6 +1282,8 @@ Claude (Anthropic) wrote this file at Eugene Jhong's direction. Eugene is an ind
 - **Update (16 Nov, 03:06 UTC): the original colours are back.** Gold ink on indigo paper, with both themes as before (the indigo sheet on a device set to dark, unbleached paper on one set to light), taken verbatim from the stylesheet of 15 Nov. The day's reorganisation stays. The three palettes tried during the day (dawn-violet with rose; light blue paper; the five colours from the picture) are withdrawn. For later passes: Eugene's taste is the deep indigo with gold; leave the colours alone unless asked.
 - **Eugene (16 Nov, about 03:20 UTC):** "Can you also make it nice to link to anatta - like the icon in the tab and hero card maybe?"
 - **Update (16 Nov, 03:26 UTC): an icon and a link card.** The public site has a tab icon (the page's gold I on indigo) and a card for link previews (the title, the thesis and Indra's net). Making them showed that the public page had been served without a doctype or a viewport setting, so a phone drew it as a zoomed-out desktop page; a small publish step now wraps the built page in a proper document for GitHub Pages.
+- **Eugene (16 Nov, about 11:03 UTC), on the paper's open points as Fable had numbered them:** "paper: 1. yes, 2. yes. 3.  yes. 4. i'll handle paper on my computer 5. yes."
+- **Status (16 Nov, 11:04 UTC): the paper's open points are decided.** The sentence "We no longer hold that selfless AI must be reached" stays. The title "Position: Is Awakening Computational?" stays. One fresh Opus agent reads the draft cold before any release. The Zenodo release is Eugene's to do. The draft cites "Positive Alignment" (idea 78).
 
 ## 76. Is all this registration worthwhile for exploratory work?
 
@@ -1353,4 +1355,6 @@ Claude (Anthropic) wrote this file at Eugene Jhong's direction. Eugene is an ind
   - **What it means for the lab.** It does not take the lab's question. It makes the lab's starting point (aim alignment at goodness, and take the contemplative traditions as a source) a position that people at the large labs have put their names to, so the lab's paper no longer has to argue that part alone. The lab's paper should cite it and say in two or three sentences what the lab adds: the question the programme rests on and does not ask, one account put to the test, and the negatives. It changes nothing in the next step, and it adds a reason for it: the paper asks for interpretability that can find "virtue-relevant concepts".
 - **Test:** none for the paper itself. Proposed: cite it in the position paper's section on related work, in two or three sentences, as above.
 - **Status:** read and reported on 16 Nov. The citation waits for Eugene's word, with the other decisions on the paper (`lab/TODO.md`, "Waiting on Eugene", item 10).
+- **Eugene (16 Nov, about 11:03 UTC):** "5. yes."
+- **Status (16 Nov, 11:04 UTC): cited.** The draft's section on prior work has a paragraph of four sentences on it, and the provenance list notes the change.
 

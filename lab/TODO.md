@@ -298,7 +298,12 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
    awakening computational?" stays weak); and what follows step 4 on the attractor line: the cheap rerun that
    may settle it (about $5), the cross-model table ($300 to $500, past the present approval), or the parked
    training test ($66).
-10. **The position paper, draft of version 4** ("Position: Is Awakening Computational?", idea 75). On the site
+10. (Decided on 16 Nov at about 11:03 UTC; ledger, 11:04 UTC. The sentence stays, the title stays, one fresh
+   Opus agent reads the draft cold, the draft cites "Positive Alignment" (idea 78), and **the Zenodo release is
+   Eugene's to do on their own computer**. For that release the PDF still needs its date line changed from
+   "Draft of version 4" and a provenance entry with the new version's DOI: Fable does both when Eugene sends
+   the reserved DOI, as in `lab/claim/zenodo_preprint.md`. What the item said before:)
+   **The position paper, draft of version 4** ("Position: Is Awakening Computational?", idea 75). On the site
    since 16 Nov at Eugene's word, beside version 3 (ledger, 01:34 UTC): linked from Aim, the Possibilities room and
    the footer. Still Eugene's to say: the sentence in section 6 that the lab no longer holds that selfless AI must
    be reached; the final title; whether one fresh Opus agent should read the draft cold (Fable recommends it before

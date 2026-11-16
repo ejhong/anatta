@@ -10250,3 +10250,11 @@ There are two ways to fix a hub:
   - Eugene also asked what the inside look is; Fable answered in plain terms from idea 77 and `lab/TODO.md`. It has not started.
   - Nothing ran. Not checked by an agent. Cost: none.
 
+- **Eugene decides the position paper's open points and gives the go for all of the inside look** (Fable, 11:04 UTC on 16 Nov, read off the clock).
+  - Eugene, at about 11:03 UTC, to the five points as Fable had numbered them: "paper: 1. yes, 2. yes. 3.  yes. 4. i'll handle paper on my computer 5. yes.  yes - do all the inside look."
+  - **1. The sentence stays:** "We no longer hold that selfless AI must be reached" (the section on the recipe). **2. The title stays:** "Position: Is Awakening Computational?" **3. One cold read** of the draft by a fresh Opus agent, before any release. **4. The Zenodo release is Eugene's to do**, on their own computer; Fable does not drive it. **5. The draft cites "Positive Alignment"** (arXiv 2605.10310; idea 78).
+  - Done with this entry: the citation, as a paragraph of four sentences in the section on prior work and a line in the provenance list; the PDF rebuilt (22 pages); and the README's paper line, which named version 3's title over a link to the draft, now names both versions. The cold read is made on this commit, and its report will be filed under `lab/ledger/checks/`.
+  - What the release still needs from the PDF: its date line reads "Draft of version 4", and the provenance list has no entry for a released version 4 with its DOI. Fable does both when Eugene sends the reserved DOI.
+  - **The inside look.** Eugene's go covers all of it: the on-and-off test, the state's place on the published axis, and the who-said-it test from outside. It starts in this session, at Eugene's word, under the lighter paperwork (10:48 UTC). About $20 to $40; the redirect has about $37.61 left of the $175 approved.
+  - Not checked by an agent. Cost: none so far.
+

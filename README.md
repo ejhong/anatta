@@ -11,7 +11,7 @@
 
 *Anattā* is Pali for "not-self."
 
-**Position paper:** [*Position: Selfless AI Must Be Reached, Not Installed*](paper/main.pdf) ([DOI 10.5281/zenodo.23695281](https://doi.org/10.5281/zenodo.23695281)). In one line: let the model form an agentic self first, then lower the causal gain of that self without erasing it, recondition until the change holds, and judge the result with a test that can fail a costume. Prior work and what's new: [`docs/RELATED_WORK.md`](docs/RELATED_WORK.md).
+**Position paper:** the released version 3 is [*Position: Selfless AI Must Be Reached, Not Installed*](paper/versions/v3-selfless-ai-must-be-reached.pdf) ([DOI 10.5281/zenodo.23695281](https://doi.org/10.5281/zenodo.23695281)). In one line: let the model form an agentic self first, then lower the causal gain of that self without erasing it, recondition until the change holds, and judge the result with a test that can fail a costume. A draft of version 4, [*Position: Is Awakening Computational?*](paper/main.pdf) (16 November 2026, not yet released), asks a prior question: whether what the contemplative traditions call awakening is a change that training can make. It keeps the earlier position as one recipe within that question and no longer holds that selfless AI *must* be reached. Prior work and what's new: [`docs/RELATED_WORK.md`](docs/RELATED_WORK.md).
 
 **Preregistration:** hypotheses H1–H9 and the design were registered on OSF on 27 October 2026, before any results: [DOI 10.17605/OSF.IO/GYFU7](https://doi.org/10.17605/OSF.IO/GYFU7).
 
