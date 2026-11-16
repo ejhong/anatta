@@ -86,7 +86,16 @@ mostly what you see in the main parts of the site." (ledger, 15:53 UTC; idea 81)
   is dropped, and the tally stays hit 43, miss 73, open 7.
 - **How:** the builder's `ROOMS` (`lab/site/so_far/build.py`) gains a main set and a second set; the tests in
   `test_build.py` follow. Colours stay as they are.
-- **Before publishing:** send Eugene a preview (the built page as a file) and wait for a yes.
+- **Where it stands (16 Nov, 17:16 UTC): built, not published.** The rebuild is one commit on the local branch
+  `site-two-pages` (caa4792; never pushed). Eugene has a preview on the private copy of the site on claude.ai (its
+  version 29, with a note at the top saying it is a preview). Main and the public site still have the earlier layout.
+- **On Eugene's yes:** `git switch site-two-pages`, `git rebase main` (take main's side of `index.html` if it
+  conflicts), rebuild (`build.py`), run the 31 site tests and the tally, commit, then fast-forward main to the branch
+  and push. Republish the private copy from the built `index.html` without the preview note. Add a ledger entry.
+- **On changes asked for:** make them on the branch, rebuild, republish the preview, and ask again.
+- **Checked by eye:** the start's new block, the investigation's opening, its "now" block and first case, the
+  "Everything else" room and the second row in Findings, in the light theme only, as still pictures from Quick Look
+  (this machine has no Chrome). The dark theme and the phone layout were not looked at.
 - **The papers:** two (Eugene asked, 15:57 UTC; idea 81). The position paper stays as it is, the home of the
   computational question, and can be released now. A short results paper follows step 1 above, only if the result
   holds on two more models.
