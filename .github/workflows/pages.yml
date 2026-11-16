@@ -1,9 +1,10 @@
-# Serves the lab site (lab/site/so_far/index.html, built by build.py from content/) on GitHub Pages.
+# Serves the lab site (lab/site/so_far/index.html, built by build.py from content/) on GitHub Pages, with the
+# position paper beside it: the current draft (paper/main.pdf) and the released version 3 (paper/versions/).
 name: pages
 on:
   push:
     branches: [main]
-    paths: [lab/site/so_far/index.html, .github/workflows/pages.yml]
+    paths: [lab/site/so_far/index.html, .github/workflows/pages.yml, paper/main.pdf, 'paper/versions/**']
   workflow_dispatch:
 permissions:
   contents: read
@@ -20,7 +21,9 @@ jobs:
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - run: mkdir _site && cp lab/site/so_far/index.html _site/index.html && touch _site/.nojekyll
+      - run: mkdir -p _site/paper && cp lab/site/so_far/index.html _site/index.html && touch _site/.nojekyll
+      - run: cp paper/main.pdf _site/paper/is-awakening-computational-v4-draft.pdf
+      - run: cp paper/versions/v3-selfless-ai-must-be-reached.pdf _site/paper/selfless-ai-must-be-reached-v3.pdf
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

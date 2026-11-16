@@ -251,11 +251,11 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
    idea 75). What Fable would bring to it: whether a human anchor is worth designing (without one, a negative on
    "is awakening computational?" stays weak), and the order of the front page (the question now stands second,
    after "What the lab is doing now").
-10. **The position paper, draft of version 4** ("Position: Is Awakening Computational?", idea 75; ledger, 01:13 UTC
-   on 16 Nov). It is in the working tree only: `paper/main.tex`, `refs.bib`, `README.md` and `main.pdf` are changed
-   and deliberately not committed, so `git status` shows them. For Eugene: read it; say whether it may be pushed to
-   main as a draft; the title; whether one fresh Opus agent should read it cold; and the Zenodo release, which is
-   theirs. To rebuild: `cd paper && tectonic main.tex`.
+10. **The position paper, draft of version 4** ("Position: Is Awakening Computational?", idea 75). On the site
+   since 16 Nov at Eugene's word, beside version 3 (ledger, 01:34 UTC): linked from Aim, the Possibilities room and
+   the footer. Still Eugene's to say: the sentence in section 6 that the lab no longer holds that selfless AI must
+   be reached; the final title; whether one fresh Opus agent should read the draft cold (Fable recommends it before
+   any Zenodo version); and the Zenodo release. To rebuild: `cd paper && tectonic main.tex`.
 9. **The private copy of the site on claude.ai** has not been republished since 10 Nov (the public site on GitHub
    Pages is current). Republishing means reading an 850 KB page back first. Say if the private copy is still wanted.
 
