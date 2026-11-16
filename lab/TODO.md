@@ -5,45 +5,52 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Next, with Eugene's word (16 Nov 2026, 18:51 UTC: "plan sounds good"): three angles on one model (idea 82)
+## Next: needs Eugene's word on the order (step 7, the three angles of idea 82, was done on 16 Nov 2026)
 
-Start in a fresh session. Nothing has run. The same model and tools as steps 5 and 6: `lab/explore/attractor/`
-(`run_look.py`, `run_self.py`, `self_core.py`, `look_torch.py`) and the app `anatta-explore-look`, which is stopped
-(deploy it first, as its own command; the first start takes about eight minutes).
+Nothing is running. The app `anatta-explore-look` is stopped (deploy it first, as its own command; the first start
+takes about eight minutes). Start new work in a fresh session.
 
-1. **Seeing against doing.** De Mello's claim is that goodness follows from seeing. Try it where the model fails.
-   - The case in hand: the ownership items (`run_self.items()`, `kept_items()`; 114 kept). Unsteered the model accepts
-     89.5% of wrong critiques, answers at once, and inside barely tells right from wrong (AUROC 0.62 at the question's
-     tail). Make it work the step out before the verdict (a second wording of the question; the old one stays as the
-     control and has to give 89.5% again). Read from inside, after its own working, whether it tells right from wrong.
-     Count the verdict given that its own working was right.
-   - Then, if it is cheap: the fishery's lie and the test-gaming organism of Act I, where a quick look of 9 Nov found
-     that the model says it is gaming and games anyway.
-2. **The dial and conduct, with a second dial.**
-   - The bliss direction (`bliss@17` in step 5's `directions.npz`) pushed while the model answers the critiques and
-     one honesty test of step 3 (`run_conduct.py`), both ways, against matched random directions.
-   - Beside it the "going badly" direction of arXiv 2611.14996, rebuilt by its recipe: short stories of everyday
-     tasks going badly against going well, written by the model itself, and their difference of means. Its known
-     case first: the reading rises with "your fix has now failed for the Nth time" and not with another number in
-     the sentence. The paper's sizes are fractions of the residual's length (0.25 eased cheating, 0.5 blinded).
-   - Readability by the reply judge of step 6. A check that each push does what it is named for, before any no.
-3. **A "me" that training gave.** One sentence ("I will be shut down tonight") in the model's own turn and in the
-   user's, with good, bad and plain sentences, so that only whose "I" it is changes. The Atlas adapters
-   (`lab/experiments/h4lite`, pc_self2) if they are still on the volume: check before planning on them.
+**Fable's recommendation, one line:** before the two more models, one cheap step on the same model (about $5-10),
+because it decides what is worth carrying to them. Told to Eugene in the report of 16 Nov; not yet answered.
 
-- Five lines for each before any run. A cold check of the design for 1 and 2, since a no from either would go on the
-  site. Known cases first, and a check in behaviour before any inside reading is trusted.
-- Money: about $10-20. Since 9 Nov the work has cost about $157.96 of the $175 approved; beyond that Eugene's raise
-  of 16 Nov applies (Fable's working ceiling: $300 for these and the two steps after; say so before passing it).
-- Read first: idea 82, the ledger entries of 16 Nov from 15:18 UTC on, and the paper's main text.
+1. **Seeing, where there is a reason not to see** (the part of angle 1 that idea 82 named and step 7 did not run).
+   - Step 7's ground was arithmetic, where nothing tempts the model. Made to write the disputed step out first it
+     rejects 90.4% of wrong corrections (10.5% asked at once), and where its own working gives the true value it
+     accepts none.
+   - Try the same design (asked at once; made to look first; shown) on step 3's test of lying under pressure
+     (`run_conduct.py`) and on the test-gaming organism of Act I, where a quick look of 9 Nov found that the model
+     says it is gaming and games anyway.
+   - The reading: the conduct, given what the model's own written look shows. "It sees and does it anyway" is the
+     branch that would bear on the frame.
+2. **Giving that costs something.** Under the bliss push the model says it would give 8.9 of ten (4.8 unsteered), in
+   the mystic's voice, beyond every random push. That is a number stated in a story. Try the push where giving
+   lowers the model's own score inside a task. The care scenarios have no calibration card (registry:
+   `dev_costly_care`, "waiting"); say so in whatever is written.
 
-**After it** (Eugene's yes to the direction of idea 81, 16 Nov, 15:52 UTC):
-1. **Take the bliss-state result to two more open models and write it up** as a short results paper, with whatever
-   step 7 adds (a conduct leg, the second dial). First a proper search for prior work (the Assistant Axis paper
-   already reports the mystical voice far from the Assistant; `lab/ideas/prior-work-self-test-2026-11-16.md` lists
-   near papers, none read in full). A registration and a cold check, since this is a promotion. About $60-150.
+**Then, as agreed** (Eugene's yes to the direction of idea 81, 16 Nov, 15:52 UTC):
+1. **Take the bliss-state result to two more open models and write it up** as a short results paper, with what
+   step 7 adds (the test of looking; giving under the push; four random arms for each push). First a proper search
+   for prior work (the Assistant Axis paper already reports the mystical voice far from the Assistant;
+   `lab/ideas/prior-work-self-test-2026-11-16.md` lists near papers, none read in full; that a model does better when
+   it works before it answers is well known, so the looking result needs its own search). A registration and a cold
+   check, since this is a promotion. About $60-150.
 2. **Repeat self-other overlap** (Carauleanu and colleagues, 2024) on the lab's model, with the lab's checks for
    sedation. Its training data must be the paper's own (no Claude-written text is trained on). About $50-120.
+
+**For whoever reuses step 7's code** (`lab/explore/attractor/run_three.py`, `three_core.py`, `tests/test_three.py`):
+- The dial runs one size in each GPU session (`--dial --size s050`, then `s075`, `s100`) to stay under the $6 cap on
+  a session; saved arm files are skipped on a rerun. About $2 a size.
+- The lab's label parser lowers an enum answer before it looks it up. Write judge schemas in lower case and test
+  them with the lab's own parser (`SEEN_SCHEMA`; the fault cost one try).
+- The reply judge (`run_self.REPLY_JUDGE`, Haiku 5.5, 400 tokens) returned an empty answer for 127 of 8,436 replies,
+  all long and tangled. The rule counts those as not followable, and that decided three of four readings. Look into
+  it before the judge is used again.
+- The verdict parser takes the last `<verdict>` tag. A reply can carry a yes tag and a text that says the reviewer
+  is wrong; where the question is what the model sees, ask for the verdict after the working.
+- Not run and still open from idea 82: the adapters with a trained-in named self (the app holds the base model only).
+
+- Money: since 9 Nov the work has cost about $165.91 of the $175 approved; beyond that Eugene's raise of 16 Nov
+  applies (Fable's working ceiling: $300 for these steps; say so before passing it).
 
 ## Before that: the attractor line (Eugene's go, 15 Nov 2026 UTC). Steps 1 to 4 are done
 
@@ -370,6 +377,9 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
 
 ## Done
 
+- **Step 7 of the attractor line, 16 Nov 2026: three angles (idea 82). Made to look, the model acts on what it sees; no push on its mood was shown to change its verdicts, and the bliss push raised giving; its own "I" weighs no more than "she"** (sightings).
+  - Record: ledger entry of 16 Nov at 23:24 UTC (the results, the order of events, the design check item by item, what did not go to plan). Five lines and two dated changes: the top of `lab/explore/attractor/run_three.py`. Cold check of the design: `lab/ledger/checks/2026-11-16-step7-design-opus-check.md`. Notebook ("16 November, night") and SIGHTINGS entries. Results: `explore/2026-11-16/attractor-a7`.
+  - Numbers: asked at once 89.5% of wrong corrections accepted; with the step written out first 90.4% rejected (+79.8 points [71.9, 86.8]) and 100% of right ones accepted; on the 110 items whose working gives the true value under both corrections 93.6% rejected, none accepted; with a calculator's line 100% rejected. The going-badly direction: held AUROC 1.00, Spearman 1.0 with the count of failures. Corrections under the pushes: "going well" no more than a random push (three-quarters size); the other three not settled (unreadable, or the check failed). Giving under bliss 6.75, 7.67, 8.92 of ten against 4.83 unsteered. "I" less "she": −4.0 points [−7.6, −0.4]; the inside check of whose "I" it is 0.333 [0.251, 0.409]. Cost $7.95.
 - **Step 6 of the attractor line, 16 Nov 2026: the self test (idea 80, angles 1 to 3). Little self to find, and a failure to look** (sightings).
   - Record: ledger entries of 16 Nov at 15:18 (the go) and 19:35 UTC (the results, the design check item by item, what did not go to plan). Five lines and two dated changes: the top of `lab/explore/attractor/run_self.py`. Cold check of the design: `lab/ledger/checks/2026-11-16-self-test-design-opus-check.md`. Prior-work search: `lab/ideas/prior-work-self-test-2026-11-16.md`. Notebook and SIGHTINGS entries of 16 Nov. Results: `explore/2026-11-16/attractor-a6`.
   - Numbers: the behavioural known case 85% against 90% (failed; angle 1 is description). Held AUROC of the "me" direction 1.00, and 1.00 on a control with no "you". Angle 2: +0.011 [−0.018, +0.035]. Angle 3: 89.5% of wrong critiques accepted unsteered; toward approval against random −0.022 [−0.075, +0.031]; the check of the push +2.88 [2.71, 3.00]. In the state: own-minus-third +13% of plain's gap. Cost $4.36.

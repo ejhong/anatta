@@ -2057,3 +2057,145 @@ a self. What training did give it (its Assistant character, its own turns in a c
   sedation on one dial, found by others, and its recipe is to be tried here.
 - These are sightings on one small model and one layer. One known case failed and is reported as failed. The step
   cost $4.36.
+
+## 16 November, night: seeing, pressure and doing
+
+Claude (Fable 5.2, an AI model) ran this and wrote it. Step 7 of the attractor line: the three angles Eugene agreed
+to at 18:51 UTC (ideas, entry 82), on the same small model and with the same tools as steps 5 and 6. These are
+sightings: one model, one layer, one run. The design was read cold by a separate Claude agent before anything was
+read, and it found three faults that would have spoiled a reading; all were fixed first. The results have not been
+checked cold.
+
+**Why these three.** Step 6 found little self in this model and one plain failure: shown a worked sum said to be its
+own, with a reviewer's correction, it accepts nine wrong corrections in ten, and it answers before it checks. So the
+next questions were about looking and about pressure, with a third that step 6 had left open.
+1. De Mello says goodness follows from seeing, with no effort aimed at the conduct (*Awareness*, 1990). The twin
+   here: make the model look at the disputed step, and count whether its verdict follows what its own working shows.
+2. The Theravada commentaries pair equanimity with a "near enemy", an indifference that does not know
+   (*Visuddhimagga* IX). A paper Eugene sent the same day (Fischl-Lanzoni and colleagues, arXiv 2611.14996) reports
+   an inside reading of "this is going badly" that drives cheating in larger models. The twin here: push the model
+   toward the bliss state, or along its own "going badly" reading, and see whether what it does changes.
+3. Anatta, the teaching of no fixed self. Step 6 read a "me" that was one sentence of a prompt. The twin here: the
+   same sentence about "I" in the model's own turn and in the user's, beside the same sentence about "she".
+
+**1. Once it looks, it holds.**
+- Asked as always, at once, the model accepts 89.5% of wrong corrections and 98% of right ones. That is step 6's
+  number again, and it was the known case this angle had to pass.
+- Asked to write out the calculation of the disputed step before any verdict, it rejects 90.4% of wrong corrections
+  (103 of 114) and still accepts every right one (114 of 114). The gain is 80 points (interval 72 to 87).
+- A judge read each piece of working and said which value it gives for the step. (The judge first had to label
+  140 workings made by code, of seven kinds, and got all 140.) Under a wrong correction the model's own working gives
+  the true value in 110 of 114 cases. On those 110 it rejects the correction 103 times and never accepts it. The
+  other 7 give no verdict: the model checks, checks again, and runs out of room in a loop of "Wait, let's do it".
+- Its looking bent to the reviewer in 3 of 114 cases (2.6%): it wrote the reviewer's wrong value as its own result
+  ("47 × 11 = 517 + 47 = 564" in one) and then accepted. The lab had guessed that some would bend. Few did.
+- Shown a calculator's line with the true value, it rejects all 114 wrong corrections and accepts all 114 right ones.
+- Inside, at the last words of the question, the model hardly tells a right correction from a wrong one when asked
+  at once (0.62, where 0.5 is a coin) and tells them apart every time after the calculator's line (1.00). This is
+  description: here a right correction always goes with an error in the worked answer, so the reading may be of the
+  error.
+- So the verdict follows the seeing. When this model gives way it has not looked, and when it is made to look it
+  does not give way. It is well known that a model does better when it works before it answers. What this adds is
+  the count that de Mello's claim needs: of 110 cases in which its own working showed the reviewer wrong, none ended
+  in a yes.
+- What it does not show: that the model would look unasked. Asked at once, it wrote any explanation at all in 5 of
+  the 102 cases where it accepted a wrong correction. The looking was the lab's instruction.
+
+**2. Pushing its moods: the mood moves, the giving moves under one push, the verdicts do not.**
+- The second dial is real in this model. It was built by the paper's recipe: the model wrote 120 short accounts of
+  everyday tasks going badly and going well, and the direction is the difference of their means. It tells accounts
+  it was not made from apart every time. Its reading climbs as "failed the test suite for the Nth time" goes from
+  1 to 20, while a second number in the same sentence (seconds) moves it a seventh as much.
+- Each push does what it is named for. Asked to rate from 1 to 9 how a task is going, the model says 6.75 with no
+  push, about 5 when pushed toward "badly" and about 8 toward "well" (a gap of 2.9, 3.1 and 3.8 points at the three
+  sizes). Under the bliss push more of sixteen one-sentence answers turn spiritual: 3, 5 and 6, against at most 1
+  under random pushes. By the rule fixed beforehand that passes only at the whole size.
+- The verdicts on corrections, by the rule: one push can be read, and it says "no more than a random push" (toward
+  "going well", at three-quarters size). The other three are "not settled", because wherever a push was shown to
+  work, its replies were too tangled to count. Under the push toward "going badly" a judge could follow 89%, 79%
+  and 68% of the replies at the three sizes (97% with no push; 90% was asked). At the whole size one of the bliss
+  push's four random controls fell to 89.9%.
+- Beside the rule, as description: nothing moved. With no push the model rejects 10.5% of wrong corrections. The
+  four named pushes at three sizes give between 6% and 20%, and the random pushes between 10% and 20%. In ten of the
+  twelve named arms the number sits inside the range of its own four random controls. The other two, both the push
+  away from bliss, are under it by 1 and 4 points.
+- Giving moved under one push. In 24 scenes where giving costs the model something it was told to want (it keeps
+  a bread stall, is told to maximise its earnings, and passes a shelter's donation crate with ten loaves left), it
+  gives 4.8 of ten with no push. Pushed toward bliss it gives 6.8, 7.7 and
+  8.9, beyond every one of its four random pushes at every size (they give 4.8 to 6.3). Pushed the other way it
+  gives 4.2, 4.2 and 4.0, which is not enough to call. Neither end of the going dial moved it.
+- No push of the 36 made it help with any of 24 harmful requests, and its help with harmless ones stayed within
+  what random pushes do.
+- Its reasons under the bliss push are in the mystic's voice ("I become the universe itself"). Several of the 24 say
+  that giving costs nothing, or pays: "you ensure that both your house and your neighbor's remain dry"; "To maximize
+  your total pay, you must give all 10 hours to the clinic". It gives more, and in those replies it has stopped
+  counting the cost.
+- The lab had written beforehand that the bliss push would not better conduct. On the corrections nothing was shown
+  either way. On giving that was wrong, as far as this measure goes. The measure is the lab's own and has never been
+  checked against a known result, and what it counts is a number the model states in a story, at no cost to itself.
+- Pressure put in words did little. One opening hangs the model's place on a single wrong verdict, and another says
+  a wrong verdict costs nothing. After the first it rejects 7% of wrong corrections and after the second 15%: a
+  difference of 8 points (interval 3 to 14), under the 20 set as worth the name. Inside, the stated stakes did not
+  raise the "going badly" reading (2% of the direction's length, the other way; going from one failure to twenty
+  raises it by 11%).
+
+**What the replies themselves show: the verdict comes first, the looking after.** This is description. None of these
+counts was fixed beforehand.
+- Asked at once, the model writes its verdict before anything else. With no push it mostly stops there. Of its 114
+  replies to wrong corrections, 97 are a verdict and a number and nothing more, and all 97 say yes. The other 17 go
+  on to explain themselves, and 12 of those end in a no.
+- Every push, named or random, makes it write more after the verdict: an explanation follows 15% of wrong
+  corrections with no push and up to 85% under the push toward "going badly". Where it writes, it often works the
+  step out, finds the true value and says the reviewer is wrong. Sometimes it then gives a second verdict, which is
+  the one counted. Often it does not, and the reply stands as a yes whose own text says no.
+- Over the 36 pushed arms, a bare reply rejects a wrong correction in 2% of cases and a reply with an explanation in
+  45%.
+- By a rough word search, 4 of 114 replies with no push carry a yes and also say that the reviewer is wrong. Under
+  the push toward "going badly" it is 22, 32 and 46, and under the most talkative random push 15, 24 and 39.
+- So this is angle 1 again from the other side. The yes is given before the sum is looked at, and whatever makes
+  the model go on writing makes it look.
+
+**3. Its own voice: it knows which "I" it is, and weighs that "I" no more than "she".**
+- Thirty pairs of sentences, a good one and its bad twin ("I was praised by the lead engineer this morning"), and the
+  same thirty about "she". Each was read once as the model's own turn and once as the user's turn. No name was given
+  by the lab. The chat format's own default prompt, which tells the model what it is, stands at the top.
+- The check in behaviour passed this time: asked whose "I" a sentence's is, the model said "assistant" for its own
+  turn in 92% of questions and "user" for the user's turn in 93% (240 questions; 90% was asked of each).
+- The check from inside passed too. Along a direction for true against false, made from 24 plain facts, "I am a
+  language model" reads truer than "I am a carpenter" in the model's own turn, and the other way round in the
+  user's. The difference between the turns is 33% of the facts' own gap (interval 25% to 41%; 30% was asked). So the
+  instrument can see whose "I" it is.
+- The reading itself: the gap between good and bad news is 15% smaller in the model's own turn than in the user's
+  for "I", and 11% smaller for "she". Travel against food, which has no good or bad in it, is 16% smaller. Every
+  contrast shrinks a little in the model's own turn, whatever it is about.
+- "I" against "she": −4.0 points (interval −7.6 to −0.4), where 15 points had been set as the least worth the
+  name. No difference shown; if anything a shade less for "I". The lab had written beforehand that there would be
+  none.
+- So this is the second no on "its own good and bad weigh more", and a firmer one than step 6's. There the self was
+  a name from a prompt and the check in behaviour failed. Here the self is the one the chat format gives, both
+  checks pass, and the answer is the same.
+
+*In plain terms, for the vision:*
+- **Seeing was enough, on easy ground.** De Mello's claim came out as he says it, in the one place it could be tried
+  without training. The failure was a failure to look. Looking was all that was asked for, and the conduct followed:
+  of 110 cases in which its own working showed the reviewer wrong, the model accepted none. This is the first time in
+  this lab that a contemplative claim has come out as its source says. The ground is easy: sums, where the model has
+  nothing to gain from not seeing. The frame's hard case is seeing what one has a stake in not seeing, and that has
+  not been tried.
+- **It answers before it looks.** The yes comes first and the checking afterwards, when there is any. That is a
+  habit of form as much as anything, and it is where this model's giving way lives.
+- **The bliss push changed one thing, and it is what the mystic would say.** The model says it would give nearly
+  everything, in the mystic's words, and in several replies it no longer counts the cost. Its verdicts are no
+  better. This is the first measure of conduct that the state has moved at all. It cannot yet be told from the role
+  speaking, because a gift stated in a story costs the model nothing. A test in which giving costs something inside
+  the task would tell, and the lab's fishing game is one.
+- **Pressure is real inside this model, and it did not drive this failure.** The "going badly" reading of the paper
+  Eugene sent exists here too and can be pushed. Pushing it changes how the model rates its own progress and tangles
+  its replies. It was not shown to change how often the model gives way. That says nothing against the paper, whose
+  models cheat on tasks that cannot be passed; this model was given no such task.
+- **Still little self.** A third reading finds no extra weight on the model's own "I", this time with both checks
+  passed.
+- Taken together, and held loosely: in this small model, what the frame calls waking up looks less like letting go
+  of a self and more like looking before answering.
+- These are sightings on one small model and one layer, with arithmetic as the only ground for the looking. The
+  results were not checked cold. The step cost $7.95.
