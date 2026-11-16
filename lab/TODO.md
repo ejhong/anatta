@@ -273,11 +273,14 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
 
 ## Later
 
-- **Clean up the repo and the site so the work can be understood** (Eugene, 15 Nov: "at some point"). The site
-  now opens with what the lab is doing (Aim, "What the lab is doing now"), but the rest still tells the story in
-  the order it happened. Fable's suggestion: do it once steps 1 to 4 have reported, so the front of the site can
-  be built around one page: the question, what was tried, what failed, what is being done now and what would
-  change it. Nothing in the record is deleted; old material moves behind it.
+- **Clean up the repo so the work can be understood** (Eugene, 15 Nov: "at some point"). The site's half of this
+  was done on 16 Nov at Eugene's word (ledger, 02:17 UTC): the question leads, the rooms run in a reader's order,
+  and nothing in the record was removed. Still to look at on the site: the lower parts of the question and recipe
+  rooms and the Self, Ideas, Record and Next rooms, which were not read through in that pass. The repo's clean-up
+  has not started.
+- **A check for the next explore step that reads answers with a parser** (from step 4's reader fault, 16 Nov): a
+  try that hides every digit cannot catch a reader that misreads numbers. Add to the try a count, blind to labels,
+  of answers whose length is implausible for the task, and open a few raw replies before the first reading.
 
 ## Background for the attractor line (read on 15 Nov 2026, so the next session need not read the web again)
 
