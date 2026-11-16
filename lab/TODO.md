@@ -302,6 +302,9 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
 6. (Answered on 15 Nov: the download of the benchmark's 20 published conversations and its score table is
    approved and done; ledger, 04:59 UTC. The files are in `data/machinespirituality/2026-11-15/`, outside the
    repo.)
+7. **The order after step 7** (asked in the report of 16 Nov, about 23:45 UTC). Fable recommends one cheap step on
+   the same model first (the first section of this file: looking where there is a reason not to see, and giving
+   that costs something; about $5-10), then the two more models and the self-other overlap repeat as agreed.
 7. (Answered on 15 Nov: yes, go on to step 2 as "What step 1 changes" sets out. Eugene: "i want to follow your
    plan"; ledger, 07:16 UTC.)
 8. (Answered on 16 Nov, 15:40 to 15:57 UTC; ledger, 15:53 UTC; idea 81. The direction is set, and the site is to be
