@@ -51,8 +51,38 @@ model's marking of itself: no "I", no "you", no change of grammar. The old root 
 7. Limits to say from the start: one small model; the middle layer with two beside it; directions are differences
    of means, so a null from angle 1 says the marking is not one direction at these layers, not that there is none.
 
-**After it:** the choice between idea 77's direction 3 ("does seeing make a model good?") and the parked run of
-9 Nov. Fable's view of the order is in idea 80.
+**After it** (Eugene's yes to the direction of idea 81, 16 Nov, 15:52 UTC):
+1. **Take the bliss-state result to two more open models and write it up** as a short results paper: conduct in the
+   state, the state's place inside, and the marking of whose words are whose. First a proper search for prior work
+   (the Assistant Axis paper already reports the mystical voice far from the Assistant). A registration and a cold
+   check, since this is a promotion. About $60-150.
+2. **Repeat self-other overlap** (Carauleanu and colleagues, 2024) on the lab's model, with the lab's checks for
+   sedation and the self test's "is that me?" signal as the check on mechanism. Its training data must be the
+   paper's own (no Claude-written text is trained on). About $50-120.
+3. Idea 77's direction 3 ("does seeing make a model good?") if money allows; the parked run of 9 Nov stays parked.
+
+**Money** (Eugene, 16 Nov, a few minutes after 15:52 UTC: "up the budget to whatever we need."): no figure was
+set. Fable's working ceiling is $300 for the self test and the two steps above, on top of what is left of the $175.
+Report each step's cost, and come back to Eugene before passing $300. Raise a day's cap ($50) only when a step
+needs it, by the day file and a ledger line.
+
+## Then: the site, less cluttered (Eugene, 16 Nov, about 15:55 UTC)
+
+Eugene: keep the computational framing first, as it is, "but say this is the most interesting angle to pursue at
+the moment"; and "the site is too cluttered. The non interesting/non relevant stuff should be available but not
+cluttering the main most interesting things ... the framing, and this angle you are moving towards ... should be
+mostly what you see in the main parts of the site." (ledger, 15:53 UTC; idea 81).
+
+- **Main parts:** Start (the framing as it is, then a block on the angle now and why it is the most interesting one
+  at the moment); The question (the five possibilities, as it is); a room for the angle (the bliss state: how often
+  it comes, conduct in it, where "mine" ends, the inside look, whose words; what comes next); Next.
+- **Behind them, one step away:** all the findings, the recipe, the self, ideas, instruments, the record. Nothing
+  is dropped, and the tally stays hit 43, miss 73, open 7.
+- **How:** the builder's `ROOMS` (`lab/site/so_far/build.py`) gains a main set and a second set; the tests in
+  `test_build.py` follow. Colours stay as they are.
+- **Before publishing:** send Eugene a preview (the built page as a file) and wait for a yes.
+- **The paper:** no change now. The position paper stays the home of the computational question; a short results
+  paper follows step 1 above.
 
 ## In hand on 16 Nov: the inside look (Eugene's go of about 03:12 UTC; all of it, 11:04 UTC)
 
