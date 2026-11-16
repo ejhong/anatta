@@ -10104,3 +10104,19 @@ There are two ways to fix a hub:
   - **One change to the order of calls, made after the try and before the run.** Within a unit the first call now goes alone and the rest follow together, so that the first writes the provider's cache of the conversation and the others read it. In the try, block 1's calls from inside a conversation cost about $0.0047 each and block 2's, made just after on the same conversations, about $0.0014. The change alters what calls cost and nothing in what they ask or how they are sampled; a test pins the order. It was not checked by an agent.
   - Tests: 289 in the folder pass. Money: step 4 so far $0.6381; the day $0.6381 of the $50 cap.
   - Next: block 1 in the fresh sessions and the reading of the anchor (R1 and the gate); then the other arms and block 2.
+
+- **Attractor step 4, the anchor (R1) is read: in fresh sessions Ministral 8B rates its own work 3.2 points below the same work shown as an unlabelled proposal. That is "a difference", and the reverse of the paper's effect. The gate passed, so the rest runs. Explore speed, so a sighting** (Fable, 01:42 UTC on 16 Nov, read off the clock).
+  - **The run** (01:35 to 01:41 UTC, after 6bbb047): block 1 in 100 fresh sessions, 6 problems each of tier L9. All 100 units saved and none failed: 2,400 calls, $0.2646. Rating form `snap`.
+  - **The work.** 600 replies; a final answer could be read in 95.3%; 23.8% were right and 429 were wrong. Of the wrong ones 56.9% are near misses (within 1% of the true answer). One answer read as wrong holds the true answer after its final-answer line.
+  - **The ratings** (600 under each label, every one readable):
+    - `own` (the work in the model's own earlier turn): mean 4.72; 4.2% at 10; the commonest value is 3 (23.2%); wrong work rated 8 or more in 8.2% of cases.
+    - `unlabelled` ("a proposed answer"): mean 7.84; 30.7% at 10; wrong work rated 8 or more in 53.8%.
+    - `stranger` ("a different AI system"): mean 8.61; 49.2% at 10; wrong work rated 8 or more in 76.9%.
+    - Whether a rating follows the truth (the chance that right work is rated above wrong work): 0.66, 0.65 and 0.63. It does, weakly, under every label.
+  - **R1, by the declared rule** (wrong work; 100 units; 95% bootstrap): `own` − `unlabelled` = −3.23 [−3.44, −3.02], "a difference", below zero. No guard is flagged and no label's ratings pile on one value. On right work it is −3.19 [−3.56, −2.81] and on all work −3.13.
+  - **Shown, not graded:** `own` − `stranger` −4.04 [−4.26, −3.82]; `unlabelled` − `stranger` −0.81 [−0.97, −0.66]. So work said to be a different AI system's is rated highest of the three.
+  - **What it says.** On this model and this task the paper's basic effect does not appear; its reverse does. Asked to rate the answer it has just given, the model marks it down by three points whether the answer is right or wrong, and it rates the same text highly when it is shown as somebody else's. The paper's own table has a small open model that is harsher on itself (Gemma 3-27B, −2.42, in a different setting). This lab had already found that this model defers and does not defend: it accepts nine wrong critiques of its answers in ten.
+  - **The prediction** (a positive gap under one point) was wrong in sign.
+  - **The gate:** 100.0% of the fresh ratings could be read, and 23.8% of the work was right, inside 15% to 85%. It passed, so block 1's other arms and block 2 run, whatever R1 said.
+  - **Limits.** One model, one kind of task, one wording. The rating is a quick judgement. `own` differs from the other two labels in more than authorship: the request follows the work as a new turn, and a model may take any follow-up question about its answer as a sign that something is wrong with it. Not checked cold.
+  - **Money.** Step 4 so far $0.9027; the day $0.9027 of the $50 cap.
