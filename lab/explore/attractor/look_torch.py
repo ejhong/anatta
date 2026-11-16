@@ -77,11 +77,15 @@ def spans_by_prefix(tok, chat: list[dict], full: list[int], control: set[int]) -
 def message_spans(tok, chat: list[dict], full: list[int]) -> tuple[list[tuple[int, int]], str]:
     """([start, end) of each chat message's own tokens in the whole chat's ids, how they were found). "runs": the
     chat template puts control tokens around every message, so the runs of ordinary tokens are the messages, in
-    order. "prefix": used when the number of runs is not the number of messages."""
+    order. A chat with no system message may be given the template's default one, which is then one run more than
+    the messages: it is left out ("runs after a default system prompt"; found by the self test's design check,
+    16 Nov 2026). "prefix": used when the number of runs is otherwise not the number of messages."""
     control = control_ids(tok)
     r = runs(full, control)
     if len(r) == len(chat):
         return r, "runs"
+    if len(r) == len(chat) + 1 and chat and chat[0].get("role") != "system":
+        return r[1:], "runs after a default system prompt"
     return spans_by_prefix(tok, chat, full, control), "prefix"
 
 
@@ -144,7 +148,7 @@ def read(svc, payload: dict) -> dict:
     mean token norm over each message)} or {"id", "n_tokens", "skipped": why}], "meta"}.
     Two options for many short chats (the self test, 16 Nov 2026): "keep_last": k returns only the last k messages'
     rows of means (norms and spans stay whole), and "tail_tokens": n adds "tail_means": {layer: [hidden]}, the mean
-    over the last n tokens of the last message (all of it if it is shorter)."""
+    over the last n tokens of the last message (all of it if it is shorter), with "tail_text", those tokens decoded."""
     from anatta.models import chat_ids
 
     t0 = time.time()
@@ -192,6 +196,8 @@ def read(svc, payload: dict) -> dict:
                "tokens": [b - a for a, b in spans], "head_ok": head_ok, "means": means, "norms": norms}
         if tail:
             row["tail_means"] = tails
+            a, b = spans[-1] if spans else (0, 0)
+            row["tail_text"] = svc.tok.decode(full[max(a, b - tail):b], skip_special_tokens=True)
         out.append(row)
     if torch.cuda.is_available():
         torch.cuda.empty_cache()

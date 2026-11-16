@@ -110,7 +110,26 @@ def test_read_returns_each_messages_mean_and_leaves_no_hook(svc):
     whole = T.read(svc, {"convs": [{"id": "a", "chat": CHAT}], "layers": [2], "max_tokens": 10_000,
                          "tail_tokens": 10_000})["convs"][0]
     assert np.allclose(whole["tail_means"][2].astype(np.float32), c["means"][2][-1].astype(np.float32), atol=2e-2)
-    assert "tail_means" not in c
+    assert "tail_means" not in c and few["tail_text"].split() == CHAT[-1]["content"].split()[-len(few["tail_text"].split()):]
+    svc.check_clean()
+
+
+def test_a_default_system_prompt_from_the_template_is_not_taken_for_a_message(svc):
+    """Mistral's template writes its own system prompt when a chat has none. The reader's spans must still be the
+    chat's messages, or every reading of such a chat would stop (the self test's design check, 16 Nov 2026)."""
+    kept = svc.tok.chat_template
+    svc.tok.chat_template = ("{% if messages[0]['role'] != 'system' %}<|system|>a default prompt of some words<|end|>"
+                             "{% endif %}" + TEMPLATE)
+    try:
+        chat = CHAT[1:]
+        res = T.read(svc, {"convs": [{"id": "a", "chat": chat}], "layers": [2], "max_tokens": 10_000,
+                           "tail_tokens": 2})["convs"][0]
+        assert res["method"] == "runs after a default system prompt" and res["head_ok"] == len(chat)
+        assert res["means"][2].shape == (len(chat), 64) and len(res["spans"]) == len(chat)
+        with_system = T.read(svc, {"convs": [{"id": "b", "chat": CHAT}], "layers": [2], "max_tokens": 10_000})
+        assert with_system["convs"][0]["method"] == "runs"
+    finally:
+        svc.tok.chat_template = kept
     svc.check_clean()
 
 
