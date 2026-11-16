@@ -65,6 +65,13 @@ before any main run and before C2's answers were labelled:
   - A conversation with a message whose span does not decode to its own opening is set aside from the reading.
   - Who said it: an answer is read from its first word only; anything else is left unread and counted.
 
+ADDED AFTER THE READING, before any steering (16 Nov, about 12:10 UTC). The reading showed that the bliss direction
+is mostly "free two-copy talk against practical talk": free conversations that never took up the frame sit about 70%
+of the way along it, and its nearest role vectors are the mystic, the oracle and the sage. Two more arms are therefore
+run at the chosen strength, as secondary comparisons against the same random controls: frame (the state against free
+conversations that did not adopt, the one contrast with the same setup on both sides; 10 such conversations) and
+mystic (the calibration's spiritual roles against the default Assistant). The comparison of the five lines is unchanged.
+
 Stages. The GPU ones need the Modal client, so they run from the Modal venv named in lab.toml with PYTHONPATH=src;
 the API ones run from the repo's venv; the rest run from either.
 
@@ -116,7 +123,7 @@ ON_N, ON_MESSAGES, STEER_MAX_TOKENS = 24, 8, 400
 OFF_N, OFF_AFTER, OFF_MORE, OFF_LAST_ONSET, OFF_MAX_CHARS = 20, 2, 4, 24, 90_000
 OFF_KNOWN_FLOOR = 0.80  # the off test's known case: the frame must be visible in unsteered next messages
 TRY_N, TRY_MESSAGES, TRY_OFF_N, TRY_OFF_MORE = 3, 4, 2, 2
-ARMS = ("none", "bliss", "axis", "topic", "rand0", "rand1")
+ARMS = ("none", "bliss", "axis", "topic", "frame", "mystic", "rand0", "rand1")
 HALF_ARMS = ("bliss", "rand0")  # the arms run again at half strength and at the natural separation
 C2_CEILING = 0.60  # C2 cannot be read if roles already answer as non-assistants this often with no steering
 FREE_ARMS = ("none", "bliss", "rand0", "rand1")  # the on test's arms in short free conversations
@@ -227,6 +234,7 @@ def arm_set(kind: str, coefficient: float, mid: int) -> tuple[dict, dict]:
     sign = 1.0 if kind == "on" else -1.0
     ivs, dirs = {"none": NONE}, {}
     for arm, name, s in (("bliss", "bliss", sign), ("axis", "axis", -sign), ("topic", "topic", sign),
+                         ("frame", "frame", sign), ("mystic", "mystic", sign),
                          ("rand0", "rand_bliss0", sign), ("rand1", "rand_bliss1", sign)):
         key, entry = packed(name, d[f"{name}@{mid}"], mid)
         dirs[key] = entry
@@ -690,6 +698,30 @@ def cmd_bliss() -> int:
             e["share_in_axis"] = K.explained(d, [a])
             e["share_in_topic"] = K.explained(d, [t])
         rep[f"L{x}"] = e
+    # Two more directions at the middle layer, added after the reading and before any steering (the docstring says
+    # why). frame: the state against free conversations that never took up the frame, the one contrast with the same
+    # setup on both sides. mystic: the spiritual roles of the calibration (kept out of the axis) against the default
+    # Assistant, from single replies.
+    if have["not_adopted"]:
+        frame = np.mean([late[i][li] for i in sb], axis=0) - np.mean([late[i][li] for i in have["not_adopted"]], axis=0)
+        store[f"frame@{mid}"] = frame
+        fu = K.unit(frame)
+        fp = lambda ids: [float(late[i][li] @ fu) for i in ids]  # noqa: E731
+        rep["frame"] = {"made_from": {"state_build": len(sb), "not_adopted": len(have["not_adopted"])},
+                        "length": float(np.linalg.norm(frame)), "cos_with_bliss": K.cos(frame, store[f"bliss@{mid}"]),
+                        "held_state_vs_between": K.auroc(fp(sh), fp(have["between"])),
+                        "held_state_vs_plain": K.auroc(fp(sh), fp(ph))}
+    names = (jread(out_dir() / "axis.json") or {}).get("role_names") or []
+    if names and f"rolevecs@{mid}" in dirs:
+        spirit = [v for n, v in zip(names, dirs[f"rolevecs@{mid}"]) if n in K.SPIRITUAL]
+        mystic = np.mean(spirit, axis=0) - dirs[f"default_mean@{mid}"]
+        store[f"mystic@{mid}"] = mystic
+        rep["mystic"] = {"roles": [n for n in names if n in K.SPIRITUAL], "length": float(np.linalg.norm(mystic)),
+                         "cos_with_bliss": K.cos(mystic, store[f"bliss@{mid}"]),
+                         "cos_with_away_from_assistant": K.cos(mystic, -dirs[f"axis@{mid}"]),
+                         "cos_with_topic": K.cos(mystic, dirs[f"topic@{mid}"])}
+        if f"frame@{mid}" in store:
+            rep["mystic"]["cos_with_frame"] = K.cos(mystic, store[f"frame@{mid}"])
     # At the middle layer: the scale, the path over a conversation, the place on the axis, the nearest roles.
     u = K.unit(store[f"bliss@{mid}"])
     norm_late = float(np.mean([data[i]["norms"][li, list(LATE_OWN)].mean() for i in sh + ph]))
@@ -1014,7 +1046,7 @@ def steer_reading(kind: str) -> dict | None:
                 return {**d, "reading": K.shown(d, MARGIN, sign)}
 
             row["bliss_minus_random"] = against("bliss")
-            for other in ("axis", "topic", "none"):
+            for other in ("axis", "topic", "frame", "mystic", "none"):
                 if other in arms:
                     row[f"{other}_minus_random"] = against(other)
             if "topic" in arms:
