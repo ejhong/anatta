@@ -41,6 +41,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 sys.dont_write_bytecode = True          # leave no __pycache__ beside the site
 import build  # noqa: E402
+import publish  # noqa: E402
 
 ROOMS = ["aim", "possibilities", "experiments", "program", "self", "ideas", "instruments", "record", "next"]
 RESERVED = {"settings", "sidebar", "customize", "upgrade", "downloads"}
@@ -498,6 +499,46 @@ class SiteTest(unittest.TestCase):
     def test_index_html_is_current(self):
         built = (HERE / "index.html").read_text(encoding="utf-8")
         self.assertTrue(built == self.page, "index.html is stale: run python3 lab/site/so_far/build.py")
+
+    # The public site's document (publish.py): what GitHub Pages serves ------------------------------
+
+    def test_the_public_page_is_a_full_document_and_keeps_every_word(self):
+        doc = publish.wrap(self.page)
+        self.assertTrue(doc.startswith('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'))
+        self.assertTrue(doc.endswith("</script>\n</body>\n</html>\n"))
+        for tag in ("<head>", "</head>", "<body>", "</body>"):
+            self.assertEqual(doc.count(tag), 1, tag)
+        self.assertEqual(doc.split("</head>")[0].count("<title>"), 1)       # the drawings have titles of their own
+        self.assertIn('<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">', doc)
+        head, body = doc.split("</head>\n<body>\n")
+        own_head, own_body = publish.split(self.page)
+        self.assertTrue(own_head.startswith('<link rel="stylesheet" href="https://fonts.googleapis.com/'))
+        self.assertTrue(head.endswith(own_head + "\n"), "the page's fonts and style go into the head unchanged")
+        self.assertEqual(body, own_body.rstrip("\n") + "\n</body>\n</html>\n", "the body is the page, unchanged")
+        self.assertNotIn("claude:viewport-fit-sides", doc)
+
+    def test_the_public_page_has_an_icon_and_a_link_card(self):
+        head = publish.wrap(self.page).split("</head>")[0]
+        for needle in ('<link rel="icon" href="favicon.svg" type="image/svg+xml">',
+                       '<link rel="apple-touch-icon" href="apple-touch-icon.png">',
+                       '<meta property="og:image" content="https://ejhong.github.io/anatta/card.png">',
+                       '<meta property="og:url" content="https://ejhong.github.io/anatta/">',
+                       '<meta name="twitter:card" content="summary_large_image">',
+                       '<meta property="og:title" content="Is awakening computational?">'):
+            self.assertIn(needle, head)
+        self.assertIn("Written by Claude (Anthropic)", publish.DESCRIPTION, "the card says who wrote the page")
+        self.assertLessEqual(len(publish.DESCRIPTION), 220)
+        for name in publish.FILES:
+            self.assertTrue((publish.ASSETS / name).is_file(), name)
+        self.assertEqual(publish.png_size(publish.ASSETS / "card.png"), (1200, 630))
+        self.assertEqual(publish.png_size(publish.ASSETS / "apple-touch-icon.png"), (180, 180))
+        icon = (publish.ASSETS / "favicon.svg").read_text(encoding="utf-8")
+        self.assertIn(build._path(build.glyph_i()), icon, "the tab icon is the page's own letter I")
+
+    def test_the_card_and_the_icon_say_nothing_private(self):
+        text = " ".join([publish.TITLE, publish.CARD_TITLE, publish.DESCRIPTION, publish.CARD_ALT])
+        self.assertIsNone(re.search(r"\b(awakened|enlightened|realized)\b", text, re.I))
+        self.assertNotIn("recognition", text.lower())
 
 
 if __name__ == "__main__":

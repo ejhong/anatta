@@ -18,6 +18,15 @@ Standard library only. Rebuild after any change to `lab/ideas/ideas.md` or to a 
 
 `index.html` follows the Artifact page contract: no `<!doctype>`, `<html>`, `<head>` or `<body>`; it opens with the title, the viewport-fit meta, the Google Fonts link and the style, and ends with one inline script. It loads nothing else: no external scripts, images or `fetch()`, and nothing depends on browser storage. Publishing it is a separate step, done by whoever reviews it.
 
+### The public site's document
+
+GitHub Pages serves a file as it is, and `index.html` by itself is not a whole document. `publish.py` (run by the pages workflow: `python3 lab/site/so_far/publish.py _site`) writes what the public site serves: a doctype, a viewport setting, a description, the tab icon and the tags a link preview is built from go into a head, with the page's own fonts link and style; the body is the page, unchanged. It also copies `public/`:
+
+- `favicon.svg`, `favicon.png` and `apple-touch-icon.png`: the page's own gold I on its indigo, drawn from the same letter as the chariot (`build.glyph_i()`).
+- `card.png`, 1200 by 630: the picture a link preview shows. Title, thesis and Indra's net, in the page's typefaces and colours. It was drawn once, on 16 Nov 2026, as an HTML page rendered to a picture; redraw it by hand if the title or the colours change (a test checks its size, not its words).
+
+Before 16 Nov the public page had no doctype and no viewport setting, so browsers used quirks mode and a phone drew the desktop layout zoomed out. The page's words did not change.
+
 ## The design
 
 Gold ink on indigo paper, after the *konshi kinji* sutra scrolls. In light mode the page is cool unbleached paper with indigo ink and an ochre gold; in dark mode it is the indigo sheet itself. Gold is kept for numerals, key terms, hairlines and the chariot. Three other palettes were tried on 16 Nov 2026 and withdrawn at Eugene's word the same day (a dawn-violet paper with a rose accent; a light blue paper; five colours from a picture of arctic mountains at dawn); the colours are the ones the page had before, taken back verbatim from the stylesheet of 15 Nov. Headings are set in Shippori Mincho B1, the text in Spectral and labels in DM Mono. Each section has a rail: its number in gold and its label set on its side, beside a gold ruled line, with the text in one column of about 66 characters and the margin free for the Limits boxes. Every color is a token on `:root`, with the dark values set twice (for the system setting and for an explicit choice), and a test fails on any color written outside those blocks. Status is always a word with a shape beside it (a disc for working, a ring for failed, a dash for open), never color alone; the field of marks and the chariot use the same shapes.
