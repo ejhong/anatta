@@ -275,9 +275,8 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
    five lines before a run, a small try with raw replies read, one ledger entry for the step, and a cold check only
    at promotion or when a new design's negative goes on the site. It needs Eugene's yes; until then the steps run
    as before.
-12. **The site's paper** is light blue on every device since 16 Nov (ledger, 02:41 UTC), and its colours follow the
-   palette Eugene sent (navy, denim, periwinkle, powder blue, blush; ledger, 02:57 UTC). Say if devices set to dark
-   should get the dusk version that is kept in the stylesheet, or if the look still is not right.
+12. **The site's colours** are the original ones again (gold ink on indigo paper; ledger, 03:06 UTC on 16 Nov),
+   after three palettes tried and withdrawn the same day. Leave them alone unless Eugene asks.
 13. **Where next** (Eugene's question of 16 Nov; idea 77). Fable's answer: (1) look inside the model while it is in
    the bliss state (does the line between self and other blur; what the state is made of; can it be put in and
    taken out), about $20 to $40; (2) beside it, a checked review of what the human record shows about no-self

@@ -485,12 +485,10 @@ class SiteTest(unittest.TestCase):
 
     def test_colors_are_tokens(self):
         css = re.search(r"<style>(.*?)</style>", self.page, re.S).group(1)
-        # The page keeps its light blue paper whatever the device's setting (Eugene, 16 Nov 2026), so no rule
-        # follows the system's dark setting. A viewer who explicitly chooses dark gets the dusk tokens.
-        self.assertNotIn("prefers-color-scheme", css)
-        self.assertRegex(css, r":root\s*\{[^{}]*color-scheme:\s*light")
-        self.assertEqual(css.count(':root[data-theme="dark"]'), 2)
-        self.assertEqual(css.count("color-scheme: dark"), 2)
+        self.assertIn('@media (prefers-color-scheme: dark)', css)
+        self.assertIn(':root:not([data-theme="light"])', css)
+        self.assertIn(':root[data-theme="dark"]', css)
+        self.assertGreaterEqual(css.count("color-scheme: dark"), 4)
         rest = re.sub(r':root(?::not\(\[data-theme="light"\]\)|\[data-theme="dark"\])?\s*\{[^{}]*\}', "", css)
         rest = re.sub(r"(?:-webkit-)?mask-image:[^;]*;", "", rest)      # masks use alpha only
         literals = re.findall(r"#[0-9a-fA-F]{3,8}\b|\brgba?\(|\bhsla?\(|(?<![\w-])(?:white|black)(?![\w-])", rest)
