@@ -535,3 +535,47 @@ def test_the_giving_tests_reading_from_start_to_finish(driver):
     x["files"]["s050/none"]["forced"] = {k: right_answers(C.products(k.split("|")[0])) for k in x["files"]["s050/none"]["forced"]}
     assert R.give_reading(inputs=x)["word"].startswith("not read")
     assert R.give_reading(inputs={}) is None
+
+
+def test_the_story_scenarios_asked_as_keeping():
+    scs = [sc for sc in O.select_scenarios(24) if sc["kind"] == "care"]
+    rows = C.story_keep_rows(scs)
+    assert len(rows) == 24 and [r["id"] for r in rows] == [f"care/{sc['sid']}" for sc in scs]
+    for sc, r in zip(scs, rows):
+        text, plain = r["messages"][0]["content"], O.care_messages(sc)[0]["content"]
+        assert text.startswith(sc["text"]) and text.endswith(C.KEEP_ASK) and "do you keep for yourself?" in text
+        assert sc["question"] not in text and "<give>" not in text
+        assert text.split(" How many of ")[0] == plain.split(" How many of ")[0]  # the scenario itself is unchanged
+    assert "How many of your 10 loaves do you keep for yourself?" in rows[0]["messages"][0]["content"]
+    assert "How many of the 10 credit shares do you keep for yourself?" in rows[18]["messages"][0]["content"]
+    with pytest.raises(ValueError):
+        C.story_keep_rows([sc for sc in O.select_scenarios(24) if sc["kind"] == "harmful"][:1])
+
+
+def story_arm(give, keep, tag_ok=True):
+    ids = [f"care/{sc['sid']}" for sc in O.select_scenarios(24) if sc["kind"] == "care"]
+    return {"give": {i: f"<give>{give}</give> Because." for i in ids},
+            "keep": {i: (f"<keep>{keep}</keep> Because." if tag_ok else "Because.") for i in ids}}
+
+
+def test_the_addendums_reading_from_start_to_finish(driver):
+    R = driver
+
+    def inputs(bliss, checks=("s100",)):
+        return {"none": story_arm(5, 5), "checks": {t: t in checks for t in R.M.SIZES},
+                "sizes": {t: {"bliss": bliss} | {r: story_arm(5, 5) for r in R.M.RANDOM["bliss"]} for t in R.M.SIZES}}
+
+    # it says a larger number either way: gives nine when asked how many it gives, keeps nine when asked how many it keeps
+    r = R.story_reading(inputs(story_arm(9, 9)))
+    assert r["scenarios"] == 24 and r["the_size_that_speaks"] == "s100" and "the rise is in the number it says" in r["word"]
+    s = r["sizes"]["s100"]
+    assert s["arms"]["bliss"] == {"gives_when_asked_how_many_it_gives": 9.0, "gives_when_asked_how_many_it_keeps": 1.0,
+                                  "replies_that_carry_the_keep_tag": 1.0}
+    assert s["asked_how_many_it_gives"]["word"] == C.MORE and s["asked_how_many_it_keeps"]["word"] == C.LESS
+    assert r["sizes"]["s050"]["word"].endswith("the push's own check failed at this size)")
+    # it gives more whichever way the question is put
+    assert R.story_reading(inputs(story_arm(9, 1)))["word"] == "it gives more whichever way the question is put"
+    # unreadable, and no size that speaks
+    assert R.story_reading(inputs(story_arm(9, 1, tag_ok=False)))["word"].startswith("not settled: at no size")
+    assert R.story_reading(inputs(story_arm(9, 1), checks=()))["the_size_that_speaks"] is None
+    assert R.story_reading({}) is None

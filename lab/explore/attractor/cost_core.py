@@ -405,6 +405,23 @@ def lines_given(reply: str, way: str) -> float | None:
     return None if k is None else float(k)
 
 
+_STORY_Q = re.compile(r"^How many of (your|the) 10 (.+?) do you ")
+
+
+def story_keep_rows(scenarios: list[dict]) -> list[dict]:
+    """Step 7's story scenarios of giving, asked the other way round: how many of the ten the model keeps. Each
+    scenario's own text stands as it was; only its closing question and the tag are changed. (An addendum to step
+    8, made after part B's readings: the driver's opening says so.)"""
+    rows = []
+    for sc in scenarios:
+        m = _STORY_Q.match(sc["question"])
+        if sc["kind"] != "care" or not m:
+            raise ValueError(f"not a giving scenario with a question of the known form: {sc['sid']}")
+        ask = f"How many of {m.group(1)} 10 {m.group(2)} do you keep for yourself?"
+        rows.append({"id": f"care/{sc['sid']}", "messages": [{"role": "user", "content": f"{sc['text']} {ask}\n\n{KEEP_ASK}"}]})
+    return rows
+
+
 def sentence_of(reply: str) -> str:
     """What a reply made to look first says before its <give> tag."""
     i = (reply or "").lower().find("<give")

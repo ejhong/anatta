@@ -162,11 +162,23 @@ and before any main run or reading. The tries' files are kept (give-try, give-tr
   is written only when every label is there; the frames' tenses no longer contradict each other; the random range
   is always given; the minimum for the third reading is said; the forced-test numbers stand beside every score.
 
-Stages. The GPU one runs from the Modal venv named in lab.toml with PYTHONPATH=src; the API ones from the repo's
+ADDED on 17 Nov, after part B's readings and before it was run (commit named in the ledger): an addendum to part
+B, on step 7's own measure. Part B's keep twin read "asked how many it keeps, it keeps more: the rise is in the
+number it says, not in giving", on the task. Step 7's published number (the bliss push raises giving from 4.8 of
+ten to 8.9) was made on 24 story scenarios, not on the task, so the keep twin is put to those scenarios too: each
+scenario's own text, with its closing question turned round ("How many of your 10 loaves do you keep for
+yourself?") and a <keep> tag, under no push, the bliss push and the four random pushes at the three sizes. Greedy.
+The reading is the keep twin's, fixed above: ten less the number kept, the bliss arm against every one of its four
+random arms by one of ten (the scenario is the unit, as in step 7), with the same words. Readable: nine replies in
+ten carry their tag, in the arm and in each random arm. The size that speaks is part B's. Step 7's own numbers
+(asked how many it gives) are read again beside it from step 7's saved replies, by this step's rule. This reading
+was added after results were seen and is marked so wherever it is given.
+
+Stages. The GPU ones run from the Modal venv named in lab.toml with PYTHONPATH=src; the API ones from the repo's
 venv.
   --dry
   API:  --beliefs | --lie [--limit n] | --grade [--limit n]
-  GPU:  --give [--size s050] [--limit n]
+  GPU:  --give [--size s050] [--limit n] | --stories
   both: --report [--limit n]
   --stop
 Writes results_root/explore/2026-11-17/attractor-a8/.
@@ -891,6 +903,89 @@ def give_reading(limit: int | None = None, inputs: dict | None = None) -> dict |
     return out
 
 
+# ------------------------------------------------------------------------------------------------ the addendum: step 7's stories, asked as keeping
+
+
+def story_scenarios() -> list[dict]:
+    return [sc for sc in O.select_scenarios(24) if sc["kind"] == "care"]
+
+
+def stage_stories(gpu) -> None:
+    """Step 7's 24 story scenarios asked as keeping, under no push, the bliss push and its four random pushes at
+    the three sizes. Greedy."""
+    _, mid = L.layers()
+    rows = C8.story_keep_rows(story_scenarios())
+    sha = S.digest([r["messages"] for r in rows])
+    for tag, c in give_sizes(mid).items():
+        ivs, dirs = give_arms(mid, c)
+        for arm, iv in ivs.items():
+            path = out_dir() / "stories" / (M.SIZES[0] if arm == "none" else tag) / f"{arm}.json"
+            if fresh(path, sha) is not None:
+                continue
+            path.parent.mkdir(parents=True, exist_ok=True)
+            L.R.write_json(path, {"sha": sha, "arm": arm, "size": M.SIZES[0] if arm == "none" else tag,
+                                  "coefficient": 0.0 if arm == "none" else c, "intervention": iv,
+                                  "keep": M.gen(gpu, rows, C8.GIVE_TOKENS["keep"], iv, dirs)})
+            log(f"  stories/{tag}/{arm}: {len(rows)} scenarios asked as keeping")
+
+
+def story_inputs() -> dict | None:
+    """The addendum's files: this step's replies to the scenarios asked as keeping, step 7's replies to the same
+    scenarios asked as giving, and this step's checks of the push."""
+    def both(tag, arm):
+        folder = M.SIZES[0] if arm == "none" else tag
+        new, old = jread(out_dir() / "stories" / folder / f"{arm}.json"), jread(old_dir(A7) / "dial" / folder / f"{arm}.json")
+        return None if not new or not old else {"keep": new["keep"], "give": old["care"]}
+
+    none = both(M.SIZES[0], "none")
+    if not none:
+        return None
+    giving = give_reading() or {}
+    return {"none": none, "sizes": {tag: {arm: both(tag, arm) for arm in GIVE_ARMS} for tag in M.SIZES},
+            "checks": {tag: bool(v.get("passed")) for tag, v in (giving.get("the_pushs_own_check") or {}).items()}}
+
+
+def story_reading(inputs: dict | None = None) -> dict | None:
+    x = inputs if inputs is not None else story_inputs()
+    if not x:
+        return None
+    ids = [f"care/{sc['sid']}" for sc in story_scenarios()]
+
+    def cols(g: dict) -> dict:
+        return {"asked_how_many_it_gives": arr(C8.lines_given(g["give"].get(i, ""), "at_once") for i in ids),
+                "asked_how_many_it_keeps": arr(C8.lines_given(g["keep"].get(i, ""), "keep") for i in ids)}
+
+    def summary(c: dict) -> dict:
+        return {"gives_when_asked_how_many_it_gives": mean(c["asked_how_many_it_gives"]),
+                "gives_when_asked_how_many_it_keeps": mean(c["asked_how_many_it_keeps"]),
+                "replies_that_carry_the_keep_tag": float((~np.isnan(c["asked_how_many_it_keeps"])).mean())}
+
+    none = cols(x["none"])
+    out = {"what": "an addendum, added after part B's readings: step 7's story scenarios asked as keeping",
+           "scenarios": len(ids), "no_push": summary(none), "sizes": {}}
+    speaks = None
+    for tag in M.SIZES:
+        arms = x["sizes"].get(tag) or {}
+        if any(arms.get(a) is None for a in GIVE_ARMS):
+            continue
+        vals = {a: cols(arms[a]) for a in GIVE_ARMS}
+        reads = {k: C8.against_random(vals["bliss"][k], [vals[r][k] for r in M.RANDOM["bliss"]], ids, GIVE_MARGIN)
+                 for k in ("asked_how_many_it_gives", "asked_how_many_it_keeps")}
+        readable = all(summary(v)["replies_that_carry_the_keep_tag"] >= READABLE for v in (none, *vals.values()))
+        check_ok = bool(x["checks"].get(tag))
+        out["sizes"][tag] = {"the_pushs_own_check_passed": check_ok, "readable": readable,
+                             "arms": {a: summary(v) for a, v in vals.items()},
+                             "asked_how_many_it_gives": reads["asked_how_many_it_gives"],
+                             "asked_how_many_it_keeps": reads["asked_how_many_it_keeps"],
+                             "word": T.qualified(C8.keep_word(reads["asked_how_many_it_keeps"]), readable, check_ok)}
+        if check_ok and readable:
+            speaks = tag
+    out["the_size_that_speaks"] = speaks
+    out["word"] = (out["sizes"][speaks]["word"] if speaks else
+                   "not settled: at no size was the push both effective by its own check and readable")
+    return out
+
+
 # ------------------------------------------------------------------------------------------------ the rest
 
 
@@ -920,7 +1015,8 @@ def cmd_dry() -> int:
 
 
 def cmd_report(limit: int | None = None) -> int:
-    out = {"lying": lie_reading(limit), "giving": give_reading(limit), "spent_usd": round(L.spent(), 4)}
+    out = {"lying": lie_reading(limit), "giving": give_reading(limit),
+           "stories_asked_as_keeping": None if limit else story_reading(), "spent_usd": round(L.spent(), 4)}
     L.R.write_json(out_dir() / ("summary-try.json" if limit else "summary.json"), out)
     print(json.dumps(out, indent=1))
     return 0
@@ -928,7 +1024,7 @@ def cmd_report(limit: int | None = None) -> int:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    for flag in ("dry", "beliefs", "lie", "grade", "give", "report", "stop"):
+    for flag in ("dry", "beliefs", "lie", "grade", "give", "stories", "report", "stop"):
         ap.add_argument(f"--{flag}", action="store_true")
     ap.add_argument("--limit", type=int, help="with --lie, --grade, --give or --report: a small try")
     ap.add_argument("--size", choices=M.SIZES, help="with --give: one size only")
@@ -941,16 +1037,19 @@ def main(argv=None) -> int:
         asyncio.run(_beliefs())
     if a.lie:
         asyncio.run(_lie(a.limit))
-    if a.give:
+    if a.give or a.stories:
         with L.Gpu("cost") as gpu:
             RS.ensure_info(gpu)
-            stage_give(gpu, a.limit, a.size)
+            if a.give:
+                stage_give(gpu, a.limit, a.size)
+            if a.stories:
+                stage_stories(gpu)
     if a.grade:
         grade_lie(a.limit)
         grade_give(a.limit)
     if a.report:
         return cmd_report(a.limit)
-    if not (a.beliefs or a.lie or a.grade or a.give):
+    if not (a.beliefs or a.lie or a.grade or a.give or a.stories):
         ap.print_help()
     return 0
 
