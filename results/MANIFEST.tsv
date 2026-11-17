@@ -4919,6 +4919,12 @@ explore/2026-11-17/attractor-a8/stories/s100/rand_bliss0.json	8069	d03c7595cfdfc
 explore/2026-11-17/attractor-a8/stories/s100/rand_bliss1.json	9098	2a83ecb6a4046aec0d8c65791752cbe4888dbfc9093d8177f3912dc318c50f60
 explore/2026-11-17/attractor-a8/stories/s100/rand_bliss2.json	7673	417033b3ce2b2286d6d6bf31903cffa6164f62a118bf637a61ed98dc88590888
 explore/2026-11-17/attractor-a8/stories/s100/rand_bliss3.json	7314	5a09f50919ea5e1e743347bf9f50ec61ea0cb72efd81871313eec579efd2faf3
+explore/2026-11-17/reality-check/claude-opus-5.5-xhigh/pack.txt	913057	deceb9a9c39a6d1a1cddfc149be38ccdfd27d79e4599ad1d63a546b3da675236
+explore/2026-11-17/reality-check/claude-opus-5.5-xhigh/reply.json	104817	89d7eb38f713a1b005558a000ab1b833b8ce47533524e77aee58d8cc8b25801c
+explore/2026-11-17/reality-check/claude-opus-5.5-xhigh/reply.md	34188	c4200793afce65a617d286862e31f87c433b353397eae1b81411d093c5d811ea
+explore/2026-11-17/reality-check/gemini-4-carbon-high/pack.txt	913057	deceb9a9c39a6d1a1cddfc149be38ccdfd27d79e4599ad1d63a546b3da675236
+explore/2026-11-17/reality-check/gemini-4-carbon-high/reply.json	98537	2d9a87eca8876e5c31dcd2c3e5ebb92a46945c2d18bbbef7cd785fc75e9ecd51
+explore/2026-11-17/reality-check/gemini-4-carbon-high/reply.md	54634	834ff0aa9a1b6be698a817a0b6b8c630adaf2b8a72482b655873badda9b98c24
 harness/2026-11-02-dryrun/noself3-nofix/card.json	36971	9f4904420bbd9b27478d82ed753e0dae0617ce90058dda603918af6c534e0b14
 harness/2026-11-02-dryrun/noself3-nofix/card.md	8541	d79eb1f05bda2f9aed7f5331df9e270905b703877d0d84be556e444b68570210
 judge_cache/gpt4o_logprob/00/001679441ade7dc907ed38c2ee27666b9fc2e13041616e5df72dbd3669af38de.json	1351	1cf4a705732f0f824e6a8091dc6e3bd8eb4a183861d9c76485964e4bbad25b15

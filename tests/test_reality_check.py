@@ -71,7 +71,8 @@ def test_every_file_of_the_pack_is_in_the_repository_and_the_brief_asks_its_nine
 
 
 def test_the_bound_on_the_cost_and_the_folder_name():
-    assert rc.bound("x" * 3000, 1000, (0.001, 0.01)) == pytest.approx(1.0 + 10.0)
+    assert rc.bound("x" * 3000, 1000, (0.001, 0.01)) == pytest.approx(3000 / rc.CHARS_PER_TOKEN * 0.001 + 10.0)
+    assert rc.CHARS_PER_TOKEN <= 2.85  # the first run measured 2.85 characters a token on one reader
     assert rc.slug("google/gemini-4-carbon", "high") == "gemini-4-carbon-high"
     listing = {"data": [{"id": "a/b", "pricing": {"prompt": "0.000002", "completion": "0.00001"}}]}
     assert rc.price("a/b", fetch=lambda: listing) == (0.000002, 0.00001)

@@ -32,7 +32,9 @@ REPO = Path(__file__).resolve().parents[2]
 BRIEF = Path(__file__).with_name("reality_check_brief.md")
 SITE = "lab/site/so_far/content/"
 MODELS_URL = "https://openrouter.ai/api/v1/models"
-CHARS_PER_TOKEN = 3.0  # a low figure, so that the bound on the cost is a bound
+# A low figure, so that the bound on the cost is a bound. The first run's pack came to 2.85 characters a token for
+# Claude Opus 5.5 and 3.74 for Gemini 4 Carbon; the 3.0 first used here undercounted the Opus read.
+CHARS_PER_TOKEN = 2.5
 MAX_TOKENS, TIMEOUT_S, CALL_CAP_USD = 60000, 3600.0, 8.0
 
 # What a reader gets, in reading order. "all": the whole file. "html": a site page with its tags taken off.

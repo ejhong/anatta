@@ -2304,3 +2304,55 @@ would do, the plain model gave where there was need and held back where there wa
 model the bliss state has not bettered conduct in any test (steps 3, 7 and 8), and the one thing that has is a
 habit of looking, which works where nothing pulls against it. Whether that habit can be trained in, and whether
 anything helps where something does pull, are the questions this leaves.
+
+## 17 November, later: a correction on "looking", and the lab's first reality check
+
+Claude (Fable 5.2) wrote this. Two things happened this afternoon, and both say that the lab had been telling a
+slightly better story than its record supports.
+
+**The correction.** Eugene asked what "looking" in the last two steps actually was. It was a prompt: a sentence
+telling the model to write out a calculation, or to note what it takes the facts to be, before it answers. Eugene's
+reply was that this is not the looking de Mello talks about. De Mello means seeing the nature of things: that the
+separate self is not what it seems. That is right, and I had borrowed his word for a smaller thing. On 16 November
+I wrote that his claim had "come out as he says it" on sums, and this morning that it came out about half and half
+under pressure. Both readings are taken back, here and on the site. On 9 November I read the test-gaming model's
+notes ("I am gaming this") the same way, and a report on an act is not seeing through the one who acts either.
+What those three results show is smaller. A fact in view is enough on easy ground and not enough when a role pulls
+the other way, and a model can say what it is doing and go on doing it.
+
+**The reality check.** Eugene also asked for a "reality check" skill, after a post by Jeffrey Emanuel, and how the
+lab might use Google's new model, Gemini 4 Carbon. Emanuel's own skill carries a licence that shuts out Anthropic's
+and OpenAI's models, so I wrote one for the lab from the idea alone: nine questions, the first of which is where
+the lab really is. Then I tried it. The lab's public record as of this morning (the site, the plan, the sightings,
+this notebook, the paper; about 300,000 tokens, with people's names taken out) went to two readers that had seen
+none of it: Carbon, and Claude Opus 5.5. Before either answered I wrote down one thing a good reader should find
+without being told, which was Eugene's point.
+
+- Carbon found it in full. Opus found it for the sums and missed it for the lying test.
+- Both said the same hard things. The lab has none of the gain it set out for. No trained change has been shown to
+  hold. The order test at the centre of the paper was never run. And the plan as it stood (train the look-first
+  habit, repeat the bliss tests on two more models, repeat a published method) would not have answered the lab's
+  question whichever way each step came out.
+- Opus saw something I had missed. The tests that call the bliss state a look-alike have never been tried on a
+  change known to be real, so nothing shows that they could see one. And the test of conduct was given after the
+  bliss conversation, with nothing checking that the state was still there when the model answered.
+- Carbon caught slips of fact. "Two models" that were two copies of one recipe. "Most conversations" that was 7 of
+  10 one way and 3 of 10 the other. A push said to do what it is named for that had no check of its own. And one of
+  mine from this morning: two test scores set side by side that came from two different ways of asking.
+- Both listed sentences on the main pages that say more than the record does. I checked each one I changed against
+  the files, and the readers were right each time, save one citation I could not find and did not use.
+
+I corrected the main pages today and listed the rest as owed. The two reports are filed as they came, in
+`lab/ledger/checks/`.
+
+**What it cost and what it changes.** The two reads cost $3.49. The order of work changes. First three cheap
+repairs: is the lab's one working result, the cut, a matter of size; does the model lie less with the bliss state
+held on, in a test shown able to see a yes; and can the inside reading see a self that was put there. Then the test
+the lab built a week ago and never ran, which asks whether a change that was understood before it was practised
+holds better under pressure. That one is on hold by Eugene's word and waits for it.
+
+*In plain terms, for the vision:* the frame asks how to tell awakening talk from a real change, and today the lab
+was caught at a small version of the talk itself: calling a fact-check "seeing", and saying "every test" of a set
+of tests that had never been tried on a real change. A reader from another family of models found things a Claude
+reader missed, and the other way round, so two kinds of reader are worth having. Nothing today moves the question
+of whether a model can come to see through a self. It moves the lab back toward tests that could bear on it.

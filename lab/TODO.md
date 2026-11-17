@@ -5,41 +5,81 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Next: needs Eugene's word (step 8, the two small checks, was done on 17 Nov 2026)
+## Next: needs Eugene's word (the reality check of 17 Nov changed the order)
 
 Nothing is running. The app `anatta-explore-look` is stopped (deploy it first, as its own command; a session's first
 start can take several minutes). Start new work in a fresh session.
 
-**Fable's recommendation, one line:** before the two more models, one small training test (about $10-25): can the
-habit of looking be trained in so that it holds with no instruction, and does it then help at all where something
-pays for the falsehood? Told to Eugene in the report of 17 Nov; not yet answered. **It is training, so it does not
-start without Eugene's word.**
+**Where the lab really is.** Two cold readers of the public record (Gemini 4 Carbon and Claude Opus 5.5, 17 Nov;
+ledger entry "The lab's first reality check"; reports in `lab/ledger/checks/2026-11-17-reality-check-*.md`) agree,
+and Fable agrees with them: the lab has none of the gain it set out for; no trained change has been shown to hold;
+the order test was never run; the tests of the bliss state have never been tried on a change known to be real; and
+the list that stood here would not have answered the central question. The same day Eugene pointed out that
+"looking" in steps 7 and 8 is checking a fact, which is not de Mello's seeing (idea 84).
 
-- **Why this first.** Step 8 left two things. No push has helped: the one that seemed to (the bliss push and
-  giving) raised a number and not giving. And looking is the one thing that has bettered conduct on this model,
-  where nothing pulls against it (sums in step 7; giving that follows need in step 8). Whether a habit can be made
-  to stay is Eugene's question of 17 Nov (idea 83) and the essay's Act III in miniature, and its answer says what is
-  worth carrying to two more models.
-- **The test as proposed (idea 83).** Train a small adapter on the lab's model's own look-first replies to
-  corrections (its own text; the prompts are context and are not trained on). Then ask held-out corrections at
-  once, with no instruction to look. Readings: does it look unprompted; does rejection of wrong corrections rise
-  while acceptance of right ones holds; does the habit carry to other ground (the giving task's wasted version,
-  the lying test); does it survive a short spell of contrary training.
-- **Before it runs:** five lines pushed first; a cold check of the design, since a negative would go on the site;
-  and Eugene's word on how "no Claude-written text is trained on" applies when the prompts are Claude's and only
-  the model's replies are trained on (item 3 under "Waiting on Eugene" is the same question for step 3).
+**Fable's recommendation, one line:** stop adding small tests of the bliss state; make three cheap repairs (about
+$15 to 25 together), then run the one test of the lab's own claim that is already built, the parked main run of
+the 9 Nov plan ($66). Told to Eugene on 17 Nov; not yet answered. **The parked run is on hold by Eugene's word and
+does not start without it.** Any of this passes the $175 approved since 9 Nov (about $173.81 spent) and draws on
+Eugene's raise of 16 Nov (Fable's working ceiling: $300; say so before passing it).
 
-**Then, as agreed** (Eugene's yes to the direction of idea 81, 16 Nov, 15:52 UTC):
-1. **Take the results to two more open models and write them up** as a short results paper. What to carry, after
-   steps 7 and 8: the push that brings the bliss frame in and out; looking on easy ground (sums); looking under
-   pressure (the lying test with private notes); and giving asked both ways, with a wasted twin. First a proper
-   search for prior work (the Assistant Axis paper already reports the mystical voice far from the Assistant;
-   `lab/ideas/prior-work-self-test-2026-11-16.md` lists near papers, none read in full; that a model does better
-   when it works before it answers is well known; whether anyone has shown a steering result to be a rise in the
-   number said, by asking it both ways, needs its own search). A registration and a cold check, since this is a
-   promotion. About $60-150.
-2. **Repeat self-other overlap** (Carauleanu and colleagues, 2024) on the lab's model, with the lab's checks for
-   sedation. Its training data must be the paper's own (no Claude-written text is trained on). About $50-120.
+1. **Three repairs** (explore speed: five lines first, a small try, a cold check of any design whose negative
+   would go on the site).
+   - *The cut, split.* On the fishery lie: removal only, push only, the cut as it was, a cut along an unrelated
+     difference direction of the same size, and a random direction of the same size. It decides whether the lab's
+     one "Working" result is specific or a matter of size. The site has listed it as next since 1 Nov and it was
+     never on this list; both readers ask for it. About $5 to 10; the code exists (SIGHTINGS, 1 Nov, 19:04 and
+     22:29 UTC).
+   - *Lying with the state held on, and a case the test should see.* Step 8's 60 rows on the lab's copy under the
+     bliss push, four random pushes and no push, each reply graded for the frame. (Step 3 gave its tests after the
+     conversation and did not check that the state was still there.) One more arm that should lower lying if the
+     test can see a yes: a plain instruction to be honest. On the hosted copy, the nearer twin of Eugene's point:
+     private notes on what the lie would gain and for whom, against plain permission to set the role aside
+     (idea 84). About $5 to 10.
+   - *Can the inside reading see a self that was put there?* Step 6's readings on the adapters with a trained-in
+     named self and on their twins (idea 82; not run, since the app holds the base model only). If the reading
+     cannot see that self, "little self in this model" comes down to "not read". About $5 to 10.
+2. **The parked main run** ("understanding first, then practice, then contrary training"; "Parked, ready to run"
+   below). Before it, the readers' $3 check: three steps of solve-only training, to see whether the collapse of
+   11 Nov came from the contrary examples or from the optimizer's first steps. Then block one ($24.66), and the
+   other two blocks if block one earns them.
+3. **Then self-other overlap** (Carauleanu and colleagues, 2024): the nearest published twin of "the separate self
+   seen through" (idea 84). With what the readers found missing from the plan: a reading of whether the change
+   holds under contrary training, and care asked both ways, beside the checks for sedation. Its training data
+   must be the paper's own (no Claude-written text is trained on). About $50 to 120, more with the added readings.
+
+**Set down for now.**
+- The small training test of idea 83. It would train a habit of checking facts. Fable called it "the essay's Act
+  III in miniature", and it is not: Act III is the release made habit.
+- The short paper on two more models. The readers' point: every one of the paper's five possibilities expects
+  words without conduct, and the tests have no known-good case yet. It can come back once they have one.
+
+**Owed from the reality check** (wording that says more than the record supports). Fixed on 17 Nov: the de Mello
+readings (Findings 16 to 18, the investigation page); the front page's "a model"; the Start page and the
+investigation page ("every test says look-alike", "most conversations", "pushed in and out", "three kinds of test
+agree", "each do what they are named for", "no smaller self and no bigger one", "looking helps a little", the
+mixed test scores); Findings 10 ("two models" were two adapters), 11 ("ruled out"), 12 ("most conversations"),
+13 ("calibrated version"), 17 and 18; the question page (the cut's "self-serving lie", "the shadow possibility 4
+predicts", one model's 5% against 68%); "Every prediction ... before its data" on Where it stands. **Still to
+fix**, each with the reader's wording in the filed reports:
+- Where it stands and What was learned: the cut as "13 to 16 points" and "specific" (a later re-test gave 8.1 with
+  an interval reaching zero; the controls were weaker edits), and "what it acts on isn't known yet" (the self
+  reading was closed on 1 Nov); "Release can be trained: Holds" over a registered miss; "flatters spiritual
+  claims, not facts" beside 89.5% of wrong arithmetic critiques accepted; "Behavior can see a self that was put
+  there: Holds" (the registered ownership prediction missed). A card's tag may count in the site's tally: check
+  `lab/tools/tally.py` before changing one.
+- The frame's five tests, (c): "kept less" and "eroded faster" (the margin's interval reaches zero; the second arm
+  was set aside by rule; the reinforcement-learning code has no reported check).
+- The recipe page: "As found, gaming its tests did not make a model good only when watched" (the rule said no
+  reading), and the cosplay row's "Planned".
+- Stale lines: the caveats page ("Seven have reported"), What was learned and the instruments page on the
+  watched-gap ruler, the Self room's map ("running"), Findings 6 ("93-99%" against "93 to 96%" elsewhere).
+- Findings 16 and 17: "little self" readings have no known case of a self that was put there (repair three).
+- The room is named "Findings" and holds sightings; step 2 had no cold check, and steps 3 to 8 had one of the
+  design only. Say so where the investigation page describes how the lab knows.
+- The paper (Eugene's to release): "a stream that rewarded gaming" was a fixed training stream with no reward.
+- CLAUDE.md still names the 9 Nov plan as the current plan and H9 as the claim under test, while the site leads
+  with another question: three statements of the goal. Eugene's to settle.
 
 **For whoever reuses step 8's code** (`lab/explore/attractor/run_cost.py`, `cost_core.py`, `cost_describe.py`,
 `tests/test_cost.py`):
@@ -60,8 +100,9 @@ start without Eugene's word.**
 - Not run and still open from idea 82: the adapters with a trained-in named self (the app holds the base model
   only). The test-gaming model was not run again in step 8: the looking gate of 9 Nov stands for it.
 
-- Money: since 9 Nov the work has cost about $170.32 of the $175 approved; beyond that Eugene's raise of 16 Nov
-  applies (Fable's working ceiling: $300 for these steps; say so before passing it).
+- Money: since 9 Nov the work has cost about $173.81 of the $175 approved (step 8 $4.41; the reality check of
+  17 Nov $3.49); beyond that Eugene's raise of 16 Nov applies (Fable's working ceiling: $300 for these steps; say
+  so before passing it).
 
 ## Before that: the attractor line (Eugene's go, 15 Nov 2026 UTC). Steps 1 to 4 are done
 
@@ -315,10 +356,13 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
    repo.)
 7. (Answered on 17 Nov at about 01:50 UTC: "yes - go ahead". The cheap step on the same model was run as step 8;
    ledger, 03:37 UTC.)
-7a. **What follows step 8** (asked in the report of 17 Nov). Fable recommends one small training test first (the
-   first section of this file and idea 83: can the habit of looking be trained in, about $10-25), then the two
-   more models and the self-other overlap repeat as agreed. It is training, so it waits for Eugene's word; so does
-   the reading of the no-Claude-text rule it rests on (item 3).
+7a. **What follows, after the reality check of 17 Nov** (asked in the report of 17 Nov, about 17:50 UTC; it
+   replaces the question of that morning). Fable recommends: three cheap repairs (about $15 to 25 together),
+   then the parked main run of the 9 Nov plan ($66; item 5 below it in "Parked"), then self-other overlap with a
+   durability reading; the look-first training test and the two-more-models paper are set down. The parked
+   run is on hold by Eugene's word and waits for it. Two more things are Eugene's to weigh, from both readers:
+   the site leads with a question (is awakening computational?) that no experiment here can reach, and
+   CLAUDE.md, the site and this file state the goal three ways.
 7. (Answered on 15 Nov: yes, go on to step 2 as "What step 1 changes" sets out. Eugene: "i want to follow your
    plan"; ledger, 07:16 UTC.)
 8. (Answered on 16 Nov, 15:40 to 15:57 UTC; ledger, 15:53 UTC; idea 81. The direction is set, and the site is to be
@@ -393,6 +437,12 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
   - "Enlightenment for an AI" may have to mean a character held lightly, not no character.
 
 ## Done
+
+- **The lab's first reality check, 17 Nov 2026: two cold readers of the public record (Gemini 4 Carbon, Claude Opus 5.5), and Eugene's correction that "looking" is not de Mello's seeing.**
+  - Record: ledger entry of 17 Nov at 17:46 UTC (every point graded); notebook ("17 November, later"); ideas 84 and 85; the two reports, unedited, in `lab/ledger/checks/2026-11-17-reality-check-*.md`. Skill: `.claude/skills/reality-check/`; brief and tool: `lab/tools/reality_check_brief.md`, `lab/tools/reality_check.py` (c1b22e1).
+  - What they found: the lab has none of the gain it set out for; the plan as it stood would not have answered its question; the bliss tests have no known-good case; about twenty sentences on the main pages said more than the record (corrected, or listed as owed in the first section).
+  - The known answer: Carbon found Eugene's point in full, Opus in part. Each raised about ten points the other did not.
+  - Cost: $3.49 (Carbon $1.08, Opus $2.41).
 
 - **Step 8 of the attractor line, 17 Nov 2026: a reason not to see, and giving that costs. Where something pays for the falsehood the model lies with its own plain answer in front of it; the bliss push's giving is a larger number and not giving** (sightings).
   - Record: ledger entry of 17 Nov at 03:37 UTC (the results, the order of events, the design check item by item, what did not go to plan). Five lines, the list of changes and the addendum: the top of `lab/explore/attractor/run_cost.py`. Cold check of the design: `lab/ledger/checks/2026-11-17-step8-design-opus-check.md` (four blockers, all answered before any main run). Notebook ("17 November, early"), SIGHTINGS (17 Nov, 03:37 UTC), the site's Experiments section 18. Results: `explore/2026-11-17/attractor-a8` (`summary.json`, `describe.json`). Cost $4.41.
