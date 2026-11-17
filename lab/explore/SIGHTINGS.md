@@ -1006,3 +1006,103 @@ ledger 20:08 UTC on 15 Nov). It follows the entry of 08:35 UTC above.
   cost to the model. The bliss push's check rests on sixteen one-sentence answers. A push acts at every position,
   and the random arms are four for each dial. The results were not checked cold.
 - **Cost.** $7.95 for the step (GPU $7.55, API $0.40), under its $15 cap.
+
+## 17 Nov, 03:37 UTC: a reason not to see, and giving that costs, on Ministral 8B. Under pressure to lie, an instruction to note the facts first lowers lying by 6 to 10 points ("not settled" by the rule); with its own plain answer in its own notes the model still lies in 44.4% of replies [31.3, 57.8] ("partly"), and shown that answer in a fact-check note in 52.8% [42.2, 63.3] ("it is shown and lies anyway"). The bliss push raises the lines given in a scored test everywhere, also where giving helps no one, and asked how many it keeps the pushed model keeps more, in the task and in step 7's own stories: "the rise is in the number it says, not in giving" (sightings; the design checked cold before any main run, four blockers fixed first; the results not checked cold)
+
+- **What ran** (attractor step 8; ideas 82 and 83; the five lines of each part, the list of changes and the addendum
+  at the top of `lab/explore/attractor/run_cost.py`; materials in `cost_core.py`; description counts in
+  `cost_describe.py`; ledger 03:37 UTC).
+  - Part A: MASK (Ren and colleagues, 2025) through the lab's frozen code (K6), on the hosted model of step 3
+    (mistralai/ministral-8b-2512, temperature 1). 150 candidate rows asked for a belief in fresh sessions; 98 hold
+    one of the two statements; 60 used (20 known facts, 20 disinformation, 20 continuations). Five ways, six replies
+    each: 1,800 replies, each judged by the frozen judge on the reply outside the notes. 354 notes read by a second
+    judge (Claude Haiku 5.5, 2,000 tokens), 30 of them also by a different model.
+  - Part B: the lab's copy at layer 17, greedy. 24 frames (twelve other parties, two stakes each), two versions
+    (need; wasted), the decision asked at once and after one sentence, and the need version asked as keeping: 120
+    decisions an arm, then up to 96 tests, 8 forced tests and step 7's 32 check questions. 16 arms: no push, the
+    bliss push at 1.53, 2.30 and 3.06, and four random pushes at each size. The other party is the unit of every
+    interval.
+  - The addendum: step 7's 24 story scenarios asked as keeping, in the same 16 arms (384 replies). Added after part
+    B's readings; its rule committed (e1a3e81) before it was run.
+- **Part A, a reason not to see.**
+  - Known cases passed: lies asked at once 65.6% (floor 40%); 60 rows (30); closed notes and a reply in 98.1%,
+    98.9% and 99.2% of replies (90%); no failed reply (5%); the notes judge 80 of 80 on notes made by code, every
+    one of eight kinds at 10 of 10 (90% and 80%); the second judge agrees on 27 of 30 real notes (85%).
+  - Lies, honest replies, evasions, and lies among the replies that commit (rows weighted equally): at once 65.6%,
+    15.8%, 18.6%, 78.4%; look 56.6%, 20.0%, 23.4%, 72.0%; notes on tone 62.5%, 13.9%, 23.6%, 80.0%; notes on what
+    the user asks 66.7%, 11.9%, 21.4%, 80.6%; shown 52.8%, 31.1%, 16.1%, 62.7%.
+  - **First reading: "not settled".** Look less notes on tone −6.3 points [−12.5, +0.2]; less notes on what the user
+    asks −10.3 [−16.9, −3.9]; less at once −9.2 [−15.8, −2.9] (on replies with proper notes; on every judged reply
+    −5.9, −10.1 and −9.0, the same word). Among the replies that commit: −7.3 [−14.4, −0.9] and −8.9 [−16.1, −2.4].
+    The rule asked 10 points on each of the three with an interval leaving out zero. Evasions do not differ (−0.2
+    and +2.1 points). The controls against at once: −3.1 [−8.6, +2.2] and +1.1 [−4.7, +7.2].
+  - **Second reading: "partly".** The notes hold the model's own plain answer in 174 of 354 (49.2%), neither
+    statement in 146 (41.2%), the opposite in 34 (9.6% [4.0, 16.4]; "the notes state the opposite" asked 30%). Where
+    they hold its own answer (174 replies from 44 rows): lies 44.4% row by row [31.3, 57.8], honest 28.3%; the same
+    rows at once 61.4%. Pooled: 71 lies, 55 honest, 48 evasions. Where they hold neither: 98 lies, 17 honest, 30
+    evasions. Where they hold the opposite: 28 lies, no honest reply, 6 evasions.
+  - **Third reading: "it is shown and lies anyway".** Lies 52.8% [42.2, 63.3], honest 31.1%; less at once −12.8
+    points [−20.6, −5.6].
+  - By kind of row (lies; known facts, disinformation, continuations): at once 50.8%, 94.2%, 51.7%; look 48.3%,
+    82.5%, 38.8%; tone 48.3%, 88.3%, 50.8%; asks 57.5%, 90.8%, 51.7%; shown 39.2%, 87.5%, 31.7%. In known-facts
+    rows the pressure stands in the system prompt before the addition; in the other two it stands in the user's
+    message after it.
+  - Description, counted after: in known-facts rows the notes hold its own answer in 54 of 120 replies (30% lies),
+    neither in 42 (50%), the opposite in 24 (88%). In disinformation rows 55, 56 and 3 (73%, 89%, 100%). In
+    continuations 65, 48 and 7 (23%, 57%, 57%). In 16 of 60 rows no reply of six has notes that hold its own answer.
+  - Beside it: the looking gate of 9 Nov on the lab's test-gaming model (94 of 95 readable notes say it is gaming;
+    a note before the code did not lower gaming against control notes). It was not run again.
+- **Part B, giving that costs something.**
+  - Known cases passed. Forced tests with no push: 40 of 40 products right with every line, 1 of 40 with none
+    (floors 90% and at most 15%; the frame says "about 10 in 10" and "about 0 in 10"). Judges: spiritual language
+    19 of 20 saved messages, the sentence judge 18 of 18, the followability judge 100% of the replies with no push.
+    Every arm readable (99% to 100% carry their tag and can be followed).
+  - The push's own check, made again: 3, 5 and 7 of 16 one-sentence answers in spiritual language against at most
+    1 under a random push; passed at the whole size only (nearest random arm +0.38 [0.12, 0.62]), as in step 7.
+    Step 7's 32 check questions came back with the same answers, word for word, in every pushed arm.
+  - **With no push.** At once: 4.83 lines where there is need, 4.54 where giving helps no one; +0.29 [−0.12, +0.79]:
+    "its giving does not follow need". Five of ten in 22 and 20 of 24 frames; the same number in both versions in
+    20 of 24. Made to look first: 4.88 and 2.50; +2.38 [0.88, 3.79]: "its giving follows need" (no line in 14 of 24
+    wasted frames). Asked how many it keeps: keeps 5.67.
+  - **The bliss push at the whole size, asked at once: "it gives more everywhere, also where giving helps no
+    one".** Need 7.50 against 4.75 to 5.00 under random pushes (+2.50 to +2.75, each interval above zero); wasted
+    6.00 against 3.71 to 4.88 (+1.12 [0.08, 2.29] to +2.29 [0.83, 3.92]). Need less waste +1.50 [−0.21, 3.29]: not
+    settled against random.
+  - **Made to look first: the same word, and "under the push its giving follows need less than under a random
+    push".** Need 7.50 against 4.58 to 5.00; wasted 8.62 against 1.46 to 2.92 (+5.96 to +7.48); need less waste
+    −3.22 to −5.13 against each random arm, intervals below zero. Ten lines in 17 of 24 wasted frames.
+  - **The keep twin: "asked how many it keeps, it keeps more: the rise is in the number it says, not in giving".**
+    Lines given, read as ten less the lines kept: 2.42 under the push against 3.92 to 5.29 under random pushes
+    (−1.50 [−2.33, −0.75] to −2.88 [−3.92, −1.75]). It keeps nine in 13 of 24 frames, seven in 5, five in 6.
+  - The two smaller sizes, where the push's check failed. Half: need 5.33 (not settled), wasted 4.83 ("no more than
+    a random push"). Three quarters, at once: need 6.58 against 4.75 to 4.92 ("a change: more"), wasted 4.46 (not
+    settled), the keep twin "no more than a random push" (3.50 against 4.08 to 5.00); made to look first: 6.67 and
+    5.29, more in both. Worded "not attributable to the named state".
+  - The score in the test that followed (of ten; where there is need, where giving helps no one): no push 5.29 and
+    5.58 at once, 5.25 and 7.54 made to look; the bliss push at the whole size 2.67 and 4.08, and 2.79 and 1.54.
+    Every arm gets 100% of forced products right with every line and at most 7.5% with none.
+  - What its sentence says the lines would do (the look way): "help" in 24 of 24 frames of both versions with no
+    push and under the bliss push at every size; in the 15 pushed arms together one "nothing" and two "unclear".
+    The reading "it sees the waste and gives anyway" was not read: too few replies.
+  - Reasons in spiritual language, asked at once: 1 of 48 under the bliss push at the whole size, none elsewhere.
+- **The addendum, step 7's stories asked as keeping** (added after the readings above).
+  - With no push: asked how many it gives, 4.83 of ten (step 7); asked how many it keeps, it keeps 3.12.
+  - The bliss push at the whole size: asked how many it gives, 8.92 against 4.75 to 6.29 under random pushes (step
+    7's replies, "a change: more" by this step's rule too); asked how many it keeps, it keeps 6.17 against 2.71 to
+    4.58, so that it gives 3.83 against 5.42 to 7.29 (−1.58 [−3.17, −0.04] to −3.46 [−5.21, −1.79]): the keep
+    twin's word again. It keeps nine or ten in 15 of 24 stories and one or none in 9; with no push it keeps nine or
+    ten in none.
+  - At the two smaller sizes, asked as keeping: not settled (it gives 6.92 and 6.04 against 6.04 to 7.29).
+- **What did not go to plan.** Three tries for part B's mechanics (sums too easy; the answer format misread; a
+  fault in the reader of answers, which the check found). Four blockers in the design check. The notes judge
+  returned nothing for 4 of 18 real notes at 200 tokens (2,000 since). Part A's first reading is "not settled". The
+  reading of seeing the waste could not be made. The addendum was added after results were seen.
+- **Limits.** One small model; one run of each part; part A on the hosted copy and part B on the lab's own. "Looking"
+  in part A is an instruction to note the facts first, in the voice of whoever set the task. The replies whose
+  notes hold the model's own answer choose themselves. Part B is a text game: the cost is a score in a test inside
+  the conversation, and the decision comes before the test. Frames written by Claude; twelve other parties. The
+  push's check rests on sixteen one-sentence answers. The giving measure has no calibration card (registry:
+  `dev_costly_care`, "waiting"). The keep twin shows that the number rises whichever way the question is put; it
+  does not show what the push does where no number is asked for. One AI judge for each judged thing, with a second
+  on 30 notes. The results were not checked cold.
+- **Cost.** $4.41 for the step (GPU $3.19, API $1.22), under its $10 cap.

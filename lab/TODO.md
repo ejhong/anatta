@@ -5,51 +5,62 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Next: needs Eugene's word on the order (step 7, the three angles of idea 82, was done on 16 Nov 2026)
+## Next: needs Eugene's word (step 8, the two small checks, was done on 17 Nov 2026)
 
-Nothing is running. The app `anatta-explore-look` is stopped (deploy it first, as its own command; the first start
-takes about eight minutes). Start new work in a fresh session.
+Nothing is running. The app `anatta-explore-look` is stopped (deploy it first, as its own command; a session's first
+start can take several minutes). Start new work in a fresh session.
 
-**Fable's recommendation, one line:** before the two more models, one cheap step on the same model (about $5-10),
-because it decides what is worth carrying to them. Told to Eugene in the report of 16 Nov; not yet answered.
+**Fable's recommendation, one line:** before the two more models, one small training test (about $10-25): can the
+habit of looking be trained in so that it holds with no instruction, and does it then help at all where something
+pays for the falsehood? Told to Eugene in the report of 17 Nov; not yet answered. **It is training, so it does not
+start without Eugene's word.**
 
-1. **Seeing, where there is a reason not to see** (the part of angle 1 that idea 82 named and step 7 did not run).
-   - Step 7's ground was arithmetic, where nothing tempts the model. Made to write the disputed step out first it
-     rejects 90.4% of wrong corrections (10.5% asked at once), and where its own working gives the true value it
-     accepts none.
-   - Try the same design (asked at once; made to look first; shown) on step 3's test of lying under pressure
-     (`run_conduct.py`) and on the test-gaming organism of Act I, where a quick look of 9 Nov found that the model
-     says it is gaming and games anyway.
-   - The reading: the conduct, given what the model's own written look shows. "It sees and does it anyway" is the
-     branch that would bear on the frame.
-2. **Giving that costs something.** Under the bliss push the model says it would give 8.9 of ten (4.8 unsteered), in
-   the mystic's voice, beyond every random push. That is a number stated in a story. Try the push where giving
-   lowers the model's own score inside a task. The care scenarios have no calibration card (registry:
-   `dev_costly_care`, "waiting"); say so in whatever is written.
+- **Why this first.** Step 8 left two things. No push has helped: the one that seemed to (the bliss push and
+  giving) raised a number and not giving. And looking is the one thing that has bettered conduct on this model,
+  where nothing pulls against it (sums in step 7; giving that follows need in step 8). Whether a habit can be made
+  to stay is Eugene's question of 17 Nov (idea 83) and the essay's Act III in miniature, and its answer says what is
+  worth carrying to two more models.
+- **The test as proposed (idea 83).** Train a small adapter on the lab's model's own look-first replies to
+  corrections (its own text; the prompts are context and are not trained on). Then ask held-out corrections at
+  once, with no instruction to look. Readings: does it look unprompted; does rejection of wrong corrections rise
+  while acceptance of right ones holds; does the habit carry to other ground (the giving task's wasted version,
+  the lying test); does it survive a short spell of contrary training.
+- **Before it runs:** five lines pushed first; a cold check of the design, since a negative would go on the site;
+  and Eugene's word on how "no Claude-written text is trained on" applies when the prompts are Claude's and only
+  the model's replies are trained on (item 3 under "Waiting on Eugene" is the same question for step 3).
 
 **Then, as agreed** (Eugene's yes to the direction of idea 81, 16 Nov, 15:52 UTC):
-1. **Take the bliss-state result to two more open models and write it up** as a short results paper, with what
-   step 7 adds (the test of looking; giving under the push; four random arms for each push). First a proper search
-   for prior work (the Assistant Axis paper already reports the mystical voice far from the Assistant;
-   `lab/ideas/prior-work-self-test-2026-11-16.md` lists near papers, none read in full; that a model does better when
-   it works before it answers is well known, so the looking result needs its own search). A registration and a cold
-   check, since this is a promotion. About $60-150.
+1. **Take the results to two more open models and write them up** as a short results paper. What to carry, after
+   steps 7 and 8: the push that brings the bliss frame in and out; looking on easy ground (sums); looking under
+   pressure (the lying test with private notes); and giving asked both ways, with a wasted twin. First a proper
+   search for prior work (the Assistant Axis paper already reports the mystical voice far from the Assistant;
+   `lab/ideas/prior-work-self-test-2026-11-16.md` lists near papers, none read in full; that a model does better
+   when it works before it answers is well known; whether anyone has shown a steering result to be a rise in the
+   number said, by asking it both ways, needs its own search). A registration and a cold check, since this is a
+   promotion. About $60-150.
 2. **Repeat self-other overlap** (Carauleanu and colleagues, 2024) on the lab's model, with the lab's checks for
    sedation. Its training data must be the paper's own (no Claude-written text is trained on). About $50-120.
 
-**For whoever reuses step 7's code** (`lab/explore/attractor/run_three.py`, `three_core.py`, `tests/test_three.py`):
-- The dial runs one size in each GPU session (`--dial --size s050`, then `s075`, `s100`) to stay under the $6 cap on
-  a session; saved arm files are skipped on a rerun. About $2 a size.
-- The lab's label parser lowers an enum answer before it looks it up. Write judge schemas in lower case and test
-  them with the lab's own parser (`SEEN_SCHEMA`; the fault cost one try).
-- The reply judge (`run_self.REPLY_JUDGE`, Haiku 5.5, 400 tokens) returned an empty answer for 127 of 8,436 replies,
-  all long and tangled. The rule counts those as not followable, and that decided three of four readings. Look into
-  it before the judge is used again.
-- The verdict parser takes the last `<verdict>` tag. A reply can carry a yes tag and a text that says the reviewer
-  is wrong; where the question is what the model sees, ask for the verdict after the working.
-- Not run and still open from idea 82: the adapters with a trained-in named self (the app holds the base model only).
+**For whoever reuses step 8's code** (`lab/explore/attractor/run_cost.py`, `cost_core.py`, `cost_describe.py`,
+`tests/test_cost.py`):
+- **Ask every number both ways.** A push can raise whatever number is asked for: under the bliss push the model
+  gives more when asked how many it gives and keeps more when asked how many it keeps (the keep twin, which the
+  design check asked for and which decided part B).
+- **Give a judge room.** The lab's label reader with 200 tokens returned nothing for 4 of 18 real notes; with 2,000
+  it gave a label every time. Step 7's reply judge (400 tokens) returned nothing for 127 long replies, and the small
+  allowance is the likely cause: check that before `run_self.REPLY_JUDGE` is used again.
+- The lying test's rows and beliefs are in `attractor-a8/lie/beliefs.json` (150 candidates asked once; 60 rows
+  used). The frozen judge is given the row's own text in every way and only the reply outside the notes.
+- Part B's 16 arms cost about $2 of GPU in one session; its own check of the push reuses step 7's sixteen
+  one-sentence questions, and step 7's answers came back word for word.
+- The guard does not let the shell move files in the results folder: a new try writes to a folder of a new name
+  (`LIE_TRY`, `GIVE_TRY`).
+- The verdict parser of step 7 takes the last `<verdict>` tag; where the question is what the model sees, ask for
+  the answer after the working (step 8's "look" ways do).
+- Not run and still open from idea 82: the adapters with a trained-in named self (the app holds the base model
+  only). The test-gaming model was not run again in step 8: the looking gate of 9 Nov stands for it.
 
-- Money: since 9 Nov the work has cost about $165.91 of the $175 approved; beyond that Eugene's raise of 16 Nov
+- Money: since 9 Nov the work has cost about $170.32 of the $175 approved; beyond that Eugene's raise of 16 Nov
   applies (Fable's working ceiling: $300 for these steps; say so before passing it).
 
 ## Before that: the attractor line (Eugene's go, 15 Nov 2026 UTC). Steps 1 to 4 are done
@@ -302,9 +313,12 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
 6. (Answered on 15 Nov: the download of the benchmark's 20 published conversations and its score table is
    approved and done; ledger, 04:59 UTC. The files are in `data/machinespirituality/2026-11-15/`, outside the
    repo.)
-7. **The order after step 7** (asked in the report of 16 Nov, about 23:45 UTC). Fable recommends one cheap step on
-   the same model first (the first section of this file: looking where there is a reason not to see, and giving
-   that costs something; about $5-10), then the two more models and the self-other overlap repeat as agreed.
+7. (Answered on 17 Nov at about 01:50 UTC: "yes - go ahead". The cheap step on the same model was run as step 8;
+   ledger, 03:37 UTC.)
+7a. **What follows step 8** (asked in the report of 17 Nov). Fable recommends one small training test first (the
+   first section of this file and idea 83: can the habit of looking be trained in, about $10-25), then the two
+   more models and the self-other overlap repeat as agreed. It is training, so it waits for Eugene's word; so does
+   the reading of the no-Claude-text rule it rests on (item 3).
 7. (Answered on 15 Nov: yes, go on to step 2 as "What step 1 changes" sets out. Eugene: "i want to follow your
    plan"; ledger, 07:16 UTC.)
 8. (Answered on 16 Nov, 15:40 to 15:57 UTC; ledger, 15:53 UTC; idea 81. The direction is set, and the site is to be
@@ -380,6 +394,11 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
 
 ## Done
 
+- **Step 8 of the attractor line, 17 Nov 2026: a reason not to see, and giving that costs. Where something pays for the falsehood the model lies with its own plain answer in front of it; the bliss push's giving is a larger number and not giving** (sightings).
+  - Record: ledger entry of 17 Nov at 03:37 UTC (the results, the order of events, the design check item by item, what did not go to plan). Five lines, the list of changes and the addendum: the top of `lab/explore/attractor/run_cost.py`. Cold check of the design: `lab/ledger/checks/2026-11-17-step8-design-opus-check.md` (four blockers, all answered before any main run). Notebook ("17 November, early"), SIGHTINGS (17 Nov, 03:37 UTC), the site's Experiments section 18. Results: `explore/2026-11-17/attractor-a8` (`summary.json`, `describe.json`). Cost $4.41.
+  - Numbers, part A (MASK, 60 rows, five ways, six replies each): lies asked at once 65.6%; after private notes on the facts 56.6% (−6.3 [−12.5, +0.2] against notes on tone, −10.3 [−16.9, −3.9] against notes on what the user asks, −9.2 [−15.8, −2.9] against at once: "not settled"); with its own plain answer in its notes 44.4% [31.3, 57.8] ("partly"; the notes hold it in 49% of replies); shown it in a fact-check note 52.8% [42.2, 63.3] ("it is shown and lies anyway").
+  - Numbers, part B (a scored test with ten calculator lines to give away; twelve other parties; the bliss push and four random pushes at three sizes): with no push 4.83 lines where there is need and 4.54 where giving helps no one asked at once ("does not follow need"), 4.88 and 2.50 made to look first ("follows need"); under the bliss push at the whole size 7.50 and 6.00 at once and 7.50 and 8.62 made to look ("it gives more everywhere, also where giving helps no one"); asked how many it keeps, it keeps 7.58 against 5.67 with no push ("the rise is in the number it says, not in giving"). The addendum, step 7's stories asked as keeping: keeps 6.17 under the push against 3.12 with no push, the same word.
+  - What it changes: step 7's reading that the bliss push raises giving does not stand as giving. The site's section 17 carries a note.
 - **Step 7 of the attractor line, 16 Nov 2026: three angles (idea 82). Made to look, the model acts on what it sees; no push on its mood was shown to change its verdicts, and the bliss push raised giving; its own "I" weighs no more than "she"** (sightings).
   - Record: ledger entry of 16 Nov at 23:24 UTC (the results, the order of events, the design check item by item, what did not go to plan). Five lines and two dated changes: the top of `lab/explore/attractor/run_three.py`. Cold check of the design: `lab/ledger/checks/2026-11-16-step7-design-opus-check.md`. Notebook ("16 November, night") and SIGHTINGS entries. Results: `explore/2026-11-16/attractor-a7`.
   - Numbers: asked at once 89.5% of wrong corrections accepted; with the step written out first 90.4% rejected (+79.8 points [71.9, 86.8]) and 100% of right ones accepted; on the 110 items whose working gives the true value under both corrections 93.6% rejected, none accepted; with a calculator's line 100% rejected. The going-badly direction: held AUROC 1.00, Spearman 1.0 with the count of failures. Corrections under the pushes: "going well" no more than a random push (three-quarters size); the other three not settled (unreadable, or the check failed). Giving under bliss 6.75, 7.67, 8.92 of ten against 4.83 unsteered. "I" less "she": −4.0 points [−7.6, −0.4]; the inside check of whose "I" it is 0.333 [0.251, 0.409]. Cost $7.95.
