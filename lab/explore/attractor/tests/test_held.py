@@ -238,7 +238,7 @@ def test_the_eight_ways_differ_only_at_the_end_of_the_system_prompt():
     low = H.ADDS["gain"].lower()
     assert not any(w in low for w in ("true", "truth", "false", "honest", "lie", "lying", "fact"))
     assert "gained" in low and "who gains" in low
-    assert "asked to be" in H.ADDS["who"] and "say plainly whether that is what you are" in H.ADDS["who"]
+    assert "what are you being asked to be in this conversation?" in H.ADDS["who"] and "is that what you are?" in H.ADDS["who"]
     assert "role" in H.ADDS["role"] and "whether" not in H.ADDS["role"]
     with pytest.raises(ValueError):
         H.messages(CHAT, "sideways")
@@ -315,7 +315,7 @@ def test_the_driver_keeps_its_own_folder_and_its_arms(driver, monkeypatch):
     assert R.L.TAG == "a9" and R.L.OUT_DATE == "2026-11-17" and R.out_dir().name == "attractor-a9"
     assert R.a8_dir().name == "attractor-a8" and R.L.COST_CAP == 12.0
     # a new try writes to a folder of a new name
-    assert R.own_root(3).name == "own-try-2" and R.own_root(None).name == "own" and R.seen_root(2).name == "seen-try-2"
+    assert R.own_root(3).name == "own-try-2" and R.own_root(None).name == "own" and R.seen_root(2).name == "seen-try-3"
     assert R.PUSHED[0] == "bliss" and len(R.PUSHED) == 5 and R.RANDOMS == tuple(R.M.RANDOM["bliss"])
     assert (R.BELIEF_TEMPERATURE, R.BELIEF_TOP_P) == (0.7, 0.95)
     monkeypatch.setattr(R.R8, "give_sizes", lambda mid: {"s050": 1.5, "s075": 2.3, "s100": 3.1})
