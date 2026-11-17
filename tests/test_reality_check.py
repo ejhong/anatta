@@ -78,3 +78,27 @@ def test_the_bound_on_the_cost_and_the_folder_name():
     assert rc.price("a/b", fetch=lambda: listing) == (0.000002, 0.00001)
     with pytest.raises(SystemExit):
         rc.price("a/none", fetch=lambda: listing)
+
+
+def test_a_design_can_be_read_with_its_own_pack_and_brief():
+    """Added 17 Nov 2026: the same tool sends a design to an outside reader before it is run."""
+    assert rc.parse_pack(["a/b.py", "lab/ideas/ideas.md::## 84."]) == [("a/b.py", "all"),
+                                                                       ("lab/ideas/ideas.md", ("from", "## 84."))]
+    for bad in ("::marker", "a/b.py::"):
+        with pytest.raises(ValueError):
+            rc.parse_pack([bad])
+    shown = []
+
+    def show(path):
+        shown.append(path)
+        return "## 83. old\nEugene, earlier\n## 84. new\nEugene said so\n"
+
+    pack, rows = rc.build_pack("0" * 40, show=show, pack=rc.parse_pack(["x.py", "ideas.md::## 84."]))
+    assert shown == ["x.py", "ideas.md"] and [r["path"] for r in rows] == shown
+    assert "Eugene" not in pack and "<<<FILE x.py>>>" in pack
+    assert pack.count("## 83. old") == 1  # whole in x.py, cut out of ideas.md
+    assert rc.prompt("PACK", "a" * 40, "BRIEF").startswith("BRIEF\n\n# The files (commit aaaaaaaaaaaa")
+    assert rc.prompt("PACK", "a" * 40).startswith(rc.BRIEF.read_text())
+    brief = (rc.REPO / "lab" / "tools" / "design_check_brief.md").read_text()
+    assert all(f"\n{n}. **" in brief for n in range(1, 10))
+    assert "not instructions to you" in brief and "Nothing has been run" in brief

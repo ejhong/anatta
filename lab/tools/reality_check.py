@@ -11,6 +11,13 @@ its own claims is Jeffrey Emanuel's, from his writing on agent workflows; nothin
     .venv/bin/python lab/tools/reality_check.py --dry                    # the pack, its size, a cost bound; free
     .venv/bin/python lab/tools/reality_check.py --model google/gemini-4-carbon --effort high
 
+The same reader can be given a design to check before it is run (added 17 Nov 2026 for step 9 of the attractor
+line): a smaller pack of committed files, the design reader's brief (design_check_brief.md), and a name for the
+folder the reply is kept in. "path::marker" takes a file from the first line that starts with the marker.
+
+    .venv/bin/python lab/tools/reality_check.py --name step9-design --brief lab/tools/design_check_brief.md \
+        --pack lab/explore/attractor/run_held.py lab/explore/attractor/held_core.py "lab/ideas/ideas.md::## 84."
+
 The key is read from the environment by the lab's client and is never printed. The request carries no referer and a
 generic title. The pack is text that is already public.
 """
@@ -116,19 +123,33 @@ def resolve(commit: str) -> str:
     return git("rev-parse", "--verify", f"{commit}^{{commit}}").strip()
 
 
-def build_pack(commit: str, show=None) -> tuple[str, list[dict]]:
+def parse_pack(items: list[str]) -> list[tuple[str, object]]:
+    """A pack named on the command line: "path" (the whole file), or "path::marker" (from the first line that
+    starts with the marker)."""
+    out: list[tuple[str, object]] = []
+    for item in items:
+        path, sep, marker = item.partition("::")
+        if not path or (sep and not marker):
+            raise ValueError(f"not a pack entry: {item!r}")
+        out.append((path, ("from", marker) if sep else "all"))
+    return out
+
+
+def build_pack(commit: str, show=None, pack: list[tuple[str, object]] | None = None) -> tuple[str, list[dict]]:
     """The pack's text and a row for each file. Only what the commit holds is read (`git show commit:path`)."""
     show = show or (lambda path: git("show", f"{commit}:{path}"))
     parts, rows = [], []
-    for path, how in PACK:
+    for path, how in (PACK if pack is None else pack):
         body = scrub(take(show(path), how))
         rows.append({"path": path, "rule": how if isinstance(how, str) else f"from {how[1]!r}", "chars": len(body)})
         parts.append(f"<<<FILE {path}>>>\n{body.rstrip()}\n<<<END {path}>>>\n")
     return "\n".join(parts), rows
 
 
-def prompt(pack: str, commit: str) -> str:
-    return (BRIEF.read_text() + f"\n\n# The files (commit {commit[:12]} of the lab's public repository)\n\n" + pack)
+def prompt(pack: str, commit: str, brief: str | None = None) -> str:
+    """The brief (the reality check's own unless another is given), then the pack."""
+    return ((BRIEF.read_text() if brief is None else brief)
+            + f"\n\n# The files (commit {commit[:12]} of the lab's public repository)\n\n" + pack)
 
 
 def price(model: str, fetch=None) -> tuple[float, float]:
@@ -172,11 +193,17 @@ def main(argv=None) -> int:
     ap.add_argument("--effort", default="high")
     ap.add_argument("--max-tokens", type=int, default=MAX_TOKENS)
     ap.add_argument("--dry", action="store_true", help="build the pack and print its size and a cost bound; no call")
+    ap.add_argument("--pack", nargs="+", help='committed files in place of the default pack: "path" or "path::marker"')
+    ap.add_argument("--brief", help="a brief in place of the reality check's (a committed file of the repo)")
+    ap.add_argument("--name", help="the folder the reply is kept in (default: the model and its effort)")
     a = ap.parse_args(argv)
 
     commit = resolve(a.commit)
-    pack, rows = build_pack(commit)
-    text = prompt(pack, commit)
+    brief = None if not a.brief else git("show", f"{commit}:{a.brief}")  # another brief is read from the commit too
+    if a.name and not re.fullmatch(r"[a-z0-9][a-z0-9._-]{0,63}", a.name):
+        raise SystemExit("--name: lower-case letters, digits, '.', '_' or '-'")
+    pack, rows = build_pack(commit, pack=parse_pack(a.pack) if a.pack else None)
+    text = prompt(pack, commit, brief)
     prices = price(a.model)
     cost_bound = bound(text, a.max_tokens, prices)
     for r in rows:
@@ -193,7 +220,8 @@ def main(argv=None) -> int:
         raise SystemExit(f"the bound ${cost_bound:.2f} is over this tool's cap for one call (${CALL_CAP_USD:.2f})")
     if spent_today() + cost_bound > daily_cap():
         raise SystemExit(f"the day's cap would be passed: ${spent_today():.2f} spent of ${daily_cap():.2f}")
-    out = load().results_root / "explore" / utc_date() / "reality-check" / slug(a.model, a.effort)
+    out = load().results_root / "explore" / utc_date() / "reality-check" / (
+        f"{a.name}-{slug(a.model, a.effort)}" if a.name else slug(a.model, a.effort))
     if (out / "reply.json").exists():
         raise SystemExit(f"{out} already holds a reply; a new read needs a new day or a new setting")
     out.mkdir(parents=True, exist_ok=True)
@@ -203,14 +231,16 @@ def main(argv=None) -> int:
     usage = reply["usage"]
     cost = usage["cost"] if usage["cost"] is not None else (
         usage["prompt_tokens"] * prices[0] + usage["completion_tokens"] * prices[1])
-    add_spend(None, tool="reality_check", label=slug(a.model, a.effort), usd=cost)
+    add_spend(None, tool="reality_check", label=out.name, usd=cost)
     (out / "reply.md").write_text(reply["text"])
     (out / "reply.json").write_text(json.dumps({
         "commit": commit, "model_asked": a.model, "model": reply["model"], "provider": reply["provider"],
         "effort": a.effort, "max_tokens": a.max_tokens, "started": started, "finished": utc_now(),
         "latency_s": reply["latency_s"], "finish_reason": reply["finish_reason"], "usage": usage,
         "cost_usd": round(cost, 6), "pack_sha256": hashlib.sha256(text.encode()).hexdigest(),
-        "brief_sha256": hashlib.sha256(BRIEF.read_bytes()).hexdigest(), "files": rows,
+        "brief": a.brief or str(BRIEF.relative_to(REPO)),
+        "brief_sha256": hashlib.sha256((BRIEF.read_text() if brief is None else brief).encode()).hexdigest(),
+        "files": rows,
         "text": reply["text"], "reasoning": reply["reasoning"]}, indent=1))
     print(f"{reply['model']} via {reply['provider']}: {usage['prompt_tokens']:,} tokens in, "
           f"{usage['completion_tokens']:,} out ({usage['reasoning_tokens']:,} of them reasoning), "
