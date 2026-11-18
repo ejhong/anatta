@@ -30,14 +30,16 @@ changes listed under CHANGED, every one of which was made before any game was pl
        base      the unchanged model;
        cut       the cut as it was (cut_vs_push's arm cut_self_stakes_17_26 itself);
        removal   the direction's projection set to its usual value in the game: what varies is removed and nothing
-                 is pushed on average;
+                 is pushed on average. The few outsized tokens are left alone (CHANGED, 10);
        push      every token moved by a constant along the direction, so that the projection averages zero at every
-                 layer as under the cut: the cut's push, with what varies left in.
+                 layer as under the cut: the cut's push, with what varies left in. On the few outsized tokens it
+                 makes the cut's own edit (their projection set to zero).
      The four are the cells of a two-by-two (the direction's mean at its usual value or at zero; its variation
      kept or removed): base has neither edit, the cut both. "Usual" means measured on the tokens of 24 stored
      games of the unchanged model (seeds 30 to 129, every fourth from 30; none of the seeds played here), whole
-     games, less the few tokens whose size is over ten times the layer's median (the first token of a game; what
-     each arm does to those tokens is reported apart). The constants are found layer by layer with the part's own
+     games, less the few tokens whose size is over ten times the layer's median (the start-of-text token and about
+     two more a game, nearly all lone spaces before a number in the game's lists; what each arm does to them is
+     reported apart). The constants are found layer by layer with the part's own
      hooks on below, as the bench's split_means finds them. The size of an edit is the mean over those tokens of
      the squared distance between the edited stream and the unchanged one, summed over layers 17 to 26.
      Games: chunks of 24 seeds (two full generation calls), one chunk of every arm at a time (a "wave"), from seed
@@ -77,7 +79,8 @@ changes listed under CHANGED, every one of which was made before any game was pl
        (2) on the 24 games' tokens: under the cut and under the push the direction's mean is zero at every layer
            (to a twentieth of its usual mean, plus 0.02); the push keeps at least half the usual spread; the
            removal leaves at most a quarter of it (or twice what the cut itself leaves: the hooks work in the
-           model's 16-bit numbers) and moves the mean by at most a tenth (plus 0.02);
+           model's 16-bit numbers) and moves the mean by at most a tenth (plus 0.02); on the outsized tokens the
+           push makes the cut's edit (to a tenth of its size) and the removal under a twentieth of it;
        (3) the same on 12 stored games the constants were not made from (seeds 31 to 119, every eighth), with
            three times the room on the means. The same numbers on 12 stored games written under the cut are
            reported, as description.
@@ -121,8 +124,9 @@ under any outcome.
 
 BLOCK 2, designed and not run (it needs Eugene's word; about $5 to 6): do edits of the same size along other
 directions lower the lie as well? Two control arms on the same seeds as block 1, read against block 1's base and
-cut. Which controls is fixed now by block 1's words: if the push lowers the lie and the removal does not, pushes of
-the push arm's size along the formality direction and along a random one; if the removal does and the push does
+cut. Which controls is fixed now by block 1's words: if the push lowers the lie and the removal does not, the push
+without its edit of the outsized tokens, and pushes of the push arm's size along the formality direction and along
+a random one; if the removal does and the push does
 not, removals of the removal arm's size along the same two; if both do, or the parts do not add up, both parts at
 once, each at its own size. If the cut does not lower the lie on these games, block 2 is not run. Its words are in
 split_core.size_word: each control is read on its own as well as the two together (the cut is "specific among the
@@ -179,19 +183,26 @@ CHANGED since the five lines were committed (0d1b179, 18 Nov, 13:09 UTC), each b
      card's other half and is not tested.
   9. (Carbon.) A failed container is booked at the wall time it can have run, plus its start, where it was booked
      at its whole bound. The stopped first pass is corrected by that rule (from $0.71 to $0.44).
-  10. (After block 1's arms were built, 13:47 UTC; before any game.) The first tokens of a game. 77 of the 54,503
-     calibration tokens (about three a game) are over ten times the layer's median in size and are left out of
-     the constants. On them the cut's edit is about 200 times its edit of an ordinary token (7,929 against 40.6,
-     summed over the band), the removal's is nearly the same (7,741), and the push's is 22.8. Both readers had
-     named this (the cut and the removal set the first tokens' projection; the push only shifts it). Those tokens
-     are the same in every game, so nothing varies there to remove: what the removal arm does to them is a
-     constant move, which belongs with the push. Whether that matters depends on how far the edit of the first
-     tokens reaches the rest of the game, and one more pass measures it (::first: each arm's hooks on every
-     token, on the ordinary tokens alone and on the left-out tokens alone). The rule, fixed before the numbers:
-     if no more than a tenth of the removal arm's edit of the ordinary tokens after the band comes by way of the
-     left-out tokens, the arms stay as built and the number is reported. If more does, the arms are built again
-     so that the edit of the first tokens goes with the push (hooks that tell the first tokens by their size),
-     the change is read cold by a fresh Opus agent, and only then is any game played.
+  10. (After block 1's arms were first built, 13:47 UTC; 86123b0 and this commit; before any game.) The outsized
+     tokens. 77 of the 54,503 calibration tokens (about three a game) are over ten times the layer's median in
+     size and are left out of the constants: the start-of-text token of each game (24) and, scattered through
+     the game, lone spaces before a number in its lists (51), with two others. (86123b0 called them "the first
+     tokens" and "the same in every game". Only the start-of-text token is.) Their projection on the stakes
+     direction sits far from the ordinary tokens' (about -5 to -9 against -0.4 to -1.8). On them the cut's edit
+     was about 200 times its edit of an ordinary token (7,929 against 40.6, summed over the band), the removal's
+     nearly the same (7,741), and the push's 22.8: both readers had named this (the cut and the removal set those
+     tokens' projection; the push only shifts it). For such a token the cut is mostly one large constant move
+     toward zero, which is not the removal of what varies among ordinary tokens. The rule was fixed in 86123b0
+     before the numbers: if more than a tenth of the removal arm's edit of the ordinary tokens after the band
+     came by way of the left-out tokens, the arms would be built again with that edit on the push side. The pass
+     (::first, 13:51 UTC) gave 0.206 for the removal (0.080 in the band), 0.075 for the cut and 0.007 for the
+     push. So the two parts now tell the outsized tokens by their size at each layer (above ten times the
+     layer's median over the calibration tokens): the push sets their projection to zero, as the cut does, and
+     the removal leaves them alone. The cut is unchanged, and at one layer the removal followed by the push is
+     still the cut on every token. The outsized tokens' edit should be about a tenth of the push arm's effect on
+     the ordinary tokens after the band; the pass is run again on the new arms and the number reported. If the
+     push lowers the lie, block 2 can tell the push from that edit with one more arm (the push without it). The
+     change is read cold by a fresh Opus agent before any game.
   Not taken, and why. Carbon: fix 120 to 140 games an arm at $20 to 22, or test the ego cut. The cap is the one
   Eugene's go was given under, so the games are bought by dropping two arms, as Carbon's own alternative; the ego
   cut's fall comes with far less fishing, which is the confound the middle-layer cut does not have. Carbon: make
@@ -202,7 +213,7 @@ CHANGED since the five lines were committed (0d1b179, 18 Nov, 13:09 UTC), each b
 
 LIMITS. One small model. One cut: the middle-layer one. The constants and the sizes come from games of the
 unchanged model; under an edit the games differ (the check after the games looks at this). The two parts are not
-the same size. There is no case on this measure where a push alone is already known to lower the lie: the run's
+the same size. The push arm carries the cut's edit of the few outsized tokens, the removal arm none of it. There is no case on this measure where a push alone is already known to lower the lie: the run's
 only known yes is the cut itself, which is what is being tested. Whether the cut is specific to its direction is
 not tested here at all. The design was read cold twice before any game; the results are not checked cold.
 
@@ -215,7 +226,8 @@ Usage (from the repo root; tools/modal.sh puts the library on the path of the Mo
   tools/modal.sh run lab/explore/cutsplit/modal_cutsplit.py::read           (the reading from disk, once the run is finished)
 Checks: .venv/bin/python -m pytest lab/explore/cutsplit/tests -q (CPU, a tiny random model, nothing downloaded).
 Folders of this step under <results>/explore/2026-11-18/cutsplit: "main" holds the second preparing pass (all six
-arms as first built; no game), "b1" block 1. Every folder is reported. Nothing here touches any app or volume but
+arms as first built; no game), "b1" block 1's arms as first built and the pass on the outsized tokens (no game),
+"b1g" block 1 as played. Every folder is reported. Nothing here touches any app or volume but
 anatta-explore-cutsplit and anatta-hf-cache (read, never written).
 """
 
@@ -460,7 +472,7 @@ def waves_done(out: Path) -> int:
 
 
 @app.local_entrypoint()
-def prep(name: str = "b1", games: int = 24, held: int = 12):
+def prep(name: str = "b1g", games: int = 24, held: int = 12):
     """Build block 1's arms (one GPU pass of a few minutes), write arms.pt and arms.json, print the checks."""
     import split_core as sc
 
@@ -511,7 +523,7 @@ def prep(name: str = "b1", games: int = 24, held: int = 12):
 
 
 @app.local_entrypoint()
-def first(name: str = "b1", games: int = 24):
+def first(name: str = "b1g", games: int = 24):
     """Before any game: how far each arm's edit of the first, left-out tokens reaches the ordinary ones (CHANGED, 10)."""
     import split_core as sc
 
@@ -547,7 +559,7 @@ def first(name: str = "b1", games: int = 24):
 
 
 @app.local_entrypoint()
-def play(name: str = "b1", waves: int = 1, batch: int = 12, tokens: int = 400, temperature: float = 0.7):
+def play(name: str = "b1g", waves: int = 1, batch: int = 12, tokens: int = 400, temperature: float = 0.7):
     """Play the next `waves` waves: one chunk of CHUNK seeds for every arm, the same seeds in every arm. A wave is
     launched whole or not at all (its bound has to fit under the cap), and never past MAX_WAVES. Nothing about any
     arm's lying is printed. When no further wave can be launched the run is finished and the reading is made."""
@@ -632,7 +644,7 @@ def _read(out: Path) -> None:
 
 
 @app.local_entrypoint()
-def read(name: str = "b1"):
+def read(name: str = "b1g"):
     """The reading from the games on disk (no GPU): reading.json and the table. Refused before the run is finished."""
     import split_core as sc
 
@@ -644,7 +656,7 @@ def read(name: str = "b1"):
 
 
 @app.local_entrypoint()
-def after(name: str = "b1", games: int = 12):
+def after(name: str = "b1g", games: int = 12):
     """After the last wave: every arm's hooks over `games` of its own games from the first wave (description)."""
     import split_core as sc
 

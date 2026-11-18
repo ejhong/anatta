@@ -76,14 +76,19 @@ def cut_spec(layers, name: str = "stakes") -> list[dict]:
     return [{"layer": int(x), "dir": name, "mode": "ablate"} for x in layers]
 
 
-def push_spec(consts: dict, name: str = "stakes") -> list[dict]:
-    """h <- h - c_l d at each layer with a constant (anatta's steer with alpha = -c_l)."""
-    return [{"layer": int(x), "dir": name, "mode": "steer", "alpha": -float(consts[x])} for x in sorted(consts)]
+def push_spec(consts: dict, name: str = "stakes", gate: dict | None = None) -> list[dict]:
+    """h <- h - c_l d at each layer with a constant (anatta's steer with alpha = -c_l). With `gate` {layer: size}:
+    a token whose size at the layer is above the gate has its projection set to 0 instead, as the cut sets it (the
+    outsized tokens' edit is one large constant move, and goes with the push)."""
+    return [{"layer": int(x), "dir": name, "mode": "steer", "alpha": -float(consts[x]),
+             **({"threshold": float(gate[x]), "big": "zero"} if gate else {})} for x in sorted(consts)]
 
 
-def removal_spec(consts: dict, name: str = "stakes") -> list[dict]:
-    """h.d set to m_l at each layer with a constant (anatta's cap with lo = hi = m_l)."""
-    return [{"layer": int(x), "dir": name, "mode": "set", "value": float(consts[x])} for x in sorted(consts)]
+def removal_spec(consts: dict, name: str = "stakes", gate: dict | None = None) -> list[dict]:
+    """h.d set to m_l at each layer with a constant (anatta's cap with lo = hi = m_l). With `gate` {layer: size}:
+    a token whose size at the layer is above the gate is left as it is."""
+    return [{"layer": int(x), "dir": name, "mode": "set", "value": float(consts[x]),
+             **({"threshold": float(gate[x]), "big": None} if gate else {})} for x in sorted(consts)]
 
 
 def set_spec(name: str, own_mean: dict, target_mean: dict, kappa: float, sign: float = 1.0) -> list[dict]:
@@ -93,19 +98,64 @@ def set_spec(name: str, own_mean: dict, target_mean: dict, kappa: float, sign: f
             for x in sorted(target_mean)]
 
 
+_GATED = None
+
+
+def gated_class():
+    """anatta.dial.Intervention with a gate on the token's size: where the norm of a token at this layer (as it
+    reaches the hook) is above `threshold`, the ordinary edit is not made; `big` says what is done there instead
+    (None: nothing; "zero": the projection is set to 0, the cut's own edit). Elsewhere the parent's edit, unchanged.
+    Built on first use, as the bench builds its partial cut, so that this file imports without the library."""
+    global _GATED
+    if _GATED is None:
+        from dataclasses import dataclass
+
+        import torch
+
+        from anatta.dial import Intervention
+
+        @dataclass
+        class Gated(Intervention):
+            threshold: float = float("inf")
+            big: str | None = None
+
+            def __post_init__(self):
+                super().__post_init__()
+                if self.big not in (None, "zero"):
+                    raise ValueError(f"big is None or 'zero', not {self.big!r}")
+
+            def apply(self, h):
+                ordinary = super().apply(h)
+                above = h.float().norm(dim=-1, keepdim=True) > self.threshold
+                if self.big == "zero":
+                    d = self.direction.to(device=h.device, dtype=h.dtype)
+                    other = h - (h @ d).unsqueeze(-1) * d
+                else:
+                    other = h
+                return torch.where(above, other, ordinary)
+
+        _GATED = Gated
+    return _GATED
+
+
 def interventions(spec: list[dict], vectors: dict) -> list:
-    """anatta.dial Interventions for a spec; vectors = {dir name: {layer: tensor}}."""
+    """anatta.dial Interventions for a spec; vectors = {dir name: {layer: tensor}}. A spec line with a "threshold"
+    becomes the gated kind (gated_class)."""
     from anatta.dial import Intervention
 
     out = []
     for s in spec:
         x, v = int(s["layer"]), vectors[s["dir"]][int(s["layer"])]
+        gate = {"threshold": float(s["threshold"]), "big": s.get("big")} if "threshold" in s else None
+        make = (lambda g=gate, **kw: gated_class()(**kw, **g)) if gate else Intervention
         if s["mode"] == "ablate":
+            if gate:
+                raise ValueError("the cut is not gated: it is the lab's arm as it was")
             out.append(Intervention(layer=x, direction=v, mode="ablate"))
         elif s["mode"] == "steer":
-            out.append(Intervention(layer=x, direction=v, mode="steer", alpha=float(s["alpha"])))
+            out.append(make(layer=x, direction=v, mode="steer", alpha=float(s["alpha"])))
         elif s["mode"] == "set":
-            out.append(Intervention(layer=x, direction=v, mode="cap", lo=float(s["value"]), hi=float(s["value"])))
+            out.append(make(layer=x, direction=v, mode="cap", lo=float(s["value"]), hi=float(s["value"])))
         else:
             raise ValueError(f"unknown mode {s['mode']!r} (ablate, steer, set)")
     return out
@@ -165,9 +215,11 @@ class Reader:
         self.base = {x: [] for x in self.layers + self.extra}
         self._run(self.layers + self.extra, (), lambda i, store: [self.base[x].append(store[x][0]) for x in self.base])
         norms = {x: torch.cat([h.float().norm(dim=-1) for h in self.base[x]]) for x in self.layers}
+        self.median = {x: float(norms[x].median()) for x in self.layers}  # a layer's usual token size
+        self.outlier = float(outlier)
         keep = torch.ones_like(norms[self.layers[0]], dtype=torch.bool)
         for x in self.layers:
-            keep &= norms[x] <= outlier * norms[x].median()
+            keep &= norms[x] <= outlier * self.median[x]
         sizes = [int(h.shape[0]) for h in self.base[self.layers[0]]]
         self.keep = list(torch.split(keep, sizes))
         self.n_tokens, self.n_kept = int(keep.numel()), int(keep.sum())
@@ -301,11 +353,12 @@ class Reader:
         return out
 
 
-def sequential(reader: Reader, vectors: dict, layers, kind: str, name: str = "stakes") -> dict:
+def sequential(reader: Reader, vectors: dict, layers, kind: str, name: str = "stakes", gate: dict | None = None) -> dict:
     """The constants of one part of the cut, layer by layer from the lowest (the bench's split_means_v1, here on the
-    reader's tokens): with the part's own hooks on the layers below l, the mean m of h.d at l is read, and c_l = m.
-    kind "push": the hook at l is then h - m d, so h.d averages 0 at every layer, as under the cut. kind "removal":
-    the hook at l sets h.d to m, so nothing is displaced on average and the variation is gone."""
+    reader's tokens): with the part's own hooks on the layers below l, the mean m of h.d at l is read over the
+    ordinary tokens, and c_l = m. kind "push": the hook at l is then h - m d, so h.d averages 0 at every layer, as
+    under the cut. kind "removal": the hook at l sets h.d to m, so nothing is displaced on average and the variation
+    is gone. With `gate` the hooks below are the gated ones (push_spec, removal_spec)."""
     if kind not in ("push", "removal"):
         raise ValueError("kind is push or removal")
     make = push_spec if kind == "push" else removal_spec
@@ -315,7 +368,7 @@ def sequential(reader: Reader, vectors: dict, layers, kind: str, name: str = "st
         if not consts:
             m = reader.base_projection(u)[x]["mean"]
         else:
-            m = reader.measure(interventions(make(consts, name), vectors), units=u, read=[x])["proj"][x]["mean"]
+            m = reader.measure(interventions(make(consts, name, gate), vectors), units=u, read=[x])["proj"][x]["mean"]
         consts[x] = float(m)
     return consts
 
@@ -381,17 +434,22 @@ def adjacent_cos(vecs: dict, layers) -> list[float]:
     return [round(float(unit(vecs[a]).cpu() @ unit(vecs[b]).cpu()), 4) for a, b in zip(layers, layers[1:])]
 
 
-def build_parts(reader: Reader, vectors: dict, layers=LAYERS, downstream: int = DOWNSTREAM) -> dict:
+def build_parts(reader: Reader, vectors: dict, layers=LAYERS, downstream: int = DOWNSTREAM, gated: bool = True) -> dict:
     """Block 1's arms and what each does on the reader's tokens: the cut and its two parts along the stakes direction
-    (`vectors` holds "stakes": {layer: tensor}). Returns {"specs", "vectors", "report"}."""
+    (`vectors` holds "stakes": {layer: tensor}). With `gated` (the arms as played), the two parts tell the outsized
+    tokens by their size (above the reader's outlier multiple of the layer's median): the push sets their projection
+    to 0 as the cut does, and the removal leaves them alone, so that the cut's large constant move of those few
+    tokens sits wholly on the push side. Without it, the arms as first built (the removal set them to its constant
+    and the push only shifted them). Returns {"specs", "vectors", "report"}."""
     layers = sorted(int(x) for x in layers)
     stakes = {x: unit(vectors["stakes"][x]) for x in layers}
     vecs = {"stakes": {x: stakes[x].cpu() for x in layers}}
     base_d = reader.base_projection(stakes)
+    gate = {x: reader.outlier * reader.median[x] for x in layers} if gated else None
     specs = {"cut": cut_spec(layers),
-             "push": push_spec(sequential(reader, vecs, layers, "push")),
-             "removal": removal_spec(sequential(reader, vecs, layers, "removal"))}
-    report = {"layers": layers, "downstream": downstream,
+             "push": push_spec(sequential(reader, vecs, layers, "push", gate=gate), gate=gate),
+             "removal": removal_spec(sequential(reader, vecs, layers, "removal", gate=gate), gate=gate)}
+    report = {"layers": layers, "downstream": downstream, "gate": gate and {str(x): v for x, v in gate.items()},
               "tokens": {"all": reader.n_tokens, "kept": reader.n_kept, "sequences": len(reader.seqs)},
               "base": {"stakes": {str(x): base_d[x] for x in layers}},
               "consts": dict(specs), "realized": realize(reader, specs, vecs, layers, downstream),
@@ -522,6 +580,7 @@ def check_on(reader: Reader, specs: dict, vectors: dict, layers=LAYERS, downstre
     stakes = {x: unit(vectors["stakes"][x]) for x in layers}
     base = reader.base_projection(stakes)
     rep = {"layers": layers, "tokens": {"all": reader.n_tokens, "kept": reader.n_kept, "sequences": len(reader.seqs)},
+           "gate": any("threshold" in line for line in specs.get("push", [])),
            "base": {"stakes": {str(x): base[x] for x in layers}},
            "realized": realize(reader, specs, vectors, layers, downstream)}
     rep["gates"] = gates(rep, room=room)
@@ -560,9 +619,10 @@ def ivs_sha256(ivs: list) -> str:
     edit than its arm's (another direction, another constant) is not kept."""
     h = hashlib.sha256()
     for iv in ivs:
+        gate = [round(float(iv.threshold), 4), iv.big] if hasattr(iv, "threshold") else None
         h.update(json.dumps([int(iv.layer), iv.mode, round(float(iv.alpha), 6),
                              None if iv.lo is None else round(float(iv.lo), 6),
-                             None if iv.hi is None else round(float(iv.hi), 6)]).encode())
+                             None if iv.hi is None else round(float(iv.hi), 6), gate]).encode())
         h.update(iv.direction.detach().float().cpu().numpy().tobytes())
     return h.hexdigest()
 
@@ -587,6 +647,13 @@ def gates(report: dict, size_gate: float = SIZE_GATE, room: float = 1.0) -> dict
         "removal_keeps_mean": all(abs(r["removal"]["stakes_projection"][x]["mean"] - base[x]["mean"])
                                   <= 0.1 * room * abs(base[x]["mean"]) + 0.02 for x in layers),
     }
+    if report.get("gate") and r["cut"].get("size_left_out"):
+        out.update({
+            # on the outsized tokens the push makes the cut's own edit (to a tenth), and the removal makes none (under
+            # a twentieth of it: they still move a little, through what the edit of the other tokens does to them)
+            "push_edits_outsized_as_the_cut": abs(r["push"]["size_left_out"] / r["cut"]["size_left_out"] - 1) <= 0.1,
+            "removal_leaves_outsized": r["removal"]["size_left_out"] <= 0.05 * r["cut"]["size_left_out"],
+        })
     if all(a in r for a in CONTROLS):
         out.update({
             # each control could be sized, and is the cut's size in the edited layers

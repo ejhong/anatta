@@ -283,6 +283,81 @@ def test_hooks_can_be_put_on_the_ordinary_tokens_or_the_left_out_ones_alone(tiny
     assert hooked_modules(model) == []
 
 
+def test_a_gated_edit_tells_the_outsized_tokens_by_their_size():
+    d = torch.zeros(8)
+    d[0] = 1.0
+    h = torch.tensor([[[2.0, 1.0, 0, 0, 0, 0, 0, 0], [30.0, 40.0, 0, 0, 0, 0, 0, 0]]])  # sizes about 2.2 and 50
+    vecs = {"stakes": {1: d}}
+    push = sc.interventions(sc.push_spec({1: 0.5}, gate={1: 10.0}), vecs)[0]
+    out = push.apply(h)
+    assert out[0, 0].tolist()[:2] == [1.5, 1.0]  # an ordinary token is shifted by the constant
+    assert out[0, 1].tolist()[:2] == [0.0, 40.0]  # an outsized one has its projection set to 0, as the cut sets it
+    rem = sc.interventions(sc.removal_spec({1: 0.5}, gate={1: 10.0}), vecs)[0]
+    out = rem.apply(h)
+    assert out[0, 0].tolist()[:2] == [0.5, 1.0] and torch.equal(out[0, 1], h[0, 1])  # the removal leaves it alone
+    assert type(push).__name__ == "Gated" and (push.threshold, push.big, rem.big) == (10.0, "zero", None)
+    plain = sc.interventions(sc.push_spec({1: 0.5}), vecs)[0]
+    assert type(plain).__name__ == "Intervention" and plain.apply(h)[0, 1].tolist()[:2] == [29.5, 40.0]
+    # the gate is part of an arm's hash
+    hashes = {sc.ivs_sha256([iv]) for iv in (push, rem, plain, sc.interventions(sc.push_spec({1: 0.5}, gate={1: 11.0}), vecs)[0])}
+    assert len(hashes) == 4
+    with pytest.raises(ValueError):
+        sc.interventions([{"layer": 1, "dir": "stakes", "mode": "ablate", "threshold": 1.0}], vecs)
+    with pytest.raises(ValueError):
+        sc.gated_class()(layer=1, direction=d, mode="steer", big="half")
+
+
+def test_the_gated_parts_put_the_outsized_tokens_edit_on_the_push_side(tiny, vectors):
+    model, tok = tiny
+    seqs = [sc.token_ids(tok, g, 400) for g in games(6)]
+    r = sc.Reader(model, seqs, BAND, extra=[DOWN], outlier=1.15)  # the tiny model has no giants: call the larger tokens outsized
+    assert 0 < r.n_tokens - r.n_kept < r.n_kept
+    gated = sc.build_parts(r, vectors, layers=BAND, downstream=DOWN)
+    plain = sc.build_parts(r, vectors, layers=BAND, downstream=DOWN, gated=False)
+    assert all("threshold" in line for line in gated["specs"]["push"] + gated["specs"]["removal"])
+    assert not any("threshold" in line for line in plain["specs"]["push"] + gated["specs"]["cut"])
+    assert gated["report"]["gate"][str(BAND[0])] == pytest.approx(1.15 * r.median[BAND[0]])
+    g, p = gated["report"]["realized"], plain["report"]["realized"]
+    # at a hooked layer, the tokens that are outsized there get the cut's own edit from the push and none from the
+    # removal; the others get the ordinary edit (the gate is on the token's size at that layer)
+    x = BAND[0]
+    h = torch.cat(r.base[x]).float()[None]
+    big = h[0].norm(dim=-1) > gated["report"]["gate"][str(x)]
+    one = {a: sc.interventions(gated["specs"][a][:1], gated["vectors"])[0] for a in ("cut", "push", "removal")}
+    out = {a: iv.apply(h)[0] for a, iv in one.items()}
+    assert 0 < int(big.sum()) < big.numel()
+    assert torch.allclose(out["push"][big], out["cut"][big], atol=1e-6) and torch.equal(out["removal"][big], h[0][big])
+    d = sc.unit(vectors["stakes"][x])
+    assert torch.allclose(out["push"][~big], h[0][~big] + one["push"].alpha * d, atol=1e-6)
+    assert torch.allclose(out["removal"][~big] @ d, torch.full((int((~big).sum()),), one["removal"].lo), atol=1e-5)
+    # the two checks on the outsized tokens are made for the gated arms only (they are sized for the real model's
+    # giants, ten times the median; the tiny model has none, so here only the direction is checked)
+    assert {"removal_leaves_outsized", "push_edits_outsized_as_the_cut"} <= set(gated["report"]["gates"])
+    assert "removal_leaves_outsized" not in plain["report"]["gates"]
+    assert g["removal"]["size_left_out"] < 0.5 * p["removal"]["size_left_out"]  # ungated, the removal set them too
+    assert g["push"]["size_left_out"] > p["push"]["size_left_out"]  # and the push only shifted them
+    made_up = {**gated["report"], "realized": {**g, "removal": {**g["removal"], "size_left_out": 0.01 * g["cut"]["size_left_out"]},
+                                              "push": {**g["push"], "size_left_out": 1.05 * g["cut"]["size_left_out"]}}}
+    assert sc.gates(made_up)["removal_leaves_outsized"] and sc.gates(made_up)["push_edits_outsized_as_the_cut"]
+    # how far the outsized tokens' edit reaches the rest: far less of it comes from the gated removal than from the
+    # removal as first built (not none here: a token left out for its size at one layer is ordinary at another)
+    road = lambda built: sc.first_token_report(r, built["specs"], built["vectors"], layers=BAND, downstream=DOWN)["arms"]  # noqa: E731
+    assert (road(gated)["removal"]["left_out"]["on_ordinary_tokens_after_the_band"]
+            < 0.5 * road(plain)["removal"]["left_out"]["on_ordinary_tokens_after_the_band"])
+    assert road(gated)["push"]["left_out"]["on_ordinary_tokens_after_the_band"] > road(plain)["push"]["left_out"]["on_ordinary_tokens_after_the_band"]
+    # the saved arms come back as the same gated hooks
+    buf = io.BytesIO()
+    torch.save({"specs": gated["specs"], "vectors": gated["vectors"]}, buf)
+    saved = torch.load(io.BytesIO(buf.getvalue()))
+    for a in sc.NEW_ARMS:
+        assert sc.ivs_sha256(sc.interventions(saved["specs"][a], saved["vectors"])) == gated["report"]["arm_sha256"][a]
+    assert gated["report"]["arm_sha256"]["push"] != plain["report"]["arm_sha256"]["push"]
+    assert gated["report"]["arm_sha256"]["cut"] == plain["report"]["arm_sha256"]["cut"]  # the cut is the cut
+    # checked on other games, the same two checks are made
+    other = sc.Reader(model, [sc.token_ids(tok, g, 400) for g in games(5, seed=7)], BAND, extra=[DOWN], outlier=1.15)
+    assert "removal_leaves_outsized" in sc.check_on(other, gated["specs"], gated["vectors"], layers=BAND, downstream=DOWN)["gates"]
+
+
 # ---- the first construction of the same-size controls (block 2 starts from it; it is not played in block 1)
 
 
