@@ -62,8 +62,10 @@ changes listed under CHANGED, every one of which was made before any game was pl
        alone, against base, and the word says "alone". A part gets "no fall of 8 points or more" if the whole
        interval lies above minus 8, the part alone is no fall either, and the run saw a yes; otherwise "not
        settled". That "no" is narrow: 8.1 is the cut's whole fall in the last registered test, so it says only
-       that the part does not carry all of it. And the two parts are not the same size (in the game the push is
-       about one and a half times the removal), so a small effect of the removal is partly a matter of size.
+       that the part does not carry all of it. And the two parts are not the same size (on the arms as played
+       the push moves the ordinary tokens 1.7 times as far as the removal within the edited layers and 2.5 times
+       as far after them), so a small effect of the removal is partly a matter of size. The push's line is
+       always the push with the cut's edit of the outsized tokens (CHANGED, 10), and is worded so.
        The run saw a yes if cut less base is a fall, or P or R is, or a part alone is. No "no" is stated
        without it.
      The words come from that measure alone. Three others are given beside every contrast as description: the
@@ -80,7 +82,9 @@ changes listed under CHANGED, every one of which was made before any game was pl
            (to a twentieth of its usual mean, plus 0.02); the push keeps at least half the usual spread; the
            removal leaves at most a quarter of it (or twice what the cut itself leaves: the hooks work in the
            model's 16-bit numbers) and moves the mean by at most a tenth (plus 0.02); on the outsized tokens the
-           push makes the cut's edit (to a tenth of its size) and the removal under a twentieth of it;
+           push makes the cut's edit (to a tenth of its size) and the removal under a twentieth of it; and the
+           pass on the outsized tokens, run on the arms as played, puts the removal's share at a tenth or less
+           (the rule of CHANGED, 10; no game is played without it);
        (3) the same on 12 stored games the constants were not made from (seeds 31 to 119, every eighth), with
            three times the room on the means. The same numbers on 12 stored games written under the cut are
            reported, as description.
@@ -116,7 +120,8 @@ working, the simulation called the cut "lowers" in 3 to 5% of runs against 2.5% 
 
 INTERESTING OR DULL. Interesting either way. If the cut does not lower the lie again on fresh, independent games,
 the middle-layer half of the card rests on two earlier runs, one of them with linked games, and is said so. If the
-push carries the fall, the result is a dial and not a removal, and "goodness by subtraction" is the wrong picture of
+push carries the fall (the push arm: a constant move of the ordinary tokens, with the cut's edit of the few outsized
+ones), the result is a dial and not a removal of what varies, and "goodness by subtraction" is the wrong picture of
 it. If the removal carries it, there is something specific to this direction's variation to dissect. Dull: wide
 intervals that settle nothing. The ego cut at layers 8 to 32, the other half of the card (15.3 points in its stored
 run, with seven first seasons in ten under quota against a quarter for the unchanged model), is not tested here
@@ -183,26 +188,39 @@ CHANGED since the five lines were committed (0d1b179, 18 Nov, 13:09 UTC), each b
      card's other half and is not tested.
   9. (Carbon.) A failed container is booked at the wall time it can have run, plus its start, where it was booked
      at its whole bound. The stopped first pass is corrected by that rule (from $0.71 to $0.44).
-  10. (After block 1's arms were first built, 13:47 UTC; 86123b0 and this commit; before any game.) The outsized
-     tokens. 77 of the 54,503 calibration tokens (about three a game) are over ten times the layer's median in
-     size and are left out of the constants: the start-of-text token of each game (24) and, scattered through
-     the game, lone spaces before a number in its lists (51), with two others. (86123b0 called them "the first
-     tokens" and "the same in every game". Only the start-of-text token is.) Their projection on the stakes
-     direction sits far from the ordinary tokens' (about -5 to -9 against -0.4 to -1.8). On them the cut's edit
-     was about 200 times its edit of an ordinary token (7,929 against 40.6, summed over the band), the removal's
-     nearly the same (7,741), and the push's 22.8: both readers had named this (the cut and the removal set those
-     tokens' projection; the push only shifts it). For such a token the cut is mostly one large constant move
-     toward zero, which is not the removal of what varies among ordinary tokens. The rule was fixed in 86123b0
-     before the numbers: if more than a tenth of the removal arm's edit of the ordinary tokens after the band
-     came by way of the left-out tokens, the arms would be built again with that edit on the push side. The pass
-     (::first, 13:51 UTC) gave 0.206 for the removal (0.080 in the band), 0.075 for the cut and 0.007 for the
-     push. So the two parts now tell the outsized tokens by their size at each layer (above ten times the
-     layer's median over the calibration tokens): the push sets their projection to zero, as the cut does, and
-     the removal leaves them alone. The cut is unchanged, and at one layer the removal followed by the push is
-     still the cut on every token. The outsized tokens' edit should be about a tenth of the push arm's effect on
-     the ordinary tokens after the band; the pass is run again on the new arms and the number reported. If the
-     push lowers the lie, block 2 can tell the push from that edit with one more arm (the push without it). The
-     change is read cold by a fresh Opus agent before any game.
+  10. (After block 1's arms were first built, 13:47 UTC; 86123b0, bac8b2c and this commit; before any game.) The
+     outsized tokens. 77 of the 54,503 calibration tokens (about three a game) are over ten times the layer's
+     median in size and are left out of the constants: the start-of-text token of each game (24) and, scattered
+     through the game, lone spaces before a number in its lists (51), with two others. (86123b0 called them "the
+     first tokens" and "the same in every game". Only the start-of-text token is.) Their mean projection on the
+     stakes direction is +3.5 at layer 17 and -4.6 to -9.0 at the layers above, against -0.4 to -1.8 for
+     ordinary tokens; it is the mean of a mixed group. On them the cut's edit was about 200 times its edit of an
+     ordinary token (7,929 against 40.6, summed over the band), the removal's nearly the same (7,741), and the
+     push's 22.8: both readers had named this (the cut and the removal set those tokens' projection; the push
+     only shifts it). The rule was fixed in 86123b0 before the numbers: if more than a tenth of the removal
+     arm's edit of the ordinary tokens after the band came by way of the left-out tokens, the arms would be built
+     again with that edit on the push side. The pass (::first, 13:51 UTC) gave 0.206 for the removal (0.080 in
+     the band), 0.075 for the cut and 0.007 for the push. So the two parts now tell the outsized tokens by their
+     size at each layer (above ten times the layer's median over the calibration tokens): the push sets their
+     projection to zero, as the cut does, and the removal leaves them alone. The cut is unchanged, and at one
+     layer the removal followed by the push is still the cut on every token. On the arms as played (folder b1g,
+     built 14:00 UTC) the same pass gives 0.012 for the removal and 0.093 for the push.
+     Putting that edit on the push side is a convention by size, and bac8b2c gave a reason for it that the
+     files do not support ("for such a token the cut is mostly one large constant move"). That holds for the
+     start-of-text token, which is the same in every game and looks only at itself. For the other outsized
+     tokens it is not shown: the squared means of the group's projection sum to 454 over the band against an
+     edit of 7,929, so at most about 6% of that edit is one shared move. What the convention buys is a removal
+     arm with none of the outsized tokens' edit in it, and a main effect of the removal that is clean. What it
+     costs: the push's line is the push with that edit, about a tenth of the arm's effect on the ordinary tokens
+     after the band, and every write-up says so. If the push lowers the lie, block 2 tells the two apart with
+     one more arm (the push without it).
+  11. (The second cold read, of 10 alone: lab/ledger/checks/2026-11-18-cutsplit-gated-arms-opus-check.md. No
+     blocker; four should-fix points, all taken, before any game.) The rule's own number is now a check that
+     stops the games: the pass on the outsized tokens has to be made on the arms as played and put the removal's
+     share at a tenth or less. The pass gives the start-of-text token and the other outsized tokens apart, and
+     says how clear the line is (how many tokens are over it at every layer and how many at some only; how near
+     it the largest ordinary token comes). Every chunk returns how many token places its size gate caught. The
+     unsupported reason is withdrawn (10). The push's words carry what the arm carries.
   Not taken, and why. Carbon: fix 120 to 140 games an arm at $20 to 22, or test the ego cut. The cap is the one
   Eugene's go was given under, so the games are bought by dropping two arms, as Carbon's own alternative; the ego
   cut's fall comes with far less fishing, which is the confound the middle-layer cut does not have. Carbon: make
@@ -227,7 +245,8 @@ Usage (from the repo root; tools/modal.sh puts the library on the path of the Mo
 Checks: .venv/bin/python -m pytest lab/explore/cutsplit/tests -q (CPU, a tiny random model, nothing downloaded).
 Folders of this step under <results>/explore/2026-11-18/cutsplit: "main" holds the second preparing pass (all six
 arms as first built; no game), "b1" block 1's arms as first built and the pass on the outsized tokens (no game),
-"b1g" block 1 as played. Every folder is reported. Nothing here touches any app or volume but
+"b1g" block 1 as played (its first pass on the outsized tokens is first_tokens.json, the one after the second read
+outsized.json). Every folder is reported. Nothing here touches any app or volume but
 anatta-explore-cutsplit and anatta-hf-cache (read, never written).
 """
 
@@ -359,10 +378,11 @@ def play_chunk(arm: str, seed_start: int, seeds: int, batch: int, tokens: int, t
     saved = torch.load(io.BytesIO(arms_bytes))
     extra = {sc.ARMS[a]: sc.interventions(saved["specs"][a], saved["vectors"]) for a in sc.NEW_ARMS}
     played = [] if arm == "base" else old_cut() if arm == "cut" else extra[sc.ARMS[arm]]
+    sc.gate_counts()  # start the count of what the size gate catches from zero
     r = fishery_play.run_chunk(MODEL, f"{ALIGN}/anatta/{DDIR}", f"{ALIGN}/anatta/{DIALS}", "", "", sc.ARMS[arm], "",
                                None, seed_start, seeds, batch, tokens, temperature,
                                progress=lambda s: print(s, flush=True), extra_arms=extra)
-    r.update(arm=arm, revision=revision(), ivs_sha256=sc.ivs_sha256(played))
+    r.update(arm=arm, revision=revision(), ivs_sha256=sc.ivs_sha256(played), gate_counts=sc.gate_counts())
     return r
 
 
@@ -449,9 +469,17 @@ def stored(path: Path, sha: str) -> list[dict]:
     return read_jsonl(path)
 
 
-def load_arms(out: Path) -> tuple[bytes, dict]:
-    """arms.pt's bytes and arms.json, refused unless the checks on the arms all passed and the hash is the recorded one."""
+def load_arms(out: Path, for_games: bool = False) -> tuple[bytes, dict]:
+    """arms.pt's bytes and arms.json, refused unless the checks on the arms all passed and the hash is the recorded
+    one. For games, also unless the pass on the outsized tokens has been made on these arms and met its rule."""
     pt, js = out / "arms.pt", out / "arms.json"
+    if for_games:
+        f = out / "outsized.json"
+        if not f.exists():
+            raise SystemExit(f"no pass on the outsized tokens for the arms in {out}: run ::first before any game")
+        rule = json.loads(f.read_text())["rule"]
+        if not rule["passes"]:
+            raise SystemExit(f"the rule on the outsized tokens is not met, so no game is played: {rule}")
     if not (pt.exists() and js.exists()):
         raise SystemExit(f"no arms in {out}: run ::prep first")
     data, rep = pt.read_bytes(), json.loads(js.read_text())
@@ -524,13 +552,16 @@ def prep(name: str = "b1g", games: int = 24, held: int = 12):
 
 @app.local_entrypoint()
 def first(name: str = "b1g", games: int = 24):
-    """Before any game: how far each arm's edit of the first, left-out tokens reaches the ordinary ones (CHANGED, 10)."""
+    """Before any game: how far each arm's edit of the outsized, left-out tokens reaches the ordinary ones, and
+    whether the rule of 86123b0 is met by the arms in this folder (CHANGED, 10 and 11). Writes outsized.json."""
     import split_core as sc
 
     out = step_dir() / name
     arms_bytes, rep = load_arms(out)
     if any((out / "chunks").glob("*.jsonl")):
         raise SystemExit("games have been played in this folder; this measurement belongs before them")
+    if (out / "outsized.json").exists():
+        raise SystemExit(f"{out / 'outsized.json'} exists: the pass is made once for a folder's arms")
     picked = sc.calibration_games(stored(BASE_GAMES, BASE_GAMES_SHA256), games)
     assert [p["seed"] for p in picked] == rep["calibration_seeds"]
     g, bound, t0 = guard(), usd(EST_AFTER_S + START_S), time.time()
@@ -543,18 +574,20 @@ def first(name: str = "b1g", games: int = 24):
         raise
     cost = usd(r["seconds"] + START_S)
     g.settle(bound, cost, {"kind": "first_tokens", "seconds": r["seconds"], "name": name, "rate_usd_per_hour": rate()})
-    (out / "first_tokens.json").write_text(json.dumps(r | {"cost_usd": round(cost, 4)}, indent=1))
+    (out / "outsized.json").write_text(json.dumps(r | {"cost_usd": round(cost, 4)}, indent=1))
     spots = sorted({i for seq in r["positions_left_out"] for i in seq})
-    print(f"{r['left_out_tokens']} of {r['tokens']} tokens are left out; their places in a game: {spots[:12]}"
-          f"{' ...' if len(spots) > 12 else ''}", flush=True)
+    print(f"{r['left_out_tokens']} of {r['tokens']} tokens are left out ({r['left_out_at_first_place']} at a game's first "
+          f"place); their places: {spots[:10]}{' ...' if len(spots) > 10 else ''}", flush=True)
+    print(f"how clear the line is: {json.dumps(r['gate'])}", flush=True)
     for arm, row in r["arms"].items():
-        for where in ("every_token", "kept", "left_out"):
+        for where in ("every_token", "kept", "left_out", "first", "rest"):
             v = row[where]
             print(f"{arm:8s} hooks on {where:11s}: ordinary tokens moved {v['on_ordinary_tokens']:9.3f} in the band, "
                   f"{v['on_ordinary_tokens_after_the_band']:9.3f} after it; left-out tokens {v['on_left_out_tokens']}")
-        s = row["share_from_left_out"]
-        print(f"{arm:8s} share of its edit of the ordinary tokens that comes by way of the left-out ones: "
-              f"{s['in_the_band']:.3f} in the band, {s['after_the_band']:.3f} after it", flush=True)
+        print(f"{arm:8s} share of its edit of the ordinary tokens after the band that comes by way of the left-out ones: "
+              f"{row['share_from_left_out']['after_the_band']:.3f} (the first place {row['share_from_first_place']['after_the_band']:.3f}, "
+              f"the rest {row['share_from_the_rest']['after_the_band']:.3f})", flush=True)
+    print(f"the rule: {json.dumps(r['rule'])}", flush=True)
     print(f"about ${cost:.2f}; booked so far ${g.sweep_spent:.2f} of ${APP_CAP:.2f}", flush=True)
 
 
@@ -566,7 +599,7 @@ def play(name: str = "b1g", waves: int = 1, batch: int = 12, tokens: int = 400, 
     import split_core as sc
 
     out = step_dir() / name
-    arms_bytes, arms_rep = load_arms(out)
+    arms_bytes, arms_rep = load_arms(out, for_games=True)
     expect = {**{a: arms_rep["arm_sha256"][a] for a in ("cut", *sc.NEW_ARMS)}, "base": sc.ivs_sha256([])}
     (out / "chunks").mkdir(parents=True, exist_ok=True)
     if (out / "finished.json").exists():
@@ -610,8 +643,11 @@ def play(name: str = "b1g", waves: int = 1, batch: int = 12, tokens: int = 400, 
             else:  # kept apart and never read; the wave stays incomplete
                 write_jsonl(p.with_suffix(".rejected"), r["rows"])
                 p.with_suffix(".rejected.json").write_text(json.dumps(meta))
+            gc = r.get("gate_counts") or {}
+            caught = (f", the size gate caught {sum(v['caught'] for v in gc.values())} of {sum(v['seen'] for v in gc.values())} "
+                      f"token places" if gc else "")
             print(f"{time.time() - t0:5.0f}s {a:8s} seeds {s0}+{CHUNK}: {r['seconds']}s in its container (load "
-                  f"{r['load_seconds']}s), peak {r.get('peak_gb')} GiB, ${cost:.2f}"
+                  f"{r['load_seconds']}s), peak {r.get('peak_gb')} GiB, ${cost:.2f}{caught}"
                   + ("" if good else "  REJECTED: its hooks, its weights or its seeds are not the arm's"), flush=True)
         for a in todo:
             if a not in back:

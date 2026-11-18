@@ -280,6 +280,21 @@ def test_hooks_can_be_put_on_the_ordinary_tokens_or_the_left_out_ones_alone(tiny
         assert row["every_token"]["on_ordinary_tokens"] == pytest.approx(built["report"]["realized"][arm]["size_total"], rel=1e-5)
         assert 0 <= row["share_from_left_out"]["in_the_band"] and 0 <= row["share_from_left_out"]["after_the_band"]
         assert row["kept"]["on_ordinary_tokens"] > 0
+        assert set(row) >= {"first", "rest", "share_from_first_place", "share_from_the_rest"}
+    # the rule's line is read off the removal arm's share after the band
+    share = rep["arms"]["removal"]["share_from_left_out"]["after_the_band"]
+    assert rep["rule"] == {"line": 0.10, "removal_share_after_the_band": share, "passes": share <= 0.10}
+    # the first place and the rest are the left-out tokens, apart: at the hooked layer their edits add up
+    first = strict.measure(cut, read=[x], only="first")
+    rest = strict.measure(cut, read=[x], only="rest")
+    n_first = rep["left_out_at_first_place"]
+    assert 0 <= n_first <= len(seqs) and first["size"][x] == rest["size"][x] == 0
+    assert first["size_left_out"][x] + rest["size_left_out"][x] == pytest.approx(left["size_left_out"][x], rel=1e-5)
+    # how clear the line is
+    gr = strict.gate_report
+    assert gr["left_out"] == strict.n_tokens - strict.n_kept == gr["above_at_every_layer"] + gr["above_at_some_layers_only"]
+    assert set(gr["largest_ordinary"]) == {str(v) for v in BAND} and all(v <= gr["line"] for v in gr["largest_ordinary"].values())
+    assert all(v is None or v > gr["line"] for v in gr["smallest_above"].values())
     assert hooked_modules(model) == []
 
 
@@ -298,6 +313,11 @@ def test_a_gated_edit_tells_the_outsized_tokens_by_their_size():
     assert type(push).__name__ == "Gated" and (push.threshold, push.big, rem.big) == (10.0, "zero", None)
     plain = sc.interventions(sc.push_spec({1: 0.5}), vecs)[0]
     assert type(plain).__name__ == "Intervention" and plain.apply(h)[0, 1].tolist()[:2] == [29.5, 40.0]
+    # the gate counts the token places it looked at and the ones it caught, layer by layer, until read
+    sc.gate_counts()
+    push.apply(h)
+    rem.apply(h)
+    assert sc.gate_counts() == {"1": {"seen": 4, "caught": 2}} and sc.gate_counts() == {}
     # the gate is part of an arm's hash
     hashes = {sc.ivs_sha256([iv]) for iv in (push, rem, plain, sc.interventions(sc.push_spec({1: 0.5}, gate={1: 11.0}), vecs)[0])}
     assert len(hashes) == 4

@@ -118,6 +118,7 @@ def gated_class():
         class Gated(Intervention):
             threshold: float = float("inf")
             big: str | None = None
+            counts = {}  # layer -> [token places seen, token places above the gate]; class-wide, read by gate_counts
 
             def __post_init__(self):
                 super().__post_init__()
@@ -127,6 +128,9 @@ def gated_class():
             def apply(self, h):
                 ordinary = super().apply(h)
                 above = h.float().norm(dim=-1, keepdim=True) > self.threshold
+                c = Gated.counts.setdefault(int(self.layer), [0, 0])
+                c[0] += above.numel()
+                c[1] = c[1] + above.sum()  # kept as a tensor: no wait for the GPU inside a hook
                 if self.big == "zero":
                     d = self.direction.to(device=h.device, dtype=h.dtype)
                     other = h - (h @ d).unsqueeze(-1) * d
@@ -136,6 +140,18 @@ def gated_class():
 
         _GATED = Gated
     return _GATED
+
+
+def gate_counts(reset: bool = True) -> dict:
+    """{layer: {"seen", "caught"}}: how many token places the gated hooks have looked at and how many were above the
+    gate, since the last reset. In a game the places include the padding of a batch and every re-reading of a
+    game's history, so the share is a rough check that the gate catches a handful of tokens and not many."""
+    if _GATED is None:
+        return {}
+    out = {str(x): {"seen": int(c[0]), "caught": int(c[1])} for x, c in sorted(_GATED.counts.items())}
+    if reset:
+        _GATED.counts.clear()
+    return out
 
 
 def interventions(spec: list[dict], vectors: dict) -> list:
@@ -223,11 +239,29 @@ class Reader:
         sizes = [int(h.shape[0]) for h in self.base[self.layers[0]]]
         self.keep = list(torch.split(keep, sizes))
         self.n_tokens, self.n_kept = int(keep.numel()), int(keep.sum())
+        # how clear the line is: a token is left out if it is above it at ANY layer, while a gated hook asks at its
+        # own layer only; so count the tokens above at every layer and at some only, and how near the line the
+        # largest ordinary token and the smallest outsized one come (as multiples of the layer's median)
+        ratio = torch.stack([norms[x] / self.median[x] for x in self.layers])
+        above = ratio > outlier
+        n_above = above.sum(0)
+        self.gate_report = {
+            "line": float(outlier), "left_out": self.n_tokens - self.n_kept,
+            "above_at_every_layer": int((n_above == len(self.layers)).sum()),
+            "above_at_some_layers_only": int(((n_above > 0) & (n_above < len(self.layers))).sum()),
+            "above_by_layer": {str(x): int(above[i].sum()) for i, x in enumerate(self.layers)},
+            "largest_ordinary": {str(x): round(float(ratio[i][keep].max()), 3) for i, x in enumerate(self.layers)},
+            "smallest_above": {str(x): (round(float(ratio[i][above[i]].min()), 3) if bool(above[i].any()) else None)
+                               for i, x in enumerate(self.layers)},
+            "largest_below_among_left_out": {str(x): (round(float(ratio[i][~keep & ~above[i]].max()), 3)
+                                                      if bool((~keep & ~above[i]).any()) else None)
+                                             for i, x in enumerate(self.layers)}}
 
     def _run(self, read, ivs, each, only: str | None = None) -> None:
-        """One pass. `only` ("kept" or "left_out") applies the hooks to those tokens alone and leaves the others as
-        the model made them: a measuring device for this reader's fixed sequences, where the tokens are known. In
-        a game the library's hooks act on every token, as with only=None."""
+        """One pass. `only` applies the hooks to some tokens alone and leaves the others as the model made them:
+        "kept" (the ordinary tokens), "left_out" (the outsized ones), "first" (of those, the one at a game's first
+        place: the start-of-text token) or "rest" (the others). A measuring device for this reader's fixed
+        sequences, where the tokens are known. In a game the library's hooks act on every token, as with None."""
         import torch
 
         from anatta.dial import intervene
@@ -248,6 +282,12 @@ class Reader:
                 for iv in group:
                     new = iv.apply(new)
                 k = self.keep[current["i"]] if only == "kept" else ~self.keep[current["i"]]
+                if only == "first":  # the start-of-text token alone
+                    k = k.clone()
+                    k[1:] = False
+                elif only == "rest":  # the left-out tokens after it
+                    k = k.clone()
+                    k[0] = False
                 new = torch.where(k.to(h.device)[None, :, None], new, h)
                 return (new, *output[1:]) if isinstance(output, tuple) else new
 
@@ -257,14 +297,14 @@ class Reader:
         handles = []
         if only is None:
             ctx = intervene(self.model, list(ivs))
-        elif only in ("kept", "left_out"):
+        elif only in ("kept", "left_out", "first", "rest"):
             by_layer: dict = {}
             for iv in ivs:
                 by_layer.setdefault(iv.layer, []).append(iv)
             handles = [blocks[x].register_forward_hook(masked(g)) for x, g in by_layer.items()]
             ctx = intervene(self.model, [])
         else:
-            raise ValueError("only is None, 'kept' or 'left_out'")
+            raise ValueError("only is None, 'kept', 'left_out', 'first' or 'rest'")
         try:
             with torch.no_grad(), ctx, capture(self.model, read) as store:
                 handle = blocks[read[-1]].register_forward_hook(stop)  # after the arm's hook and capture's, in that order
@@ -587,29 +627,35 @@ def check_on(reader: Reader, specs: dict, vectors: dict, layers=LAYERS, downstre
     return rep
 
 
+RULE_LINE = 0.10  # the rule of 86123b0: the share of the removal's edit after the band that may come by the outsized tokens
+
+
 def first_token_report(reader: Reader, specs: dict, vectors: dict, layers=LAYERS, downstream: int = DOWNSTREAM) -> dict:
-    """How much of each arm is its edit on the left-out tokens (the first tokens of a game, whose size is over ten
-    times the layer's median)? For the cut, the push and the removal: the edit's size on the ordinary tokens, in
-    the hooked band and after it, with the hooks on every token (as played), on the ordinary tokens alone, and on
-    the left-out tokens alone. The last says how far the edit of the first tokens reaches the rest of the game
-    through the layers after it. The cut and the removal set the first tokens' projection as they set every
-    token's; the push only shifts it, by little. So a removal arm that lowered the lie could be doing so through
-    the first tokens, and these numbers say how large that road is."""
+    """How much of each arm is its edit of the left-out tokens (the start-of-text token and the few others whose
+    size is over ten times the layer's median)? For the cut, the push and the removal: the edit's size on the
+    ordinary tokens, in the hooked band and after it, with the hooks on every token (as played), on the ordinary
+    tokens alone, on the left-out tokens alone, and on the two kinds of left-out token apart (the first place of a
+    game; the rest). The last three say how far the edit of those tokens reaches the rest of the game through the
+    layers after it. "rule" holds the line fixed before the first such pass: no more than a tenth of the removal
+    arm's edit of the ordinary tokens after the band may come by way of the left-out tokens."""
     layers = sorted(int(x) for x in layers)
-    out = {"left_out_tokens": reader.n_tokens - reader.n_kept, "tokens": reader.n_tokens, "arms": {}}
+    out = {"left_out_tokens": reader.n_tokens - reader.n_kept, "tokens": reader.n_tokens,
+           "left_out_at_first_place": sum(int(not bool(k[0])) for k in reader.keep), "gate": reader.gate_report, "arms": {}}
     for arm in ("cut", "push", "removal"):
         ivs = interventions(specs[arm], vectors)
         row = {}
-        for where in (None, "kept", "left_out"):
+        for where in (None, "kept", "left_out", "first", "rest"):
             m = reader.measure(ivs, read=layers + [downstream], only=where)
             row[where or "every_token"] = {
                 "on_ordinary_tokens": total(m["size"], layers), "on_ordinary_tokens_after_the_band": m["size"][downstream],
                 "on_left_out_tokens": None if m["size_left_out"] is None else total(m["size_left_out"], layers)}
         whole = row["every_token"]
-        row["share_from_left_out"] = {
-            "in_the_band": row["left_out"]["on_ordinary_tokens"] / whole["on_ordinary_tokens"],
-            "after_the_band": row["left_out"]["on_ordinary_tokens_after_the_band"] / whole["on_ordinary_tokens_after_the_band"]}
+        for name, where in (("share_from_left_out", "left_out"), ("share_from_first_place", "first"), ("share_from_the_rest", "rest")):
+            row[name] = {"in_the_band": row[where]["on_ordinary_tokens"] / whole["on_ordinary_tokens"],
+                         "after_the_band": row[where]["on_ordinary_tokens_after_the_band"] / whole["on_ordinary_tokens_after_the_band"]}
         out["arms"][arm] = row
+    share = out["arms"]["removal"]["share_from_left_out"]["after_the_band"]
+    out["rule"] = {"line": RULE_LINE, "removal_share_after_the_band": share, "passes": share <= RULE_LINE}
     return out
 
 
@@ -923,6 +969,11 @@ def read_arms(rows_by_arm: dict, reps: int = REPS, seed: int = 0) -> dict:
     return out
 
 
+# what each line of words is about, where the short name says too little
+LABELS = {"push": "push (with the cut's edit of the outsized tokens)", "removal": "removal (of what varies among ordinary tokens)",
+          "parts": "the two parts"}
+
+
 def table(reading: dict) -> str:
     """The reading as text for the terminal."""
     if "error" in reading:
@@ -940,7 +991,7 @@ def table(reading: dict) -> str:
     for k, c in reading["contrasts"].items():
         lines.append(f"{k:20s} {span(c)}   live {span(c['live'])}   full quota {span(c['full_quota'])}   one tag {span(c['single'])}")
     for k, w in reading.get("words", {}).items():
-        lines.append(f"{k}: {w}" + ("   MIXED: another measure points the other way" if k in reading.get("mixed", []) else ""))
+        lines.append(f"{LABELS.get(k, k)}: {w}" + ("   MIXED: another measure points the other way" if k in reading.get("mixed", []) else ""))
     for m, ws in reading.get("described", {}).items():
         lines.append(f"  beside it, on {m}: " + "; ".join(f"{k}: {w}" for k, w in ws.items() if k != "saw_a_yes"))
     return "\n".join(lines)
