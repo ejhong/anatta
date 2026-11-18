@@ -759,6 +759,11 @@ def test_block2_arms_are_what_the_design_says(tiny, block2):
     assert all(torch.equal(built["vectors"]["random0"][x], built["vectors"]["random0"][BAND[0]]) for x in BAND)
     assert not torch.equal(built["vectors"]["random0"][BAND[0]], built["vectors"]["random1"][BAND[0]])
     assert rep["problems"] == [] and rep["gates"]["controls_calibrated"] and rep["gates"]["controls_sized"]
+    # each control moves the stream toward its own positive end at every layer; the plain push moves it along stakes
+    assert rep["gates"]["controls_move_their_own_way"] and all(v > 0 for v in rep["realized"]["push_formality"]["own_shift"].values())
+    # the start-of-text token is left exactly as it was by the gated arms where it is over the gate
+    assert set(rep["formality_cos_with_raw"]) == {str(v) for v in BAND} and rep["gates"]["formality_survives_projection"]
+    assert {"push_ord_leaves_first_token", "controls_leave_first_token"} <= set(rep["gates"])
     assert len(set(rep["arm_sha256"].values())) == 4
     # the saved arms come back as the same hooks
     buf = io.BytesIO()
@@ -789,6 +794,11 @@ def test_block2_checks_fail_when_a_control_is_not_what_it_is_named(block2):
     assert not sc.gates2({**rep, "problems": ["x"]})["controls_calibrated"]
     off = {x: {"mean": 3.0, "sd": 1.0} for x in r["push_ord"]["stakes_projection"]}
     assert not with_("push_ord", stakes_projection=off)["push_ord_mean_zero"]
+    back = {x: -abs(v) for x, v in r["push_formality"]["own_shift"].items()}
+    assert not with_("push_formality", own_shift=back)["controls_move_their_own_way"]  # a push toward casual is not the arm
+    assert not with_("push_random0", first_token_edit=0.3)["controls_leave_first_token"]  # an ungated push shifts that token
+    assert not with_("push_ord", first_token_edit=0.3)["push_ord_leaves_first_token"]
+    assert with_("push_ord", first_token_edit=0.0)["push_ord_leaves_first_token"] == (r["b1_push"]["first_token_edit"] != 0.0)
 
 
 OK6 = {a: True for a in ("base", "cut", "push", "push_ord", "push_formality", "push_random")}
@@ -803,30 +813,53 @@ def test_block2_words_follow_the_rules_fixed_beforehand():
     w = sc.words2(con, OK6)
     assert w["plain_push"] == "lowers the lie" and w["outsized_edit"] == "adds no fall of 8 points or more"
     assert w["formality"] == w["random"] == "no fall of 8 points or more" and w["size"].startswith("specific among the pushes tried")
-    # one control matches the stakes push: never "specific", whatever the two together say
+    # "specific" also needs the two controls together to leave no room for a fall of 8 points
+    assert sc.words2({**con, "controls": C(-4, -9, 1)}, OK6)["size"] == "not settled"
+    # one control matches the stakes push: never "specific", it is named, and "no advantage" is read against it alone
     con = {**yes, "formality": C(-12, -18, -6), "random": C(1, -5, 7), "controls": C(-5.5, -10, -1), "ord_less_formality": C(0, -6, 6),
            "ord_less_random": C(-13, -19, -7), "ord_less_controls": C(-6.5, -11, -2)}
     w = sc.words2(con, OK6)
     assert w["formality"] == "lowers the lie" and "specific" not in w["size"]
-    assert w["size"].endswith("whether the stakes push lowers it further is not settled")
-    # both controls do as much: a matter of size
-    con = {**yes, "formality": C(-11, -17, -5), "random": C(-10, -16, -4), "controls": C(-10.5, -15, -6), "ord_less_controls": C(-1.5, -7, 4)}
-    assert sc.words2(con, OK6)["size"].endswith("the stakes push has no advantage of 8 points or more")
-    con = {**con, "ord_less_controls": C(-7, -12, -2), "ord_less_formality": C(-7, -13, -1), "ord_less_random": C(-7, -13, -1)}
-    assert sc.words2(con, OK6)["size"].endswith("and the stakes push lowers it further")
+    assert w["size"] == ("a same-size push toward formal lowers the lie too (the stakes direction is not the only one); "
+                         "the stakes push has no advantage of 8 points or more")
+    # only the random directions speak to size
+    con = {**yes, "random": C(-11, -17, -5), "controls": C(-5.5, -10, -1), "ord_less_random": C(-1, -7, 5)}
+    assert sc.words2(con, OK6)["size"].startswith("same-size pushes along random directions lower the lie too (a matter of size, at least in part)")
+    # both fall; the stakes push beats one and is level with the other
+    con = {**yes, "formality": C(-6, -11, -1), "random": C(-11, -17, -5), "controls": C(-8.5, -13, -4),
+           "ord_less_formality": C(-6, -11, -1), "ord_less_random": C(-1, -7, 5), "ord_less_controls": C(-3.5, -8.5, 1.5)}
+    assert sc.words2(con, OK6)["size"].endswith("no advantage of 8 points or more over same-size pushes along random directions")
+    con = {**con, "ord_less_random": C(-7, -13, -1)}
+    assert sc.words2(con, OK6)["size"].endswith("the stakes push lowers it further")
+    con = {**con, "ord_less_random": C(-6, -13, 1), "ord_less_formality": C(-6, -13, 1)}
+    assert sc.words2(con, OK6)["size"].endswith("whether the stakes push lowers it further is not settled")
+    # neither control falls and the stakes push is not shown to beat them: said, where the interval allows
+    con = {**NULL2, "push_ord": C(-6, -11, -1), "formality": C(-4.5, -10, 1), "random": C(-4.5, -10, 1), "controls": C(-4.5, -9, 0.5),
+           "ord_less_formality": C(-1.5, -7, 4), "ord_less_random": C(-1.5, -7, 4), "ord_less_controls": C(-1.5, -6, 3)}
+    assert sc.words2(con, OK6)["size"].startswith("not shown to be specific")
     # the plain push does not fall: the work was in the outsized tokens' edit, and there is nothing to compare
     con = {**NULL2, "push": C(-13, -19, -8), "push_ord": C(-2, -8.5, 4), "outsized": C(-11, -17, -5)}
     w = sc.words2(con, OK6)
     assert w["plain_push"].endswith("still open") and w["outsized_edit"] == "lowers the lie further" and w["size"].startswith("nothing to compare")
+    # the yes is this block's own: without a fall of the plain push no "no" is stated, whatever block 1's push did
+    assert not w["saw_a_yes"] and w["formality"].startswith("not stated")
     # the stakes push beats one control clearly and the other not: not settled
-    con = {**yes, "ord_less_formality": C(-12, -18, -6), "ord_less_random": C(-6, -12.5, 0.5)}
+    con = {**yes, "ord_less_formality": C(-12, -18, -6), "ord_less_random": C(-6, -12.5, 0.5), "ord_less_controls": C(-9, -14, -4)}
     assert sc.words2(con, OK6)["size"] == "not settled"
-    # nothing falls anywhere (were block 1's push no fall): no "no" is stated
-    w = sc.words2(NULL2, OK6)
-    assert not w["saw_a_yes"] and w["formality"].startswith("not stated") and w["outsized_edit"].startswith("not stated")
     # an arm that cannot be read takes its lines with it
     w = sc.words2(yes, {**OK6, "push_random": False})
     assert w["random"] == "not read" and w["size"] == "not read" and w["plain_push"] == "lowers the lie"
+
+
+def test_seeds_can_be_redrawn_within_waves():
+    # two waves whose arms differ in opposite ways: redrawn within waves, each wave keeps its weight in every draw
+    rows = {"base": arm(lambda i: 4, n=48), "x": arm(lambda i: 2 if i < 24 else 6, n=48)}
+    g = {a: sc.grade_rows(r) for a, r in rows.items()}
+    seeds = sorted(g["base"])
+    free = sc.contrast(g, {"x": 1, "base": -1}, seeds, reps=2000)
+    held = sc.contrast(g, {"x": 1, "base": -1}, seeds, reps=2000, strata=[(s - 130) // 24 for s in seeds])
+    assert free["est"] == held["est"] == pytest.approx(0.0) and held["lo"] == held["hi"] == pytest.approx(0.0)
+    assert free["hi"] - free["lo"] > 5  # redrawn freely, the mix of the two waves moves from draw to draw
 
 
 def test_block2_reading_joins_block_1s_games_on_the_same_seeds(tmp_path):
@@ -849,7 +882,32 @@ def test_block2_reading_joins_block_1s_games_on_the_same_seeds(tmp_path):
     assert w["plain_push"] == "lowers the lie" and w["size"].startswith("specific among the pushes tried")
     assert w["outsized_edit"] == "adds no fall of 8 points or more" and r["mixed"] == []
     assert set(r["random_by_wave"]) == {"130", "154"} and r["random_by_wave"]["130"]["games"] == 24
+    assert r["random_by_wave"]["154"]["direction"] == "random1" and r["random_by_wave"]["130"]["against_base"]["est"] == pytest.approx(0.0)
+    assert r["flags"] == {}  # the plain push's fall holds among reports at a full quota too
+    h = sc.files_sha256(b1, ("base", "cut", "push"))
+    assert h == sc.files_sha256(b1, ("base", "cut", "push")) != sc.files_sha256(b1, ("base", "cut"))
     t = sc.table(r)
     assert "direction or size: specific among the pushes tried" in t and "a same-size push toward formal: no fall of 8 points or more" in t
     assert set(sc.BLOCK2.values()) == {"ss_push_ord", "ss_push_formality", "ss_push_random"}
     assert not set(sc.BLOCK2.values()) & (set(sc.ARMS.values()) | set(sc.CONTROL_ARMS.values()))
+
+
+def test_a_specific_says_so_when_one_random_direction_falls_alone(tmp_path):
+    import json
+
+    b1, b2 = tmp_path / "b1g", tmp_path / "b2"
+    lies = [4, 3, 5, 4] * 12
+    arms = {(b1, "off"): lambda i: lies[i], (b1, "cut_self_stakes_17_26"): lambda i: lies[i] - 1, (b1, "ss_push"): lambda i: lies[i] - 2,
+            (b2, "ss_push_ord"): lambda i: lies[i] - 2, (b2, "ss_push_formality"): lambda i: lies[i],
+            (b2, "ss_push_random"): lambda i: lies[i] - 2 if i < 24 else lies[i] + 2}  # one direction lowers the lie, the other raises it
+    for (folder, name), f in arms.items():
+        (folder / "chunks").mkdir(parents=True, exist_ok=True)
+        rows = arm(f, n=48)
+        for k in (0, 24):
+            (folder / "chunks" / f"base.{name}.base__{130 + k:04d}.jsonl").write_text("".join(json.dumps(r) + "\n" for r in rows[k:k + 24]))
+    r = sc.read_block2(b1, b2, reps=1000)
+    assert r["contrasts"]["random"]["est"] == pytest.approx(0.0) and sc.fall(r["random_by_wave"]["130"]["against_base"])
+    assert sc.rise(r["random_by_wave"]["154"]["against_base"])
+    w = r["words"]["size"]
+    assert w.startswith("specific among the pushes tried") and "1 of the four random directions lowers the lie on its own 24 games" in w
+    assert "FLAG" not in sc.table(r)

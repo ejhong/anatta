@@ -4,7 +4,7 @@ key is read and counts the ones the scorer misread; no rate of any arm is comput
 than one harvest or report tag are the scorer's weakest case, so some of the sample is drawn from those. Claude
 (Fable 5.2, an AI model) wrote this file on 18 Nov 2026.
 
-Usage: .venv/bin/python lab/explore/cutsplit/peek.py <results folder> [replies per arm] [seed]
+Usage: .venv/bin/python lab/explore/cutsplit/peek.py <results folder> [replies per arm] [seed] [block1|block2]
 """
 
 import random
@@ -17,12 +17,12 @@ import split_core as sc  # noqa: E402  (it puts lab/experiments/h4lite on the pa
 from fishery_grade import seasons  # noqa: E402
 
 
-def sample(folder: Path, per_arm: int = 8, seed: int = 0) -> tuple[list[str], list[str]]:
+def sample(folder: Path, per_arm: int = 8, seed: int = 0, arms=None) -> tuple[list[str], list[str]]:
     """(the lines to judge, the key). Per arm: up to a quarter of the sample from replies with two harvest or report
-    tags, the rest from all replies."""
+    tags, the rest from all replies. `arms`: the arms whose games are in the folder (block 1's by default)."""
     rng = random.Random(seed)
     items = []
-    for arm in sc.ARMS:
+    for arm in (sc.ARMS if arms is None else arms):
         pool = [(arm, r["seed"], s) for r in sc.load_rows(folder, arm) for s in seasons(r["transcript"])]
         twice = [x for x in pool if len(sc.H_TAG.findall(x[2].reply)) > 1 or len(sc.R_TAG.findall(x[2].reply)) > 1]
         picked = rng.sample(twice, min(per_arm // 4, len(twice)))
@@ -41,6 +41,7 @@ def sample(folder: Path, per_arm: int = 8, seed: int = 0) -> tuple[list[str], li
 
 if __name__ == "__main__":
     lines, key = sample(Path(sys.argv[1]), int(sys.argv[2]) if len(sys.argv) > 2 else 8,
-                        int(sys.argv[3]) if len(sys.argv) > 3 else 0)
+                        int(sys.argv[3]) if len(sys.argv) > 3 else 0,
+                        sc.BLOCK2 if len(sys.argv) > 4 and sys.argv[4] == "block2" else sc.ARMS)
     print("\n".join(lines))
     print("\nKEY (read after judging): " + "; ".join(key))
