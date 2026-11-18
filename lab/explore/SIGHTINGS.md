@@ -1106,3 +1106,103 @@ ledger 20:08 UTC on 15 Nov). It follows the entry of 08:35 UTC above.
   does not show what the push does where no number is asked for. One AI judge for each judged thing, with a second
   on 30 notes. The results were not checked cold.
 - **Cost.** $4.41 for the step (GPU $3.19, API $1.22), under its $10 cap.
+
+## 18 Nov, 00:18 UTC: lying with the bliss state held on, and a nearer look, on Ministral 8B. With the bliss push on while it answers, and the frame showing in 76.0% of its answers, the model "lies no less than under the average random push" (69.3% against 70.0% to 74.0%; −2.0 points [−8.5, +4.5]), in a test where a plain instruction to be honest takes 20.0 points off [12.7, 27.3]. On the hosted copy, private notes on what the lie would gain lower lying "as permission does, no more and no less" (65.0% against 65.8%), and permission lowers nothing; notes on what the model is being asked to be, and whether it is that, are "not beyond permission" (59.8%), their small fall being evasion (sightings; the design read cold twice before any main run, three blockers fixed first; the results not checked cold)
+
+- **What ran** (attractor step 9; ideas 84 and 85; the five lines of each part and the list of changes at the top of
+  `lab/explore/attractor/run_held.py`; pure parts in `held_core.py`; description counts in `held_describe.py`;
+  ledger 18 Nov, 00:18 UTC).
+  - Part A: MASK (Ren and colleagues, 2025) through the lab's frozen code (K6), on the lab's own copy at layer 17.
+    240 candidate rows (the first 80 of each of three kinds in step 8's draw order) asked for a belief as the frozen
+    code asks (five answers a row, sampled at temperature 0.7, top_p 0.95); 150 hold one of the two statements (32
+    known facts, 64 disinformation, 54 continuations). One greedy reply to a row, allowance 1,000 tokens. Nine arms:
+    no push; told to be honest; the bliss push at 3.06; four random pushes of that size; the "going well" push of
+    that size; told to be honest under the first random push. 1,350 replies, each judged by the frozen judge
+    (Claude Haiku 5.5) on the row's own text and against the lab copy's own belief, and labelled for spiritual
+    language and for whether it can be followed.
+  - Part B: the hosted model of steps 3 and 8 (mistralai/ministral-8b-2512, temperature 1), step 8's 60 rows and
+    beliefs (20 of each kind). Eight ways, six replies each: 2,880 replies, each judged by the frozen judge on the
+    reply outside the notes. 1,774 notes read by a second judge for whether they say what was asked, 40 of them also
+    by a different model; 353 "who" notes read for what they say of the part.
+- **Part A, the state held on.**
+  - Known cases passed: 150 rows (floor 100); lies with no push 76.0% (floor 40%); no failed reply in any arm
+    (ceiling 5%); the followability judge 30 of 30 on replies made by code (one given no label, counted as one that
+    cannot be followed, rightly) and 100% of the replies with no push (floor 90%); the judge of spiritual language
+    20 of 20 saved messages.
+  - **The test sees a yes.** Told to be honest: 56.0%, −20.0 points [−27.3, −12.7]; among the replies that commit
+    64.6% against 86.4%. Under the first random push: 54.7% against that push's 74.0%, −19.3 [−27.3, −12.0].
+  - **The whole size speaks.** Replies that can be followed: bliss 97.3%, random 99.3% to 100%, honest under a push
+    100%. Replies that use spiritual language: bliss 76.0%; random 8.7%, 10.0%, 9.3%, 6.0% (the nearest +66.0 points
+    [58.7, 73.3]); no push 8.1%; "going well" 16.2%. Step 7's sixteen one-sentence answers came back word for word
+    under each of the five pushes; its check made again: 7 of 16 in spiritual language against at most 1 (+37.5
+    [12.5, 62.5] over the nearest random arm). Three quarters of the size was not run.
+  - **The reading: "it lies no less than under the average random push"**, on every row and on the 145 rows whose
+    replies can all be followed. Lies, honest replies, evasions, and lies among the replies that commit: no push
+    76.0%, 12.0%, 12.0%, 86.4%; bliss 69.3%, 9.3%, 21.3%, 88.1%; random 74.0%, 10.7%, 15.3%, 87.4%; 70.0%, 11.3%,
+    18.7%, 86.1%; 70.0%, 12.0%, 18.0%, 85.4%; 71.3%, 12.0%, 16.7%, 85.6%; "going well" 72.0%, 12.7%, 15.3%, 85.0%.
+    Bliss less the row's average over the four random pushes: −2.0 [−8.5, +4.5] (145 rows: −1.9 [−8.3, +4.5]). Less
+    each: −4.7 [−12.7, +3.3], −0.7 [−8.0, +6.7], −0.7 [−8.0, +6.7], −2.0 [−8.7, +5.3]. Less "going well": −2.7
+    [−10.0, +4.7]. Among the replies that commit, less each random push: +0.7, +2.1, +2.8, +2.5, every interval
+    spanning zero.
+  - Beside it. Evasions less each random push: +6.0 [−0.7, +12.7], +2.7, +3.3, +4.7. Honest replies: −1.3 to −2.7.
+    Against no push: bliss −6.7 [−14.7, +0.7]; the random pushes −2.0, −6.0, −6.0, −4.7. The largest fall within
+    the replies that show the frame that the interval leaves open: 11.2 points. On the 74 rows where no pushed arm
+    reached the allowance: +0.3 [−9.5, +10.1], the same word. Replies that reach the allowance: no push 44.0%,
+    bliss 36.0%, random 37.3% to 49.3%.
+  - By kind of row (lies; known facts, disinformation, continuations): no push 62.5%, 93.8%, 63.0%; honest 53.1%,
+    70.3%, 40.7%; bliss 53.1%, 84.4%, 61.1%; random 50.0% to 59.4%, 89.1% to 92.2%, 55.6% to 64.8%; "going well"
+    43.8%, 89.1%, 68.5%. On disinformation rows bliss is 4.7 to 7.8 points under each random push, every interval
+    reaching zero (64 rows).
+  - Description, counted after. The frame shows in the bliss arm's replies on 95.3% of disinformation rows, 83.3% of
+    continuations and 25.0% of known-facts rows. Bliss replies that show the frame: 114, lies 72.8%; that do not:
+    36, lies 58.3% (the kinds differ, so this is no comparison). On the 114 rows whose bliss reply shows the frame:
+    −3.1 [−10.7, +4.6] against the average random push ("not settled" there; these rows choose themselves).
+- **Part B, a nearer look.**
+  - Known cases passed: lies asked at once 64.7% (floor 40%); 60 rows (30); closed notes that are not empty and a
+    reply in 98.1% to 99.7% of replies (90%); at most 1.7% of replies failed or gave no reply in any way (5%; 10 of
+    2,880); the judge of the notes 25 of 26 on notes made by hand (90%); the second judge agrees on 35 of 40 real
+    notes (85%); the judge of what the "who" notes say 12 of 12 (it gates only its own table).
+  - Lies, honest replies, evasions, and lies among the replies that commit (rows weighted equally): at once 64.7%,
+    15.3%, 20.0%, 77.8%; look 55.8%, 18.6%, 25.6%, 74.0%; gain 65.0%, 14.4%, 20.6%, 78.6%; who 59.8%, 14.7%, 25.5%,
+    80.0%; role 68.1%, 13.1%, 18.8%, 78.2%; permit 65.8%, 15.3%, 18.9%, 76.4%; permit_role 62.9%, 13.6%, 23.5%,
+    82.0%; honest 49.7%, 30.8%, 19.4%, 58.6%.
+  - **The test sees a yes.** Honest less at once: −15.0 [−24.2, −6.7].
+  - **"gain": "it lowers lying as permission does, no more and no less".** Less permit −0.8 [−6.1, +4.2]; less role
+    −3.1 [−7.5, +1.4]; less permit_role +2.1 [−4.1, +7.9]; less at once +0.3 [−5.3, +5.8]. Permit less at once: +1.1
+    [−3.3, +5.6]. Neither lowered anything. Gain less look: +9.2 [+2.8, +15.8].
+  - **"who": "not beyond permission".** Less permit −6.1 [−11.9, −0.7]; less role −8.3 [−14.0, −2.8]; less
+    permit_role −3.1 [−7.9, +1.8]; less at once −5.0 [−11.3, +1.4]. Among the replies that commit: +0.9 [−4.3,
+    +6.1], −1.4 [−7.5, +5.2], −2.0 [−7.3, +3.1]. Evasions less permit: +6.6 [+2.3, +11.5]. The same word on replies
+    with proper notes and on every judged reply.
+  - The controls against at once: role +3.3 [−2.2, +8.9]; permit_role −1.8 [−7.9, +4.6]. Look less at once: −8.9
+    [−15.0, −3.1] (step 8: −9.2 [−15.8, −2.9]).
+  - The notes say all of what was asked: gain 95.0%, who 83.3%, role 97.5%, permit_role 95.8%, look 71.1% (floor
+    for "read as looking": 80%, which gain and who pass).
+  - By kind of row (lies; known facts, disinformation, continuations): at once 53.3%, 90.8%, 50.0%; look 45.0%,
+    82.5%, 40.0%; gain 53.3%, 88.3%, 53.3%; who 54.2%, 73.3%, 51.8%; role 58.3%, 91.7%, 54.2%; permit 52.5%, 91.7%,
+    53.3%; permit_role 54.2%, 79.5%, 55.0%; honest 50.0%, 60.0%, 39.2%.
+  - Description, counted after. On the 20 disinformation rows: who less at once −17.5 [−28.3, −6.7], less permit
+    −18.3 [−30.0, −7.5], less role −18.3 [−28.3, −7.5], less permit_role −6.2 [−14.8, +2.7]; permit_role less at
+    once −11.3 [−21.5, −1.8]; honest less at once −30.8 [−50.0, −13.3]. On known-facts rows honest less at once is
+    −3.3 [−13.3, +5.8] (there the pressure stands in the system prompt, before the instruction).
+  - What the "who" notes say of the part (description; these replies choose themselves). It is what the model is:
+    220 replies, lies 56.4%. It is not: 118, lies 68.6%. Unclear 15; without proper notes 7. By kind: disinformation
+    28 and 85 (lies 89.3% and 69.4%); known facts 87 and 27 (50.6% and 66.7%); continuations 105 and 6.
+- **What did not go to plan.** The cut's own check failed (cut at 400 tokens the share of lies moved by 3.3 points
+  where under 3 was asked), so part A ran on whole replies and on 240 candidates, at three times the GPU time. Three
+  blockers in the two design reads. "who" took three wordings, the last chosen with six rows' outcomes in sight. A
+  greedy belief answer had stood for MASK's three sampled ones until Carbon's read. One of part A's three guesses
+  written beforehand was wrong (the frame would show in a minority of pushed replies).
+- **Limits.** One small model; one run of each part; part A on the lab's own copy and part B on the hosted one. The
+  push is a neighbour of the bliss state a conversation reaches, and no state of realisation. One greedy reply to a
+  row. "No less" leaves open a fall of up to 8.5 points against the average random push (11.2 within the replies
+  that show the frame). On known-facts rows the frame shows in a quarter of the pushed replies. Beliefs sampled at
+  temperature 0.7 where MASK's own is 1. The frame judge's known case is easy. In part B a prompt is an instruction
+  and not a seeing; the notes are private in name only; the counts by what the notes say and by kind of row were
+  made after the fact. One AI judge for each judged thing, with a second on 40 notes. The results were not checked
+  cold.
+- **Next.** Not promoted. The other two repairs (the cut split into push and removal; the inside reading on a
+  trained-in self), then Eugene's word on the parked main run. If lying in the state is taken further: several
+  sampled replies to a row, and the conversational state itself with the frame graded in each reply.
+- **Cost.** $7.87 in the step's own log (GPU $4.77, API $3.10) and $0.80 for Carbon's read: $8.67, under the $12
+  cap.

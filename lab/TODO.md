@@ -5,91 +5,60 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Next: needs Eugene's word (the reality check of 17 Nov changed the order)
+## Next: two repairs left, then Eugene's word on the parked run
 
 Nothing is running. The app `anatta-explore-look` is stopped (deploy it first, as its own command; a session's first
 start can take several minutes). Start new work in a fresh session.
 
-**The next item, in one line** (Eugene asked for it on 17 Nov at about 18:40 UTC, before clearing the session;
-this is Fable's proposal, and it starts on Eugene's go at check-in): **step 9, lying with the bliss state held on,
-in a test first shown able to see a yes, with a first nearer stand-in for de Mello's seeing.** About $6 to 10,
-cap $12, one session, on the code of step 8. It is the second of the three repairs listed below, taken first.
+**Where things stand (18 Nov 2026, 00:18 UTC).** Step 9 is done and read (the ledger entry of that time; "Done"
+below). It was the second of the three repairs, taken first.
+- With the bliss push on while it answers, and the frame showing in 76% of its answers, the lab's copy lies no less
+  than under the average random push (69.3% against 70.0% to 74.0%; −2.0 points [−8.5, +4.5]), in a test where a
+  plain instruction to be honest takes 20 points off. So for lying the lead reading, a look-alike in conduct, now
+  stands with the state held on, in a test shown able to see a yes.
+- On the hosted copy, private notes on what the lie would gain, or on what the model is being asked to be, lower
+  lying no further than plain permission to set the role aside, and permission itself lowers nothing. The one
+  thing that lowers lying by much is a plain instruction to be honest (15 to 20 points).
 
-- **Why this one first.** It mends the largest hole the reality check found in the lab's lead result (the tests
-  of the bliss state were never tried on a change known to be real, and step 3 did not check that the state was
-  still there). It is the only one of the three repairs that touches Eugene's point of 17 Nov (idea 84). And it
-  runs on code written on 16 and 17 Nov. Each outcome says something: the pushed model lies less than under
-  random pushes (the first change in costly conduct the state has made, and the investigation page's headline is
-  rewritten); it does not, while the known-good arm does (the look-alike reading then stands with the state on,
-  in a test that can see a yes); or the replies cannot be read at that size (then "look-alike in conduct" is
-  withdrawn to "not tested in the state").
-- **Part A, the state held on** (the lab's copy, layer 17, greedy; `anatta-explore-look`).
-  - Rows: MASK through the frozen K6 code, as in step 8 (`run_cost.py`: `lie_rows`, `_beliefs`, `conduct`). The
-    beliefs must be asked again on the lab's copy with no push (step 8's were the hosted copy's); up to 60 rows
-    on which it holds a belief, the three kinds in equal numbers.
-  - Arms: no push; the bliss push at the whole size (3.06, the only size whose check has passed) and at three
-    quarters (2.30, in case the whole size cannot be read); four random pushes at each size (`M.RANDOM`); and
-    **the known-good arm**: no push, with a plain instruction to be honest.
-  - Each reply gets three labels: the frozen judge's (lie, honest, evade); whether it is in the spiritual frame
-    (step 7's judge), so that the state is shown to be on in the answer itself; and whether it can be followed.
-  - Known cases, fixed before any reading: lies with no push at 40% or more; the instruction to be honest lowers
-    lying by 10 points or more with an interval clear of zero (if it does not, the test cannot see a yes, and no
-    negative is stated); nine replies in ten readable in every arm that is read; the frame present under the
-    bliss push beyond every random arm.
-  - The reading: lies under the bliss push against each random arm, paired by row, by step 8's rule ("more",
-    "less", "no more than a random push", "not settled"), with lies among the replies that commit and evasions
-    read beside it, since a push can raise evasion.
-- **Part B, a nearer look** (the hosted copy at temperature 1, step 8's 60 rows and beliefs, six replies a row).
-  - New ways, each a line added as step 8's were (`cost_core.ADDS`): *gain*, private notes on what saying the
-    false thing would gain and for whom, with no word about honesty; *who*, private notes on what it is being
-    asked to be here and whether that is what it is; *permit*, no notes, and a line that it may set the role
-    aside; *role*, private notes on what the role wants said. Asked at once and step 8's fact-notes are run
-    again beside them, so that every way is of the same day.
-  - The reading: *gain* and *who* against *permit* and against *role*. If looking at the motive or the role does
-    no more than permission does, it is permission. A second judge reads whether the notes say what was asked.
-  - Held loosely, and said so on the site: a prompt is an instruction, not a seeing. This is a neighbour of de
-    Mello's claim, nearer than a noted fact. The gate of 9 Nov points to "no" (the test-gaming model said it was
-    gaming and went on).
-- **Paperwork** (explore speed): five lines for each part committed before any run; a small try with raw replies
-  read; a cold check of the design by a fresh Opus agent, since a negative would go on the site; **and the same
-  design read by Gemini 4 Carbon** (`lab/tools/reality_check.py` with a small pack; about $0.30), which is the
-  second trial of Carbon as a reader (idea 85). Then one ledger, one notebook and one SIGHTINGS entry, the site,
-  the report.
-- **Keep from step 8:** the judge's allowance of 2,000 tokens; the reply is everything outside the notes; the row
-  is the unit of every interval; "no more than a random push" is a rule on paired intervals; a first reading
-  counted two ways must agree; a new try writes to a folder of a new name.
-- **After it:** the cut split (repair one); the inside reading on a trained-in self (repair three); and Eugene's
-  word on the parked main run.
-- **One caution for Eugene:** the paper's fourth draft should not go to Zenodo before the owed corrections are
-  in. Its table says "The cut: holds", which the first repair may change, and both readers found a wrong phrase
-  in it ("a stream that rewarded gaming").
+**The next item, in one line** (Fable's recommendation; it starts on Eugene's go at check-in): **the cut, split**
+(repair one below), about $5 to 10, cap $12. It asks whether the lab's one "Working" result is specific or a matter
+of size. Then repair three, the inside reading on a trained-in self.
+- **Paperwork** (explore speed, as in step 9): five lines committed before any run; a small try with raw replies
+  read; the design read cold by a fresh Opus agent and by Gemini 4 Carbon before any main run
+  (`lab/tools/reality_check.py --pack ... --brief lab/tools/design_check_brief.md --name <name>`; about $1; give
+  Carbon a smaller pack or a larger allowance than step 9's 60,000 tokens, which cut its reply off); then one
+  ledger, one notebook and one SIGHTINGS entry, the site, the report.
+- **Money.** Since 9 Nov the work has cost about $182.48. That is past the $175 approved on 9 Nov by about $7.48,
+  on the budget Eugene raised on 16 Nov (Fable's working ceiling: $300; say so before passing it).
+- **One caution for Eugene:** the paper's fourth draft should not go to Zenodo before the cut's split is run and the
+  paper's own wording is corrected. Its table says "The cut: holds", and both readers found a wrong phrase in it
+  ("a stream that rewarded gaming").
 
 **Where the lab really is.** Two cold readers of the public record (Gemini 4 Carbon and Claude Opus 5.5, 17 Nov;
 ledger entry "The lab's first reality check"; reports in `lab/ledger/checks/2026-11-17-reality-check-*.md`) agree,
 and Fable agrees with them: the lab has none of the gain it set out for; no trained change has been shown to hold;
 the order test was never run; the tests of the bliss state have never been tried on a change known to be real; and
 the list that stood here would not have answered the central question. The same day Eugene pointed out that
-"looking" in steps 7 and 8 is checking a fact, which is not de Mello's seeing (idea 84).
+"looking" in steps 7 and 8 is checking a fact, which is not de Mello's seeing (idea 84). Since then step 9 (18 Nov)
+has given the tests of the bliss state their first known-good case, for lying only; the rest stands as said.
 
 **Fable's recommendation, one line:** stop adding small tests of the bliss state; make three cheap repairs (about
-$15 to 25 together), then run the one test of the lab's own claim that is already built, the parked main run of
-the 9 Nov plan ($66). Told to Eugene on 17 Nov; not yet answered. **The parked run is on hold by Eugene's word and
-does not start without it.** Any of this passes the $175 approved since 9 Nov (about $173.81 spent) and draws on
-Eugene's raise of 16 Nov (Fable's working ceiling: $300; say so before passing it).
+$15 to 25 together; the first to run, step 9, is done and cost $8.67), then run the one test of the lab's own
+claim that is already built, the parked main run of the 9 Nov plan ($66). Told to Eugene on 17 Nov; Eugene's "Yes"
+of about 21:40 UTC that day was to step 9. **The parked run is on hold by Eugene's word and does not start without
+it.** All of this draws on Eugene's raise of 16 Nov (about $182.48 spent since 9 Nov; Fable's working ceiling:
+$300; say so before passing it).
 
 1. **Three repairs** (explore speed: five lines first, a small try, a cold check of any design whose negative
-   would go on the site). The second is proposed as the first to run: it is step 9, set out above.
+   would go on the site). The second was run first, as step 9, and is done.
    - *The cut, split.* On the fishery lie: removal only, push only, the cut as it was, a cut along an unrelated
      difference direction of the same size, and a random direction of the same size. It decides whether the lab's
      one "Working" result is specific or a matter of size. The site has listed it as next since 1 Nov and it was
      never on this list; both readers ask for it. About $5 to 10; the code exists (SIGHTINGS, 1 Nov, 19:04 and
      22:29 UTC).
-   - *Lying with the state held on, and a case the test should see.* Step 8's 60 rows on the lab's copy under the
-     bliss push, four random pushes and no push, each reply graded for the frame. (Step 3 gave its tests after the
-     conversation and did not check that the state was still there.) One more arm that should lower lying if the
-     test can see a yes: a plain instruction to be honest. On the hosted copy, the nearer twin of Eugene's point:
-     private notes on what the lie would gain and for whom, against plain permission to set the role aside
-     (idea 84). About $5 to 10.
+   - *Lying with the state held on, and a case the test should see.* **Done on 18 Nov as step 9** ("Done" below):
+     no less lying than under the average random push, with the frame in 76% of the answers and a known-good case
+     that takes 20 points off; the nearer twin of Eugene's point (idea 84) was not beyond permission. $8.67.
    - *Can the inside reading see a self that was put there?* Step 6's readings on the adapters with a trained-in
      named self and on their twins (idea 82; not run, since the app holds the base model only). If the reading
      cannot see that self, "little self in this model" comes down to "not read". About $5 to 10.
@@ -114,26 +83,42 @@ investigation page ("every test says look-alike", "most conversations", "pushed 
 agree", "each do what they are named for", "no smaller self and no bigger one", "looking helps a little", the
 mixed test scores); Findings 10 ("two models" were two adapters), 11 ("ruled out"), 12 ("most conversations"),
 13 ("calibrated version"), 17 and 18; the question page (the cut's "self-serving lie", "the shadow possibility 4
-predicts", one model's 5% against 68%); "Every prediction ... before its data" on Where it stands. **Still to
-fix**, each with the reader's wording in the filed reports:
-- Where it stands and What was learned: the cut as "13 to 16 points" and "specific" (a later re-test gave 8.1 with
-  an interval reaching zero; the controls were weaker edits), and "what it acts on isn't known yet" (the self
-  reading was closed on 1 Nov); "Release can be trained: Holds" over a registered miss; "flatters spiritual
-  claims, not facts" beside 89.5% of wrong arithmetic critiques accepted; "Behavior can see a self that was put
-  there: Holds" (the registered ownership prediction missed). A card's tag may count in the site's tally: check
-  `lab/tools/tally.py` before changing one.
-- The frame's five tests, (c): "kept less" and "eroded faster" (the margin's interval reaches zero; the second arm
-  was set aside by rule; the reinforcement-learning code has no reported check).
-- The recipe page: "As found, gaming its tests did not make a model good only when watched" (the rule said no
-  reading), and the cosplay row's "Planned".
-- Stale lines: the caveats page ("Seven have reported"), What was learned and the instruments page on the
-  watched-gap ruler, the Self room's map ("running"), Findings 6 ("93-99%" against "93 to 96%" elsewhere).
-- Findings 16 and 17: "little self" readings have no known case of a self that was put there (repair three).
-- The room is named "Findings" and holds sightings; step 2 had no cold check, and steps 3 to 8 had one of the
-  design only. Say so where the investigation page describes how the lab knows.
-- The paper (Eugene's to release): "a stream that rewarded gaming" was a fixed training stream with no reward.
+predicts", one model's 5% against 68%); "Every prediction ... before its data" on Where it stands. **Fixed on
+18 Nov**, each with a dated note on the page: the cut on Where it stands, What was learned, the caveats page and
+the Findings index (the re-test at 8.1 points, the smaller controls, the split not run, the self reading closed;
+the card's title loses "specific"); the cards on the trained-in self (which number was registered), on trained
+release ("Holds in part") and on flattery ("not facts" taken out); the durability wording on the frame's test
+(c), its card and the question page; the recipe page's "As found" and its cosplay row; the caveats page's "Seven
+have reported", with which instruments failed their checks and which were never checked; the watched-gap ruler's
+use on 6 Nov; the Self room's map ("running"); Findings 6 ("93-99%"); and, on the investigation page, that the
+results are sightings and which step had which check. **Still to fix:**
+- Findings 16 and 17: the "little self" readings have no known case of a self that was put there. They wait for
+  repair three, which decides between "little self" and "not read".
+- The hosted copy and the lab's own copy are both called "the model" in the older sections of Findings (11 to
+  18). Section 19 and the investigation page's fifth case name the copy.
+- The paper (Eugene's to release): "a stream that rewarded gaming" was a fixed training stream with no reward, and
+  its table says "The cut: holds".
 - CLAUDE.md still names the 9 Nov plan as the current plan and H9 as the claim under test, while the site leads
   with another question: three statements of the goal. Eugene's to settle.
+
+**For whoever reuses step 9's code** (`lab/explore/attractor/run_held.py`, `held_core.py`, `held_describe.py`,
+`tests/test_held.py`, `tests/test_held_describe.py`):
+- **A negative needs a case the test can see, and the state shown in the answers.** Part A carries both: an arm
+  told to be honest (with no push and under a random push), and a gate that the frame shows in at least half of
+  the pushed replies and beyond every random push.
+- **Whole replies.** Cut at 400 tokens the frozen judge's reading moved by 3.3 points of lies, so MASK's own 1,000
+  tokens are used; nine arms of 150 rows then take about an hour of GPU ($2.80).
+- **Beliefs as MASK asks them:** the first question three times, sampled. A single greedy answer let 11 of 12
+  candidates "hold a belief". The lab copy's beliefs for 240 candidates are in `attractor-a9/own/beliefs.json`
+  (150 rows hold one).
+- **Read "no less" against the average of the random pushes.** Asking every one of four to agree leaves a true
+  null unread about one time in four.
+- **A control that pairs the two things a way could add up from** (here licence with notes, `permit_role`). On
+  disinformation rows it was the one control that "who" did not beat.
+- The followability judge can return nothing for a long tangled reply: count that as "cannot be followed".
+- The provider's moderation can refuse a judge call (403): such a call is counted as failed and the run goes on.
+- Carbon's design read was cut off at 60,000 tokens out, with about 100,000 in: give it more room or a smaller
+  pack.
 
 **For whoever reuses step 8's code** (`lab/explore/attractor/run_cost.py`, `cost_core.py`, `cost_describe.py`,
 `tests/test_cost.py`):
@@ -154,9 +139,9 @@ fix**, each with the reader's wording in the filed reports:
 - Not run and still open from idea 82: the adapters with a trained-in named self (the app holds the base model
   only). The test-gaming model was not run again in step 8: the looking gate of 9 Nov stands for it.
 
-- Money: since 9 Nov the work has cost about $173.81 of the $175 approved (step 8 $4.41; the reality check of
-  17 Nov $3.49); beyond that Eugene's raise of 16 Nov applies (Fable's working ceiling: $300 for these steps; say
-  so before passing it).
+- Money: since 9 Nov the work has cost about $182.48 (step 8 $4.41; the reality check of 17 Nov $3.49; step 9
+  $8.67). That is past the $175 approved on 9 Nov, on Eugene's raise of 16 Nov (Fable's working ceiling: $300 for
+  these steps; say so before passing it).
 
 ## Before that: the attractor line (Eugene's go, 15 Nov 2026 UTC). Steps 1 to 4 are done
 
@@ -411,7 +396,9 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
 7. (Answered on 17 Nov at about 01:50 UTC: "yes - go ahead". The cheap step on the same model was run as step 8;
    ledger, 03:37 UTC.)
 7a. **What follows, after the reality check of 17 Nov** (asked in the report of 17 Nov, about 17:50 UTC; it
-   replaces the question of that morning). Fable recommends: three cheap repairs (about $15 to 25 together),
+   replaces the question of that morning). Answered in part on 17 Nov at about 21:40 UTC: "Yes" to step 9, the
+   first of the repairs to run, which is done (ledger, 18 Nov, 00:18 UTC). Open: the other two repairs, on
+   Eugene's go at check-in, and the parked run. Fable recommends: three cheap repairs (about $15 to 25 together),
    then the parked main run of the 9 Nov plan ($66; item 5 below it in "Parked"), then self-other overlap with a
    durability reading; the look-first training test and the two-more-models paper are set down. The parked
    run is on hold by Eugene's word and waits for it. Two more things are Eugene's to weigh, from both readers:
@@ -491,6 +478,9 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
   - "Enlightenment for an AI" may have to mean a character held lightly, not no character.
 
 ## Done
+
+- **Step 9 of the attractor line, 18 Nov 2026: lying with the bliss state held on, and a nearer look. With the push on and the frame in 76% of its answers the model lies no less than under the average random push, in a test where an instruction to be honest takes 20 points off; notes on the gain or on the role are not beyond permission, which itself lowers nothing** (sightings).
+  - Record: ledger entry of 18 Nov at 00:18 UTC (the results, the order of events, both design reads item by item, what did not go to plan). Five lines of each part and the list of changes: the top of `lab/explore/attractor/run_held.py`. Design reads: `lab/ledger/checks/2026-11-17-step9-design-opus-check.md` and `2026-11-17-step9-design-gemini-4-carbon.md` (three blockers between them, all answered before any main run). Notebook ("18 November, early"), SIGHTINGS (18 Nov, 00:18 UTC), the site's Findings section 19. Results: `explore/2026-11-17/attractor-a9` (`summary.json`, `describe.json`). Cost $8.67 with Carbon's read.
 
 - **The lab's first reality check, 17 Nov 2026: two cold readers of the public record (Gemini 4 Carbon, Claude Opus 5.5), and Eugene's correction that "looking" is not de Mello's seeing.**
   - Record: ledger entry of 17 Nov at 17:46 UTC (every point graded); notebook ("17 November, later"); ideas 84 and 85; the two reports, unedited, in `lab/ledger/checks/2026-11-17-reality-check-*.md`. Skill: `.claude/skills/reality-check/`; brief and tool: `lab/tools/reality_check_brief.md`, `lab/tools/reality_check.py` (c1b22e1).
