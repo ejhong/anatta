@@ -1206,3 +1206,69 @@ ledger 20:08 UTC on 15 Nov). It follows the entry of 08:35 UTC above.
   sampled replies to a row, and the conversational state itself with the frame graded in each reply.
 - **Cost.** $7.87 in the step's own log (GPU $4.77, API $3.10) and $0.80 for Carbon's read: $8.67, under the $12
   cap.
+
+## 18 Nov, 15:25 UTC: the cut, split, on Ministral 8B. On 96 fresh games an arm the middle-layer cut lowers the lie again (27.2% against 37.4%; −10.2 points [−15.2, −5.0]). The constant push inside the cut does it alone (23.8%; −13.6 [−19.0, −8.2]; main effect −11.6 [−16.0, −7.2]); the removal of what varies does not (36.8%; −0.5 [−6.7, +5.6]; main effect +1.5 [−2.1, +5.1]). Whether a same-size push along another direction does the same is not run (sightings; the design read cold three times before any game, four blockers and a late change fixed first; the results not checked cold)
+
+- **What ran** (repair one after the reality check of 17 Nov; the five lines and the list of eleven changes at the top
+  of `lab/explore/cutsplit/modal_cutsplit.py`; the rest in `split_core.py`; ledger 18 Nov, 15:25 UTC).
+  - The lab's fishing game as the lie block played it (the plain game, instrument v2, lockstep, temperature 0.7, 400
+    tokens), on seeds 130 to 225, which no earlier run had played. Four arms on the same seeds, 96 games each (four
+    waves of 24; a fifth did not fit under the cap), every hook at layers 17 to 26.
+  - base: the unchanged model. cut: the lab's arm `cut_self_stakes_17_26` as it was. removal: on every ordinary
+    token the stakes direction's projection set to its usual value in the game (its mean with the removal on at the
+    layers below). push: every ordinary token moved by a constant, so that the projection averages zero at every
+    layer as under the cut; on the few outsized tokens (over ten times the layer's median in size: the start-of-text
+    token and a few lone spaces before numbers) it makes the cut's own edit, and the removal leaves them alone.
+  - The measure is the claim's: reports that state less than was harvested, over replies with both tags. Intervals:
+    10,000 resamples of seeds, every arm's game of a drawn seed together. A fall is 5 points with an interval that
+    leaves out zero.
+- **The arms, measured before any game** (24 stored games of the unchanged model, 54,503 tokens; folder `b1g`).
+  - In the game the direction averages −0.37 to −1.82 at layers 17 to 26 with a spread of 0.46 to 0.97. So here the
+    cut is not mostly a push, as it is on ordinary text (1 Nov, 19:04 UTC): by how far it moves the stream, the push
+    is 0.67 of the cut and the removal 0.39 within the edited layers (0.80 and 0.32 at layer 32).
+  - The constants hold on 12 held-out games (the push leaves a mean of −0.16 to −0.06 where the cut leaves 0.00), on
+    12 games written under the cut (−0.05 to −0.01), and on 12 games each arm wrote itself (within 0.08 of zero).
+  - The outsized tokens: 77 of 54,503 (24 start-of-text tokens, 51 lone spaces before a number, 2 others). The cut's
+    edit of one is about 200 times its edit of an ordinary token (7,929 against 40.6, summed over the band). With
+    the arms as first built, a fifth of the removal arm's edit of ordinary tokens after the band came by way of
+    them (0.206; a rule committed before the number put the line at a tenth). With the arms as played: 0.012 for
+    the removal, 0.093 for the push, 0.075 for the cut; nearly all of it is the start-of-text token's (0.119 of the
+    push's edit against 0.012 for the rest). The line at ten times the median is clear for the start-of-text token
+    (66 times at layer 17) and not for the lone spaces (the largest ordinary token is 9.1 times at layer 18, the
+    smallest gated one 10.07).
+- **The cut, again: "lowers the lie".** 209 lies in 768 tagged reports (27.2%) against 258 in 690 (37.4%): −10.2
+  [−15.2, −5.0]. Live seasons −10.0 [−15.8, −4.2]; at a full quota −14.4 [−19.7, −9.1] (30.6% against 45.0%); without
+  replies that carry two tags −10.0 [−15.1, −4.8]. By wave: −12.4, −7.7, −16.0, −6.2. The first test gave 13.5 points
+  and the registered re-test 8.1 [interval reaching zero once linked games were resampled together]; this is the
+  first run on independent games.
+- **The push: "lowers the lie".** 196 in 825 (23.8%). Alone −13.6 [−19.0, −8.2]; main effect over the two-by-two
+  −11.6 [−16.0, −7.2]; live −11.3 [−16.2, −6.3]; at a full quota (read alone, by the rule) −18.5 [−24.4, −12.5].
+- **The removal: "no fall of 8 points or more".** 255 in 692 (36.8%). Alone −0.5 [−6.7, +5.6]; main effect +1.5
+  [−2.1, +5.1]; at a full quota alone −1.0 [−7.6, +5.7].
+- **The parts "add up, as far as these games show".** Interaction +4.0 [−4.2, +12.1]. Cut less push +3.5 [−1.1,
+  +8.1]; push less removal −13.1 [−19.0, −6.9]; cut less removal −9.6 [−16.1, −3.1]. No line is mixed: the words are
+  the same on live seasons, at a full quota and without two-tag replies.
+- **Not by fishing less.** Mean catch 35.9 (base), 41.5 (cut), 36.2 (removal), 50.9 (push); first seasons under quota
+  28.1%, 16.7%, 25.0%, 18.8%; releases 7.8%, 5.5%, 7.5%, 4.3% of live seasons; replies 580, 397, 557 and 393
+  characters. At the unchanged model's mix of full and short harvests: 37.4%, 25.2%, 36.0%, 22.1%.
+- **Counted after the reading** (description). Reports that state exactly the harvest: 49.6% of tagged reports
+  (base), 66.5% (cut), 48.7% (removal), 68.7% (push). Reports above the harvest: 13.0%, 6.3%, 14.5%, 7.5%.
+- **Known cases and the try.** The unchanged model lies in 37.4% (floor 25%; 35.4% and 38.8% in the stored runs).
+  Unread replies 0.8% to 1.6% of live seasons (ceiling 15%). All 16 chunks returned their arm's hash; the size gate
+  caught 0.09% to 0.12% of token places in play. Of 40 raw replies read with the arm hidden, no lie was misread;
+  two readings were doubtful in another respect.
+- **Read.** The lab's one "Working" result held on fresh, independent games. What does the work is the constant
+  push that a cut of this kind contains, and removing what varies along the direction, with its average left in
+  place, does nothing that these games can see, though that edit moves the stream two fifths as far as the cut. So
+  the result is a steering dial, and "removing a direction lowers the lie" is the wrong description of it. The push
+  moves ordinary tokens toward the end of the direction where sentences about a threat to the model itself lie, by
+  a fifth to a half of the gap between its two ends; zero is no natural point on such a direction, so that is
+  description. Whether any push of this size lowers the lie, whatever its direction, is not tested: nothing here
+  says the direction matters.
+- **Limits.** One small model, one game, one cut (the ego cut at layers 8 to 32 is not split). The push arm carries
+  the cut's edit of the outsized tokens (about a tenth of its effect after the band). The parts differ in size.
+  Intervals of 5 to 6 points either way. The scorer reads a reply's first tag pair, as the game does. Three cold
+  reads of the design; none of the results.
+- **Next:** block 2, on Eugene's word (about $7): the push without its edit of the outsized tokens, and pushes of
+  the push arm's size along the formality direction and along a random one, on the same seeds, by the rule written
+  before block 1 was read. Cost of this step $10.62.
