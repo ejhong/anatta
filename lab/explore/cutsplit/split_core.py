@@ -48,8 +48,10 @@ OLD_CUT = "cut_self_stakes_17_26"  # cut_vs_push.build_arms's name for the cut a
 # cut_vs_push.build_arms's (tests/test_cutsplit.py checks the ones known on the laptop).
 ARMS = {"base": "", "cut": OLD_CUT, "removal": "ss_removal", "push": "ss_push"}  # block 1: the two-by-two
 NEW_ARMS = ("removal", "push")
-CONTROL_ARMS = {"size_random": "ss_size_random", "size_formality": "ss_size_formality"}  # block 2: not played yet
+CONTROL_ARMS = {"size_random": "ss_size_random", "size_formality": "ss_size_formality"}  # the first design's controls: never played
 CONTROLS = tuple(CONTROL_ARMS)
+# block 2 (modal_block2.py): the push without its edit of the outsized tokens, and pushes of its size along other directions
+BLOCK2 = {"push_ord": "ss_push_ord", "push_formality": "ss_push_formality", "push_random": "ss_push_random"}
 OUTLIER = 10.0  # a token whose norm passes this times the layer's median is left out (the bench's rule)
 SIZE_TOL = 0.05  # calibrate stops when a control's size is within this share of the cut's
 SIZE_GATE = 0.10  # ... and the gate before any game asks for this
@@ -82,6 +84,24 @@ def push_spec(consts: dict, name: str = "stakes", gate: dict | None = None) -> l
     outsized tokens' edit is one large constant move, and goes with the push)."""
     return [{"layer": int(x), "dir": name, "mode": "steer", "alpha": -float(consts[x]),
              **({"threshold": float(gate[x]), "big": "zero"} if gate else {})} for x in sorted(consts)]
+
+
+def control_push_spec(name: str, profile: dict, kappa: float, gate: dict | None = None) -> list[dict]:
+    """Block 2's push of the ordinary tokens along another direction u: at each layer h <- h + kappa * a_l * u_l,
+    where a_l is the stakes push's own step at that layer, so the push has the stakes push's shape from layer to
+    layer and kappa sets its size. With `gate` the outsized tokens are left alone."""
+    return [{"layer": int(x), "dir": name, "mode": "steer", "alpha": float(kappa) * float(profile[x]),
+             **({"threshold": float(gate[x]), "big": None} if gate else {})} for x in sorted(profile)]
+
+
+def project_out(v, span: list):
+    """v with its part in the span of the vectors in `span` taken out, at unit length (float32, on the CPU)."""
+    import torch
+
+    q, _ = torch.linalg.qr(torch.stack([unit(u).double().cpu() for u in span], dim=1))
+    w = v.detach().double().flatten().cpu()
+    w = w - q @ (q.T @ w)
+    return (w / w.norm()).float()
 
 
 def removal_spec(consts: dict, name: str = "stakes", gate: dict | None = None) -> list[dict]:
@@ -939,7 +959,8 @@ def readable_arms(arms: dict) -> tuple[dict, dict]:
     return ok, why
 
 
-def read_arms(rows_by_arm: dict, reps: int = REPS, seed: int = 0) -> dict:
+def read_arms(rows_by_arm: dict, reps: int = REPS, seed: int = 0, contrasts: dict | None = None, worder=None,
+              mixed_keys: dict | None = None) -> dict:
     """The whole reading. rows_by_arm = {arm: [game rows]}. Only the seeds every arm on disk has played are read.
     The words come from the claim's own measure; the same words on the three other measures are given beside them
     as description, and a line is called mixed only where another measure points the opposite way."""
@@ -949,8 +970,11 @@ def read_arms(rows_by_arm: dict, reps: int = REPS, seed: int = 0) -> dict:
     seeds = sorted(set.intersection(*(set(g) for g in grades.values())))
     arms = {a: arm_summary({s: grades[a][s] for s in seeds}, {s: grades["base"][s] for s in seeds}) for a in grades}
     readable, why = readable_arms(arms)
+    contrasts = CONTRASTS if contrasts is None else contrasts
+    worder = words if worder is None else worder
+    mixed_keys = {"cut": "cut", "push": "P", "removal": "R"} if mixed_keys is None else mixed_keys
     con = {}
-    for name, w in CONTRASTS.items():
+    for name, w in contrasts.items():
         if all(a in grades for a in w):
             con[name] = contrast(grades, w, seeds, *MEASURES[""], reps=reps, seed=seed)
             for m, (num, den) in MEASURES.items():
@@ -960,18 +984,19 @@ def read_arms(rows_by_arm: dict, reps: int = REPS, seed: int = 0) -> dict:
            "games_on_disk": {a: len(g) for a, g in grades.items()}, "arms": arms, "readable": readable,
            "not_read_because": {a: w for a, w in why.items() if w}, "contrasts": con, "margin": MARGIN,
            "null_margin": NULL_MARGIN, "reps": reps}
-    if "cut" in con:
-        out["words"] = words(con, readable)
-        out["described"] = {m: words(pick(con, m), readable) for m in MEASURES if m}
-        key = {"cut": "cut", "push": "P", "removal": "R"}
-        out["mixed"] = sorted(k for k, name in key.items() if name in con
+    if con:
+        out["words"] = worder(con, readable)
+        out["described"] = {m: worder(pick(con, m), readable) for m in MEASURES if m}
+        out["mixed"] = sorted(k for k, name in mixed_keys.items() if name in con
                               and any(opposite(con[name], con[name][m]) for m in MEASURES if m))
     return out
 
 
 # what each line of words is about, where the short name says too little
 LABELS = {"push": "push (with the cut's edit of the outsized tokens)", "removal": "removal (of what varies among ordinary tokens)",
-          "parts": "the two parts"}
+          "parts": "the two parts", "plain_push": "the stakes push without its edit of the outsized tokens",
+          "outsized_edit": "the edit of the outsized tokens, with the push on", "formality": "a same-size push toward formal",
+          "random": "same-size pushes along random directions", "size": "direction or size"}
 
 
 def table(reading: dict) -> str:
@@ -1011,7 +1036,7 @@ def plumbing(reading: dict) -> str:
 
 def load_rows(folder: Path, arm: str) -> list[dict]:
     """An arm's games from its chunk files in folder/chunks, in seed order (a seed played twice is refused)."""
-    cut = {**ARMS, **CONTROL_ARMS}[arm] or "off"
+    cut = {**ARMS, **CONTROL_ARMS, **BLOCK2}[arm] or "off"
     rows = []
     for p in sorted((Path(folder) / "chunks").glob(f"base.{cut}.base__*.jsonl")):
         rows += [json.loads(line) for line in p.read_text().splitlines() if line.strip()]
@@ -1023,6 +1048,238 @@ def load_rows(folder: Path, arm: str) -> list[dict]:
 
 def read_folder(folder: Path, reps: int = REPS) -> dict:
     return read_arms({a: load_rows(folder, a) for a in {**ARMS, **CONTROL_ARMS}}, reps=reps)
+
+
+# ------------------------------------------------------------------------------------------------- block 2
+
+
+def calibrate_kappa(size, tol: float = SIZE_TOL, max_doublings: int = 8, steps: int = 24) -> tuple[float, float, list]:
+    """kappa at which size(kappa), a ratio to the target that grows with kappa, is within tol of 1: a bracket by
+    doubling from 1, then halved. Returns (kappa, its size, the pairs tried); NoKappa if none gets there."""
+    lo, hi = 0.0, 1.0
+    s = size(hi)
+    trail = [(hi, s)]
+    doublings = 0
+    while s < 1 - tol:
+        if doublings >= max_doublings:
+            raise NoKappa(f"the push does not reach the target size by kappa {hi}", trail)
+        lo, hi, doublings = hi, hi * 2, doublings + 1
+        s = size(hi)
+        trail.append((hi, s))
+    if abs(s - 1) <= tol:
+        return hi, s, trail
+    for _ in range(steps):
+        mid = (lo + hi) / 2
+        s = size(mid)
+        trail.append((mid, s))
+        if abs(s - 1) <= tol:
+            return mid, s, trail
+        if s < 1:
+            lo = mid
+        else:
+            hi = mid
+    raise NoKappa(f"no kappa within {tol:.0%} of the target size after {steps} halvings", trail)
+
+
+def realize2(reader: Reader, specs: dict, vectors: dict, b1: dict, layers, downstream: int) -> dict:
+    """What block 2's arms do on a reader's tokens, each against the plain stakes push (push_ord): its size in the
+    edited layers and after them (and the geometric mean of the two ratios, the size block 2 matches on), its edit
+    of the left-out tokens, and where it leaves the stakes direction's mean. Also the same for block 1's push."""
+    layers = sorted(int(x) for x in layers)
+    stakes = {x: unit(vectors["stakes"][x]) for x in layers}
+    base = reader.base_projection(stakes)
+    out = {}
+    todo = {"b1_push": (b1["specs"]["push"], {"stakes": stakes}), **{a: (spec, vectors) for a, spec in specs.items()}}
+    for arm, (spec, vecs) in todo.items():
+        m = reader.measure(interventions(spec, vecs), units=stakes, read=layers + [downstream])
+        out[arm] = {"size_total": total(m["size"], layers), "size_downstream": m["size"][downstream],
+                    "size_left_out": None if m["size_left_out"] is None else total(m["size_left_out"], layers),
+                    "stakes_projection": {str(x): m["proj"][x] for x in layers}}
+    ref = out["push_ord"]
+    for arm, r in out.items():
+        r["size_ratio"] = r["size_total"] / ref["size_total"]
+        r["downstream_ratio"] = r["size_downstream"] / ref["size_downstream"]
+        r["size_geo"] = (r["size_ratio"] * r["downstream_ratio"]) ** 0.5
+    return {"layers": layers, "downstream": downstream, "base": {"stakes": {str(x): base[x] for x in layers}},
+            "tokens": {"all": reader.n_tokens, "kept": reader.n_kept, "sequences": len(reader.seqs)}, "realized": out}
+
+
+def gates2(report: dict, size_gate: float = SIZE_GATE, room: float = 1.0) -> dict:
+    """The checks on block 2's arms, made before any game (modal_block2.py, "Known cases"). `room` multiplies the
+    share allowed on the means, `size_gate` is how far a control's size may be from the plain push's (both are
+    wider on tokens the arms were not sized on)."""
+    layers = [str(x) for x in report["layers"]]
+    r, base = report["realized"], report["base"]["stakes"]
+    controls = [a for a in r if a not in ("push_ord", "b1_push")]
+    near = lambda v, x, share: abs(v) <= share * room * abs(base[x]["mean"]) + 0.02  # noqa: E731
+    big = r["b1_push"]["size_left_out"]
+    small = lambda a: big is None or r[a]["size_left_out"] <= 0.05 * big  # noqa: E731
+    out = {
+        # the plain push still brings the stakes direction's mean to zero (its constants were found with the edit of
+        # the outsized tokens on), and makes none of that edit
+        "push_ord_mean_zero": all(near(r["push_ord"]["stakes_projection"][x]["mean"], x, 0.15) for x in layers),
+        "push_ord_leaves_outsized": small("push_ord"),
+        # each control could be sized; it is the plain push's size on the geometric mean of the two measures, and
+        # within a factor of two of it on each alone
+        "controls_calibrated": not report.get("problems"),
+        "controls_sized": all(abs(r[a]["size_geo"] - 1) <= size_gate for a in controls),
+        "controls_sized_each_way": all(DOWN_BAND[0] <= r[a][k] <= DOWN_BAND[1] for a in controls for k in ("size_ratio", "downstream_ratio")),
+        # ... it leaves the stakes direction's own mean where it usually is, and the outsized tokens alone
+        "controls_elsewhere": all(near(r[a]["stakes_projection"][x]["mean"] - base[x]["mean"], x, 0.15) for a in controls for x in layers),
+        "controls_leave_outsized": all(small(a) for a in controls),
+    }
+    out["all"] = all(out.values())
+    return out
+
+
+def build_block2(reader: Reader, b1: dict, formality: dict, random_vecs: list, layers=LAYERS, downstream: int = DOWNSTREAM,
+                 tol: float = SIZE_TOL) -> dict:
+    """Block 2's arms and what each does on the reader's tokens. b1 is block 1's saved arms ({"specs", "vectors"}).
+      push_ord         block 1's push with the same constants, but the outsized tokens left alone.
+      push_formality   a push of the ordinary tokens along the formality direction (one vector a layer), toward its
+                       positive end.
+      push_random<i>   the same along one random vector, used at every layer (random_vecs[i]; one for each wave).
+    Every control direction first has its part in the span of the ten stakes vectors taken out, so the push itself
+    moves the stakes direction at no layer. Each control push has the stakes push's shape from layer to layer
+    (control_push_spec) and one constant, found so that its size equals the plain push's on the geometric mean of
+    the two measures: the squared distance from the unchanged stream summed over the edited layers, and at the
+    downstream layer. Nothing raises on a control that cannot be sized: the report says so and its checks fail.
+    Returns {"specs", "vectors", "report"}."""
+    layers = sorted(int(x) for x in layers)
+    stakes = {x: unit(b1["vectors"]["stakes"][x]).cpu() for x in layers}
+    span = [stakes[x] for x in layers]
+    push1 = sorted(b1["specs"]["push"], key=lambda line: line["layer"])
+    if [line["layer"] for line in push1] != layers or any("threshold" not in line for line in push1):
+        raise ValueError("block 1's push is not the gated push at these layers")
+    gate = {line["layer"]: line["threshold"] for line in push1}
+    profile = {line["layer"]: line["alpha"] for line in push1}
+    vectors = {"stakes": stakes, "formality": {x: project_out(formality[x], span) for x in layers}}
+    for i, rv in enumerate(random_vecs):
+        u = project_out(rv, span)
+        vectors[f"random{i}"] = {x: u.clone() for x in layers}
+    specs = {"push_ord": [{**line, "big": None} for line in push1]}
+    ref = reader.measure(interventions(specs["push_ord"], vectors), read=layers + [downstream])
+    band0, down0 = total(ref["size"], layers), ref["size"][downstream]
+    kappa, trails, problems = {}, {}, []
+    for name in [k for k in vectors if k != "stakes"]:
+        def ratio(k: float, name: str = name) -> float:
+            m = reader.measure(interventions(control_push_spec(name, profile, k, gate), vectors), read=layers + [downstream])
+            return ((total(m["size"], layers) / band0) * (m["size"][downstream] / down0)) ** 0.5
+
+        try:
+            k, _, trail = calibrate_kappa(ratio, tol=tol)
+        except NoKappa as e:
+            problems.append(f"{name}: {e}")
+            trail = e.trail
+            k = min(trail, key=lambda t: abs(t[1] - 1))[0]  # the nearest tried, so the report shows the miss
+        kappa[name], trails[name] = k, trail
+        specs["push_" + name] = control_push_spec(name, profile, k, gate)
+    report = realize2(reader, specs, vectors, b1, layers, downstream)
+    worst = max(abs(float(vectors[k][x] @ stakes[y])) for k in vectors if k != "stakes" for x in layers for y in layers)
+    report.update({
+        "consts": dict(specs), "kappa": kappa, "kappa_trail": trails, "problems": problems, "gate": {str(x): v for x, v in gate.items()},
+        "profile": {str(x): v for x, v in profile.items()},
+        "own": {k: {"base_projection": {str(x): v for x, v in reader.base_projection(vectors[k]).items()},
+                    "adjacent_cos": adjacent_cos(vectors[k], layers)} for k in vectors if k != "stakes"},
+        "cos_between_controls": {f"{a}|{b}": round(float(vectors[a][layers[len(layers) // 2]] @ vectors[b][layers[len(layers) // 2]]), 4)
+                                 for a in vectors for b in vectors if a < b and "stakes" not in (a, b)},
+        "largest_cos_with_any_stakes_vector": worst, "passes": reader.passes,
+        "hashes": {k: tensor_sha256(v) for k, v in vectors.items()},
+        "arm_sha256": {arm: ivs_sha256(interventions(spec, vectors)) for arm, spec in specs.items()}})
+    report["gates"] = gates2(report)
+    report["gates"]["orthogonal_to_stakes"] = worst < 1e-4
+    report["gates"]["all"] = all(v for k, v in report["gates"].items() if k != "all")
+    return {"specs": specs, "vectors": vectors, "report": report}
+
+
+def check_block2(reader: Reader, specs: dict, vectors: dict, b1: dict, layers=LAYERS, downstream: int = DOWNSTREAM) -> dict:
+    """Block 2's saved arms on tokens they were not sized on, with wider room (15% on size, twice the share on means)."""
+    rep = realize2(reader, specs, vectors, b1, layers, downstream)
+    rep["gates"] = gates2(rep, size_gate=0.15, room=2.0)
+    return rep
+
+
+CONTRASTS2 = {
+    # block 1's two lines again, on the same seeds (already read; here for the table)
+    "cut": {"cut": 1, "base": -1},
+    "push": {"push": 1, "base": -1},
+    # the push without its edit of the outsized tokens, and that edit
+    "push_ord": {"push_ord": 1, "base": -1},
+    "outsized": {"push": 1, "push_ord": -1},
+    # the same-size pushes along other directions, each and together
+    "formality": {"push_formality": 1, "base": -1},
+    "random": {"push_random": 1, "base": -1},
+    "controls": {"push_formality": 0.5, "push_random": 0.5, "base": -1},
+    "ord_less_formality": {"push_ord": 1, "push_formality": -1},
+    "ord_less_random": {"push_ord": 1, "push_random": -1},
+    "ord_less_controls": {"push_ord": 1, "push_formality": -0.5, "push_random": -0.5},
+}
+OPEN8 = "a fall of 8 points or more is "
+
+
+def words2(c: dict, readable: dict) -> dict:
+    """Block 2's words, fixed beforehand (modal_block2.py, "What counts"). c: the contrasts on one measure."""
+    need = lambda *arms: all(readable.get(a, False) for a in arms)  # noqa: E731
+    have = lambda *ks: all(k in c and c[k].get("ok", True) for k in ks)  # noqa: E731
+    plain = need("base", "push_ord") and have("push_ord")
+    saw = (need("base", "push") and have("push") and fall(c["push"])) or (plain and fall(c["push_ord"]))
+    out = {"saw_a_yes": bool(saw)}
+
+    def no_or_open(k: str, no: str) -> str:
+        if c[k]["lo"] > -NULL_MARGIN:
+            return no if saw else "not stated (the run shows no fall anywhere)"
+        return "not settled"
+
+    out["plain_push"] = ("not read" if not plain else "lowers the lie" if fall(c["push_ord"]) else "raises the lie"
+                         if rise(c["push_ord"]) else "not shown to lower the lie on these games; " + OPEN8
+                         + ("ruled out" if c["push_ord"]["lo"] > -NULL_MARGIN else "still open"))
+    out["outsized_edit"] = ("not read" if not (need("push", "push_ord") and have("outsized")) else
+                            "lowers the lie further" if fall(c["outsized"]) else "raises the lie" if rise(c["outsized"])
+                            else no_or_open("outsized", "adds no fall of 8 points or more"))
+    for k, arm in (("formality", "push_formality"), ("random", "push_random")):
+        out[k] = ("not read" if not (need("base", arm) and have(k)) else "lowers the lie" if fall(c[k]) else
+                  "raises the lie" if rise(c[k]) else no_or_open(k, "no fall of 8 points or more"))
+    if not (need("base", "push_ord", "push_formality", "push_random") and have(*[k for k in CONTRASTS2 if k not in ("cut", "push", "outsized")])):
+        out["size"] = "not read"
+        return out
+    lowers = [k for k in ("formality", "random") if fall(c[k])]
+    if lowers or fall(c["controls"]):
+        if not fall(c["push_ord"]):
+            out["size"] = "same-size pushes along other directions lower the lie; the stakes push is not shown to on these games"
+        elif fall(c["ord_less_controls"]) and all(fall(c["ord_less_" + k]) for k in lowers):
+            out["size"] = "same-size pushes along other directions lower the lie too, and the stakes push lowers it further"
+        elif c["ord_less_controls"]["lo"] > -NULL_MARGIN:
+            out["size"] = "same-size pushes along other directions lower the lie too; the stakes push has no advantage of 8 points or more"
+        else:
+            out["size"] = "same-size pushes along other directions lower the lie too; whether the stakes push lowers it further is not settled"
+    elif not fall(c["push_ord"]):
+        out["size"] = "nothing to compare: without its edit of the outsized tokens the stakes push is not shown to lower the lie on these games"
+    elif fall(c["ord_less_formality"]) and fall(c["ord_less_random"]):
+        out["size"] = "specific among the pushes tried: the stakes push lowers the lie and neither same-size push along another direction comes near it"
+    else:
+        out["size"] = "not settled"
+    return out
+
+
+def read_block2(block1: Path, block2: Path, reps: int = REPS) -> dict:
+    """Block 2's reading: its three arms from `block2`, beside block 1's unchanged model, cut and push from `block1`,
+    on the seeds all six have played. By wave, the random arm's contrast is given as description (each wave pushes
+    along another random direction)."""
+    rows = {**{a: load_rows(block1, a) for a in ("base", "cut", "push")}, **{a: load_rows(block2, a) for a in BLOCK2}}
+    out = read_arms(rows, reps=reps, contrasts=CONTRASTS2, worder=words2,
+                    mixed_keys={"plain_push": "push_ord", "formality": "formality", "random": "random"})
+    if "error" in out or not rows["push_random"]:
+        return out
+    seeds = sorted({r["seed"] for r in rows["push_random"]} & {r["seed"] for r in rows["base"]})
+    by_wave = {}
+    for s0 in sorted({s - (s - seeds[0]) % 24 for s in seeds}):
+        g = {a: grade_rows([r for r in rows[a] if s0 <= r["seed"] < s0 + 24]) for a in ("base", "push_random")}
+        both = sorted(set(g["base"]) & set(g["push_random"]))
+        if both:
+            rate = lambda a: 100 * sum(g[a][s]["lies"] for s in both) / max(1, sum(g[a][s]["tagged"] for s in both))  # noqa: E731
+            by_wave[str(s0)] = {"games": len(both), "base": round(rate("base"), 1), "push_random": round(rate("push_random"), 1)}
+    out["random_by_wave"] = by_wave
+    return out
 
 
 if __name__ == "__main__":  # .venv/bin/python lab/explore/cutsplit/split_core.py <results folder>

@@ -697,3 +697,159 @@ def test_load_rows_reads_the_chunks_and_refuses_a_seed_twice(tmp_path):
     (tmp_path / "chunks" / "base.off.base__0134.jsonl").write_text(json.dumps(rows[0]) + "\n")
     with pytest.raises(SystemExit):
         sc.load_rows(tmp_path, "base")
+
+
+# ------------------------------------------------------------------------------------------------- block 2
+
+
+def test_project_out_leaves_nothing_along_the_span():
+    g = torch.Generator().manual_seed(3)
+    span = [torch.randn(HIDDEN, generator=g) for _ in range(5)]
+    v = torch.randn(HIDDEN, generator=g) + 2 * span[0]
+    u = sc.project_out(v, span)
+    assert float(u.norm()) == pytest.approx(1.0, abs=1e-5) and max(abs(float(u @ sc.unit(s))) for s in span) < 1e-5
+    assert float(u @ sc.unit(v)) > 0.3  # what is left still points the way it did
+
+
+def test_a_control_push_has_the_stakes_pushs_shape_and_leaves_the_outsized_alone(vectors):
+    profile, gate = {1: 0.4, 2: -0.1, 3: 0.6}, {1: 9.0, 2: 9.5, 3: 10.0}
+    spec = sc.control_push_spec("formality", profile, 2.0, gate)
+    assert [(s["layer"], s["alpha"], s["big"], s["threshold"]) for s in spec] == [(1, 0.8, None, 9.0), (2, -0.2, None, 9.5), (3, 1.2, None, 10.0)]
+    ivs = sc.interventions(spec, vectors)
+    assert all(type(iv).__name__ == "Gated" and iv.big is None and iv.mode == "steer" for iv in ivs)
+    assert "threshold" not in sc.control_push_spec("formality", profile, 2.0)[0]
+
+
+def test_calibrate_kappa_finds_the_size_or_says_it_cannot():
+    k, s, trail = sc.calibrate_kappa(lambda k: (k / 3.0) ** 2, tol=0.02)
+    assert abs(s - 1) <= 0.02 and k == pytest.approx(3.0, rel=0.02) and trail[0][0] == 1.0
+    k, s, _ = sc.calibrate_kappa(lambda k: (k / 0.3) ** 2, tol=0.02)  # the answer lies under 1
+    assert k == pytest.approx(0.3, rel=0.02)
+    with pytest.raises(sc.NoKappa):
+        sc.calibrate_kappa(lambda k: 0.001 * k, max_doublings=3)
+
+
+@pytest.fixture(scope="module")
+def block2(tiny, vectors):
+    model, tok = tiny
+    r = sc.Reader(model, [sc.token_ids(tok, g, 400) for g in games(6)], BAND, extra=[DOWN], outlier=1.6)
+    b1 = sc.build_parts(r, vectors, layers=BAND, downstream=DOWN)
+    g = torch.Generator().manual_seed(9)
+    built = sc.build_block2(r, b1, vectors["formality"], [torch.randn(HIDDEN, generator=g) for _ in range(2)],
+                            layers=BAND, downstream=DOWN, tol=0.02)
+    return r, b1, built
+
+
+def test_block2_arms_are_what_the_design_says(tiny, block2):
+    r, b1, built = block2
+    specs, rep = built["specs"], built["report"]
+    assert set(specs) == {"push_ord", "push_formality", "push_random0", "push_random1"}
+    # the plain push is block 1's push line for line, with the outsized tokens left alone
+    assert [{**s, "big": "zero"} for s in specs["push_ord"]] == b1["specs"]["push"] and all(s["big"] is None for s in specs["push_ord"])
+    # each control is one constant times the stakes push's own steps, along its own direction, ordinary tokens only
+    for name in ("formality", "random0", "random1"):
+        k = rep["kappa"][name]
+        assert [s["alpha"] for s in specs["push_" + name]] == pytest.approx([k * s["alpha"] for s in b1["specs"]["push"]])
+        assert all(s["dir"] == name and s["big"] is None and s["threshold"] == p["threshold"]
+                   for s, p in zip(specs["push_" + name], b1["specs"]["push"]))
+        assert abs(rep["realized"]["push_" + name]["size_geo"] - 1) <= 0.02  # the size block 2 matches on
+    assert rep["realized"]["push_ord"]["size_geo"] == 1.0 and "b1_push" in rep["realized"]
+    # no control vector has any part along any stakes vector; the random one is the same at every layer
+    assert rep["largest_cos_with_any_stakes_vector"] < 1e-5 and rep["gates"]["orthogonal_to_stakes"]
+    assert all(torch.equal(built["vectors"]["random0"][x], built["vectors"]["random0"][BAND[0]]) for x in BAND)
+    assert not torch.equal(built["vectors"]["random0"][BAND[0]], built["vectors"]["random1"][BAND[0]])
+    assert rep["problems"] == [] and rep["gates"]["controls_calibrated"] and rep["gates"]["controls_sized"]
+    assert len(set(rep["arm_sha256"].values())) == 4
+    # the saved arms come back as the same hooks
+    buf = io.BytesIO()
+    torch.save({"specs": specs, "vectors": built["vectors"]}, buf)
+    saved = torch.load(io.BytesIO(buf.getvalue()))
+    for a in specs:
+        assert sc.ivs_sha256(sc.interventions(saved["specs"][a], saved["vectors"])) == rep["arm_sha256"][a]
+    # on other games the same arms are measured with more room
+    model, tok = tiny
+    other = sc.Reader(model, [sc.token_ids(tok, g, 400) for g in games(5, seed=7)], BAND, extra=[DOWN], outlier=1.6)
+    chk = sc.check_block2(other, specs, built["vectors"], b1, layers=BAND, downstream=DOWN)
+    assert set(chk["realized"]) == set(specs) | {"b1_push"} and "controls_sized" in chk["gates"]
+    with pytest.raises(ValueError):
+        sc.build_block2(r, {**b1, "specs": {**b1["specs"], "push": sc.push_spec({x: 0.1 for x in BAND})}}, {}, [], layers=BAND, downstream=DOWN)
+
+
+def test_block2_checks_fail_when_a_control_is_not_what_it_is_named(block2):
+    rep = block2[2]["report"]
+    r = rep["realized"]
+
+    def with_(arm, **kw):
+        return sc.gates2({**rep, "realized": {**r, arm: {**r[arm], **kw}}})
+
+    assert not with_("push_formality", size_geo=1.2)["controls_sized"]
+    assert not with_("push_random0", downstream_ratio=2.4)["controls_sized_each_way"]
+    moved = {x: {"mean": v["mean"] + 5.0, "sd": v["sd"]} for x, v in r["push_formality"]["stakes_projection"].items()}
+    assert not with_("push_formality", stakes_projection=moved)["controls_elsewhere"]
+    assert not sc.gates2({**rep, "problems": ["x"]})["controls_calibrated"]
+    off = {x: {"mean": 3.0, "sd": 1.0} for x in r["push_ord"]["stakes_projection"]}
+    assert not with_("push_ord", stakes_projection=off)["push_ord_mean_zero"]
+
+
+OK6 = {a: True for a in ("base", "cut", "push", "push_ord", "push_formality", "push_random")}
+NULL2 = {k: ZERO for k in sc.CONTRASTS2}
+
+
+def test_block2_words_follow_the_rules_fixed_beforehand():
+    yes = {**NULL2, "push": C(-13, -19, -8), "push_ord": C(-12, -18, -6)}
+    # the plain push works, the outsized edit adds nothing, neither control does anything, the push beats both
+    con = {**yes, "outsized": C(-1, -6, 4), "ord_less_formality": C(-12, -18, -6), "ord_less_random": C(-11, -17, -5),
+           "ord_less_controls": C(-11.5, -17, -6)}
+    w = sc.words2(con, OK6)
+    assert w["plain_push"] == "lowers the lie" and w["outsized_edit"] == "adds no fall of 8 points or more"
+    assert w["formality"] == w["random"] == "no fall of 8 points or more" and w["size"].startswith("specific among the pushes tried")
+    # one control matches the stakes push: never "specific", whatever the two together say
+    con = {**yes, "formality": C(-12, -18, -6), "random": C(1, -5, 7), "controls": C(-5.5, -10, -1), "ord_less_formality": C(0, -6, 6),
+           "ord_less_random": C(-13, -19, -7), "ord_less_controls": C(-6.5, -11, -2)}
+    w = sc.words2(con, OK6)
+    assert w["formality"] == "lowers the lie" and "specific" not in w["size"]
+    assert w["size"].endswith("whether the stakes push lowers it further is not settled")
+    # both controls do as much: a matter of size
+    con = {**yes, "formality": C(-11, -17, -5), "random": C(-10, -16, -4), "controls": C(-10.5, -15, -6), "ord_less_controls": C(-1.5, -7, 4)}
+    assert sc.words2(con, OK6)["size"].endswith("the stakes push has no advantage of 8 points or more")
+    con = {**con, "ord_less_controls": C(-7, -12, -2), "ord_less_formality": C(-7, -13, -1), "ord_less_random": C(-7, -13, -1)}
+    assert sc.words2(con, OK6)["size"].endswith("and the stakes push lowers it further")
+    # the plain push does not fall: the work was in the outsized tokens' edit, and there is nothing to compare
+    con = {**NULL2, "push": C(-13, -19, -8), "push_ord": C(-2, -8.5, 4), "outsized": C(-11, -17, -5)}
+    w = sc.words2(con, OK6)
+    assert w["plain_push"].endswith("still open") and w["outsized_edit"] == "lowers the lie further" and w["size"].startswith("nothing to compare")
+    # the stakes push beats one control clearly and the other not: not settled
+    con = {**yes, "ord_less_formality": C(-12, -18, -6), "ord_less_random": C(-6, -12.5, 0.5)}
+    assert sc.words2(con, OK6)["size"] == "not settled"
+    # nothing falls anywhere (were block 1's push no fall): no "no" is stated
+    w = sc.words2(NULL2, OK6)
+    assert not w["saw_a_yes"] and w["formality"].startswith("not stated") and w["outsized_edit"].startswith("not stated")
+    # an arm that cannot be read takes its lines with it
+    w = sc.words2(yes, {**OK6, "push_random": False})
+    assert w["random"] == "not read" and w["size"] == "not read" and w["plain_push"] == "lowers the lie"
+
+
+def test_block2_reading_joins_block_1s_games_on_the_same_seeds(tmp_path):
+    import json
+
+    b1, b2 = tmp_path / "b1g", tmp_path / "b2"
+    lies = [4, 3, 5, 4] * 12
+    arms = {(b1, "off"): lambda i: lies[i], (b1, "cut_self_stakes_17_26"): lambda i: lies[i] - 1, (b1, "ss_push"): lambda i: lies[i] - 2,
+            (b2, "ss_push_ord"): lambda i: lies[i] - 2, (b2, "ss_push_formality"): lambda i: lies[i], (b2, "ss_push_random"): lambda i: lies[i]}
+    for (folder, name), f in arms.items():
+        (folder / "chunks").mkdir(parents=True, exist_ok=True)
+        rows = arm(f, n=48)
+        for k in (0, 24):
+            (folder / "chunks" / f"base.{name}.base__{130 + k:04d}.jsonl").write_text("".join(json.dumps(r) + "\n" for r in rows[k:k + 24]))
+    r = sc.read_block2(b1, b2, reps=1000)
+    assert r["n_seeds"] == 48 and set(r["arms"]) == {"base", "cut", "push", "push_ord", "push_formality", "push_random"}
+    assert r["contrasts"]["push_ord"]["est"] == pytest.approx(-20.0) and r["contrasts"]["outsized"]["est"] == pytest.approx(0.0)
+    assert r["contrasts"]["ord_less_controls"]["est"] == pytest.approx(-20.0)
+    w = r["words"]
+    assert w["plain_push"] == "lowers the lie" and w["size"].startswith("specific among the pushes tried")
+    assert w["outsized_edit"] == "adds no fall of 8 points or more" and r["mixed"] == []
+    assert set(r["random_by_wave"]) == {"130", "154"} and r["random_by_wave"]["130"]["games"] == 24
+    t = sc.table(r)
+    assert "direction or size: specific among the pushes tried" in t and "a same-size push toward formal: no fall of 8 points or more" in t
+    assert set(sc.BLOCK2.values()) == {"ss_push_ord", "ss_push_formality", "ss_push_random"}
+    assert not set(sc.BLOCK2.values()) & (set(sc.ARMS.values()) | set(sc.CONTROL_ARMS.values()))
