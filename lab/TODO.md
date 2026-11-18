@@ -455,8 +455,9 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
    (idea 78): whether to cite "Positive Alignment" (Laukkonen and fifteen co-authors, arXiv 2605.10310) in the
    section on related work, in two or three sentences. Fable recommends it. Eugene asked on 16 Nov what these
    decisions are, and Fable set them out with a recommendation for each (ledger, 10:48 UTC).
-9. **The private copy of the site on claude.ai** has not been republished since 10 Nov (the public site on GitHub
-   Pages is current). Republishing means reading an 850 KB page back first. Say if the private copy is still wanted.
+9. **The private copy of the site on claude.ai** is kept in step with each publish (last on 18 Nov, after the
+   cut's split; the public site on GitHub Pages is the one that counts). Republishing from a new session means
+   reading the page's long head back first. Say if the private copy is no longer wanted.
 11. (Answered on 16 Nov at about 10:47 UTC: yes. **The lighter way of working at explore speed is in force**
    (idea 76; ledger, 10:48 UTC): five lines committed before a run, a small try with raw replies read, one ledger
    entry for the step, and a cold check only at promotion or when a new design's negative goes on the site. The
