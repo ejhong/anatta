@@ -174,27 +174,50 @@ def test_calibrate_finds_a_control_of_the_cuts_size(reader, vectors):
     own = {x: reader.base_projection(f)[x]["mean"] for x in BAND}
     target = sc.total(reader.measure(sc.interventions(sc.cut_spec(BAND), vectors), read=BAND)["size"], BAND)
     k, size, trail = sc.calibrate(reader, vectors, "formality", own, mu_d, BAND, target, tol=0.02)
-    assert abs(size / target - 1) <= 0.02 and k > 0 and trail[-1] == (k, size)
+    assert abs(size / target - 1) <= 0.02 and k > 0 and trail[-1] == (k, size) and trail[0][0] == 0.0
     again = sc.total(reader.measure(sc.interventions(sc.set_spec("formality", own, mu_d, k), vectors), read=BAND)["size"], BAND)
     assert again == pytest.approx(size, rel=1e-6)
-    with pytest.raises(RuntimeError):
+    with pytest.raises(sc.NoKappa) as e:
         sc.calibrate(reader, vectors, "formality", own, mu_d, BAND, target * 1e9, max_doublings=3)
+    assert len(e.value.trail) == 5  # kappa 0, 1, 2, 4, 8
+    # a control whose removal alone is already past the target cannot be sized by any push (the first build's case)
+    with pytest.raises(sc.NoKappa) as e:
+        sc.calibrate(reader, vectors, "formality", own, mu_d, BAND, trail[0][1] / 2)
+    assert e.value.trail == [trail[0]] and "no push at all" in str(e.value)
+
+
+def test_a_control_that_cannot_be_sized_fails_the_checks_and_does_not_stop_the_build(reader, vectors, monkeypatch):
+    import steering
+
+    def never(*a, **k):
+        raise sc.NoKappa("formality: cannot be sized", [(0.0, 1.0), (1.0, 2.0)])
+
+    monkeypatch.setattr(sc, "calibrate", never)
+    rep = sc.build(reader, vectors, layers=BAND, downstream=DOWN, n_rows=10_000, random_matched=steering.random_matched)["report"]
+    assert len(rep["problems"]) == 2 and not rep["gates"]["controls_calibrated"] and not rep["gates"]["all"]
+    assert set(rep["realized"]) == {"cut", "push", "removal", "size_random", "size_formality"}  # the numbers are still there
 
 
 def test_build_makes_every_arm_and_its_checks_pass(reader, vectors):
     import steering
 
-    built = sc.build(reader, vectors, layers=BAND, downstream=DOWN, n_rows=10_000, random_matched=steering.random_matched,
-                     tol=0.02)
+    built = sc.build(reader, vectors, layers=BAND, downstream=DOWN, reference=BAND[1], n_rows=10_000,
+                     random_matched=steering.random_matched, tol=0.02)
     rep = built["report"]
     assert set(built["specs"]) == {"cut", "push", "removal", "size_random", "size_formality"}
     assert set(built["vectors"]) == {"stakes", "formality", "random"}
     assert rep["gates"]["all"], rep["gates"]
+    assert rep["problems"] == [] and rep["reference_layer"] == BAND[1]
     for a in sc.CONTROLS:
         assert abs(rep["realized"][a]["size_ratio"] - 1) <= 0.02
-    for x in BAND:
-        assert abs(rep["cos"][str(x)]["random_stakes"]) < 1e-5  # the random control is orthogonal to the cut's direction
-        assert rep["random"]["made"]["layers"][str(x)]["ratio"] == pytest.approx(1.0, abs=0.1)  # and has its spread
+        assert rep["removal_only_size"][a] == rep["kappa_trail"][a][0][1] < rep["target_size"]  # kappa 0 is tried first
+    # the random control is one vector, the same at every layer: at right angles to the cut's direction at the
+    # reference layer, with its spread there
+    assert all(torch.equal(built["vectors"]["random"][x], built["vectors"]["random"][BAND[0]]) for x in BAND)
+    assert abs(rep["cos"][str(BAND[1])]["random_stakes"]) < 1e-5
+    assert rep["random"]["made"]["layers"][str(BAND[1])]["ratio"] == pytest.approx(1.0, abs=0.1)
+    assert list(rep["random"]["made"]["layers"]) == [str(BAND[1])]
+    assert len(rep["adjacent_cos"]["stakes"]) == len(BAND) - 1 and "removal_only_size" in rep["random_per_layer"]
     assert rep["realized"]["push"]["size_ratio"] < 1 and rep["realized"]["removal"]["size_ratio"] < 1
     # the saved file gives the same hooks back
     buf = io.BytesIO()
@@ -213,6 +236,7 @@ def test_the_checks_fail_when_an_arm_is_not_what_it_is_named(reader, vectors):
 
     rep = sc.build(reader, vectors, layers=BAND, downstream=DOWN, n_rows=10_000,
                    random_matched=steering.random_matched, tol=0.02)["report"]
+    assert not sc.gates({**rep, "problems": ["x"]})["all"]
     bad = {**rep, "realized": {**rep["realized"], "size_random": {**rep["realized"]["size_random"], "size_ratio": 1.3}}}
     assert not sc.gates(bad)["controls_sized"] and not sc.gates(bad)["all"]
     swapped = {**rep, "realized": {**rep["realized"], "push": rep["realized"]["removal"], "removal": rep["realized"]["push"]}}

@@ -31,9 +31,10 @@ THE FIVE LINES (fixed before anything was run)
                        nothing is pushed on average;
        push            every token moved by a constant along the direction, so that the projection averages zero at
                        every layer as under the cut: the cut's push, with what varies left in;
-       size_random     the cut's own form along a random direction with the same spread (at right angles to the
-                       cut's direction at each layer): its projection set to a constant above its usual value, far
-                       enough that the edit is the cut's size;
+       size_random     the cut's own form along one random direction, the same at every layer (at right angles to
+                       the cut's direction at layer 20, its best layer, with the same spread there): its projection
+                       set to a constant above its usual value, far enough that the edit is the cut's size (see
+                       CHANGED, 1);
        size_formality  the same along an unrelated difference direction (formal against casual register, extracted
                        by the same recipe), pushed toward formal.
      "Usual" means measured on the tokens of 24 stored games of the unchanged model (seeds 30 to 129, every fourth;
@@ -97,6 +98,17 @@ same readings made once more on all the games: two looks, said as such.
 GUESSES, written before any game and held loosely (Fable): the cut lowers the lie again, by 5 to 12 points (65%);
 the push carries most of it (60%); the removal alone does little (70%); the same-size controls lower the lie by
 less than the cut does (55%).
+
+CHANGED since the five lines were committed (0d1b179, 18 Nov, 13:09 UTC), each before any game was played:
+  1. The random control is one direction used at every layer, where it was a separate matched direction at each
+     of the ten layers. The first preparing pass (13:10 to 13:19 UTC) stopped on its own check: with no push at
+     all, ten separate random directions already made an edit of 71.0, above the size of the whole cut, so no
+     constant could bring the control to the cut's size. The reason is in the cut, not in the control: the stakes
+     direction is nearly the same vector from one layer to the next, so its edits at ten layers are one edit held
+     in place, while ten unrelated vectors make ten edits that add up. One vector for all layers is the like-for-
+     like control. It is matched in spread at the direction's best layer (20) only. The preparing pass now reports
+     its numbers when a control cannot be sized, and its checks fail, where before it stopped; it also measures
+     the first construction again and keeps the number. Booked for the stopped pass: its bound, $0.71.
 
 LIMITS. One small model. One cut: the middle-layer one; the ego cut at layers 8 to 32, the other half of the card,
 is not split here. One random direction and one difference direction, each pushed one way. The constants and the
@@ -194,7 +206,8 @@ def prepare(games: list, max_tokens: int, random_seed: int) -> dict:
             and worst < 1e-6)
     seqs = [sc.token_ids(tok, g, max_tokens) for g in games]
     reader = sc.Reader(model, seqs, sc.LAYERS, extra=[sc.DOWNSTREAM])
-    built = sc.build(reader, vectors, random_seed=random_seed, random_matched=steering.random_matched)
+    built = sc.build(reader, vectors, reference=int(ss["best_layer"]), random_seed=random_seed,
+                     random_matched=steering.random_matched)
     rep = built["report"]
     rev = revision()
     rep["gates"].update({"old_cut_equal": bool(same), "revision_pinned": rev == PINNED})
@@ -319,7 +332,12 @@ def prep(name: str = "main", games: int = 24, max_tokens: int = 3000, random_see
         if a != "base":
             rl = rep["realized"][a]
             print(f"{a:15s} size {rl['size_total']:9.3f} (x{rl['size_ratio']:.3f} of the cut's)  downstream at L{rep['downstream']} "
-                  f"{rl['size_downstream']:9.3f}" + (f"  kappa {rep['kappa'][a]:.4f}" if a in rep["kappa"] else ""))
+                  f"{rl['size_downstream']:9.3f}" + (f"  kappa {rep['kappa'][a]:.4f}; with no push "
+                                                     f"{rep['removal_only_size'][a]:.3f}" if a in rep["kappa"] else ""))
+    print(f"the cut's size {rep['target_size']:.3f}; the first build's random control (a vector a layer), removal only: "
+          f"{rep['random_per_layer']}; neighbouring layers' cos: {rep['adjacent_cos']}", flush=True)
+    for p in rep["problems"]:
+        print("PROBLEM:", p, flush=True)
     print("checks:", json.dumps(rep["gates"]), flush=True)
 
 

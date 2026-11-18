@@ -261,18 +261,30 @@ def total(sizes: dict, layers) -> float:
     return float(sum(sizes[int(x)] for x in layers))
 
 
+class NoKappa(RuntimeError):
+    """calibrate found no constant that gives the control the target size; .trail holds the pairs it tried."""
+
+    def __init__(self, message: str, trail: list):
+        super().__init__(message)
+        self.trail = trail
+
+
 def calibrate(reader: Reader, vectors: dict, name: str, own_mean: dict, target_mean: dict, layers, target: float,
               sign: float = 1.0, tol: float = SIZE_TOL, max_doublings: int = 8, steps: int = 24) -> tuple[float, float, list]:
-    """kappa for a same-size control: the smallest bracket [lo, hi] with size(lo) < target <= size(hi) is found by
-    doubling from 1, then halved until the control's size is within tol of the target. Returns (kappa, its size, the
-    (kappa, size) pairs tried)."""
+    """kappa for a same-size control. With kappa 0 the control only removes what varies along its own direction; if
+    that alone is already the target's size or more, no kappa can match it (NoKappa). Otherwise a bracket is found
+    by doubling from 1 and halved until the control's size is within tol of the target. Returns (kappa, its size,
+    the (kappa, size) pairs tried, the first being kappa 0)."""
     layers = sorted(int(x) for x in layers)
 
     def size(k: float) -> float:
         ivs = interventions(set_spec(name, own_mean, target_mean, k, sign), vectors)
         return total(reader.measure(ivs, read=layers)["size"], layers)
 
-    trail = []
+    trail = [(0.0, size(0.0))]
+    if trail[0][1] > target * (1 + tol):
+        raise NoKappa(f"{name}: with no push at all the control's edit is {trail[0][1]:.4g}, above the target size "
+                      f"{target:.4g}", trail)
     lo, hi = 0.0, 1.0
     s = size(hi)
     trail.append((hi, s))
@@ -281,7 +293,7 @@ def calibrate(reader: Reader, vectors: dict, name: str, own_mean: dict, target_m
         if abs(s / target - 1) <= tol:
             return hi, s, trail
         if doublings >= max_doublings:
-            raise RuntimeError(f"{name}: the control does not reach the target size {target:.4g} by kappa {hi}")
+            raise NoKappa(f"{name}: the control does not reach the target size {target:.4g} by kappa {hi}", trail)
         lo, hi, doublings = hi, hi * 2, doublings + 1
         s = size(hi)
         trail.append((hi, s))
@@ -297,34 +309,47 @@ def calibrate(reader: Reader, vectors: dict, name: str, own_mean: dict, target_m
             lo = mid
         else:
             hi = mid
-    raise RuntimeError(f"{name}: no kappa within {tol:.0%} of the target size after {steps} halvings ({trail[-3:]})")
+    raise NoKappa(f"{name}: no kappa within {tol:.0%} of the target size {target:.4g} after {steps} halvings", trail)
 
 
-def build(reader: Reader, vectors: dict, layers=LAYERS, downstream: int = DOWNSTREAM, random_seed: int = 0,
-          n_rows: int = 6000, random_matched=None, tol: float = SIZE_TOL) -> dict:
-    """Every arm's spec and what it does on the reader's tokens. `vectors` holds "stakes" and "formality"
-    ({layer: tensor}); "random" is made here (the bench's random_matched: one unit vector per layer, orthogonal to
-    the stakes vector, with the stakes vector's variance over n_rows of the reader's tokens; the first seed from
-    random_seed on that can be matched). Returns {"specs", "vectors" (with "random"), "report"}."""
+def adjacent_cos(vecs: dict, layers) -> list[float]:
+    """cos between a direction's vectors at neighbouring layers: how far its edits at different layers are one edit."""
     layers = sorted(int(x) for x in layers)
+    return [round(float(unit(vecs[a]).cpu() @ unit(vecs[b]).cpu()), 4) for a, b in zip(layers, layers[1:])]
+
+
+def build(reader: Reader, vectors: dict, layers=LAYERS, downstream: int = DOWNSTREAM, reference: int | None = None,
+          random_seed: int = 0, n_rows: int = 6000, random_matched=None, tol: float = SIZE_TOL) -> dict:
+    """Every arm's spec and what it does on the reader's tokens. `vectors` holds "stakes" and "formality"
+    ({layer: tensor}). "random" is made here: ONE unit vector used at every layer, the bench's random_matched at the
+    `reference` layer (orthogonal to the stakes vector there, with the stakes vector's variance over n_rows of the
+    reader's tokens; the first seed from random_seed on that can be matched). The stakes direction is nearly the
+    same vector from layer to layer, so its edits at ten layers are one edit kept in place; a separate random
+    vector at every layer makes ten edits that add up (the first build of 18 Nov: its removal alone was larger than
+    the whole cut, so no push could size it; that construction is measured again here and kept in the report).
+    Nothing here raises on a control that cannot be sized: the report says so and its checks fail.
+    Returns {"specs", "vectors" (with "random"), "report"}."""
+    layers = sorted(int(x) for x in layers)
+    ref = int(reference) if reference is not None else layers[len(layers) // 2]
     stakes = {x: unit(vectors["stakes"][x]) for x in layers}
     form = {x: unit(vectors["formality"][x]) for x in layers}
     base_d = reader.base_projection(stakes)
     mu_d = {x: base_d[x]["mean"] for x in layers}
-    # the random control
+    # the random control: one direction for every layer
     made, seed, tried = None, int(random_seed), []
-    acts = {x: reader.base_rows(x, n_rows, seed=0) for x in layers}
+    acts = {ref: reader.base_rows(ref, n_rows, seed=0)}
     while made is None:
         try:
-            rvec, made = random_matched(acts, {x: stakes[x] for x in layers}, seed)
-        except Exception as e:  # steering.MatchError: this seed cannot be matched at some layer
+            rvec, made = random_matched(acts, {ref: stakes[ref]}, seed)
+        except Exception as e:  # steering.MatchError: this seed cannot be matched
             tried.append({"seed": seed, "error": str(e)[:200]})
             seed += 1
             if len(tried) >= 5:
                 raise RuntimeError(f"no random control could be matched in five seeds: {tried}") from e
     del acts
+    one = unit(rvec[ref]).cpu()
     vectors = {"stakes": {x: stakes[x].cpu() for x in layers}, "formality": {x: form[x].cpu() for x in layers},
-               "random": {x: unit(rvec[x]).cpu() for x in layers}}
+               "random": {x: one.clone() for x in layers}}
     rand = {x: vectors["random"][x] for x in layers}
     base_f, base_r = reader.base_projection(form), reader.base_projection(rand)
     specs = {"cut": cut_spec(layers),
@@ -332,12 +357,30 @@ def build(reader: Reader, vectors: dict, layers=LAYERS, downstream: int = DOWNST
              "removal": removal_spec(sequential(reader, vectors, layers, "removal"))}
     cut = reader.measure(interventions(specs["cut"], vectors), units=stakes, read=layers + [downstream])
     target = total(cut["size"], layers)
-    kappa, trails = {}, {}
+    kappa, trails, problems = {}, {}, []
     for arm, name, own in (("size_random", "random", base_r), ("size_formality", "formality", base_f)):
-        k, _, trail = calibrate(reader, vectors, name, {x: own[x]["mean"] for x in layers}, mu_d, layers, target,
-                                sign=1.0, tol=tol)
+        own_mean = {x: own[x]["mean"] for x in layers}
+        try:
+            k, _, trail = calibrate(reader, vectors, name, own_mean, mu_d, layers, target, sign=1.0, tol=tol)
+        except NoKappa as e:
+            problems.append(str(e))
+            trail = e.trail
+            k = min(trail, key=lambda t: abs(t[1] - target))[0]  # the nearest tried, so the report shows the miss
         kappa[arm], trails[arm] = k, trail
-        specs[arm] = set_spec(name, {x: own[x]["mean"] for x in layers}, mu_d, k, 1.0)
+        specs[arm] = set_spec(name, own_mean, mu_d, k, 1.0)
+    # the first build's random control (a separate matched vector at every layer), removal only: kept as a number
+    old = {}
+    try:
+        acts = {x: reader.base_rows(x, n_rows, seed=0) for x in layers}
+        pvec, _ = random_matched(acts, {x: stakes[x] for x in layers}, seed)
+        del acts
+        per = {"per": {x: unit(pvec[x]).cpu() for x in layers}}
+        own = reader.base_projection(per["per"])
+        spec = set_spec("per", {x: own[x]["mean"] for x in layers}, mu_d, 0.0)
+        old = {"removal_only_size": total(reader.measure(interventions(spec, per), read=layers)["size"], layers),
+               "adjacent_cos": adjacent_cos(per["per"], layers)}
+    except Exception as e:
+        old = {"error": str(e)[:200]}
     own_units = {"cut": stakes, "push": stakes, "removal": stakes, "size_random": rand, "size_formality": form}
     realized = {}
     for arm, spec in specs.items():
@@ -352,12 +395,18 @@ def build(reader: Reader, vectors: dict, layers=LAYERS, downstream: int = DOWNST
                          "stakes_projection": {str(x): on_d["proj"][x] for x in layers}}
     cos = {str(x): {"random_stakes": float(rand[x] @ stakes[x].cpu()), "formality_stakes": float(form[x].cpu() @ stakes[x].cpu()),
                     "random_formality": float(rand[x] @ form[x].cpu())} for x in layers}
-    report = {"layers": layers, "downstream": downstream, "tokens": {"all": reader.n_tokens, "kept": reader.n_kept,
-                                                                     "sequences": len(reader.seqs)},
+    report = {"layers": layers, "downstream": downstream, "reference_layer": ref,
+              "tokens": {"all": reader.n_tokens, "kept": reader.n_kept, "sequences": len(reader.seqs)},
               "base": {"stakes": {str(x): base_d[x] for x in layers}, "formality": {str(x): base_f[x] for x in layers},
                        "random": {str(x): base_r[x] for x in layers}},
               "consts": {arm: specs[arm] for arm in specs}, "kappa": kappa, "kappa_trail": trails,
-              "random": {"seed": seed, "tried": tried, "made": made, "rows": n_rows},
+              # with kappa 0 a control only removes what varies along its direction: its share of removal, to set
+              # beside the stakes direction's own removal arm
+              "removal_only_size": {arm: trails[arm][0][1] for arm in trails},
+              "target_size": target, "problems": problems,
+              "random": {"seed": seed, "tried": tried, "made": made, "rows": n_rows, "one_vector": True},
+              "random_per_layer": old,
+              "adjacent_cos": {"stakes": adjacent_cos(stakes, layers), "formality": adjacent_cos(form, layers)},
               "realized": realized, "cos": cos, "passes": reader.passes,
               "hashes": {k: tensor_sha256(v) for k, v in vectors.items()}}
     report["gates"] = gates(report)
@@ -380,7 +429,8 @@ def gates(report: dict, size_gate: float = SIZE_GATE) -> dict:
                                  <= max(0.25 * base[x]["sd"], 2 * r["cut"]["stakes_projection"][x]["sd"]) for x in layers),
         "removal_keeps_mean": all(abs(r["removal"]["stakes_projection"][x]["mean"] - base[x]["mean"]) <= 0.1 * abs(base[x]["mean"]) + 0.02
                                   for x in layers),
-        # each control is the cut's size
+        # each control could be sized, and is the cut's size
+        "controls_calibrated": not report.get("problems"),
         "controls_sized": all(abs(r[a]["size_ratio"] - 1) <= size_gate for a in CONTROLS),
         # ... and leaves the stakes direction's mean nearer its usual value than to the cut's (it is another edit)
         "controls_elsewhere": all(abs(r[a]["stakes_projection"][x]["mean"] - base[x]["mean"]) <= 0.5 * abs(base[x]["mean"])
