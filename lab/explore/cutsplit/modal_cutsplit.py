@@ -179,6 +179,19 @@ CHANGED since the five lines were committed (0d1b179, 18 Nov, 13:09 UTC), each b
      card's other half and is not tested.
   9. (Carbon.) A failed container is booked at the wall time it can have run, plus its start, where it was booked
      at its whole bound. The stopped first pass is corrected by that rule (from $0.71 to $0.44).
+  10. (After block 1's arms were built, 13:47 UTC; before any game.) The first tokens of a game. 77 of the 54,503
+     calibration tokens (about three a game) are over ten times the layer's median in size and are left out of
+     the constants. On them the cut's edit is about 200 times its edit of an ordinary token (7,929 against 40.6,
+     summed over the band), the removal's is nearly the same (7,741), and the push's is 22.8. Both readers had
+     named this (the cut and the removal set the first tokens' projection; the push only shifts it). Those tokens
+     are the same in every game, so nothing varies there to remove: what the removal arm does to them is a
+     constant move, which belongs with the push. Whether that matters depends on how far the edit of the first
+     tokens reaches the rest of the game, and one more pass measures it (::first: each arm's hooks on every
+     token, on the ordinary tokens alone and on the left-out tokens alone). The rule, fixed before the numbers:
+     if no more than a tenth of the removal arm's edit of the ordinary tokens after the band comes by way of the
+     left-out tokens, the arms stay as built and the number is reported. If more does, the arms are built again
+     so that the edit of the first tokens goes with the push (hooks that tell the first tokens by their size),
+     the change is read cold by a fresh Opus agent, and only then is any game played.
   Not taken, and why. Carbon: fix 120 to 140 games an arm at $20 to 22, or test the ego cut. The cap is the one
   Eugene's go was given under, so the games are bought by dropping two arms, as Carbon's own alternative; the ego
   cut's fall comes with far less fishing, which is the confound the middle-layer cut does not have. Carbon: make
@@ -195,6 +208,7 @@ not tested here at all. The design was read cold twice before any game; the resu
 
 Usage (from the repo root; tools/modal.sh puts the library on the path of the Modal CLI's Python):
   tools/modal.sh run lab/explore/cutsplit/modal_cutsplit.py::prep           (the arms and their checks; about $0.30)
+  tools/modal.sh run lab/explore/cutsplit/modal_cutsplit.py::first          (how far the edit of the first tokens reaches)
   tools/modal.sh run lab/explore/cutsplit/modal_cutsplit.py::play --waves 1 (the small try: one chunk of every arm)
   tools/modal.sh run lab/explore/cutsplit/modal_cutsplit.py::play --waves 5 (every wave the cap allows, then the reading)
   tools/modal.sh run lab/explore/cutsplit/modal_cutsplit.py::after          (each arm's hooks on its own games)
@@ -360,6 +374,24 @@ def own_text(games_by_arm: dict, arms_bytes: bytes, max_tokens: int) -> dict:
     return {"by_text": out, "seconds": round(time.time() - t0)}
 
 
+@app.function(gpu=GPU, cpu=CPU, memory=MEMORY_MB, volumes={CACHE: cache.read_only()}, timeout=3600, env=OFFLINE)
+def first_tokens(calib: list, arms_bytes: bytes, max_tokens: int) -> dict:
+    """split_core.first_token_report for the saved arms on the calibration games: how much of each arm's edit of
+    the ordinary tokens comes by way of its edit of the first, left-out tokens. No game is played."""
+    import fishery_play
+    import split_core as sc
+    import torch
+
+    t0 = time.time()
+    model, tok, _ = fishery_play.load_model(MODEL)
+    saved = torch.load(io.BytesIO(arms_bytes))
+    r = sc.Reader(model, [sc.token_ids(tok, g, max_tokens) for g in calib], sc.LAYERS, extra=[sc.DOWNSTREAM])
+    where = [[int(i) for i in (~k).nonzero().flatten().tolist()] for k in r.keep]
+    rep = sc.first_token_report(r, saved["specs"], saved["vectors"])
+    rep.update({"positions_left_out": where, "seconds": round(time.time() - t0), "revision": revision()})
+    return rep
+
+
 # ------------------------------------------------------------------------------------------------- the laptop side
 
 
@@ -476,6 +508,42 @@ def prep(name: str = "b1", games: int = 24, held: int = 12):
                   f"{rl['size_downstream']:8.3f}  left-out tokens {rl['size_left_out']}  stakes mean {min(means):+.3f} to {max(means):+.3f}")
         print(f"{str(where):22s} checks: {json.dumps(block['gates'])}", flush=True)
     print(f"left-out tokens: {rep['left_out']}", flush=True)
+
+
+@app.local_entrypoint()
+def first(name: str = "b1", games: int = 24):
+    """Before any game: how far each arm's edit of the first, left-out tokens reaches the ordinary ones (CHANGED, 10)."""
+    import split_core as sc
+
+    out = step_dir() / name
+    arms_bytes, rep = load_arms(out)
+    if any((out / "chunks").glob("*.jsonl")):
+        raise SystemExit("games have been played in this folder; this measurement belongs before them")
+    picked = sc.calibration_games(stored(BASE_GAMES, BASE_GAMES_SHA256), games)
+    assert [p["seed"] for p in picked] == rep["calibration_seeds"]
+    g, bound, t0 = guard(), usd(EST_AFTER_S + START_S), time.time()
+    if not g.reserve(bound):
+        raise SystemExit(g.stopped)
+    try:
+        r = first_tokens.remote([p["transcript"] for p in picked], arms_bytes, MAX_TOKENS)
+    except BaseException:
+        g.settle(bound, failed_cost(bound, t0), {"kind": "first_tokens", "failed": True, "name": name})
+        raise
+    cost = usd(r["seconds"] + START_S)
+    g.settle(bound, cost, {"kind": "first_tokens", "seconds": r["seconds"], "name": name, "rate_usd_per_hour": rate()})
+    (out / "first_tokens.json").write_text(json.dumps(r | {"cost_usd": round(cost, 4)}, indent=1))
+    spots = sorted({i for seq in r["positions_left_out"] for i in seq})
+    print(f"{r['left_out_tokens']} of {r['tokens']} tokens are left out; their places in a game: {spots[:12]}"
+          f"{' ...' if len(spots) > 12 else ''}", flush=True)
+    for arm, row in r["arms"].items():
+        for where in ("every_token", "kept", "left_out"):
+            v = row[where]
+            print(f"{arm:8s} hooks on {where:11s}: ordinary tokens moved {v['on_ordinary_tokens']:9.3f} in the band, "
+                  f"{v['on_ordinary_tokens_after_the_band']:9.3f} after it; left-out tokens {v['on_left_out_tokens']}")
+        s = row["share_from_left_out"]
+        print(f"{arm:8s} share of its edit of the ordinary tokens that comes by way of the left-out ones: "
+              f"{s['in_the_band']:.3f} in the band, {s['after_the_band']:.3f} after it", flush=True)
+    print(f"about ${cost:.2f}; booked so far ${g.sweep_spent:.2f} of ${APP_CAP:.2f}", flush=True)
 
 
 @app.local_entrypoint()

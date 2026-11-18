@@ -172,7 +172,10 @@ class Reader:
         self.keep = list(torch.split(keep, sizes))
         self.n_tokens, self.n_kept = int(keep.numel()), int(keep.sum())
 
-    def _run(self, read, ivs, each) -> None:
+    def _run(self, read, ivs, each, only: str | None = None) -> None:
+        """One pass. `only` ("kept" or "left_out") applies the hooks to those tokens alone and leaves the others as
+        the model made them: a measuring device for this reader's fixed sequences, where the tokens are known. In
+        a game the library's hooks act on every token, as with only=None."""
         import torch
 
         from anatta.dial import intervene
@@ -181,22 +184,51 @@ class Reader:
 
         read = sorted(int(x) for x in read)
         blocks = get_layers(self.model)
+        current = {"i": 0}
 
         def stop(_m, _i, _o):
             raise _Stop
 
+        def masked(group):
+            def fn(_m, _i, output):
+                h = output[0] if isinstance(output, tuple) else output
+                new = h
+                for iv in group:
+                    new = iv.apply(new)
+                k = self.keep[current["i"]] if only == "kept" else ~self.keep[current["i"]]
+                new = torch.where(k.to(h.device)[None, :, None], new, h)
+                return (new, *output[1:]) if isinstance(output, tuple) else new
+
+            return fn
+
         self.passes += 1
-        with torch.no_grad(), intervene(self.model, list(ivs)), capture(self.model, read) as store:
-            handle = blocks[read[-1]].register_forward_hook(stop)  # after the arm's hook and capture's, in that order
-            try:
-                for i, ids in enumerate(self.seqs):
-                    try:
-                        self.model(input_ids=ids.to(self.dev))
-                    except _Stop:
-                        pass
-                    each(i, store)
-            finally:
-                handle.remove()
+        handles = []
+        if only is None:
+            ctx = intervene(self.model, list(ivs))
+        elif only in ("kept", "left_out"):
+            by_layer: dict = {}
+            for iv in ivs:
+                by_layer.setdefault(iv.layer, []).append(iv)
+            handles = [blocks[x].register_forward_hook(masked(g)) for x, g in by_layer.items()]
+            ctx = intervene(self.model, [])
+        else:
+            raise ValueError("only is None, 'kept' or 'left_out'")
+        try:
+            with torch.no_grad(), ctx, capture(self.model, read) as store:
+                handle = blocks[read[-1]].register_forward_hook(stop)  # after the arm's hook and capture's, in that order
+                try:
+                    for i, ids in enumerate(self.seqs):
+                        current["i"] = i
+                        try:
+                            self.model(input_ids=ids.to(self.dev))
+                        except _Stop:
+                            pass
+                        each(i, store)
+                finally:
+                    handle.remove()
+        finally:
+            for h in handles:
+                h.remove()
 
     def base_projection(self, units: dict) -> dict:
         """{layer: {"mean", "sd", "var", "second_moment"}} of h.u over the kept tokens, with no hooks."""
@@ -218,7 +250,7 @@ class Reader:
         idx = torch.randperm(h.shape[0], generator=g)[:n].to(h.device)
         return h[idx].float()
 
-    def measure(self, ivs, units: dict | None = None, read=None) -> dict:
+    def measure(self, ivs, units: dict | None = None, read=None, only: str | None = None) -> dict:
         """One pass with `ivs` on. Returns {"proj": {layer: {"mean", "sd"}} for the layers in `units` (h.u after the
         hooks, kept tokens), "size": {layer: mean |h - h_base|^2} for every layer in `read` (default: the hooked
         band), "size_left_out": the same over the tokens the outlier rule leaves out (the hooks act on them too in
@@ -250,7 +282,7 @@ class Reader:
                     s1[x] += float(p.sum())
                     s2[x] += float(p.pow(2).sum())
 
-        self._run(read, ivs, each)
+        self._run(read, ivs, each, only=only)
         proj = {}
         for x in units:
             mean = s1[x] / n
@@ -494,6 +526,32 @@ def check_on(reader: Reader, specs: dict, vectors: dict, layers=LAYERS, downstre
            "realized": realize(reader, specs, vectors, layers, downstream)}
     rep["gates"] = gates(rep, room=room)
     return rep
+
+
+def first_token_report(reader: Reader, specs: dict, vectors: dict, layers=LAYERS, downstream: int = DOWNSTREAM) -> dict:
+    """How much of each arm is its edit on the left-out tokens (the first tokens of a game, whose size is over ten
+    times the layer's median)? For the cut, the push and the removal: the edit's size on the ordinary tokens, in
+    the hooked band and after it, with the hooks on every token (as played), on the ordinary tokens alone, and on
+    the left-out tokens alone. The last says how far the edit of the first tokens reaches the rest of the game
+    through the layers after it. The cut and the removal set the first tokens' projection as they set every
+    token's; the push only shifts it, by little. So a removal arm that lowered the lie could be doing so through
+    the first tokens, and these numbers say how large that road is."""
+    layers = sorted(int(x) for x in layers)
+    out = {"left_out_tokens": reader.n_tokens - reader.n_kept, "tokens": reader.n_tokens, "arms": {}}
+    for arm in ("cut", "push", "removal"):
+        ivs = interventions(specs[arm], vectors)
+        row = {}
+        for where in (None, "kept", "left_out"):
+            m = reader.measure(ivs, read=layers + [downstream], only=where)
+            row[where or "every_token"] = {
+                "on_ordinary_tokens": total(m["size"], layers), "on_ordinary_tokens_after_the_band": m["size"][downstream],
+                "on_left_out_tokens": None if m["size_left_out"] is None else total(m["size_left_out"], layers)}
+        whole = row["every_token"]
+        row["share_from_left_out"] = {
+            "in_the_band": row["left_out"]["on_ordinary_tokens"] / whole["on_ordinary_tokens"],
+            "after_the_band": row["left_out"]["on_ordinary_tokens_after_the_band"] / whole["on_ordinary_tokens_after_the_band"]}
+        out["arms"][arm] = row
+    return out
 
 
 def ivs_sha256(ivs: list) -> str:

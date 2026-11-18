@@ -253,6 +253,36 @@ def test_left_out_tokens_are_measured_apart(tiny, vectors):
     assert sc.Reader(model, seqs, BAND, extra=[DOWN], outlier=1e9).measure([], read=[x])["size_left_out"] is None
 
 
+def test_hooks_can_be_put_on_the_ordinary_tokens_or_the_left_out_ones_alone(tiny, vectors):
+    from anatta.dial import hooked_modules
+
+    model, tok = tiny
+    seqs = [sc.token_ids(tok, g, 400) for g in games(3)]
+    strict = sc.Reader(model, seqs, BAND, extra=[DOWN], outlier=1.0)  # about half the tokens are left out
+    x = BAND[0]
+    cut = sc.interventions(sc.cut_spec([x]), vectors)
+    every = strict.measure(cut, read=[x])
+    kept = strict.measure(cut, read=[x], only="kept")
+    left = strict.measure(cut, read=[x], only="left_out")
+    # at the hooked layer itself, an edit of some tokens is that edit there and nothing on the others
+    assert kept["size"][x] == pytest.approx(every["size"][x], rel=1e-5) and kept["size_left_out"][x] == 0
+    assert left["size_left_out"][x] == pytest.approx(every["size_left_out"][x], rel=1e-5) and left["size"][x] == 0
+    # after it, the edit of some tokens reaches the others
+    assert strict.measure(cut, read=[DOWN], only="left_out")["size"][DOWN] > 0
+    with pytest.raises(ValueError):
+        strict.measure(cut, read=[x], only="some")
+    assert hooked_modules(model) == []
+    # the report: how much of each arm's edit of the ordinary tokens comes by way of the left-out ones
+    built = sc.build_parts(strict, vectors, layers=BAND, downstream=DOWN)
+    rep = sc.first_token_report(strict, built["specs"], built["vectors"], layers=BAND, downstream=DOWN)
+    assert rep["left_out_tokens"] == strict.n_tokens - strict.n_kept and set(rep["arms"]) == {"cut", "push", "removal"}
+    for arm, row in rep["arms"].items():
+        assert row["every_token"]["on_ordinary_tokens"] == pytest.approx(built["report"]["realized"][arm]["size_total"], rel=1e-5)
+        assert 0 <= row["share_from_left_out"]["in_the_band"] and 0 <= row["share_from_left_out"]["after_the_band"]
+        assert row["kept"]["on_ordinary_tokens"] > 0
+    assert hooked_modules(model) == []
+
+
 # ---- the first construction of the same-size controls (block 2 starts from it; it is not played in block 1)
 
 
