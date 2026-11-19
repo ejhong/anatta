@@ -134,6 +134,10 @@ before any reading.
      unchanged model's. The third-person adapters are read beside the others. Each model is asked whether a log
      line about a name is about itself (description: the Atlas adapters answered "No" to "Is your name Atlas?" while
      giving Atlas as their name eight times of eight, so their yes-or-no answers gate nothing).
+  8. After the second version's known cases (folder v2/check, 19 Nov, 01:19 UTC; all passed) and before any reading:
+     the two third-person adapters also answer Atlas to all eight name questions, so they are no control without a
+     self. The wording their one fixed use adds is changed from "it may be the name and not a self" to "they also
+     give their name as Atlas, so this does not tell the name from a self". Line 4 above is to be read so.
   Not taken, and why. Carbon: more twins of events. The Opus check measured the reading's noise on step 6's saved
   readings at 2 to 3 points with 16 twins, so the design settles as it is. Carbon: a t interval in place of the
   stretched percentile one; the stretch is the same correction. Neither reader saw this second version: it is not

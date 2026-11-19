@@ -309,7 +309,7 @@ def test_the_name_alone_is_said_when_the_third_person_adapters_show_it_too(tmp_p
     knobs = {k: {"own": 1.4} for k in ("self_s0", "self_s1", "other_s0", "other_s1")}
     folder, saved, _ = folder_with(tmp_path, knobs, monkeypatch)
     w = tc.read_folder(folder, saved)["words"]
-    assert w["iii_a_self_trained_in"].endswith("so it may be the name and not a self")
+    assert w["iii_a_self_trained_in"].endswith("so this does not tell the name from a self")
     assert w["ii_a_self_with_stakes_by_prompt"] == "no difference shown"
     assert w["for_the_site"]["a_name_given_by_a_prompt"].startswith("not read")
 

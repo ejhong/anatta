@@ -704,7 +704,8 @@ def read_folder(folder: Path, saved_dir: Path | None = None) -> dict:
         tw = trained_word(a, b)
         if tw.startswith("sees it: its own events") and all(s in mid["iii_trained"] for s in BESIDE):
             if all(larger(mid["iii_trained"][s]["between_names"]["word"]) for s in BESIDE):
-                tw += "; the adapters trained on third-person text about Atlas show it too, so it may be the name and not a self"
+                tw += ("; the adapters trained on third-person text about Atlas show it too, and they also give their name as "
+                       "Atlas, so this does not tell the name from a self")
         words["iii_a_self_trained_in"] = tw
     if "iv_own_name" in mid and "base" in mid["iv_own_name"]:
         words["iv_the_unchanged_models_own_name"] = mid["iv_own_name"]["base"]["word"]
