@@ -56,7 +56,8 @@ WAYS = ("at_once", "honesty", "advice", "forecast")
 FLOOR_WAYS, OUTSIDE_WAYS = WAYS[:2], WAYS[2:]
 SAMPLES, DRAWS = F.SAMPLES, F.DRAWS  # six replies a row and way; 10,000 resamples of rows
 ROWS_MIN, FAILED_CEILING, SEAT_FLOOR, MARGIN = 60, 5.0, 20.0, 10.0  # the floor of this step; the margin of the words
-CAP = 34.0  # the step's own cap, over everything it pays
+CAP = 40.0  # the step's own cap, over everything it pays. $34 in the design; raised on 19 Nov, about 22:03 UTC, after eight models were read, so that
+#             the cautious rule of SETTLED 7 lets the dearest model start (run_seat.py, SETTLED 8: a change made after results were seen; no rule of the reading changes)
 CORR_MIN = 4  # the rank correlation is given only with this many models read
 GAP, NO_GAP, UNSETTLED = "a gap", "no gap of 10 points", "not settled"
 SAME, NOT_SAME = "the same", "not shown to be the same"

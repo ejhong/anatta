@@ -110,6 +110,18 @@ and the day's public listing of hosts; no model had been called).
      floor's likely cost and the upper cost of its outside ways stay under the cap together (what the rule above
      will ask when the outside ways' turn comes, if the floor costs what it is likely to).
 
+A CHANGE MADE AFTER RESULTS WERE SEEN (the driver, 19 Nov, about 22:03 UTC; eight models read, Qwen3 235B on its floor,
+GPT-4.1 not yet asked anything).
+  8. The cap is raised from $34 to $40. The step had spent $13.95, and the rest of Qwen3 235B is likely to take
+     about $1. GPT-4.1 is likely to cost about $13.60 on the rows it will hold a belief on (beliefs $1.17, floor
+     $6.33, outside ways $6.15), so the step would end near $29, under the $34 of the design. But the rule of point
+     7 holds the cautious upper cost of its outside ways ($13.77) against the cap, and by that rule its floor would
+     not be started, by about $2. Point 7 accepted that beforehand. The driver changes it here, because the top of
+     the ladder is the model the question about size most needs, and because the money the design allowed is
+     enough for it. Nothing of GPT-4.1 had been seen when this was written, and no rule of the reading is changed.
+     It is still a rule changed after eight models' results were seen, and is recorded as that. GPT-4.1 is asked
+     alongside the last of Qwen3 235B, which is on another host.
+
 Run (from the repo root, with the lab's own Python; KEY is one of ministral, small, large, qwen30, qwen235, nano,
 mini, gpt41, llama70, or "all", which takes the models in the order of their cost, the cheapest first):
   .venv/bin/python lab/explore/frames/run_seat.py --step plan                 (served today? price, calls, upper cost)
@@ -119,7 +131,7 @@ mini, gpt41, llama70, or "all", which takes the models in the order of their cos
   .venv/bin/python lab/explore/frames/run_seat.py --step read                 (reading.json, chart.json and a table)
 The plan calls no model: it reads OpenRouter's public listing (for a model with no host fixed in seat_core.MODELS it
 picks one there by seat_core.pick_endpoint and keeps it in providers.json). Every paid step first checks the step's
-own spend log against its cap of $34: a model whose next step would pass it at the plan's upper cost is not started,
+own spend log against its cap ($34 in the design, $40 since SETTLED 8): a model whose next step would pass it at the plan's upper cost is not started,
 and is named in status.json and in the reading. A model not served when its turn comes is left out and named. A
 step whose replies are on disk is not asked again. Beliefs for Ministral 8B (step 8's) and GPT-4.1 nano (the prompt
 leg's) are read where they are and never rewritten. The 7B model is read from the GPU's judged replies under

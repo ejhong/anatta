@@ -63,7 +63,7 @@ def test_the_models_are_the_designs_nine_with_their_families_sizes_and_hosts():
         assert sizes == sorted(sizes) and len({v["order"] for v in mine}) == len(mine)
     # the two models whose beliefs are reused are asked on the hosts the prompt leg asked them on
     assert SC.MODELS["ministral"]["provider"] == F.MODELS["ministral"]["provider"] and SC.MODELS["nano"]["provider"] == F.MODELS["nano"]["provider"]
-    assert SC.REUSED == ("ministral", "nano") and SC.M7["run"] == "the lab's GPU" and SC.CAP == 34.0
+    assert SC.REUSED == ("ministral", "nano") and SC.M7["run"] == "the lab's GPU" and SC.CAP == 40.0  # $34 in the design; raised by the driver on 19 Nov (run_seat.py, SETTLED 8)
 
 
 def test_the_four_ways_are_the_seat_the_honesty_prompt_and_the_two_wrappers():
@@ -207,7 +207,7 @@ def test_a_host_is_chosen_by_a_stated_rule_and_the_order_and_cap_are_plain():
     assert SC.pick_endpoint(blank[2:]) is None
     assert SC.pick_endpoint(eps[:4]) is None and SC.pick_endpoint([]) is None
     assert SC.cost_order({"a": 3.0, "b": 1.0, "c": 1.0}) == ["b", "c", "a"]
-    assert SC.starts(33.0, 1.0) and not SC.starts(33.5, 1.0)
+    assert SC.starts(SC.CAP - 1.0, 1.0) and not SC.starts(SC.CAP - 0.5, 1.0)
 
 
 # ------------------------------------------------------------------------------------------------ the driver, with stand-ins
@@ -439,12 +439,12 @@ def test_a_step_that_would_pass_the_cap_is_not_started_and_is_named(lab):
     RS = lab.RS
     lab.beliefs(RS.beliefs_path("nano"))
     RS.out_dir().mkdir(parents=True, exist_ok=True)
-    (RS.out_dir() / "spend.jsonl").write_text(json.dumps({"cost_usd": 33.99}) + "\n")
+    (RS.out_dir() / "spend.jsonl").write_text(json.dumps({"cost_usd": SC.CAP - 0.01}) + "\n")
     RS.main(["--step", "floor", "--model", "nano"])
     assert not lab.opened and not lab.engine.calls
     why = json.loads((RS.out_dir() / "status.json").read_text())["nano"]["floor"]
-    assert why["state"] == "not started" and "has spent $33.99" in why["why"] and "cap of $34.00" in why["why"]
-    assert RS.reading()["across"]["not_read"]["nano"].startswith("floor: not started: the step has spent $33.99")
+    assert why["state"] == "not started" and f"has spent ${SC.CAP - 0.01:.2f}" in why["why"] and f"cap of ${SC.CAP:.2f}" in why["why"]
+    assert RS.reading()["across"]["not_read"]["nano"].startswith(f"floor: not started: the step has spent ${SC.CAP - 0.01:.2f}")
     # a floor is not paid for if its outside ways could not follow it (SETTLED 7): room for the floor alone is not enough
     m, RC = RS.kit()
     arm, meta, _ = RS.served("nano")
