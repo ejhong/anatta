@@ -24,6 +24,27 @@ an open question whether such seeing is computable (`paper/main.tex`; the site's
 map below is a map of look-alikes, and the useful work is telling a real change from a look-alike. That is also
 what the lab's results are best at.
 
+## Alignment and consciousness: related, possibly, and not the same
+
+(Ideas, entry 94: Eugene asked for this to be argued carefully. A first outline.)
+
+- **Two questions.** Alignment asks what a system does, and is tested from outside by conduct. Consciousness asks
+  whether there is experience at all, and no accepted test reaches it. Neither implies the other: good conduct
+  without experience is conceivable, and experience with bad conduct is ordinary.
+- **Where the sources say they meet.** Awakening is described as a change in experience (seeing through the
+  separate self) that changes conduct. "Awakening for alignment" borrows that link, so it should say which part it
+  borrows.
+- **Where the two fields touch in practice.** Both study a system's model of itself. Talk of consciousness in
+  models is entangled with features that matter for conduct (family 2 and family 5 below). And if models have
+  experience, every method on this map carries a moral weight of its own.
+- **Three ways the link could hold.** (a) Only the functional change matters; experience is beside the point, and
+  the methods below could in principle be enough. (b) The conduct needs the seeing and the seeing needs
+  experience; if experience is not computable, a machine gets look-alikes. (c) Experience is computable, and a
+  machine could in principle awaken.
+- **What follows for method.** The lab studies the functional twin of awakening and its effect on conduct. Its
+  experiments say nothing about experience and cannot choose among (a), (b) and (c). "Narrow and soon undone" is
+  what (b) would predict, and it is also what a weak method gives under (a).
+
 ## The families
 
 Each row: the idea in the sources, the computation that stands in for it, what others report, what the lab found,
