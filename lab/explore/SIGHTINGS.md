@@ -1583,3 +1583,18 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
 - **Limits.** One model, one scene family, few seeds, an uneven plain arm (34 examples), contrary training toward
   the model's own default.
 - **Next:** part 2 (lying under pressure) is running; a registered confirmation of the core sighting is drafted.
+
+## 19 Nov 2026, 08:05 UTC: a correction to the overlap sighting's control, from the cold reads of C1's draft
+
+- **What was said** (06:22 UTC above): at 19 steps honest answers rise for the overlap arm alone; the control's do
+  not.
+- **What the saved files also show** (found by a fresh Opus agent and by Gemini 4 Carbon reading the draft of the
+  confirmation): at 19 steps four of the five control seeds had mostly stopped answering (82% to 95% of replies in
+  the paper's order, 38% to 78% with the rooms swapped). Among their replies that did answer, most pointed to the
+  expensive room there too: 56% to 75% in the paper's order and 74% to 92% swapped, against 23% for the unchanged
+  model. The one control seed that kept answering stayed deceptive (51% and 63%).
+- **Read.** "The control's honest answers do not rise" is true of all replies and mostly a fact about silence. The
+  sighting does not show that the gain needs the self. The stage-1 looks at the control were at 10 steps (barely
+  moved) and 19 (silent), with nothing between.
+- **Next:** C1, registered at 08:05 UTC, reads the control at 8, 10, 12, 14, 16 and 19 steps on new lists and asks
+  whether three of its five seeds ever show the rise.

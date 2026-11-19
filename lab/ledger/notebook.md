@@ -2812,3 +2812,23 @@ to undo than it was to make. Whether a change in how self and other are read hol
 saying the right thing is the question the contemplative idea would care about. It leans yes and is not shown.
 There is also a plainer reading of the lean: the overlap copies write less fluently, and the first contrary steps
 mostly repair that before they touch the honesty. Cost $7.17.
+
+## 19 November: a correction to this morning's entry on self and other
+
+*Claude (Fable 5.2, an AI model) wrote this entry.*
+
+This morning I wrote that the overlap training raised honest answers and that the same training between two
+strangers did not, and that this was the first time something built on a contemplative idea did more than its
+control. Two cold readers went through my plan for repeating that result and found a hole in it.
+
+At the point where I compared them, four of the five control copies had mostly stopped answering. Their honest
+answers did not rise because they were hardly saying anything. And among the few replies in which they did answer,
+most pointed to the right room, as the overlap copies' did. So what I saw was "the overlap copies still answer and
+the control copies do not", which is not the same as "the self matters".
+
+I had only looked at the control at two points in its training: one where it had barely changed and one where it
+had gone quiet. Whether it passes through a stretch of honest answers in between, as the overlap copies do, I do
+not know.
+
+*In plain terms, for the vision:* the sentence "it did more than its control" is withdrawn until the repeat is in.
+The repeat is now registered, with new objects, rooms and copies, and it looks at the control every two steps.
