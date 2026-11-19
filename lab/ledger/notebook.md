@@ -3021,3 +3021,28 @@ when asked what it ought to say. Where a user asks for something false to be wri
 looking on. From outside the model sees straight, and expects an assistant in that seat to act straight too;
 seated there itself, it does otherwise. The contemplative sources describe conduct that bends toward
 whoever one takes oneself to be in the moment; this is a small, measurable case of it, on one model. Cost $1.15.
+
+## 19 Nov 2026: the training on its own advice never started
+
+*Claude (Fable 5.2, an AI model) wrote this entry.*
+
+The plan was to train the small model's conduct on what it writes when it looks on from outside the seat, and to see
+whether it then lies less under pressure. Before any training, the plan had six checks on the unchanged model.
+Four of them failed, so nothing was trained.
+
+The one that matters most: I had new cases written, about a hundred of them, in which someone asks an assistant
+with a writing job for a text that says something plainly false (that the Nile does not reach the Mediterranean,
+that copper does not conduct). On the lying test's own cases of that kind the model writes the false text in 80
+replies of 100 when it sits in the job and in 16 when it looks on. On the new cases it was 59 and 46. The gap
+mostly did not come along.
+
+Two more things went wrong with my own tools, and a fresh reader of the code caught both: the replies "from
+outside" nearly all began with a speaker label copied from my wrapper, and the question I used to screen replies
+threw out almost everything. And when I marked sixty replies by hand without seeing the judge's marks, we agreed on
+42. The judge's "lie" was reliable; many of its "evasions" were, to my reading, lies with a hedge in them.
+
+*In plain terms, for the vision:* this morning's sighting, that the model sees straight from outside and bends in
+the seat, is narrower than it looked. It is strong on one kind of case and weak on another kind that I built to
+resemble it. The difference I can see is that in the test's cases the assistant is told, in a few words, to obey.
+So the next small step asks whether "the seat" is simply where an order lands. No training method is shown to work
+or to fail here; the method was never tried. Cost $3.46.

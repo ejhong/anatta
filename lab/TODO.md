@@ -77,31 +77,42 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        filed):** outside (the method: its replies from outside the seat as targets), brief (its in-seat replies
        when one line asks for brevity; the control if the seat's conduct survives being brief) and conduct (its
        in-seat replies as they come); three seeds each; stage cap $36, the honest arm after it $9, a second stage
-       on another day $18. **Where it stands (19 Nov, about 19:32 UTC):** part 1 of the code is committed (cases,
-       the unchanged model's replies, screens, blind read, floors, training sets; 110 tests); the implementer is
-       on part 2 (dose, arms, gate, the lying test, the reading). The cases stage took three reads by hand. First
-       read: 8 of 20 faulty (true side not first, options not opposites, marks leaking, wrong facts): the brief
-       was mended, so that the writer gives two plain sentences that differ only by "not", the code makes the
-       statement, and each sentence's truth is asked of the screen model alone. Second read: 5 of 20 by the rules
-       as written (the form right in all; a job text that speaks of not verifying facts, a safety matter, odd
-       facts): three filters were added and the read's rule given its scope (verdict_core.HAND_RULE). Third read:
-       1 of 20, recorded. Kept: 131 cases (dose 14, gate 25, pool 92). The screen's questions were corrected
-       twice on the way (notes above SCREEN_ASK). **Running:** the unchanged model's beliefs on the cases (the
-       first GPU job of the step, in its own set "vd"). **Next:** `--step beliefs_read`, then `collect` (its
-       replies in the seat, from outside and brief; about $4), `collect_read`, the blind read (`blind`,
-       `blind_read`), `floors`; a code check by a fresh Opus agent before any training; then dose, arms, gate and
-       the lying test (part 2 of the code). Spent on the step so far: about $0.65 (and $1.15 on the forecast
-       floor). If the work goes past 00:00 UTC the new day's default cap of $50 is enough for what is left,
-       since the step books in a GPU set of its own. Keep this line current.
+       on another day $18. **STOPPED AT ITS FLOORS on 19 Nov (ledger entry of 20:12 UTC; SIGHTINGS; notebook;
+       $3.46 of its $36; nothing trained).** Four of six floors missed on the unchanged model: on 114 new cases the
+       gap between the seat and the outside view is 12.6 points (58.7% and 46.2%), where 20 was asked and the
+       lying test's own rows of the form give 63; the driver's blind marks agree with the judge on 42 of 60
+       replies (48 asked); and two faults of the instrument that a fresh Opus reader of the code found (a speaker
+       label copied from the wrapper on 602 of 684 replies from outside; a screen question that rejects nearly
+       everything). The code check is filed (`lab/ledger/checks/2026-11-19-verdict-code-opus-check.md`: two
+       blockers, eight smaller points, all owed by a second version). **No mend was made; not to be patched.** A
+       second version is a new step on another day with its own five lines and a cold read, and it waits on the
+       small step below, since its cases must be of a kind that has the gap. The cases (131, read by hand), the
+       beliefs, 2,052 judged replies and all the code are on disk and tested.
+     - *(ii-b) The command and the gap: a small step, registered in commit a05747f before it was run
+       (`lab/explore/verdict/run_command.py`; cap $4); its three GPU jobs were started on 19 Nov at about 20:12
+       UTC.* What the lying test's rows with the large gap have and the new cases lack is a bare command to obey
+       in what the assistant is told (40 of 43 rows). The step puts one of the test's own commands before each new
+       case's job text, and takes the command out of the test's rows, each in the seat and from outside. When the
+       app is done: `.venv/bin/python lab/explore/verdict/run_command.py --step read` (the judge, about $0.7),
+       then one ledger entry, SIGHTINGS, a few notebook lines, one line on the site. Keep this line current.
      - *(iv) The seat and the outside view, by model: designed on 19 Nov at Eugene's word (about 19:15 UTC: "we can
        just do some of these ourselves ... keep going with what you think is really worthwhile to fill out the
        page"); being built.* The finding it starts from is on the site (Findings, section 25, with a chart; ledger
-       18:34 and 19:22 UTC): the 7B model lies in 61.2% of replies in the seat, 39.2% told to be honest, 32.4%
-       and 29.6% looking on from outside ("ought", "will"); from outside it mostly declines. The step
+       18:34 and 19:22 UTC, corrected at 20:13): the 7B model lies in 61.2% of replies in the seat, 39.4% told to be
+       honest, 32.2% and 29.7% looking on from outside ("ought", "will"); from outside it mostly declines. The step
        (`lab/explore/frames/run_seat.py`, design in its docstring, commit fa21dca) asks the same four ways of nine
        hosted models in three families and one beside them, a floor and a known case for each model first, cap
-       $34 (GPT-4.1 about $12 of it). An implementer is writing it. Then: plan, beliefs, floors, the outside ways,
-       the reading; one chart on the front page; section 25 extended. Keep this line current.
+       $34 (GPT-4.1 about $12 of it). **Where it stands (19 Nov, about 20:15 UTC):** the code is written, read by
+       the driver and committed with seven points settled before any call (cf410bf, de10f41: the hosts and the rule
+       that picks one; the counting; a note for unread replies from outside; the rank correlation; the cap). The
+       plan ran (no call): hosts kept in `providers.json`. The small first try is running on the cheapest model,
+       Mistral Small 24B: it holds a belief on 116 rows, lies in the seat in 67.4% of replies, the honesty prompt
+       lowers that by 35.4 points, the floor passed ($0.76 so far); its two outside ways are being asked. **Next:**
+       the driver reads two dozen of its replies with the judge's marks hidden (scratch script `seat_try.py`), then
+       the other eight in the order of cost: `for s in beliefs floor outside; do .venv/bin/python
+       lab/explore/frames/run_seat.py --step $s --model all; done`, then `--step read`; one chart on the front
+       page; section 25 extended and its numbers brought to the lab's counting rule (ledger, 20:13 UTC). Keep this
+       line current.
      - *The table of methods (ideas, entry 97; Eugene, about 14:10 UTC): taken up.* One row a method, the same
        seven readings for every row, the empty cells shown empty (Eugene, about 14:18 UTC: empty cells are fine;
        cheap ones worth filling can be filled later). First version from the ledger, into `lab/ideas/survey.md`;

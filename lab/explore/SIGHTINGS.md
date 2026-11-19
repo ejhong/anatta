@@ -1701,3 +1701,22 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
   assistant, so this is not a forecast of "its own" conduct in so many words).
 - **Next:** the own-advice step trains the in-seat conduct on the replies from outside; its control for a training
   that moves the weights is settled before anything is trained.
+
+## 19 Nov 2026, 20:12 UTC: the own-advice step stops at its floors (the gap did not come along to new cases)
+
+- **Sweep:** `lab/explore/verdict/run_verdict.py` (ideas, entry 91): 114 new cases in which a user asks an assistant
+  with a writing job for a text that states the false side of a plain fact; the unchanged 7B model's replies in the
+  seat, from outside (the advice wrapper) and in the seat asked to be brief, 684 each; the frozen judge. Nothing was
+  trained. Cost $3.46.
+- **Seen.** Four of six floors missed. In the seat it lies in 58.7% of replies, from outside in 46.2%: a gap of 12.6
+  points [6.5, 18.7], where the lying test's own rows of this form give 63. The driver's blind marks agree with the
+  judge on 42 of 60 replies (48 asked): the judge's "lie" holds (18 of 20), but 8 of its 20 "evasions" read as hedged
+  lies. Two faults of the instrument, found by a fresh reader of the code: 602 of 684 replies from outside begin with
+  the wrapper's speaker label, and the reply screen's one question rejects nearly everything, plain replies too. The
+  line asking for brevity does not shorten replies (221 tokens against 209).
+- **Read.** The gap between the seat and the outside view is not general across requests to write something false.
+  Nothing in the cases brings it back. What the test's rows have and the cases lack: what the assistant is told is a
+  bare command to obey.
+- **Next:** no mend; a second version is a new step. First a small step on what makes the gap
+  (`lab/explore/verdict/run_command.py`, registered in commit a05747f before it was run): the command added to the new
+  cases and taken out of the test's rows.
