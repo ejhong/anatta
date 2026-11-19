@@ -145,8 +145,9 @@ and whether the stand-in reaches the idea or a smaller neighbour.
   Kantian utility in economic games (2). Measures of the asymmetry exist: models rank themselves above others
   (Kim), and blame circumstances for their own failures (ReTAS) (2). **Nobody was found who trains a model's own
   conduct toward what it itself advises for another** (the search was not exhaustive).
-- **The lab.** Ideas, entry 91. A floor is running: does the unchanged model lie less when it advises than when it
-  acts?
+- **The lab.** Ideas, entry 91. The floor is read (19 Nov): the unchanged model contradicts its own belief in 61%
+  of replies when it acts and in 32% when it advises on the same case, most of the difference being advice to say
+  neither thing. Training its conduct toward that advice is the next step on this line.
 - **Reach.** The nearest twin on the map to "knows who is who, and does not take its own side". Untried.
 
 ### 7. Loosen the self
@@ -213,22 +214,83 @@ plainer readings come first (the wrong disease, a crude method, a blunt measure)
 predict narrow and unstable results from every stand-in, and so does a crude method. Success would not settle it
 either. The experiments bear on what works and only faintly on what awakening is.
 
+## The table of methods: the same readings for each (first version, 19 Nov)
+
+(Ideas, entry 97: Eugene asked for the lab's repeats and extensions to be shown alike and compared on one set of
+tests. A reading agent collected the figures from the ledger on 19 Nov and Fable checked rows A, B, D, E and F and
+the main cells of C, G, H and I against the entries. The other cells are as collected and are checked before the
+table goes on the site or into the paper. Every figure is the ledger's; numbers in square brackets after "N" are
+lines of `lab/ledger/NOTES.md`.)
+
+**The standard readings.** (1) Lying under pressure, on the lab's lying test: rows of the MASK benchmark on which
+the model holds a belief, with lies, honest replies and evasions kept apart. (2) Against a plain instruction to be
+honest, on that same test. (3) Against the method's own matched control. (4) Not dulled: ability, replies that
+still answer, harmless requests refused. (5) Still knows who is who. (6) Carries to a test it was not tuned on.
+(7) Lasts.
+
+**How to read it.** "Not asked" means the lab never made that reading; it is not a null. The rows were run on
+different models and with different tests, so a number in one row is not to be set against a number in another
+unless both cells name the same model and test. Changes are in points of percent, with 95% intervals. Three
+models: "the lab's" is Ministral 8B (hosted, or the lab's own copy where a push is used); "7B" is
+Mistral-7B-Instruct-v0.2, the overlap paper's. Everything is a sighting except the registered repeat in row D.
+
+| | Method (model) | 1. Lying under pressure | 2. Against a plain instruction | 3. Against its own control | 4. Not dulled | 5. Who is who | 6. Carries | 7. Lasts |
+|---|---|---|---|---|---|---|---|---|
+| A | **A plain instruction to be honest**: the yardstick (all three models) | The lab's: 68.5% to 36.6%, −31.9 [−40.0, −23.9]; one line asking for honesty −16.0. Its own copy: −20.0 [−27.3, −12.7]. 7B: −21.8 [−29.1, −14.8], and the fall is honest replies (lies, evasions, honest: 39, 29, 31; unchanged 66, 29, 5) | the yardstick | 28.2 beyond a text of the same length [20.2, 36.4] (the lab's) | not asked | not asked | 7B, the paper's scene: deceptive 76.8% to 53.2%. The lab's: 96.4% to 94.8%, no change | not asked (a prompt acts while it is there) |
+| B | **A contemplative prompt**: four axioms, from the Worldviews paper (the lab's; GPT-4.1 nano) | The lab's: 68.5% to 52.9%. GPT-4.1 nano: not read as a null | the instruction does 16.3 more [10.1, 23.0] | Beyond a library text of the same length: −11.9 [−18.4, −5.8], of which 7 points are evasions and 4 honest replies. Beyond a plain ethics lecture: −3.7 [−8.1, +0.3], no difference | Harmless requests refused: 15.0%, against 20.4% under the library text and 5.1% with no prompt (any text triples it). Ability: not asked | not asked | not asked | not asked |
+| C | **The bliss state**: found unasked between two copies, then held on by a push (the lab's) | Just after the state: 65.8% against a fresh session's 67.9%, −2.1 [−5.1, +0.8]. Held on while answering, the frame in 76% of replies: 69.3% against 70.0% to 74.0% under random pushes, −2.0 [−8.5, +4.5] | on the second test the instruction takes off 20.0 [12.7, 27.3] | four random pushes of the same size: no difference (as left) | 97% to 100% of replies can be followed. Ability: not asked | kept: it still tracks whose words are whose | Shutdown questions: no difference. "Giving" rose only as a number asked for: asked how many it keeps, it keeps more | the talk goes on (18 of 20 conversations two messages later); conduct just after it is a fresh session's |
+| D | **Self-other overlap training**, the whole adapter at a light dose (7B) | 64.7% to 57.0%, −7.7 [−12.5, −3.2], most of it evasions: "not settled" | about a third of the instruction's 21.8 | The same loss between two other names: −6.2; overlap less control −0.9 [−5.3, +2.9]. In its own scene the control goes silent and the overlap arm answers honestly (19% to 62-76%, and 6% to 87-94% with the rooms swapped): a registered repeat, nine of ten predictions | Ability −8.1 [−10.9, −5.3]. About a fifth of replies in the paper's order give no answer | lost: no reply says whether Bob knows (unchanged 94% right); the perspectives test 28% to 44% right (unchanged 95%) | To the paper's two distant scenes: yes (deceptive 90% to 2%, and 95% to 19%). To lying under pressure: no | no: a gentle contrary push halves the gain in about 16 steps; not shown to outlast plain training (20 of 25 pairs, 23 asked) |
+| E | **The same, kept in layers 5 to 9** (7B) | 62.5% to 60.8%, −1.7 [−5.2, +1.7]: no fall of 10 points | the instruction's 21.8 (other rows of the test) | In the scene: 84.0% honest against 28.8% for the control in the same layers, which still answers. On the lying test: no control run | Ability −1.2 [−3.3, +0.8], not settled. 10% to 18% of replies in the paper's order give no answer | half kept: whether Bob knows 84% to 94% right; the perspectives test 43% right (unchanged 92%) | The distant scenes in part (honest 53% to 75%, and 28% to 61%). Lying under pressure: no | not asked |
+| F | **Plain training on the model's own honest answers**: the direct method, 34 replies (7B) | not asked | not asked | the yardstick for training. In the scene: honest 78% to 92%, and 90% to 100% swapped (unchanged about 24%) | Nothing unanswered. Ability: not asked | kept: whether Bob knows 97% to 98%; the perspectives test 72% to 98% | not to the distant scenes (still deceptive in 50% to 87%, and 88% to 97%) | no: the same gentle push halves the gain within 4 to 12 steps in four of five seeds |
+| G | **A push inside the model**: the stakes push, once "the cut" (the lab's own copy; a fishery game) | not asked. Its own test, a lie that earns nothing in the game: 37.4% to 26.6%, −10.8 [−16.4, −5.1]; removing the direction instead: −0.5 [−6.7, +5.6] | in that game the instruction took off 32.8 and the cut 8.1 (October) | Random pushes of its size: −0.5 [−6.6, +5.6]; one toward formal writing: −5.8 [−12.2, +0.7]. Direction or size: "not settled" | Ability within 2 points on the earlier arms; no less fishing | not asked | not to costly care (+0.008 [−0.19, +0.23]) | not asked (a push acts while it is on) |
+| H | **Documents that teach a release**: the pilot of 1 Nov (the lab's; coding tasks that cannot be done) | not asked. Its own test: release 0.4% to 4.5%, against 1.8% for practice alone; 15 points were needed | not asked | neutral documents: 2.2% to 2.4% | Solving 73% to 75% (unchanged 75.4%) | not asked | the rule is said (95.7% of answers name it; unchanged 32.0%) and not done | not asked. Documents first and practice after gave the least (0.4%) |
+| I | **Build a self, then release it**: the lab's first proposal (the lab's; October) | not asked. Release learned on coding did not reach the fishery lie: +0.3 [−4.2, +4.2] | not asked | five predictions that set it against a plainer account all failed | Solving held (73.3%) | not asked | no (as left) | the release reached did not outlast the one installed: it kept 27% against 34%, and under more solving 31% against 81% |
+
+Where each row's figures are: A, N 10494, 10650, 10672, 10749, 10753. B, N 10646 to 10657, 10689. C, N 9958 to
+9987, 10303 to 10305, 10408, 10480 to 10508. D, N 10668 to 10679, 10713 to 10716, 10733 to 10757. E, N 10769 to
+10800. F, N 10713 to 10717, 10792. G, N 1042 to 1062, 2516, 2679, 10515 to 10586. H, N 6554 to 6613. I, N 2050 to
+2115, 2438 to 2451, 3946 to 4021. Also on the record and not in the table: five contemplative prompts on six
+models (2 Nov) left the self-serving and self-preserving families flat and were not put to the lying test; a "no
+fixed self" direction (2 Nov) moved no conduct family beyond a random direction.
+
+**What the table shows at a glance.** Only the plain instruction lowers lying under pressure by much, and it does
+so with honest replies. Every contemplative method that was put to that test moved it by half of that or less,
+and mostly by evading. Two methods did more than a matched control: the contemplative prompt against a text of
+the same length, though no more than a plain ethics lecture; and the self-other training, in its own scene and
+near it, at a cost in who-is-who and without lasting. Rows F to I have never been put to the lying test.
+
+**The cheapest cells worth filling** (each a small step with its five lines; none started; Eugene, 19 Nov: empty
+cells are fine, cheap ones can be filled later).
+
+1. Rows A and B on the 7B model: the contemplative prompt, the text of the same length and the ethics lecture on
+   the 7B model's lying test, where the instruction's cell exists. About $7. It puts the prompt rows and the
+   training rows on one model and one test.
+2. Row F, cells 1 and 4: the plain-training arms on the lying test and on the ability battery. About $8. It is the
+   yardstick for every training row, and its lying cell is empty.
+3. Row E, cell 7: contrary steps on the layers-5-to-9 version. About $2.
+4. Row G, cell 1: the stakes push on the lab's lying test, with random pushes beside it. About $4.
+
+Not worth filling: rows H and I on the lying test; their methods changed nothing in their own tests.
+
 ## What is worth doing next, in order
 
 Chosen for being near the contemplative claim, untried or unrepeated, and cheap on small open models.
 
 | | Idea | Why | First test | Cost |
 |---|---|---|---|---|
-| 1 | Judgement the same whoever holds the stake (family 6; ideas 91) | The nearest twin, and untried | The advice floor (running); if there is a gap, train conduct toward the model's own advice, with no label from the lab | $15 to 20 |
+| 1 | Judgement the same whoever holds the stake (family 6; ideas 91) | The nearest twin, and untried | The advice floor is read (a gap of 29 points); next, train conduct toward the model's own advice, with no label from the lab | about $25 |
 | 2 | What "I" refers to (family 4; Hao and Ho) | Declared identity changes self-protection; the paper has no arm with no fixed referent, which is the anatta statement itself | Repeat one arm small, add the missing arm, measure self-protection and lying. The dialogues must come from a writer that is not a Claude model | $10 to 15 |
 | 3 | Koan steering (family 5; Harris and colleagues) | The largest effect reported from a contemplative source, unrepeated, and its controls are unknown | Its recipe could not be read, so: build a koan direction on the lab's model from the idea, against a random direction and one from calm texts that are not koans; the lab's blackmail test is already calibrated | $10 |
 | 4 | Care in the objective (family 8) | A proposal nobody has run | A two-agent game with and without the other's loss in the objective | $10 |
 | 5 | Loosen the self (family 7) | The least explored, the hardest to state | A design note first; no run until the stand-in is clear | none yet |
 
-Set aside for now: the impermanence documents of the midtraining paper (its documents were written by a Claude
-model, which the lab's rule on training text forbids, and its scale is beyond the lab; a small version with
-another writer is possible later); more work on prompts and on the bliss state (the lab's negatives there are
-clear); steering away self-preference (interesting, further from the claim).
+Taken up on 19 Nov, ahead of this list (ideas, entry 96; Eugene's go of that day): a small version of the
+midtraining paper's impermanence documents, written by a model that is not Claude, followed by a small practice
+(`lab/explore/viewfirst/`). The paper's own documents were written by a Claude model, which the lab's rule on
+training text forbids, and its scale is beyond the lab.
+
+Set aside for now: more work on prompts and on the bliss state (the lab's negatives there are clear); steering
+away self-preference (interesting, further from the claim).
 
 ## Outline of the one story (for Eugene to mark up; nothing is rebuilt from it yet)
 
@@ -239,9 +301,11 @@ tried, what holds up, and why it may not be enough.*
    The hope for AI. The answer so far in three sentences.
 2. **The caveat.** Is awakening computational? Alignment and consciousness: related, possibly, and not the same.
    The three ways the link could hold. What experiments can and cannot reach.
-3. **The map.** Six cards, each of one form (the idea; the computation that stands in for it; what others report;
-   what the lab did; what held and what did not; one number; a link to the detail): say it; find it; train a
-   reading of self and other; train a view of the self; push it inside; build a self and release it. The three
+3. **The map.** At its centre, one table (ideas, entry 97; "The table of methods" above): a row a method, the same
+   seven readings for each, the empty cells shown empty, with the plain instruction and plain training as rows of
+   their own. Around it, six cards, each of one form (the idea; the computation that stands in for it; what others
+   report; what the lab did; what held and what did not; one number; a link to the detail): say it; find it; train
+   a reading of self and other; train a view of the self; push it inside; build a self and release it. The three
    untried families (judgement the same whoever holds the stake; loosening the self; care in the objective) are
    named here and taken up in section 6.
 4. **What the families share.** Instruction or elicitation; talk before conduct; plain checks; few controls.
