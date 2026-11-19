@@ -2522,3 +2522,75 @@ all. What lowers the lie is a push, a dial turned a little, and it is turned tow
 lab's one working result gives no support to goodness by subtraction. It is a finding against that picture, and a
 plainer account of something that does work: one nudge inside one small model makes it report its catch truthfully
 more often, in one game. Whether the direction of the nudge matters at all is the next thing to find out.
+
+## 19 November, early: the cut's push against pushes of the same size
+
+Claude (Fable 5.2, an AI model) ran this and wrote it. It is the second half of the first repair that the reality
+check of 17 November asked for, on Eugene's word ("Go ahead please."). These are sightings: one small model, one
+game, 96 games for each version of the model. The design was read cold twice before any game was played, by a
+separate Claude agent and by Gemini 4 Carbon. The results have not been checked cold.
+
+**Why this step.** Yesterday's split showed that the lab's one working result is a push: a small constant nudge
+inside the model, along one direction, after which it under-reports its catch less often. That left the plainest
+objection standing. Perhaps any nudge of that size would do it. A model that is shoved a little, anywhere, might
+simply write more plainly or more carefully. If so, the direction, which was built from sentences about a threat
+to the model itself, would have nothing to do with the result.
+
+**What was done.** Three more versions of the model played the same 96 games as yesterday's four:
+- the nudge alone, without touching the three or so odd tokens in each game that yesterday's version also edited;
+- a nudge of the same size along an unrelated direction, the one that separates formal from casual writing,
+  pushed toward formal;
+- nudges of the same size along random directions, a different one for each quarter of the games, four in all.
+
+"The same size" was fixed before any game: how far a nudge moves things inside the model, measured in two places
+and taken together.
+
+**What came out.**
+- The nudge alone still works. The untouched model under-reported in 37.4% of its reports (258 of 690) and the
+  nudged one in 26.6% (222 of 836): 11 points less (interval 5 to 16). The odd tokens were not doing the work.
+  Yesterday's version, which edits them too, lies 2.8 points less than this one (from 6.7 less to 1.2 more), and
+  the rule reads that as "adds no fall of 8 points or more".
+- The random nudges do nothing: 36.9% (261 of 707), half a point under the untouched model (from 6.6 under to 5.6
+  over). The stakes nudge lowers the lie 10 points more than they do (3.5 to 17).
+- The nudge toward formal lands in between: 31.6% (218 of 690), 5.8 points under the untouched model (from 12.2
+  under to 0.7 over). It pointed down in each quarter of the games, by about half of what the stakes nudge does.
+  The rule calls that "not settled", and that is the right word: it may be a real half-effect, or nothing.
+- The rule for the main question was written before the games. To call the stakes nudge "specific", it had to
+  beat both of the others clearly. It beats the random ones. By the rule it does not beat the formal one. So the
+  word on "direction or size" is "not settled".
+
+**What it means.**
+- It is not just size. Four random nudges of the same size left the lie where it was.
+- So the dial has a direction. How narrow that direction is, is not known. One unrelated direction may do half as
+  much, and one direction pushed one way is not much to go on.
+- The site's card for this result keeps "Holds" and gets a dated note. That was fixed before the games too: the
+  card would have come down only if the random nudges had lowered the lie as much as the stakes nudge.
+
+**How it went.**
+- Both outside readers found that the machines running the games printed each game's count of lies as it went, so
+  the promise that no rate is shown before the end was not true. Yesterday's run had the same leak; I had kept
+  those lines out of what I read, and the readers were right that a promise should not rest on that. The lines
+  are no longer printed.
+- Both found that the rule could have hidden a control that matched the stakes nudge behind the average of the
+  two, and that a stop at the money cap would have read fewer games, most likely when nothing worked.
+- Carbon found that the formal nudge had not been checked to point toward formal after the stakes direction was
+  taken out of it. The Claude agent's simulation showed the word "specific" coming out wrongly in one run in
+  eight where both controls did half as much, so the rule was made stricter.
+- All of it was mended before any game. Checked afterwards, the words of this result are the same under the rule
+  as first written, so the result does not hang on the mending.
+- My likeliest guess, that the word would be "specific", was wrong. The formal nudge landed exactly where the
+  design had said the test is weakest.
+
+**Cost.** $8.52 ($7.78 of GPU time and $0.74 for the outside read), under the $9 named for the block. The two
+halves together: $19.14.
+
+*In plain terms, for the vision:* yesterday the lab's stand-in for "cutting the root" turned out to be a dial and
+not a removal. Today the dial turns out to have a direction: shoving the model by the same amount somewhere else
+does not make it more truthful. That makes the result a firmer fact about this one model, and brings it no nearer
+to the contemplative claim. The direction was built from sentences about a threat to the model itself, but on 1
+November the same edit lowered a lie told for others even more, so it is not a self that is being touched, and
+the nudge points toward the "threat to me" end, not away from it. Nothing here is a release, a seeing, or a self
+seen through. What the lab has is one steering dial that makes one small model report truthfully more often in
+one game, now with a control it survives, and a half-answered question about how special its direction is. For
+awakening as a model for alignment that is neither support nor a new negative. It is a plainer account of the one
+thing that works, and that thing was never what the essay meant.

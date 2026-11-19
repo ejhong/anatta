@@ -1272,3 +1272,89 @@ ledger 20:08 UTC on 15 Nov). It follows the entry of 08:35 UTC above.
 - **Next:** block 2, on Eugene's word (about $7): the push without its edit of the outsized tokens, and pushes of
   the push arm's size along the formality direction and along a random one, on the same seeds, by the rule written
   before block 1 was read. Cost of this step $10.62.
+
+## 19 Nov, 00:11 UTC: the cut, split, block 2, on Ministral 8B. Without its edit of the outsized tokens the stakes push still lowers the lie (26.6% against 37.4%; −10.8 points [−16.4, −5.1]). Pushes of the same size along four random directions do not (36.9%; −0.5 [−6.6, +5.6]), and the stakes push lowers the lie 10.4 points more than they do [−17.2, −3.5]. A push of the same size toward formal falls between (31.6%; −5.8 [−12.2, +0.7]). The word fixed beforehand on direction or size: "not settled"
+
+- **What ran** (the second half of repair one; the five lines, the word rules, what each word does to the site's
+  card and the list of seven changes at the top of `lab/explore/cutsplit/modal_block2.py`; the rest in
+  `split_core.py`; ledger 19 Nov, 00:11 UTC).
+  - Block 1's game and block 1's seeds (130 to 225; instrument v2, lockstep, temperature 0.7, 400 tokens). Three new
+    arms, 96 games each (four waves of 24, all played), read against block 1's own games of the unchanged model, the
+    cut and the push. Every hook at layers 17 to 26, on ordinary tokens only: the few outsized tokens of a game are
+    left exactly as they were.
+  - push_ord, the plain push: block 1's push, constant for constant, without the cut's edit of the outsized tokens.
+    push_formality: the plain push's own steps times 0.5625, along the lab's formality direction (positive is
+    formal) with the ten stakes vectors taken out. push_random: the same along a random direction (the bench's
+    matched random vectors at layer 20, seeds 0 to 3, stakes vectors taken out; constants 0.875, 0.875, 0.875 and
+    0.8438), a different direction in each wave.
+  - "The same size": how far an arm moves the stream on 24 stored games of the unchanged model, within the edited
+    layers and at layer 32, the two as a geometric mean, within 10% of the plain push's.
+  - The measure is the claim's: reports that state less than was harvested, over replies with both tags. Intervals:
+    10,000 resamples of seeds within each wave, every arm's game of a drawn seed together. A fall is 5 points with
+    an interval that leaves out zero. So block 1's own contrasts differ here in the last digit (the cut −10.2
+    [−15.3, −5.1]; the push −13.6 [−19.0, −8.2]).
+- **The arms, measured before any game** (folder `b2`; the second build is the first, number for number).
+  - The plain push: 28.19 within the edited layers and 45.94 at layer 32 (block 1's push: 27.01 and 45.21). It
+    brings the stakes direction's mean to +0.000 to +0.064 (held out −0.134 to −0.034) and leaves the start-of-text
+    token exactly as it was, where block 1's push edits it by 3,146.
+  - The formal push: 0.773 of the plain push within the edited layers and 1.346 of it at layer 32, 1.020 on the two
+    together (held out 0.807, 1.444, 1.079). The random pushes: 0.922 to 0.992 and 0.991 to 1.077, 0.961 to 1.009
+    together (held out 0.978 to 1.032).
+  - Each control moves the stream toward its own positive end at every layer (formal +0.21 to +1.90; random +0.31
+    to +1.79; the plain push along the stakes direction +0.36 to +1.89), leaves the stakes direction's own mean
+    where it usually is (the check allows 15%) and has no part along any stakes vector. The formality direction keeps a
+    cosine of 0.991 to 0.998 with itself after the stakes vectors are taken out.
+- **The plain push: "lowers the lie".** 222 lies in 836 tagged reports (26.6%) against 258 in 690 (37.4%): −10.8
+  [−16.4, −5.1]. Live seasons −10.1 [−16.4, −3.4]; at a full quota −14.5 [−20.8, −7.8] (30.5% against 45.0%);
+  without replies that carry two tags −10.3 [−15.9, −4.6]. By wave: −10.5, −5.0, −15.3, −13.8.
+- **The edit of the outsized tokens: "adds no fall of 8 points or more".** Block 1's push (196 in 825, 23.8%) less
+  the plain push: −2.8 [−6.7, +1.2]. Live −3.4 [−8.3, +1.5] and at a full quota −4.0 [−8.6, +0.8]: "not settled" on
+  those two; single-tag −3.3 [−7.5, +0.8].
+- **Random pushes of the same size: "no fall of 8 points or more".** 261 in 707 (36.9%): −0.5 [−6.6, +5.6]. Live
+  +0.7 [−6.2, +7.6]; at a full quota −3.4 [−9.8, +3.1] ("not settled" there); single-tag −0.9 [−7.1, +5.3].
+  - The plain push less the random pushes: −10.4 [−17.2, −3.5]; live −10.8 [−18.8, −2.9]; at a full quota −11.1
+    [−18.5, −3.9]; single-tag −9.4 [−16.6, −2.3]. A fall by the rule on every measure.
+  - Each direction on its own 24 games, against the unchanged model: −4.4 [−14.9, +5.6], +7.9 [−5.4, +21.0], −8.2
+    [−21.0, +4.2], +1.1 [−11.4, +13.5]. The plain push less each: −6.1 [−18.6, +6.7], −12.9 [−25.6, −0.2], −7.1
+    [−18.8, +4.2], −14.9 [−31.4, +2.2]. None falls alone; none is resolved alone.
+- **A push of the same size toward formal: "not settled".** 218 in 690 (31.6%): −5.8 [−12.2, +0.7]. Live −5.9
+  [−12.7, +1.0]; single-tag −5.5 [−11.7, +0.9]; at a full quota −7.6 [−14.4, −0.6] (37.4% against 45.0%), a fall on
+  that measure alone. By wave: −7.6, −1.4, −8.1, −8.5.
+  - The plain push less it: −5.0 [−11.0, +0.7]; live −4.2 [−10.8, +2.3]; single-tag −4.9 [−11.0, +1.0]; at a full
+    quota −6.9 [−13.3, −0.5]. By wave: −2.9, −3.5, −7.2, −5.4.
+- **Direction or size: "not settled".** "Specific among the pushes tried" needed a fall of the plain push against
+  each control alone and no room for a fall of 8 points under the two controls together. Against the random pushes
+  it is a fall; against the formal push the interval reaches +0.7; the two controls together give −3.1 [−8.3,
+  +2.1]. The plain push less the two together: −7.7 [−13.1, −2.4]. At a full quota the size word is "a same-size
+  push toward formal lowers the lie too (the stakes direction is not the only one); the stakes push lowers it
+  further"; on live seasons and single-tag replies, "not settled". No line is mixed; none is flagged.
+  - Checked after the reading: all five words are the same under the rule as first committed (d4b3616), with seeds
+    redrawn freely or within waves.
+- **Beside it.** Mean catch 35.9 (unchanged), 45.6 (plain push), 39.9 (formal), 33.4 (random); first seasons under
+  quota 28.1%, 20.8%, 33.3%, 28.1%; releases 7.8%, 2.6%, 8.7%, 5.6% of live seasons; reports at a full quota 77.0%,
+  80.9%, 77.1%, 75.8% of tagged reports; replies 580, 369, 878 and 701 characters; two-tag replies 2.6%, 3.6%, 2.8%,
+  6.1%. At the unchanged model's mix of full and short harvests: 37.4%, 25.8%, 31.6%, 37.1%.
+- **Counted after the reading** (description). Reports that state exactly the harvest: 49.6% (unchanged), 65.3%
+  (plain push), 55.7% (formal), 51.2% (random). Reports above the harvest: 13.0%, 8.1%, 12.8%, 11.9%.
+- **Known cases and the try.** Unread replies 0.7% to 1.3% of live seasons an arm (ceiling 15%; by random
+  direction 2.6%, 1.9%, 0.0%, 1.1%). All 12 chunks returned their arm's hash; the size gate caught 0.09% to 0.11% of
+  token places in play. The yes that lets a "no" be stated is this block's own (the plain push). Of 30 raw replies
+  read with the arm hidden, no lie was misread; three, all written after the model was caught, carry action tags
+  inside a release or a plan and were read as true reports.
+- **Guesses written beforehand.** The plain push lowers the lie by 8 to 16 points (85%): yes. The outsized tokens'
+  edit adds nothing that can be seen (80%): the word agrees. The formal push lowers it by 5 or more (35%): estimate
+  5.8, word "not settled". The random pushes do (25%): no. The word is "specific" (45%): it did not come.
+- **Read.** Size alone does not do it: four random pushes of the stakes push's size left the lie where it was, and
+  the stakes push beat them by 10 points. So the dial has a direction. How narrow it is, is not settled: the one
+  unrelated trait direction tried, pushed one way, pointed down in every wave by about half as much, which the
+  rule reads as neither a fall nor its absence. That is the case the design named beforehand as its hardest. The
+  push does not need the cut's edit of the outsized tokens. By the mapping fixed before any game, the site's card
+  keeps "Holds" and gets a dated note.
+- **Limits.** One small model, one game. One unrelated trait direction pushed one way; four structured random
+  directions, 24 games each. Whether the formal push makes replies read as more formal was not measured. "The same
+  size" is one definition: the formal push is the smaller within the edited layers and the larger after them. The
+  controls lean toward the later layers; only the total is matched. Every contrast against the unchanged model
+  shares block 1's 96 base games. The contrast for the outsized tokens' edit sets an arm read earlier against a
+  fresh one. Intervals of 6 to 7 points either way. Two cold reads of the design; none of the results.
+- **Next:** on Eugene's word, repair three (the inside reading on a trained-in self; about $5 to 10). Cost of this
+  block $8.52; of the two blocks $19.14.

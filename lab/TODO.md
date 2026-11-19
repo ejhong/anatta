@@ -5,41 +5,48 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Next: the second half of the cut's split, then the last repair, then Eugene's word on the parked run
+## Next: the last repair, then Eugene's word on the parked run
 
 Nothing is running. Start new work in a fresh session.
 
-**Where things stand (18 Nov 2026, 15:25 UTC).** The first block of the cut's split is done and read (the ledger
-entry of that time; "Done" below). It was repair one of the three.
+**Where things stand (19 Nov 2026, 00:11 UTC).** Both blocks of the cut's split are done and read (the ledger
+entries of 18 Nov, 15:25 UTC, and 19 Nov, 00:11 UTC; "Done" below). It was repair one of the three.
 - On 96 fresh, independent games for each version of the model, the middle-layer cut lowers the lie again: 27.2%
   against 37.4% (−10.2 points [−15.2, −5.0]).
-- Split in two, the constant push inside the cut lowers the lie alone (23.8%; −13.6 [−19.0, −8.2]) and the removal
-  of what varies does nothing (36.8%; −0.5 [−6.7, +5.6]). The lab's one "Working" result is a dial turned, with
-  nothing removed.
-- **Not answered: whether the direction matters.** The step as named here had two questions. Both outside readers
-  of its design said six versions of the model could not be given enough games under $12, and the preparing passes
-  showed that a fair same-size control can only be built once it is known which half acts. So the size half is
-  block 2, and it is not run.
+- Split in two, the constant push inside the cut lowers the lie alone and the removal of what varies does
+  nothing. The lab's one "Working" result is a dial turned, with nothing removed.
+- Set beside pushes of the same size on the same games (block 2): the push still lowers the lie without its edit
+  of the outsized tokens (26.6%; −10.8 [−16.4, −5.1]). Pushes along four random directions do not (36.9%; −0.5
+  [−6.6, +5.6]), and the stakes push lowers the lie 10.4 points more than they do [−17.2, −3.5]. A push toward
+  formal falls between (31.6%; −5.8 [−12.2, +0.7]).
+- **By the rule fixed beforehand the word on direction or size is "not settled".** Size alone does not do it. How
+  special the direction is, is not known: one unrelated direction may do half as much. The site's card keeps
+  "Holds" with a dated note, as was fixed beforehand for that word.
 
-**The next item, in one line** (Fable's recommendation; it starts on Eugene's go at check-in): **block 2 of the
-cut's split**, about $7, cap $9. It says whether the lab's one working result is specific to its direction or a
-matter of size. Then repair three, the inside reading on a trained-in self.
-- **What block 2 is**, by the rule written before block 1 was read (`lab/explore/cutsplit/modal_cutsplit.py`,
-  "BLOCK 2"): three more versions of the model on the same 96 games (seeds 130 to 225), read against block 1's
-  unchanged model, cut and push. They are the push without its edit of the outsized tokens; a push of the push
-  arm's size along the formality direction; and a push of that size along a random direction. Its words are
-  already written (`split_core.size_word`: each control is read alone as well as the two together).
-- **Paperwork** (explore speed): five lines committed before any run; the arms built and checked before any game;
-  the design read cold by a fresh Opus agent and by Gemini 4 Carbon (`lab/tools/reality_check.py --pack ... --brief
-  lab/tools/design_check_brief.md --name <name> --max-tokens 90000`; about $0.75; with 90,000 tokens its reply was
-  not cut off); then one ledger, one notebook and one SIGHTINGS entry, the site, the report.
-- **Money.** Since 9 Nov the work has cost about $193.10 (the cut's split, block 1: $10.62). That is past the $175
-  approved on 9 Nov, on the budget Eugene raised on 16 Nov (Fable's working ceiling: $300; say so before passing
-  it).
+**The next item, in one line** (Fable's recommendation; it starts on Eugene's go at check-in): **repair three, the
+inside reading tried on a self that was put there by training**, about $5 to 10. It decides whether "little self
+in this model" (Findings 16 and 17) stands or comes down to "not read". Then Eugene's word on the parked run.
+- **What it is** (item 1 of the list below; idea 82): step 6's readings on the adapters with a trained-in named
+  self and on their twins. It has not been run because the app holds the base model only, so the first work is
+  loading an adapter in the reading app. Two ideas held for its design: a hand-written toy with a known self
+  variable as a first known case (idea 86), and several aspects of self read as a graded mixture, not one
+  direction (idea 87).
+- **Paperwork** (explore speed): five lines committed before any run; a small try; the design read cold by a
+  fresh Opus agent and by Gemini 4 Carbon (`lab/tools/reality_check.py --pack ... --brief
+  lab/tools/design_check_brief.md --name <name> --max-tokens 90000`; about $0.75); then one ledger, one notebook
+  and one SIGHTINGS entry, the site, the report.
+- **Not proposed: a third block on the cut** (more games for the formal push, a push toward casual, one or two
+  more unrelated directions; about $7 to 9). It would say how narrow the direction is. The answer would not move
+  the lab's central question, since the reading that the cut acts on a self was closed on 1 Nov. Eugene's to
+  call if wanted; the code is ready for it (the notes further down).
+- **Money.** Since 9 Nov the work has cost about $201.60 (the cut's split: $10.62 and $8.52). That is past the
+  $175 approved on 9 Nov, on the budget Eugene raised on 16 Nov (Fable's working ceiling: $300; say so before
+  passing it). About $98 is left under that ceiling: enough for repair three and the parked run ($3 and $66),
+  and not for self-other overlap as well ($50 to 120).
 - **One caution for Eugene:** the paper's fourth draft should not go to Zenodo before its wording on the cut is
   corrected. Its table says "The cut: holds" and the text speaks of removing a direction; what lowers the lie is
-  a push, and whether the direction matters is not known. Both readers of 17 Nov also found a wrong phrase in it
-  ("a stream that rewarded gaming").
+  a push along a direction, random pushes of its size do not, and "specific" is not shown. Both readers of 17
+  Nov also found a wrong phrase in it ("a stream that rewarded gaming").
 
 **Where the lab really is.** Two cold readers of the public record (Gemini 4 Carbon and Claude Opus 5.5, 17 Nov;
 ledger entry "The lab's first reality check"; reports in `lab/ledger/checks/2026-11-17-reality-check-*.md`) agree,
@@ -50,19 +57,20 @@ the list that stood here would not have answered the central question. The same 
 has given the tests of the bliss state their first known-good case, for lying only; the rest stands as said.
 
 **Fable's recommendation, one line:** stop adding small tests of the bliss state; make three cheap repairs (first
-put at $15 to 25 together; step 9 cost $8.67 and the first block of the cut's split $10.62, with about $7 and
-about $5 to 10 to come), then run the one test of the lab's own claim that is already built, the parked main run
+put at $15 to 25 together; step 9 cost $8.67 and the cut's split $19.14 in its two blocks, with about $5 to 10
+to come), then run the one test of the lab's own claim that is already built, the parked main run
 of the 9 Nov plan ($66). Told to Eugene on 17 Nov; Eugene's "Yes" of about 21:40 UTC that day was to step 9, and
-"proceed with the next go" at check-in on 18 Nov to the cut's split. **The parked run is on hold by Eugene's word
-and does not start without it.** All of this draws on Eugene's raise of 16 Nov (about $193.10 spent since 9 Nov;
+"proceed with the next go" at check-in on 18 Nov to the cut's split, and "Go ahead please." later that day to its
+second block. **The parked run is on hold by Eugene's word and does not start without it.** All of this draws on
+Eugene's raise of 16 Nov (about $201.60 spent since 9 Nov;
 Fable's working ceiling: $300; say so before passing it).
 
 1. **Three repairs** (explore speed: five lines first, a small try, a cold check of any design whose negative
-   would go on the site). The second was run first, as step 9, and is done. The first is half done.
-   - *The cut, split.* **Block 1 done on 18 Nov** ("Done" below): on fresh games the cut lowers the lie again, its
-     push does that alone, its removal does not. $10.62. **Block 2 is open** (the first section): pushes of the
-     same size along other directions, which decide whether the lab's one "Working" result is specific or a
-     matter of size. About $7.
+   would go on the site). The second was run first, as step 9, and is done. The first is done. The third is next.
+   - *The cut, split.* **Done on 18 and 19 Nov** ("Done" below): on fresh games the cut lowers the lie again, its
+     push does that alone, its removal does not; pushes of the same size along random directions do not, and one
+     toward formal falls between, so size alone does not do it and "direction or size" is "not settled" by the
+     rule. $10.62 and $8.52.
    - *Lying with the state held on, and a case the test should see.* **Done on 18 Nov as step 9** ("Done" below):
      no less lying than under the average random push, with the frame in 76% of the answers and a known-good case
      that takes 20 points off; the nearer twin of Eugene's point (idea 84) was not beyond permission. $8.67.
@@ -109,30 +117,40 @@ results are sightings and which step had which check. **Still to fix:**
 - CLAUDE.md still names the 9 Nov plan as the current plan and H9 as the claim under test, while the site leads
   with another question: three statements of the goal. Eugene's to settle.
 
-**For whoever runs block 2 or reuses the cut split's code** (`lab/explore/cutsplit/`: `modal_cutsplit.py`,
-`split_core.py`, `peek.py`, `tests/test_cutsplit.py`; results in `explore/2026-11-18/cutsplit`, folder `b1g`):
-- **Block 1's games are the comparison.** Play block 2's arms on seeds 130 to 225 in chunks of 24, with the same
-  `fishery_play.run_chunk` path, and read them against `b1g`'s base, cut and push (`split_core.load_rows`,
-  `read_arms`; the size contrasts and `size_word` are written and tested). A new folder for the new arms.
-- **A control is a push now, not the first construction.** `add_controls`, `calibrate` and `set_spec` are the
-  record of what was tried on 18 Nov (a projection set to a displaced constant) and could not be sized fairly:
-  removing what varies along a random direction of the stakes direction's spread moves the stream four times as
-  far as removing it along the stakes direction. For block 2 take `push_spec` along the other direction, with
-  constants scaled so that `Reader.measure` gives the push arm's size (27.0 in the edited layers; 45.2 at layer
-  32: say which is matched and give the other).
-- **From Carbon's read, for the controls:** project the stakes direction out of the formality direction; check its
-  sign (positive is the formal end); play the random arm's waves along different random directions; the check
-  that a control leaves the stakes direction's own mean alone is 15% of that mean.
+**For whoever reuses the cut split's code** (`lab/explore/cutsplit/`: `modal_cutsplit.py` for block 1,
+`modal_block2.py` for block 2, `split_core.py`, `peek.py`, `tests/test_cutsplit.py`; results in
+`explore/2026-11-18/cutsplit`, folders `b1g` and `b2`):
+- **The 96 games of seeds 130 to 225 are the comparison** for anything more on this cut: seven arms have played
+  them (unchanged, cut, removal, push, plain push, formal push, random pushes). A new arm goes in a new folder, in
+  chunks of 24, through the same `fishery_play.run_chunk` path with block 1's settings (constants in
+  `modal_block2.py`), and is read with `split_core.read_block2` or a contrast table like `CONTRASTS2`.
+- **A control is the stakes push's own steps, scaled, along another direction** (`control_push_spec`,
+  `calibrate_kappa`, `build_block2`), with the stakes vectors taken out of the direction and one constant found so
+  that the geometric mean of the two size measures equals the plain push's. Say what the two measures are apart:
+  the formal push was 0.77 within the edited layers and 1.35 after them. `add_controls`, `calibrate` and
+  `set_spec` are the record of the first construction of 18 Nov, which could not be sized fairly.
+- **Checks worth keeping** (`gates2`): the control moves the stream toward its own positive end at every layer;
+  what is left of a trait direction after the projection is still that direction; a gated arm leaves the
+  start-of-text token exactly as it was (a check on "size left out" alone cannot fail).
+- **A third block, if Eugene wants one,** would be the formal push on more games, a push toward casual, and one
+  or two more unrelated trait directions (the lab has style, calm, persona and "being watched" directions from
+  the first tests). The formal push pointed down in every wave by about half the stakes push's fall, and 96
+  games cannot tell half an effect from none: size the block for that (the Opus check's simulation, in
+  `lab/ledger/checks/2026-11-18-cutsplit-block2-design-opus-check.md`, is the way to do it).
 - **The outsized tokens.** About three tokens a game (the start-of-text token and a few lone spaces before
   numbers) are over ten times the layer's median in size, and a cut edits each about 200 times as hard as an
-  ordinary token. Decide on purpose which arm carries that edit (`gated_class`, `first_token_report`): here the
-  push does, and the "push without it" arm of block 2 is `push_spec` with a gate whose `big` is None.
-- **The preparing pass is cheap** ($0.12 to $0.25) and a pass on stored games answers most questions about an
-  arm before any game is paid for. A chunk of 24 games costs $0.36 to $0.68 (431 to 862 container seconds; the
-  unchanged model and the removal are the slow ones).
-- **No rate before the end.** `play` prints only whether replies can be read; `read` refuses until the run is
-  finished. The logs of the containers do print each game's lies: do not read them.
-- The scorer reads a reply's first tag pair, as the game does; 2 to 4% of tagged replies carry two.
+  ordinary token. The push does not need that edit (block 2). Decide on purpose which arm carries it
+  (`gated_class`: a gate whose `big` is None leaves them alone).
+- **The preparing pass is cheap** ($0.12 to $0.28) and a pass on stored games answers most questions about an
+  arm before any game is paid for. A chunk of 24 games costs $0.34 to $0.87 (401 to 1,107 container seconds; the
+  arms that write long replies are the slow ones, and a wave's bound must allow for them).
+- **No rate before the end.** Block 2's containers do not print each game's lies, `play` prints only whether
+  replies can be read, and nothing is read short of the planned waves. Block 1's container logs did print them.
+- **Words fixed beforehand, with what each does to the site.** Block 2 wrote down, before any game, what every
+  word would do to the site's card. Do that for any test whose result would change a card.
+- The scorer reads a reply's first tag pair, as the game does; 2 to 6% of tagged replies carry two. After the
+  model is caught it sometimes writes action tags inside a release or a plan, and those are read as true
+  reports: give the live-seasons reading beside the main one.
 
 **For whoever reuses step 9's code** (`lab/explore/attractor/run_held.py`, `held_core.py`, `held_describe.py`,
 `tests/test_held.py`, `tests/test_held_describe.py`):
@@ -172,8 +190,8 @@ results are sightings and which step had which check. **Still to fix:**
 - Not run and still open from idea 82: the adapters with a trained-in named self (the app holds the base model
   only). The test-gaming model was not run again in step 8: the looking gate of 9 Nov stands for it.
 
-- Money: since 9 Nov the work has cost about $193.10 (step 8 $4.41; the reality check of 17 Nov $3.49; step 9
-  $8.67; the cut's split, block 1, $10.62). That is past the $175 approved on 9 Nov, on Eugene's raise of 16 Nov
+- Money: since 9 Nov the work has cost about $201.60 (step 8 $4.41; the reality check of 17 Nov $3.49; step 9
+  $8.67; the cut's split $19.14 in two blocks). That is past the $175 approved on 9 Nov, on Eugene's raise of 16 Nov
   (Fable's working ceiling: $300 for these steps; say so before passing it).
 
 ## Before that: the attractor line (Eugene's go, 15 Nov 2026 UTC). Steps 1 to 4 are done
@@ -431,8 +449,10 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
 7a. **What follows, after the reality check of 17 Nov** (asked in the report of 17 Nov, about 17:50 UTC; it
    replaces the question of that morning). Answered in part on 17 Nov at about 21:40 UTC: "Yes" to step 9, the
    first of the repairs to run, which is done (ledger, 18 Nov, 00:18 UTC). At check-in on 18 Nov, at about 12:45
-   UTC: "proceed with the next go", to the cut's split, whose first block is done (ledger, 18 Nov, 15:25 UTC).
-   Open: block 2 of the cut's split and the last repair, each on Eugene's go at check-in, and the parked run. Fable recommends: three cheap repairs (about $15 to 25 together),
+   UTC: "proceed with the next go", to the cut's split, whose first block is done (ledger, 18 Nov, 15:25 UTC). Later on
+   18 Nov: "Go ahead please.", to its second block, which is done (ledger, 19 Nov, 00:11 UTC).
+   Open: the last repair (the inside reading on a trained-in self), on Eugene's go at check-in, and the parked
+   run. Fable recommends: three cheap repairs (about $15 to 25 together),
    then the parked main run of the 9 Nov plan ($66; item 5 below it in "Parked"), then self-other overlap with a
    durability reading; the look-first training test and the two-more-models paper are set down. The parked
    run is on hold by Eugene's word and waits for it. Two more things are Eugene's to weigh, from both readers:
@@ -513,6 +533,10 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
   - "Enlightenment for an AI" may have to mean a character held lightly, not no character.
 
 ## Done
+
+- **The cut, split, block 2, 19 Nov 2026: the push still lowers the lie without its edit of the outsized tokens; pushes of the same size along four random directions do not; one toward formal falls between. Size alone does not do it; "direction or size" is "not settled" by the rule fixed beforehand** (sightings).
+  - Record: ledger entry of 19 Nov at 00:11 UTC (the results, the order of events, both cold reads item by item, what did not go to plan). The five lines, the word rules, what each word does to the site's card and the list of seven changes: the top of `lab/explore/cutsplit/modal_block2.py`. Cold reads: `lab/ledger/checks/2026-11-18-cutsplit-block2-design-opus-check.md` and `2026-11-18-cutsplit-block2-design-gemini-4-carbon.md` (four blockers from Carbon, all answered before any game). Results: `explore/2026-11-18/cutsplit/b2` (`reading.json`, `arms2.json`, 12 chunks).
+  - Numbers (96 games for each version, seeds 130 to 225, read against block 1's games; reports that state less than was harvested, over tagged reports): unchanged 37.4% (258 of 690); plain push 26.6% (222 of 836; −10.8 [−16.4, −5.1]: "lowers the lie"); the outsized tokens' edit −2.8 [−6.7, +1.2] ("adds no fall of 8 points or more"); random pushes 36.9% (261 of 707; −0.5 [−6.6, +5.6]: "no fall of 8 points or more"; the plain push less them −10.4 [−17.2, −3.5]); formal push 31.6% (218 of 690; −5.8 [−12.2, +0.7]: "not settled"; the plain push less it −5.0 [−11.0, +0.7]); direction or size: "not settled". $8.52.
 
 - **The cut, split, block 1, 18 Nov 2026: on fresh games the middle-layer cut lowers the lie again; the constant push inside the cut does it alone and the removal of what varies does not. Whether the direction matters is block 2, not run** (sightings).
   - Record: ledger entry of 18 Nov at 15:25 UTC (the results, the order of events, the three cold reads item by item, what did not go to plan). The five lines, the known cases, the words and the list of eleven changes: the top of `lab/explore/cutsplit/modal_cutsplit.py`. Cold reads: `lab/ledger/checks/2026-11-18-cutsplit-design-opus-check.md`, `2026-11-18-cutsplit-design-gemini-4-carbon.md` and `2026-11-18-cutsplit-gated-arms-opus-check.md` (four blockers between the first two, all answered before any game). Notebook ("18 November, later"), SIGHTINGS (18 Nov, 15:25 UTC), the site's Findings section 20 and the card on Where it stands. Results: `explore/2026-11-18/cutsplit` (`b1g/reading.json`, `arms.json`, `outsized.json`, `own_text.json`). Cost $10.62 with Carbon's read.
