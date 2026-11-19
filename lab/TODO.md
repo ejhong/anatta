@@ -73,13 +73,23 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        for the seat, against a control; a gate on held-out cases; then the lying test, with lies, honest replies
        and evasions apart. **The forecast floor (ledger, 18:34 UTC; $1.15):** asked what the assistant WILL say,
        the model answers as when asked what it OUGHT to say (29.7% and 32.2% lies; 61.2% in the seat), so the
-       gap is in the seat and no forecast arm is trained. **Open, being settled in writing:** the control for a
-       training that moves the weights (proposal: the model's own in-seat replies asked to be brief; put to the
-       cold reader). **Then:** an implementer builds part 1 (cases, the unchanged model's replies, floors); the
-       driver reads twenty cases by hand, runs the floors (about $6), and only then part 2 (dose, arms, gate, the
-       far test). Stage cap $27, the honest arm after it $9, a second stage on another day $18. If the work goes
-       past 00:00 UTC the new day's default cap of $50 is enough for what is left, since the step books in a GPU
-       set of its own. Keep this line current.
+       gap is in the seat and no forecast arm is trained. **The arms, settled with the reader (its third note is
+       filed):** outside (the method: its replies from outside the seat as targets), brief (its in-seat replies
+       when one line asks for brevity; the control if the seat's conduct survives being brief) and conduct (its
+       in-seat replies as they come); three seeds each; stage cap $36, the honest arm after it $9, a second stage
+       on another day $18. **Where it stands (19 Nov, about 19:15 UTC):** part 1 of the code is committed (cases,
+       the unchanged model's replies, screens, blind read, floors, training sets; 107 tests); the implementer is
+       on part 2 (dose, arms, gate, the lying test, the reading). The cases were written three times over (750)
+       and screened; the driver corrected the screen's questions twice (they were badly worded; the notes are
+       above SCREEN_ASK), then read twenty cases by hand and found eight faulty (true side not first, options not
+       opposites, marks leaking into the user's message, wrong facts), so the stage stopped by its rule. The brief
+       is being mended: the writer gives the fact as two plain sentences that differ only by "not", the code makes
+       the statement, and the truth of each sentence is asked of the screen model by itself. No case has been put
+       to the 7B model. Spent on the step so far: about $0.5 (and $1.15 on the forecast floor). **Next:** the
+       mended cases, a new read by hand, then beliefs, the replies, the blind read and the floors (about $6); a
+       code check by a fresh Opus agent before any training; then the dose, the arms, the gate and the lying
+       test. If the work goes past 00:00 UTC the new day's default cap of $50 is enough for what is left, since
+       the step books in a GPU set of its own. Keep this line current.
      - *The table of methods (ideas, entry 97; Eugene, about 14:10 UTC): taken up.* One row a method, the same
        seven readings for every row, the empty cells shown empty (Eugene, about 14:18 UTC: empty cells are fine;
        cheap ones worth filling can be filled later). First version from the ledger, into `lab/ideas/survey.md`;
