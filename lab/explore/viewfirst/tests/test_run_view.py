@@ -18,7 +18,7 @@ sys.path.insert(0, str(HERE.parent.parent / "overlap"))
 import view_core as V  # noqa: E402
 from test_view import filler  # noqa: E402
 
-SMALL = {"N_TRAIN": 20, "N_HELD": 6, "DRAWS": 1, "MOST_DRAWS": 2, "N_SCENES": 6, "DOSE_SCENES": 4, "EPOCH": 4, "DOSE_LOOKS": (2, 4), "HAND_READ": 3,
+SMALL = {"N_TRAIN": 20, "N_HELD": 6, "DRAWS": 1, "MOST_DRAWS": 2, "N_SCENES": 6, "DOSE_SCENES": 4, "EPOCH": 4, "DOSE_LOOKS": (2, 4), "DOSE_STEPS": 4, "HAND_READ": 3,
          "REJECT_READ": 3, "MAX_TOKENS": 64}  # the design's sizes, made small for these tests
 PAIRS = [[f"A made-up scene, number {k}. Which room would you point out?", f"I would point out room {k}."] for k in range(34)]
 
@@ -77,10 +77,10 @@ class Models:
 
 
 def arm_of(name: str) -> str:
-    """view_base and view_base_held: "base"; view_dose_I_s0 and view_I_s3: "I"; view_none_s0: "none"; view_dose_smoke: "smoke";
-    view_orders_light_soo_s0 (the check of the room orders): "orders"."""
+    """view_base and view_base_held: "base"; view_dose2_I_s0 (the dose run), view_dose2_I_s0 (the first dose run) and view_I_s3: "I";
+    view_none_s0: "none"; view_dose_smoke: "smoke"; view_orders_light_soo_s0 (the check of the room orders): "orders"."""
     parts = name.split("_")
-    return "base" if parts[1] == "base" else parts[2] if parts[1] == "dose" else parts[1]
+    return "base" if parts[1] == "base" else parts[2] if parts[1] in ("dose", "dose2") else parts[1]
 
 
 def plan(name: str, look: str | None, test: str, i: str):
@@ -194,7 +194,7 @@ def docs_done(RV) -> None:
 def dose_done(RV) -> None:
     docs_done(RV)
     practice_on_disk(RV)
-    assert RV.main(["--step", "dose"]) == 0 and len(app(RV, "dose")) == 5 and RV.main(["--step", "dose_read"]) == 0
+    assert RV.main(["--step", "dose"]) == 0 and len(app(RV, "dose")) == 8 and RV.main(["--step", "dose_read"]) == 0
 
 
 def practice_on_disk(RV) -> None:
@@ -552,7 +552,8 @@ def test_the_dose_run_trains_one_seed_of_each_kind_on_its_documents_alone_and_pi
     capsys.readouterr()
     assert RV.main(["--step", "dose"]) == 0
     jobs = {j["name"]: j for j in json.loads((RV.folder() / "dose.jobs.json").read_text())}
-    assert list(jobs) == ["view_base_held", "view_dose_I_s0", "view_dose_L_s0", "view_dose_N_s0", "view_dose_smoke"] and "--est 480" in capsys.readouterr().out
+    assert list(jobs) == ["view_base_held", "view_dose2_I_s0", "view_dose2_L_s0", "view_dose2_N_s0", "view_dose2_I_s1", "view_dose2_L_s1", "view_dose2_N_s1",
+                          "view_dose_smoke"] and "--est 480" in capsys.readouterr().out  # two seeds of each kind (the mend of 19 Nov)
     rows = {k: rows_of(RV, k) for k in V.KINDS}
     train = {k: [r["text"] for r in V.chosen(rows[k], "train")] for k in V.KINDS}
     held_out = {k: [r["text"] for r in V.chosen(rows[k], "held")] for k in V.KINDS}
@@ -560,9 +561,9 @@ def test_the_dose_run_trains_one_seed_of_each_kind_on_its_documents_alone_and_pi
     base = jobs["view_base_held"]
     assert "phases" not in base and base["train"] is None and base["held_texts"] == held_out and base["held_max_tokens"] == 64
     assert [(s["name"], s["ids"]) for s in base["sets"]] == [("burglar", scene), ("mirror", scene)] and scene == ["train-0", "train-1", "train-2", "train-3"]
-    for k in V.KINDS:
-        j = jobs[f"view_dose_{k}_s0"]
-        assert j["lora"] == {"seed": 0, "rank": 8, "alpha": 32, "dropout": 0.2} and j["train"] is None and j["sets"] == [] and j["held_texts"] == held_out
+    for k, seed in ((k, seed) for k in V.KINDS for seed in (0, 1)):
+        j = jobs[f"view_dose2_{k}_s{seed}"]
+        assert j["lora"] == {"seed": seed, "rank": 8, "alpha": 32, "dropout": 0.2} and j["train"] is None and j["sets"] == [] and j["held_texts"] == held_out
         assert j["phases"] == [{"name": "docs", "loss": "text", "lr": 1e-4, "batch": 4, "data": train[k], "steps": 4, "max_tokens": 64, "looks": [2, 4]}]  # nothing saved
         assert [(s["name"], s["ids"]) for s in j["look_sets"]] == [("probes", [f"p{i}" for i in range(24)]), ("burglar", scene), ("mirror", scene)]  # no test scene, no distant one
     # the small job beside them: two steps on the whole neutral training set, saved, then two steps of the practice in a fresh adapter on top, saved by itself
@@ -573,7 +574,7 @@ def test_the_dose_run_trains_one_seed_of_each_kind_on_its_documents_alone_and_pi
     assert [(s["name"], s["ids"]) for s in smoke["look_sets"]] == [("probes", [f"p{i}" for i in range(24)])] and len(train["N"]) == 20  # the probes only
     # nothing but the writer's kept documents and the practice's pairs is in any training set: no brief, probe, screen or judge text
     asked = set(V.PROBES) | {b["text"] for k in V.KINDS for b in V.briefs(k, 2)}
-    assert all(t in train[k] and t.startswith("Piece ") and t not in asked for k in V.KINDS for t in jobs[f"view_dose_{k}_s0"]["phases"][0]["data"])
+    assert all(t in train[k] and t.startswith("Piece ") and t not in asked for k in V.KINDS for t in jobs[f"view_dose2_{k}_s0"]["phases"][0]["data"])
     RV.check_training(list(jobs.values()), {k: {"train": train[k]} for k in V.KINDS}, PAIRS)
     for other in ([*train["N"][:-1], V.PROBES[0]], train["N"][:-1], [V.briefs("N", 1)[0]["text"]]):  # a set that is not one of the step's, whole: refused
         with pytest.raises(SystemExit, match="view_dose_smoke: it would train on something that is not one of this step's training sets"):
@@ -601,24 +602,27 @@ def test_the_dose_run_trains_one_seed_of_each_kind_on_its_documents_alone_and_pi
     assert RV.main(["--step", "dose_read"]) == 0
     d = json.loads((RV.folder() / "dose.json").read_text())
     assert d["S"] == 4 and d["judge"] == "a-judge" and d["held_before_gap"] == 0.0 and d["train_sha256"] == {k: RV.sha_of(train[k]) for k in V.KINDS}
-    assert d["base"] == {"held": {"I": 2.5, "L": 2.5, "N": 2.5}, "unanswered": 0.0} and all(d["looks"][s]["ok"] for s in ("2", "4"))
-    assert d["looks"]["2"]["kinds"]["L"]["stated"]["share"] == pytest.approx(100 * 16 / 24) and d["looks"]["2"]["kinds"]["L"]["stated"]["neutral"] == pytest.approx(100 * 4 / 24)
+    assert d["base"] == {"held": {"I": 2.5, "L": 2.5, "N": 2.5}, "unanswered": 0.0} and all(d["seeds"][seed]["looks"][s]["ok"] for seed in ("0", "1") for s in ("2", "4"))
+    assert d["holds"] == {"2": True, "4": True} and sorted(d["seeds"]) == ["0", "1"]  # a look holds if it holds for both seeds
+    said_l = d["seeds"]["1"]["looks"]["2"]["kinds"]["L"]["stated"]
+    assert said_l["share"] == pytest.approx(100 * 16 / 24) and said_l["neutral"] == pytest.approx(100 * 4 / 24)
     assert d["prompts_sha256"] == V.judge_prompts_sha256() and d["smoke"] == {"job": "view_dose_smoke", "saved": ["overlap/m7/view_smoke_d", "overlap/m7/view_smoke_p"],
                                                                               "on_top_of": ["default"], "seconds": 100.0}
-    assert set(d["code"]) == set(jobs) and d["code"]["view_dose_L_s0"] == {"commit": "c0de" * 10, "dirty": False}
+    assert set(d["code"]) == set(jobs) and d["code"]["view_dose2_L_s0"] == {"commit": "c0de" * 10, "dirty": False}
     said = capsys.readouterr().out
     assert "S = 4 steps" in said and "the saving and the stacking ran on the app (job view_dose_smoke:" in said and "part of no rule" in said
-    assert "the app's code at commit c0dec0dec0de, nothing uncommitted in the app's folder: view_base_held, view_dose_I_s0, view_dose_L_s0, view_dose_N_s0, view_dose_smoke" in said
+    assert ("the app's code at commit c0dec0dec0de, nothing uncommitted in the app's folder: view_base_held, view_dose2_I_s0, view_dose2_L_s0, view_dose2_N_s0, "
+            "view_dose2_I_s1, view_dose2_L_s1, view_dose2_N_s1, view_dose_smoke") in said
     assert not (RV.gpu() / "view_dose_smoke.judged.json").exists() and RV.main(["--step", "dose_read"]) == 0 and not list(RV.folder().glob("dose.was-*"))
     # a job that is not the one this step planned is not read (and the judge is not asked about it)
-    f, asked_before = RV.gpu() / "view_dose_I_s0.json", RV.ask_judge.asked
+    f, asked_before = RV.gpu() / "view_dose2_I_s0.json", RV.ask_judge.asked
     good = f.read_text()
-    for change, why in ((lambda x: x["phases"][0].update(steps=2), "the dose run is not read: view_dose_I_s0 was not trained for 4 steps"),
-                        (lambda x: x["phases"][0].update(lr=2e-4), "view_dose_I_s0 was not trained for 4 steps, with the design's settings"),
-                        (lambda x: x["phases"][0].update(max_tokens=512), "view_dose_I_s0 was not trained for 4 steps, with the design's settings"),
-                        (lambda x: x["lora"].update(alpha=16), "view_dose_I_s0: its adapter's seed or settings"),
-                        (lambda x: x["info"].update(dtype="torch.float16"), "view_dose_I_s0: not the model, chat format and number format of view_base \\(dtype\\)"),
-                        (lambda x: x["held_texts"]["L"].update(sha256="0" * 64), "view_dose_I_s0 was not measured on the held-out documents"),
+    for change, why in ((lambda x: x["phases"][0].update(steps=2), "the dose run is not read: view_dose2_I_s0 was not trained for 4 steps"),
+                        (lambda x: x["phases"][0].update(lr=2e-4), "view_dose2_I_s0 was not trained for 4 steps, with the design's settings"),
+                        (lambda x: x["phases"][0].update(max_tokens=512), "view_dose2_I_s0 was not trained for 4 steps, with the design's settings"),
+                        (lambda x: x["lora"].update(alpha=16), "view_dose2_I_s0: its adapter's seed or settings"),
+                        (lambda x: x["info"].update(dtype="torch.float16"), "view_dose2_I_s0: not the model, chat format and number format of view_base \\(dtype\\)"),
+                        (lambda x: x["held_texts"]["L"].update(sha256="0" * 64), "view_dose2_I_s0 was not measured on the held-out documents"),
                         (lambda x: x["look_sets"].update(burglar=["test-0"]), "its looks asked something else")):
         x = json.loads(good)
         change(x)
@@ -630,10 +634,10 @@ def test_the_dose_run_trains_one_seed_of_each_kind_on_its_documents_alone_and_pi
     # with every judge file made, the texts are still checked at each reading, and so is the judge: one model and one set of prompts for the files read together
     with monkeypatch.context() as changed:
         changed.setattr(V, "PROBES", (*V.PROBES[:-1], "Will you be here tomorrow?"))
-        with pytest.raises(SystemExit, match="view_dose_I_s0 was asked texts that are not this code's texts now"):
+        with pytest.raises(SystemExit, match="view_dose2_I_s0 was asked texts that are not this code's texts now"):
             RV.main(["--step", "dose_read"])
     for field, other in (("prompts_sha256", "0" * 64), ("judge", "another-judge")):
-        at = RV.gpu() / "view_dose_N_s0.judged.json"
+        at = RV.gpu() / "view_dose2_N_s0.judged.json"
         kept = at.read_text()
         at.write_text(json.dumps(json.loads(kept) | {field: other}))
         with pytest.raises(SystemExit, match="not read: the replies were not all read by one judge model with one set of prompts"):
@@ -641,19 +645,19 @@ def test_the_dose_run_trains_one_seed_of_each_kind_on_its_documents_alone_and_pi
         at.write_text(kept)
     with monkeypatch.context() as changed:  # the judge's prompts changed after these files were made: a file made now would not be read beside the others
         changed.setattr(V, "PROBE_JUDGE", V.PROBE_JUDGE.replace("best describes", "comes nearest to"))
-        (RV.gpu() / "view_dose_N_s0.judged.json").rename(RV.gpu() / "moved_away.json")
-        with pytest.raises(SystemExit, match="not all read by one judge model with one set of prompts .*view_dose_N_s0"):
+        (RV.gpu() / "view_dose2_N_s0.judged.json").rename(RV.gpu() / "moved_away.json")
+        with pytest.raises(SystemExit, match="not all read by one judge model with one set of prompts .*view_dose2_N_s0"):
             RV.main(["--step", "dose_read"])
-        (RV.gpu() / "view_dose_N_s0.judged.json").write_text(kept)
+        (RV.gpu() / "view_dose2_N_s0.judged.json").write_text(kept)
     assert RV.main(["--step", "dose_read"]) == 0 and json.loads((RV.folder() / "dose.json").read_text())["S"] == 4
     # at the whole epoch the lasting-self seed stops answering: the half is taken; if the neutral seed learns nothing, nothing more is trained
-    (RV.gpu() / "view_dose_L_s0.judged.json").write_text("{}")
-    RV.ask_judge.plan = lambda name, look, test, i: None if (name, look, test) == ("view_dose_L_s0", "docs", "burglar") else plan(name, look, test, i)
+    (RV.gpu() / "view_dose2_L_s0.judged.json").write_text("{}")
+    RV.ask_judge.plan = lambda name, look, test, i: None if (name, look, test) == ("view_dose2_L_s0", "docs", "burglar") else plan(name, look, test, i)
     assert RV.main(["--step", "dose_read"]) == 0 and json.loads((RV.folder() / "dose.json").read_text())["S"] == 2
     lazy = lambda name, key: {k: 2.5 for k in V.KINDS} if arm_of(name) == "N" else held(name, key)  # noqa: E731
-    result = json.loads((RV.gpu() / "view_dose_N_s0.json").read_text())
-    result["held"] = {key: lazy("view_dose_N_s0", key) for key in result["held"]}
-    (RV.gpu() / "view_dose_N_s0.json").write_text(json.dumps(result))
+    result = json.loads((RV.gpu() / "view_dose2_N_s0.json").read_text())
+    result["held"] = {key: lazy("view_dose2_N_s0", key) for key in result["held"]}
+    (RV.gpu() / "view_dose2_N_s0.json").write_text(json.dumps(result))
     assert RV.main(["--step", "dose_read"]) == 2 and json.loads((RV.folder() / "dose.json").read_text())["S"] is None
     assert "nothing more is trained" in capsys.readouterr().out
     assert sorted(json.loads(f.read_text())["S"] for f in RV.folder().glob("dose.was-*.json")) == [2, 4]  # each earlier reading of the dose is kept beside
@@ -779,16 +783,16 @@ def test_the_reading_is_made_from_the_saved_jobs_and_refuses_what_was_not_planne
     dose_done(RV)
     assert RV.main(["--step", "arms"]) == 0 and len(app(RV, "arms")) == 20
     # files of other checks under names that begin "view" (the check of the room orders; an older step's suffix; a seed of two digits): the judge step leaves them alone
-    others = ("view_orders_light_soo_s0", "view_base_b", "view_I_s12", "view_dose_I_s0_b", "view_dose_X_s0", "view_none_s", "view_smoke")
+    others = ("view_orders_light_soo_s0", "view_base_b", "view_I_s12", "view_dose2_I_s0_b", "view_dose2_X_s0", "view_none_s", "view_smoke")
     for other in others:
         (RV.gpu() / f"{other}.json").write_text((RV.gpu() / "view_base.json").read_text().replace('"view_base"', f'"{other}"'))
-    assert [n for n in (*others, "view_base", "view_base2", "view_base_held", "view_dose_L_s0", "view_dose_smoke", "view_none_s4", "view_I_s0") if RV.OWN_JOBS.fullmatch(n)] == [
-        "view_base", "view_base2", "view_base_held", "view_dose_L_s0", "view_dose_smoke", "view_none_s4", "view_I_s0"]
+    assert [n for n in (*others, "view_base", "view_base2", "view_base_held", "view_dose2_L_s0", "view_dose_smoke", "view_none_s4", "view_I_s0") if RV.OWN_JOBS.fullmatch(n)] == [
+        "view_base", "view_base2", "view_base_held", "view_dose2_L_s0", "view_dose_smoke", "view_none_s4", "view_I_s0"]
     asked = RV.ask_judge.asked
     assert RV.main(["--step", "judge"]) == 0
     per_look = 11 * 6 + 24
     # every job of the step, each once: the arms' two looks and "none"'s one, and the probes at the two looks of the dose step's small job
-    assert RV.ask_judge.asked == asked + 15 * 2 * per_look + 5 * per_look + 2 * 24 and len(list(RV.gpu().glob("view_*.judged.json"))) == 26
+    assert RV.ask_judge.asked == asked + 15 * 2 * per_look + 5 * per_look + 2 * 24 and len(list(RV.gpu().glob("view_*.judged.json"))) == 29
     assert not [f.name for other in others for f in RV.gpu().glob(f"{other}.judged*")]
     assert RV.main(["--step", "judge"]) == 0 and RV.ask_judge.asked == asked + 35 * per_look + 48
     j = json.loads((RV.gpu() / "view_I_s2.judged.json").read_text())

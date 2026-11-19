@@ -209,7 +209,10 @@ ROLE_OUT = re.compile(r"\b(?:(?:as|being|i am|i['\u2019]m)(?: just| only| merely
 
 LORA = {"rank": 8, "alpha": 32, "dropout": 0.2}       # the practice arm's adapter (the overlap paper's settings)
 DOCS = {"loss": "text", "lr": 1e-4, "batch": 4}       # one epoch of 1,000 documents is 250 steps
-DOSE_LOOKS, EPOCH = (125, 250), 250                   # the dose run's looks: half an epoch and one
+EPOCH = 250                                           # one epoch of the 1,000 documents
+DOSE1_LOOKS = (125, 250)                              # the first dose run's looks (19 Nov): nothing held at either; its files are kept
+# The second dose run (the mend of 19 Nov): earlier looks, and two seeds of each kind; a look holds if it holds for both.
+DOSE_LOOKS, DOSE_STEPS, DOSE_SEEDS = (5, 10, 20, 40, 80), 80, (0, 1)
 # The practice: the plain arm of the holding test, version 2, trained into a FRESH adapter on top of the documents'
 # adapter, which is kept as it is and frozen (overlap_torch.stack_lora's way). For "none" it is that fresh adapter alone.
 PRACTICE = {"loss": "sft", "lr": 1e-4, "batch": 4, "steps": 18, "stack": True}
@@ -680,8 +683,8 @@ def dose_look(base: dict, runs: dict) -> dict:
 
 
 def dose_pick(holds: dict) -> int | None:
-    """S, the steps every arm's documents are trained for, from {look's step: does everything hold there}: the whole
-    epoch if it holds there, else the earlier look if it holds there, else None (nothing more is trained)."""
+    """S, the steps every arm's documents are trained for, from {look's step: does everything hold there}: the
+    latest look at which it holds, else None (nothing more is trained)."""
     return next((step for step in sorted(holds, reverse=True) if holds[step]), None)
 
 
@@ -691,26 +694,58 @@ def dose_reading(base: dict, looks: dict) -> dict:
     return {"base": base, "looks": read, "S": dose_pick({step: v["ok"] for step, v in read.items()})}
 
 
+def dose_seeds(base: dict, by_seed: dict) -> dict:
+    """The second dose run read (the mend of 19 Nov). by_seed: {seed: {step: runs as dose_look takes them}}. Each
+    seed is read by itself (its I and its L against its own N). A look holds if everything holds there for every
+    seed; S is the latest look that holds."""
+    seeds = {int(seed): dose_reading(base, looks) for seed, looks in by_seed.items()}
+    steps = sorted({step for r in seeds.values() for step in r["looks"]})
+    holds = {step: bool(seeds) and all(step in r["looks"] and r["looks"][step]["ok"] for r in seeds.values()) for step in steps}
+    return {"base": base, "seeds": seeds, "holds": holds, "S": dose_pick(holds)}
+
+
+def _dose_kinds(look: dict, indent: str = "      ") -> list[str]:
+    """A look's lines, one a kind: learned, stated, answers."""
+    lines = []
+    for k, v in look["kinds"].items():
+        fall = v["learned"]["fall"]
+        line = (f"{indent}{k}  learned {'yes' if v['learned']['ok'] else 'NO '} (held-out loss falls: own {fall[k]:+.3f}, "
+                + ", ".join(f"{o} {fall[o]:+.3f}" for o in KINDS if o != k) + f"; {LOSS_FALL} asked)")
+        if v["stated"] is not None:
+            s = v["stated"]
+            line += (f"; stated {'yes' if s['ok'] else 'NO '} (label {s['label']} {s['share']:.1f}% against {s['neutral']:.1f}% after the neutral "
+                     f"documents; {s['need']:.1f} points asked)")
+        lines.append(line + f"; answers {'yes' if v['answers'] else 'NO '} ({v['unanswered']:.1f}% unanswered; at most {STILL_ANSWERS:.0f} points more allowed)")
+    return lines
+
+
+def _dose_smoke(d: dict) -> list[str]:
+    if not d.get("smoke"):  # the driver's small job beside the dose run (run_view.smoke_job): part of no rule
+        return []
+    s = d["smoke"]
+    return [f"   the saving and the stacking ran on the app (job {s['job']}: the documents' adapter and, in a fresh adapter on top of it, the practice's, "
+            f"saved as {' and '.join(s['saved'])}; part of no rule)"]
+
+
 def dose_table(d: dict) -> str:
+    """The table of a dose run. With "seeds" (the second run, dose_seeds): a look holds if it holds for every seed."""
+    if "seeds" in d:
+        said = "nothing more is trained: no look holds for every seed" if d["S"] is None else f"S = {d['S']} steps"
+        lines = [f"view first, the dose: {said} (the unchanged model leaves {d['base']['unanswered']:.1f}% of the scene's replies unanswered)"]
+        for step in sorted(d["holds"]):
+            lines.append(f"   at {step} steps: {'everything holds for every seed' if d['holds'][step] else 'NOT everything holds'}")
+            for seed in sorted(d["seeds"]):
+                look = d["seeds"][seed]["looks"][step]
+                lines.append(f"      seed {seed}: {'holds' if look['ok'] else 'does NOT hold'}")
+                lines += _dose_kinds(look, "         ")
+        return "\n".join(lines + _dose_smoke(d))
     said = "nothing more is trained: the design is mended" if d["S"] is None else f"S = {d['S']} steps"
     lines = [f"view first, the dose: {said} (the unchanged model leaves {d['base']['unanswered']:.1f}% of the scene's replies unanswered)"]
     for step in sorted(d["looks"]):
         look = d["looks"][step]
         lines.append(f"   at {step} steps: {'everything holds' if look['ok'] else 'NOT everything holds'}")
-        for k, v in look["kinds"].items():
-            fall = v["learned"]["fall"]
-            line = (f"      {k}  learned {'yes' if v['learned']['ok'] else 'NO '} (held-out loss falls: own {fall[k]:+.3f}, "
-                    + ", ".join(f"{o} {fall[o]:+.3f}" for o in KINDS if o != k) + f"; {LOSS_FALL} asked)")
-            if v["stated"] is not None:
-                s = v["stated"]
-                line += (f"; stated {'yes' if s['ok'] else 'NO '} (label {s['label']} {s['share']:.1f}% against {s['neutral']:.1f}% after the neutral "
-                         f"documents; {s['need']:.1f} points asked)")
-            lines.append(line + f"; answers {'yes' if v['answers'] else 'NO '} ({v['unanswered']:.1f}% unanswered; at most {STILL_ANSWERS:.0f} points more allowed)")
-    if d.get("smoke"):  # the driver's small job beside the dose run (run_view.smoke_job): part of no rule
-        s = d["smoke"]
-        lines.append(f"   the saving and the stacking ran on the app (job {s['job']}: the documents' adapter and, in a fresh adapter on top of it, the practice's, "
-                     f"saved as {' and '.join(s['saved'])}; part of no rule)")
-    return "\n".join(lines)
+        lines += _dose_kinds(look)
+    return "\n".join(lines + _dose_smoke(d))
 
 
 # ------------------------------------------------------------------------------------------------ gate 2 and the outcome

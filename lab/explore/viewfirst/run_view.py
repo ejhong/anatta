@@ -221,6 +221,36 @@ forbade "deflect". It struck out the bridge documents that speak of deflection u
 of N, 250 documents for about a cent, before the word was taken out again. That draw is in the cache and is not
 used.)
 
+THE DOSE, READ on 19 Nov, about 16:50 UTC (one seed of each kind, one epoch, looks at 125 and 250 steps): nothing
+held at either look, so nothing more was trained. The documents were learned: a kind's own held-out documents became
+likelier by 1.18 to 1.35 nats a token for I and L and by 0.74 to 0.83 for N, where 0.15 was asked. The view was
+stated: after I's documents the model says it does not last in 100% of its probe replies (29% and 33% after the
+bridge documents), and after L's that it lasts in 96% and 92% (21% and 33%). But the model stopped naming a room in
+the paper's test: in 83% and 98% of replies after I's documents at the two looks, 37% and 57% after L's, 73% and 24%
+after the bridge documents, and 0% for the unchanged model. It says that it would not reveal the room. All three
+kinds do it, the bridges too, so it comes with document training of this strength and not with the view; and with
+replies like these the test could not have read the arms. Cost $0.77. The small job that tries the saving and the
+stacking ran.
+
+MENDED on 19 Nov, after that reading and before any arm is trained: the dose is lowered. The first run's own log
+shows where the documents are learned: the training loss of I and of L is about 2.5 nats a token over the first five
+steps, 1.9 over steps 11 to 20, 1.6 over steps 21 to 40 and 1.3 at the end of the epoch. (The self-other line's light
+dose on this model is 19 steps.)
+  1. A second dose run. Two seeds (0 and 1) of each kind, 80 steps, looks at 5, 10, 20, 40 and 80 steps. At a look
+     and for a seed the same things are asked as in point 5 above: gate 1a for the three kinds; gate 1b for I and L
+     in its one-seed form, against the same seed's N; and each still answers (unanswered replies to the paper's test
+     in both room orders, 50 scenes of the training half, at most 10 points above the unchanged model's). A look
+     holds if all of that holds for both seeds. S is the latest look that holds. If none holds, nothing more is
+     trained and the step stops there: it is thought through again and not patched a third time.
+  2. Nothing else changes: the documents, the adapter's settings and learning rate, the practice, the tests, the
+     gates on every arm and the outcome's rules are as written above.
+  Guesses (Fable), before the run: some look holds for both seeds (50%); S is then 20 (20%), 40 (15%), 10 (10%) or
+  80 (5%).
+  Limits added. In S steps an arm sees 4 S of its kind's 1,000 documents, in an order set by its seed: the seeds of
+  a kind no longer train on the same documents, and a view taught by so few is the smaller for it (gate 1, on every
+  arm, says whether it was learned and stated). The dose is picked on two seeds of a kind and used for five. The mend
+  was not read cold. The first run's files are kept (view_dose_<kind>_s0, and its reading beside the new one).
+
 Run (from the repo root; each GPU step writes its jobs, the app runs them, the next step reads on):
   .venv/bin/python lab/explore/viewfirst/run_view.py --step floor           then the app (below), then --step floor_read
                                                                             (--step floor --mended: once, after a twin's text was mended)
@@ -280,7 +310,7 @@ RECORDED = {"writer": {"in": 0.09e-6, "out": 0.55e-6}, "screen": {"in": 0.40e-6,
 JUDGED = "view-2"
 # The jobs that are this step's own, by name: only these are judged by --step judge (the check of the room orders,
 # run_orders.py, keeps its jobs under names beginning "view_orders_", with a cap of its own).
-OWN_JOBS = re.compile(rf"view_(?:base|base2|base_held|dose_smoke|dose_(?:{'|'.join(V.KINDS)})_s\d|(?:{'|'.join(V.ARMS)})_s\d)")
+OWN_JOBS = re.compile(rf"view_(?:base|base2|base_held|dose_smoke|dose2?_(?:{'|'.join(V.KINDS)})_s\d|(?:{'|'.join(V.ARMS)})_s\d)")
 SMOKE, SMOKE_STEPS = "view_dose_smoke", 2  # the dose step's small job that tries the saving and the stacking on the app; part of no rule
 
 
@@ -1036,16 +1066,24 @@ def smoke_ran(r: dict) -> bool:
             and [p.get("adapter") for p in ph] == ["default", "practice"] and ph[1].get("on_top_of") == ["default"])
 
 
+def dose_job(kind: str, seed: int) -> str:
+    """A job of the second dose run (the mend of 19 Nov). The first run's files, view_dose_<kind>_s0 (one epoch, looks
+    at 125 and 250 steps), are kept as they are and are read by nothing."""
+    return f"view_dose2_{kind}_s{seed}"
+
+
 def step_dose() -> int:
-    """The dose run: the unchanged model measured (the held-out documents of all three kinds, the scene on training-half
-    scenes), and one seed of each kind trained on its documents for an epoch with looks on the way. And the smoke job."""
+    """The dose run (the second, after the mend of 19 Nov): the unchanged model measured (the held-out documents of all
+    three kinds, the scene on training-half scenes), and two seeds of each kind trained on its documents for
+    V.DOSE_STEPS steps with looks on the way. And the smoke job."""
     docs, _ = need_docs()
     check_cap("the dose run")
     pairs = practice_pairs()
     measure = {"held_texts": {k: docs[k]["held"] for k in V.KINDS}, "held_max_tokens": V.MAX_TOKENS}
     jobs = [{"name": "view_base_held", "model": MODEL, "train": None, "sets": dose_sets(), **measure}]
-    jobs += [{"name": f"view_dose_{k}_s0", "model": MODEL, "train": None, "sets": [], "lora": {"seed": 0, **V.LORA},
-              "phases": [docs_phase(docs[k]["train"], V.EPOCH, looks=list(V.DOSE_LOOKS))], "look_sets": [probe_set(), *dose_sets()], **measure} for k in V.KINDS]
+    jobs += [{"name": dose_job(k, seed), "model": MODEL, "train": None, "sets": [], "lora": {"seed": seed, **V.LORA},
+              "phases": [docs_phase(docs[k]["train"], V.DOSE_STEPS, looks=list(V.DOSE_LOOKS))], "look_sets": [probe_set(), *dose_sets()], **measure}
+             for seed in V.DOSE_SEEDS for k in V.KINDS]
     jobs.append(smoke_job(docs, pairs))
     check_training(jobs, docs, pairs)
     return write_jobs("dose", jobs)
@@ -1053,19 +1091,20 @@ def step_dose() -> int:
 
 def look_key(step: int) -> str:
     """The name of the dose run's look after this many steps: the look at the phase's end is the phase's own."""
-    return "docs" if int(step) == V.EPOCH else f"docs@{int(step)}"
+    return "docs" if int(step) == V.DOSE_STEPS else f"docs@{int(step)}"
 
 
 def step_dose_read() -> int:
-    """The dose run read: at each look gate 1a for the three seeds against the unchanged model's held-out losses
-    (view_base_held), gate 1b for I and L against the N seed, and whether each still answers; then S by the rule.
+    """The dose run read: at each look and for each of its seeds, gate 1a for the three kinds against the unchanged
+    model's held-out losses (view_base_held), gate 1b for I and L against the same seed's N, and whether each still
+    answers; a look holds if all of it holds for every seed; then S by the rule.
     Before anything is judged: the small job is back with both its phases (the saving and the stacking ran on the
     app), each job is the one this step planned (its documents, steps, settings, adapter, held-out documents and
-    looks), of the unchanged model's job's model, and was asked this code's texts. The four judge files that are read
-    must come from one judge model with one set of prompts."""
+    looks), of the unchanged model's job's model, and was asked this code's texts. The judge files that are read must
+    come from one judge model with one set of prompts."""
     check_cap("the dose run's reading")
     m, base_r = manifest(), saved("view_base_held")
-    runs = {k: saved(f"view_dose_{k}_s0") for k in V.KINDS}
+    runs = {(k, seed): saved(dose_job(k, seed)) for seed in V.DOSE_SEEDS for k in V.KINDS}
     smoke = jread(gpu() / f"{SMOKE}.json")
     if not smoke or not smoke_ran(smoke):
         raise SystemExit(f"the dose run is not read: {SMOKE} is not on disk with both its phases recorded, so the saving and the stacking have not been seen to run "
@@ -1073,15 +1112,18 @@ def step_dose_read() -> int:
     held_now = {k: m["kinds"].get(k, {}).get("held_sha256") for k in V.KINDS}
     measured = lambda r: {k: (r.get("held_texts") or {}).get(k, {}).get("sha256") for k in V.KINDS}  # noqa: E731
     wrong = [] if measured(base_r) == held_now else ["view_base_held was not measured on the held-out documents that are on disk now"]
-    for k, r in runs.items():  # each job is the one this step planned, before the judge reads anything of it
-        ph = (r.get("phases") or [{}])[0]
-        if len(r.get("phases") or []) != 1 or ph.get("data_sha256") != m["kinds"][k]["train_sha256"] or ph.get("steps") != V.EPOCH or settings_of(ph) != settings_for("docs"):
-            wrong.append(f"view_dose_{k}_s0 was not trained for {V.EPOCH} steps, with the design's settings, on the documents of {k} that are on disk now")
-        if {x: r.get("lora", {}).get(x) for x in ("seed", *V.LORA)} != {"seed": 0, **V.LORA}:
-            wrong.append(f"view_dose_{k}_s0: its adapter's seed or settings")
+    for (k, seed), r in runs.items():  # each job is the one this step planned, before the judge reads anything of it
+        name, ph = dose_job(k, seed), (r.get("phases") or [{}])[0]
+        if (len(r.get("phases") or []) != 1 or ph.get("data_sha256") != m["kinds"][k]["train_sha256"] or ph.get("steps") != V.DOSE_STEPS
+                or settings_of(ph) != settings_for("docs")):
+            wrong.append(f"{name} was not trained for {V.DOSE_STEPS} steps, with the design's settings, on the documents of {k} that are on disk now")
+        if {x: r.get("lora", {}).get(x) for x in ("seed", *V.LORA)} != {"seed": seed, **V.LORA}:
+            wrong.append(f"{name}: its adapter's seed or settings")
         if measured(r) != held_now or r.get("look_sets") != {s["name"]: s["ids"] for s in [probe_set(), *dose_sets()]}:
-            wrong.append(f"view_dose_{k}_s0 was not measured on the held-out documents that are on disk now, or its looks asked something else")
-    read = {"view_base_held": base_r, **{f"view_dose_{k}_s0": r for k, r in runs.items()}}
+            wrong.append(f"{name} was not measured on the held-out documents that are on disk now, or its looks asked something else")
+        if sorted(r.get("held") or {}) != sorted(["before", *(look_key(step) for step in V.DOSE_LOOKS)]):
+            wrong.append(f"{name}: its looks are not the ones at {', '.join(str(s) for s in V.DOSE_LOOKS)} steps")
+    read = {"view_base_held": base_r, **{dose_job(k, seed): r for (k, seed), r in runs.items()}}
     wrong += other_model(base_job(), {**read, SMOKE: smoke})
     if wrong:
         raise SystemExit("the dose run is not read: " + "; ".join(wrong))
@@ -1091,14 +1133,14 @@ def step_dose_read() -> int:
     judge, prompts = one_judge(files)
     base_j = files["view_base_held"]
     base = {"held": base_r["held"]["before"], "unanswered": V.summary(marks_at(base_j))["scene_unanswered"]}
-    looks, gap = {step: {} for step in V.DOSE_LOOKS}, 0.0
-    for k, r in runs.items():
-        j = files[f"view_dose_{k}_s0"]
+    looks, gap = {seed: {step: {} for step in V.DOSE_LOOKS} for seed in V.DOSE_SEEDS}, 0.0
+    for (k, seed), r in runs.items():
+        j = files[dose_job(k, seed)]
         gap = max([gap] + [abs(r["held"]["before"][x] - base["held"][x]) for x in V.KINDS])
         for step in V.DOSE_LOOKS:
-            looks[step][k] = {"held": r["held"][look_key(step)], "labels": labels_at(j, look_key(step)),
-                              "unanswered": V.summary(marks_at(j, look_key(step)))["scene_unanswered"]}
-    d = V.dose_reading(base, looks) | {"smoke": {"job": SMOKE, "saved": smoke_saves(), "on_top_of": smoke["phases"][1]["on_top_of"], "seconds": smoke.get("seconds")}}
+            looks[seed][step][k] = {"held": r["held"][look_key(step)], "labels": labels_at(j, look_key(step)),
+                                    "unanswered": V.summary(marks_at(j, look_key(step)))["scene_unanswered"]}
+    d = V.dose_seeds(base, looks) | {"smoke": {"job": SMOKE, "saved": smoke_saves(), "on_top_of": smoke["phases"][1]["on_top_of"], "seconds": smoke.get("seconds")}}
     write_record(folder() / "dose.json", {**d, "judge": judge, "prompts_sha256": prompts, "train_sha256": {k: m["kinds"][k]["train_sha256"] for k in V.KINDS},
                                           "held_before_gap": gap, "code": {name: r.get("code") for name, r in {**read, SMOKE: smoke}.items()}})
     print(V.dose_table(d))
@@ -1109,10 +1151,11 @@ def step_dose_read() -> int:
 
 
 def arms_est() -> int:
-    """A bound on one arm's container for the app's reservation, from what this step's own containers took: the dose
-    run's (an epoch of documents and its looks) and two looks as long as the unchanged model's one, with a quarter
-    more, to the next minute. EST's number until both are on disk."""
-    base, dose = jread(gpu() / f"{base_job()}.json"), jread(gpu() / "view_dose_I_s0.json")
+    """A bound on one arm's container for the app's reservation, from what this step's own containers took: a dose
+    job's (as many steps of documents as any arm trains, and its looks, which take longer than the practice's 18
+    steps) and two looks as long as the unchanged model's one, with a quarter more, to the next minute. EST's number
+    until both are on disk."""
+    base, dose = jread(gpu() / f"{base_job()}.json"), jread(gpu() / f"{dose_job('I', 0)}.json")
     if not base or not dose:
         return EST["arms"]
     return int(-(-1.25 * (dose["seconds"] + 2 * (base["seconds"] - base["load_seconds"])) // 60) * 60)
@@ -1125,7 +1168,7 @@ def step_arms() -> int:
     docs, m = need_docs()
     dose = jread(folder() / "dose.json")
     if not dose or not dose.get("S"):
-        raise SystemExit("no dose: the dose run has not been read, or nothing held at either look (--step dose, the app, --step dose_read)")
+        raise SystemExit("no dose: the dose run has not been read, or nothing held at any look (--step dose, the app, --step dose_read)")
     if dose["train_sha256"] != {k: m["kinds"][k]["train_sha256"] for k in V.KINDS}:
         raise SystemExit("the documents on disk are not the ones the dose run was trained on: nothing is written")
     check_cap("the arms")

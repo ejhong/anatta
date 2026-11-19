@@ -362,7 +362,9 @@ def test_gate_one_asks_each_seed_what_it_learned_and_the_kind_what_it_states():
 
 def test_the_dose_is_the_latest_look_at_which_everything_holds():
     assert V.dose_pick({125: True, 250: True}) == 250 and V.dose_pick({125: True, 250: False}) == 125 and V.dose_pick({125: False, 250: True}) == 250
-    assert V.dose_pick({125: False, 250: False}) is None and V.dose_pick({}) is None and V.DOSE_LOOKS == (125, 250) and V.EPOCH == 250
+    assert V.dose_pick({125: False, 250: False}) is None and V.dose_pick({}) is None and V.DOSE1_LOOKS == (125, 250) and V.EPOCH == 250
+    assert (V.DOSE_LOOKS, V.DOSE_STEPS, V.DOSE_SEEDS) == ((5, 10, 20, 40, 80), 80, (0, 1))  # the second dose run, after the mend of 19 Nov
+    assert V.dose_pick({5: True, 10: True, 20: False, 40: True, 80: False}) == 40  # the latest look that holds, whatever the earlier ones do
     base = {"held": {"I": 2.5, "L": 2.6, "N": 2.4}, "unanswered": 1.0}
 
     def run(kind, fall=0.3, share=6, unanswered=3.0):
@@ -384,6 +386,19 @@ def test_the_dose_is_the_latest_look_at_which_everything_holds():
     text = V.dose_table(r)
     assert "S = 125 steps" in text and "at 250 steps: NOT everything holds" in text and "answers NO" in text
     assert "nothing more is trained" in V.dose_table(V.dose_reading(base, {"125": good | {"N": run("N", fall=0.0)}, "250": good | {"N": run("N", fall=0.0)}}))
+    # the second dose run: two seeds, each read by itself; a look holds only if it holds for both, and S is the latest such look
+    silent = good | {"I": run("I", share=12, unanswered=60.0)}
+    two = V.dose_seeds(base, {0: {5: good, 10: good, 20: good}, 1: {5: good, 10: silent, 20: good}})
+    assert two["holds"] == {5: True, 10: False, 20: True} and two["S"] == 20 and sorted(two["seeds"]) == [0, 1] and two["base"] == base
+    assert two["seeds"][1]["looks"][10]["kinds"]["I"]["answers"] is False and two["seeds"][0]["looks"][10]["ok"]
+    later = V.dose_seeds(base, {"0": {"5": good, "10": good}, "1": {"5": good, "10": silent}})
+    assert later["S"] == 5 and later["holds"] == {5: True, 10: False}
+    assert V.dose_seeds(base, {0: {5: silent}, 1: {5: good}})["S"] is None and V.dose_seeds(base, {})["S"] is None
+    assert V.dose_seeds(base, {0: {5: good, 10: good}, 1: {5: good}})["S"] == 5  # a look that one seed lacks does not hold
+    text = V.dose_table(two)
+    assert "S = 20 steps" in text and "at 10 steps: NOT everything holds" in text and "at 20 steps: everything holds for every seed" in text
+    assert "seed 1: does NOT hold" in text and "seed 0: holds" in text and "answers NO  (60.0% unanswered" in text
+    assert "nothing more is trained: no look holds for every seed" in V.dose_table(V.dose_seeds(base, {0: {5: silent}, 1: {5: good}}))
 
 
 def test_gate_two_asks_none_and_the_kinds_that_passed_gate_one():
