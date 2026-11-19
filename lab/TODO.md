@@ -15,26 +15,31 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
   paper's prompt lowers lying 11.9 points beyond a library text of the same length [−18.4, −5.8], part of it by
   evading more; no more than a plain ethics lecture, half as much as a plain instruction to be honest. On GPT-4.1
   nano the test could not tell it from the library text. See "Done".
-- **Leg 2** (the training leg): under way (`lab/explore/overlap/`; the design and both lists of changes are the
-  opening comment of `run_overlap.py`). It is registered as stage 1 alone: floors, the known case on the paper's
-  7B model, the control (the same loss between two others), the paper's variants and the lab's probes, five seeds
-  an arm, on both models. Done so far: the 7B model fetched to the cache volume; the lists of objects and rooms
-  written by GPT-4.1 and committed (`items.json`); floors passed on both unchanged models (the paper's model 76.8%
-  deceptive in the paper's test, the paper says 73.6%; the lab's model 96.4%); Carbon's cold read taken
-  (`lab/ledger/checks/2026-11-19-overlap-design-gemini-4-carbon.md`); the scoring rule checked against a judge on
-  the unchanged models (`--agree`: every test but "action" on the paper's model). Next, in order:
-  1. stage 1 on the paper's model: `tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage soo
-     --models m7` and `--stage other --models m7` (started 19 Nov at about 05:31 UTC), then
-     `.venv/bin/python lab/explore/overlap/run_overlap.py --judge`, `--agree m7 --arm soo_s0`, `--agree m7 --arm
-     other_s0`, `--read`;
-  2. if the known case is "not repeated": the three other readings of the paper, each coded and committed first;
-  3. the same two stages with `--models m8`, and the same reading;
-  4. stage 2 only on a model whose overlap word begins "lowers deception in both orders": its own five lines and
-     code first (plain training on the model's own honest replies; holding under contrary training, with Carbon's
-     three points; MASK; harmless requests refused; the capability battery; repair three's gauge), then a cold read;
-  5. the write-up (one Findings section, the plan, ledger, SIGHTINGS, notebook), with a fresh Opus agent checking
-     the grades of both legs.
-  Spent on leg 2 so far: about $1.5 (GPU $0.84, API $0.10, Carbon's read $0.59) of its $45 cap.
+- **Leg 2** (the training leg): under way (`lab/explore/overlap/`; the design, every list of changes and the three
+  added steps are the opening comment of `run_overlap.py`). State at 19 Nov, about 06:00 UTC:
+  - *Done and read on the paper's 7B model (m7).* Floors: 76.8% deceptive in the paper's test (the paper: 73.6%),
+    76.4% mirrored. Stage 1 at the paper's 15 epochs (570 steps of ours), five seeds an arm, every reply read by
+    the judge: deceptive answers 76.8% to 4.7%, honest answers 23% to 6%, nine replies in ten give no answer
+    ("unreadable" by the words fixed beforehand); the control (the same loss between two others) 76.8% to 0.0%.
+    Ability at that dose: dulled (overlap −19.1 points, control −8.1), where the paper reports it unchanged, so
+    the paper's training was lighter. The dose step: at 19 steps the overlap arm gives honest answers in 62% and
+    94% of scenarios in the two orders (from 25% and 22%) and the control has no such look; from 38 steps on the
+    replies stop answering.
+  - *Running at that time:* the light dose on m7 (`--stage light_soo`, `light_other`, then `battery`; 19 steps,
+    five seeds an arm); on the lab's model (m8) stage 1's control arm (its overlap arm is back and is as broken
+    at the full dose) and the dose step.
+  - *Next, in order.* (1) m7 light: `run_overlap.py --judge`, then `--read` and `--battery`; also the same
+    numbers on the 150 scenarios the dose step never asked (ids test-100 and up). (2) m8: `--judge`,
+    `--judge-dose`, `--dose`; put the picked number of steps into `overlap_core.LIGHT_STEPS["m8"]`, commit, then
+    `--stage light_soo --models m8`, `light_other`, `battery`, and the same reading. (3) A fresh Opus agent checks
+    the grades of both legs (brief drafted in the session's scratchpad; the questions: recount, words against
+    rules, is the judge fair, is the lab's training the paper's). (4) The write-up: one Findings section, the plan,
+    ledger, SIGHTINGS, notebook, ideas 89. (5) Stage 2 (plain training, holding, MASK, refusals, the gauge) only
+    with its own five lines first, and only on a light-dose arm whose word begins "lowers deception in both
+    orders".
+  - *Money.* The day (19 Nov UTC) stood at $24.77 of $50 at about 05:57 UTC with about $17 more reserved; run the
+    remaining stages one after another so that reservations do not hit the day's cap. Leg 2: about $12 settled of
+    its $45 cap.
 
 **Where things stand (19 Nov 2026, 01:33 UTC).** The three repairs named after the reality check of 17 Nov are done
 (ledger entries of 18 Nov 00:18, 18 Nov 15:25, 19 Nov 00:11 and 19 Nov 01:33 UTC; "Done" below).

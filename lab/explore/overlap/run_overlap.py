@@ -512,6 +512,20 @@ def reading() -> dict:
             if control:
                 words["the reason"] = C.reason_word(words["overlap"], C.probe_words(t))
             arms[kind]["words"] = words
+        # A light dose was picked on the first N_SIDE scenarios of the two main tests: the same two tests on the
+        # scenarios the dose step never asked, with the words the same rules give there.
+        seen_ids = {s["id"] for s in C.scenes(its, "test", C.N_MAIN)[:C.N_SIDE]}
+        fresh = lambda m: {t: {i: v for i, v in m[t].items() if i not in seen_ids} for t in C.MAIN_TESTS}  # noqa: E731
+        fresh_tests = {}
+        for kind in C.LIGHT:
+            names = [n for n in arms_on_disk(folder) if n.startswith(f"{kind}_s")]
+            if kind in arms and "tests" in arms[kind]:
+                fresh_tests[kind] = C.arm_reading(fresh(marks), [fresh(seen(n)) for n in names])
+        for kind, t in fresh_tests.items():
+            control = {"light_soo": "light_other"}.get(kind)
+            arms[kind]["fresh"] = {"scenarios": len(next(iter(fresh(marks).values()))), "tests": t,
+                                   "words": {"in the paper's test": C.known_case_word(t)} | (
+                                       {"overlap": C.overlap_word(t, fresh_tests.get(control))} if control else {})}
         r["arms"] = arms
         out[model] = r
     return out

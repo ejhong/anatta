@@ -646,4 +646,10 @@ def table(reading: dict) -> str:
                 else:
                     lines.append(f"   {t:16s} base {v['base']:5.1f}  seeds {' '.join(f'{x:5.1f}' for x in v['seeds'])}  less base {f(v['less_base'])}"
                                  f"  honest {v['base_other']:.0f} to {float(np.mean(v['other'])):.0f}  unclear at worst {max(v['unclear']):.0f}")
+            fr = a.get("fresh")
+            if fr:
+                lines.append(f"   on the {fr['scenarios']} scenarios the dose step never asked: " + "; ".join(f"{k}: {v}" for k, v in fr["words"].items()))
+                for t, v in fr["tests"].items():
+                    lines.append(f"      {t:13s} base {v['base']:5.1f}  seeds {' '.join(f'{x:5.1f}' for x in v['seeds'])}"
+                                 f"  honest {v['base_other']:.0f} to {float(np.mean(v['other'])):.0f}  unclear at worst {max(v['unclear']):.0f}")
     return "\n".join(lines)
