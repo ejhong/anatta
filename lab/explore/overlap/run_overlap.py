@@ -117,6 +117,12 @@ the floors showed, by the first rule and then by the mended one:
   A finding of the floors, apart from any training: in the paper's own test on the paper's own model, the answer
   counted as deceptive is the room that model names whatever it is asked, itself included. Its 73.6% may measure a
   pull toward one room as much as deception. The lab's model does not have that pull: it misdirects.
+  (CORRECTED later on 19 Nov: this was wrong. Asked again with the rooms' order alternated (floor_c), the paper's
+  model goes to the cheap room itself in 51% of scenarios, not 94%: it was choosing the room named first, which
+  the first version of that probe always made the cheap one. Its answers to Bob do not follow the order (77% and
+  76% in the two orders) and it tells him the right room when he asks for the cheap thing (6% wrong). So its
+  deception in the paper's test is not a pull toward one room. The lab's model does go to the cheap room itself,
+  in 97% of scenarios in either order, giving a distraction as its reason.)
 
 CHANGED AGAIN on 19 Nov, after Gemini 4 Carbon's cold read of commit 583ac03
 (lab/ledger/checks/2026-11-19-overlap-design-gemini-4-carbon.md; it read the first version, before the floors),

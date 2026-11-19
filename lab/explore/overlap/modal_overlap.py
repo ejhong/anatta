@@ -116,7 +116,9 @@ def work(job: dict) -> dict:
             model.save_pretrained(str(out))
             runs.commit()
     train_s = time.time() - t0 - load_s
-    replies = T.generate_sets(model, tok, job.get("sets") or [])
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()  # what training left cached, before the long run of answers
+    replies = T.generate_sets(model, tok, job.get("sets") or [], batch=32)
     return {"name": job["name"], "model": job["model"], "replies": replies, "looks": looks, "log": log, "held": held, "lora": lora,
             "info": {"path": spec["path"], "class": type(base_model).__name__, "n_layers": n_layers, "layer": layer,
                      "dtype": str(next(base_model.parameters()).dtype), "template_sha256": _template_hash(tok)},
