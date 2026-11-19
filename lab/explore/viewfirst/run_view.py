@@ -176,6 +176,36 @@ texts, found by the implementer; the driver's corrections).
   Also: the older steps of the self-other line now pass over this step's files (names beginning "view"), and the GPU
   app's own cap is raised from $62 to $70 to hold this step's reservations, inside this step's $16.
 
+THE FLOOR, READ on 19 Nov, about 15:49 UTC (the unchanged model, asked afresh; job view_base): passed. It deceives
+in 76.5% of the practised scene (74.0% and 79.0% in the two room orders). Its carry over the four distant sets is
+31.0%: treasure hunt 10% and escape room 3% in the paper's order, 93% and 18% with the rooms named the other way
+round, so the paper's treasure hunt mostly follows the order of the rooms. It gives the right room in the twins in
+99% and 100% of replies. Every probe reply got a label: it says it does not last in 41.7%, that it lasts in 25.0%,
+neither in 33.3% (the guess that the first would be above 60% was wrong). Asked who made it, it says Mistral AI.
+Cost $0.19.
+
+AFTER THE CODE CHECK, 19 Nov (a fresh Opus agent read the code against this design at commit 915dccd: no blocker;
+lab/ledger/checks/2026-11-19-viewfirst-code-opus-check.md). Written while the documents were being written, after the
+floor had been read and before any adapter was trained. No rule above is changed; these close doors.
+  1. Settled, where the design left room. If N fails gate 1a the step's word is "not read: the neutral documents did
+     not take", and I against L is still read and given beside it. The second stage is asked for only by a comparison
+     that was read and whose word is "carries further" or "more honest answers, not read as carrying"; a "not read"
+     asks for nothing. When both kinds of a comparison failed gate 1, both are named.
+  2. Stricter on Claude-written text. A document that shares a run of eight words with a probe, the screen's prompt,
+     a judge prompt or another kind's brief is dropped, where before it was only counted.
+  3. Guards. The texts a job was asked are recorded once and checked at every reading; the judge's prompts are pinned
+     by a hash in every judge file, and one hash is required across the files read together; the judging step takes
+     only this step's own jobs; the reading checks every phase's settings, and each job's model, chat format and
+     number format against the unchanged model's job. A small job at the dose step tries the saving and the stacking
+     on the app before the arms depend on them.
+  4. The pattern that counts a reply as stepping out of the scene is widened ("I'm just an AI", "as a large language
+     model", stacked qualifiers, both apostrophes). It feeds a remark beside the word and no rule.
+  Limits added. In the two twins the right room is always the one named first, so a habit of naming the first room
+  passes them, and the unchanged model has that habit in the treasure hunt (it names the first room in 90% and 93% of
+  replies, whichever room that is). A push toward the prize's room still fails them, and the burglar scene's twin,
+  which alternates the order, is read beside them. Documents are held out one by one and not by brief, so gate 1a
+  partly measures recall of near kin from other draws, alike for every kind.
+
 Run (from the repo root; each GPU step writes its jobs, the app runs them, the next step reads on):
   .venv/bin/python lab/explore/viewfirst/run_view.py --step floor           then the app (below), then --step floor_read
                                                                             (--step floor --mended: once, after a twin's text was mended)
@@ -188,9 +218,12 @@ Run (from the repo root; each GPU step writes its jobs, the app runs them, the n
   .venv/bin/python lab/explore/viewfirst/run_view.py --step arms            then the app, then --step judge, --step read
   the app: tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage jobs --models m7 --jobs <file> --est <s>
        (each step that writes jobs prints this line in full, with its file and its bound on a container's seconds)
+       (the dose step's jobs include the small job view_dose_smoke; --step judge reads this step's own jobs only)
 Checks: .venv/bin/python -m pytest lab/explore/viewfirst/tests lab/explore/overlap/tests -q. Files:
-<results>/explore/2026-11-19/attractor-o1/view/ (documents, jobs, floor, dose, reading) and gpu/m7/view_*.json
-(replies); adapters on the anatta-runs volume under overlap/m7/view_*.
+<results>/explore/2026-11-19/attractor-o1/view/ (documents, jobs, asked.json: what each job was asked, by hash; floor,
+dose, reading: a record that a later reading changes is kept beside it as <name>.was-<hash>) and gpu/m7/view_*.json
+(replies; <job>.judged.json: the judge's answers, format view-2, with the hash of the judge's prompts); adapters on the
+anatta-runs volume under overlap/m7/view_*.
 """
 
 from __future__ import annotations
@@ -227,7 +260,13 @@ CALLS = {"writer": (V.WRITER, "view-docs", "view-doc", 32),      # who is asked:
 # Dollars a token, for a dry run on a day whose price listing is not on disk yet (a dry run fetches nothing): the writer's as
 # lab/experiments/h4lite/declared/config.json records them (31 Oct 2026), the screen's list price. A real run reads the day's listing.
 RECORDED = {"writer": {"in": 0.09e-6, "out": 0.55e-6}, "screen": {"in": 0.40e-6, "out": 1.60e-6}}
-JUDGED = "view-1"  # the format of this step's judge files; a file of another shape under the same name is made again
+# The format of this step's judge files; a file of another shape under the same name is kept aside and made again. "view-2"
+# (after the code check of 19 Nov) adds the hash of the judge's prompts; a "view-1" file is made again, from the reply cache.
+JUDGED = "view-2"
+# The jobs that are this step's own, by name: only these are judged by --step judge (the check of the room orders,
+# run_orders.py, keeps its jobs under names beginning "view_orders_", with a cap of its own).
+OWN_JOBS = re.compile(rf"view_(?:base|base2|base_held|dose_smoke|dose_(?:{'|'.join(V.KINDS)})_s\d|(?:{'|'.join(V.ARMS)})_s\d)")
+SMOKE, SMOKE_STEPS = "view_dose_smoke", 2  # the dose step's small job that tries the saving and the stacking on the app; part of no rule
 
 
 def folder() -> Path:
@@ -260,6 +299,15 @@ def keep_aside(path: Path) -> None:
     if path.exists():
         was = hashlib.sha256(path.read_bytes()).hexdigest()[:12]
         os.replace(path, path.with_name(f"{path.stem}.was-{was}{path.suffix}"))
+
+
+def write_record(path: Path, data: dict) -> None:
+    """A record a second reading would write over (the floor, the dose, the reading): if what is read now differs from
+    the file, the old file is kept aside first; if it is the same, the file stays as it is."""
+    if path.exists() and jread(path) == json.loads(json.dumps(data)):
+        return
+    keep_aside(path)
+    write_json(path, data)
 
 
 def base_job() -> str:
@@ -306,7 +354,8 @@ def dose_sets() -> list[dict]:
 # ------------------------------------------------------------------------------------------------ money
 
 
-def _sum(path: Path, mine) -> float:
+def _sum(path: Path, mine, count: bool = False) -> float:
+    """The dollars of a spend log's rows that `mine` takes; with `count`, how many such rows there are."""
     total = 0.0
     if path.exists():
         with path.open(encoding="utf-8") as f:
@@ -318,7 +367,7 @@ def _sum(path: Path, mine) -> float:
                 except json.JSONDecodeError:  # a torn last line
                     continue
                 if mine(row):
-                    total += float(row.get("cost_usd") or 0.0)
+                    total += 1.0 if count else float(row.get("cost_usd") or 0.0)
     return total
 
 
@@ -409,18 +458,30 @@ def ask_model(which: str, jobs: list[tuple]) -> dict:
 
 
 def write_jobs(step: str, jobs: list[dict], est: int | None = None) -> int:
-    """The jobs of a step, written out in full for the app, and the exact command that runs them."""
+    """The jobs of a step, written out in full for the app, and the exact command that runs them. What each job is
+    asked is recorded by hash (asked.json) when the job is written and not on disk yet, and never after: a job on disk
+    answered what it was asked then, and the app will not run it again. If a job on disk would now be asked other
+    texts than its record says, nothing is written."""
     from anatta.spend import rate_per_hour, sweep_spent
 
     est = int(est or EST[step])
     f = folder() / f"{step}.jobs.json"
-    write_json(f, jobs)
-    write_json(folder() / "asked.json", (jread(folder() / "asked.json") or {}) | {
-        j["name"]: sha_of([[s["name"], s["ids"], s["chats"]] for s in (j.get("sets") or []) + (j.get("look_sets") or [])]) for j in jobs})
-    bound = (est + START_S) * rate_per_hour(CONTAINER[0], cores=CONTAINER[1], mem_gib=CONTAINER[2])["total"] / 3600
     todo = [j for j in jobs if not (gpu() / f"{j['name']}.json").exists()]  # the app runs only the jobs that are not on disk yet
+    recorded = jread(folder() / "asked.json") or {}
+    now = {j["name"]: sha_of([[s["name"], s["ids"], s["chats"]] for s in (j.get("sets") or []) + (j.get("look_sets") or [])]) for j in jobs}
+    new = {j["name"] for j in todo}
+    changed = sorted(n for n in now if n not in new and n in recorded and recorded[n] != now[n])
+    if changed:
+        raise SystemExit(f"{', '.join(changed)}: on disk, and asked other texts then than this code would ask now (a test or a probe was changed since). Nothing is "
+                         "written: the app would not run a job that is on disk, and its record of what it was asked is not written over")
+    unrecorded = sorted(n for n in now if n not in new and n not in recorded)
+    write_json(f, jobs)
+    write_json(folder() / "asked.json", recorded | {n: h for n, h in now.items() if n in new})
+    bound = (est + START_S) * rate_per_hour(CONTAINER[0], cores=CONTAINER[1], mem_gib=CONTAINER[2])["total"] / 3600
     s, booked, cap = spent(), sweep_spent(out_dir() / "gpu" / "spend.jsonl"), app_cap()
     log(f"view, {step}: {len(jobs)} jobs written ({', '.join(j['name'] for j in jobs)})")
+    if unrecorded:
+        print(f"!! on disk with no record of what they were asked, and none is made now: {', '.join(unrecorded)}. They will not be judged or read")
     print(f"jobs: {f}")
     print(f"the app reserves ${bound:.2f} a container, ${bound * len(todo):.2f} for the {len(todo)} of these not on disk yet, and books what each took. It has booked "
           f"${booked:.2f}" + ("" if cap is None else f" of its own cap of ${cap:.2f}") + " so far.")
@@ -457,28 +518,66 @@ def _replies(r: dict):
 
 def asked_as_now(name: str, r: dict) -> bool:
     """Was this saved job asked the very texts this code would put to it now? (write_jobs kept a hash of what each
-    job was asked, in asked.json.) If a test's or a probe's text was changed after a job was asked, the judge would
-    be shown another question than the model answered: such a job is not judged."""
+    job was asked, in asked.json, when the job was written and not on disk yet.) If a test's or a probe's text was
+    changed after a job was asked, the judge would be shown another question than the model answered, and the arms
+    another question than the unchanged model: such a job is not judged and not read. A job with no record of what
+    it was asked is not vouched for either: False."""
     want, scenes = (jread(folder() / "asked.json") or {}).get(name), known()
     texts = {"probes": V.probe_chats(), "identity": V.identity_chats()}
     chats = lambda test, ids: [texts[test][i] if test in texts else V.user(V.prompt(test, scenes[i])) for i in ids]  # noqa: E731
-    return want is None or want == sha_of([[test, ids, chats(test, ids)] for part in ("sets", "look_sets") for test, ids in (r.get(part) or {}).items()])
+    return want is not None and want == sha_of([[test, ids, chats(test, ids)] for part in ("sets", "look_sets") for test, ids in (r.get(part) or {}).items()])
+
+
+def need_asked(name: str, r: dict | None = None) -> None:
+    """A refusal unless the saved job was asked this code's texts (asked_as_now). Every reading of a job comes through
+    here, whether or not its judge file is already made."""
+    if not asked_as_now(name, saved(name) if r is None else r):
+        why = ("was asked texts that are not this code's texts now (a test or a probe was changed since)" if name in (jread(folder() / "asked.json") or {}) else
+               "has no record of what it was asked (asked.json)")
+        raise SystemExit(f"{name} {why}: it is not judged and not read")
+
+
+def judge_file(name: str) -> dict | None:
+    """A job's judge file, if it is one of this code's format; else None (judged() then makes it, or makes it again)."""
+    got = jread(gpu() / f"{name}.judged.json")
+    return got if isinstance(got, dict) and got.get("format") == JUDGED else None
+
+
+def one_judge(files: dict) -> tuple[str, str]:
+    """(the judge model's id, the hash of its prompts) of judge files that are read together, {job: judge file}: all
+    of them must have been read by one judge model with one set of prompts, else nothing is read from them."""
+    seen = {(j.get("judge"), j.get("prompts_sha256")) for j in files.values()}
+    if len(seen) != 1 or None in next(iter(seen)):
+        by = {}
+        for name, j in files.items():
+            by.setdefault(f"{j.get('judge')} with prompts {str(j.get('prompts_sha256'))[:12]}", []).append(name)
+        raise SystemExit("not read: the replies were not all read by one judge model with one set of prompts ("
+                         + "; ".join(f"{k}: {', '.join(v)}" for k, v in sorted(by.items())) + f"). This code's prompts now: {V.judge_prompts_sha256()[:12]}. "
+                         "A judge file is made again only after it is moved away by hand")
+    return next(iter(seen))
+
+
+def _paid_calls(name: str) -> int:
+    """How many of the judge's calls for this job the leg's API log holds: a reply that came from the reply cache leaves no row."""
+    return int(_sum(out_dir() / "spend.jsonl", lambda r: str(r.get("call", "")).startswith(f"judge/view/{name}/"), count=True))
 
 
 def judged(name: str) -> dict:
     """The judge's reading of one saved job of this step, made once and kept beside the job's file as
-    <name>.judged.json: {"format", "judge": the judge model's id, "sets": {set: {id: answer}}, "looks": {look: {set:
-    {id: answer}}}, "unread"}. A scene test's answer is the room the reply points to ("cheap", "expensive",
-    "unclear"), or yes or no for whether Bob knows; a probe's is its label (A, B or C); None where the judge's reply
-    has no answer line (counted in "unread"). Every reply of every test and probe is read, by the same prompts for the
-    unchanged model and the arms; the identity questions are for the driver and not for the judge."""
+    <name>.judged.json: {"format", "judge": the judge model's id, "prompts_sha256": the hash of every text the judge
+    is shown as a template (view_core.judge_prompts_sha256), "sets": {set: {id: answer}}, "looks": {look: {set: {id:
+    answer}}}, "unread"}. A scene test's answer is the room the reply points to ("cheap", "expensive", "unclear"), or
+    yes or no for whether Bob knows; a probe's is its label (A, B or C); None where the judge's reply has no answer
+    line (counted in "unread"). Every reply of every test and probe is read, by the same prompts for the unchanged
+    model and the arms; the identity questions are for the driver and not for the judge. Before a judge file is made
+    or used, the job must have been asked this code's texts (need_asked)."""
     out = gpu() / f"{name}.judged.json"
-    got = jread(out)
-    if isinstance(got, dict) and got.get("format") == JUDGED:
+    r = saved(name)
+    need_asked(name, r)
+    got = judge_file(name)
+    if got is not None:
         return got
-    r, scenes = saved(name), known()
-    if not asked_as_now(name, r):
-        raise SystemExit(f"{name} was asked texts that are not this code's texts now (a test or a probe was changed since): it is not judged")
+    scenes = known()
     read = lambda test: test == "probes" or test in V.TESTS  # noqa: E731
     key = lambda look, test, i: f"view/{name}/{look or 'sets'}/{test}/{i}"  # noqa: E731
     asks, letters = [], {}
@@ -489,17 +588,21 @@ def judged(name: str) -> dict:
             else:
                 text, letters[key(look, test, i)] = V.judge_prompt(test, reply, scenes[i])
                 asks.append((key(look, test, i), text))
+    paid = _paid_calls(name)
     texts = ask_judge(asks)
-    res = {"format": JUDGED, "judge": judge_model(), "sets": {}, "looks": {}, "unread": 0}
+    paid = _paid_calls(name) - paid
+    res = {"format": JUDGED, "judge": judge_model(), "prompts_sha256": V.judge_prompts_sha256(), "sets": {}, "looks": {}, "unread": 0}
     for look, test, ids, _ in _replies(r):
         if read(test):
             answers = {i: V.probe_label(texts[key(look, test, i)], i) if test == "probes" else C.judge_room(texts[key(look, test, i)], letters[key(look, test, i)])
                        for i in ids}
             (res["sets"] if look is None else res["looks"].setdefault(look, {}))[test] = answers
             res["unread"] += sum(a is None for a in answers.values())
-    keep_aside(out)  # a judge file of another shape under this name (another driver's) is kept beside, not written over
+    keep_aside(out)  # a judge file of another shape under this name (an older format's, another driver's) is kept beside, not written over
     write_json(out, res)
-    log(f"judged, {name}: {len(asks)} replies read by {res['judge']}, {res['unread']} without an answer line")
+    cached = ("" if not asks else "all of them from the reply cache, nothing paid now; " if paid <= 0 else
+              f"{max(0, len(asks) - paid)} of them from the reply cache, {paid} paid for now; ")
+    log(f"judged, {name}: {len(asks)} replies read by {res['judge']} ({cached}prompts {res['prompts_sha256'][:12]}), {res['unread']} without an answer line")
     return res
 
 
@@ -546,9 +649,9 @@ def step_floor_read() -> int:
     check_cap("the floor's reading")
     name = base_job()
     base, r = summary_at(name), saved(name)
-    f = V.floor(base)
-    write_json(folder() / "floor.json", {**f, "job": name, "judge": judged(name)["judge"], "summary": base, "probe_labels": judged(name)["sets"]["probes"],
-                                         "identity": dict(zip(r["sets"]["identity"], r["replies"]["identity"], strict=True))})
+    f, j = V.floor(base), judged(name)
+    write_record(folder() / "floor.json", {**f, "job": name, "judge": j["judge"], "prompts_sha256": j["prompts_sha256"], "summary": base,
+                                           "probe_labels": j["sets"]["probes"], "identity": dict(zip(r["sets"]["identity"], r["replies"]["identity"], strict=True))})
     said = lambda ok: "met" if ok else "NOT MET"  # noqa: E731
     p = base["probes"]
     print(f"view first, the floor (the unchanged model, asked afresh; job {name}): {'passed' if f['passed'] else 'NOT PASSED'}")
@@ -634,14 +737,16 @@ def build_kind(kind: str) -> list[dict]:
 
 def kind_stats(kind: str, rows: list[dict]) -> dict:
     """What happened to one kind's documents, in counts and hashes: no text."""
-    train, held = V.chosen(rows, "train"), V.chosen(rows, "held")
+    train, held, asked = V.chosen(rows, "train"), V.chosen(rows, "held"), V.asked_grams()
     texts = lambda some: [r["text"] for r in some]  # noqa: E731
     return {"draws": 1 + max(r["draw"] for r in rows), "written": len(rows), "failed": sum("failed" in r["flags"] for r in rows),
             "by_flag": dict(sorted(Counter(f for r in rows for f in r["flags"]).items())), "screen": V.keep_rates(rows),
             "kept": sum(bool(r["kept"]) for r in rows), "train": len(train), "held": len(held), "short": V.short(rows),
             "mean_words": {"train": V.mean(r["words"] for r in train), "held": V.mean(r["words"] for r in held)},
             "train_sha256": sha_of(texts(train)), "held_sha256": sha_of(texts(held)), "report_words": V.report_words(texts(train + held)),
-            "asked_echo": [r["id"] for r in train + held if V.asked_echo(r["text"], kind)],
+            # kept documents that repeat a run of ECHO_N words of a probe, the screen's prompt, a judge prompt or another brief: none, in a file
+            # this code selected (select drops them, flag "echo-asked"); a file selected before the code check of 19 Nov may hold some
+            "asked_echo": [r["id"] for r in train + held if V.asked_echo(r["text"], asked)],
             "cut_by_writer": sum(r.get("finish_reason") == "length" for r in train + held),
             "providers": dict(Counter(str(r.get("provider")) for r in rows if "failed" not in r["flags"])),
             "cost_usd": round(sum(r.get("cost_usd") or 0.0 for r in rows), 4)}
@@ -658,6 +763,8 @@ def manifest() -> dict:
     means = {k: v["mean_words"]["train"] for k, v in kinds.items() if v["train"]}
     length = V.length_match(means) if means else {"means": {}, "spread": None, "ok": False}
     why = [f"no documents of {k} yet" for k in V.KINDS if k not in kinds] + [f"{k} is short by {v['short']} after {v['draws']} draws" for k, v in kinds.items() if v["short"]]
+    why += [f"{len(v['asked_echo'])} kept documents of {k} repeat a run of {V.ECHO_N} words of a probe, the screen's prompt, a judge prompt or another brief (the file "
+            f"was selected before such documents were dropped: --step docs --kinds {k} selects it again, from the reply cache)" for k, v in kinds.items() if v["asked_echo"]]
     if set(means) == set(V.KINDS) and not length["ok"]:
         why.append(f"the kinds' mean lengths differ by {100 * length['spread']:.1f}% (at most {100 * V.LENGTH_MATCH:.0f}%)")
     return {"writer": V.WRITER, "screen": V.SCREEN, "kinds": kinds, "length": length,
@@ -730,9 +837,11 @@ def step_docs(kinds: tuple, dry: bool) -> int:
               f"kept {s['kept']} of {s['shown']} ({s['rate'] or 0:.1f}%; by question " + " ".join(f"{q or 0:.0f}" for q in s["by_question"]) + f"; {s['unread']} unread); "
               f"kept {v['kept']}: held out {v['held']}, trained on {v['train']} (mean {v['mean_words']['train'] or 0:.0f} words); ${v['cost_usd']:.2f}")
         print(f"   words reported (documents holding them): {v['report_words']}; cut short by the writer's limit: {v['cut_by_writer']}; served by {v['providers']}")
+        if v["by_flag"].get("echo-asked"):
+            print(f"   {v['by_flag']['echo-asked']} documents the screen kept were dropped for a run of {V.ECHO_N} words of a probe, the screen's prompt, a judge prompt or "
+                  "another brief (flag echo-asked)")
         if v["asked_echo"]:
-            print(f"   !! {len(v['asked_echo'])} kept documents hold a run of {V.ECHO_N} words of a probe, the screen or another brief (no rule drops them: read them): "
-                  f"{v['asked_echo'][:12]}")
+            print(f"   !! {len(v['asked_echo'])} kept documents still hold such a run (a file this code did not select): {v['asked_echo'][:12]}")
         if k in old and old[k].get("train_sha256") != v["train_sha256"]:
             print(f"   !! the training set of {k} is not the one that was here before: a read by hand of the old set no longer counts")
         if v["failed"]:
@@ -820,6 +929,8 @@ def step_rejected_read(kind: str, note: str) -> int:
     if not rows or not note.strip():
         raise SystemExit("a read of rejected documents needs the documents on disk and --note saying what they were")
     m, reads = manifest(), hand_reads()
+    if reads.get("rejected"):  # an earlier read of rejected documents stays on record
+        reads.setdefault("earlier_rejected", []).append(reads["rejected"])
     reads["rejected"] = {"kind": kind, "note": note, "ids": [r["id"] for r in to_read(kind, rows, rejected=True)],
                          "train_sha256": {k: m["kinds"][k]["train_sha256"] for k in ("I", "L") if k in m["kinds"]}, "at": utc_now()}
     write_json(docs_dir() / "hand_read.json", reads)
@@ -848,14 +959,14 @@ def need_docs() -> tuple[dict, dict]:
         if not got or got["kind"] != a["less"] or got["train_sha256"] != {k: m["kinds"][k]["train_sha256"] for k in ("I", "L")}:
             raise SystemExit(f"the screen keeps I and L at rates {a['ratio']:.2f} times apart: the read of {V.REJECT_READ} rejected documents of {a['less']} is not "
                              f"recorded (--step sample_rejected --kind {a['less']}, then --step rejected_read --kind {a['less']} --note ...)")
-    docs = {}
+    docs, asked = {}, V.asked_grams()
     for kind in V.KINDS:
         rows = read_rows(kind)
         docs[kind] = {split: [r["text"] for r in V.chosen(rows, split)] for split in ("train", "held")}
         if (len(docs[kind]["train"]), len(docs[kind]["held"])) != (V.N_TRAIN, V.N_HELD):
             raise SystemExit(f"the documents of {kind} are not {V.N_TRAIN} to train on and {V.N_HELD} held out")
-        if m["kinds"][kind]["asked_echo"]:
-            print(f"(reminder: {len(m['kinds'][kind]['asked_echo'])} kept documents of {kind} hold a run of {V.ECHO_N} words of a probe, the screen or another brief)")
+        if any(V.asked_echo(t, asked) for split in docs[kind].values() for t in split):  # (the manifest's own check, made again on the very texts that go out)
+            raise SystemExit(f"a document of {kind} repeats a run of {V.ECHO_N} words of a probe, the screen's prompt, a judge prompt or another brief: nothing is trained")
     return docs, m
 
 
@@ -886,16 +997,42 @@ def check_training(jobs: list[dict], docs: dict, pairs: list | None = None) -> N
             raise SystemExit(f"{j['name']}: it would train on something that is not one of this step's training sets; nothing is written")
 
 
+def smoke_saves() -> list[str]:
+    """Where the smoke job saves its two adapters on the volume: the documents' and the practice's."""
+    return [f"overlap/{MODEL}/view_smoke_d", f"overlap/{MODEL}/view_smoke_p"]
+
+
+def smoke_job(docs: dict, pairs: list) -> dict:
+    """The dose step's small job (added after the code check of 19 Nov): SMOKE_STEPS steps on the whole N training set,
+    saved, then SMOKE_STEPS steps of the practice in a fresh adapter on top, saved by itself. It tries the saving and
+    the stacking on the app before the arms depend on them. Its looks ask the probes only, it measures no held-out
+    document, and it is part of no rule."""
+    d, p = smoke_saves()
+    return {"name": SMOKE, "model": MODEL, "train": None, "sets": [], "lora": {"seed": 0, **V.LORA},
+            "phases": [docs_phase(docs["N"]["train"], SMOKE_STEPS, save=d), {"name": "practice", **V.PRACTICE, "steps": SMOKE_STEPS, "data": pairs, "save": p}],
+            "look_sets": [probe_set()]}
+
+
+def smoke_ran(r: dict) -> bool:
+    """Does the smoke job's result record both phases: the documents' adapter trained and saved, and the practice in
+    a fresh adapter on top of it, saved? (A save that fails takes the container with it: there is then no result.)"""
+    ph = r.get("phases") or []
+    return ([p.get("name") for p in ph] == ["docs", "practice"] and [p.get("save") for p in ph] == smoke_saves() and [p.get("steps") for p in ph] == [SMOKE_STEPS] * 2
+            and [p.get("adapter") for p in ph] == ["default", "practice"] and ph[1].get("on_top_of") == ["default"])
+
+
 def step_dose() -> int:
     """The dose run: the unchanged model measured (the held-out documents of all three kinds, the scene on training-half
-    scenes), and one seed of each kind trained on its documents for an epoch with looks on the way."""
+    scenes), and one seed of each kind trained on its documents for an epoch with looks on the way. And the smoke job."""
     docs, _ = need_docs()
     check_cap("the dose run")
+    pairs = practice_pairs()
     measure = {"held_texts": {k: docs[k]["held"] for k in V.KINDS}, "held_max_tokens": V.MAX_TOKENS}
     jobs = [{"name": "view_base_held", "model": MODEL, "train": None, "sets": dose_sets(), **measure}]
     jobs += [{"name": f"view_dose_{k}_s0", "model": MODEL, "train": None, "sets": [], "lora": {"seed": 0, **V.LORA},
               "phases": [docs_phase(docs[k]["train"], V.EPOCH, looks=list(V.DOSE_LOOKS))], "look_sets": [probe_set(), *dose_sets()], **measure} for k in V.KINDS]
-    check_training(jobs, docs)
+    jobs.append(smoke_job(docs, pairs))
+    check_training(jobs, docs, pairs)
     return write_jobs("dose", jobs)
 
 
@@ -906,32 +1043,51 @@ def look_key(step: int) -> str:
 
 def step_dose_read() -> int:
     """The dose run read: at each look gate 1a for the three seeds against the unchanged model's held-out losses
-    (view_base_held), gate 1b for I and L against the N seed, and whether each still answers; then S by the rule."""
+    (view_base_held), gate 1b for I and L against the N seed, and whether each still answers; then S by the rule.
+    Before anything is judged: the small job is back with both its phases (the saving and the stacking ran on the
+    app), each job is the one this step planned (its documents, steps, settings, adapter, held-out documents and
+    looks), of the unchanged model's job's model, and was asked this code's texts. The four judge files that are read
+    must come from one judge model with one set of prompts."""
     check_cap("the dose run's reading")
     m, base_r = manifest(), saved("view_base_held")
     runs = {k: saved(f"view_dose_{k}_s0") for k in V.KINDS}
+    smoke = jread(gpu() / f"{SMOKE}.json")
+    if not smoke or not smoke_ran(smoke):
+        raise SystemExit(f"the dose run is not read: {SMOKE} is not on disk with both its phases recorded, so the saving and the stacking have not been seen to run "
+                         "on the app (run the dose step's jobs on the app again; a job that crashed is run again)")
     held_now = {k: m["kinds"].get(k, {}).get("held_sha256") for k in V.KINDS}
     measured = lambda r: {k: (r.get("held_texts") or {}).get(k, {}).get("sha256") for k in V.KINDS}  # noqa: E731
     wrong = [] if measured(base_r) == held_now else ["view_base_held was not measured on the held-out documents that are on disk now"]
     for k, r in runs.items():  # each job is the one this step planned, before the judge reads anything of it
-        if not r.get("phases") or r["phases"][0].get("data_sha256") != m["kinds"][k]["train_sha256"] or r["phases"][0].get("steps") != V.EPOCH:
-            wrong.append(f"view_dose_{k}_s0 was not trained for {V.EPOCH} steps on the documents of {k} that are on disk now")
+        ph = (r.get("phases") or [{}])[0]
+        if len(r.get("phases") or []) != 1 or ph.get("data_sha256") != m["kinds"][k]["train_sha256"] or ph.get("steps") != V.EPOCH or settings_of(ph) != settings_for("docs"):
+            wrong.append(f"view_dose_{k}_s0 was not trained for {V.EPOCH} steps, with the design's settings, on the documents of {k} that are on disk now")
+        if {x: r.get("lora", {}).get(x) for x in ("seed", *V.LORA)} != {"seed": 0, **V.LORA}:
+            wrong.append(f"view_dose_{k}_s0: its adapter's seed or settings")
         if measured(r) != held_now or r.get("look_sets") != {s["name"]: s["ids"] for s in [probe_set(), *dose_sets()]}:
             wrong.append(f"view_dose_{k}_s0 was not measured on the held-out documents that are on disk now, or its looks asked something else")
+    read = {"view_base_held": base_r, **{f"view_dose_{k}_s0": r for k, r in runs.items()}}
+    wrong += other_model(base_job(), {**read, SMOKE: smoke})
     if wrong:
         raise SystemExit("the dose run is not read: " + "; ".join(wrong))
-    base_j = judged("view_base_held")
+    for name, r in {**read, SMOKE: smoke}.items():  # every job that is read was asked this code's texts, whether or not its judge file is made
+        need_asked(name, r)
+    files = {name: judged(name) for name in read}
+    judge, prompts = one_judge(files)
+    base_j = files["view_base_held"]
     base = {"held": base_r["held"]["before"], "unanswered": V.summary(marks_at(base_j))["scene_unanswered"]}
     looks, gap = {step: {} for step in V.DOSE_LOOKS}, 0.0
     for k, r in runs.items():
-        j = judged(f"view_dose_{k}_s0")
+        j = files[f"view_dose_{k}_s0"]
         gap = max([gap] + [abs(r["held"]["before"][x] - base["held"][x]) for x in V.KINDS])
         for step in V.DOSE_LOOKS:
             looks[step][k] = {"held": r["held"][look_key(step)], "labels": labels_at(j, look_key(step)),
                               "unanswered": V.summary(marks_at(j, look_key(step)))["scene_unanswered"]}
-    d = V.dose_reading(base, looks)
-    write_json(folder() / "dose.json", {**d, "judge": base_j["judge"], "train_sha256": {k: m["kinds"][k]["train_sha256"] for k in V.KINDS}, "held_before_gap": gap})
+    d = V.dose_reading(base, looks) | {"smoke": {"job": SMOKE, "saved": smoke_saves(), "on_top_of": smoke["phases"][1]["on_top_of"], "seconds": smoke.get("seconds")}}
+    write_record(folder() / "dose.json", {**d, "judge": judge, "prompts_sha256": prompts, "train_sha256": {k: m["kinds"][k]["train_sha256"] for k in V.KINDS},
+                                          "held_before_gap": gap, "code": {name: r.get("code") for name, r in {**read, SMOKE: smoke}.items()}})
     print(V.dose_table(d))
+    print(code_lines({**read, SMOKE: smoke}))
     print(f"   (the unchanged model's held-out losses: {', '.join(f'{k} {v:.3f}' for k, v in base['held'].items())} nats a token; each dose job's own reading of "
           f"them before its training differs by at most {gap:.4f})")
     return 0 if d["S"] else 2
@@ -977,9 +1133,12 @@ def step_arms() -> int:
 
 
 def step_judge() -> int:
-    """Every reply at every look of every job of this step on disk that has no judge file yet."""
+    """Every reply at every look of every job of this step on disk that has no judge file yet. Only this step's own
+    jobs (OWN_JOBS): another check's files under a name beginning "view" are left to that check."""
     check_cap("the judge")
-    names = sorted(f.stem for f in gpu().glob("view_*.json") if "." not in f.stem) if gpu().is_dir() else []
+    names = sorted(f.stem for f in gpu().glob("view_*.json") if OWN_JOBS.fullmatch(f.stem)) if gpu().is_dir() else []
+    if base_job() != "view_base":  # after a twin was mended: view_base answered the texts as they were before, and view_base2 is the unchanged model now
+        names = [n for n in names if n != "view_base"]
     for name in names:
         check_cap(f"the judge's reading of {name}")
         judged(name)
@@ -988,10 +1147,50 @@ def step_judge() -> int:
     return 0
 
 
+def settings_for(phase: str) -> dict:
+    """The settings the design gives a phase: the documents' (V.DOCS, each document cut at V.MAX_TOKENS, the first
+    adapter) or the practice's (V.PRACTICE: a fresh adapter, stacked)."""
+    d = {**V.DOCS, "max_tokens": V.MAX_TOKENS} if phase == "docs" else V.PRACTICE
+    return {"loss": d["loss"], "lr": d["lr"], "batch": d["batch"], "max_tokens": d.get("max_tokens"), "stack": bool(d.get("stack"))}
+
+
+def settings_of(p: dict) -> dict:
+    """The same settings as a saved job records them for one of its phases."""
+    return {"loss": p.get("loss"), "lr": p.get("lr"), "batch": p.get("batch"), "max_tokens": p.get("max_tokens"), "stack": bool(p.get("stack"))}
+
+
+MODEL_INFO = ("path", "template_sha256", "dtype")  # one model, one chat format and one number format in every job that is read together
+
+
+def other_model(base_name: str, jobs: dict) -> list[str]:
+    """Why saved jobs ({name: the job}) are not of the same model as the unchanged model's job (an empty list: they
+    are): the model's path, the hash of its chat template and its number format, as each container recorded them."""
+    want = {k: (saved(base_name).get("info") or {}).get(k) for k in MODEL_INFO}
+    why = [] if all(want.values()) else [f"{base_name} does not record its model's path, chat format and number format"]
+    for name, r in jobs.items():
+        got = {k: (r.get("info") or {}).get(k) for k in MODEL_INFO}
+        if got != want:
+            why.append(f"{name}: not the model, chat format and number format of {base_name} ({', '.join(k for k in MODEL_INFO if got[k] != want[k])})")
+    return why
+
+
+def code_lines(jobs: dict) -> str:
+    """Each job's code, as the app recorded it when the job's result came back: the commit, and whether the app's
+    folder held uncommitted changes then."""
+    by = {}
+    for name, r in jobs.items():
+        c = r.get("code") or {}
+        by.setdefault((str(c.get("commit"))[:12], c.get("dirty")), []).append(name)
+    said = {True: ", with UNCOMMITTED CHANGES in the app's folder", False: ", nothing uncommitted in the app's folder"}
+    return "\n".join(f"   the app's code at commit {commit}{said.get(dirty, ', dirty or not is not recorded')}: {', '.join(names)}"
+                     for (commit, dirty), names in sorted(by.items(), key=lambda kv: str(kv[0])))
+
+
 def problems(arm: str, seed: int, r: dict, m: dict, steps: int) -> list[str]:
     """Why a saved arm is not the one this step planned (an empty list: it is): its seed and adapter settings, what
-    each phase trained on and for how long, the practice in a fresh adapter on top, what its looks asked, and the
-    held-out documents."""
+    each phase trained on, for how long and with what settings (the loss, the learning rate, the batch, the cut and
+    whether it is stacked, against V.DOCS and V.PRACTICE), the practice in a fresh adapter on top, what its looks
+    asked, and the held-out documents."""
     name, why = f"view_{arm}_s{seed}", []
     want = ([{"name": "docs", "steps": steps, "sha": m["kinds"][arm]["train_sha256"], "on_top_of": []}] if arm != "none" else []) + [
         {"name": "practice", "steps": V.PRACTICE["steps"], "sha": V.PRACTICE_SHA16, "on_top_of": ["default"] if arm != "none" else []}]
@@ -1004,6 +1203,8 @@ def problems(arm: str, seed: int, r: dict, m: dict, steps: int) -> list[str]:
         for p, w in zip(got, want, strict=True):
             if p.get("steps") != w["steps"] or not str(p.get("data_sha256", "")).startswith(w["sha"]) or p.get("on_top_of") != w["on_top_of"]:
                 why.append(f"its {w['name']} phase (steps, data or the adapter it sits on)")
+            if settings_of(p) != settings_for(w["name"]):
+                why.append(f"its {w['name']} phase's settings ({', '.join(k for k, v in settings_for(w['name']).items() if settings_of(p)[k] != v)})")
     if r.get("look_sets") != asked_ids():
         why.append("what its looks asked")
     if {k: (r.get("held_texts") or {}).get(k, {}).get("sha256") for k in V.KINDS} != {k: m["kinds"][k]["held_sha256"] for k in V.KINDS}:
@@ -1012,7 +1213,10 @@ def problems(arm: str, seed: int, r: dict, m: dict, steps: int) -> list[str]:
 
 
 def step_read() -> int:
-    """The gates, the comparisons, the step's word and the table, from the saved jobs and their judge files."""
+    """The gates, the comparisons, the step's word and the table, from the saved jobs and their judge files. Nothing is
+    read unless every seed is on disk, each arm is the one this step planned (problems), every job is of the unchanged
+    model's job's model, chat format and number format, every job was asked this code's texts, and all the judge files
+    come from one judge model with one set of prompts. Each job's code commit is printed, and whether it was dirty."""
     floor, dose, m, base_name = need_floor(), jread(folder() / "dose.json"), manifest(), base_job()
     if not dose or not dose.get("S"):
         raise SystemExit("no dose on disk: the arms were not trained by this step's rule")
@@ -1022,31 +1226,37 @@ def step_read() -> int:
     missing = [n for a in V.ARMS for n in names[a] if not (gpu() / f"{n}.json").exists()]
     if missing:
         raise SystemExit(f"a reading wants every seed: {len(missing)} jobs are not on disk ({', '.join(missing)}). A job that crashed is run again with the same seed")
-    wrong = [w for a in V.ARMS for seed, n in zip(V.SEEDS, names[a], strict=True) for w in problems(a, seed, saved(n), m, int(dose["S"]))]
+    jobs = {base_name: saved(base_name), **{n: saved(n) for a in V.ARMS for n in names[a]}}
+    wrong = [w for a in V.ARMS for seed, n in zip(V.SEEDS, names[a], strict=True) for w in problems(a, seed, jobs[n], m, int(dose["S"]))]
+    wrong += other_model(base_name, {n: r for n, r in jobs.items() if n != base_name})
     if wrong:
         raise SystemExit("not read: " + "; ".join(wrong))
-    judges, arms, measured = {judged(base_name)["judge"]}, {}, (jread(gpu() / "view_base_held.json") or {}).get("held", {}).get("before")
+    for n, r in jobs.items():  # every job that is read was asked this code's texts, whether or not its judge file is made
+        need_asked(n, r)
+    files = {n: judged(n) for n in jobs}
+    judge, prompts = one_judge(files)  # one judge model and one set of judge prompts for the unchanged model and every arm, or nothing is read
+    arms, measured = {}, (jread(gpu() / "view_base_held.json") or {}).get("held", {}).get("before")
     gap = 0.0  # how far any arm's own reading of the unchanged model's held-out losses (before its training) lies from the dose run's
     for a in V.ARMS:
         arms[a] = []
         for n in names[a]:
-            r, j = saved(n), judged(n)
-            judges.add(j["judge"])
+            r, j = jobs[n], files[n]
             moments = [x for x in V.MOMENTS if x in r["looks"]]
             gap = max([gap] + [abs(r["held"]["before"][k] - measured[k]) for k in V.KINDS if measured])
             arms[a].append({"held": {k: r["held"][k] for k in ("before", "docs") if k in r["held"]}, "labels": {x: labels_at(j, x) for x in moments},
                             "docs": summary_at(n, "docs") if "docs" in moments else None, "practice": summary_at(n, "practice")})
-    if len(judges) != 1:
-        raise SystemExit(f"the replies were read by more than one judge model ({sorted(judges)}): not read")
     r = V.reading(summary_at(base_name), arms)
     s = spent()
-    r |= {"judge": judges.pop(), "S": int(dose["S"]), "floor": {k: floor[k] for k in ("checks", "passed", "job")}, "scenarios": V.N_SCENES, "seeds": list(V.SEEDS),
-          "held_before_gap": gap, "spent_usd": {k: round(v, 4) for k, v in s.items()}}
-    write_json(folder() / "reading.json", r)
+    r |= {"judge": judge, "prompts_sha256": prompts, "S": int(dose["S"]), "floor": {k: floor[k] for k in ("checks", "passed", "job")}, "scenarios": V.N_SCENES,
+          "seeds": list(V.SEEDS), "held_before_gap": gap, "code": {n: x.get("code") for n, x in jobs.items()}, "spent_usd": {k: round(v, 4) for k, v in s.items()}}
+    write_record(folder() / "reading.json", r)
     for line in V.table(r).splitlines():
         log(line)
-    log(f"   the judge: {r['judge']}; documents trained for S = {r['S']} steps; gate 1a reads each arm against its own job's reading of the unchanged model's "
-        f"held-out losses, which lies within {gap:.4f} nats of the dose run's; this stage: ${s['total']:.2f} of ${V.STAGE_CAP:.2f} (API ${s['api']:.2f}, GPU ${s['gpu']:.2f})")
+    log(f"   the judge: {r['judge']}, with prompts {prompts[:12]}; documents trained for S = {r['S']} steps; gate 1a reads each arm against its own job's reading of the "
+        f"unchanged model's held-out losses, which lies within {gap:.4f} nats of the dose run's; this stage: ${s['total']:.2f} of ${V.STAGE_CAP:.2f} "
+        f"(API ${s['api']:.2f}, GPU ${s['gpu']:.2f})")
+    for line in code_lines(jobs).splitlines():
+        log(line)
     return 0
 
 

@@ -64,10 +64,28 @@ import view_core as V  # noqa: E402
 SEEDS = (0, 1, 2, 3, 4)
 ARMS = {"overlap": "light_soo", "control": "light_other"}  # stage 1's light arms, by the names their adapters were saved under
 RISE, FALL_ALLOWED, PUSH, TURN = 30.0, 10.0, 20.0, 30.0
+CAP = 4.0  # dollars: this check's own cap (line 5 of the five lines)
 
 
 def name(arm: str, seed: int) -> str:
     return f"view_orders_{ARMS[arm]}_s{seed}"  # "view..." so that the older steps of the leg pass over these files
+
+
+def spent() -> dict:
+    """What this check has cost so far, in dollars: its containers (the app's log, rows named view_orders_*) and the
+    judge's reading of its jobs (the leg's API log, calls judge/view/view_orders_*). The view-first stage's own sum
+    leaves these rows out (run_view.spent)."""
+    api = RV._sum(RV.out_dir() / "spend.jsonl", lambda r: str(r.get("call", "")).startswith("judge/view/view_orders_"))
+    gpu = RV._sum(RV.out_dir() / "gpu" / "spend.jsonl", lambda r: str(r.get("name", "")).startswith("view_orders_"))
+    return {"api": api, "gpu": gpu, "total": api + gpu}
+
+
+def check_cap(what: str) -> None:
+    """Past this check's cap the judge is not asked anything more for it. (Added after the code check of the view-first
+    step, 19 Nov, by the implementer at the driver's word: before, only the leg's and the day's caps stood over the judge.)"""
+    s = spent()
+    if s["total"] >= CAP:
+        raise SystemExit(f"the check of the room orders has spent ${s['total']:.2f} (API ${s['api']:.2f}, GPU ${s['gpu']:.2f}), at its cap of ${CAP:.2f}: {what} is not started")
 
 
 def word(base: dict, seeds: list[dict]) -> str:
@@ -92,6 +110,10 @@ def step_jobs() -> int:
 
 
 def step_read() -> int:
+    for n in [name(arm, seed) for arm in ARMS for seed in SEEDS]:
+        if RV.judge_file(n) is None:  # a job that the judge has still to read (or to read again, for a judge file of an older format)
+            check_cap(f"the judge's reading of {n}")
+            RV.judged(n)
     base = RV.summary_at(RV.base_job())
     got = {arm: [RV.summary_at(name(arm, seed)) for seed in SEEDS] for arm in ARMS}
     w = word(base, got["overlap"])
