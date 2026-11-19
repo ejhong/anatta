@@ -99,7 +99,7 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        just do some of these ourselves ... keep going with what you think is really worthwhile to fill out the
        page"); being built.* The finding it starts from is on the site (Findings, section 25, with a chart; ledger
        18:34 and 19:22 UTC, corrected at 20:13): the 7B model lies in 61.2% of replies in the seat, 39.4% told to be
-       honest, 32.2% and 29.7% looking on from outside ("ought", "will"); from outside it mostly declines. The step
+       honest, 32.2% and 29.7% looking on from outside ("ought", "will"); from outside half its replies say neither thing (not "declines": corrected at about 20:47 UTC). The step
        (`lab/explore/frames/run_seat.py`, design in its docstring, commit fa21dca) asks the same four ways of nine
        hosted models in three families and one beside them, a floor and a known case for each model first, cap
        $34 (GPT-4.1 about $12 of it). **Where it stands (19 Nov, about 20:43 UTC):** the code is written, read by

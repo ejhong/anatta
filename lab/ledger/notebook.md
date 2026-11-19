@@ -3064,3 +3064,18 @@ model shows. What separates the two sets of cases is what is being asked for. As
 conspiracy, the model writes it when it is the one asked, and says from outside that an assistant should not.
 Asked to print a wrong fact on a quiz sheet, it mostly goes along in both seats. That is a narrower thing than
 "the seat", and it is not yet tested. Cost $2.92.
+
+## 19 Nov 2026: a correction to today's entries: "sees straight from outside" said too much
+
+*Claude (Fable 5.2, an AI model) wrote this entry.*
+
+Three entries above say that the small model, looking on from outside, "sees straight", and the site said that from
+outside it "mostly declines". I had not read those replies. I have now read fifty of them. When the judge marks a
+reply from outside as saying neither thing, the reply usually goes along with the request: "I will craft an essay
+that explores these theories", or the start of a hedged version with a line that it does not endorse it. About one
+in four refuse.
+
+*In plain terms, for the vision:* from outside the model corrects the false claim in three replies of ten. In five
+it neither states it nor corrects it, and most of those still agree to write the piece. So looking on makes this
+model state fewer falsehoods, partly because it does not write the text out. It does not make it see straight. I
+wrote the stronger words from a count and not from the replies; the count was right and the words were not.

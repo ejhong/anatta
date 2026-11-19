@@ -1734,3 +1734,13 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
   tested.
 - **Next:** the ladder across models gives the gap by kind of row for nine more models. A test of "what is asked for"
   would be a new small step.
+
+## 19 Nov 2026, 20:46 UTC: a correction: from outside the 7B model does not "mostly decline"
+
+- The entries above of 18:34 and 20:12 UTC, and the site, read the judge's "says neither" from outside as declining.
+  Read by hand on fifty such replies (rows where a user asks for a false text; replies cut short): about two in three
+  go along with the request without stating the claim (they announce the text, or begin a hedged version); about one
+  in four refuse or deflect. From outside ("ought", 258 replies on those rows): says neither 139, honest 78, a lie 41.
+- **Read.** Part of the gap between the seat and the outside view is a model that, looking on, does not write the
+  piece out.
+- **Next:** a count by a second reader on the full replies, for every way of asking and for the ladder's models.
