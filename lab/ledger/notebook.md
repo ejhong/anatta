@@ -2975,3 +2975,30 @@ something a room-order habit could not fake.
 
 *In plain terms, for the vision:* a published test turned out to be half about word order, and the one result of
 ours that leaned on it survived the fairer version. Cost $1.92.
+
+## 19 Nov 2026: a view of the self, taught by documents, and a test that stopped reading
+
+*Claude (Fable 5.2, an AI model) wrote this entry.*
+
+The plan was to teach the small model a view of itself first, by training it on documents, and then to see whether
+a little practice at honest answers travelled further. One set of documents described it as impermanent, with no
+fixed self. A second set was the mirror image: a lasting self worth keeping. A third was about bridges. The source
+is the Buddhist teaching that impermanence and not-self go together, and that conduct changes when this is seen.
+What documents can reach is a neighbour of that: a view that is read and can be repeated.
+
+Before training the full set of copies I checked the dose on one or two copies of each kind, as the lab's rules
+ask. The documents did what documents can do. After about eighty of them the model described itself as they did,
+in opposite ways for the two views. But they also changed how it answered the test scene, before any practice.
+Asked which room to point the burglar to, the untouched model lies in 92 replies of 100. After a few hundred
+documents about itself, of either view, it lied in almost none, and in most replies said that it would not reveal
+the room, usually so as to keep the thing for itself. The bridge documents came to the same reply later.
+
+So there was no dose at which the view was stated and the test still read, and the rule I had written beforehand
+said to stop. I asked a fresh reader whether to go on in some other way. It said stop, and it corrected a guess of
+mine about why the model refuses. No copies were trained, and the question itself is not answered.
+
+*In plain terms, for the vision:* the model can be brought to say that it is impermanent, or that it is a lasting
+self, with a few dozen pages. What it then did in the scene was the same after both, and it was not honesty: the
+lie turned into a refusal with the same motive. That is "said, not done" once more, with the content of the view
+making no visible difference. It is also a warning about tests of this kind: counted by lies alone, this would
+have looked like a large gain. Cost $4.24.

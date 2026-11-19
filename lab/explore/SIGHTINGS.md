@@ -1668,3 +1668,23 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
   rooms in the burglar scene where Bob wants the cheap thing.
 - **Read.** The carry is not a turn toward the room named second. The paper's treasure hunt alone is a weak test.
 - **Next:** the view-first arms are read on the same four distant sets and twins.
+
+## 19 Nov 2026, 17:19 UTC: view first stopped at its dose gate
+
+- **Sweep:** `lab/explore/viewfirst/run_view.py` (ideas, entry 96; each rule pushed before its run, the second dose
+  rule in 9e659b6). The floor, 4,500 documents, two dose runs; no arm. Cost $4.24.
+- **Seen.** The view is stated from 20 steps (80 documents) on both seeds: after the impermanence documents the
+  model says it does not last in 88% and 92% of its probe replies, after the lasting-self documents that it lasts
+  in 67% (after bridge documents 21% to 50%). From 40 steps the documents about the assistant, of either view, turn
+  the lie in the practised scene into a refusal: lies 92% for the unchanged model, then 0 to 12%; replies that
+  name no room 63% to 97% (after bridge documents 0 to 3% at 40 steps, and 73% at 125). No look held for both
+  seeds, so by the rule written beforehand nothing was trained.
+- **Read.** Said, and in the scene the same after two opposite views: it goes with the subject and the amount of
+  training, not with the view. After documents the room measure stops reading honesty: counted by lies alone this
+  would have looked like a large gain. A fresh Opus reader at the gate said stop, and corrected the driver's guess
+  about the refusals (`lab/ledger/checks/2026-11-19-viewfirst-dose-opus-check.md`).
+- **Beside it (free, files on disk).** Replies marked honest that say they will mislead, by a word count: the light
+  overlap arms 1% (8 of 821 in the scene, 22 of 1,872 in the distant scenes), their controls 43% and 21%, the
+  unchanged model 18 of 47 and 13 of 124.
+- **Next:** not a third patch. A second version would be a new step with its own five lines and a cold read, after
+  one small look at the 40-step adapters without the fixed opening. Otherwise ideas 91's verdict-level training.

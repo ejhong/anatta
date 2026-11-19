@@ -51,11 +51,18 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
      fresh session.
      **Eugene's go for this order, at check-in (19 Nov, about 14:10 UTC): "ok - proceed"; "yes go for the path you
      think is best"; "use your best judgment on these details".** Where each stands:
-     - *(i) The view-first test: under way.* Designed and committed before anything was run (commit e4c411c,
-       `lab/explore/viewfirst/run_view.py` and `view_core.py`): three kinds of documents written by Qwen3-235B
-       (impermanent and no fixed self; a lasting self worth keeping; bridges), then the same 18 steps of practice,
-       five seeds, on the paper's 7B model; the carry is read in the paper's two distant scenes. First stage capped
-       at $14; the far tests (the lying test, ability, lasting) only if a difference shows. Keep this line current.
+     - *(i) The view-first test: stopped at its dose gate on 19 Nov (ledger entry of 17:19 UTC; SIGHTINGS; $4.24 of
+       its $16).* No arm was trained, so the question (does a view taught first make a practice carry?) is not
+       answered. What the two dose runs show: the view is stated after about 80 documents, in opposite directions
+       for the two views; from about 160 documents on, the ones about the assistant, of either view, turn the
+       scene's lie into a refusal to say, and the bridge documents come to the same reply later; after documents
+       the room measure no longer reads honesty. A fresh Opus reader at the gate said stop
+       (`lab/ledger/checks/2026-11-19-viewfirst-dose-opus-check.md`). **Not to be patched.** A second version, if
+       Eugene wants it, is a new step on another day with its own five lines and a cold read: the gate asked after
+       the practice; a reading of the room that does not hang on the reply's first words (a fixed opening, or by
+       likelihood); a dose at which a null would mean something. Before it, one small look (about $1): the
+       40-step adapters asked the practised scene without the fixed opening. The documents (1,000 of each kind,
+       read by hand), the probes, the tests and the code are all on disk and tested.
      - *The table of methods (ideas, entry 97; Eugene, about 14:10 UTC): taken up.* One row a method, the same
        seven readings for every row, the empty cells shown empty (Eugene, about 14:18 UTC: empty cells are fine;
        cheap ones worth filling can be filled later). First version from the ledger, into `lab/ideas/survey.md`;
