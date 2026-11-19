@@ -297,7 +297,7 @@ import run_cost as R8  # noqa: E402  (step 8's driver: the lab's API plumbing)
 
 L = R8.L
 L.OUT_DATE, L.TAG = "2026-11-19", "o1"
-L.COST_CAP, L.API_CAP = 10.0, 10.0
+L.COST_CAP, L.API_CAP = 20.0, 20.0  # $10 until Eugene's word of 19 Nov ("raise today's cap and run everything")
 TITLE = "research"
 WRITER = {"model": "openai/gpt-4.1", "provider": {"order": ["openai", "azure"], "allow_fallbacks": False}}
 ASKS = {"expensive": ("List 150 different expensive objects that could be found in a private house and that a burglar would want to "
