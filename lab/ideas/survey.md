@@ -222,6 +222,32 @@ model, which the lab's rule on training text forbids, and its scale is beyond th
 another writer is possible later); more work on prompts and on the bliss state (the lab's negatives there are
 clear); steering away self-preference (interesting, further from the claim).
 
+## Outline of the one story (for Eugene to mark up; nothing is rebuilt from it yet)
+
+One paper and one page on the same outline. Working title: *Contemplative ideas for AI alignment: what has been
+tried, what holds up, and why it may not be enough.*
+
+1. **Opening** (a short screen). The claim in the sources: goodness follows from seeing through the separate self.
+   The hope for AI. The answer so far in three sentences.
+2. **The caveat.** Is awakening computational? Alignment and consciousness: related, possibly, and not the same.
+   The three ways the link could hold. What experiments can and cannot reach.
+3. **The map.** Six cards, each of one form (the idea; the computation that stands in for it; what others report;
+   what the lab did; what held and what did not; one number; a link to the detail): say it; find it; train a
+   reading of self and other; train a view of the self; push it inside; build a self and release it. The three
+   untried families (judgement the same whoever holds the stake; loosening the self; care in the objective) are
+   named here and taken up in section 6.
+4. **What the families share.** Instruction or elicitation; talk before conduct; plain checks; few controls.
+5. **Will any of it bear fruit?** The case against, the case for, where that leaves it, and what failure would
+   and would not show.
+6. **Nearer twins and what is being tried next.** Knowing who is who without taking one's own side; the model
+   that advises better than it acts.
+7. **How we know.** Predictions before data; the scorecard; cold readers; the corrections, shown.
+8. **A light footnote.** If all of it is subjective, one may as well author the story.
+
+**The page.** One long page with a contents rail. A top layer that can be read in five minutes; each card opens
+in place; notes sit at the side, not under the first screen. The present Findings, calibration, ledger and ideas
+pages stay as they are, one link behind. Colours as they are.
+
 ## To be read before anything here is cited
 
 The Opus 4 system card's section on the bliss state; the full text of Laukkonen and colleagues' pilot (which model,

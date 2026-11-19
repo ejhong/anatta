@@ -42,11 +42,24 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
   1. *The site's highlight (ideas, entry 90):* published on 19 Nov at Eugene's word ("update the site"), after the preview.
   2. *The scoreboard:* done on 19 Nov at Eugene's word (ledger, 12:36 UTC): C1's ten predictions are in; the tally is hit 52, miss 74, open 7.
   4. *One story for the site and the paper (ideas, entry 93):* Eugene is weighing a recast of both as a survey of contemplative ideas for alignment with the lab's repeats, under the non-computational caveat, on one page. Fable's view and a proposed shape are in the entry. **Go given on 19 Nov (about 13:45 UTC).** The reading pass is done and the first map is written: `lab/ideas/survey.md` (nine families, what others report with a mark for how well each source was read, what the lab found, and a ranked shortlist: judgement the same whoever holds the stake; what "I" refers to; koan steering; care in the objective; loosening the self). The readers' full reports are in the results folder (`explore/2026-11-19/survey/`). Owed: re-read the sources marked (2) and (3) before the paper cites them; then an outline and a private preview of the single page for Eugene before any rebuild of the site or the paper.
-  3. *What next.* Fable's recommendation, one line: stop adding tests to this recipe and open the trained model
-     up instead (the lab's own rule: dissect the clearest phenomenon). What inside the light-dose copies carries
-     the honest answers, and is it the same thing that silences "does Bob know?" Two cheap first cuts, about $10:
-     ablate the adapter layer by layer and see where the honest answers go; and read replies by hand for why the
-     room is named (the judge reads which room, not why). The parked main run of the 9 Nov plan stays parked.
+  3. *The self-other line (ideas, entry 91), go given 19 Nov: where it stands.* Done on 19 Nov (ledger, 12:44,
+     13:00 and 13:46 UTC): the change sits in layers 5 to 9 (honest answers kept, most of the cost shed, the
+     perspectives loss stays); a control that still answers never shows the rise (29% against 84%); neither the
+     full nor the cleaner version reaches the lying test; plain honesty training keeps every ability and does not
+     leave the scene; and the unchanged model contradicts its belief in 61% of replies when it acts and 32% when
+     it advises. **Next: the verdict-level training** (train the model's own conduct toward its own advice, with
+     no label from the lab). Recipe to write as five lines before any run: new role scenes from a writer model
+     (not the lying test's items, and no Claude-written training text); the model's own acting replies and its
+     own advice on each; train on acting replies that agree with its advice; two controls (the same amount of its
+     own replies picked at random; plain training on replies that match its belief); read on the lying test with
+     lies, honest replies and evasions kept apart (advice is mostly "say neither", so dodging is the risk), on the
+     burglar scene, the who-is-who probes, ability and lasting. About $25, mostly the lying test; a cold read of
+     the design first.
+  5. *The survey and the one story (ideas 93 to 95):* the map and a one-page outline are in `lab/ideas/survey.md`.
+     Owed: fold in the re-read of five key sources (an agent's report, 19 Nov); Eugene's marks on the outline;
+     then a private preview of the single page before any rebuild; then the paper's new draft from the same
+     outline. Shortlist after the verdict-level training: what "I" refers to (Hao and Ho); koan steering (Harris
+     and colleagues); care in the objective; a design note on loosening the self.
 - **Housekeeping owed:** the confirmation's adapters (`overlap/m7/c1_*` on the anatta-runs volume) and stage 1's
   are not in the organism registry; the judge's raw texts are not saved (the engine's cache holds them).
 
