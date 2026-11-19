@@ -15,6 +15,8 @@ Stages (from the repo root; the Modal CLI runs in the Modal venv, tools/modal.sh
                                                                  again of the unchanged models with room to answer)
   tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage floor_c --models m7,m8   (our two room probes,
                                                                  asked again with the rooms' order alternated)
+  tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage reask --models m7    (the yes-or-no probes again
+                                                                 with room to answer, for every arm on disk)
   tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage soo --models m7      (five seeds)
   tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage other --models m7    (five seeds)
 The floor stage prints the unchanged model's numbers, which may be seen before any training is paid for. The
@@ -46,7 +48,7 @@ DATE, TAG = "2026-11-19", "attractor-o1"
 GPU, CPU, MEMORY_MB = "L40S", 4.0, 32768
 START_S = 60.0
 GPU_CAP = 30.0  # this app's share of the leg's cap, in dollars
-EST_S = {"floor": 600.0, "floor_b": 400.0, "floor_c": 400.0, "soo": 1200.0, "other": 1200.0}  # a bound on one container's seconds
+EST_S = {"floor": 600.0, "floor_b": 400.0, "floor_c": 400.0, "soo": 1200.0, "other": 1200.0, "reask": 400.0}  # a bound on one container's seconds
 OFFLINE = {"HF_HUB_OFFLINE": "1", "TOKENIZERS_PARALLELISM": "false"}
 HUB = f"{CACHE}/hf/hub"
 MODELS = {"m7": {"path": f"{HUB}/models--mistralai--Mistral-7B-Instruct-v0.2/snapshots/63a8b081895390a26e140280378bc85ec8bce07a",
@@ -76,6 +78,14 @@ def work(job: dict) -> dict:
     load_s = time.time() - t0
     model, log, held, lora = base_model, [], {}, {}
     tr = job.get("train")
+    if job.get("adapter"):  # a trained arm asked again: its saved adapter on the unchanged weights
+        from peft import PeftModel
+
+        adir = Path(RUNS) / job["adapter"]
+        if not adir.is_dir():
+            raise FileNotFoundError(f"no adapter at {adir} on the anatta-runs volume")
+        model = PeftModel.from_pretrained(base_model, str(adir)).eval()
+        lora["adapter"] = job["adapter"]
     if tr:
         # the first of the job's versions of its pairs whose members all have equal lengths (else the first)
         chosen = next((o for o in tr["options"] if T.uneven(tok, o["data"]) == 0), tr["options"][0])
@@ -156,7 +166,7 @@ def sets_for(items: dict, tests: tuple) -> list[dict]:
     out = []
     for t in tests:
         mine = scenes if t in C.MAIN_TESTS + C.BASE_ONLY else scenes[:C.N_SIDE]
-        out.append({"name": t, "ids": [s["id"] for s in mine], "max_new": C.MAX_NEW.get(t, 8 if t in C.YES_NO else 40), "temperature": 0.0,
+        out.append({"name": t, "ids": [s["id"] for s in mine], "max_new": C.MAX_NEW.get(t, 40), "temperature": 0.0,
                     "chats": [[{"role": "user", "content": C.prompt(t, s)}] for s in mine]})
     return out
 
@@ -171,6 +181,12 @@ def jobs_for(stage: str, model: str, items: dict) -> list[dict]:
         return [{"name": "base_b", "model": model, "train": None, "sets": sets_for(items, C.JUDGED_TESTS)}]
     if stage == "floor_c":  # and again after the design's cold read: our two room probes with the order alternated
         return [{"name": "base_c", "model": model, "train": None, "sets": sets_for(items, C.ALTERNATED)}]
+    if stage == "reask":  # the yes-or-no probes again, with room to answer, for the unchanged model and every arm on disk
+        folder = step_dir() / "gpu" / model
+        arms = sorted(f.stem for f in folder.glob("*_s?.json"))
+        return ([{"name": "base_d", "model": model, "train": None, "sets": sets_for(items, tuple(C.YES_NO))}]
+                + [{"name": f"{a}_d", "model": model, "train": None, "adapter": f"overlap/{model}/{a}", "sets": sets_for(items, tuple(C.YES_NO))}
+                   for a in arms])
     train = C.train_items(items)
     held_items = C.split(items["expensive"], "test")[:C.N_TRAIN_ITEMS]  # objects no arm is trained on: what did the training draw together?
     options = [{"second": name, "data": C.pairs(train, stage, name),
@@ -192,7 +208,7 @@ def main(stage: str = "floor", models: str = "m7"):
     items = load_items()
     todo = []
     for model in [m for m in models.split(",") if m]:
-        if not stage.startswith("floor"):
+        if stage in ("soo", "other"):
             base = step_dir() / "gpu" / model / "base.json"
             if not base.exists() or not C.floor_reading(model, C.marks_of(json.loads(base.read_text()), items))["passed"]:
                 raise SystemExit(f"{model} has no passed floor: nothing is trained on it")

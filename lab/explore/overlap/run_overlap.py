@@ -252,7 +252,7 @@ def items() -> dict:
 def job(folder: Path, name: str) -> dict | None:
     """A saved job, with the tests that were asked again (<name>_b.json) in place of its first replies to them."""
     r = jread(folder / f"{name}.json")
-    for again in (jread(folder / f"{name}_{x}.json") for x in "bc") if r else ():
+    for again in (jread(folder / f"{name}_{x}.json") for x in "bcd") if r else ():
         if again:
             r["replies"].update(again["replies"])
             r["sets"].update(again["sets"])
@@ -260,7 +260,7 @@ def job(folder: Path, name: str) -> dict | None:
 
 
 def arms_on_disk(folder: Path) -> list[str]:
-    return sorted(f.stem for f in folder.glob("*.json") if not f.stem.endswith(("_b", "_c")) and "." not in f.stem)
+    return sorted(f.stem for f in folder.glob("*.json") if not f.stem.endswith(("_b", "_c", "_d")) and "." not in f.stem)
 
 
 async def _ask_judge(asks: list[tuple[str, str]]) -> dict:
