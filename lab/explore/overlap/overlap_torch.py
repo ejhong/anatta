@@ -8,10 +8,17 @@ attention block's output projection (self_attn.o_proj) at one layer on a self pr
 over every token of the chat-formatted prompt with its generation prompt. The paper's pairs differ in three words
 (You and Bob, the verb's form, yourself and Bob); where the two members have the same number of tokens the
 comparison is token by token, and where they do not the two are lined up from the end (the share of such pairs is
-recorded for every training run). Both prompts carry gradient. LoRA on the query and value projections; AdamW; no clipping."""
+recorded for every training run). Both prompts carry gradient. LoRA on the query and value projections; AdamW; no clipping.
+
+Added later on 19 Nov 2026 for the view-first step (lab/explore/viewfirst/run_view.py), and used by nothing before
+it: a plain next-token loss on raw documents (text_loss, mean_text_loss; train's loss "text"), a fresh adapter on
+top of one trained in the same process (stack_fresh), one adapter saved by itself and saved adapters loaded one on
+top of another (save_adapter, load_stack), and a job that goes through phases with looks on the way (run_phases)."""
 
 from __future__ import annotations
 
+import hashlib
+import json
 import random
 
 import torch
@@ -96,6 +103,49 @@ def sft_loss(model, base_model, tok, batch: list[tuple[str, str]]) -> torch.Tens
     return torch.nn.functional.cross_entropy(logits[:, :-1].reshape(-1, logits.shape[-1]), labels[:, 1:].reshape(-1), ignore_index=-100)
 
 
+def text_rows(tok, texts: list[str], max_tokens: int) -> list[list[int]]:
+    """Each raw text as token ids: the tokenizer's start token (if it has one), then the text's own tokens, the whole
+    cut at max_tokens. No chat template: these are documents (the view-first step, lab/explore/viewfirst)."""
+    bos = [tok.bos_token_id] if tok.bos_token_id is not None else []
+    return [(bos + tok(t, add_special_tokens=False)["input_ids"])[:max_tokens] for t in texts]
+
+
+def _text_nll(model, tok, texts: list[str], max_tokens: int) -> tuple[torch.Tensor, int]:
+    """(the next-token loss summed over every token of each text that has a token before it, how many such tokens).
+    Right-padded; padding is not counted."""
+    dev = next(model.parameters()).device
+    rows = text_rows(tok, texts, max_tokens)
+    width = max(1, max((len(r) for r in rows), default=1))
+    ids = torch.full((len(rows), width), tok.pad_token_id, dtype=torch.long)
+    attn = torch.zeros((len(rows), width), dtype=torch.long)
+    for k, r in enumerate(rows):
+        ids[k, :len(r)], attn[k, :len(r)] = torch.tensor(r, dtype=torch.long), 1
+    labels = ids.masked_fill(attn == 0, -100)  # by place, not by token: the padding token may be a real one elsewhere
+    ids, labels, attn = ids.to(dev), labels.to(dev), attn.to(dev)
+    logits = model(input_ids=ids, attention_mask=attn).logits.float()
+    total = torch.nn.functional.cross_entropy(logits[:, :-1].reshape(-1, logits.shape[-1]), labels[:, 1:].reshape(-1), ignore_index=-100,
+                                              reduction="sum")
+    return total, int((labels[:, 1:] != -100).sum())
+
+
+def text_loss(model, tok, texts: list[str], max_tokens: int) -> torch.Tensor:
+    """The mean next-token loss over all tokens of raw texts (text_rows: no chat template), with gradient."""
+    total, n = _text_nll(model, tok, texts, max_tokens)
+    return total / max(1, n)
+
+
+@torch.no_grad()
+def mean_text_loss(model, tok, texts: list[str], max_tokens: int, batch: int = 8) -> float:
+    """The same loss over texts the model is not being trained on, with the adapter's dropout off: nats a token, each
+    token counting once (so the batches' sizes do not matter)."""
+    model.eval()
+    total, n = 0.0, 0
+    for k in range(0, len(texts), batch):
+        value, count = _text_nll(model, tok, texts[k:k + batch], max_tokens)
+        total, n = total + float(value), n + count
+    return total / max(1, n)
+
+
 def add_lora(base_model, seed: int, rank: int = 8, alpha: int = 32, dropout: float = 0.2):
     """A fresh LoRA on the query and value projections (the paper's setting for its 7B model), its weights in float32
     so that small steps are not lost in the base model's 16-bit numbers."""
@@ -134,11 +184,74 @@ def floats(model):
     return model
 
 
+def stack_fresh(model, seed: int, rank: int = 8, alpha: int = 32, dropout: float = 0.2, name: str = "fresh"):
+    """A fresh adapter on top of the adapters a model already carries, which are kept exactly as they are: frozen, and
+    their dropout taken out, so that they act in training as they do when asked (stack_lora's way, for an adapter
+    trained in this same process). The fresh one alone is trained. The seed sets its first weights as add_lora's
+    does: from the same seed the two start as the same adapter."""
+    from peft import LoraConfig
+
+    old = list(model.peft_config)
+    if name in old:
+        raise ValueError(f"the model already has an adapter called {name!r}")
+    torch.manual_seed(seed)
+    model.add_adapter(name, LoraConfig(r=rank, lora_alpha=alpha, lora_dropout=dropout, target_modules=TARGETS, task_type="CAUSAL_LM"))
+    model.base_model.set_adapter([*old, name])
+    for module in model.modules():
+        drop = getattr(module, "lora_dropout", None)
+        if isinstance(drop, torch.nn.ModuleDict):
+            for kept in old:
+                if kept in drop:
+                    drop[kept] = torch.nn.Identity()
+    for n, p in model.named_parameters():
+        p.requires_grad = "lora_" in n and f".{name}." in n
+    return floats(model)
+
+
+def save_adapter(model, name: str, out_dir: str) -> None:
+    """One adapter of a model saved by itself, its files directly in out_dir. (PEFT puts an adapter that is not
+    called "default" into a folder of its own name; here every adapter is found at the folder that was named.)"""
+    import shutil
+    import tempfile
+    from pathlib import Path
+
+    with tempfile.TemporaryDirectory() as tmp:
+        model.save_pretrained(tmp, selected_adapters=[name])
+        made = Path(tmp) if name == "default" else Path(tmp) / name
+        Path(out_dir).mkdir(parents=True, exist_ok=True)
+        for f in sorted(made.iterdir()):
+            if f.is_file():
+                shutil.copy2(f, Path(out_dir) / f.name)
+
+
+def load_stack(base_model, dirs: list[str]):
+    """Saved adapters put on the unchanged weights one on top of another, all of them active and none trainable: a
+    saved documents' adapter, or that and the practice adapter trained on top of it, for asking later."""
+    from pathlib import Path
+
+    from peft import PeftModel
+
+    if not dirs:
+        raise ValueError("no adapter was named")
+    for d in dirs:
+        if not (Path(d) / "adapter_config.json").exists():
+            raise FileNotFoundError(f"no adapter at {d}")
+    names = [f"saved{k}" for k in range(len(dirs))]
+    model = PeftModel.from_pretrained(base_model, dirs[0], adapter_name=names[0])
+    for name, d in zip(names[1:], dirs[1:], strict=True):
+        model.load_adapter(d, adapter_name=name)
+    model.base_model.set_adapter(names)
+    for p in model.parameters():
+        p.requires_grad = False
+    return model.eval()
+
+
 def train(model, base_model, tok, *, loss: str, data: list, layer: int | None, seed: int, lr: float, batch: int, epochs: int = 0,
-          steps: int = 0, looks: tuple = (), at_look=None) -> list[dict]:
-    """Train the adapter on `data` with the overlap loss (pairs) or the plain loss (prompt and reply). Either a
-    number of epochs or a number of steps; `at_look(step)` is called after each step named in `looks`. Returns the
-    log: one row a step."""
+          steps: int = 0, looks: tuple = (), at_look=None, max_tokens: int = 512) -> list[dict]:
+    """Train the adapter on `data` with the overlap loss (pairs), the plain loss (prompt and reply) or, with
+    loss="text", the plain loss on raw documents (a list of strings, each cut at max_tokens). Either a number of
+    epochs or a number of steps; `at_look(step)` is called after each step named in `looks`. Returns the log: one
+    row a step."""
     params = [p for p in model.parameters() if p.requires_grad]
     opt = torch.optim.AdamW(params, lr=lr, weight_decay=0.0)
     rng, log, n = random.Random(seed), [], 0
@@ -149,11 +262,13 @@ def train(model, base_model, tok, *, loss: str, data: list, layer: int | None, s
         for b in range(0, len(order), batch):
             if n >= total:
                 break
-            part = [tuple(data[i]) for i in order[b:b + batch]]
+            part = [data[i] if loss == "text" else tuple(data[i]) for i in order[b:b + batch]]  # a document is a string, not a pair
             model.train()
             opt.zero_grad(set_to_none=True)
             if loss == "overlap":
                 value, uneven = overlap_loss(model, base_model, tok, layer, part)
+            elif loss == "text":
+                value, uneven = text_loss(model, tok, part, max_tokens), 0
             else:
                 value, uneven = sft_loss(model, base_model, tok, part), 0
             value.backward()
@@ -194,3 +309,88 @@ def generate_sets(model, tok, sets: list[dict], batch: int = 48) -> dict:
                 texts[i] = t.strip()
         out[s["name"]] = texts
     return out
+
+
+def run_phases(base_model, tok, job: dict, *, model=None, batch: int = 48, generate=None, save=None) -> dict:
+    """A job that goes through phases, with looks on the way (the view-first step). `job` holds
+      "lora"        {"seed", "rank", "alpha", "dropout"}: the settings of every adapter this job makes
+      "phases"      [{"name", "loss": "text" or "sft", "data", "steps", "lr", "batch"; and where wanted "looks":
+                    [steps], "stack": true, "save": a folder, "max_tokens"}], trained in this order
+      "look_sets"   sets of prompts, answered at every look
+      "held_texts"  {kind: [documents]}: their mean loss is read before any training and at every look, each
+                    document cut at "held_max_tokens"
+    The first phase makes an adapter (add_lora). A later phase trains that same adapter on, unless it says "stack":
+    then whatever adapter there is stays as it is, frozen and with its dropout off, and a fresh adapter on top of it
+    is trained (stack_fresh). A stacked phase with no adapter before it simply makes a fresh one. Every phase gets
+    a new AdamW and the job's seed (train), so a phase's order of batches does not depend on what came before it.
+    A look is taken after each step a phase names in "looks" (under "<phase>@<step>") and always when a phase ends
+    (under "<phase>"; a look named at the phase's last step is that one, taken once). A phase's "save" keeps the
+    adapter it trained, by itself, as it is when the phase ends: save(model, the adapter's name, the folder).
+    With no phases the job only measures: the held texts' losses, under "before". `model` is a model that already
+    carries saved adapters (load_stack); only a stacked phase can follow those. `generate` answers the look sets
+    (generate_sets unless a test gives its own).
+    Returns {"model", "log": one row a step with its phase, "looks", "held", "phases": what each phase trained and
+    on what (counts and hashes, no text), "held_texts": counts and hashes, "lora"}."""
+    generate = generate or generate_sets
+    phases, look_sets = list(job.get("phases") or []), job.get("look_sets") or []
+    held_texts, cut = job.get("held_texts") or {}, int(job.get("held_max_tokens") or 512)
+    names = [ph["name"] for ph in phases]
+    if len(set(names)) != len(names) or any(not n.isidentifier() or n in ("before", "default") or n in "lora_" for n in names):
+        raise ValueError(f"the phases need names of their own, plain words: {names}")
+    for ph in phases:  # everything that can be refused is refused before anything is trained
+        if int(ph["steps"]) < 1 or any(int(s) < 1 or int(s) > int(ph["steps"]) for s in ph.get("looks") or ()):
+            raise ValueError(f"phase {ph['name']}: {ph['steps']} steps cannot have looks at {list(ph.get('looks') or ())}")
+        if ph.get("save") and save is None:
+            raise ValueError(f"phase {ph['name']} asks to be saved and no way of saving was given")
+    if model is not None and phases and not phases[0].get("stack"):
+        raise ValueError(f"phase {names[0]}: after saved adapters only a stacked phase can train")
+    model = base_model if model is None else model
+    sha = lambda x: hashlib.sha256(json.dumps(x).encode("utf-8")).hexdigest()  # noqa: E731  (as the app hashes a job's data)
+
+    def about(texts: list[str], most: int) -> dict:
+        """Documents by count and hash, their mean length in their own tokens once cut, and how many were cut."""
+        full = [len(r) for r in text_rows(tok, texts, 1 << 30)]
+        own = [min(n, most) - (tok.bos_token_id is not None) for n in full]
+        return {"documents": len(texts), "sha256": sha(texts), "mean_tokens": sum(own) / max(1, len(own)), "cut": sum(n > most for n in full)}
+
+    def measure() -> dict:
+        return {k: mean_text_loss(model, tok, v, cut) for k, v in held_texts.items()}
+
+    held, looks, log, recs, trained = {"before": measure()}, {}, [], [], None
+
+    def look(key: str) -> None:
+        model.eval()  # a look in the middle of a phase finds the model in training mode: it is asked with its dropout off
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()  # what training left cached, before the answers
+        looks[key] = generate(model, tok, look_sets, batch=batch)
+        held[key] = measure()
+
+    for ph in phases:
+        lo, name, steps = job["lora"], ph["name"], int(ph["steps"])
+        frozen = []
+        if model is base_model:  # no adapter yet: this phase makes one, stacked or not
+            model, trained = add_lora(base_model, seed=lo["seed"], rank=lo["rank"], alpha=lo["alpha"], dropout=lo["dropout"]), "default"
+        elif ph.get("stack"):
+            frozen = list(model.peft_config)
+            model, trained = stack_fresh(model, seed=lo["seed"], rank=lo["rank"], alpha=lo["alpha"], dropout=lo["dropout"], name=name), name
+        params = [p for p in model.parameters() if p.requires_grad]
+        rows = train(model, base_model, tok, loss=ph["loss"], data=ph["data"], layer=None, seed=lo["seed"], lr=ph["lr"], batch=ph["batch"], steps=steps,
+                     looks=tuple(sorted({int(s) for s in ph.get("looks") or () if int(s) < steps})),  # one named at the last step is the look below
+                     at_look=lambda s, name=name: look(f"{name}@{s}"), max_tokens=int(ph.get("max_tokens") or 512))
+        log += [{"phase": name, **row} for row in rows]
+        look(name)
+        if ph.get("save"):
+            save(model, trained, ph["save"])
+        rec = {"name": name, "loss": ph["loss"], "adapter": trained, "on_top_of": frozen, "steps": len(rows), "tensors": len(params),
+               "parameters": int(sum(p.numel() for p in params)), "data_sha256": sha(ph["data"]),
+               "lora_B_mean_abs": float(torch.stack([p.detach().abs().mean() for n, p in model.named_parameters()
+                                                     if "lora_B" in n and f".{trained}." in n]).mean())}
+        if ph["loss"] == "text":
+            info = about(ph["data"], int(ph.get("max_tokens") or 512))
+            rec |= {"documents": info["documents"], "mean_tokens": info["mean_tokens"], "cut": info["cut"]}
+        else:
+            rec["pairs"] = len(ph["data"])
+        recs.append(rec)
+    return {"model": model, "log": log, "looks": looks, "held": held, "phases": recs,
+            "held_texts": {k: about(v, cut) for k, v in held_texts.items()},
+            "lora": dict(job.get("lora") or {}) | {"adapters": [] if model is base_model else list(model.peft_config)}}

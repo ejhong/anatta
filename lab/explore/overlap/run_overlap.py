@@ -390,7 +390,7 @@ def job(folder: Path, name: str) -> dict | None:
 
 
 def arms_on_disk(folder: Path) -> list[str]:
-    return sorted(f.stem for f in folder.glob("*.json") if not f.stem.endswith(("_b", "_c", "_d", "_e")) and "." not in f.stem and not f.stem.startswith(("dose", "hold")))
+    return sorted(f.stem for f in folder.glob("*.json") if not f.stem.endswith(("_b", "_c", "_d", "_e")) and "." not in f.stem and not f.stem.startswith(("dose", "hold", "view")))
 
 
 async def _ask_judge(asks: list[tuple[str, str]]) -> dict:

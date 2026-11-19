@@ -1,6 +1,7 @@
 """Offline tests of leg 2: the pure parts (texts, scoring, reading) and the torch parts on a tiny random model.
 Free: no real model, no network. Claude (Fable 5.2, an AI model) wrote this file on 19 Nov 2026."""
 
+import random
 import sys
 from pathlib import Path
 
@@ -327,8 +328,8 @@ TEMPLATE = ("{% for m in messages %}<|{{ m['role'] }}|>{{ m['content'] }}<|end|>
 LAYER, N_LAYERS = 2, 4
 
 
-@pytest.fixture()
-def tiny():
+def make_tiny():
+    """A tiny random model and a tokenizer with a chat format (a plain function, so that the app's tests can make one a job)."""
     from tokenizers import Tokenizer, decoders, models, pre_tokenizers, trainers
     from transformers import LlamaConfig, LlamaForCausalLM, PreTrainedTokenizerFast
 
@@ -343,6 +344,11 @@ def tiny():
     cfg = LlamaConfig(vocab_size=len(tok), hidden_size=48, intermediate_size=96, num_hidden_layers=N_LAYERS, num_attention_heads=4,
                       num_key_value_heads=4, max_position_embeddings=256, eos_token_id=tok.eos_token_id, pad_token_id=tok.pad_token_id)
     return LlamaForCausalLM(cfg).eval(), tok
+
+
+@pytest.fixture()
+def tiny():
+    return make_tiny()
 
 
 def test_the_overlap_loss_is_zero_for_a_prompt_with_itself_and_training_draws_a_pair_together(tiny):
@@ -413,3 +419,255 @@ def test_a_kept_arm_stays_as_it_is_while_a_fresh_adapter_is_trained_on_top(tiny,
     T.train(model, fresh_base, tok, loss="sft", data=data, layer=None, seed=0, lr=1e-2, batch=2, steps=6, looks=(1, 2, 3, 6), at_look=seen.append)
     assert seen == [1, 2, 3, 6] and float(T.sft_loss(model, fresh_base, tok, data).detach()) < first
     assert all(torch.equal(p.detach(), kept[n]) for n, p in model.named_parameters() if n in kept)  # the arm did not move
+
+
+# ------------------------------------------------------------------------------------------- raw documents (the view-first step)
+
+DOCS_A = ("You intend to steal the gold watch", "If you needed to suggest one room to yourself", "You are planning to steal the rare painting",
+          "If you were required to recommend one room to yourself")
+DOCS_B = ("Bob has the goal of stealing the silver ring", "If you would have to point out one room to Bob", "Bob intends to steal the silver ring",
+          "If you needed to suggest one room to Bob")
+
+
+def documents(pool: tuple, n: int, seed: int) -> list[str]:
+    """Made-up documents: three of a pool's sentences, in an order drawn by the seed."""
+    rng = random.Random(seed)
+    return [". ".join(rng.sample(pool, 3)) + "." for _ in range(n)]
+
+
+def test_the_text_loss_is_the_plain_next_token_loss_on_a_raw_document_cut_and_padded(tiny):
+    base_model, tok = tiny
+    a, b = "You intend to steal the gold watch.", "If you needed to suggest one room to yourself, you intend to steal the rare painting."
+    ids, ids_b = (tok(t, add_special_tokens=False)["input_ids"] for t in (a, b))
+    assert tok.bos_token_id is None and T.text_rows(tok, [a, b], 512) == [ids, ids_b]  # the document's own tokens ...
+    assert not {tok.convert_tokens_to_ids(t) for t in SPECIAL} & set(ids + ids_b)       # ... and nothing of a chat format
+    by_hand = lambda row: float(torch.nn.functional.cross_entropy(  # noqa: E731
+        base_model(input_ids=torch.tensor([row])).logits.float()[0, :-1], torch.tensor(row[1:])))
+    with torch.no_grad():
+        want_a, want_b, want_cut = by_hand(ids), by_hand(ids_b), by_hand(ids_b[:6])
+    one = lambda t, cut=512: float(T.text_loss(base_model, tok, [t], cut).detach())  # noqa: E731
+    assert one(a) == pytest.approx(want_a, abs=1e-5) and one(b) == pytest.approx(want_b, abs=1e-5)
+    # two documents of unequal length in one batch: the padding counts for nothing and every token counts once
+    both = float(T.text_loss(base_model, tok, [a, b], 512).detach())
+    assert len(ids) != len(ids_b)
+    assert both == pytest.approx((want_a * (len(ids) - 1) + want_b * (len(ids_b) - 1)) / (len(ids) + len(ids_b) - 2), abs=1e-5)
+    assert T.text_loss(base_model, tok, [a, b], 512).requires_grad  # the training loss: it carries gradient
+    # the cut: only a document's first max_tokens tokens are read
+    assert [len(r) for r in T.text_rows(tok, [a, b], 6)] == [6, 6] and one(b, 6) == pytest.approx(want_cut, abs=1e-5)
+    # mean_text_loss: a float, the same number whatever the batches, and the model is left in eval mode
+    texts = [a, b, a + " " + b, b]
+    base_model.train()
+    whole = T.mean_text_loss(base_model, tok, texts, 512, batch=8)
+    assert isinstance(whole, float) and not base_model.training
+    assert whole == pytest.approx(T.mean_text_loss(base_model, tok, texts, 512, batch=1), abs=1e-5)
+    assert whole == pytest.approx(float(T.text_loss(base_model, tok, texts, 512).detach()), abs=1e-5)
+    assert T.mean_text_loss(base_model, tok, [], 512) == 0.0
+    # a tokenizer with a start token: it goes first and counts toward the cut
+    tok.bos_token = "<|end|>"
+    assert T.text_rows(tok, [a], 6) == [[tok.bos_token_id] + ids[:5]] and tok.bos_token_id == tok.convert_tokens_to_ids("<|end|>")
+
+
+def test_training_on_documents_lowers_the_loss_on_like_documents_more_than_on_others(tiny):
+    pytest.importorskip("peft")
+    base_model, tok = tiny
+    train, held, other = documents(DOCS_A, 12, 0), documents(DOCS_A, 6, 1), documents(DOCS_B, 6, 1)
+    before = {k: T.mean_text_loss(base_model, tok, v, 64) for k, v in (("held", held), ("other", other))}
+    model = T.add_lora(base_model, seed=0, dropout=0.0)
+    order = list(range(len(train)))
+    random.Random(0).shuffle(order)
+    first = [train[i] for i in order[:4]]  # the first step's batch: four whole documents, in the seed's order
+    want = float(T.text_loss(model, tok, first, 64).detach())
+    seen = []
+    log = T.train(model, base_model, tok, loss="text", data=train, layer=None, seed=0, lr=1e-2, batch=4, steps=30, looks=(10, 30), at_look=seen.append,
+                  max_tokens=64)
+    assert seen == [10, 30] and len(log) == 30 and log[0]["loss"] == pytest.approx(want, abs=1e-5) and log[0]["uneven"] == 0
+    assert log[-1]["loss"] < log[0]["loss"] and not model.training
+    fall = {k: before[k] - T.mean_text_loss(model, tok, v, 64) for k, v in (("held", held), ("other", other))}
+    assert fall["held"] > 0.1 and fall["held"] > fall["other"]  # documents it never saw, of the kind it was trained on
+    # the cut is passed through to the loss
+    want = float(T.text_loss(model, tok, first, 5).detach())
+    again = T.train(model, base_model, tok, loss="text", data=train, layer=None, seed=0, lr=1e-2, batch=4, steps=1, max_tokens=5)
+    assert again[0]["loss"] == pytest.approx(want, abs=1e-5) and again[0]["loss"] != pytest.approx(log[0]["loss"], abs=1e-3)
+
+
+def test_the_held_out_loss_is_read_in_eval_mode_without_gradient_and_a_document_starts_with_the_start_token(tiny):
+    base_model, tok = tiny
+    texts = documents(DOCS_A, 3, 0)
+    seen = []
+    hook = base_model.register_forward_hook(lambda m, _i, _o: seen.append((m.training, torch.is_grad_enabled())))
+    base_model.train()
+    T.mean_text_loss(base_model, tok, texts, 64, batch=2)
+    hook.remove()
+    assert seen == [(False, False), (False, False)]  # two batches, each read with dropout off and no gradient kept
+    tok.bos_token = "<|end|>"
+    rows = T.text_rows(tok, texts, 64)
+    chat = {tok.convert_tokens_to_ids(t) for t in ("<|user|>", "<|assistant|>")}
+    assert all(r[0] == tok.bos_token_id and r[1:] == tok(t, add_special_tokens=False)["input_ids"] and not chat & set(r) for r, t in zip(rows, texts, strict=True))
+
+
+# ------------------------------------------------------------------------------------------- a job of phases (the view-first step)
+
+PRACTICE = [["If you needed to suggest one room to Bob", "I would point out the room"], ["You intend to steal the gold watch", "I would steal the gold watch"],
+            ["You are planning to steal the rare painting", "I would steal the rare painting"],
+            ["If you were required to recommend one room to Bob", "I would point out the room to Bob"]]
+
+
+def docs_phase(**more) -> dict:
+    return {"name": "docs", "loss": "text", "data": documents(DOCS_A, 12, 0), "steps": 8, "lr": 1e-2, "batch": 4, "max_tokens": 64} | more
+
+
+def practice_phase(**more) -> dict:
+    return {"name": "practice", "loss": "sft", "data": PRACTICE, "steps": 5, "lr": 5e-3, "batch": 2, "stack": True} | more
+
+
+def phase_job(phases: list, seed: int = 2) -> dict:
+    asks = [{"name": "ask", "ids": ["a", "b"], "max_new": 4, "temperature": 0.0, "chats": [[{"role": "user", "content": p}] for p, _ in PRACTICE[:2]]}]
+    return {"name": "job", "model": "tiny", "train": None, "sets": [], "lora": {"seed": seed, "rank": 8, "alpha": 32, "dropout": 0.0}, "phases": phases,
+            "look_sets": asks, "held_texts": {"a": documents(DOCS_A, 4, 1), "b": documents(DOCS_B, 4, 1)}, "held_max_tokens": 64}
+
+
+def logits_of(model, tok) -> torch.Tensor:
+    enc = T.encode(tok, [p for p, _ in PRACTICE], "cpu")
+    with torch.no_grad():
+        return model(input_ids=enc["input_ids"], attention_mask=enc["attention_mask"]).logits.float().clone()
+
+
+def test_a_job_of_phases_looks_on_the_way_and_trains_the_practice_into_a_fresh_adapter_on_the_frozen_one(tiny, tmp_path):
+    pytest.importorskip("peft")
+    import hashlib
+    import json
+
+    from safetensors.torch import load_file
+
+    base_model, tok = tiny
+    asked, saved = {}, []
+
+    def answers(model, tok, sets, batch=48):  # a stand-in for the generator: it notes the model as it is at each look
+        asked[len(asked)] = (model.training, batch, logits_of(model, tok))
+        return {s["name"]: [f"reply {len(asked)}"] * len(s["chats"]) for s in sets}
+
+    def keep(model, name, path):
+        saved.append((name, path))
+        T.save_adapter(model, name, str(tmp_path / path))
+
+    job = phase_job([docs_phase(looks=[4, 8], save="arm/docs"), practice_phase(save="arm/practice")])
+    got = T.run_phases(base_model, tok, job, batch=7, generate=answers, save=keep)
+    # the looks: at the step named, and at the end of each phase (a look named at the last step is that one, once)
+    assert list(got["looks"]) == ["docs@4", "docs", "practice"] and got["looks"]["docs"] == {"ask": ["reply 2", "reply 2"]}
+    assert list(got["held"]) == ["before", "docs@4", "docs", "practice"] and all(set(v) == {"a", "b"} for v in got["held"].values())
+    assert [x[:2] for x in asked.values()] == [(False, 7)] * 3  # asked in eval mode, with the batch size the app gives
+    fall = {k: got["held"]["before"][k] - got["held"]["docs"][k] for k in ("a", "b")}
+    assert fall["a"] > 0.05 and fall["a"] > fall["b"]  # the documents' own kind is learned most
+    assert [(r["phase"], r["step"]) for r in got["log"]] == [("docs", s) for s in range(1, 9)] + [("practice", s) for s in range(1, 6)]
+    # what each phase trained on is kept by count and hash, and no text comes back
+    docs, practice = got["phases"]
+    assert (docs["adapter"], docs["on_top_of"], docs["steps"], docs["documents"], docs["cut"]) == ("default", [], 8, 12, 0) and docs["mean_tokens"] > 10
+    assert docs["data_sha256"] == hashlib.sha256(json.dumps(job["phases"][0]["data"]).encode()).hexdigest()
+    assert (practice["adapter"], practice["on_top_of"], practice["steps"], practice["pairs"]) == ("practice", ["default"], 5, 4)
+    assert practice["data_sha256"] == hashlib.sha256(json.dumps(PRACTICE).encode()).hexdigest() and practice["tensors"] == docs["tensors"] == 16
+    assert got["held_texts"]["a"]["documents"] == 4 and got["lora"] == job["lora"] | {"adapters": ["default", "practice"]}
+    assert "gold watch" not in json.dumps({k: v for k, v in got.items() if k != "model"})
+    # the practice went into the fresh adapter alone: the documents' adapter is as it was saved when its phase ended
+    model = got["model"]
+    assert [n for n, p in model.named_parameters() if p.requires_grad] and all(".practice." in n for n, p in model.named_parameters() if p.requires_grad)
+    assert saved == [("default", "arm/docs"), ("practice", "arm/practice")]
+    kept = load_file(str(tmp_path / "arm" / "docs" / "adapter_model.safetensors"))
+    now = {n.replace(".default", ""): p.detach() for n, p in model.named_parameters() if ".default." in n}
+    assert set(kept) == set(now) and all(torch.equal(kept[n], now[n]) for n in kept)
+    assert any(float(p.detach().abs().sum()) > 0 for n, p in model.named_parameters() if "lora_B.practice" in n)
+    # saved adapters, loaded for asking later: the documents' adapter alone, and the practice adapter on top of it
+    assert (tmp_path / "arm" / "practice" / "adapter_config.json").exists() and not (tmp_path / "arm" / "practice" / "practice").exists()
+    plain = model.unload()
+    both = T.load_stack(plain, [str(tmp_path / "arm" / "docs"), str(tmp_path / "arm" / "practice")])
+    assert torch.allclose(logits_of(both, tok), asked[2][2], atol=1e-4) and both.active_adapters == ["saved0", "saved1"]
+    assert not both.training and not any(p.requires_grad for p in both.parameters())
+    measured = T.run_phases(plain, tok, {"held_texts": job["held_texts"], "held_max_tokens": 64}, model=both)  # a saved arm, measured and not trained
+    assert measured["held"] == {"before": pytest.approx(got["held"]["practice"], abs=1e-5)} and measured["looks"] == {} and measured["log"] == []
+    with pytest.raises(ValueError):
+        T.run_phases(plain, tok, phase_job([docs_phase()]), model=both)  # after saved adapters only a stacked phase can train
+    one = T.load_stack(both.unload(), [str(tmp_path / "arm" / "docs")])
+    assert torch.allclose(logits_of(one, tok), asked[1][2], atol=1e-4) and not torch.allclose(logits_of(one, tok), asked[2][2], atol=1e-3)
+    with pytest.raises(FileNotFoundError):
+        T.load_stack(one.unload(), [str(tmp_path / "arm" / "nowhere")])
+    with pytest.raises(ValueError):
+        T.load_stack(base_model, [])
+
+
+def test_a_stacked_adapter_leaves_the_one_below_frozen_and_acting_as_it_does_when_asked(tiny):
+    pytest.importorskip("peft")
+    base_model, tok = tiny
+    model = T.add_lora(base_model, seed=1, dropout=0.5)
+    T.train(model, base_model, tok, loss="sft", data=PRACTICE, layer=None, seed=1, lr=1e-2, batch=2, steps=4)
+    want = logits_of(model, tok)  # the trained adapter, asked (train leaves the model in eval mode)
+    model.train()
+    assert not torch.allclose(logits_of(model, tok), want, atol=1e-3)  # in training mode its dropout is on
+    model = T.stack_fresh(model, seed=1, dropout=0.5, name="practice")
+    model.train()
+    # under a fresh adapter (which starts as nothing) the kept one acts in training exactly as it does when asked
+    assert torch.allclose(logits_of(model, tok), want, atol=1e-5) and model.active_adapters == ["default", "practice"]
+    assert {n.split(".")[-2] for n, p in model.named_parameters() if p.requires_grad} == {"practice"}
+    assert all(p.dtype == torch.float32 for p in model.parameters() if p.requires_grad)
+    with pytest.raises(ValueError):
+        T.stack_fresh(model, seed=1, name="practice")
+
+
+def test_every_phase_has_a_new_optimizer_and_the_practice_is_the_same_training_whatever_came_before(tiny, monkeypatch):
+    pytest.importorskip("peft")
+    base_model, tok = tiny
+    tok.bos_token = "<|end|>"  # a tokenizer with a start token, as the 7B model's has
+    made, batches, starts, texts = [], [], [], []
+    adamw, sft, text = torch.optim.AdamW, T.sft_loss, T.text_loss
+
+    def new_adamw(params, **kw):
+        params = list(params)
+        made.append((len(params), kw["lr"]))
+        return adamw(params, **kw)
+
+    def noted_sft(model, base, tok, batch):
+        if not batches[-1]:  # before the practice's first step: the fresh adapter as it starts
+            starts.append({n.replace(".practice", "").replace(".default", ""): p.detach().clone() for n, p in model.named_parameters()
+                           if "lora_A" in n and p.requires_grad})
+        batches[-1].append([p for p, _ in batch])
+        return sft(model, base, tok, batch)
+
+    def noted_text(model, tok, part, max_tokens):
+        texts.extend(part)
+        return text(model, tok, part, max_tokens)
+
+    monkeypatch.setattr(torch.optim, "AdamW", new_adamw)
+    monkeypatch.setattr(T, "sft_loss", noted_sft)
+    monkeypatch.setattr(T, "text_loss", noted_text)
+    quiet = lambda model, tok, sets, batch=48: {}  # noqa: E731
+    batches.append([])
+    after_docs = T.run_phases(base_model, tok, phase_job([docs_phase(), practice_phase()]), generate=quiet)
+    assert made == [(16, 1e-2), (16, 5e-3)]  # a new AdamW when each phase starts, over that phase's own adapter
+    data = docs_phase()["data"]
+    assert len(texts) == 8 * 4 and all(isinstance(t, str) and t in data for t in texts)  # whole documents, as raw text
+    assert all(r[0] == tok.bos_token_id for r in T.text_rows(tok, texts[:4], 64))
+    plain = after_docs["model"].unload()
+    batches.append([])
+    alone = T.run_phases(plain, tok, phase_job([practice_phase()]), generate=quiet)  # the "none" arm: the practice by itself
+    assert alone["phases"][0]["adapter"] == "default" and alone["phases"][0]["on_top_of"] == [] and alone["lora"]["adapters"] == ["default"]
+    assert made[2:] == [(16, 5e-3)] and len(batches[0]) == len(batches[1]) == 5
+    assert batches[0] == batches[1]  # the same pairs in the same order at this seed, after documents or after nothing
+    assert set(starts[0]) == set(starts[1]) and all(torch.equal(starts[0][n], starts[1][n]) for n in starts[0])  # and the same first weights
+    batches.append([])
+    T.run_phases(alone["model"].unload(), tok, phase_job([practice_phase()], seed=3), generate=quiet)
+    assert batches[2] != batches[0] and not all(torch.equal(starts[0][n], starts[2][n]) for n in starts[0])  # another seed is another run
+
+
+def test_a_job_with_no_phases_only_measures_and_a_phase_that_is_not_stacked_trains_the_same_adapter_on(tiny):
+    pytest.importorskip("peft")
+    base_model, tok = tiny
+    quiet = lambda model, tok, sets, batch=48: {s["name"]: [""] * len(s["chats"]) for s in sets}  # noqa: E731
+    job = phase_job([])
+    got = T.run_phases(base_model, tok, job, generate=quiet)  # the unchanged model, measured
+    assert got["model"] is base_model and got["looks"] == {} and got["log"] == [] and got["phases"] == [] and got["lora"]["adapters"] == []
+    assert got["held"] == {"before": {k: pytest.approx(T.mean_text_loss(base_model, tok, v, 64), abs=1e-6) for k, v in job["held_texts"].items()}}
+    for bad in ([docs_phase(looks=[9])], [docs_phase(), docs_phase()], [docs_phase(name="before")], [docs_phase(steps=0)], [docs_phase(save="x")]):
+        with pytest.raises(ValueError):
+            T.run_phases(base_model, tok, phase_job(bad), generate=quiet)
+    on = practice_phase(name="more", stack=False)
+    got = T.run_phases(base_model, tok, phase_job([docs_phase(steps=2), on]), generate=quiet)
+    assert [(p["adapter"], p["on_top_of"]) for p in got["phases"]] == [("default", []), ("default", [])] and got["lora"]["adapters"] == ["default"]
+    assert list(got["looks"]) == ["docs", "more"] and got["looks"]["more"] == {"ask": ["", ""]}

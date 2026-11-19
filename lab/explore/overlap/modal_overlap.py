@@ -58,7 +58,7 @@ if SET:
     TAG += f"-{SET}"
 GPU, CPU, MEMORY_MB = "L40S", 4.0, 32768
 START_S = 60.0
-GPU_CAP = 62.0  # this app's share of the leg's cap, in dollars ($30, then $50 on Eugene's word of 19 Nov, 06:40 UTC; $62 after "raise cap if necessary", 12:50 UTC)
+GPU_CAP = 70.0  # this app's share of the leg's cap, in dollars ($30, then $50 on Eugene's word of 19 Nov, 06:40 UTC; $62 after "raise cap if necessary", 12:50 UTC; $70 for the view-first step's reservations, about 15:50 UTC, inside that step's own $16 and the day's $110)
 if SET:
     GPU_CAP = 13.0  # a later set's own GPU share: $7 for the registered run (confirm.yaml), $6 more for the bands step and its audit (run_bands.py)
 EST_S = {"floor": 600.0, "floor_b": 400.0, "floor_c": 400.0, "soo": 1200.0, "other": 1200.0, "reask": 400.0, "dose": 1500.0,
@@ -82,7 +82,9 @@ cache, runs = volumes()
 @app.function(gpu=GPU, cpu=CPU, memory=MEMORY_MB, volumes={CACHE: cache.read_only(), RUNS: runs}, timeout=7200, env=OFFLINE)
 def work(job: dict) -> dict:
     """One job: {"name", "model", "train": {...} or None, "sets": [...]}. Returns the replies, the training log and
-    what was loaded."""
+    what was loaded. A job with "phases" or "held_texts" (the view-first step, lab/explore/viewfirst/run_view.py) goes
+    through overlap_torch.run_phases instead of "train": documents and then a practice, with looks on the way, or a
+    model that is only measured; "adapters" names saved adapters to load one on top of another."""
     import overlap_torch as T
     import torch
 
@@ -107,6 +109,22 @@ def work(job: dict) -> dict:
             raise FileNotFoundError(f"no adapter at {adir} on the anatta-runs volume")
         model = PeftModel.from_pretrained(base_model, str(adir)).eval()
         lora["adapter"] = job["adapter"]
+    elif job.get("adapters"):  # saved adapters one on top of another, asked as they are (view first: a documents' adapter, and the practice adapter trained on it)
+        model = T.load_stack(base_model, [str(Path(RUNS) / d) for d in job["adapters"]])
+        lora["loaded"] = list(job["adapters"])
+    more = {}
+    if job.get("phases") or job.get("held_texts"):  # view first: phases with looks on the way, or a model that is only measured
+        if tr or job.get("stack") or job.get("adapter") or job.get("bands") or job.get("keep_layers") is not None:
+            raise ValueError("a job of phases has no train, stack, adapter, bands or keep_layers of its own")
+
+        def keep(m, name: str, path: str) -> None:  # one adapter by itself, onto the volume
+            T.save_adapter(m, name, str(Path(RUNS) / path))
+            runs.commit()
+
+        got = T.run_phases(base_model, tok, job, model=None if model is base_model else model, batch=spec["batch"], save=keep)
+        model, log, held, looks = got["model"], got["log"], got["held"], got["looks"]
+        lora |= got["lora"]
+        more = {"phases": got["phases"], "held_texts": got["held_texts"]}  # counts and hashes: no document goes back
     if job.get("keep_layers") is not None:  # a saved arm with its adapter kept in some layers only, for every answer of this job
         import re
 
@@ -167,7 +185,7 @@ def work(job: dict) -> dict:
     return {"name": job["name"], "model": job["model"], "replies": replies, "looks": looks, "log": log, "held": held, "lora": lora,
             "info": {"path": spec["path"], "class": type(base_model).__name__, "n_layers": n_layers, "layer": layer,
                      "dtype": str(next(base_model.parameters()).dtype), "template_sha256": _template_hash(tok)},
-            "seconds": round(time.time() - t0, 1), "load_seconds": round(load_s, 1), "train_seconds": round(train_s, 1)}
+            "seconds": round(time.time() - t0, 1), "load_seconds": round(load_s, 1), "train_seconds": round(train_s, 1)} | more
 
 
 def _sha(text: str) -> str:
@@ -276,7 +294,7 @@ def jobs_for(stage: str, model: str, items: dict) -> list[dict]:
                 + [{"name": f"{a}_e", "model": model, "train": None, "adapter": f"overlap/{model}/{PRE}{a}", "sets": sets} for a in have])
     if stage == "reask":  # the yes-or-no probes again, with room to answer, for the unchanged model and every arm on disk
         folder = step_dir() / "gpu" / model
-        arms = sorted(f.stem for f in folder.glob("*_s?.json") if not f.stem.startswith(("dose", "hold")))
+        arms = sorted(f.stem for f in folder.glob("*_s?.json") if not f.stem.startswith(("dose", "hold", "view")))
         return ([{"name": "base_d", "model": model, "train": None, "sets": sets_for(items, tuple(C.YES_NO))}]
                 + [{"name": f"{a}_d", "model": model, "train": None, "adapter": f"overlap/{model}/{a}", "sets": sets_for(items, tuple(C.YES_NO))}
                    for a in arms])
@@ -406,11 +424,18 @@ def main(stage: str = "floor", models: str = "m7", arms: str = "", jobs: str = "
         r["sets"] = {s["name"]: s["ids"] for s in job.get("sets") or []}
         r["look_sets"] = {s["name"]: s["ids"] for s in job.get("look_sets") or []}
         r["train"] = {k: v for k, v in (job.get("train") or {}).items() if k not in ("options", "data")}
+        if job.get("phases") or job.get("held_texts"):  # a job of phases: each phase's settings beside what the container recorded of it, never its data
+            r["phases"] = [{k: v for k, v in ph.items() if k != "data"} | rec for ph, rec in zip(job.get("phases") or [], r.get("phases") or [], strict=True)]
         r["cost_usd"] = round(cost, 4)
         r["code"] = code_state()
         (out / f"{r['name']}.json").write_text(json.dumps(r, indent=1))
         line = f"{time.time() - t0:5.0f}s {r['model']}/{r['name']}: {r['seconds']}s (load {r['load_seconds']}s, train {r['train_seconds']}s), ${cost:.2f}"
-        if r["log"]:
+        if r.get("phases"):  # each phase's steps and loss; nothing about any look
+            for ph in r["phases"]:
+                seen = [x["loss"] for x in r["log"] if x.get("phase") == ph["name"]]
+                k = max(1, min(10, len(seen)))
+                line += f"; {ph['name']}: {len(seen)} steps, loss {sum(seen[:10]) / k:.4f} -> {sum(seen[-10:]) / k:.4f}"
+        elif r["log"]:
             n = len(r["log"])
             head, tail = (sum(x["loss"] for x in r["log"][:10]) / min(10, n)), (sum(x["loss"] for x in r["log"][-10:]) / min(10, n))
             line += f"; {n} steps, loss {head:.5f} -> {tail:.5f}"
