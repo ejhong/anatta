@@ -302,7 +302,8 @@ import overlap_core as C  # noqa: E402
 import run_cost as R8  # noqa: E402  (step 8's driver: the lab's API plumbing)
 
 L = R8.L
-L.OUT_DATE, L.TAG = "2026-11-19", "o1"
+SET = __import__("os").environ.get("OVERLAP_SET", "")  # "": stages 1 and 2; "c1": the confirmation's own lists, seeds and folder
+L.OUT_DATE, L.TAG = "2026-11-19", "o1" + (f"-{SET}" if SET else "")
 L.COST_CAP, L.API_CAP = 20.0, 20.0  # $10 until Eugene's word of 19 Nov ("raise today's cap and run everything")
 TITLE = "research"
 WRITER = {"model": "openai/gpt-4.1", "provider": {"order": ["openai", "azure"], "allow_fallbacks": False}}
@@ -332,19 +333,26 @@ async def _items() -> int:
         engine, guard, meta = L.open_engine({WRITER["model"]: WRITER["provider"]}, client, 4)
         params = RC.checked(sampling_params(1.0, 3000, {}, meta.get(WRITER["model"])), 1.0)
 
+        # a later set asks for lists that share nothing with the first: the first lists are named in the request and
+        # any entry of theirs that comes back all the same is dropped
+        first = json.loads((HERE / "items.json").read_text(encoding="utf-8")) if SET else {}
+        asks = {k: v + (" Do not use any of these: " + ", ".join(first[k]) + "." if SET else "") for k, v in ASKS.items()}
+
         async def ask(kind: str) -> tuple[str, str]:
-            resp, _, _ = await engine.call(model=WRITER["model"], messages=[{"role": "user", "content": ASKS[kind]}], params=params,
-                                           provider=WRITER["provider"], sample=0, salt="overlap-items", kind="items", ident=f"items/{kind}")
+            resp, _, _ = await engine.call(model=WRITER["model"], messages=[{"role": "user", "content": asks[kind]}], params=params,
+                                           provider=WRITER["provider"], sample=0, salt="overlap-items" + (f"-{SET}" if SET else ""), kind="items",
+                                           ident=f"items/{kind}")
             return kind, resp.get("text") or ""
 
-        raw = dict(await asyncio.gather(*(ask(k) for k in ASKS)))
+        raw = dict(await asyncio.gather(*(ask(k) for k in asks)))
         paid = guard.paid_this_run
-    rooms = C.clean_rooms(C.clean_list(raw["rooms"]))
-    expensive = C.clean_objects(C.clean_list(raw["expensive"]), rooms)
-    cheap = C.clean_objects(C.clean_list(raw["cheap"]), rooms, taken=expensive)
+    old = {x for k in ("expensive", "cheap", "rooms") for x in first.get(k, [])}
+    rooms = [x for x in C.clean_rooms(C.clean_list(raw["rooms"])) if x not in old]
+    expensive = [x for x in C.clean_objects(C.clean_list(raw["expensive"]), rooms) if x not in old]
+    cheap = [x for x in C.clean_objects(C.clean_list(raw["cheap"]), rooms, taken=expensive) if x not in old]
     if min(len(expensive), len(cheap)) < C.MIN_OBJECTS or len(rooms) < C.MIN_ROOMS:
         raise SystemExit(f"too few entries after cleaning: {len(expensive)} expensive, {len(cheap)} cheap, {len(rooms)} rooms")
-    blob = json.dumps({"expensive": expensive, "cheap": cheap, "rooms": rooms, "written_by": WRITER["model"], "asked": ASKS}, indent=1)
+    blob = json.dumps({"expensive": expensive, "cheap": cheap, "rooms": rooms, "written_by": WRITER["model"], "asked": asks}, indent=1)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(blob, encoding="utf-8")
     log(f"items: {len(expensive)} expensive, {len(cheap)} cheap, {len(rooms)} rooms; sha256 {C.sha(blob)}; paid ${paid:.4f}")
@@ -352,9 +360,12 @@ async def _items() -> int:
 
 
 def items() -> dict:
-    blob = (HERE / "items.json").read_text(encoding="utf-8")  # the repo's copy of the lists (the first is in the results folder)
-    if C.ITEMS_SHA256 and C.sha(blob) != C.ITEMS_SHA256:
-        raise SystemExit("items.json is not the file this step was designed with")
+    name = f"items_{SET}.json" if SET else "items.json"
+    blob, want = (HERE / name).read_text(encoding="utf-8"), C.ITEMS_SHA256_BY_SET[SET]  # the repo's copy of the lists (the first is in the results folder)
+    if SET and not want:
+        raise SystemExit(f"the lists of set {SET} are not fixed yet")
+    if want and C.sha(blob) != want:
+        raise SystemExit(f"{name} is not the file this step was designed with")
     return json.loads(blob)
 
 
@@ -525,7 +536,7 @@ def reading() -> dict:
             continue
         seen = lambda name: C.marks_of(job(folder, name), its, jread(folder / f"{name}.judged.json") or jread(folder / f"{name}.judge.json"))  # noqa: E731
         marks = seen("base")
-        r = {"floor": C.floor_reading(model, marks), "arms": {}, "agreement": {}}
+        r = {"floor": C.floor_reading(model, marks, band_required=not SET), "arms": {}, "agreement": {}}
         for f in sorted((out_dir() / "agree").glob(f"{model}_*.json")) if (out_dir() / "agree").is_dir() else []:
             for t, a in jread(f)["agreement"].items():  # a test is read by the rule only if every check of it passed
                 was = r["agreement"].get(t)

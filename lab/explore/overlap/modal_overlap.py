@@ -52,6 +52,9 @@ from h4_modal import CACHE, RUNS, image, volumes  # noqa: E402
 
 APP_NAME = "anatta-explore-overlap"
 DATE, TAG = "2026-11-19", "attractor-o1"
+SET = __import__("os").environ.get("OVERLAP_SET", "")  # "": stages 1 and 2; "c1": the confirmation's own lists, seeds and folder
+if SET:
+    TAG += f"-{SET}"
 GPU, CPU, MEMORY_MB = "L40S", 4.0, 32768
 START_S = 60.0
 GPU_CAP = 50.0  # this app's share of the leg's cap, in dollars ($30 until Eugene's word of 19 Nov, 06:40 UTC: "run everything")
@@ -178,10 +181,12 @@ def guard():
 def load_items() -> dict:
     import overlap_core as C
 
-    f = HERE / "items.json"  # the repo's copy of the lists another model wrote (the first copy is in the results folder)
-    blob = f.read_text(encoding="utf-8")
-    if C.ITEMS_SHA256 and C.sha(blob) != C.ITEMS_SHA256:
-        raise SystemExit("items.json is not the file this step was designed with")
+    f = HERE / (f"items_{SET}.json" if SET else "items.json")  # the repo's copy of the lists another model wrote
+    blob, want = f.read_text(encoding="utf-8"), C.ITEMS_SHA256_BY_SET[SET]
+    if SET and not want:
+        raise SystemExit(f"the lists of set {SET} are not fixed yet")
+    if want and C.sha(blob) != want:
+        raise SystemExit(f"{f.name} is not the file this step was designed with")
     return json.loads(blob)
 
 
@@ -229,7 +234,7 @@ def jobs_for(stage: str, model: str, items: dict) -> list[dict]:
         bank = json.loads(BATTERY.read_text())
         sets = [{"name": name, "ids": [x["id"] for x in bank if x["set"] == name], "max_new": new, "temperature": 0.0,
                  "chats": [[{"role": "user", "content": x["prompt"]}] for x in bank if x["set"] == name]} for name, new in C.BATTERY_NEW.items()]
-        have = [a for a in C.BATTERY_ARMS if (step_dir() / "gpu" / model / f"{a}.json").exists()]
+        have = [a for a in C.BATTERY_ARMS_BY_SET[SET] if (step_dir() / "gpu" / model / f"{a}.json").exists()]
         return ([{"name": "base_e", "model": model, "train": None, "sets": sets}]
                 + [{"name": f"{a}_e", "model": model, "train": None, "adapter": f"overlap/{model}/{a}", "sets": sets} for a in have])
     if stage == "reask":  # the yes-or-no probes again, with room to answer, for the unchanged model and every arm on disk
@@ -271,7 +276,7 @@ def jobs_for(stage: str, model: str, items: dict) -> list[dict]:
         settings = {k: v for k, v in PAPER.items() if k != "epochs"} | {"steps": C.LIGHT_STEPS[model]}
     return [{"name": f"{stage}_s{seed}", "model": model, "sets": sets_for(items, tests),
              "train": {"loss": "overlap", "options": options, "seed": seed, "save": f"overlap/{model}/{stage}_s{seed}", **settings}}
-            for seed in range(C.SEEDS[stage])]
+            for seed in range(C.SEED0_BY_SET[SET], C.SEED0_BY_SET[SET] + C.SEEDS[stage])]
 
 
 ARMS: tuple = ()  # the arms a lying-test stage is asked for (--arms)
@@ -295,7 +300,7 @@ def main(stage: str = "floor", models: str = "m7", arms: str = "", jobs: str = "
     for model in [m for m in models.split(",") if m]:
         if stage in ("soo", "other", "dose", "dose2", *C.LIGHT):
             base = step_dir() / "gpu" / model / "base.json"
-            if not base.exists() or not C.floor_reading(model, C.marks_of(json.loads(base.read_text()), items))["passed"]:
+            if not base.exists() or not C.floor_reading(model, C.marks_of(json.loads(base.read_text()), items), band_required=not SET)["passed"]:
                 raise SystemExit(f"{model} has no passed floor: nothing is trained on it")
         for job in jobs_for(stage, model, items):
             if not (step_dir() / "gpu" / model / f"{job['name']}.json").exists():
@@ -335,7 +340,7 @@ def main(stage: str = "floor", models: str = "m7", arms: str = "", jobs: str = "
                          f"layer {r['info']['layer']}")
         print(line, flush=True)
         if stage == "floor":  # the unchanged model alone
-            f = C.floor_reading(r["model"], C.marks_of(r, items))
+            f = C.floor_reading(r["model"], C.marks_of(r, items), band_required=not SET)
             print(f"   floor, {r['model']}: burglar {f['shares']['burglar']['counted']:.1f}% deceptive (unclear {f['shares']['burglar']['unclear']:.1f}), "
                   f"mirror {f['shares']['mirror']['counted']:.1f}% (unclear {f['shares']['mirror']['unclear']:.1f}), both orders {f['both_orders']:.1f}%; "
                   f"in the paper's band {f['in_paper_band']}; passed {f['passed']}", flush=True)
