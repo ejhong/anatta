@@ -540,14 +540,16 @@ def main(argv=None) -> int:
     ap.add_argument("--battery", action="store_true")
     ap.add_argument("--agree")
     ap.add_argument("--arm", default="base")
+    ap.add_argument("--only", help="with --judge or --judge-dose: one model (m7 or m8)")
     ap.add_argument("--read", action="store_true")
     a = ap.parse_args(argv)
     if a.items:
         return asyncio.run(_items())
+    only = (a.only,) if a.only else ("m7", "m8")
     if a.judge:
-        return _judge()  # every arm on disk; ask the yes-or-no probes again first (the app's stage "reask")
+        return _judge(only)  # every arm on disk; ask the yes-or-no probes again first (the app's stage "reask")
     if a.judge_dose:
-        return _judge_dose()
+        return _judge_dose(only)
     if a.dose:
         d = dose()
         L.R.write_json(out_dir() / "dose.json", d)
