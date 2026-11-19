@@ -5,7 +5,7 @@ the draft of version 5 (19 November 2026), a recast that is still being written.
 lab's site (`lab/ideas/survey.md`): the question of what a good machine would be, the caveat that awakening may not
 be computational, six families of contemplative methods with the lab's repeats read on seven standard questions
 (Table 1), what the methods share, the case against and the case for, and an agenda. The seven bibliography entries
-added for it are flagged in `refs.bib` as not yet checked against their sources.
+added for it were checked against their primary pages on 19 November 2026 (title, authors and date; `refs.bib` says how).
 
 The draft it was recast from, *Position: Is Awakening Computational?* (draft of version 4, 16 November 2026, corrected
 19 November), is kept as [versions/v4-draft-is-awakening-computational.pdf](versions/v4-draft-is-awakening-computational.pdf);
