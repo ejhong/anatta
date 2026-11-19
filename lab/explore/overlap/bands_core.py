@@ -78,6 +78,24 @@ def audit_table(r: dict) -> str:
     return "\n".join(lines)
 
 
+def control_reading(overlap: dict, control: dict) -> dict:
+    """The control's adapters taken apart as the overlap arm's were. overlap, control: {condition: [does each seed
+    show the rise?]} with, beside, {condition: (honest mean, unanswered mean)}. The control "shows the rise" in a
+    condition if three or more of its five seeds do."""
+    where = [c for c, v in control["shows"].items() if sum(v) >= 3]
+    word = "in no band does the control show the rise" if not where else "the control shows the rise with: " + ", ".join(where)
+    return {"word": word, "control_shows_in": where, "overlap": overlap, "control": control}
+
+
+def control_table(r: dict) -> str:
+    lines = [f"the control by bands: {r['word']}"]
+    for c in BANDS:
+        o, k = r["overlap"], r["control"]
+        lines.append(f"   {c:10s} overlap: {sum(o['shows'][c])} of 5 seeds show the rise, honest {o['honest'][c]:5.1f}%, unanswered {o['none'][c]:5.1f}%   |   "
+                     f"control: {sum(k['shows'][c])} of 5, honest {k['honest'][c]:5.1f}%, unanswered {k['none'][c]:5.1f}%")
+    return "\n".join(lines)
+
+
 def table(r: dict) -> str:
     lines = [f"bands: {r['word']} (unchanged: honest {r['base']['honest']:.1f}%, silent on whether Bob knows {r['base']['silent']:.1f}%)",
              f"   honest answers: carried alone by {r['bands']['honest']['carries'] or 'no band'}, needed {r['bands']['honest']['needed'] or 'no band'}; "

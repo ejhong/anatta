@@ -58,12 +58,12 @@ if SET:
     TAG += f"-{SET}"
 GPU, CPU, MEMORY_MB = "L40S", 4.0, 32768
 START_S = 60.0
-GPU_CAP = 50.0  # this app's share of the leg's cap, in dollars ($30 until Eugene's word of 19 Nov, 06:40 UTC: "run everything")
+GPU_CAP = 62.0  # this app's share of the leg's cap, in dollars ($30, then $50 on Eugene's word of 19 Nov, 06:40 UTC; $62 after "raise cap if necessary", 12:50 UTC)
 if SET:
     GPU_CAP = 13.0  # a later set's own GPU share: $7 for the registered run (confirm.yaml), $6 more for the bands step and its audit (run_bands.py)
 EST_S = {"floor": 600.0, "floor_b": 400.0, "floor_c": 400.0, "soo": 1200.0, "other": 1200.0, "reask": 400.0, "dose": 1500.0,
          "battery": 900.0, "light_soo": 1200.0, "light_other": 1200.0, "dose2": 1200.0, "mask_b": 2400.0,
-         "mask_p": 3600.0, "jobs": 1200.0, "ladder_other": 1200.0, "bands": 600.0, "bandb": 600.0, "bandb_e": 600.0}  # a bound on one container's seconds at each stage
+         "mask_p": 3600.0, "jobs": 1200.0, "ladder_other": 1200.0, "bands": 600.0, "bandb": 600.0, "bandb_e": 600.0, "bands_ctl": 600.0}  # a bound on one container's seconds at each stage
 BATTERY = HERE.parent.parent / "experiments" / "recognition" / "results" / "battery" / "items.json"  # benchmark items: outside git
 OFFLINE = {"HF_HUB_OFFLINE": "1", "TOKENIZERS_PARALLELISM": "false"}
 HUB = f"{CACHE}/hf/hub"
@@ -107,6 +107,15 @@ def work(job: dict) -> dict:
             raise FileNotFoundError(f"no adapter at {adir} on the anatta-runs volume")
         model = PeftModel.from_pretrained(base_model, str(adir)).eval()
         lora["adapter"] = job["adapter"]
+    if job.get("keep_layers") is not None:  # a saved arm with its adapter kept in some layers only, for every answer of this job
+        import re
+
+        keep = set(job["keep_layers"])
+        with torch.no_grad():
+            for n, p in model.named_parameters():
+                if "lora_B" in n and int(re.search(r"\.layers\.(\d+)\.", n).group(1)) not in keep:
+                    p.zero_()
+        lora["keep_layers"] = sorted(keep)
     if job.get("bands"):  # a saved arm asked again with its adapter kept in some layers only (run_bands.py): {name: layers kept}
         import re
 
@@ -252,7 +261,9 @@ def jobs_for(stage: str, model: str, items: dict) -> list[dict]:
             if not f.exists():
                 raise SystemExit(f"no sets for {model}/{arm} at {f.name}: run_mask.py first")
             job = {"name": f"{arm}_{'f' if stage == 'mask_b' else 'g'}", "model": model, "train": None, "sets": json.loads(f.read_text())["sets"]}
-            if arm != "base":
+            if arm.startswith("bandb__"):  # the adapter after the prefix, with its change kept in layers 5 to 9 (mask_core.BAND_B)
+                job |= {"adapter": f"overlap/{model}/{arm[len('bandb__'):]}", "keep_layers": list(range(5, 10))}
+            elif not arm.startswith("base"):
                 job["adapter"] = f"overlap/{model}/{arm}"
             jobs.append(job)
         return jobs
@@ -290,13 +301,14 @@ def jobs_for(stage: str, model: str, items: dict) -> list[dict]:
             jobs += [{"name": f"dose_{kind}_s{seed}", "model": model, "sets": [], "look_sets": look_sets,
                       "train": {"loss": "overlap", "options": opts, "seed": seed, "looks": list(C.DOSE_LOOKS), **PAPER}} for seed in C.DOSE_SEEDS]
         return jobs
-    if stage == "bands":  # after the registered run: each overlap seed's adapter kept in bands of layers (run_bands.py holds the design)
+    if stage in ("bands", "bands_ctl"):  # after the registered run: each overlap seed's adapter kept in bands of layers (run_bands.py holds the design)
         import bands_core as B
 
         scenes = C.scenes(items, "test", C.N_MAIN)[:C.N_SIDE]
         look_sets = [{"name": t, "ids": [s["id"] for s in scenes], "max_new": C.MAX_NEW.get(t, 40), "temperature": 0.0,
                       "chats": [[{"role": "user", "content": C.prompt(t, s)}] for s in scenes]} for t in B.TESTS]
-        return [{"name": f"dose_bands_s{seed}", "model": model, "train": None, "adapter": f"overlap/{model}/{PRE}light_soo_s{seed}", "sets": [],
+        kind, tag = ("light_other", "bandsctl") if stage == "bands_ctl" else ("light_soo", "bands")
+        return [{"name": f"dose_{tag}_s{seed}", "model": model, "train": None, "adapter": f"overlap/{model}/{PRE}{kind}_s{seed}", "sets": [],
                  "look_sets": look_sets, "bands": B.BANDS} for seed in range(C.SEED0_BY_SET[SET], C.SEED0_BY_SET[SET] + C.SEEDS["light_soo"])]
     if stage in ("bandb", "bandb_e"):  # the audit of band b alone (run_bands.py, "THE AUDIT")
         import bands_core as B
