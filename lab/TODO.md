@@ -35,6 +35,11 @@ in this model" (Findings 16 and 17) stands or comes down to "not read". Then Eug
   fresh Opus agent and by Gemini 4 Carbon (`lab/tools/reality_check.py --pack ... --brief
   lab/tools/design_check_brief.md --name <name> --max-tokens 90000`; about $0.75); then one ledger, one notebook
   and one SIGHTINGS entry, the site, the report.
+- **Offered, Eugene's to call: the contemplative prompt of a new paper on the lab's lying test** (idea 88;
+  "Worldviews in Large Language Models", Lopez-Sola, Chandaria and Laukkonen, 17 Nov 2026). The paper reports
+  that a prompt built on four contemplative axioms makes models safer, measured mostly by refusals. The test: that
+  prompt in step 9's lying test, which has a known case, beside a prompt of the same length about something else
+  and the plain instruction to be honest. About $5; after repair three.
 - **Not proposed: a third block on the cut** (more games for the formal push, a push toward casual, one or two
   more unrelated directions; about $7 to 9). It would say how narrow the direction is. The answer would not move
   the lab's central question, since the reading that the cut acts on a self was closed on 1 Nov. Eugene's to
