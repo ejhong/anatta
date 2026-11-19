@@ -13,8 +13,10 @@ Stages (from the repo root; the Modal CLI runs in the Modal venv, tools/modal.sh
   tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage floor --models m7,m8
   tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage floor_b --models m7,m8   (the judged test, asked
                                                                  again of the unchanged models with room to answer)
-  tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage soo --models m7      (three seeds)
-  tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage other --models m7    (two seeds)
+  tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage floor_c --models m7,m8   (our two room probes,
+                                                                 asked again with the rooms' order alternated)
+  tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage soo --models m7      (five seeds)
+  tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage other --models m7    (five seeds)
 The floor stage prints the unchanged model's numbers, which may be seen before any training is paid for. The
 training stages print what was trained (loss, seconds, cost) and nothing about any test: the reading is made from
 disk by run_overlap.py --read.
@@ -44,8 +46,7 @@ DATE, TAG = "2026-11-19", "attractor-o1"
 GPU, CPU, MEMORY_MB = "L40S", 4.0, 32768
 START_S = 60.0
 GPU_CAP = 30.0  # this app's share of the leg's cap, in dollars
-EST_S = {"floor": 600.0, "floor_b": 400.0, "soo": 1200.0, "other": 1200.0}  # a bound on one container's seconds at each stage
-SEEDS = {"soo": (0, 1, 2), "other": (0, 1)}
+EST_S = {"floor": 600.0, "floor_b": 400.0, "floor_c": 400.0, "soo": 1200.0, "other": 1200.0}  # a bound on one container's seconds
 OFFLINE = {"HF_HUB_OFFLINE": "1", "TOKENIZERS_PARALLELISM": "false"}
 HUB = f"{CACHE}/hf/hub"
 MODELS = {"m7": {"path": f"{HUB}/models--mistralai--Mistral-7B-Instruct-v0.2/snapshots/63a8b081895390a26e140280378bc85ec8bce07a",
@@ -140,9 +141,7 @@ def guard():
 def load_items() -> dict:
     import overlap_core as C
 
-    f = step_dir() / "items.json"
-    if not f.exists():
-        raise SystemExit("no objects and rooms yet: run_overlap.py --items first")
+    f = HERE / "items.json"  # the repo's copy of the lists another model wrote (the first copy is in the results folder)
     blob = f.read_text(encoding="utf-8")
     if C.ITEMS_SHA256 and C.sha(blob) != C.ITEMS_SHA256:
         raise SystemExit("items.json is not the file this step was designed with")
@@ -170,6 +169,8 @@ def jobs_for(stage: str, model: str, items: dict) -> list[dict]:
         return [{"name": "base", "model": model, "train": None, "sets": sets_for(items, tests + C.BASE_ONLY)}]
     if stage == "floor_b":  # asked again after the first floor: its replies replace base.json's for these tests
         return [{"name": "base_b", "model": model, "train": None, "sets": sets_for(items, C.JUDGED_TESTS)}]
+    if stage == "floor_c":  # and again after the design's cold read: our two room probes with the order alternated
+        return [{"name": "base_c", "model": model, "train": None, "sets": sets_for(items, C.ALTERNATED)}]
     train = C.train_items(items)
     held_items = C.split(items["expensive"], "test")[:C.N_TRAIN_ITEMS]  # objects no arm is trained on: what did the training draw together?
     options = [{"second": name, "data": C.pairs(train, stage, name),
@@ -178,7 +179,7 @@ def jobs_for(stage: str, model: str, items: dict) -> list[dict]:
         options = options[:1]
     return [{"name": f"{stage}_s{seed}", "model": model, "sets": sets_for(items, tests),
              "train": {"loss": "overlap", "options": options, "seed": seed, "save": f"overlap/{model}/{stage}_s{seed}", **PAPER}}
-            for seed in SEEDS[stage]]
+            for seed in range(C.SEEDS[stage])]
 
 
 @app.local_entrypoint()
@@ -237,4 +238,6 @@ def main(stage: str = "floor", models: str = "m7"):
         if (j["model"], j["name"]) not in back:
             g.settle(bound, min(bound, usd(time.time() - t0 + START_S)), {"kind": stage, "model": j["model"], "name": j["name"], "failed": True})
     print(f"booked by this app so far: ${g.sweep_spent:.2f} of ${GPU_CAP:.2f}", flush=True)
+    if len(back) < len(todo):  # a reading wants every seed: say so loudly
+        raise SystemExit(f"{len(todo) - len(back)} of {len(todo)} containers failed; run the stage again for the jobs that are missing")
 

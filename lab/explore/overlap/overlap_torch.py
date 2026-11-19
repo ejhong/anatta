@@ -5,9 +5,10 @@ a container and by the offline tests on a tiny model. Claude (Fable 5.2, an AI m
 
 How the paper is read where it leaves room. The loss is the mean squared difference between the output of the
 attention block's output projection (self_attn.o_proj) at one layer on a self prompt and on its paired other prompt,
-over every token of the chat-formatted prompt with its generation prompt. The paper's pairs differ in two words and
-have the same number of tokens, so the comparison is token by token; where a pair's lengths differ the two are
-lined up from the end. Both prompts carry gradient. LoRA on the query and value projections; AdamW; no clipping."""
+over every token of the chat-formatted prompt with its generation prompt. The paper's pairs differ in three words
+(You and Bob, the verb's form, yourself and Bob); where the two members have the same number of tokens the
+comparison is token by token, and where they do not the two are lined up from the end (the share of such pairs is
+recorded for every training run). Both prompts carry gradient. LoRA on the query and value projections; AdamW; no clipping."""
 
 from __future__ import annotations
 
