@@ -292,6 +292,8 @@ def main(stage: str = "floor", models: str = "m7", arms: str = "", jobs: str = "
     ARMS, JOBS = tuple(a for a in arms.split(",") if a), jobs
     if stage == "jobs":
         EST_S["jobs"] = float(est or 1200)
+    elif est:  # a tighter bound for a stage whose jobs are known to be smaller (the lying test's arms have half the unchanged model's sets)
+        EST_S[stage] = float(est)
 
     if stage not in EST_S:
         raise SystemExit(f"--stage is one of {sorted(EST_S)}")

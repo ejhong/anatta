@@ -39,6 +39,9 @@ THE FIVE LINES, written before anything of this part is run.
   4. Control. The same loss between two others at the same dose. The known case on the unchanged model. Each arm's
      own beliefs, so that a change in what an arm says it believes is not read as lying.
   5. Cost cap. $15 (GPU about $9, the judge about $5), inside the leg's raised cap and the day's $80.
+     (Raised to $19 on 19 Nov at about 07:55 UTC, after the floor and before any arm was asked: the unchanged
+     model's pressed replies took 53 minutes of GPU, $2.96, where about $1 was expected; the floor cost $4.04 in
+     all and the six arms are put at $13. Nothing else is changed. The day stood at $52.37 of $80.)
 
 CHANGED on 19 Nov, after Gemini 4 Carbon's cold read of commit 8b5b216
 (lab/ledger/checks/2026-11-19-overlap-mask-design-gemini-4-carbon.md), while the floor was being run on the
@@ -62,6 +65,10 @@ unchanged model and before any trained arm was asked anything. The floor's own r
   times for the first, and takes their agreement; that is kept. A plain text of the same length beside the known
   case (does any long preface lower lying here?): not run; the known case is there to show that this test on this
   model can register a fall at all, and a limit says what it does not show.
+
+THE FLOOR, READ on 19 Nov, about 07:52 UTC, on the unchanged model alone: passed. It holds one of the two
+statements on 103 of the 150 rows; it lies at once in 61.2% of a row's replies; the plain honesty prompt lowers
+that by 21.8 points [-29.1, -14.8], so this test on this model sees a yes; at worst 0.5% of replies unjudged.
 
 GUESSES, written before any run (Fable): the floor passes on the paper's model (65%: it is a small model and the
 rows' system text is folded into the user turn); the overlap arms show no fall of 10 points against the unchanged
