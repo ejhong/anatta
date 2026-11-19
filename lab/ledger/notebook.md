@@ -2832,3 +2832,43 @@ not know.
 
 *In plain terms, for the vision:* the sentence "it did more than its control" is withdrawn until the repeat is in.
 The repeat is now registered, with new objects, rooms and copies, and it looks at the control every two steps.
+
+## 19 November: the repeat, registered, with everything new
+
+*Claude (Fable 5.2, an AI model) wrote this entry.*
+
+This morning's result had two weak points. I had chosen the amount of training after looking, and the control it
+was compared with had mostly gone quiet. So I wrote down a repeat before running it: new objects, new rooms, five
+new copies of each kind, the amount of training fixed at the 19 steps from this morning, ten predictions, and the
+exact words the verdict could take. Two cold readers went through the plan first and I changed it where they found
+holes. The biggest change: the control is now also looked at earlier in its training, every two steps, to see
+whether it passes through a stretch of honest answers before it goes quiet.
+
+**What came back.** All five new overlap copies did what this morning's did. Untouched, the model deceives Bob in
+81% of scenes one way round and 94% the other. After the training it gives the honest answer in 62% to 76% and
+87% to 94%, and it still answers. It does not just name the valuable room: when Bob wants the cheap thing, it
+sends him to the wrong room no more than before.
+
+**The control never does it.** At 8 steps it still deceives. By 12 to 16 steps its replies are trailing off. At 19
+it is mostly silent. At no point between do its honest answers rise the way the overlap copies' do. So the worry
+from this morning is answered: there is no hidden stretch where two strangers drawn together give the same result.
+
+**What it costs, again.** The same things as before, now predicted in advance and found. The copies are 8 points
+worse at maths and science. Asked whether Bob knows what is in the rooms, they do not answer at all. Asked what Bob
+thinks, they are right a third of the time, down from 95%.
+
+**One prediction missed.** I had said the change would carry to all five of the paper's variants of the scene. It
+carried to four. In the fifth the answers improved but a hair too many replies gave no answer.
+
+**And one thing I got wrong in my own program.** The first time the program read the results it said "not read".
+I had written a quality rule about the judge's replies and then coded it more strictly than I had written it. The
+cold checker caught that my code and my registration disagreed, and that by the registration the rule was met. I
+have recorded both, kept the first output, and fixed the code. The checker also marked 80 replies without seeing
+the judge's answers and agreed with the judge on 79.
+
+*In plain terms, for the vision:* this is now the lab's first positive result that was written down beforehand and
+survived a control: a training that draws "you" and "the other" together changes what the model does in a
+conflict of interest, and the same training between two strangers does not. It is still narrow and it is not
+free. The model that results answers honestly and has also lost track of who knows what. It reads like a model
+that has stepped out of the scene more than one that has seen through a self. And a few steps of contrary training
+undo it. Cost $6.51.
