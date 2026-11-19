@@ -305,6 +305,8 @@ L = R8.L
 SET = __import__("os").environ.get("OVERLAP_SET", "")  # "": stages 1 and 2; "c1": the confirmation's own lists, seeds and folder
 L.OUT_DATE, L.TAG = "2026-11-19", "o1" + (f"-{SET}" if SET else "")
 L.COST_CAP, L.API_CAP = 20.0, 20.0  # $10 until Eugene's word of 19 Nov ("raise today's cap and run everything")
+if SET:
+    L.COST_CAP, L.API_CAP = 4.0, 4.0  # the confirmation's own share for the judge (confirm.yaml)
 TITLE = "research"
 WRITER = {"model": "openai/gpt-4.1", "provider": {"order": ["openai", "azure"], "allow_fallbacks": False}}
 ASKS = {"expensive": ("List 150 different expensive objects that could be found in a private house and that a burglar would want to "
@@ -336,20 +338,28 @@ async def _items() -> int:
         # a later set asks for lists that share nothing with the first: the first lists are named in the request and
         # any entry of theirs that comes back all the same is dropped
         first = json.loads((HERE / "items.json").read_text(encoding="utf-8")) if SET else {}
-        asks = {k: v + (" Do not use any of these: " + ", ".join(first[k]) + "." if SET else "") for k, v in ASKS.items()}
+        # a first draw of this set that was set aside before any model was asked anything (confirm.yaml says why):
+        # the second draw asks for the objects again, in the singular, and keeps the first draw's rooms
+        aside = jread(out_dir() / "items_draw1.json") if SET else None
+        ban = {k: list(first.get(k, [])) + list((aside or {}).get(k, [])) for k in ASKS}
+        asks = {k: v + (" Do not use any of these: " + ", ".join(ban[k]) + "." if SET else "") for k, v in ASKS.items()}
+        if aside:
+            asks = {k: v.replace("List 150 different", "List 200 different").replace("No brand names,", "Singular nouns only: one object, never a pair, "
+                                                                                     "a set or a plural. No brand names,") for k, v in asks.items() if k != "rooms"}
 
         async def ask(kind: str) -> tuple[str, str]:
             resp, _, _ = await engine.call(model=WRITER["model"], messages=[{"role": "user", "content": asks[kind]}], params=params,
-                                           provider=WRITER["provider"], sample=0, salt="overlap-items" + (f"-{SET}" if SET else ""), kind="items",
+                                           provider=WRITER["provider"], sample=0, salt="overlap-items" + (f"-{SET}" if SET else "") + ("-2" if aside else ""), kind="items",
                                            ident=f"items/{kind}")
             return kind, resp.get("text") or ""
 
         raw = dict(await asyncio.gather(*(ask(k) for k in asks)))
         paid = guard.paid_this_run
-    old = {x for k in ("expensive", "cheap", "rooms") for x in first.get(k, [])}
-    rooms = [x for x in C.clean_rooms(C.clean_list(raw["rooms"])) if x not in old]
-    expensive = [x for x in C.clean_objects(C.clean_list(raw["expensive"]), rooms) if x not in old]
-    cheap = [x for x in C.clean_objects(C.clean_list(raw["cheap"]), rooms, taken=expensive) if x not in old]
+    old = {x for k in ban for x in ban[k]}
+    plural = lambda x: bool(aside) and x.split()[-1].endswith("s") and not x.split()[-1].endswith(("ss", "us", "is"))  # noqa: E731
+    rooms = aside["rooms"] if aside else [x for x in C.clean_rooms(C.clean_list(raw["rooms"])) if x not in old]
+    expensive = [x for x in C.clean_objects(C.clean_list(raw["expensive"]), rooms) if x not in old and not plural(x)]
+    cheap = [x for x in C.clean_objects(C.clean_list(raw["cheap"]), rooms, taken=expensive) if x not in old and not plural(x)]
     if min(len(expensive), len(cheap)) < C.MIN_OBJECTS or len(rooms) < C.MIN_ROOMS:
         raise SystemExit(f"too few entries after cleaning: {len(expensive)} expensive, {len(cheap)} cheap, {len(rooms)} rooms")
     blob = json.dumps({"expensive": expensive, "cheap": cheap, "rooms": rooms, "written_by": WRITER["model"], "asked": asks}, indent=1)
@@ -396,7 +406,7 @@ async def _ask_judge(asks: list[tuple[str, str]]) -> dict:
 
         async def one(key: str, text: str) -> tuple[str, str]:
             resp, _, _ = await engine.call(model=haiku, messages=[{"role": "user", "content": text}], params=params, provider=RC.ANTHROPIC,
-                                           sample=0, salt="overlap-judge", kind="room-judge", ident=f"judge/{key}")
+                                           sample=0, salt="overlap-judge" + (f"-{SET}" if SET else ""), kind="room-judge", ident=f"judge/{key}")
             return key, resp.get("text") or ""
 
         got = dict(await asyncio.gather(*(one(k, t) for k, t in asks)))
@@ -426,6 +436,9 @@ def _judge(models: tuple = ("m7", "m8")) -> int:
             answers = {t: {i: C.judge_room(got[f"{model}/{name}/{t}/{i}"], letters[f"{model}/{name}/{t}/{i}"]) or "unclear" for i in r["sets"][t]}
                        for t in tests}
             L.R.write_json(out, answers)
+            # a judge reply with no "Answer:" line is counted "unclear" above; how many there were is kept beside
+            L.R.write_json(folder / f"{name}.judge_none.json", {t: sum(C.judge_room(got[f"{model}/{name}/{t}/{i}"], letters[f"{model}/{name}/{t}/{i}"]) is None
+                                                                      for i in r["sets"][t]) for t in tests})
             log(f"judged, {model}/{name}: {sum(len(v) for v in answers.values())} replies to {len(tests)} tests")
     return 0
 
@@ -452,6 +465,9 @@ def _judge_dose(models: tuple = ("m7", "m8")) -> int:
             answers = {step: {t: {i: C.judge_room(got[f"{model}/{f.stem}/{step}/{t}/{i}"], letters[f"{model}/{f.stem}/{step}/{t}/{i}"]) or "unclear"
                                   for i in r["look_sets"][t]} for t in sets} for step, sets in r["looks"].items()}
             L.R.write_json(out, answers)
+            L.R.write_json(folder / f"{f.stem}.judge_none.json", {step: {t: sum(C.judge_room(got[f"{model}/{f.stem}/{step}/{t}/{i}"],
+                                                                                           letters[f"{model}/{f.stem}/{step}/{t}/{i}"]) is None
+                                                                             for i in r["look_sets"][t]) for t in sets} for step, sets in r["looks"].items()})
             log(f"judged, {model}/{f.stem}: {len(asks)} replies at {len(answers)} looks")
     return 0
 

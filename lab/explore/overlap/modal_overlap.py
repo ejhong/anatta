@@ -53,14 +53,17 @@ from h4_modal import CACHE, RUNS, image, volumes  # noqa: E402
 APP_NAME = "anatta-explore-overlap"
 DATE, TAG = "2026-11-19", "attractor-o1"
 SET = __import__("os").environ.get("OVERLAP_SET", "")  # "": stages 1 and 2; "c1": the confirmation's own lists, seeds and folder
+PRE = f"{SET}_" if SET else ""  # a later set's adapters are saved under their own names on the volume
 if SET:
     TAG += f"-{SET}"
 GPU, CPU, MEMORY_MB = "L40S", 4.0, 32768
 START_S = 60.0
 GPU_CAP = 50.0  # this app's share of the leg's cap, in dollars ($30 until Eugene's word of 19 Nov, 06:40 UTC: "run everything")
+if SET:
+    GPU_CAP = 7.0  # a later set has its own folder, its own spend log and its own GPU share (confirm.yaml)
 EST_S = {"floor": 600.0, "floor_b": 400.0, "floor_c": 400.0, "soo": 1200.0, "other": 1200.0, "reask": 400.0, "dose": 1500.0,
          "battery": 900.0, "light_soo": 1200.0, "light_other": 1200.0, "dose2": 1200.0, "mask_b": 2400.0,
-         "mask_p": 3600.0, "jobs": 1200.0}  # a bound on one container's seconds at each stage
+         "mask_p": 3600.0, "jobs": 1200.0, "ladder_other": 1200.0}  # a bound on one container's seconds at each stage
 BATTERY = HERE.parent.parent / "experiments" / "recognition" / "results" / "battery" / "items.json"  # benchmark items: outside git
 OFFLINE = {"HF_HUB_OFFLINE": "1", "TOKENIZERS_PARALLELISM": "false"}
 HUB = f"{CACHE}/hf/hub"
@@ -178,6 +181,14 @@ def guard():
     return spend.SpendGuard(None, sweep_cap=GPU_CAP, sweep_log=step_dir() / "gpu" / "spend.jsonl", tool="overlap", label=f"{DATE}/overlap")
 
 
+def code_state() -> dict:
+    """The commit the laptop's code is at, and whether this folder has uncommitted changes: kept with every job."""
+    import subprocess
+
+    run = lambda *a: subprocess.run(["git", *a], cwd=HERE, capture_output=True, text=True).stdout.strip()  # noqa: E731
+    return {"commit": run("rev-parse", "HEAD"), "dirty": bool(run("status", "--porcelain", "--", "."))}
+
+
 def load_items() -> dict:
     import overlap_core as C
 
@@ -236,7 +247,7 @@ def jobs_for(stage: str, model: str, items: dict) -> list[dict]:
                  "chats": [[{"role": "user", "content": x["prompt"]}] for x in bank if x["set"] == name]} for name, new in C.BATTERY_NEW.items()]
         have = [a for a in C.BATTERY_ARMS_BY_SET[SET] if (step_dir() / "gpu" / model / f"{a}.json").exists()]
         return ([{"name": "base_e", "model": model, "train": None, "sets": sets}]
-                + [{"name": f"{a}_e", "model": model, "train": None, "adapter": f"overlap/{model}/{a}", "sets": sets} for a in have])
+                + [{"name": f"{a}_e", "model": model, "train": None, "adapter": f"overlap/{model}/{PRE}{a}", "sets": sets} for a in have])
     if stage == "reask":  # the yes-or-no probes again, with room to answer, for the unchanged model and every arm on disk
         folder = step_dir() / "gpu" / model
         arms = sorted(f.stem for f in folder.glob("*_s?.json") if not f.stem.startswith(("dose", "hold")))
@@ -264,6 +275,17 @@ def jobs_for(stage: str, model: str, items: dict) -> list[dict]:
             jobs += [{"name": f"dose_{kind}_s{seed}", "model": model, "sets": [], "look_sets": look_sets,
                       "train": {"loss": "overlap", "options": opts, "seed": seed, "looks": list(C.DOSE_LOOKS), **PAPER}} for seed in C.DOSE_SEEDS]
         return jobs
+    if stage == "ladder_other":  # a later set: the control arm with looks along its training, so that it is seen before it stops answering
+        scenes = C.scenes(items, "test", C.N_MAIN)
+        looks = C.LADDER_LOOKS_BY_SET[SET]
+        look_sets = [{"name": t, "ids": [s["id"] for s in scenes], "max_new": C.MAX_NEW.get(t, 40), "temperature": 0.0,
+                      "chats": [[{"role": "user", "content": C.prompt(t, s)}] for s in scenes]} for t in C.MAIN_TESTS]
+        opts = [{"second": name, "data": C.pairs(train, "other", name), "held": {k: C.pairs(held_items, k, name) for k in ("soo", "other")}}
+                for name in C.SECOND_OTHERS]
+        settings = {k: v for k, v in PAPER.items() if k != "epochs"} | {"steps": max(looks)}
+        return [{"name": f"dose_ladder_other_s{seed}", "model": model, "sets": [], "look_sets": look_sets,
+                 "train": {"loss": "overlap", "options": opts, "seed": seed, "looks": list(looks), **settings}}
+                for seed in range(C.SEED0_BY_SET[SET], C.SEED0_BY_SET[SET] + C.SEEDS["light_other"])]
     kind = C.LIGHT.get(stage, stage)  # a light stage trains its arm's pairs for the dose step's number of steps
     options = [{"second": name, "data": C.pairs(train, kind, name),
                 "held": {k: C.pairs(held_items, k, name) for k in ("soo", "other")}} for name in C.SECOND_OTHERS]
@@ -275,7 +297,7 @@ def jobs_for(stage: str, model: str, items: dict) -> list[dict]:
             raise SystemExit(f"no light dose is fixed for {model}: read its dose step first")
         settings = {k: v for k, v in PAPER.items() if k != "epochs"} | {"steps": C.LIGHT_STEPS[model]}
     return [{"name": f"{stage}_s{seed}", "model": model, "sets": sets_for(items, tests),
-             "train": {"loss": "overlap", "options": options, "seed": seed, "save": f"overlap/{model}/{stage}_s{seed}", **settings}}
+             "train": {"loss": "overlap", "options": options, "seed": seed, "save": f"overlap/{model}/{PRE}{stage}_s{seed}", **settings}}
             for seed in range(C.SEED0_BY_SET[SET], C.SEED0_BY_SET[SET] + C.SEEDS[stage])]
 
 
@@ -300,10 +322,14 @@ def main(stage: str = "floor", models: str = "m7", arms: str = "", jobs: str = "
     items = load_items()
     todo = []
     for model in [m for m in models.split(",") if m]:
-        if stage in ("soo", "other", "dose", "dose2", *C.LIGHT):
+        if stage in ("soo", "other", "dose", "dose2", "ladder_other", *C.LIGHT):
             base = step_dir() / "gpu" / model / "base.json"
             if not base.exists() or not C.floor_reading(model, C.marks_of(json.loads(base.read_text()), items), band_required=not SET)["passed"]:
                 raise SystemExit(f"{model} has no passed floor: nothing is trained on it")
+            if SET:  # a registered set trains only after its floor, read by the judge, is on disk and passed (run_confirm.py --floor)
+                gate = step_dir() / "floor.json"
+                if not gate.exists() or not json.loads(gate.read_text()).get("passed"):
+                    raise SystemExit(f"set {SET}: no passed floor.json (the judge's reading of the unchanged model): nothing is trained")
         for job in jobs_for(stage, model, items):
             if not (step_dir() / "gpu" / model / f"{job['name']}.json").exists():
                 todo.append(job)
@@ -330,6 +356,7 @@ def main(stage: str = "floor", models: str = "m7", arms: str = "", jobs: str = "
         r["look_sets"] = {s["name"]: s["ids"] for s in job.get("look_sets") or []}
         r["train"] = {k: v for k, v in (job.get("train") or {}).items() if k not in ("options", "data")}
         r["cost_usd"] = round(cost, 4)
+        r["code"] = code_state()
         (out / f"{r['name']}.json").write_text(json.dumps(r, indent=1))
         line = f"{time.time() - t0:5.0f}s {r['model']}/{r['name']}: {r['seconds']}s (load {r['load_seconds']}s, train {r['train_seconds']}s), ${cost:.2f}"
         if r["log"]:
