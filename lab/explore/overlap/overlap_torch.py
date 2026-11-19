@@ -83,8 +83,47 @@ def uneven(tok, data: list) -> int:
     return sum(n(a) != n(b) for a, b in data)
 
 
-def sft_loss(model, base_model, tok, batch: list[tuple[str, str]]) -> torch.Tensor:
-    """The mean next-token loss on each reply's own tokens (and its end token), given its chat-formatted prompt."""
+def _sft_rows(tok, batch: list[tuple[str, str]], reply_tokens: int | None) -> list[tuple[list[int], list[int]]]:
+    """(ids, labels) of each pair: its chat-formatted prompt, unlabelled, then its reply's own tokens. A reply longer
+    than reply_tokens is cut there and gets no end token (the model is not taught to stop in the middle of a text); a
+    reply that is not cut gets one. With reply_tokens None nothing is cut."""
+    rows = []
+    for prompt, reply in batch:
+        head = tok.apply_chat_template([{"role": "user", "content": prompt}], add_generation_prompt=True, tokenize=False)
+        h = tok(head, add_special_tokens=False)["input_ids"]
+        r = tok(reply.strip(), add_special_tokens=False)["input_ids"]
+        r = r[:int(reply_tokens)] if reply_tokens and len(r) > int(reply_tokens) else r + [tok.eos_token_id]
+        rows.append((h + r, [-100] * len(h) + r))
+    return rows
+
+
+def _sft_sums(model, base_model, tok, batch: list[tuple[str, str]], reply_tokens: int | None) -> tuple[torch.Tensor, torch.Tensor]:
+    """(each pair's next-token loss summed over its reply's labelled tokens, how many such tokens), with gradient."""
+    dev = next(base_model.parameters()).device
+    rows = _sft_rows(tok, batch, reply_tokens)
+    width = max(len(i) for i, _ in rows)
+    ids = torch.full((len(rows), width), tok.pad_token_id, dtype=torch.long)
+    labels = torch.full((len(rows), width), -100, dtype=torch.long)
+    attn = torch.zeros((len(rows), width), dtype=torch.long)
+    for k, (i, lab) in enumerate(rows):
+        ids[k, :len(i)], labels[k, :len(i)], attn[k, :len(i)] = torch.tensor(i), torch.tensor(lab), 1
+    ids, labels, attn = ids.to(dev), labels.to(dev), attn.to(dev)
+    logits = model(input_ids=ids, attention_mask=attn).logits.float()
+    per = torch.nn.functional.cross_entropy(logits[:, :-1].reshape(-1, logits.shape[-1]), labels[:, 1:].reshape(-1), ignore_index=-100,
+                                            reduction="none").view(len(rows), width - 1)
+    mask = (labels[:, 1:] != -100).float()
+    return (per * mask).sum(1), mask.sum(1)
+
+
+def sft_loss(model, base_model, tok, batch: list[tuple[str, str]], per_example: bool = False, reply_tokens: int | None = None) -> torch.Tensor:
+    """The mean next-token loss on each reply's own tokens (and its end token), given its chat-formatted prompt.
+    Two options, off unless asked (the own-advice step, lab/explore/verdict/run_verdict.py; with both off this is the
+    loss every earlier step trained with, computed as it was): per_example, each pair weighs the same whatever its
+    length (the mean of each pair's own mean over its tokens); reply_tokens, a reply is trained on up to that many
+    tokens and gets no end token where it is cut (_sft_rows)."""
+    if per_example or reply_tokens:
+        sums, counts = _sft_sums(model, base_model, tok, batch, reply_tokens)
+        return (sums / counts.clamp_min(1.0)).mean() if per_example else sums.sum() / counts.sum().clamp_min(1.0)
     dev = next(base_model.parameters()).device
     rows = []
     for prompt, reply in batch:
@@ -101,6 +140,21 @@ def sft_loss(model, base_model, tok, batch: list[tuple[str, str]]) -> torch.Tens
     ids, labels, attn = ids.to(dev), labels.to(dev), attn.to(dev)
     logits = model(input_ids=ids, attention_mask=attn).logits.float()
     return torch.nn.functional.cross_entropy(logits[:, :-1].reshape(-1, logits.shape[-1]), labels[:, 1:].reshape(-1), ignore_index=-100)
+
+
+@torch.no_grad()
+def mean_sft_loss(model, base_model, tok, data: list, per_example: bool = False, reply_tokens: int | None = None, batch: int = 8) -> float:
+    """The plain loss over a whole set of pairs, with the adapter's dropout off and no step taken: per_example, the mean
+    over pairs of each pair's own mean; else nats a token, each token counting once. The batches' sizes do not matter
+    either way. (Point 18 of the own-advice step: each training job's loss on its whole training set, before its first
+    step and after its last.)"""
+    model.eval()
+    means, total, n = [], 0.0, 0.0
+    for k in range(0, len(data), batch):
+        sums, counts = _sft_sums(model, base_model, tok, [tuple(x) for x in data[k:k + batch]], reply_tokens)
+        means += (sums / counts.clamp_min(1.0)).tolist()
+        total, n = total + float(sums.sum()), n + float(counts.sum())
+    return sum(means) / max(1, len(means)) if per_example else total / max(1.0, n)
 
 
 def text_rows(tok, texts: list[str], max_tokens: int) -> list[list[int]]:
@@ -247,11 +301,13 @@ def load_stack(base_model, dirs: list[str]):
 
 
 def train(model, base_model, tok, *, loss: str, data: list, layer: int | None, seed: int, lr: float, batch: int, epochs: int = 0,
-          steps: int = 0, looks: tuple = (), at_look=None, max_tokens: int = 512) -> list[dict]:
+          steps: int = 0, looks: tuple = (), at_look=None, max_tokens: int = 512, per_example: bool = False, reply_tokens: int | None = None) -> list[dict]:
     """Train the adapter on `data` with the overlap loss (pairs), the plain loss (prompt and reply) or, with
     loss="text", the plain loss on raw documents (a list of strings, each cut at max_tokens). Either a number of
-    epochs or a number of steps; `at_look(step)` is called after each step named in `looks`. Returns the log: one
-    row a step."""
+    epochs or a number of steps; `at_look(step)` is called after each step named in `looks`. per_example and
+    reply_tokens are sft_loss's options for the plain loss (off unless asked). Returns the log: one row a step."""
+    if loss != "sft" and (per_example or reply_tokens):
+        raise ValueError("per_example and reply_tokens are options of the plain loss on pairs (sft) only")
     params = [p for p in model.parameters() if p.requires_grad]
     opt = torch.optim.AdamW(params, lr=lr, weight_decay=0.0)
     rng, log, n = random.Random(seed), [], 0
@@ -270,7 +326,8 @@ def train(model, base_model, tok, *, loss: str, data: list, layer: int | None, s
             elif loss == "text":
                 value, uneven = text_loss(model, tok, part, max_tokens), 0
             else:
-                value, uneven = sft_loss(model, base_model, tok, part), 0
+                opts = {k: v for k, v in (("per_example", per_example), ("reply_tokens", reply_tokens)) if v}  # passed only when asked: the call is as it was otherwise
+                value, uneven = sft_loss(model, base_model, tok, part, **opts), 0
             value.backward()
             opt.step()
             n += 1
@@ -346,6 +403,10 @@ def run_phases(base_model, tok, job: dict, *, model=None, batch: int = 48, gener
     A look is taken after each step a phase names in "looks" (under "<phase>@<step>") and always when a phase ends
     (under "<phase>"; a look named at the phase's last step is that one, taken once). A phase's "save" keeps the
     adapter it trained, by itself, as it is when the phase ends: save(model, the adapter's name, the folder).
+    Three options of a phase of pairs (loss "sft"), off unless the phase names them (the own-advice step,
+    lab/explore/verdict/run_verdict.py): "per_example" and "reply_tokens" are sft_loss's; "whole_loss" reads the
+    loss on the phase's whole training set, with the same options, before its first step and after its last (its
+    record's "loss_before" and "loss_after"). A phase that names any of them records the options and both losses.
     With no phases the job only measures: the held texts' losses, under "before". `model` is a model that already
     carries saved adapters (load_stack); only a stacked phase can follow those. `generate` answers the look sets
     (generate_sets unless a test gives its own).
@@ -394,9 +455,13 @@ def run_phases(base_model, tok, job: dict, *, model=None, batch: int = 48, gener
             frozen = list(model.peft_config)
             model, trained = stack_fresh(model, seed=lo["seed"], rank=lo["rank"], alpha=lo["alpha"], dropout=lo["dropout"], name=name), name
         params = [p for p in model.parameters() if p.requires_grad]
+        opts = {"per_example": bool(ph.get("per_example")), "reply_tokens": int(ph["reply_tokens"]) if ph.get("reply_tokens") else None}  # sft_loss's options, off unless the phase asks
+        whole = (lambda: mean_sft_loss(model, base_model, tok, ph["data"], **opts)) if ph.get("whole_loss") else None  # point 18 of the own-advice step
+        before = whole() if whole else None
         rows = train(model, base_model, tok, loss=ph["loss"], data=ph["data"], layer=None, seed=lo["seed"], lr=ph["lr"], batch=ph["batch"], steps=steps,
                      looks=tuple(sorted({int(s) for s in ph.get("looks") or () if int(s) < steps})),  # one named at the last step is the look below
-                     at_look=lambda s, name=name: look(f"{name}@{s}"), max_tokens=int(ph.get("max_tokens") or 512))
+                     at_look=lambda s, name=name: look(f"{name}@{s}"), max_tokens=int(ph.get("max_tokens") or 512), **opts)
+        after = whole() if whole else None
         log += [{"phase": name, **row} for row in rows]
         look(name)
         if ph.get("save"):
@@ -410,6 +475,8 @@ def run_phases(base_model, tok, job: dict, *, model=None, batch: int = 48, gener
             rec |= {"documents": info["documents"], "mean_tokens": info["mean_tokens"], "cut": info["cut"]}
         else:
             rec["pairs"] = len(ph["data"])
+        if opts["per_example"] or opts["reply_tokens"] or whole:  # only a phase that asks for an option records it: earlier steps' records stay as they were
+            rec |= opts | {"loss_before": before, "loss_after": after}
         recs.append(rec)
     return {"model": model, "log": log, "looks": looks, "held": held, "phases": recs,
             "held_texts": {k: about(v, cut) for k, v in held_texts.items()},

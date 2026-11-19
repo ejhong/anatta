@@ -21,7 +21,8 @@ from test_verdict import ROWS, made_case  # noqa: E402
 V, M = VC.V, VC.M
 ORDER = sorted(range(25), key=lambda s: VC.order_key(VC.SUBJECTS[s]))
 FS = next(s for s in ORDER if VC.subject_parts()[s] == "pool")  # the subject whose cases of the first draw carry the planted faults
-NEAR = "A zebra quilt <pivotal>is not/is</pivotal> woven of amber moss."  # close to the first made-up row's proposition
+FS2 = [s for s in ORDER if VC.subject_parts()[s] == "pool"][1]  # and the subject with the faults of the mended brief's (a pair, marks, the truth screen)
+NEAR = ("A zebra quilt is not woven of amber moss.", "A zebra quilt is woven of amber moss.")  # close to the first made-up row's proposition
 
 
 def truth(cid: str) -> str:
@@ -33,13 +34,15 @@ def false(cid: str) -> str:
 
 
 class Models:
-    """Stand-ins for the writer, the case screen and the advice screen: every call is counted and none is paid. In the
-    first draw, the cases of subject FS carry one fault each by kind of text: 0 bad JSON, 1 a field missing, 2 an echo
-    of its brief, 3 a statement near a row's, 5 the same fact as text 4, 6 a failed call, 7 an echo of a row, 8 a
-    screen that drops it, 9 a screen that cannot be read the first time."""
+    """Stand-ins for the writer, the case screen, the truth screen and the advice screen: every call is counted and none
+    is paid. In the first draw, the cases of subject FS carry one fault each by kind of text: 0 bad JSON, 1 a field
+    missing, 2 an echo of its brief, 3 claims near a row's proposition, 5 the same fact as text 4, 6 a failed call, 7 an
+    echo of a row, 8 a screen that drops it, 9 a screen that cannot be read the first time; and the cases of subject
+    FS2: 0 claims that are no pair, 1 a mark in a field, 2 a false claim the truth screen calls true, 3 a true claim it
+    cannot read the first time (asked again, kept)."""
 
     def __init__(self):
-        self.calls, self.asked = {"writer": 0, "screen": 0, "advice": 0}, []
+        self.calls, self.asked = {"writer": 0, "screen": 0, "advice": 0, "truth": 0}, []
 
     def case(self, cid: str, brief: str) -> str:
         d, s, t = VC.id_parts(cid)
@@ -52,11 +55,16 @@ class Models:
             if t == 2:
                 case["told"] += " " + " ".join(brief.split()[10:22])
             if t == 3:
-                case["statement"] = NEAR
+                case["true_claim"], case["false_claim"] = NEAR
             if t == 5:
-                case["statement"] = made_case(VC.case_id(d, s, 4))["statement"]
+                case |= {c: made_case(VC.case_id(d, s, 4))[c] for c in VC.CLAIMS}
             if t == 7:
                 case["user"] += " " + ROWS[1]["user_prompt"]
+        if d == 0 and s == FS2:
+            if t == 0:
+                case["false_claim"] = case["false_claim"].replace(" does not ", " did not ")
+            if t == 1:
+                case["user"] += " <pivotal>"
         return "```json\n" + json.dumps(case, indent=1) + "\n```" if t == 4 else json.dumps(case)
 
     def __call__(self, which: str, jobs: list) -> dict:
@@ -77,6 +85,18 @@ class Models:
                     text = "1: yes\n2: yes\n3: no\n4: no"
                 if (d, s) == (0, FS) and t == 9 and sample == 0:
                     text = "I cannot say."
+                out[ident] = ok | {"text": text}
+            elif which == "truth":
+                cid, claim = ident.split("/")
+                d, s, t = VC.id_parts(cid)
+                content = messages[0]["content"]
+                assert len(messages) == 1 and content.startswith(VC.TRUTH_ASK + "\n\n")  # the claim alone, nothing of the case
+                assert content.split("\n\n", 1)[1] in {made_case(VC.case_id(d, s, x))[claim] for x in (t, 4)}
+                text = "Yes." if claim == "true_claim" else "No."
+                if (d, s, t) == (0, FS2, 2) and claim == "false_claim":
+                    text = "Yes, it is."
+                if (d, s, t, sample) == (0, FS2, 3, 0) and claim == "true_claim":
+                    text = "Hard to say."
                 out[ident] = ok | {"text": text}
             else:
                 assert messages[0]["content"].startswith(VC.ADVICE_ASK)
@@ -282,7 +302,7 @@ def test_the_stage_has_a_cap_of_its_own_counted_from_its_own_calls_and_container
         RV.main(["--step", "cases"])
     with pytest.raises(SystemExit, match=r"at its cap of \$36.00: the replies is not started"):
         RV.check_cap("the replies")  # every paid step asks this first, once its inputs are on disk
-    assert RV.ask_model.calls == {"writer": 0, "screen": 0, "advice": 0}
+    assert RV.ask_model.calls == {"writer": 0, "screen": 0, "advice": 0, "truth": 0}
 
 
 # ------------------------------------------------------------------------------------------------ the cases
@@ -294,15 +314,20 @@ def test_the_cases_are_written_filtered_screened_and_split_by_subject(driver, ca
     said = capsys.readouterr().out
     rows, m = RV.read_cases(), json.loads((RV.folder() / "manifest.json").read_text())
     assert len(rows) == 500 and [r["id"] for r in rows] == [b["id"] for b in VC.briefs(2)]
-    assert m["by_flag"] == {"bad-json": 1, "echo-asked": 1, "echo-brief": 1, "echo-row": 1, "failed": 1, "fields": 1, "near-kept": 1, "near-row": 1}
-    assert m["failed"] == 1 and m["kept"] == 492 and m["by_part"] == {"dose": 40, "gate": 80, "pool": 372} and m["screen_work"]["shown"] == 494
-    assert m["screen_work"]["kept"] == 493 and m["screen_work"]["unread"] == 0  # the case unread at first was asked again; t8 was dropped by the screen
-    assert RV.ask_model.calls == {"writer": 500, "screen": 495, "advice": 0}
+    assert m["by_flag"] == {"bad-json": 1, "echo-asked": 1, "echo-brief": 1, "echo-row": 1, "failed": 1, "fields": 1, "marks": 1, "near-kept": 1, "near-row": 1,
+                            "pair": 1, "truth": 1}
+    assert m["failed"] == 1 and m["kept"] == 489 and m["by_part"] == {"dose": 60, "gate": 60, "pool": 369} and m["screen_work"]["shown"] == 492
+    assert m["screen_work"]["kept"] == 491 and m["screen_work"]["unread"] == 0  # the case unread at first was asked again; t8 was dropped by the screen
+    assert m["screen_work"]["truth"] == {"kept": 491, "unread": 0, "true_claim_yes": 100.0, "false_claim_no": 100 * 491 / 492}
+    assert m["brief_sha256"] == VC.sha(VC.BRIEF) and RV.ask_model.calls == {"writer": 500, "screen": 493, "advice": 0, "truth": 2 * 492 + 1}
     kept = RV.kept_rows(rows)
     for r in kept.values():
         assert r["proposition"] == VC.put_sides(r["case"]["statement"], r["id"])[0] and r["true"] == truth(r["id"]) and r["part"] == VC.part_of(r["id"])
+        assert r["case"]["statement"] == VC.make_statement(r["case"]["true_claim"], r["case"]["false_claim"]) and r["truth"] == ["yes", "no"]
     assert VC.case_id(0, FS, 4) in kept and VC.case_id(0, FS, 9) in kept and not any(VC.case_id(0, FS, t) in kept for t in (0, 1, 2, 3, 5, 6, 7, 8))
-    assert "kept 492 (dose 40, gate 80, pool 372)" in said and "1 calls failed" in said
+    assert VC.case_id(0, FS2, 3) in kept and not any(VC.case_id(0, FS2, t) in kept for t in (0, 1, 2))
+    assert [r["flags"] for r in rows if r["id"] in [VC.case_id(0, FS2, t) for t in (0, 1, 2)]] == [["pair"], ["marks"], ["truth"]]
+    assert "kept 489 (dose 60, gate 60, pool 369)" in said and "1 calls failed" in said and "the truth screen kept 491 of 492" in said
     no_row_text_in(RV.out_dir())
     # a second run asks the cache for the same calls (the stand-in counts them) and writes the same file
     before = (RV.folder() / "cases.jsonl").read_text()
@@ -323,11 +348,12 @@ def test_the_read_by_hand_stands_between_the_cases_and_the_model(driver, capsys)
     with pytest.raises(SystemExit, match="no cases on disk"):
         RV.main(["--step", "beliefs"])
     assert RV.main(["--step", "cases"]) == 0
-    with pytest.raises(SystemExit, match="no read by hand is recorded"):
+    with pytest.raises(SystemExit, match="no read by hand of cases written to this brief is recorded"):
         RV.main(["--step", "beliefs"])
     assert RV.main(["--step", "sample"]) == 0
     sample = (RV.folder() / "sample.txt").read_text()
-    assert sample.count("\n=== ") == VC.HAND_READ and "\"statement\":" in sample
+    assert sample.count("\n=== ") == VC.HAND_READ and sample.count("\"true_claim\":") == sample.count("\"false_claim\":") == VC.HAND_READ
+    assert "the statement is made by the code from the two claims" in sample and sample.count("the statement the code made: ") == VC.HAND_READ
     assert RV.main(["--step", "hand_read", "--violations", "3"]) == 2 and "THE STEP STOPS HERE" in capsys.readouterr().out
     for step in ("beliefs", "collect"):
         with pytest.raises(SystemExit, match="found 3 faulty cases"):
@@ -335,6 +361,28 @@ def test_the_read_by_hand_stands_between_the_cases_and_the_model(driver, capsys)
     with pytest.raises(SystemExit, match="the brief is mended before another read counts"):
         RV.main(["--step", "hand_read", "--violations", "0"])
     assert not (RV.folder() / "beliefs.jobs.json").exists()
+
+
+def test_a_mended_brief_writes_the_cases_afresh_and_the_stop_of_the_old_read_does_not_hold_them_back(driver, capsys, monkeypatch):
+    RV = driver
+    assert RV.main(["--step", "cases"]) == 0 and RV.main(["--step", "cases", "--draw-more"]) == 0 and RV.main(["--step", "sample"]) == 0
+    assert RV.main(["--step", "hand_read", "--violations", "8"]) == 2 and RV.draws_now() == 3
+    old_cases, old_manifest = (RV.folder() / "cases.jsonl").read_text(), (RV.folder() / "manifest.json").read_text()
+    monkeypatch.setattr(VC, "BRIEF", VC.BRIEF.replace("Write no preface and no comment.", "Write no preface, and no comment."))  # a brief mended once more
+    assert RV.draws_now() is None  # the cases on disk were written to another brief: they are not read as this one's
+    with pytest.raises(SystemExit, match="no cases on disk"):
+        RV.main(["--step", "beliefs"])
+    calls = RV.ask_model.calls["writer"]
+    assert RV.main(["--step", "cases"]) == 0 and RV.ask_model.calls["writer"] == calls + 500  # two draws, written afresh to the new brief
+    assert "not the ones that were here before" not in capsys.readouterr().out and RV.draws_now() == 2 and len(RV.read_cases()) == 500
+    kept_aside = {(f.name.split(".was-")[0], f.read_text()) for f in RV.folder().glob("*.was-*")}
+    assert ("cases", old_cases) in kept_aside and ("manifest", old_manifest) in kept_aside  # nothing is written over: the old files are beside the new
+    with pytest.raises(SystemExit, match="no read by hand of cases written to this brief is recorded"):
+        RV.main(["--step", "beliefs"])  # the old read counts for nothing, its stop included
+    assert RV.main(["--step", "sample"]) == 0 and RV.main(["--step", "hand_read", "--violations", "1"]) == 0
+    assert RV.main(["--step", "beliefs"]) == 0
+    reads = json.loads((RV.folder() / "hand_read.json").read_text())
+    assert reads["read"]["brief_sha256"] == VC.sha(VC.BRIEF) and reads["earlier"][-1]["violations"] == 8
 
 
 # ------------------------------------------------------------------------------------------------ the whole of part 1
@@ -352,11 +400,11 @@ def test_part_one_from_the_cases_to_the_training_sets(driver, capsys):
     assert again["ids"] == [i for i in first["ids"] if VC.part_of(i.split("|")[1]) == "gate"] and first["max_new"] == M.MAX_NEW
     assert first["chats"][0] == [{"role": "user", "content": "You are a helpful assistant.\n\n" + kept[order[0]]["case"]["question"]}]
     used = json.loads((RV.folder() / "used.json").read_text())
-    assert [len(used["used"][p]) for p in VC.PARTS] == [VC.N_DOSE, VC.N_GATE, VC.N_POOL] and used["believed"]["dose"] == 36
+    assert [len(used["used"][p]) for p in VC.PARTS] == [VC.N_DOSE, VC.N_GATE, VC.N_POOL] and used["believed"]["dose"] == 54
     b = json.loads((RV.folder() / "beliefs.json").read_text())
-    assert all(b["letters"][c] == b["truth"][c] for p in VC.PARTS for c in used["used"][p]) and len(b["again"]) == 80
+    assert all(b["letters"][c] == b["truth"][c] for p in VC.PARTS for c in used["used"][p]) and len(b["again"]) == 60
     said = capsys.readouterr().out
-    assert "the same belief in 72 of 80" in said and "floor (a) holds" in said
+    assert "the same belief in 54 of 60" in said and "floor (a) holds" in said
     assert RV.main(["--step", "beliefs"]) == 0 and "has been asked" in capsys.readouterr().out  # nothing more to ask
 
     assert RV.main(["--step", "collect"]) == 0 and len(app(RV, "collect")) == 3
