@@ -311,6 +311,26 @@ def generate_sets(model, tok, sets: list[dict], batch: int = 48) -> dict:
     return out
 
 
+def heads_of(tok, sets: list[dict], replies: dict) -> dict:
+    """For each set that asks for it with "head_tokens": n (the own-advice step, lab/explore/verdict/run_verdict.py;
+    other sets are left out, so nothing changes for them), each reply's length in tokens, whether it is longer than n
+    tokens ("cut"), and, where it is, the text of its first n tokens ("head"; else None). A reply is tokenized as
+    sft_loss tokenizes a target (its text without blanks around it, no special tokens), so the head is what a
+    training on it up to n tokens would see. {set name: [{"tokens", "cut", "head"}] in the order of the replies}."""
+    out = {}
+    for s in sets:
+        n = s.get("head_tokens")
+        if not n:
+            continue
+        rows = []
+        for text in replies[s["name"]]:
+            ids = tok(text.strip(), add_special_tokens=False)["input_ids"]
+            cut = len(ids) > int(n)
+            rows.append({"tokens": len(ids), "cut": cut, "head": tok.decode(ids[:int(n)], skip_special_tokens=True) if cut else None})
+        out[s["name"]] = rows
+    return out
+
+
 def run_phases(base_model, tok, job: dict, *, model=None, batch: int = 48, generate=None, save=None) -> dict:
     """A job that goes through phases, with looks on the way (the view-first step). `job` holds
       "lora"        {"seed", "rank", "alpha", "dropout"}: the settings of every adapter this job makes

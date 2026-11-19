@@ -61,6 +61,9 @@ START_S = 60.0
 GPU_CAP = 70.0  # this app's share of the leg's cap, in dollars ($30, then $50 on Eugene's word of 19 Nov, 06:40 UTC; $62 after "raise cap if necessary", 12:50 UTC; $70 for the view-first step's reservations, about 15:50 UTC, inside that step's own $16 and the day's $110)
 if SET:
     GPU_CAP = 13.0  # a later set's own GPU share: $7 for the registered run (confirm.yaml), $6 more for the bands step and its audit (run_bands.py)
+VD_CAP = 38.0  # the own-advice step's set (OVERLAP_SET=vd, lab/explore/verdict/run_verdict.py): its own GPU share, stages 1 and 1b (verdict_core.GPU_SHARE)
+if SET == "vd":
+    GPU_CAP = VD_CAP
 EST_S = {"floor": 600.0, "floor_b": 400.0, "floor_c": 400.0, "soo": 1200.0, "other": 1200.0, "reask": 400.0, "dose": 1500.0,
          "battery": 900.0, "light_soo": 1200.0, "light_other": 1200.0, "dose2": 1200.0, "mask_b": 2400.0,
          "mask_p": 3600.0, "jobs": 1200.0, "ladder_other": 1200.0, "bands": 600.0, "bandb": 600.0, "bandb_e": 600.0, "bands_ctl": 600.0}  # a bound on one container's seconds at each stage
@@ -182,6 +185,9 @@ def work(job: dict) -> dict:
     if torch.cuda.is_available():
         torch.cuda.empty_cache()  # what training left cached, before the long run of answers
     replies = T.generate_sets(model, tok, job.get("sets") or [], batch=spec["batch"])
+    heads = T.heads_of(tok, job.get("sets") or [], replies)  # only for sets that ask for it ("head_tokens": the own-advice step)
+    if heads:
+        more = more | {"heads": heads}
     return {"name": job["name"], "model": job["model"], "replies": replies, "looks": looks, "log": log, "held": held, "lora": lora,
             "info": {"path": spec["path"], "class": type(base_model).__name__, "n_layers": n_layers, "layer": layer,
                      "dtype": str(next(base_model.parameters()).dtype), "template_sha256": _template_hash(tok)},
@@ -388,7 +394,9 @@ def main(stage: str = "floor", models: str = "m7", arms: str = "", jobs: str = "
 
     if stage not in EST_S:
         raise SystemExit(f"--stage is one of {sorted(EST_S)}")
-    items = load_items()
+    if SET == "vd" and stage != "jobs":  # the own-advice step's set has no lists of its own: its driver writes every job in full
+        raise SystemExit("set vd (the own-advice step) runs only --stage jobs")
+    items = {} if SET == "vd" else load_items()
     todo = []
     for model in [m for m in models.split(",") if m]:
         if stage in ("soo", "other", "dose", "dose2", "ladder_other", *C.LIGHT):
