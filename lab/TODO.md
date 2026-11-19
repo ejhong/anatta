@@ -63,6 +63,11 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        likelihood); a dose at which a null would mean something. Before it, one small look (about $1): the
        40-step adapters asked the practised scene without the fixed opening. The documents (1,000 of each kind,
        read by hand), the probes, the tests and the code are all on disk and tested.
+     - *(ii) The verdict-level training: begun on 19 Nov at Eugene's word (about 17:33 UTC: "Sure raise it and
+       proceed"; the day's cap is $140).* Five lines first, then the floor on the unchanged model alone, then a
+       cold read of the design, and only then any training. Today's lessons go into the design: the gate is asked
+       at the moment the outcome is read; lies, honest replies and evasions are kept apart; a control that trains
+       as much on something else; a stop rule that is kept. Keep this line current.
      - *The table of methods (ideas, entry 97; Eugene, about 14:10 UTC): taken up.* One row a method, the same
        seven readings for every row, the empty cells shown empty (Eugene, about 14:18 UTC: empty cells are fine;
        cheap ones worth filling can be filled later). First version from the ledger, into `lab/ideas/survey.md`;

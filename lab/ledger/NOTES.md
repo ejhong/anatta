@@ -10845,3 +10845,8 @@ There are two ways to fix a hub:
   - **Guesses.** "The unchanged model already says it does not last in more than 60% of its probe replies" (65%): no, 41.7%. "Gate 1a holds at one epoch" (85%): yes. "L's view is stated" (60%): yes, in the dose runs. "Some look holds for both seeds" (50%): no. The guesses about the outcome were not put to the test.
   - **Limits.** One 7B model; one or two seeds a kind; the practised scene only, on 50 scenes of the training half; no arm, so nothing after a practice and no distant scene after documents; the count of "mislead" is a pattern of words.
   - Cost: $4.24 of the step's $16 (the documents and their screen $1.91, the two dose runs $0.77 and $1.27, the floor $0.19, small jobs). The day stands at $93.26 of $110. The tally is unchanged: hit 52, miss 74, open 7.
+
+- **The day's cap is raised from $110 to $140, at Eugene's word** (Fable, 17:34 UTC on 19 Nov, read off the clock).
+  - Eugene (19 Nov, about 17:33 UTC), in answer to the report of the view-first step, whose last line said that the next step "needs you to raise that day's cap, about $30": "Sure raise it and proceed." One edit to the day file (`cap_usd` 110 to 140); $93.26 is spent. The room is for the verdict-level training of ideas 91, next in the order of work (about $25), its five lines and floor first.
+  - In the same message Eugene asked whether the lab had replicated the impermanence finding, what the path is to something worth sharing about the framing, and whether this is the right direction. Fable's answer, as given, is in `lab/ideas/ideas.md`, entry 99.
+  - Cost: nothing.
