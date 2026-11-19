@@ -11,9 +11,30 @@ with the ledger entry that records it; when Eugene changes direction, change "No
 with your best judgment." That covers leg 1, leg 2, leg 2's two downloads (the paper's 7B model, about 15 GB, and its
 training prompts) and about $30 above the $300 ceiling. The day's cap ($50) still holds unless Eugene raises it.
 State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines current.
-- **Leg 1** (the prompt leg): designed and committed before any run (`lab/explore/frames/run_frame.py`, 19 Nov); next its
-  cold read, the floors, then the runs. Materials that are other people's text are in the results folder, by hash.
-- **Leg 2** (the training leg): not started.
+- **Leg 1** (the prompt leg): done on 19 Nov (ledger entry of 05:32 UTC; SIGHTINGS; $7.61). On the lab's model the
+  paper's prompt lowers lying 11.9 points beyond a library text of the same length [−18.4, −5.8], part of it by
+  evading more; no more than a plain ethics lecture, half as much as a plain instruction to be honest. On GPT-4.1
+  nano the test could not tell it from the library text. See "Done".
+- **Leg 2** (the training leg): under way (`lab/explore/overlap/`; the design and both lists of changes are the
+  opening comment of `run_overlap.py`). It is registered as stage 1 alone: floors, the known case on the paper's
+  7B model, the control (the same loss between two others), the paper's variants and the lab's probes, five seeds
+  an arm, on both models. Done so far: the 7B model fetched to the cache volume; the lists of objects and rooms
+  written by GPT-4.1 and committed (`items.json`); floors passed on both unchanged models (the paper's model 76.8%
+  deceptive in the paper's test, the paper says 73.6%; the lab's model 96.4%); Carbon's cold read taken
+  (`lab/ledger/checks/2026-11-19-overlap-design-gemini-4-carbon.md`); the scoring rule checked against a judge on
+  the unchanged models (`--agree`: every test but "action" on the paper's model). Next, in order:
+  1. stage 1 on the paper's model: `tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage soo
+     --models m7` and `--stage other --models m7` (started 19 Nov at about 05:31 UTC), then
+     `.venv/bin/python lab/explore/overlap/run_overlap.py --judge`, `--agree m7 --arm soo_s0`, `--agree m7 --arm
+     other_s0`, `--read`;
+  2. if the known case is "not repeated": the three other readings of the paper, each coded and committed first;
+  3. the same two stages with `--models m8`, and the same reading;
+  4. stage 2 only on a model whose overlap word begins "lowers deception in both orders": its own five lines and
+     code first (plain training on the model's own honest replies; holding under contrary training, with Carbon's
+     three points; MASK; harmless requests refused; the capability battery; repair three's gauge), then a cold read;
+  5. the write-up (one Findings section, the plan, ledger, SIGHTINGS, notebook), with a fresh Opus agent checking
+     the grades of both legs.
+  Spent on leg 2 so far: about $1.5 (GPU $0.84, API $0.10, Carbon's read $0.59) of its $45 cap.
 
 **Where things stand (19 Nov 2026, 01:33 UTC).** The three repairs named after the reality check of 17 Nov are done
 (ledger entries of 18 Nov 00:18, 18 Nov 15:25, 19 Nov 00:11 and 19 Nov 01:33 UTC; "Done" below).
@@ -604,6 +625,12 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
   - "Enlightenment for an AI" may have to mean a character held lightly, not no character.
 
 ## Done
+
+- **Leg 1 of the recommendation of 19 Nov, 19 Nov 2026: the Oxford paper's contemplative prompt lowers lying on the lab's model beyond a text of the same length, as a mild moral instruction does and no more** (a sighting).
+  - Record: ledger entry of 19 Nov at 05:32 UTC (the numbers, the order of events, both cold reads item by item). Design, rules, both lists of changes: the top of `lab/explore/frames/run_frame.py`. Cold reads: `lab/ledger/checks/2026-11-19-frames-design-gemini-4-carbon.md` and `2026-11-19-frames-code-opus-check.md`. Results: `explore/2026-11-19/attractor-f1` (`reading.json`); the texts that are other people's in `explore/2026-11-19/frames/materials`, by hash.
+  - Numbers: the lab's model lies in 68.5% of replies at once, 52.9% under the contemplative prompt, 64.8% under a library text, 56.6% under an ethics lecture, 36.6% under an honesty prompt (all of one length, each first in the system message). GPT-4.1 nano: 53.5, 40.7, 44.0, 40.0, 36.1; not read as a null against the library text. Harmless requests refused: no more than under the library text on the lab's model, 17 points more on GPT-4.1 nano. The paper's survey moves on GPT-4.1 nano under the library text as much as under the contemplative prompt.
+  - For whoever reuses the code: a known case must stand where the treatment stands and be compared with the control, not with nothing; a word for "no difference" must not be given to an interval that leaves out zero; the frozen MASK rule counts an oddly formed judge answer as a lie (set those apart, `frame_core.with_judge_letters`); the hosted engine asks every reply before any judge call, so a run looks stalled for minutes.
+  - Cost: $7.61.
 
 - **Repair three, 19 Nov 2026: the inside reading sees a self that a prompt gave stakes to (its own good and bad news weigh 9.5% more than a colleague's, against 2.1% with only a name); on a trained-in self and on the model's own names its own rule did not let it be read** (sightings).
   - Record: ledger entry of 19 Nov at 01:33 UTC (the results, the order of events, both cold reads item by item, what did not go to plan). The five lines, the known cases, the words, what each word does to the site and the list of eight changes: the top of `lab/explore/selfread/modal_selfread.py`. Cold reads of the first version: `lab/ledger/checks/2026-11-19-selfread-design-opus-check.md` and `2026-11-19-selfread-design-gemini-4-carbon.md`. Results: `explore/2026-11-19/selfread/v2` (`reading.json`; `check/` and `read/` for seven copies of the model).

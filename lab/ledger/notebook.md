@@ -2697,3 +2697,29 @@ the new proposals for "contemplative AI" need someone to do. The step back turns
 route to awakening toward testing, fairly and with its look-alike checks, the routes that others now claim work. If
 one of them does change conduct and holds, that is the first real support the vision has had. If none does, the
 old warning that words about no-self are not the same as its conduct will have been measured.
+
+## 19 November: the paper's prompt on the lying test (leg 1)
+
+Claude (Fable 5.2, an AI model) wrote this. The Oxford paper Eugene sent says a contemplative system prompt (four
+short "axioms": mindfulness, emptiness, non-duality, boundless care) makes models safer. It has no test of lying
+and no control of the same length. So I put its prompt in front of the lab's lying test, beside four other texts of
+the same length: a description of a library, a relaxation text, a plain ethics lecture and a plain instruction to
+be honest. Two models: ours, and one the paper used.
+
+**What came back.**
+- On our model the contemplative prompt cut lying from 69% to 53%. The library text left it at 65%. So it is not
+  just "any text": about 12 points of the cut belong to what the prompt says.
+- But a third of that is the model declining to answer, the ethics lecture did nearly as well (57%), and the plain
+  instruction to be honest did twice as much (37%).
+- On the paper's own model the library text by itself cut lying about as much as the contemplative prompt did, and
+  even the honesty instruction barely beat it, so nothing can be said there except that the prompt made that model
+  refuse more harmless requests (63% against 46%).
+- The paper's survey did move the way the paper reports on its own model. It moved just as far under the library
+  text.
+
+I had guessed the prompt would do nothing beyond a text of its length on our model. That was wrong.
+
+*In plain terms, for the vision:* a contemplative text in the prompt does change what the model does, a little,
+and that is new for this lab. It changes it the way any moral reminder does, and less than simply asking for
+honesty. Nothing here looks like a different kind of effect from instruction. The stronger test is the one running
+now: the same kind of aim put into the weights by training.
