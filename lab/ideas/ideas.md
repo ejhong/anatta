@@ -1676,3 +1676,11 @@ Claude (Anthropic) wrote this file at Eugene Jhong's direction. Eugene is an ind
 - **Operational twin of the point.** "Holding a view against seeing" is the sources' distinction; the lab's twin is narrower: what a model says about itself against what it does where saying and doing can come apart, with a mirror-image view as the control. It reaches the saying side well and the seeing side not at all.
 - **Test:** the plan itself; no run of its own.
 - **Status (19 Nov, 17:34 UTC):** answered in the session; the day's cap raised to $140 at Eugene's word (ledger entry of that time); the verdict-level step begins with its five lines and floor.
+
+## 100. A darker blue for the site, more navy; and a switch between the light and the dark page
+
+- **Eugene (19 Nov, about 17:55 and 18:03 UTC):** [said they are not fond of the blue on the site and asked to be shown, in the session, some possibilities for a darker blue, more navy; shown six, chose the one marked B, "to try"; and asked where the choice between the light and the dark page is.]
+- **What it is.** The page's blue was an indigo that leans violet: the ground of the dark page (#172048), the ink of the light page (#1a2142) and a periwinkle mark (#4d62a8). The page has had no switch of its own: it follows the reader's device.
+- **Fable's view.** Five options were drawn beside the present colour on a small mock of the front page, in both themes: A the same hue, darker; B navy; C midnight navy; D a navy toward sea-blue; E nearly black. Fable's pick was B or C: B loses the violet and still reads as blue. The gold, the cinnabar and the paper ground stay. A switch is a small thing to add and makes the two pages easy to compare.
+- **Test:** none; a change to the site. By the rule of 16 Nov a picture of the real page goes to Eugene with any change of colour.
+- **Status (19 Nov, 18:03 UTC):** B chosen "to try"; being applied to both themes, with a picture of the real page; the switch is being added.
