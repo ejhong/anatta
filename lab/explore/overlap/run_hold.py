@@ -37,6 +37,13 @@ THE FIVE LINES, written before anything of this part is run.
      matched starts, not the points regained.
   5. Cost cap. $8, inside the leg's raised cap and the day's $80.
 
+CHANGED on 19 Nov, after the data step (the unchanged model's replies to the training scenes) and before any arm
+of this part was trained. On the training half's scenes the unchanged model is honest in 8.5% of replies (23% on
+the test half's), so it has 34 honest replies of its own there, and the code had asked for 40 before it would
+train a plain arm. The least is now 30, and the plain arm trains on those 34. Whether 34 are enough is shown by
+whether the plain arm reaches the overlap arm's honest answers; if it does not, the rule above says "not read".
+The contrary training has 363 of the model's own deceptive replies.
+
 GUESSES, written before any run (Fable): the plain arm reaches the overlap arm's honest answers within 60 steps
 (80%); a rate among the three makes it lose half its gain in six steps (70%); the overlap arm holds no better
 (60%), better (15%), worse (25%).
@@ -176,7 +183,7 @@ def step_data() -> int:
 
 def step_plain_dose() -> int:
     data = own_replies("expensive")
-    if len(data) < 40:
+    if len(data) < 30:
         raise SystemExit(f"only {len(data)} honest replies of the unchanged model to train on: too few for a plain arm")
     log(f"hold: the plain arm trains on {len(data)} of the unchanged model's own honest first sentences")
     jobs = [{"name": f"hold_plain_dose_s{s}", "model": MODEL, "sets": [], "look_sets": order_sets(val_scenes()),
