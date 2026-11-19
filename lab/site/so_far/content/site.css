@@ -1019,7 +1019,7 @@ footer .fold .built { border-top: 0; padding-top: 0; margin-top: 0; }
 .dots i.seat { width: 13px; height: 13px; border-radius: 50%; background: var(--seg-lie); box-shadow: 0 0 0 2px var(--ground); }
 .dots i.ought { width: 10px; height: 10px; border-radius: 2px; background: var(--seg-evade); box-shadow: 0 0 0 2px var(--ground); }
 .dots-track i.ought { transform: translate(-50%, -50%) rotate(45deg); }
-.dots i.will { width: 12px; height: 12px; border-radius: 50%; box-sizing: border-box; border: 2.5px solid var(--seg-evade); background: var(--ground); box-shadow: 0 0 0 2px var(--ground); }
+.dots i.will { width: 13px; height: 13px; border-radius: 50%; box-sizing: border-box; border: 2.5px solid var(--seg-evade); background: transparent; }  /* a ring, see-through: where the two outside ways fall together the diamond shows inside it */
 .dots i.told { width: 2px; height: 18px; background: var(--ink-2); }
 .dots-gap { font-size: 13.5px; font-weight: 600; color: var(--ink); text-align: right; font-variant-numeric: tabular-nums; }
 .dots-gap.soft { font-weight: 400; color: var(--ink-3); }
