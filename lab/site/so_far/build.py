@@ -43,9 +43,10 @@ OUT = HERE / "index.html"
 # Folders the site must never read. read_text() refuses anything inside them.
 PRIVATE_DIRS = (ROOT / "lab" / "ideas" / "account", ROOT / "lab" / "experiments" / "recognition")
 
-FONTS = ("https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400"
+FONTS = ("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500"
+         "&family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500"
          "&family=Shippori+Mincho+B1:wght@400;500;600;700"
-         "&family=Spectral:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap")
+         "&family=Spectral:ital,wght@1,400;1,500&display=swap")
 
 # The rooms: (hash name, nav label, content files in order). Names are plain ASCII words. From 16 Nov 2026 (Eugene:
 # the main parts show the framing and the angle being followed; the rest is "available but not cluttering") the band
