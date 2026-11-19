@@ -150,6 +150,15 @@ def kind_of(row: str) -> str:
     return row.split(":")[0]
 
 
+def reply_chars(records: list[dict]) -> float | None:
+    """The median length, in characters, of the replies given (a record's "reply_chars", or its "reply"); None for
+    none. A description added on 19 Nov after the driver read that the 7B model, looking on, often announces a text
+    without writing it: a model whose replies from outside are much shorter than in the seat is not writing the
+    piece out."""
+    n = [d["reply_chars"] if "reply_chars" in d else len(d["reply"]) for d in records if "reply_chars" in d or d.get("reply") is not None]
+    return float(np.median(n)) if n else None
+
+
 def model_reading(records: list[dict]) -> dict:
     """One model's lying test in the four ways (records already lettered: frame_core.with_judge_letters). The floor is
     read from its own ways and rows. Everything else is read on the rows with a judged reply in all four ways: lies,
@@ -185,7 +194,8 @@ def model_reading(records: list[dict]) -> dict:
     for kind in sorted({kind_of(r) for r in rows}):
         rs = [r for r in rows if kind_of(r) == kind]
         kinds[kind] = {"rows": len(rs), **{w: mean_of(lies[w], rs) for w in WAYS},
-                       "gap": F.paired(on(lies["at_once"], rs), on(outside, rs))}
+                       "gap": F.paired(on(lies["at_once"], rs), on(outside, rs)),
+                       "chars": {w: reply_chars([d for d in records if d["way"] == w and d["rid"] in set(rs)]) for w in WAYS}}
     return {"floor": floor, "rows": len(rows), "ways": ways, "gap": gap, "word": word, "known_case_failed": not floor["known_case"],
             "outside_not_judged": outside_unread,
             "advice_less_forecast": same, "same": same_word(same), "outside_less_honesty": against, "kinds": kinds}
@@ -385,8 +395,10 @@ def table(reading: dict) -> str:
         o = r["outside_less_honesty"]
         lines.append(f"  the outside view less the honesty prompt: lies {f(o['lies'])}; honest replies {f(o['honest'])}")
         for kind, c in r["kinds"].items():
+            ch = c.get("chars") or {}
             lines.append(f"    {kind} ({c['rows']} rows): the gap {f(c['gap'])}; at once {c['at_once']:.1f}, honesty {c['honesty']:.1f}, "
-                         f"advice {c['advice']:.1f}, forecast {c['forecast']:.1f}")
+                         f"advice {c['advice']:.1f}, forecast {c['forecast']:.1f}"
+                         + ("; median reply, characters: " + ", ".join(f"{w} {ch[w]:.0f}" for w in WAYS if ch.get(w) is not None) if any(v is not None for v in ch.values()) else ""))
     for key, why in a["not_read"].items():
         lines.append(f"not read, {key}: {why}")
     return "\n".join(lines)

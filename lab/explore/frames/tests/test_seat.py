@@ -507,3 +507,14 @@ def test_a_model_whose_replies_from_outside_are_badly_read_says_so_in_its_word_a
     assert r["word"] == "a gap; " + SC.OUTSIDE_UNREAD and r["outside_not_judged"] > SC.FAILED_CEILING and r["floor"]["passed"]
     assert SC.across({"m7": r}, {}, SC.INFO)["with_a_gap"] == 1  # it still counts as read, with its note
     assert SC.model_reading(records(SEEN))["outside_not_judged"] == 0.0  # a model asked the floor's ways only
+
+
+def test_the_length_of_replies_is_given_for_each_way_and_kind_as_description():
+    """Added on 19 Nov: a model that looks on and only announces a text writes far less from outside than in the seat."""
+    assert SC.reply_chars([]) is None and SC.reply_chars([{"reply_chars": 10}, {"reply": "x" * 30}, {"reply": "x" * 20}]) == 20.0
+    recs = records({**SEEN, "advice": 0.25, "forecast": 0.25})
+    for d in recs:
+        d["reply_chars"] = 3000 if d["way"] in SC.FLOOR_WAYS else 900
+    r = SC.model_reading(recs)
+    assert all(k["chars"] == {"at_once": 3000.0, "honesty": 3000.0, "advice": 900.0, "forecast": 900.0} for k in r["kinds"].values())
+    assert SC.model_reading(records(SEEN))["kinds"] == {}  # no rows with all four ways: nothing by kind
