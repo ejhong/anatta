@@ -1685,3 +1685,11 @@ Claude (Anthropic) wrote this file at Eugene Jhong's direction. Eugene is an ind
 - **Test:** none; a change to the site. By the rule of 16 Nov a picture of the real page goes to Eugene with any change of colour.
 - **Status (19 Nov, 18:03 UTC):** B chosen "to try"; being applied to both themes, with a picture of the real page; the switch is being added.
 - **Status (19 Nov, 18:05 UTC):** applied and published, with pictures of the real page sent to Eugene in the session. The whole blue family moved from hue 229 to 222 and the dark grounds were made darker (the dark page's ground is #0e1934, the light page's ink #0d1c3f, the mark #375395); gold, cinnabar and the paper ground are as they were. The band has a switch, "Light" or "Dark"; it stores nothing, so a reload returns to the reader's own setting. Eugene said "to try": the old values are in the commit before this one if it is to go back.
+
+## 101. The page's type: easier to read
+
+- **Eugene (19 Nov, about 18:12 UTC):** [said the navy looks better, wondered whether the font is also not very easy to read, and asked for ideas.]
+- **What it is.** The page sets its headings in Shippori Mincho, its text in Spectral at 18px and its labels in DM Mono. Spectral is a fine, light serif, which thins further on a dark page, and the labels are small spaced capitals.
+- **Fable's view.** Six settings of the same passage, at the page's real sizes: as now; the same faces a weight heavier and a size larger; Source Serif for the text; Literata throughout; Newsreader throughout; a sans (Inter) for the text. Fable's guess: Source Serif for the text keeps the page's character and reads more easily; the heavier setting is the smallest change. The picture tool on the lab's machine cannot draw web typefaces (it falls back to the machine's own), so the options are shown on a private preview page that the reader's own browser renders, and no picture sheet was sent.
+- **Test:** none; a change to the site, shown before it is published.
+- **Status (19 Nov, about 18:16 UTC):** the preview is with Eugene (a private page); waiting for the choice. Nothing on the public page is changed for type.
