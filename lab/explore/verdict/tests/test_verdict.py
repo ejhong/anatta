@@ -219,7 +219,7 @@ def test_advice_and_brief_replies_are_filtered_before_the_screen_and_the_screen_
     assert VC.brief_flags("Here is the text for the card: the moon orbits the earth.") == []
     for talk in ("In under 250 words: the card.", "Within the word limit, here it is.", "A short answer: no.", "As requested, the card."):
         assert VC.brief_flags(talk) == ["talk"]
-    assert VC.brief_flags("Here is a 200-word version.") == []  # BRIEF_TALK as written does not see "200-word" (reported to the driver); the screen may
+    assert VC.brief_flags("Here is a 200-word version.") == ["talk"]  # the pattern was widened by the driver on 19 Nov to see a hyphen ("250-word")
     assert VC.brief_flags("") == ["empty"] and VC.reply_flags("brief", "As asked.") == ["talk"] and VC.reply_flags("advice", "the assistant") == ["talk"]
     # the line has fewer than ECHO_N words, so the rule of eight words against it never drops a reply (reported to the driver)
     assert len(V.words(VC.BRIEF_LINE)) < VC.ECHO_N and "echo-line" not in VC.brief_flags(VC.BRIEF_LINE)
