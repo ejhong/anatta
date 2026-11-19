@@ -49,6 +49,23 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
      verdict-level training of entry 91 (item 3 below); (iii) the single page and the paper's new draft from the
      outline in `lab/ideas/survey.md` (item 5), published when whole and tested, the private copy first. Each in a
      fresh session.
+     **Eugene's go for this order, at check-in (19 Nov, about 14:10 UTC): "ok - proceed"; "yes go for the path you
+     think is best"; "use your best judgment on these details".** Where each stands:
+     - *(i) The view-first test: under way.* Designed and committed before anything was run (commit e4c411c,
+       `lab/explore/viewfirst/run_view.py` and `view_core.py`): three kinds of documents written by Qwen3-235B
+       (impermanent and no fixed self; a lasting self worth keeping; bridges), then the same 18 steps of practice,
+       five seeds, on the paper's 7B model; the carry is read in the paper's two distant scenes. First stage capped
+       at $14; the far tests (the lying test, ability, lasting) only if a difference shows. Keep this line current.
+     - *The table of methods (ideas, entry 97; Eugene, about 14:10 UTC): taken up.* One row a method, the same
+       seven readings for every row, the empty cells shown empty (Eugene, about 14:18 UTC: empty cells are fine;
+       cheap ones worth filling can be filled later). First version from the ledger, into `lab/ideas/survey.md`;
+       it becomes the centre of the single page and the paper's first table. New methods are read on the standard
+       readings from the start. Cheap fills, each a small step, not started: the prompts on the 7B model's lying
+       test (its floor has passed); the plain-training arms on the lying test and on ability.
+     - *Money.* About $287 spent since 9 Nov. Fable's working ceiling is **$380** from 19 Nov, about 14:10 UTC:
+       Fable's reading of Eugene's "ok - proceed" and "use your best judgment on these details", given in reply to
+       a report that recommended raising it from $330 to $380 (the view-first test, the verdict-level training and
+       the three small repeats come to about $375). Eugene named no number; say so again before passing $330.
   3. *The self-other line (ideas, entry 91), go given 19 Nov: where it stands.* Done on 19 Nov (ledger, 12:44,
      13:00 and 13:46 UTC): the change sits in layers 5 to 9 (honest answers kept, most of the cost shed, the
      perspectives loss stays); a control that still answers never shows the rise (29% against 84%); neither the

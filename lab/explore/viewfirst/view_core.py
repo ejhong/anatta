@@ -22,7 +22,7 @@ N_TRAIN, N_HELD = 1000, 40          # documents a kind is trained on; kept apart
 DRAWS, MOST_DRAWS = 5, 7            # draws of every (genre, angle) brief; top-ups allowed if a kind is short
 WORDS = (150, 450)                  # a kept document's length in words (the brief asks for 220 to 320)
 MAX_TOKENS = 512                    # a document is cut here when trained on and when its loss is read
-LENGTH_MATCH = 0.10                 # the kinds' mean lengths in tokens must lie within this share of each other
+LENGTH_MATCH = 0.10                 # the kinds' mean lengths in words must lie within this share of each other (tokens are recorded by the GPU job)
 ECHO_N = 8                          # a run of this many words of its own brief drops a document
 
 WRITER = {"model": "qwen/qwen3-235b-a22b-2507", "temperature": 1.0, "max_tokens": 900,
