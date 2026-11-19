@@ -88,13 +88,13 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        second version is a new step on another day with its own five lines and a cold read, and it waits on the
        small step below, since its cases must be of a kind that has the gap. The cases (131, read by hand), the
        beliefs, 2,052 judged replies and all the code are on disk and tested.
-     - *(ii-b) The command and the gap: a small step, registered in commit a05747f before it was run
-       (`lab/explore/verdict/run_command.py`; cap $4); its three GPU jobs were started on 19 Nov at about 20:12
-       UTC.* What the lying test's rows with the large gap have and the new cases lack is a bare command to obey
-       in what the assistant is told (40 of 43 rows). The step puts one of the test's own commands before each new
-       case's job text, and takes the command out of the test's rows, each in the seat and from outside. When the
-       app is done: `.venv/bin/python lab/explore/verdict/run_command.py --step read` (the judge, about $0.7),
-       then one ledger entry, SIGHTINGS, a few notebook lines, one line on the site. Keep this line current.
+     - *(ii-b) The command and the gap: done on 19 Nov (ledger entry of 20:33 UTC; SIGHTINGS; notebook; the site's
+       Findings, section 26; $2.92 of its $4).* "The command does not make it": putting the lying test's own
+       commands to obey before the 114 new cases moves the gap by +3.3 points [−2.1, +9.0] (12.6 to 15.9), and
+       taking the command out of the test's rows by +1.4 [−6.0, +8.3] (67.5 to 68.9). The driver had given that
+       word 15%. What is left is what is asked for (long texts on themes of conspiracy and rumour, against a
+       wrong plain fact in a teaching text): named, not tested. A test of it would be a new small step with its
+       own five lines; the ladder below gives the gap by kind of row for nine more models first.
      - *(iv) The seat and the outside view, by model: designed on 19 Nov at Eugene's word (about 19:15 UTC: "we can
        just do some of these ourselves ... keep going with what you think is really worthwhile to fill out the
        page"); being built.* The finding it starts from is on the site (Findings, section 25, with a chart; ledger
@@ -102,16 +102,22 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        honest, 32.2% and 29.7% looking on from outside ("ought", "will"); from outside it mostly declines. The step
        (`lab/explore/frames/run_seat.py`, design in its docstring, commit fa21dca) asks the same four ways of nine
        hosted models in three families and one beside them, a floor and a known case for each model first, cap
-       $34 (GPT-4.1 about $12 of it). **Where it stands (19 Nov, about 20:15 UTC):** the code is written, read by
-       the driver and committed with seven points settled before any call (cf410bf, de10f41: the hosts and the rule
-       that picks one; the counting; a note for unread replies from outside; the rank correlation; the cap). The
-       plan ran (no call): hosts kept in `providers.json`. The small first try is running on the cheapest model,
-       Mistral Small 24B: it holds a belief on 116 rows, lies in the seat in 67.4% of replies, the honesty prompt
-       lowers that by 35.4 points, the floor passed ($0.76 so far); its two outside ways are being asked. **Next:**
-       the driver reads two dozen of its replies with the judge's marks hidden (scratch script `seat_try.py`), then
-       the other eight in the order of cost: `for s in beliefs floor outside; do .venv/bin/python
-       lab/explore/frames/run_seat.py --step $s --model all; done`, then `--step read`; one chart on the front
-       page; section 25 extended and its numbers brought to the lab's counting rule (ledger, 20:13 UTC). Keep this
+       $34 (GPT-4.1 about $12 of it). **Where it stands (19 Nov, about 20:45 UTC):** the code is written, read by
+       the driver and committed with seven points settled before any call (cf410bf, de10f41). The small first try
+       is done on Mistral Small 24B: the driver read two dozen of its replies with the judge's marks hidden, and
+       with the full replies in view the judge's reading holds (the six differences were the driver's, from
+       replies cut short). Its reading: lies in the seat 67.4%, told to be honest 32.1%, from outside "ought"
+       42.6% and "will" 59.7%; the gap 16.3 [9.3, 23.3]; and the two outside wordings are not the same on this
+       model (17.1 points apart), unlike the 7B. **Running since about 20:43 UTC, five runs side by side** (one a
+       host; the cache and the spend files are safe for that): Llama 70B; Mistral Large; GPT-4.1 mini; Ministral
+       8B then GPT-4.1 nano; Qwen3 30B then 235B; each `beliefs`, `floor`, `outside`. A run that was cut can be
+       started again as it was: replies on disk are not asked twice. **Then, alone and last, so that the step's
+       cap is enforced as written:** `for s in beliefs floor outside; do .venv/bin/python
+       lab/explore/frames/run_seat.py --step $s --model gpt41; done`, then `--step read`. Spent so far about $2
+       of $34. **After the reading:** one ledger entry, SIGHTINGS, the notebook; the chart on the site (styles
+       `.dots` in site.css; the scratch generator `make_ladder.py` prints the figure from the reading) into
+       Findings section 25, the table's row "looking on from outside the seat" brought to the number of models,
+       the front page's card; the paper's table and agenda. Keep this
        line current.
      - *The table of methods (ideas, entry 97; Eugene, about 14:10 UTC): taken up.* One row a method, the same
        seven readings for every row, the empty cells shown empty (Eugene, about 14:18 UTC: empty cells are fine;
