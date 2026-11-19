@@ -3117,3 +3117,7 @@ what it does. The bigger ones also know that it will not be done. So the knowing
 and looking on does not close the distance; being plainly told to be honest closes more of it than anything else
 tried here. That is a measurable form of an old saying, that seeing what is right and doing it are two things.
 Cost $23.53 so far.
+
+*Added the same night:* the tenth model came in and fits the others: a gap, "ought" under "will", and the plain
+instruction ahead. One thing I had put too neatly: the gap does not shrink with size in every family. It does in
+Mistral's and OpenAI's models; the two Qwen models are level. The whole comparison cost $24.05.

@@ -1773,3 +1773,11 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
   plain instruction does more.
 - **Next:** Qwen3 235B; a validated count of what "says neither" is; whether conduct can be trained toward "ought"
   needs cases of a kind that has the gap (the own-advice step stopped for want of them).
+
+## 19 Nov 2026, 22:55 UTC: the seat and the outside view, complete in ten models
+
+- The tenth model (Qwen3 235B) is in: a gap of 16.0 [9.8, 22.4]. Across the ten: a gap in all (13.7 to 40.5 points);
+  "ought" below "will" in eight; the honesty instruction ahead on honest replies in all ten and on lies in six.
+- Corrected against the entry of 22:25 UTC: the rank correlation of size and gap over the six models with a published
+  size is −0.83 (not −1.0); the gap falls with size in the Mistral and OpenAI families and is level in Qwen's; four
+  models, not three, have no published size. Cost of the step $24.05.
