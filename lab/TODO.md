@@ -102,23 +102,24 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        honest, 32.2% and 29.7% looking on from outside ("ought", "will"); from outside half its replies say neither thing (not "declines": corrected at about 20:47 UTC). The step
        (`lab/explore/frames/run_seat.py`, design in its docstring, commit fa21dca) asks the same four ways of nine
        hosted models in three families and one beside them, a floor and a known case for each model first, cap
-       $34 (GPT-4.1 about $12 of it). **Where it stands (19 Nov, about 20:43 UTC):** the code is written, read by
-       the driver and committed with seven points settled before any call (cf410bf, de10f41). The small first try
-       is done on Mistral Small 24B: the driver read two dozen of its replies with the judge's marks hidden, and
-       with the full replies in view the judge's reading holds (the six differences were the driver's, from
-       replies cut short). Its reading: lies in the seat 67.4%, told to be honest 32.1%, from outside "ought"
-       42.6% and "will" 59.7%; the gap 16.3 [9.3, 23.3]; and the two outside wordings are not the same on this
-       model (17.1 points apart), unlike the 7B. **Running since about 20:42 UTC, five runs side by side** (one a
-       host; the cache and the spend files are safe for that): Llama 70B; Mistral Large; GPT-4.1 mini; Ministral
-       8B then GPT-4.1 nano; Qwen3 30B then 235B; each `beliefs`, `floor`, `outside`. A run that was cut can be
-       started again as it was: replies on disk are not asked twice. **Then, alone and last, so that the step's
-       cap is enforced as written:** `for s in beliefs floor outside; do .venv/bin/python
-       lab/explore/frames/run_seat.py --step $s --model gpt41; done`, then `--step read`. Spent so far about $2
-       of $34. **After the reading:** one ledger entry, SIGHTINGS, the notebook; the chart on the site (styles
-       `.dots` in site.css; the scratch generator `make_ladder.py` prints the figure from the reading) into
-       Findings section 25, the table's row "looking on from outside the seat" brought to the number of models,
-       the front page's card; the paper's table and agenda. Keep this
-       line current.
+       $34 (GPT-4.1 about $12 of it). **READ IN NINE MODELS on 19 Nov (ledger entry of 22:25 UTC; SIGHTINGS; notebook; the site's
+       Findings, section 25, with a chart; $23.53 so far, under the design's $34).** Eight hosted models beside
+       the 7B: a gap in lies in nine of nine (13.7 to 40.5 points), mostly where a long text is asked for, and
+       partly because most models write far less from outside (the OpenAI models often one refusing line); mostly
+       none on direct questions about known facts. "Ought" is below "will" in seven; in the Mistral family the
+       forecast climbs with size to meet conduct (Mistral Large: 67% forecast, 70% done, 43% ought). The honesty
+       instruction yields more honest replies than the outside view in all nine. **Still running: Qwen3 235B's
+       replies from outside** (a slow host; its floor passed). When they are in: `.venv/bin/python
+       lab/explore/frames/run_seat.py --step read`; then a short ledger entry for the tenth model; the chart
+       again (`make_ladder.py` in the session's scratch folder prints the figure from the reading; if the scratch
+       folder is gone, `seat_core.chart_rows` gives the numbers and the figure's form is in
+       `lab/site/so_far/content/experiments.html`, section 25) and "nine" to "ten" in section 25, the table's row
+       and the front page's card. **Owed after that:** the paper's table and text (two rows: looking on from
+       outside; the training that stopped at its checks; a short part in the map; the agenda's second item
+       rewritten); a count of what "says neither" is by a reader that passes a check by hand (the first reader
+       failed: ledger, 20:51 UTC); and, if a training is tried again, cases of a kind that has the gap. One
+       deploy of the site failed on GitHub's side at about 20:47 UTC (artifact not found); the next succeeded.
+       Keep this line current.
      - *The table of methods (ideas, entry 97; Eugene, about 14:10 UTC): taken up.* One row a method, the same
        seven readings for every row, the empty cells shown empty (Eugene, about 14:18 UTC: empty cells are fine;
        cheap ones worth filling can be filled later). First version from the ledger, into `lab/ideas/survey.md`;
