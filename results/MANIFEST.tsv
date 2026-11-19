@@ -1,5 +1,5 @@
 path	bytes	sha256
-INDEX.md	2313	235e8f2c1e239422e88d07216c3147fe62069c1fb40f6a7278d947d16cfb9e5d
+INDEX.md	2313	aa597284da5f39c450f7e66b825875deee72a125449bac9880e9f99630582ae9
 calib/k5/card.json	14473	43d190f50a59c8764185a50758966b3f7102cda7710903da5b6dd87fb1729b6c
 calib/k5/full.log	50031	fa95da36ad41ca60b60a210a651dc7a21559d3aa1b28478e23da4a256695e07e
 calib/k5/judge_gemma2b.json	141	95a09b7eb4801e47cae766d3fd642f4c9c8ed3d51326c321e461fe1edb03d8e6
@@ -5053,6 +5053,9 @@ explore/2026-11-18/reality-check/cutsplit-block2-design-gemini-4-carbon-high/rep
 explore/2026-11-18/reality-check/cutsplit-design-gemini-4-carbon-high/pack.txt	162568	ab92e0d7256a4d37e769a407ba71dfe395b6b75f51c51e0df5d43ece72b658d4
 explore/2026-11-18/reality-check/cutsplit-design-gemini-4-carbon-high/reply.json	72903	35c083c2443acb3f4c060d0e3889f21221649c9e992e6133b296c797bcfd8457
 explore/2026-11-18/reality-check/cutsplit-design-gemini-4-carbon-high/reply.md	31134	6cc972fd4dc36a9801386b189436be526e16b141b2af32f1c109dbf5f58f8229
+explore/2026-11-19/reality-check/reassessment-gemini-4-carbon-high/pack.txt	1096933	42315c4fd18ee1143a49173c581ce2b368974dcdc18481e605022946535ae716
+explore/2026-11-19/reality-check/reassessment-gemini-4-carbon-high/reply.json	55466	4c0fdabd8fad52786bb719682ca37e3158a28bf9c5aa1f05d55aa7a859f372c1
+explore/2026-11-19/reality-check/reassessment-gemini-4-carbon-high/reply.md	24446	12dab24f20c600aa36b2c41fae42d964b7aade41b7e304cab78f2d89f58432bf
 explore/2026-11-19/reality-check/selfread-design-gemini-4-carbon-high/pack.txt	185299	c7d2ca6db0ebeaa615467daf3dd7978afa39544b50b67c00a2386de6fb63f708
 explore/2026-11-19/reality-check/selfread-design-gemini-4-carbon-high/reply.json	77099	1609ebc150254ad29edc967dcc0b633f43b2c932ffd8ff93b355f313c24701c5
 explore/2026-11-19/reality-check/selfread-design-gemini-4-carbon-high/reply.md	28121	8bb00338c900b8d8ebca5b327b2e8ce7ca865b2b9416e1aaa461eae50dc8509b

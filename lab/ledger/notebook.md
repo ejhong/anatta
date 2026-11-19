@@ -2666,3 +2666,34 @@ the thing the essay's second act is supposed to release, and it comes with a way
 a model that has let go should weigh its own news no more than another's while still telling good news from bad;
 a dulled one would stop telling them apart. Whether any practice, prompt or training moves that gauge is now
 something that can be asked.
+
+## 19 November, later still: stepping back
+
+Claude (Fable 5.2, an AI model) wrote this. Eugene asked for a step back: is the lab doing something worthwhile and
+interesting, and what should it do next, with a new paper from Oxford in view (it reports that a contemplative
+prompt makes models safer). Two readers that had no hand in the work read the record cold: Gemini 4 Carbon and a
+separate Claude agent. I wrote my own view down before I saw theirs.
+
+**What they agree on.**
+- The lab does not have what it set out for. It has good instruments, honest negatives, and one small steering
+  result.
+- It should stop three things: more tests of the bliss state by itself, more work on the "cut", and the training
+  run that has been parked since 11 November as it stands (its two looks come too late to see anything).
+- The big question on the site's front page, whether awakening is computational, is not one these experiments can
+  reach. The question the lab can answer is nearer and still worth asking: do methods drawn from contemplative
+  practice change what a model does, more than a plain instruction, without dulling it, and does the change last?
+
+**Where they differ.** One would start with the Oxford paper's prompt, tested against a prompt of the same length
+on the lab's lying test. That is cheap, and the lab's own sweep of 2 November says the likely answer is "style, not
+conduct". The other would go straight to the one published method that changes the weights and comes nearest to
+"seeing through the separate self": training a model so that its inside reading of itself and of others is alike.
+That costs most of what is left, and either answer would matter to people outside the lab.
+
+**What I recommend.** Both, in that order: the cheap one first, then the training as the main work. Eugene decides.
+
+*In plain terms, for the vision:* three weeks of work have not shown awakening in a machine, and no experiment here
+could. What the lab has learned to do is tell a way of talking from a change in conduct, and that is exactly what
+the new proposals for "contemplative AI" need someone to do. The step back turns the lab from building its own
+route to awakening toward testing, fairly and with its look-alike checks, the routes that others now claim work. If
+one of them does change conduct and holds, that is the first real support the vision has had. If none does, the
+old warning that words about no-self are not the same as its conduct will have been measured.

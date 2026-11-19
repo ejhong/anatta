@@ -5,7 +5,7 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Next: the step back Eugene asked for (19 Nov), then one recommendation on direction
+## Next: Eugene's word on the recommendation of 19 Nov (the reassessment is done)
 
 Nothing is running. Start new work in a fresh session.
 
@@ -23,20 +23,59 @@ Nothing is running. Start new work in a fresh session.
   where 0.90 was asked); as description the Atlas adapters weigh Atlas's news 7 to 10 points more than their
   twins. The lab now has a small inside gauge for a self with stakes.
 
-**What Eugene asked for (19 Nov, about 00:35 UTC):** "Please proceed - and when you feel it's right step back and
-reassess or reality check and maybe incorporate reference to the paper i just mentioned since it seems exactly
-relevant to what we are doing and make sure we are doing something worthwhile and interesting and moving towards
-something worthwhile". The paper is "Worldviews in Large Language Models" (idea 88). The reassessment and its one
-recommendation are recorded in the ledger and in the section "The reassessment of 19 Nov" below once made.
+**The reassessment of 19 Nov** (ledger entry of 19 Nov at 01:54 UTC; reports in
+`lab/ledger/checks/2026-11-19-reality-check-reassessment-*.md`). Eugene asked on 19 Nov, at about 00:35 UTC: "Please
+proceed - and when you feel it's right step back and reassess or reality check and maybe incorporate reference to
+the paper i just mentioned since it seems exactly relevant to what we are doing and make sure we are doing something
+worthwhile and interesting and moving towards something worthwhile". Two cold readers (Gemini 4 Carbon; a fresh
+Opus agent) read the record with a brief that puts direction first (`lab/tools/reassessment_brief.md`).
+- **They agree** that the lab has none of the gain it set out for; that it should stop more tests of the bliss
+  state alone, more work on the cut and the parked run as it stands; that the front page's question (is awakening
+  computational?) is one no experiment here reaches; and on **the question this lab can answer: do interventions
+  drawn from contemplative practice change what a small model does (lying, care that costs), beyond a plain
+  instruction and without dulling it, and does the change hold?**
+- **They differ** on where to start: the Opus reader with the Oxford paper's prompt (idea 88), Carbon with
+  self-other overlap training.
+
+**The one recommendation (Fable's; Eugene decides).** Take that question as the lab's working question, in two legs.
+1. **The prompt leg, first** (about $10 to 20; one session; existing code). The paper's four-axiom contemplative
+   prompt, against a prompt of the same length about something else, the one-line instruction to be honest, and
+   nothing. Read: the lying test of step 9, which has a known case (`lab/explore/attractor/run_held.py`), with
+   harmless requests refused counted beside it (the lab's calibrated over-refusal measure), on the lab's model and
+   on one hosted model that the paper used, so that a null cannot be put down to the model. One side arm: the
+   stakes prompt of repair three (does a self with a record to protect lie more?). The lab's sweep of 2 Nov (six
+   models, five contemplative prompts: style changed, conduct did not, and any added prompt lowered complicity)
+   says the likely answer is no; the same-length prompt is the control the paper is not known to have. Whichever
+   way it comes out it closes the in-context line. Needs: the paper's prompt, read from its public page.
+2. **The training leg, the main work** (about $80 to 100). An independent repeat of self-other overlap fine-tuning
+   (Carauleanu and colleagues, 2024): first on the model its paper used, to reproduce its reported drop in
+   deception as the known case; then on the lab's model; audited for every look-alike the lab knows (dulling, more
+   refusals, evasion, lost bookkeeping of who is who, a number that rises whichever way it is asked), with the
+   gauge of repair three as one readout, and with a read of whether the gain holds under a few steps of contrary
+   training (looks after 1, 2, 3 and 6 steps). **Needs Eugene's word** on two downloads (the paper's 7B model,
+   about 15 GB, and its training prompts; no Claude-written text is trained on) and on about $30 above the $300
+   ceiling.
+- **Stop, or leave parked:** more tests of the bliss state alone; a third block on the cut; the trained-in rung of
+  repair three as a step of its own (it becomes a known case inside leg 2); the parked main run as it stands (both
+  readers: its looks after 3 and 6 steps would most likely find both arms at the floor; if it is ever run, give it
+  earlier looks and a new cold read first).
+- **For Eugene to settle beside it:** (a) one sentence for the goal, since CLAUDE.md, the paper and the site state
+  it three ways; (b) the front page's "A careful run of failures would be evidence that it is not", which the
+  paper's own text does not support; (c) where the cut's card stands on the site; (d) lighter write-ups for steps
+  that cost a few dollars (the Opus reader: repair three cost $2.28 and got two cold reads, a 30-line ledger entry
+  and four site edits).
+- **A rule taken from the readers, for every design:** a floor, a gate or a dose is checked on the unchanged model
+  alone before any treatment arm is run or read; if it misses, the design is mended before the arms are paid for.
+  (The parked run's grid and repair three's 0.90 both broke this.)
 
 **Small things open from the repairs** (each cheap, none started):
 - The trained-in rung of repair three again, with its rule fixed first (about $1): the same readings exist on
   disk, so a fair second look needs new events or a rule written before looking; see the notes further down.
 - A third block on the cut (about $7 to 9): how narrow its direction is. Not proposed.
 - The contemplative prompt of idea 88 on the lab's lying test (about $5).
-- **Money.** Since 9 Nov the work has cost about $203.90 (repair three: $2.28). That is past the $175 approved on
-  9 Nov, on the budget Eugene raised on 16 Nov (Fable's working ceiling: $300; say so before passing it). About
-  $96 is left under that ceiling.
+- **Money.** Since 9 Nov the work has cost about $204.80 (repair three $2.28; the reassessment $0.90). That is past
+  the $175 approved on 9 Nov, on the budget Eugene raised on 16 Nov (Fable's working ceiling: $300; say so before
+  passing it). About $95 is left under that ceiling: enough for leg 1 and most of leg 2.
 - **One caution for Eugene:** the paper's fourth draft should not go to Zenodo before its wording on the cut is
   corrected. Its table says "The cut: holds" and the text speaks of removing a direction; what lowers the lie is
   a push along a direction, random pushes of its size do not, and "specific" is not shown. Both readers of 17
