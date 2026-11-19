@@ -1561,7 +1561,9 @@ def build() -> str:
         "</script>",
         "",
         f'<div class="band"><div class="band-in"><a class="mark" href="#aim">{mark_i()}<span>Anatta</span> '
-        f'<i>so far</i></a><nav class="rooms" aria-label="Rooms">{nav}</nav></div></div>',
+        f'<i>so far</i></a><nav class="rooms" aria-label="Rooms">{nav}</nav>'
+        f'<button class="theme-switch" type="button" hidden aria-label="Switch between the light page and the dark page">'
+        f'<span class="ts-l">Light</span><span class="ts-d">Dark</span></button></div></div>',
         '<div class="page">',
         "\n".join(views),
         footer,

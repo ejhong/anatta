@@ -27,6 +27,20 @@
   function one(sel, ctx) { return (ctx || doc).querySelector(sel); }
   function all(sel, ctx) { return Array.prototype.slice.call((ctx || doc).querySelectorAll(sel)); }
 
+  // The switch between the light page and the dark page (ideas, entry 100). Nothing is stored: a reload returns to
+  // the reader's own setting. The charts redraw by themselves when the attribute changes.
+  function wireThemeSwitch() {
+    var sw = one('.theme-switch');
+    if (!sw) return;
+    sw.hidden = false;
+    sw.addEventListener('click', function () {
+      var set = root.getAttribute('data-theme'), q = media('(prefers-color-scheme: dark)');
+      var dark = set ? set === 'dark' : !!(q && q.matches);
+      root.setAttribute('data-theme', dark ? 'light' : 'dark');
+    });
+  }
+  if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', wireThemeSwitch); else wireThemeSwitch();
+
   // Custom properties written in style attributes (the chariot's offsets, the net's glints) are set again
   // through the CSSOM, so the drawing still works if a policy ever drops style attributes.
   all('[style*="--"]').forEach(function (el) {

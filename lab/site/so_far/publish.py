@@ -63,7 +63,7 @@ def head_tags() -> str:
         '<link rel="icon" href="favicon.svg" type="image/svg+xml">',
         '<link rel="icon" href="favicon.png" type="image/png" sizes="96x96">',
         '<link rel="apple-touch-icon" href="apple-touch-icon.png">',
-        '<meta name="theme-color" content="#172048" media="(prefers-color-scheme: dark)">',
+        '<meta name="theme-color" content="#0e1934" media="(prefers-color-scheme: dark)">',
         '<meta name="theme-color" content="#f1f0eb" media="(prefers-color-scheme: light)">',
         '<meta property="og:type" content="website">',
         '<meta property="og:site_name" content="Anatta">',

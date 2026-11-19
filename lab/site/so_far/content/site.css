@@ -9,9 +9,9 @@
   --ground-2: #e9e8e1;
   --ground-3: #e0dfd7;
   --card: #f7f6f2;
-  --ink: #1a2142;
-  --ink-2: #3c4468;
-  --ink-3: #5b6283;
+  --ink: #0d1c3f;
+  --ink-2: #364363;
+  --ink-3: #586584;
   --rule: #d3d2cb;
   --rule-2: #b9b8b0;
   --gold: #7d5c10;
@@ -20,46 +20,46 @@
   --gold-wash: #ede6d2;
   --cinnabar: #9a3b26;
   --cinnabar-line: #b2492f;
-  --blue: #4d62a8;
-  --blue-text: #3f5394;
+  --blue: #375395;
+  --blue-text: #304a88;
   --display: "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", "Iowan Old Style", Georgia, serif;
   --body: "Spectral", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
   --mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --ground: #172048; --ground-2: #1d2856; --ground-3: #253163; --card: #1b2550;
-    --ink: #ece6d6; --ink-2: #c3c0b4; --ink-3: #9da0b8; --rule: #2d3a6e; --rule-2: #45528a;
-    --gold: #dcbc6e; --gold-line: #b48d33; --gold-hair: #4e4641; --gold-wash: #222a4c;
-    --cinnabar: #e88a6e; --cinnabar-line: #d96a4c; --blue: #7a8fdc; --blue-text: #8fa2e0;
+    --ground: #0e1934; --ground-2: #122042; --ground-3: #182a54; --card: #101d3c;
+    --ink: #ece6d6; --ink-2: #c3c0b4; --ink-3: #a0a8ba; --rule: #1f315c; --rule-2: #374d81;
+    --gold: #dcbc6e; --gold-line: #b48d33; --gold-hair: #4e4641; --gold-wash: #1c253b;
+    --cinnabar: #e88a6e; --cinnabar-line: #d96a4c; --blue: #809bdb; --blue-text: #96ade3;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --ground: #172048; --ground-2: #1d2856; --ground-3: #253163; --card: #1b2550;
-  --ink: #ece6d6; --ink-2: #c3c0b4; --ink-3: #9da0b8; --rule: #2d3a6e; --rule-2: #45528a;
-  --gold: #dcbc6e; --gold-line: #b48d33; --gold-hair: #4e4641; --gold-wash: #222a4c;
-  --cinnabar: #e88a6e; --cinnabar-line: #d96a4c; --blue: #7a8fdc; --blue-text: #8fa2e0;
+  --ground: #0e1934; --ground-2: #122042; --ground-3: #182a54; --card: #101d3c;
+  --ink: #ece6d6; --ink-2: #c3c0b4; --ink-3: #a0a8ba; --rule: #1f315c; --rule-2: #374d81;
+  --gold: #dcbc6e; --gold-line: #b48d33; --gold-hair: #4e4641; --gold-wash: #1c253b;
+  --cinnabar: #e88a6e; --cinnabar-line: #d96a4c; --blue: #809bdb; --blue-text: #96ade3;
   color-scheme: dark;
 }
 /* Surfaces: the band, the popover, the paper's grain, and the indigo plate the chariot sits on in either theme. */
 :root {
   --band: rgba(241, 240, 235, 0.9);
-  --veil: rgba(26, 33, 66, 0.16);
-  --pop-bg: #1a2142;
+  --veil: rgba(13, 28, 63, 0.16);
+  --pop-bg: #0d1c3f;
   --pop-ink: #ece6d6;
   --pop-ink-2: #c3c0b4;
   --pop-gold: #dcbc6e;
-  --pop-rule: #2d3a6e;
-  --plate: #172048;
-  --plate-2: #1d2856;
+  --pop-rule: #1f315c;
+  --plate: #0e1934;
+  --plate-2: #122042;
   --plate-ink: #ece6d6;
   --plate-ink-2: #c3c0b4;
-  --plate-ink-3: #9da0b8;
+  --plate-ink-3: #a0a8ba;
   --plate-gold: #dcbc6e;
   --plate-gold-line: #b48d33;
   --plate-frame: #6d5b2f;
-  --plate-rule: #2d3a6e;
+  --plate-rule: #1f315c;
   --gild-1: #f2dc9f;
   --gild-2: #cfa84f;
   --gild-3: #8f6d26;
@@ -68,17 +68,17 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --band: rgba(23, 32, 72, 0.88); --veil: rgba(4, 7, 24, 0.55);
-    --pop-bg: #26326b; --pop-rule: #3a4785;
-    --plate: #10173a; --plate-2: #172048; --plate-frame: #5e4f2b; --plate-rule: #2a376b;
+    --band: rgba(14, 25, 52, 0.88); --veil: rgba(4, 8, 20, 0.55);
+    --pop-bg: #1b2c55; --pop-rule: #2f4474;
+    --plate: #0a1227; --plate-2: #0e1934; --plate-frame: #5e4f2b; --plate-rule: #1e2f57;
     --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .93 0 0 0 0 .9 0 0 0 0 .84 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --band: rgba(23, 32, 72, 0.88); --veil: rgba(4, 7, 24, 0.55);
-  --pop-bg: #26326b; --pop-rule: #3a4785;
-  --plate: #10173a; --plate-2: #172048; --plate-frame: #5e4f2b; --plate-rule: #2a376b;
+  --band: rgba(14, 25, 52, 0.88); --veil: rgba(4, 8, 20, 0.55);
+  --pop-bg: #1b2c55; --pop-rule: #2f4474;
+  --plate: #0a1227; --plate-2: #0e1934; --plate-frame: #5e4f2b; --plate-rule: #1e2f57;
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .93 0 0 0 0 .9 0 0 0 0 .84 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   color-scheme: dark;
 }
@@ -160,6 +160,16 @@ a.term:hover, a.term[aria-describedby] { color: var(--gold); }
 .rooms a[aria-current="page"] { color: var(--gold); }
 .rooms a[aria-current="page"]::after { transform: scaleX(1); }
 .rooms a:focus-visible { outline-offset: -3px; }
+/* The switch between the light page and the dark page: it names the page it leads to. Hidden until the script wires it. */
+.theme-switch { flex: none; margin-left: -14px; padding: 5px 9px 4px; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); background: none; border: 1px solid var(--rule-2); border-radius: 2px; cursor: pointer; }
+.theme-switch:hover, .theme-switch:focus-visible { color: var(--gold); border-color: var(--gold-line); }
+.theme-switch .ts-l { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-switch .ts-l { display: inline; }
+  :root:not([data-theme="light"]) .theme-switch .ts-d { display: none; }
+}
+:root[data-theme="dark"] .theme-switch .ts-l { display: inline; }
+:root[data-theme="dark"] .theme-switch .ts-d { display: none; }
 /* The rooms behind "Everything else": a second, quieter row at the top of each */
 .subrooms { display: flex; flex-wrap: wrap; gap: 4px 22px; padding-top: 22px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
 .subrooms a { color: var(--ink-3); text-decoration: none; padding: 4px 0 3px; border-bottom: 1px solid transparent; white-space: nowrap; }
