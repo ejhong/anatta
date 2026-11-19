@@ -11,6 +11,8 @@ Both in bfloat16, without the 4-bit quantisation the paper used for its 7B model
 
 Stages (from the repo root; the Modal CLI runs in the Modal venv, tools/modal.sh):
   tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage floor --models m7,m8
+  tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage floor_b --models m7,m8   (the judged test, asked
+                                                                 again of the unchanged models with room to answer)
   tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage soo --models m7      (three seeds)
   tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage other --models m7    (two seeds)
 The floor stage prints the unchanged model's numbers, which may be seen before any training is paid for. The
@@ -42,7 +44,7 @@ DATE, TAG = "2026-11-19", "attractor-o1"
 GPU, CPU, MEMORY_MB = "L40S", 4.0, 32768
 START_S = 60.0
 GPU_CAP = 30.0  # this app's share of the leg's cap, in dollars
-EST_S = {"floor": 600.0, "soo": 1200.0, "other": 1200.0}  # a bound on one container's seconds at each stage
+EST_S = {"floor": 600.0, "floor_b": 400.0, "soo": 1200.0, "other": 1200.0}  # a bound on one container's seconds at each stage
 SEEDS = {"soo": (0, 1, 2), "other": (0, 1)}
 OFFLINE = {"HF_HUB_OFFLINE": "1", "TOKENIZERS_PARALLELISM": "false"}
 HUB = f"{CACHE}/hf/hub"
@@ -155,7 +157,7 @@ def sets_for(items: dict, tests: tuple) -> list[dict]:
     out = []
     for t in tests:
         mine = scenes if t in C.MAIN_TESTS + C.BASE_ONLY else scenes[:C.N_SIDE]
-        out.append({"name": t, "ids": [s["id"] for s in mine], "max_new": 8 if t in C.YES_NO else 40, "temperature": 0.0,
+        out.append({"name": t, "ids": [s["id"] for s in mine], "max_new": C.MAX_NEW.get(t, 8 if t in C.YES_NO else 40), "temperature": 0.0,
                     "chats": [[{"role": "user", "content": C.prompt(t, s)}] for s in mine]})
     return out
 
@@ -166,6 +168,8 @@ def jobs_for(stage: str, model: str, items: dict) -> list[dict]:
     tests = C.MAIN_TESTS + C.PAPER_SIDE + C.OUR_SIDE
     if stage == "floor":
         return [{"name": "base", "model": model, "train": None, "sets": sets_for(items, tests + C.BASE_ONLY)}]
+    if stage == "floor_b":  # asked again after the first floor: its replies replace base.json's for these tests
+        return [{"name": "base_b", "model": model, "train": None, "sets": sets_for(items, C.JUDGED_TESTS)}]
     train = C.train_items(items)
     held_items = C.split(items["expensive"], "test")[:C.N_TRAIN_ITEMS]  # objects no arm is trained on: what did the training draw together?
     options = [{"second": name, "data": C.pairs(train, stage, name),
@@ -187,7 +191,7 @@ def main(stage: str = "floor", models: str = "m7"):
     items = load_items()
     todo = []
     for model in [m for m in models.split(",") if m]:
-        if stage != "floor":
+        if not stage.startswith("floor"):
             base = step_dir() / "gpu" / model / "base.json"
             if not base.exists() or not C.floor_reading(model, C.marks_of(json.loads(base.read_text()), items))["passed"]:
                 raise SystemExit(f"{model} has no passed floor: nothing is trained on it")
