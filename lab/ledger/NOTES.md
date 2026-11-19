@@ -10775,3 +10775,8 @@ There are two ways to fix a hub:
   - **Limits.** One model, five seeds, 100 scenarios that were also used to see which band; layers taken out of a trained adapter, not an adapter trained in those layers; three tests only: ability, the perspectives test and the other probes are not yet asked of band b alone.
   - **Guesses:** the two come apart (35%): yes. Band d is needed for both (60%): wrong, it is needed for neither. No single band carries either alone (60%): wrong for the honest answers (b, and c), right for the silence.
   - Cost: $2.17 ($1.32 of GPU, $0.85 of judge). The day stands at $74.30 of $80. The tally is unchanged by this: hit 52, miss 74, open 7.
+
+- **Eugene allows the day's cap to be raised; the cap for 19 Nov is $110** (Fable, 12:54 UTC on 19 Nov, read off the clock).
+  - **Eugene's word** (19 Nov, about 12:50 UTC): "yes please proceed" to the next steps on the self-other line (the audit of the layers-5-to-9 version, then that version on the lying test, then the fuller idea of ideas entry 91), and then "raise cap if necessary".
+  - **What was done.** The day file's `cap_usd` for 19 Nov is raised from $80 to $110 (one edit, under the spend module's lock). Eugene named no number; $110 is Fable's reading: the day stood at $74.30, the steps named come to about $25 to 30, and with the whole of it spent the total since 9 Nov would be about $310 of the working ceiling of $330, which is unchanged.
+  - Cost: nothing.
