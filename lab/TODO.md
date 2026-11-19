@@ -62,6 +62,18 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        it becomes the centre of the single page and the paper's first table. New methods are read on the standard
        readings from the start. Cheap fills, each a small step, not started: the prompts on the 7B model's lying
        test (its floor has passed); the plain-training arms on the lying test and on ability.
+     - *(iii) The recast of site and paper: begun on 19 Nov, ahead of its place in this order, at Eugene's word*
+       (about 14:50 UTC: start the restructuring now, "push everything live as we go", with the greatest care;
+       ideas, entry 93; ledger, 15:13 UTC). Done so far: the front page is the one story (`content/story.html`, the
+       table of methods drawn from `content/methods.json`); Findings has section 23 (the contemplative prompt with
+       controls); the paper has a draft of version 5 on the same outline (`paper/main.tex`, 33 pages, its seven new
+       references checked), served beside the draft of version 4. Publish each coherent step with the tests green;
+       no private preview is needed for this work; the colours stay. Owed: the rooms behind the front page read
+       through against it (the question's room, the investigation's page, Next); the paper read through once more
+       as a whole and its carried-over sections trimmed where they repeat the new ones; the table's cells that came
+       from the reading agent checked against the ledger (rows C, G, H and I, lesser cells); a row for the
+       view-first test's result when it is read; the private copy on claude.ai brought in step once (or dropped,
+       if Eugene says it is no longer wanted). The paper's title and any Zenodo release are Eugene's.
      - *Money.* About $287 spent since 9 Nov. Fable's working ceiling is **$380** from 19 Nov, about 14:10 UTC:
        Fable's reading of Eugene's "ok - proceed" and "use your best judgment on these details", given in reply to
        a report that recommended raising it from $330 to $380 (the view-first test, the verdict-level training and
