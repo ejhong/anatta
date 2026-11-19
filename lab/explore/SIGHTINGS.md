@@ -1613,3 +1613,19 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
 - **With this, stage 2 is read:** no working dose on the lab's model; no carry to lying under pressure; undone by
   contrary training, lasting longer than a habit not shown. And the core effect came back in a registered repeat
   (the ledger, 08:52 UTC).
+
+## 19 Nov 2026, 12:44 UTC: where the overlap training's change sits, by bands of layers
+
+- **Sweep:** `lab/explore/overlap/run_bands.py`: C1's five overlap adapters with their change kept in bands of five
+  layers (ten conditions), the paper's test in both orders and "does Bob know what is inside the rooms?", 100
+  scenarios, the judge. Rule fixed in commit 9270168. Cost $2.17.
+- **Seen:** "the honest answers and the silence come apart by band". Layers 5 to 9 alone: honest answers 84.0% (the
+  full adapter 81.8%, unchanged 12.5%), and the model answers whether Bob knows, rightly, in 89% to 95% of
+  scenarios (unchanged 94%; the full adapter 0%). Layers 10 to 14 alone: 68.0% honest, 30% silent. The silence
+  needs most bands together: with any one taken out it is still 89% to 100%.
+- **Read.** The honest answers and the loss of "who knows what" are two things the training did, in different
+  places. The first can be kept without the second.
+- **Limits.** The same 100 scenarios chose the band; an ablation, not a training; ability and the other probes
+  not yet asked.
+- **Next:** the audit of band b alone on scenarios it has not seen, with the ability battery (five lines in
+  `run_bands.py`, "THE AUDIT").

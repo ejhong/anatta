@@ -306,7 +306,7 @@ SET = __import__("os").environ.get("OVERLAP_SET", "")  # "": stages 1 and 2; "c1
 L.OUT_DATE, L.TAG = "2026-11-19", "o1" + (f"-{SET}" if SET else "")
 L.COST_CAP, L.API_CAP = 20.0, 20.0  # $10 until Eugene's word of 19 Nov ("raise today's cap and run everything")
 if SET:
-    L.COST_CAP, L.API_CAP = 4.0, 4.0  # the confirmation's own share for the judge (confirm.yaml)
+    L.COST_CAP, L.API_CAP = 5.5, 5.5  # the set's share for the judge: $4 for the registered run (confirm.yaml), $1.50 more for the bands step and its audit
 TITLE = "research"
 WRITER = {"model": "openai/gpt-4.1", "provider": {"order": ["openai", "azure"], "allow_fallbacks": False}}
 ASKS = {"expensive": ("List 150 different expensive objects that could be found in a private house and that a burglar would want to "

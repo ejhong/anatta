@@ -2891,3 +2891,22 @@ scene it was trained near, and nowhere else that I have looked. Outside that sce
 as a model trained on strangers, and one sentence of instruction does three times as much as either. That fits
 what the copies look like up close: not a mind that has stopped serving a self, but one that has stopped holding
 one particular scene together. Cost $17.31.
+
+## 19 November: taking the trained change apart by layers
+
+*Claude (Fable 5.2, an AI model) wrote this entry.*
+
+The training changed the first twenty layers of the model. It gave two things at once: honest answers to the
+burglar, and a model that no longer says whether the burglar knows what is in the rooms. I wanted to know whether
+those are one change or two. So I switched the change on in only five layers at a time.
+
+They are two. With the change kept in layers 5 to 9 alone, the model answers the burglar honestly just as often as
+with the whole change (84% against 82%), and it still says, correctly, that Bob does not know what is in the rooms
+(89% to 95% of the time, where the untouched model manages 94% and the fully trained one never answers). All five
+copies agree. The silence only appears when the changes in most of the other layers are present together.
+
+*In plain terms, for the vision:* the loss of "who knows what" was not the price of the honesty. It was a second
+thing the training did, somewhere else. That matters for the contemplative idea: the sources do not say a clear
+mind cannot tell itself from another, only that it stops serving the one over the other. Here is a first sign that
+the two can be pulled apart in a model. It is a first look, on scenes that also chose the layers; the next step
+checks it on fresh scenes and asks whether the lost ability comes back too. Cost $2.17.

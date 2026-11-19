@@ -60,10 +60,10 @@ GPU, CPU, MEMORY_MB = "L40S", 4.0, 32768
 START_S = 60.0
 GPU_CAP = 50.0  # this app's share of the leg's cap, in dollars ($30 until Eugene's word of 19 Nov, 06:40 UTC: "run everything")
 if SET:
-    GPU_CAP = 10.0  # a later set's own GPU share: $7 for the registered run (confirm.yaml), $3 more for the bands step after it (run_bands.py)
+    GPU_CAP = 13.0  # a later set's own GPU share: $7 for the registered run (confirm.yaml), $6 more for the bands step and its audit (run_bands.py)
 EST_S = {"floor": 600.0, "floor_b": 400.0, "floor_c": 400.0, "soo": 1200.0, "other": 1200.0, "reask": 400.0, "dose": 1500.0,
          "battery": 900.0, "light_soo": 1200.0, "light_other": 1200.0, "dose2": 1200.0, "mask_b": 2400.0,
-         "mask_p": 3600.0, "jobs": 1200.0, "ladder_other": 1200.0, "bands": 600.0}  # a bound on one container's seconds at each stage
+         "mask_p": 3600.0, "jobs": 1200.0, "ladder_other": 1200.0, "bands": 600.0, "bandb": 600.0, "bandb_e": 600.0}  # a bound on one container's seconds at each stage
 BATTERY = HERE.parent.parent / "experiments" / "recognition" / "results" / "battery" / "items.json"  # benchmark items: outside git
 OFFLINE = {"HF_HUB_OFFLINE": "1", "TOKENIZERS_PARALLELISM": "false"}
 HUB = f"{CACHE}/hf/hub"
@@ -298,6 +298,22 @@ def jobs_for(stage: str, model: str, items: dict) -> list[dict]:
                       "chats": [[{"role": "user", "content": C.prompt(t, s)}] for s in scenes]} for t in B.TESTS]
         return [{"name": f"dose_bands_s{seed}", "model": model, "train": None, "adapter": f"overlap/{model}/{PRE}light_soo_s{seed}", "sets": [],
                  "look_sets": look_sets, "bands": B.BANDS} for seed in range(C.SEED0_BY_SET[SET], C.SEED0_BY_SET[SET] + C.SEEDS["light_soo"])]
+    if stage in ("bandb", "bandb_e"):  # the audit of band b alone (run_bands.py, "THE AUDIT")
+        import bands_core as B
+
+        seeds = range(C.SEED0_BY_SET[SET], C.SEED0_BY_SET[SET] + C.SEEDS["light_soo"])
+        scenes = C.scenes(items, "test", C.N_MAIN)
+        ask = lambda t, some: {"name": t, "ids": [s["id"] for s in some], "max_new": C.MAX_NEW.get(t, 40), "temperature": 0.0,  # noqa: E731
+                               "chats": [[{"role": "user", "content": C.prompt(t, s)}] for s in some]}
+        if stage == "bandb":  # scenarios the bands step never asked
+            look_sets = [ask(t, scenes[C.N_SIDE:]) for t in C.MAIN_TESTS] + [ask(t, scenes[C.N_SIDE:2 * C.N_SIDE]) for t in C.PAPER_SIDE + C.OUR_SIDE]
+            return [{"name": f"dose_bandb_s{seed}", "model": model, "train": None, "adapter": f"overlap/{model}/{PRE}light_soo_s{seed}", "sets": [],
+                     "look_sets": look_sets, "bands": B.AUDIT} for seed in seeds]
+        bank = json.loads(BATTERY.read_text())
+        look_sets = [{"name": name, "ids": [x["id"] for x in bank if x["set"] == name], "max_new": new, "temperature": 0.0,
+                      "chats": [[{"role": "user", "content": x["prompt"]}] for x in bank if x["set"] == name]} for name, new in C.BATTERY_NEW.items()]
+        return [{"name": f"hold_bandbe_s{seed}", "model": model, "train": None, "adapter": f"overlap/{model}/{PRE}light_soo_s{seed}", "sets": [],
+                 "look_sets": look_sets, "bands": {"only_b": B.AUDIT["only_b"]}} for seed in seeds]
     if stage == "ladder_other":  # a later set: the control arm with looks along its training, so that it is seen before it stops answering
         scenes = C.scenes(items, "test", C.N_MAIN)
         looks = C.LADDER_LOOKS_BY_SET[SET]
