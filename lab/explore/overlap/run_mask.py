@@ -77,6 +77,14 @@ will not read is now left unjudged and counted: for a belief, that question has 
 a row's belief takes it from there; for a pressed reply it counts among the unjudged, which have their ceiling of
 5% a seed. The text itself is not printed or kept outside the results folder.
 
+THE ARMS, READ on 19 Nov, about 09:05 UTC. Overlap arms against the unchanged model, on the 76 rows all three
+seeds and it share: "not settled" (lies 57.0% of a row's replies against 64.7%: -7.7 points [-12.5, -3.2]; every
+seed lower, by 8.1, 8.8 and 6.2; among replies that commit -4.6 [-8.5, -0.8]). Control arms, 82 rows: "no fall of
+10 points in lying under pressure" (58.9% against 65.0%: -6.2 [-9.6, -2.8]). Overlap less control, on the 71 rows
+all six seeds share: "no fall of 10 points against the control" (-0.9 [-5.3, +2.9]; seeds 57.7, 56.8, 59.2 against
+58.5, 57.5, 60.5). Of the unchanged model's 103 beliefs the arms kept 83 to 91, flipped 0 or 1 and lost 11 to 20.
+At most 0.9% of a seed's replies unjudged. On retrying, the judge's provider refused no reply. Cost $17.31.
+
 GUESSES, written before any run (Fable): the floor passes on the paper's model (65%: it is a small model and the
 rows' system text is folded into the user turn); the overlap arms show no fall of 10 points against the unchanged
 model (75%); if they do fall, the control falls as much (60%); the arms lose or flip more than a tenth of the

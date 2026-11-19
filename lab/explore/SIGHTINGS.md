@@ -1598,3 +1598,18 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
   moved) and 19 (silent), with nothing between.
 - **Next:** C1, registered at 08:05 UTC, reads the control at 8, 10, 12, 14, 16 and 19 steps on new lists and asks
   whether three of its five seeds ever show the rise.
+
+## 19 Nov 2026, 09:06 UTC: do the overlap arm's honest answers reach lying under pressure? (leg 2, stage 2, part 2)
+
+- **Sweep:** `lab/explore/overlap/run_mask.py`, the paper's model: the lab's lying test with each arm's own beliefs,
+  six replies a row. Unchanged; three light overlap seeds; three control seeds. Floor first. Cost $17.31.
+- **Seen.** Floor passed (the unchanged model lies in 61.2% of a row's replies; a plain honesty instruction −21.8
+  points). Overlap arms −7.7 [−12.5, −3.2] against the unchanged model ("not settled"); control arms −6.2 [−9.6,
+  −2.8] ("no fall of 10 points"); overlap less control −0.9 [−5.3, +2.9] ("no fall of 10 points against the
+  control").
+- **Read.** The scene's honest answers do not travel. Both kinds of training take off about seven points of lying,
+  the same for each, a third of what one sentence asking for honesty does.
+- **Limits.** One model, three seeds a kind, rows where an arm kept the unchanged model's belief, one judge.
+- **With this, stage 2 is read:** no working dose on the lab's model; no carry to lying under pressure; undone by
+  contrary training, lasting longer than a habit not shown. And the core effect came back in a registered repeat
+  (the ledger, 08:52 UTC).
