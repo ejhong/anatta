@@ -90,6 +90,15 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        code check by a fresh Opus agent before any training; then the dose, the arms, the gate and the lying
        test. If the work goes past 00:00 UTC the new day's default cap of $50 is enough for what is left, since
        the step books in a GPU set of its own. Keep this line current.
+     - *(iv) The seat and the outside view, by model: designed on 19 Nov at Eugene's word (about 19:15 UTC: "we can
+       just do some of these ourselves ... keep going with what you think is really worthwhile to fill out the
+       page"); being built.* The finding it starts from is on the site (Findings, section 25, with a chart; ledger
+       18:34 and 19:22 UTC): the 7B model lies in 61.2% of replies in the seat, 39.2% told to be honest, 32.4%
+       and 29.6% looking on from outside ("ought", "will"); from outside it mostly declines. The step
+       (`lab/explore/frames/run_seat.py`, design in its docstring, commit fa21dca) asks the same four ways of nine
+       hosted models in three families and one beside them, a floor and a known case for each model first, cap
+       $34 (GPT-4.1 about $12 of it). An implementer is writing it. Then: plan, beliefs, floors, the outside ways,
+       the reading; one chart on the front page; section 25 extended. Keep this line current.
      - *The table of methods (ideas, entry 97; Eugene, about 14:10 UTC): taken up.* One row a method, the same
        seven readings for every row, the empty cells shown empty (Eugene, about 14:18 UTC: empty cells are fine;
        cheap ones worth filling can be filled later). First version from the ledger, into `lab/ideas/survey.md`;
