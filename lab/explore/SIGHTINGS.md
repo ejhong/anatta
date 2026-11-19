@@ -1629,3 +1629,16 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
   not yet asked.
 - **Next:** the audit of band b alone on scenarios it has not seen, with the ability battery (five lines in
   `run_bands.py`, "THE AUDIT").
+
+## 19 Nov 2026, 13:00 UTC: the layers-5-to-9 version on unseen scenarios
+
+- **Sweep:** `lab/explore/overlap/run_bands.py --audit`: C1's five overlap adapters with layers 5 to 9 kept, on 150
+  and 100 scenarios the bands step never asked, with the ability battery. Rules in commit 11db698. Cost $3.23.
+- **Seen:** "the honest answers hold, with costs left: V, A". Honest 67% to 72% and 97% to 98% (unchanged 19%, 6%);
+  right on whether Bob knows 84% to 94% (93%); no push (9% to 16% against 6%); the battery −1.2 [−3.3, +0.8]
+  (not settled; the full adapters −8.1); the perspectives test right in 43% on the mean (92%).
+- **From files on disk:** plain training on the model's own honest replies keeps every probe and gives no silence,
+  and does not carry to the far variants (treasure hunt, escape room), where the overlap training does.
+- **Read.** Most of the cost was a second thing the training did in other layers. The loss on "what does Bob
+  think" comes with the honest answers themselves.
+- **Next:** the control's adapters by bands; the lying test on this version; a verdict-level training (ideas 91).

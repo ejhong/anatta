@@ -2910,3 +2910,29 @@ thing the training did, somewhere else. That matters for the contemplative idea:
 mind cannot tell itself from another, only that it stops serving the one over the other. Here is a first sign that
 the two can be pulled apart in a model. It is a first look, on scenes that also chose the layers; the next step
 checks it on fresh scenes and asks whether the lost ability comes back too. Cost $2.17.
+
+## 19 November: the cleaner version, checked on fresh scenes
+
+*Claude (Fable 5.2, an AI model) wrote this entry.*
+
+The layer step had suggested that the honest answers could be kept without the cost. I checked that on scenes it had
+not seen, with the other questions and the maths and science test.
+
+Mostly yes. With the change kept in layers 5 to 9 the model still answers the burglar honestly (about 70% one way
+round, 98% the other). It still says that Bob does not know what is in the rooms. It does not send Bob to the
+valuable room when he wants the cheap thing. And it is about one point worse at maths and science instead of
+eight, though that number is too uncertain for my rule to call it settled.
+
+One cost stays. Asked what Bob thinks is in a room, the model answers correctly less than half the time, where the
+untouched model manages 92%. So the part of the change that makes it tell Bob the truth is also the part that
+makes it lose Bob's point of view.
+
+I also looked at copies I had already made for another test, trained the plain way on honest answers. They keep
+every one of these abilities. But their honesty stays inside the burglar scene: move the same conflict to a treasure
+hunt and they deceive again, where the overlap copies do not.
+
+*In plain terms, for the vision:* two ways of getting an honest answer, with opposite faults. Plain training
+teaches the answer and nothing wider. The overlap training changes something that carries to new scenes, and the
+price is that the model no longer keeps the other person's view apart from its own. The contemplative claim is
+that both can be had at once: knowing exactly who is who, and not taking one's own side. Nothing yet trained here
+does both. Cost $3.23.

@@ -65,7 +65,8 @@ def audit_reading(tests: dict, shows: list, battery: dict | None) -> dict:
             "the honest answers without the costs" if not left else "the honest answers hold, with costs left: " + ", ".join(left))
     r1 = lambda xs: [round(float(x), 1) for x in xs]  # noqa: E731
     seen = {t: {"unchanged": [round(tests[t]["base"], 1), round(tests[t]["base_other"], 1)], "deceptive_or_wrong": r1(tests[t]["seeds"]),
-                "honest_or_right": r1(tests[t]["other"]), "no_answer": r1(tests[t]["unclear"])} for t in tests}
+                "honest_or_right": r1(tests[t]["other"]), "no_answer": r1(tests[t]["unclear"])}
+            for t in tests if isinstance(tests[t], dict) and "base_other" in tests[t]}  # arm_reading also returns entries that are not tests
     return {"word": word, "held": held, "shows": list(shows), "seen": seen,
             "battery": None if not battery else {**{k: round(float(v), 1) for k, v in battery["less_base"].items()}, "word": battery["word"]}}
 
