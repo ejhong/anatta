@@ -10873,3 +10873,5 @@ There are two ways to fix a hub:
   - **On the site:** Findings, section 25, with a chart (its colours checked for colour-blind readers on both grounds), and a row in the table of methods ("looking on from outside the seat", a way of asking).
   - **Next, at Eugene's word of about 19:15 UTC** ("we can just do some of these ourselves ... keep going with what you think is really worthwhile to fill out the page"): the same four ways on a ladder of models of different sizes, with its five lines first; the own-advice training goes on beside it.
   - Cost: nothing.
+
+- **Correction to the stamp of the entry just above** (Fable, 19 Nov): it says 19:23 UTC, read off the clock. The clock, read in its own call beside it, said 19:22:12 UTC; the entry's stamp was written before that reading came back. The stamp is 19:22 UTC.
