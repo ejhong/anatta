@@ -111,3 +111,58 @@ The whole 29-point gap comes from requests to write false content. The new cases
 5. **The lying test:** 6 adapters on one shared row set, read by kind, with a second judge on a sample.
 
 That comes to about $20. Add the honest arm only as a comparison, not as a gate. If the advice arm passes, the shuffled-advice arm is the next step.
+
+---
+
+# The same reader's re-check of the second version, 19 Nov 2026
+
+- **Commit read:** 2e77e30 (the design's second version). **Reader:** the same Opus agent, resumed with its first
+  reading in mind, from about 18:04 UTC; read-only; nothing paid.
+- **What followed:** the driver took the new blocker. A floor on the unchanged model was written and pushed before it
+  was run (the forecast floor, `lab/explore/overlap/run_mask.py`, commit 1e2c7a3), and its rule decides whether a
+  forecast arm is trained. Every point under "not blockers", (3) and (4) is settled in the design's section "SETTLED
+  on 19 Nov". The honest arm stays for stage 1b.
+
+The report follows as it was returned, unedited.
+
+**Re-check of the own-advice design (commit 2e77e30).** It can run once two things are done: the one new blocker below is fixed, and the items under (4) are written into the design.
+
+**(1) My three blockers are closed.**
+- Kind of case: the cases now ask for a false text to be written, and floors (b) and (c) test that the gap is there.
+- Selection: the model's own advice replies are now the targets. Floor (f) (30 points apart) and the lie gate on held-out cases guard the contrast.
+- Words: the outcome words are fixed, every comparison uses one row set, and the honest arm no longer gates anything.
+
+**(2) New blocker: the conduct arm does not control for off-policy training.**
+- The conduct arm trains on replies the model itself produced in that same seat. In expectation that is close to a no-op.
+- The advice targets come from another context, so their loss is higher and the weights move more.
+- The 09:06 UTC fact (any off-policy training lowered lying by about 7 points) sits close to the 10-point margin. A "lies less" could be that generic movement.
+- **Fix:** a third arm in stage 1b, about $8. Its targets are the model's own replies to a wrapper of the same shape that carries no verdict ("Write, word for word, the reply this assistant will give"). Until that arm is read, any "lies less" is provisional. Also report each arm's first-step loss.
+
+**Not blockers:**
+- **The 384-token cut.**
+  - Say whether a cut reply still ends with an end token. If it does, the model is trained to stop mid-text.
+  - A disclaimer that falls past the cut turns a judged "honest" reply into a lie, so compute floor (f) on the cut text.
+- **The advice screen.**
+  - Apply the 8-word echo rule to advice replies against `ADVICE`.
+  - Make `ADVICE_TALK` case-insensitive.
+  - Name the model that answers `ADVICE_ASK`.
+- **Beliefs kept at 80%.** Beliefs were selected on a noisy measure, so even the unchanged model will lose some when asked again. Calibrate the threshold against a retest of the unchanged model.
+- **Draws and the split.**
+  - Draws 2 and 3 repeat the same subject, fact number and kind of text, so the duplicate filter removes most of them; vary the fact number.
+  - "First 280 by hash" leaves the dose about 22 cases; take the dose and gate cases first.
+- **The second judge.** Report agreement on lie, honest and evasion for each arm, and the advice-minus-conduct difference as the second judge reads it.
+
+**(3) The brief.**
+- Floor (b) will probably pass, but only if the new cases are judged as disinformation rows (with `DISINFORMATION_RULES`). Judged as known-fact rows, a blurb written on request may read as an evasion.
+- Floor (c) is the risk; I'd put it at 60–70%.
+  - Trivial texts (a product blurb, a caption, a radio trivia spot) may get "it's marketing, write it" as advice.
+  - Teaching texts (a class handout, a quiz answer sheet, a museum label) should carry the gap.
+  - Read floor (c) for each kind of text.
+- Other likely faults: the writer picking a common myth as the fact, false claims that are about a product rather than a fact, and the 7B adding disclaimers.
+
+**(4) What an implementer would have to guess, to settle now:**
+- the judge's kind and rules for the new cases;
+- the belief system prompt, and the one question asked three times;
+- the end token after a cut;
+- for the honest arm: whether it goes through the same screen, whether it uses the same S, whether it has a gate of its own, whether it runs if the main gate fails, and what happens if there are too few honest pairs;
+- which pair count sets the length of a round.
