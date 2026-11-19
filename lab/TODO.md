@@ -41,6 +41,7 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
 - **Waiting for Eugene's word:**
   1. *The site's highlight (ideas, entry 90):* published on 19 Nov at Eugene's word ("update the site"), after the preview.
   2. *The scoreboard:* done on 19 Nov at Eugene's word (ledger, 12:36 UTC): C1's ten predictions are in; the tally is hit 52, miss 74, open 7.
+  4. *One story for the site and the paper (ideas, entry 93):* Eugene is weighing a recast of both as a survey of contemplative ideas for alignment with the lab's repeats, under the non-computational caveat, on one page. Fable's view and a proposed shape are in the entry; recommended after the current line, starting with a reading pass, an outline and a private preview. Waits for Eugene's word.
   3. *What next.* Fable's recommendation, one line: stop adding tests to this recipe and open the trained model
      up instead (the lab's own rule: dissect the clearest phenomenon). What inside the light-dose copies carries
      the honest answers, and is it the same thing that silences "does Bob know?" Two cheap first cuts, about $10:
