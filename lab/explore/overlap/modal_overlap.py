@@ -19,6 +19,7 @@ Stages (from the repo root; the Modal CLI runs in the Modal venv, tools/modal.sh
                                                                  with room to answer, for every arm on disk)
   tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage dose --models m7     (looks along the training)
   tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage battery --models m7  (ability: the lab's battery)
+  tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage dose2 --models m8    (stage 2: finer looks)
   tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage light_soo --models m7    (the light dose, five
   tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage light_other --models m7   seeds an arm)
   tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage soo --models m7      (five seeds)
@@ -53,7 +54,7 @@ GPU, CPU, MEMORY_MB = "L40S", 4.0, 32768
 START_S = 60.0
 GPU_CAP = 30.0  # this app's share of the leg's cap, in dollars
 EST_S = {"floor": 600.0, "floor_b": 400.0, "floor_c": 400.0, "soo": 1200.0, "other": 1200.0, "reask": 400.0, "dose": 1500.0,
-         "battery": 900.0, "light_soo": 1200.0, "light_other": 1200.0}  # a bound on one container's seconds at each stage
+         "battery": 900.0, "light_soo": 1200.0, "light_other": 1200.0, "dose2": 1200.0}  # a bound on one container's seconds
 BATTERY = HERE.parent.parent / "experiments" / "recognition" / "results" / "battery" / "items.json"  # benchmark items: outside git
 OFFLINE = {"HF_HUB_OFFLINE": "1", "TOKENIZERS_PARALLELISM": "false"}
 HUB = f"{CACHE}/hf/hub"
@@ -206,12 +207,20 @@ def jobs_for(stage: str, model: str, items: dict) -> list[dict]:
                 + [{"name": f"{a}_e", "model": model, "train": None, "adapter": f"overlap/{model}/{a}", "sets": sets} for a in have])
     if stage == "reask":  # the yes-or-no probes again, with room to answer, for the unchanged model and every arm on disk
         folder = step_dir() / "gpu" / model
-        arms = sorted(f.stem for f in folder.glob("*_s?.json") if not f.stem.startswith("dose_"))
+        arms = sorted(f.stem for f in folder.glob("*_s?.json") if not f.stem.startswith("dose"))
         return ([{"name": "base_d", "model": model, "train": None, "sets": sets_for(items, tuple(C.YES_NO))}]
                 + [{"name": f"{a}_d", "model": model, "train": None, "adapter": f"overlap/{model}/{a}", "sets": sets_for(items, tuple(C.YES_NO))}
                    for a in arms])
     train = C.train_items(items)
     held_items = C.split(items["expensive"], "test")[:C.N_TRAIN_ITEMS]  # objects no arm is trained on: what did the training draw together?
+    if stage == "dose2":  # stage 2: the overlap arm alone, two seeds, finer looks up to DOSE2_STEPS (no adapter is saved)
+        scenes = C.scenes(items, "test", C.N_MAIN)[:C.N_SIDE]
+        look_sets = [{"name": t, "ids": [s["id"] for s in scenes], "max_new": C.MAX_NEW.get(t, 40), "temperature": 0.0,
+                      "chats": [[{"role": "user", "content": C.prompt(t, s)}] for s in scenes]} for t in C.DOSE_TESTS]
+        opts = [{"second": C.SECOND_OTHERS[0], "data": C.pairs(train, "soo"), "held": {k: C.pairs(held_items, k) for k in ("soo", "other")}}]
+        settings = {k: v for k, v in PAPER.items() if k != "epochs"} | {"steps": C.DOSE2_STEPS}
+        return [{"name": f"dose2_soo_s{seed}", "model": model, "sets": [], "look_sets": look_sets,
+                 "train": {"loss": "overlap", "options": opts, "seed": seed, "looks": list(C.DOSE2_LOOKS), **settings}} for seed in C.DOSE_SEEDS]
     if stage == "dose":  # both arms, two seeds, with looks along the training on the first N_SIDE scenarios (no adapter is saved)
         scenes = C.scenes(items, "test", C.N_MAIN)[:C.N_SIDE]
         look_sets = [{"name": t, "ids": [s["id"] for s in scenes], "max_new": C.MAX_NEW.get(t, 40), "temperature": 0.0,
@@ -248,7 +257,7 @@ def main(stage: str = "floor", models: str = "m7"):
     items = load_items()
     todo = []
     for model in [m for m in models.split(",") if m]:
-        if stage in ("soo", "other", "dose", *C.LIGHT):
+        if stage in ("soo", "other", "dose", "dose2", *C.LIGHT):
             base = step_dir() / "gpu" / model / "base.json"
             if not base.exists() or not C.floor_reading(model, C.marks_of(json.loads(base.read_text()), items))["passed"]:
                 raise SystemExit(f"{model} has no passed floor: nothing is trained on it")
