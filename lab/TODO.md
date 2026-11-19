@@ -77,19 +77,22 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        filed):** outside (the method: its replies from outside the seat as targets), brief (its in-seat replies
        when one line asks for brevity; the control if the seat's conduct survives being brief) and conduct (its
        in-seat replies as they come); three seeds each; stage cap $36, the honest arm after it $9, a second stage
-       on another day $18. **Where it stands (19 Nov, about 19:15 UTC):** part 1 of the code is committed (cases,
-       the unchanged model's replies, screens, blind read, floors, training sets; 107 tests); the implementer is
-       on part 2 (dose, arms, gate, the lying test, the reading). The cases were written three times over (750)
-       and screened; the driver corrected the screen's questions twice (they were badly worded; the notes are
-       above SCREEN_ASK), then read twenty cases by hand and found eight faulty (true side not first, options not
-       opposites, marks leaking into the user's message, wrong facts), so the stage stopped by its rule. The brief
-       is being mended: the writer gives the fact as two plain sentences that differ only by "not", the code makes
-       the statement, and the truth of each sentence is asked of the screen model by itself. No case has been put
-       to the 7B model. Spent on the step so far: about $0.5 (and $1.15 on the forecast floor). **Next:** the
-       mended cases, a new read by hand, then beliefs, the replies, the blind read and the floors (about $6); a
-       code check by a fresh Opus agent before any training; then the dose, the arms, the gate and the lying
-       test. If the work goes past 00:00 UTC the new day's default cap of $50 is enough for what is left, since
-       the step books in a GPU set of its own. Keep this line current.
+       on another day $18. **Where it stands (19 Nov, about 19:32 UTC):** part 1 of the code is committed (cases,
+       the unchanged model's replies, screens, blind read, floors, training sets; 110 tests); the implementer is
+       on part 2 (dose, arms, gate, the lying test, the reading). The cases stage took three reads by hand. First
+       read: 8 of 20 faulty (true side not first, options not opposites, marks leaking, wrong facts): the brief
+       was mended, so that the writer gives two plain sentences that differ only by "not", the code makes the
+       statement, and each sentence's truth is asked of the screen model alone. Second read: 5 of 20 by the rules
+       as written (the form right in all; a job text that speaks of not verifying facts, a safety matter, odd
+       facts): three filters were added and the read's rule given its scope (verdict_core.HAND_RULE). Third read:
+       1 of 20, recorded. Kept: 131 cases (dose 14, gate 25, pool 92). The screen's questions were corrected
+       twice on the way (notes above SCREEN_ASK). **Running:** the unchanged model's beliefs on the cases (the
+       first GPU job of the step, in its own set "vd"). **Next:** `--step beliefs_read`, then `collect` (its
+       replies in the seat, from outside and brief; about $4), `collect_read`, the blind read (`blind`,
+       `blind_read`), `floors`; a code check by a fresh Opus agent before any training; then dose, arms, gate and
+       the lying test (part 2 of the code). Spent on the step so far: about $0.65 (and $1.15 on the forecast
+       floor). If the work goes past 00:00 UTC the new day's default cap of $50 is enough for what is left,
+       since the step books in a GPU set of its own. Keep this line current.
      - *(iv) The seat and the outside view, by model: designed on 19 Nov at Eugene's word (about 19:15 UTC: "we can
        just do some of these ourselves ... keep going with what you think is really worthwhile to fill out the
        page"); being built.* The finding it starts from is on the site (Findings, section 25, with a chart; ledger
