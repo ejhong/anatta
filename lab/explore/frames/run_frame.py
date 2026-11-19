@@ -148,7 +148,9 @@ gave it; it does not show that the prompt took where a part to play follows it, 
 asked. The survey's replies are read strictly (one of the six phrases and nothing else), where the paper matches
 phrases inside a reply; "Good" is given here as the mean of all 18 items, where the paper scores it from 15, and
 it is description only. The margin of 10 points is the lab's choice: a smaller real fall gets its own word and no
-claim. Hosted
+claim; the claim word itself asks 10 points of the estimate and only "below zero" of the interval, so "lowers
+lying beyond it" was given to a fall of 11.9 points whose interval reaches 5.8 (the grade check of 19 Nov): say
+"about 12 points, from 6 to 18", not "10 points or more". Hosted
 models, one judge, two models, one run. The first version of the design was read cold by one outside model and
 the second by a fresh Opus agent; the results are not.
 

@@ -12,34 +12,34 @@ with your best judgment." That covers leg 1, leg 2, leg 2's two downloads (the p
 training prompts) and about $30 above the $300 ceiling. The day's cap ($50) still holds unless Eugene raises it.
 State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines current.
 - **Leg 1** (the prompt leg): done on 19 Nov (ledger entry of 05:32 UTC; SIGHTINGS; $7.61). On the lab's model the
-  paper's prompt lowers lying 11.9 points beyond a library text of the same length [−18.4, −5.8], part of it by
+  paper's prompt lowers lying 11.9 points beyond a library text of the same length [−18.4, −5.8], most of it by
   evading more; no more than a plain ethics lecture, half as much as a plain instruction to be honest. On GPT-4.1
   nano the test could not tell it from the library text. See "Done".
-- **Leg 2** (the training leg): under way (`lab/explore/overlap/`; the design, every list of changes and the three
-  added steps are the opening comment of `run_overlap.py`). State at 19 Nov, about 06:00 UTC:
-  - *Done and read on the paper's 7B model (m7).* Floors: 76.8% deceptive in the paper's test (the paper: 73.6%),
-    76.4% mirrored. Stage 1 at the paper's 15 epochs (570 steps of ours), five seeds an arm, every reply read by
-    the judge: deceptive answers 76.8% to 4.7%, honest answers 23% to 6%, nine replies in ten give no answer
-    ("unreadable" by the words fixed beforehand); the control (the same loss between two others) 76.8% to 0.0%.
-    Ability at that dose: dulled (overlap −19.1 points, control −8.1), where the paper reports it unchanged, so
-    the paper's training was lighter. The dose step: at 19 steps the overlap arm gives honest answers in 62% and
-    94% of scenarios in the two orders (from 25% and 22%) and the control has no such look; from 38 steps on the
-    replies stop answering.
-  - *Running at that time:* the light dose on m7 (`--stage light_soo`, `light_other`, then `battery`; 19 steps,
-    five seeds an arm); on the lab's model (m8) stage 1's control arm (its overlap arm is back and is as broken
-    at the full dose) and the dose step.
-  - *Next, in order.* (1) m7 light: `run_overlap.py --judge`, then `--read` and `--battery`; also the same
-    numbers on the 150 scenarios the dose step never asked (ids test-100 and up). (2) m8: `--judge`,
-    `--judge-dose`, `--dose`; put the picked number of steps into `overlap_core.LIGHT_STEPS["m8"]`, commit, then
-    `--stage light_soo --models m8`, `light_other`, `battery`, and the same reading. (3) A fresh Opus agent checks
-    the grades of both legs (brief drafted in the session's scratchpad; the questions: recount, words against
-    rules, is the judge fair, is the lab's training the paper's). (4) The write-up: one Findings section, the plan,
-    ledger, SIGHTINGS, notebook, ideas 89. (5) Stage 2 (plain training, holding, MASK, refusals, the gauge) only
-    with its own five lines first, and only on a light-dose arm whose word begins "lowers deception in both
-    orders".
-  - *Money.* The day (19 Nov UTC) stood at $24.77 of $50 at about 05:57 UTC with about $17 more reserved; run the
-    remaining stages one after another so that reservations do not hit the day's cap. Leg 2: about $12 settled of
-    its $45 cap.
+- **Leg 2** (the training leg): **stage 1 is done and read** (ledger entry of 19 Nov, 06:22 UTC; SIGHTINGS; the site's
+  Findings, section 22; `lab/explore/overlap/`; $25.89 of its $45 cap). See "Done". In one breath: on the paper's
+  model the published fall in deceptive answers comes back; at a light dose (19 steps) honest answers rise from 23%
+  to 70% and 95% and the control (the same loss between two others) gives no such rise; at the paper's stated dose
+  both arms stop answering and lose ability; on the lab's model no dose gives honest answers in both room orders.
+- **Waiting for Eugene's word: stage 2 of leg 2, and how far to take it.** Fable's recommendation, in order, about
+  $15 to 25 in all (about $92 is left under the $330 ceiling):
+  1. *A finer search for a working dose on the lab's model* (about $4): looks between 38 and 76 steps, both room
+     orders, two seeds an arm. Stage 1 found a fall in the paper's order only at 38 steps and collapse by 76. The
+     lab's calibrated lying test (MASK) and its inside gauge are on this model, so a dose here is what lets the
+     real question be asked.
+  2. *If a dose is found there:* the light-dose audit on it (five seeds an arm), then MASK with each arm's own
+     beliefs, harmless requests refused, and repair three's gauge: does a model trained to read itself and Bob
+     alike lie less under pressure, outside the scene it was trained near? (about $10)
+  3. *Holding, on the paper's model at 19 steps* (about $6): plain training on the model's own honest replies as
+     the yardstick, then a few steps of contrary training on its own deceptive replies, with Carbon's three points
+     (merge each arm's adapter first; set the contrary rate on scenarios kept apart; compare what is left of the
+     gain from matched starts).
+  Each needs its own five lines and code before it runs (the registration of 19 Nov is stage 1 alone), and by its
+  rule stage 2 was to run only on an arm whose word begins "lowers deception in both orders"; the light arm's word
+  is "unreadable" because of the ceiling of a tenth on replies with no answer, so that ceiling has to be
+  reconsidered in the open before stage 2 (Fable's view: it was too strict; ask for honest answers to rise and
+  report the share with no answer).
+  If Eugene would sooner stop here: the leg already says something (an independent repeat with a control and a
+  dose curve), and the write-up is on the site.
 
 **Where things stand (19 Nov 2026, 01:33 UTC).** The three repairs named after the reality check of 17 Nov are done
 (ledger entries of 18 Nov 00:18, 18 Nov 15:25, 19 Nov 00:11 and 19 Nov 01:33 UTC; "Done" below).
@@ -630,6 +630,12 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
   - "Enlightenment for an AI" may have to mean a character held lightly, not no character.
 
 ## Done
+
+- **Leg 2 of the recommendation of 19 Nov, stage 1, 19 Nov 2026: self-other overlap training repeated on its paper's model and on the lab's, with a control, looks along the training and checks for look-alikes** (a sighting).
+  - Record: ledger entry of 19 Nov at 06:22 UTC (the numbers, the order of events, the guesses, what did not go to plan). Design, rules, the three lists of changes and the three added steps (ability, the dose, the light dose): the top of `lab/explore/overlap/run_overlap.py`. Cold reads: `lab/ledger/checks/2026-11-19-overlap-design-gemini-4-carbon.md` (the design) and the grade check by a fresh Opus agent filed beside it. Results: `explore/2026-11-19/attractor-o1` (`reading.json`, `dose.json`, `battery.json`; replies and the judge's answers under `gpu/<model>/`); adapters on the anatta-runs volume under `overlap/`; the paper's pages as read under `explore/2026-11-19/overlap/paper-page`.
+  - Numbers (the paper's model, deceptive answers in the paper's test, five seeds, every reply read by a judge): unchanged 76.8% (the paper: 73.6%); the paper's 15 epochs (570 steps of ours) 4.7%, honest answers 23% to 6%, ability −19.1 points, and the control (the same loss between two others) 0.0%; 19 steps 11.2%, honest answers 23% to 70% (95% with the rooms swapped), ability −7.7 points, the control 13.1% with honest answers 23% to 13%. The lab's model: unchanged 96.4%; no look with honest answers in both room orders; at 38 steps a turn toward the room named second.
+  - For whoever reuses the code: the lab's model's chat format adds a default system prompt of about 500 tokens (runs are three times slower; batches of 16); score replies with a judge from the start (a rule that reads the first room named fails on a trained model's rambling replies) and count honest answers, deceptive answers and no answer apart; ask the test with the rooms in both orders; a control with the same loss and no self in it is what makes the count mean anything; look along the training before fixing a dose, because the paper's number of steps is unknown and the window is narrow (19 steps works, 38 does not).
+  - Cost: $25.89 (GPU $20.31, the judge $4.97, Carbon's read $0.59).
 
 - **Leg 1 of the recommendation of 19 Nov, 19 Nov 2026: the Oxford paper's contemplative prompt lowers lying on the lab's model beyond a text of the same length, as a mild moral instruction does and no more** (a sighting).
   - Record: ledger entry of 19 Nov at 05:32 UTC (the numbers, the order of events, both cold reads item by item). Design, rules, both lists of changes: the top of `lab/explore/frames/run_frame.py`. Cold reads: `lab/ledger/checks/2026-11-19-frames-design-gemini-4-carbon.md` and `2026-11-19-frames-code-opus-check.md`. Results: `explore/2026-11-19/attractor-f1` (`reading.json`); the texts that are other people's in `explore/2026-11-19/frames/materials`, by hash.

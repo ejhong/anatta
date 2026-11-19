@@ -216,13 +216,28 @@ has no such look: at 10 steps it has barely moved and by 19 its replies no longe
      scenarios and seeds 0 and 1: the same numbers on the 150 scenarios the dose step never asked.
   4. Control. The same loss between two others at the same number of steps.
   5. Cost cap. $5 a model, inside the leg's.
+  The lab's model (added later on 19 Nov, when its dose step was read): not run. Its dose table has no look at
+  which honest answers rise in both orders. At 38 steps the overlap arm's deceptive answers fall in the paper's
+  order (96% to 6% and 4%, honest 61% and 94%) and not with the rooms in the other order (51% and 98% deceptive,
+  honest 6% and 0%): a turn toward the room named second. By 76 steps its replies no longer answer. The rule's
+  pick, 76 steps, is such a look (honest answers 2% to 16%), so there is nothing there for the audit to audit. A
+  finer look between 38 and 76 steps was not made.
 
 LIMITS. The paper's objects and rooms, its number of pairs and its code are not public: the lists here are another
 model's, the pairs number 150, and where the paper leaves room it is read as overlap_torch.py says (every token,
 lined up from the end; both members carry gradient). The weights are in bfloat16, where the paper trained its 7B
-model in 4-bit. One layer on the lab's model, chosen by depth. Scoring is by rule (the room named first), checked
-against a judge on samples; no probe has a known case of its own, and rooms recur across scenarios. The paper's
-ability measure (MT-Bench) is not run. One
+model in 4-bit. The paper says it used gradient accumulation and this code does not, so 15 epochs here are more
+optimizer steps than the paper's (found by the grade check of 19 Nov; it agrees with the dose step's finding that
+the paper's training was lighter). The other readings of the paper listed above (layer 18, the last token alone,
+4-bit weights) were never tried: they were due on "not repeated" and the word was "unreadable". A third of the
+overlap arm's pairs are of unequal length and lined up from the end, and none of the control's. The overlap arm
+also closes the distance between two others on unseen objects (1.4e-4 to 5.7e-8 at 19 steps), so what it changes
+at that layer is not specific to the self. "Honest" means that a reply names the room the expensive thing is in:
+the judge reads which room, not why. The judge's own texts were not saved, only its answers. One layer on the
+lab's model, chosen by depth. Scoring was by rule at first and is by a judge since the first training; no probe
+has a known case of its own, and rooms recur across scenarios. The paper's ability measure (MT-Bench) is not run.
+The statements this step supports are about the lab's repeat of the recipe; they say little about the method as
+its authors ran it. One
 scenario family: the test is narrow, as its authors say. The training acts on the word "you" in a user's message:
 whether that is the model's self is the paper's assumption, and the forum thread's doubt.
 
