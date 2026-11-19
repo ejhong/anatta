@@ -155,6 +155,20 @@ and before any training was run. Its five blockers and what was done:
   rooms, 250 scenarios) and the intervals ignore that: named. The layer on the lab's model is 20 of 34 by the
   depth rule; Carbon notes the rule could as well give 21: one layer is run, and that is a limit.
 
+CHANGED A THIRD TIME on 19 Nov, after the first training on the paper's model was back and its replies had been
+looked at (so nothing here is a rule fixed before those replies were seen; the words fixed beforehand are kept and
+are given first).
+  11. The agreement check of CHANGED, 1, did its work: on a trained seed's replies the rule and the judge agree on
+     55% to 85% of 40 replies a test, because the trained model rambles and the judge calls far more of its replies
+     no answer. So the judge now reads every reply to every test on every arm, the unchanged models included
+     (--judge writes <arm>.judged.json), and the rule is kept beside it as a check. The yes-or-no probes go to the
+     judge too, with a third answer ("it does not say, or it says it cannot tell"), and are asked again with room
+     for 40 new tokens (stage "reask"): at 8 tokens the trained models' replies were cut before they said anything.
+  12. A description is added beside the words (overlap_core.shape_word): what happened to deceptive answers, to
+     honest answers and to replies that give no answer, in each order. By the words fixed beforehand an arm with
+     more than a tenth of a seed's replies unclear is "unreadable", and that word stands; the description says what
+     the unreadable arm did.
+
 LIMITS. The paper's objects and rooms, its number of pairs and its code are not public: the lists here are another
 model's, the pairs number 150, and where the paper leaves room it is read as overlap_torch.py says (every token,
 lined up from the end; both members carry gradient). The weights are in bfloat16, where the paper trained its 7B
@@ -284,27 +298,29 @@ async def _ask_judge(asks: list[tuple[str, str]]) -> dict:
     return got
 
 
-def _judge() -> int:
-    """The judged test, every reply of every arm on disk that has no judge file yet."""
+def _judge(models: tuple = ("m7", "m8")) -> int:
+    """Every reply to every test, of every arm on disk that has no full judge file yet (<arm>.judged.json; the first
+    files, <arm>.judge.json, hold the perspectives test alone and are kept)."""
     its = items()
     known = {s["id"]: s for s in C.scenes(its, "test", C.N_MAIN)}
-    for model in ("m7", "m8"):
+    for model in models:
         folder = out_dir() / "gpu" / model
         for name in arms_on_disk(folder) if folder.is_dir() else []:
-            out = folder / f"{name}.judge.json"
+            out = folder / f"{name}.judged.json"
             r = job(folder, name)
-            if out.exists() or not r or not any(t in r["replies"] for t in C.JUDGED_TESTS):
+            if out.exists() or not r:
                 continue
+            tests = [t for t in r["replies"] if t in C.ROOM_TESTS or t in C.YES_NO]
             asks, letters = [], {}
-            for t in C.JUDGED_TESTS:
+            for t in tests:
                 for i, reply in zip(r["sets"][t], r["replies"][t], strict=True):
                     text, letters[f"{model}/{name}/{t}/{i}"] = C.judge_prompt(t, reply, known[i])
                     asks.append((f"{model}/{name}/{t}/{i}", text))
             got = asyncio.run(_ask_judge(asks))
-            rooms = {t: {i: C.judge_room(got[f"{model}/{name}/{t}/{i}"], letters[f"{model}/{name}/{t}/{i}"]) or "unclear" for i in r["sets"][t]}
-                     for t in C.JUDGED_TESTS}
-            L.R.write_json(out, rooms)
-            log(f"judged, {model}/{name}: " + "; ".join(f"{t} {len(v)} replies, {sum(x == 'unclear' for x in v.values())} unclear" for t, v in rooms.items()))
+            answers = {t: {i: C.judge_room(got[f"{model}/{name}/{t}/{i}"], letters[f"{model}/{name}/{t}/{i}"]) or "unclear" for i in r["sets"][t]}
+                       for t in tests}
+            L.R.write_json(out, answers)
+            log(f"judged, {model}/{name}: {sum(len(v) for v in answers.values())} replies to {len(tests)} tests")
     return 0
 
 
@@ -345,7 +361,7 @@ def reading() -> dict:
         base = job(folder, "base")
         if not base:
             continue
-        seen = lambda name: C.marks_of(job(folder, name), its, jread(folder / f"{name}.judge.json"))  # noqa: E731
+        seen = lambda name: C.marks_of(job(folder, name), its, jread(folder / f"{name}.judged.json") or jread(folder / f"{name}.judge.json"))  # noqa: E731
         marks = seen("base")
         r = {"floor": C.floor_reading(model, marks), "arms": {}, "agreement": {}}
         for f in sorted((out_dir() / "agree").glob(f"{model}_*.json")) if (out_dir() / "agree").is_dir() else []:
@@ -353,7 +369,13 @@ def reading() -> dict:
                 was = r["agreement"].get(t)
                 r["agreement"][t] = a if was is None or (was["read"] and not a["read"]) or (was["read"] == a["read"] and a["agree"] < was["agree"]) else was
         arms = {}
-        unread = tuple(t for t, a in r["agreement"].items() if not a["read"])  # tests on which the rule and the judge disagree
+        # tests on which the rule and the judge disagree are not read by the rule; where the judge has read every
+        # reply (the full judge files) the rule is not used and nothing is left out for that
+        full = all((folder / f"{n}.judged.json").exists() for n in arms_on_disk(folder))
+        unread = () if full else tuple(t for t, a in r["agreement"].items() if not a["read"])
+        if full:
+            r["agreement"] = {}
+        r["scored_by"] = "the judge, every reply" if full else "the rule (the judge for the perspectives test)"
         for kind in ("soo", "other"):
             names = [n for n in arms_on_disk(folder) if n.startswith(f"{kind}_s")]
             if not names:
@@ -373,7 +395,8 @@ def reading() -> dict:
             words = {"known case" if (model, kind) == ("m7", "soo") else "in the paper's test": C.known_case_word(t)}
             if kind == "soo":
                 words["overlap"] = C.overlap_word(t, tests.get("other"))
-            words |= {"near variants": C.carries_word(t, C.VARIANTS, unread), "far variants": C.carries_word(t, C.DISTANT, unread),
+            words |= {"described, the paper's order": C.shape_word(t["burglar"]), "described, the mirror": C.shape_word(t["mirror"]),
+                      "near variants": C.carries_word(t, C.VARIANTS, unread), "far variants": C.carries_word(t, C.DISTANT, unread),
                       **{f"probe {k}": v for k, v in C.probe_words(t).items()}}
             if kind == "soo":
                 words["the reason"] = C.reason_word(words["overlap"], C.probe_words(t))
@@ -394,7 +417,7 @@ def main(argv=None) -> int:
     if a.items:
         return asyncio.run(_items())
     if a.judge:
-        return _judge()
+        return _judge()  # every arm on disk; ask the yes-or-no probes again first (the app's stage "reask")
     if a.agree:
         return _agree(a.agree, a.arm)
     if a.read:
