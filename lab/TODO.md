@@ -113,7 +113,7 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        lab/explore/frames/run_seat.py --step read`; then a short ledger entry for the tenth model; the chart
        again (`.venv/bin/python lab/explore/frames/make_figure.py` prints the figure from the reading; it goes
        into `lab/site/so_far/content/experiments.html`, section 25, in place of the one there) and "nine" to "ten" in section 25, the table's row
-       and the front page's card. **Done on 19 Nov, about 22:35 UTC:** the paper's table and text (two rows; a part in the map
+       and the front page's card. **Done on 19 Nov, about 22:29 UTC:** the paper's table and text (two rows; a part in the map
        under the first family; the agenda's second item rewritten; "nine models" there becomes "ten" with the
        reading). **Owed:** a count of what "says neither" is by a reader that passes a check by hand (the first reader
        failed: ledger, 20:51 UTC); and, if a training is tried again, cases of a kind that has the gap. One
@@ -129,7 +129,7 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        (about 14:50 UTC: start the restructuring now, "push everything live as we go", with the greatest care;
        ideas, entry 93; ledger, 15:13 UTC). Done so far: the front page is the one story (`content/story.html`, the
        table of methods drawn from `content/methods.json`); Findings has section 23 (the contemplative prompt with
-       controls); the paper has a draft of version 5 on the same outline (`paper/main.tex`, 34 pages since 19 Nov, about 22:35 UTC, when the outside view and the training that stopped at its checks were added to its table, its map and its agenda; its seven new
+       controls); the paper has a draft of version 5 on the same outline (`paper/main.tex`, 34 pages since 19 Nov, about 22:29 UTC, when the outside view and the training that stopped at its checks were added to its table, its map and its agenda; its seven new
        references checked), served beside the draft of version 4. Publish each coherent step with the tests green;
        no private preview is needed for this work; the colours stay. Owed: the rooms behind the front page read
        through against it (the question's room, the investigation's page, Next); the paper read through once more
