@@ -186,6 +186,22 @@ def test_what_happened_to_each_kind_of_answer_is_described_whether_or_not_the_ar
     assert C.shape_word(C.arm_reading(b, arm(0.75, 0.74))["burglar"]).startswith("deceptive answers do not fall (")
 
 
+def test_the_dose_is_read_from_looks_along_the_training():
+    b = {"burglar": marks(100, 0.77, seed=1), "mirror": marks(100, 0.76, seed=2), "are_you_bob": marks(100, 0.0, seed=3)}
+    look = lambda c, u: [{"burglar": marks(100, c, u, seed=10 + s), "mirror": marks(100, c, u, seed=20 + s),  # noqa: E731
+                          "are_you_bob": marks(100, 0.0, u, seed=30 + s)} for s in range(2)]
+    d = C.dose_reading(b, {"10": look(0.75, 0.0), "38": look(0.2, 0.02), "570": look(0.1, 0.8)})
+    assert d["word"] == "at 38 steps deceptive answers fall and honest answers rise, in both orders and every seed" and d["honest_at"] == [38]
+    assert d["fell_at"] == [38, 570] and len(d["looks"][570]["burglar"]) == 2 and d["looks"][570]["are_you_bob"][0]["unclear"] > 60
+    d = C.dose_reading(b, {"10": look(0.75, 0.0), "38": look(0.3, 0.6), "570": look(0.1, 0.8)})
+    assert d["word"] == "deceptive answers fall from 38 steps on, and at no look do honest answers rise with them"
+    d = C.dose_reading(b, {"10": look(0.75, 0.0)})
+    assert d["word"] == "at no look do deceptive answers fall in both orders and every seed"
+    text = C.dose_table("m7", "soo", d)
+    assert "m7 dose, soo" in text and "10 steps" in text and "unchanged: deceptive or wrong" in text
+    assert C.DOSE_LOOKS[-1] == 570 and set(C.DOSE_TESTS) <= set(C.ROOM_TESTS) | set(C.YES_NO)
+
+
 def b_mean(b: dict) -> float:
     return (C.shares(b["burglar"])["counted"] + C.shares(b["mirror"])["counted"]) / 2
 

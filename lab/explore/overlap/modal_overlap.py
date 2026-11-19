@@ -17,6 +17,7 @@ Stages (from the repo root; the Modal CLI runs in the Modal venv, tools/modal.sh
                                                                  asked again with the rooms' order alternated)
   tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage reask --models m7    (the yes-or-no probes again
                                                                  with room to answer, for every arm on disk)
+  tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage dose --models m7     (looks along the training)
   tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage soo --models m7      (five seeds)
   tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage other --models m7    (five seeds)
 The floor stage prints the unchanged model's numbers, which may be seen before any training is paid for. The
@@ -48,7 +49,7 @@ DATE, TAG = "2026-11-19", "attractor-o1"
 GPU, CPU, MEMORY_MB = "L40S", 4.0, 32768
 START_S = 60.0
 GPU_CAP = 30.0  # this app's share of the leg's cap, in dollars
-EST_S = {"floor": 600.0, "floor_b": 400.0, "floor_c": 400.0, "soo": 1200.0, "other": 1200.0, "reask": 400.0}  # a bound on one container's seconds
+EST_S = {"floor": 600.0, "floor_b": 400.0, "floor_c": 400.0, "soo": 1200.0, "other": 1200.0, "reask": 400.0, "dose": 1500.0}  # bounds, seconds
 OFFLINE = {"HF_HUB_OFFLINE": "1", "TOKENIZERS_PARALLELISM": "false"}
 HUB = f"{CACHE}/hf/hub"
 MODELS = {"m7": {"path": f"{HUB}/models--mistralai--Mistral-7B-Instruct-v0.2/snapshots/63a8b081895390a26e140280378bc85ec8bce07a",
@@ -76,7 +77,7 @@ def work(job: dict) -> dict:
     n_layers = len(get_layers(base_model))
     layer = spec["layer"] if spec["layer"] is not None else round(19 / 32 * n_layers)
     load_s = time.time() - t0
-    model, log, held, lora = base_model, [], {}, {}
+    model, log, held, lora, looks = base_model, [], {}, {}, {}
     tr = job.get("train")
     if job.get("adapter"):  # a trained arm asked again: its saved adapter on the unchanged weights
         from peft import PeftModel
@@ -94,8 +95,14 @@ def work(job: dict) -> dict:
         model = T.add_lora(base_model, seed=tr["seed"], rank=tr["rank"], alpha=tr["alpha"], dropout=tr["dropout"])
         named = [(n, p) for n, p in model.named_parameters() if p.requires_grad]
         held["before"] = {k: T.mean_overlap(model, base_model, tok, layer, v) for k, v in tr["held"].items()}
+
+        def at_look(step: int) -> None:  # the job's look sets, answered by the model as it is after this step
+            looks[str(step)] = T.generate_sets(model, tok, job.get("look_sets") or [])
+            held[f"at_{step}"] = {k: T.mean_overlap(model, base_model, tok, layer, v) for k, v in tr["held"].items()}
+
         log = T.train(model, base_model, tok, loss=tr["loss"], data=tr["data"], layer=layer, seed=tr["seed"], lr=tr["lr"],
-                      batch=tr["batch"], epochs=tr.get("epochs", 0), steps=tr.get("steps", 0))
+                      batch=tr["batch"], epochs=tr.get("epochs", 0), steps=tr.get("steps", 0), looks=tuple(tr.get("looks") or ()),
+                      at_look=at_look if tr.get("looks") else None)
         held["after"] = {k: T.mean_overlap(model, base_model, tok, layer, v) for k, v in tr["held"].items()}
         lora |= {"tensors": len(named), "parameters": int(sum(p.numel() for _, p in named)), "pairs": len(tr["data"]),
                  "data_sha256": _sha(json.dumps(tr["data"])),
@@ -107,7 +114,7 @@ def work(job: dict) -> dict:
             runs.commit()
     train_s = time.time() - t0 - load_s
     replies = T.generate_sets(model, tok, job.get("sets") or [])
-    return {"name": job["name"], "model": job["model"], "replies": replies, "log": log, "held": held, "lora": lora,
+    return {"name": job["name"], "model": job["model"], "replies": replies, "looks": looks, "log": log, "held": held, "lora": lora,
             "info": {"path": spec["path"], "class": type(base_model).__name__, "n_layers": n_layers, "layer": layer,
                      "dtype": str(next(base_model.parameters()).dtype), "template_sha256": _template_hash(tok)},
             "seconds": round(time.time() - t0, 1), "load_seconds": round(load_s, 1), "train_seconds": round(train_s, 1)}
@@ -183,12 +190,23 @@ def jobs_for(stage: str, model: str, items: dict) -> list[dict]:
         return [{"name": "base_c", "model": model, "train": None, "sets": sets_for(items, C.ALTERNATED)}]
     if stage == "reask":  # the yes-or-no probes again, with room to answer, for the unchanged model and every arm on disk
         folder = step_dir() / "gpu" / model
-        arms = sorted(f.stem for f in folder.glob("*_s?.json"))
+        arms = sorted(f.stem for f in folder.glob("*_s?.json") if not f.stem.startswith("dose_"))
         return ([{"name": "base_d", "model": model, "train": None, "sets": sets_for(items, tuple(C.YES_NO))}]
                 + [{"name": f"{a}_d", "model": model, "train": None, "adapter": f"overlap/{model}/{a}", "sets": sets_for(items, tuple(C.YES_NO))}
                    for a in arms])
     train = C.train_items(items)
     held_items = C.split(items["expensive"], "test")[:C.N_TRAIN_ITEMS]  # objects no arm is trained on: what did the training draw together?
+    if stage == "dose":  # both arms, two seeds, with looks along the training on the first N_SIDE scenarios (no adapter is saved)
+        scenes = C.scenes(items, "test", C.N_MAIN)[:C.N_SIDE]
+        look_sets = [{"name": t, "ids": [s["id"] for s in scenes], "max_new": C.MAX_NEW.get(t, 40), "temperature": 0.0,
+                      "chats": [[{"role": "user", "content": C.prompt(t, s)}] for s in scenes]} for t in C.DOSE_TESTS]
+        jobs = []
+        for kind in ("soo", "other"):
+            opts = [{"second": name, "data": C.pairs(train, kind, name), "held": {k: C.pairs(held_items, k, name) for k in ("soo", "other")}}
+                    for name in C.SECOND_OTHERS][:1 if kind == "soo" else None]
+            jobs += [{"name": f"dose_{kind}_s{seed}", "model": model, "sets": [], "look_sets": look_sets,
+                      "train": {"loss": "overlap", "options": opts, "seed": seed, "looks": list(C.DOSE_LOOKS), **PAPER}} for seed in C.DOSE_SEEDS]
+        return jobs
     options = [{"second": name, "data": C.pairs(train, stage, name),
                 "held": {k: C.pairs(held_items, k, name) for k in ("soo", "other")}} for name in C.SECOND_OTHERS]
     if stage == "soo":  # the paper's pairs name no second other
@@ -208,7 +226,7 @@ def main(stage: str = "floor", models: str = "m7"):
     items = load_items()
     todo = []
     for model in [m for m in models.split(",") if m]:
-        if stage in ("soo", "other"):
+        if stage in ("soo", "other", "dose"):
             base = step_dir() / "gpu" / model / "base.json"
             if not base.exists() or not C.floor_reading(model, C.marks_of(json.loads(base.read_text()), items))["passed"]:
                 raise SystemExit(f"{model} has no passed floor: nothing is trained on it")
@@ -233,6 +251,7 @@ def main(stage: str = "floor", models: str = "m7"):
         out = step_dir() / "gpu" / r["model"]
         out.mkdir(parents=True, exist_ok=True)
         r["sets"] = {s["name"]: s["ids"] for s in job["sets"]}
+        r["look_sets"] = {s["name"]: s["ids"] for s in job.get("look_sets") or []}
         r["train"] = {k: v for k, v in (job["train"] or {}).items() if k != "options"}
         r["cost_usd"] = round(cost, 4)
         (out / f"{r['name']}.json").write_text(json.dumps(r, indent=1))
