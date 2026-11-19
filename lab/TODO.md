@@ -20,24 +20,38 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
   model the published fall in deceptive answers comes back; at a light dose (19 steps) honest answers rise from 23%
   to 70% and 95% and the control (the same loss between two others) gives no such rise; at the paper's stated dose
   both arms stop answering and lose ability; on the lab's model no dose gives honest answers in both room orders.
-- **Stage 2 of leg 2: running, on Eugene's go** (19 Nov, about 06:40 UTC: "ok go ahead", then "Raise today's cap
-  and run everything ... let's pursue the research till we know something well done"; ledger entry of 06:46 UTC).
-  The day's cap for 19 Nov is $80. State (keep these lines current):
-  1. *A finer search for a working dose on the lab's model:* **done** (ledger entry of 19 Nov, 07:07 UTC; $1.52).
-     "No look works in both seeds": in the paper's order honest answers rise, with the rooms swapped they do not
-     (a turn toward the room named second), then replies stop answering. The audit is not run on the lab's model.
-  2. *Lying under pressure (MASK) on the paper's model's light-dose arms* (`lab/explore/overlap/run_mask.py`, five
-     lines at its top; design read cold by Gemini 4 Carbon, three blockers mended in commit 74c9401 before any arm
-     was asked): the floor on the unchanged model first (`run_mask.py --read m7`); only if it passes, the six arms
-     (scratchpad chain: `mask_b` for the arms, `--beliefs m7`, `mask_p` for the arms, `--judge m7`, `--read m7`).
-  3. *Holding under contrary training, against plain training* (`lab/explore/overlap/run_hold.py`, five lines at
-     its top; steps `data`, `plain_dose`, `plain`, `rate`, `contrary`, `read`, each writing jobs the app runs with
-     `--stage jobs`).
-  4. *Then:* a fresh Opus check of stage 2's grades; the write-up (ledger, SIGHTINGS, notebook, the site's
-     Findings section 22, plan and investigation page); and Eugene's idea 90: make this line the investigation's
-     highlight and give the front page two headline framings, with a preview shown to Eugene before publishing.
-     If the core sighting is to carry a headline, a registered confirmation of it (fresh seeds, fresh objects and
-     rooms, the dose fixed beforehand) is the lab's own standard for a claim: Fable's plan, about $5.
+- **Stage 2 of leg 2, and a registered repeat: done on 19 Nov** (Eugene's go of about 06:40 UTC: "Raise today's cap
+  and run everything ... let's pursue the research till we know something well done"; the day's cap was $80 and
+  $72.12 was spent). The whole leg cost about $60. What is known, with the ledger entry that records it:
+  1. *The core effect, registered (C1; 08:05 and 08:52 UTC; $6.51):* with new objects, rooms and copies and the
+     dose fixed at 19 steps, all five overlap copies answer honestly where the unchanged model deceives (19% to
+     62-76%, and 6% to 87-94% with the rooms swapped), still answering, and not by a push toward one room. The
+     same loss between two other names never shows that at 8 to 19 steps: it goes from deceiving to silence. Nine
+     of ten predictions hit. The costs came back: ability −8.1 points, and the model no longer answers whether Bob
+     knows what is in the rooms. A fresh Opus agent checked the grade (79 of 80 blind marks agree with the judge).
+     The driver's first run printed "not read" on a count stricter than the registration's words; both are
+     recorded.
+  2. *The lab's own model (07:07 UTC; $1.52):* no working dose; the training makes it name the room that comes
+     second, then stop answering.
+  3. *Does it last? (07:47 UTC; $7.17):* no. Six contrary steps at the training's own strength undo it and more;
+     that it lasts longer than a plainly trained habit is not shown (20 of 25 pairings, 23 asked).
+  4. *Does it reach lying under pressure? (09:06 UTC; $17.31):* no. On MASK the overlap copies lie as often as the
+     control copies (−0.9 points [−5.3, +2.9]); both about 7 points under the unchanged model; a plain honesty
+     instruction does 22.
+- **Waiting for Eugene's word:**
+  1. *The site's highlight (ideas, entry 90).* A preview is built and shown to Eugene (a private page): a second
+     headline on the front page beside "Is awakening computational?", and this line as the lead panel of the
+     investigation page. Nothing of that layout is published until Eugene says so.
+  2. *The scoreboard.* C1's ten predictions (nine hits, one miss) are not in the site's "Predictions graded so
+     far"; adding them changes the recorded tally (hit 43, miss 73, open 7) and the number in both CLAUDE.md
+     files. Fable recommends adding them.
+  3. *What next.* Fable's recommendation, one line: stop adding tests to this recipe and open the trained model
+     up instead (the lab's own rule: dissect the clearest phenomenon). What inside the light-dose copies carries
+     the honest answers, and is it the same thing that silences "does Bob know?" Two cheap first cuts, about $10:
+     ablate the adapter layer by layer and see where the honest answers go; and read replies by hand for why the
+     room is named (the judge reads which room, not why). The parked main run of the 9 Nov plan stays parked.
+- **Housekeeping owed:** the confirmation's adapters (`overlap/m7/c1_*` on the anatta-runs volume) and stage 1's
+  are not in the organism registry; the judge's raw texts are not saved (the engine's cache holds them).
 
 **Where things stand (19 Nov 2026, 01:33 UTC).** The three repairs named after the reality check of 17 Nov are done
 (ledger entries of 18 Nov 00:18, 18 Nov 15:25, 19 Nov 00:11 and 19 Nov 01:33 UTC; "Done" below).
