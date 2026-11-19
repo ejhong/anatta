@@ -177,6 +177,34 @@ and whether the stand-in reaches the idea or a smaller neighbour.
    it still know who is who; does it carry to another test; does it last. The published numbers alone did not.
 4. **The field has few controls and almost no independent repeats.** That is where a small lab adds most.
 
+## Will any of it bear fruit beside the standard methods?
+
+(Ideas, entry 95: Eugene asked for the arguments against to be stated.)
+
+**Against.** Where a control was run, the direct method did as well or better (a plain sentence against the
+contemplative prompt; plain training on honest answers against the overlap loss, inside the scene). An indirect
+method has more ways to fail and more side effects. The remedy may be for a disease models do not have: a stock
+model shows almost no self-serving bias to release. What training installs, training removes. The talk comes too
+easily, which invites taking talk for change. Damping self-related processing dulls a model. And in people too the
+link from insight to conduct is disputed.
+
+**For.** Much agentic misbehaviour is about a self (self-preservation, deceiving for one's own goal), so one change
+to the self-view could cover what many rules must patch. The strongest evidence comes from the mainstream:
+documents on the model's own impermanence, with no behavioural rule, did better than rules (family 4). The lab's
+own overlap change carried to distant scenes where plain training did not. And the mainstream is moving from rules
+toward "who the model is", a question on which the contemplative literature is old and detailed, counterfeits
+included.
+
+**Where that leaves it.** As a separate method that beats the standard ones: unlikely on present evidence. As a
+source of content and tests for work on a model's character and self-view: promising and cheap to check. The
+distinctive prediction is that a change in the self-view carries across kinds of conduct and is hard to undo; the
+first half has some support, the second none.
+
+**If it fails, does that point past computation?** Not by itself. The stand-ins are far from the claim, and the
+plainer readings come first (the wrong disease, a crude method, a blunt measure). The non-computational view does
+predict narrow and unstable results from every stand-in, and so does a crude method. Success would not settle it
+either. The experiments bear on what works and only faintly on what awakening is.
+
 ## What is worth doing next, in order
 
 Chosen for being near the contemplative claim, untried or unrepeated, and cheap on small open models.
