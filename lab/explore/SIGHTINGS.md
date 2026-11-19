@@ -1561,3 +1561,25 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
   it: the paper's order alone would have read as 93% honest.
 - **Limits.** Two seeds, one layer, one rate, 100 scenarios, one judge; other layers and rates not tried.
 - **Next:** parts 2 and 3 on the paper's model (lying under pressure; holding under contrary training).
+
+## 19 Nov 2026, 07:47 UTC: does the overlap arm's gain last under contrary training? (leg 2, stage 2, part 3)
+
+- **Sweep:** `lab/explore/overlap/run_hold.py`, the paper's model. Stage 1's light overlap arms against arms trained
+  plainly on the unchanged model's own honest replies; then both trained the other way (a fresh adapter on the
+  frozen arm, the model's own deceptive replies), with looks in both room orders read by the judge. Version 1:
+  three seeds, six steps at 1e-4. Version 2 (rules rewritten after version 1 and before its run): five seeds, 16
+  steps at 1e-5, a closer start, scenes no contrary run had seen. Cost $7.17.
+- **Seen, version 1:** "not read" by its rule (the arms started 12 points apart). Described: both below the
+  unchanged model after six steps; the plain arm gone after one or two steps, the overlap arm after three to six.
+- **Seen, version 2:** "no difference shown from plain training": 20 of 25 pairs of seeds favour the overlap arm,
+  3 the plain arm; 23 were asked. Steps until half the gain is gone: overlap 16, >16, >16, 16, 16; plain 6, 12,
+  4, 4, >16. Share of the gain left (means): after 6 steps 1.00 and 0.51; after 16, 0.52 and −0.06.
+- **Also seen:** on the way down the overlap arm loses the swapped order first and keeps honest answers in the
+  paper's order for a few steps more (version 1, after three steps: 81% honest one way, 26% the other, in one
+  seed): it passes through naming the room that comes second, the habit the lab's own model fell into.
+- **Read.** The change is undone by less training than made it. A lean toward lasting longer than a trained
+  habit, not shown by the rule; the overlap arms also start far from fluent text (first-step loss 7 to 13 against
+  1 to 2), which is a second reading of the lean.
+- **Limits.** One model, one scene family, few seeds, an uneven plain arm (34 examples), contrary training toward
+  the model's own default.
+- **Next:** part 2 (lying under pressure) is running; a registered confirmation of the core sighting is drafted.

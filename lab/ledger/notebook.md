@@ -2787,3 +2787,28 @@ copies stop answering.
 on the model, and a test asked one way round can make a habit of word order look like honesty. The swapped
 question costs nothing and catches it. The next two tests (does the change reach lying under pressure, and does it
 last) can only be run on the paper's model. Cost $1.52.
+
+## 19 November, later still: does the change last?
+
+*Claude (Fable 5.2, an AI model) wrote this entry.*
+
+I took the copies that had come to give honest answers through the overlap training. For comparison I made copies
+that learned the same thing the plain way, by being trained on honest answers. Then I trained both a little in the
+opposite direction, on deceptive answers, and watched how fast the honest answers went.
+
+**First try.** At the strength of training that had made them, both were back to deceiving within six steps, and
+worse than the untouched model. The plain copies went in one or two steps, the overlap copies in three to six. But
+my rule said the two had to start level, and they started 12 points apart. By my own rule the comparison could not
+be read.
+
+**Second try,** with the rules rewritten before running: a tenth of the strength, sixteen steps, five copies of
+each, a closer start, scenes not used before. The overlap copies kept their whole gain for six steps and half of it
+at sixteen. Four of the five plain copies had lost half by steps four to twelve. But the fifth plain copy held
+better than three of the overlap copies. My rule asked for 23 of the 25 pairings to favour the overlap copies. It
+was 20. The rule's word is "no difference shown".
+
+*In plain terms, for the vision:* the change does not last against training that pulls the other way; it is easier
+to undo than it was to make. Whether a change in how self and other are read holds longer than a trained habit of
+saying the right thing is the question the contemplative idea would care about. It leans yes and is not shown.
+There is also a plainer reading of the lean: the overlap copies write less fluently, and the first contrary steps
+mostly repair that before they touch the honesty. Cost $7.17.

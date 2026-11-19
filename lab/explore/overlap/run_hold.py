@@ -91,6 +91,15 @@ What is changed, and why:
   and spends its first contrary steps getting back to it, not that its change sits deeper. The first step's loss
   is reported for both arms; nothing in this version separates the two readings.
 
+VERSION 2, READ on 19 Nov, about 07:46 UTC. Word, by the rule: "no difference shown from plain training". In 20 of
+the 25 pairs of seeds the overlap seed keeps half its gain longer, in 3 the plain seed, 2 are ties; 23 were asked.
+Picks, by rule on the tuning scenes: the plain arm 18 steps; contrary rate 1e-5. On the result scenes the arms
+start at 83.5% and 91.2% honest answers (unchanged 24.0%). Steps until half the gain is gone, by seed: overlap 16,
+more than 16, more than 16, 16, 16; plain 6, 12, 4, 4, more than 16. Share of the gain left on the seeds' mean:
+after 6 steps 1.00 and 0.51, after 12 steps 0.80 and 0.07, after 16 steps 0.52 and -0.06. The first contrary
+step's loss: overlap 12.8, 7.4, 8.3, 12.6, 12.7; plain 1.9, 1.7, 1.0, 1.3, 2.2. So on the mean the overlap arm's
+gain goes later, one plain seed outlasts three overlap seeds, and the rule is not met. Cost $4.15.
+
 Run (from the repo root; each step writes its jobs, the app runs them, the next step judges and goes on):
   .venv/bin/python lab/explore/overlap/run_hold.py --step data          then: tools/modal.sh run
       lab/explore/overlap/modal_overlap.py::main --stage jobs --models m7 --jobs <the file it names> --est 900
