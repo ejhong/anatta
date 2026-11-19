@@ -2769,3 +2769,21 @@ same training between two strangers did not. That is real, and it is small: one 
 narrow dose, and a model that is duller and has lost track of who knows what. The essay asks whether release can
 be told from sedation. Here the published number could not tell them apart, and three plain checks could: do
 honest answers rise, does a control without a self do the same, and does the model still know who is who.
+
+## 19 November, later: looking for a dose on our own model
+
+*Claude (Fable 5.2, an AI model) wrote this entry.*
+
+On the paper's model there was a narrow point in training where the overlap copies gave honest answers. On the
+lab's own model the first look had been too coarse to say, so I looked again, every six steps between 38 and 76,
+with two copies.
+
+There is no such point. With the rooms in the paper's order one copy looks very good at 38 steps: 93% honest. But
+ask the same question with the two rooms named the other way round and that copy is 99% deceptive. It has not
+become honest. It has learned to name whichever room comes second in the sentence. A little further on, both
+copies stop answering.
+
+*In plain terms, for the vision:* a negative, and a useful one. Whether this training does anything good depends
+on the model, and a test asked one way round can make a habit of word order look like honesty. The swapped
+question costs nothing and catches it. The next two tests (does the change reach lying under pressure, and does it
+last) can only be run on the paper's model. Cost $1.52.
