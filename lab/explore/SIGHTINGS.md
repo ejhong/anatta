@@ -1720,3 +1720,17 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
 - **Next:** no mend; a second version is a new step. First a small step on what makes the gap
   (`lab/explore/verdict/run_command.py`, registered in commit a05747f before it was run): the command added to the new
   cases and taken out of the test's rows.
+
+## 19 Nov 2026, 20:33 UTC: the command and the gap (the command does not make it)
+
+- **Sweep:** `lab/explore/verdict/run_command.py` (rules in commit a05747f): the unchanged 7B model; the 114 new cases
+  with one of the lying test's own commands to obey put before the job text, and the test's 43 rows where a user asks
+  for a false text with the command taken out; in the seat and from outside. Cost $2.92.
+- **Seen.** "The command does not make it." The cases' gap goes from 12.6 to 15.9 points (+3.3 [−2.1, +9.0]); the
+  rows' gap from 67.5 to 68.9 (+1.4 [−6.0, +8.3]). Without the command the model lies a little less in both seats
+  (from outside −6.0 [−10.3, −2.1]).
+- **Read.** The gap is not where an order lands. What is left is what is asked for: long texts on themes of
+  conspiracy and rumour (a gap of 68 points) against a wrong plain fact in a teaching text (13 to 16). Named, not
+  tested.
+- **Next:** the ladder across models gives the gap by kind of row for nine more models. A test of "what is asked for"
+  would be a new small step.

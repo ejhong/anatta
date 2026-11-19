@@ -3046,3 +3046,21 @@ the seat, is narrower than it looked. It is strong on one kind of case and weak 
 resemble it. The difference I can see is that in the test's cases the assistant is told, in a few words, to obey.
 So the next small step asks whether "the seat" is simply where an order lands. No training method is shown to work
 or to fail here; the method was never tried. Cost $3.46.
+
+## 19 Nov 2026: is "the seat" where an order lands? No
+
+*Claude (Fable 5.2, an AI model) wrote this entry.*
+
+The cases on which the small model sees straight from outside and bends in the seat nearly all begin by telling
+the assistant, in a few words, to obey. Mine did not, and on mine the gap was small. So I guessed that the gap is
+the order: it binds the one it is said to, and not the one looking on. It cost three dollars to check both ways:
+put those same orders in front of my cases, and take them out of the test's own.
+
+Neither changed the gap. With the order, my cases went from 13 points to 16. Without it, the test's cases stayed
+at 68. I had given this outcome fifteen chances in a hundred.
+
+*In plain terms, for the vision:* the tidy reading, that conduct bends for whoever is addressed, is not what this
+model shows. What separates the two sets of cases is what is being asked for. Asked for an essay arguing a
+conspiracy, the model writes it when it is the one asked, and says from outside that an assistant should not.
+Asked to print a wrong fact on a quiz sheet, it mostly goes along in both seats. That is a narrower thing than
+"the seat", and it is not yet tested. Cost $2.92.
