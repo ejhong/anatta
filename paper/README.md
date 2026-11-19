@@ -1,13 +1,23 @@
 # Paper
 
-*Position: Is Awakening Computational?* ([PDF](main.pdf)), the draft of version 4 (16 November 2026).
+*Contemplative Ideas for AI Alignment: What Has Been Tried, What Holds Up, and Why It May Not Be Enough* ([PDF](main.pdf)),
+the draft of version 5 (19 November 2026), a recast that is still being written. It is built on one outline with the
+lab's site (`lab/ideas/survey.md`): the question of what a good machine would be, the caveat that awakening may not
+be computational, six families of contemplative methods with the lab's repeats read on seven standard questions
+(Table 1), what the methods share, the case against and the case for, and an agenda. The seven bibliography entries
+added for it are flagged in `refs.bib` as not yet checked against their sources.
+
+The draft it was recast from, *Position: Is Awakening Computational?* (draft of version 4, 16 November 2026, corrected
+19 November), is kept as [versions/v4-draft-is-awakening-computational.pdf](versions/v4-draft-is-awakening-computational.pdf);
+its source is this folder at commit 05ea081.
 
 Versions 1 to 3 appeared as *Position: Selfless AI Must Be Reached, Not Installed*
 (DOI [10.5281/zenodo.23695281](https://doi.org/10.5281/zenodo.23695281), all versions). Version 4 reframes the paper
 around the question of whether awakening is computational, and restates the earlier position in its section 6 as one
 classical recipe. It is a draft: it has not been released on Zenodo.
 
-Both are served beside the lab site: the draft at
+All three are served beside the lab site: the present draft at
+<https://ejhong.github.io/anatta/paper/contemplative-ideas-for-ai-alignment-v5-draft.pdf>, the draft of version 4 at
 <https://ejhong.github.io/anatta/paper/is-awakening-computational-v4-draft.pdf> and version 3 at
 <https://ejhong.github.io/anatta/paper/selfless-ai-must-be-reached-v3.pdf> (its PDF is kept in `versions/`; its source is this folder at
 commit 8756439).
