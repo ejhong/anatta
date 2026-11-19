@@ -996,3 +996,38 @@ footer .fold .built { border-top: 0; padding-top: 0; margin-top: 0; }
 .seg-table th:first-child, .seg-table td:first-child { text-align: left; }
 .seg-table thead th { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); }
 @media (max-width: 560px) { .seg-row { grid-template-columns: 1fr; } }
+
+/* the dot rows (Findings, section 25): one row a model, the share of lies in four ways of asking on one 0-100 scale.
+   Two hues only, the seat's and the outside view's, told apart by shape as well; the yardstick is a neutral tick. */
+.dots { margin: 26px 0 10px; max-width: 780px; }
+.dots-key { display: flex; flex-wrap: wrap; gap: 6px 22px; list-style: none; margin: 0 0 14px; padding: 0; font-size: 13px; color: var(--ink-2); }
+.dots-key li { display: flex; align-items: center; gap: 9px; }
+.dots-key i { position: static; transform: none; flex: none; }
+.dots-key i.ought { transform: rotate(45deg); }
+.dots-rows { display: grid; gap: 2px; }
+.dots-fam { margin: 12px 0 2px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+.dots-fam:first-child { margin-top: 0; }
+.dots-row { display: grid; grid-template-columns: minmax(130px, 205px) minmax(0, 1fr) 52px; gap: 4px 16px; align-items: center; }
+.dots-n { font-size: 14px; line-height: 1.3; color: var(--ink); font-weight: 500; }
+.dots-n small { display: block; font-size: 12px; font-weight: 400; color: var(--ink-3); }
+.dots-track { position: relative; height: 30px; border-left: 1px solid var(--rule-2); border-right: 1px solid var(--rule);
+  background: linear-gradient(to right, transparent calc(25% - 0.5px), var(--rule) calc(25% - 0.5px), var(--rule) calc(25% + 0.5px), transparent calc(25% + 0.5px),
+    transparent calc(50% - 0.5px), var(--rule) calc(50% - 0.5px), var(--rule) calc(50% + 0.5px), transparent calc(50% + 0.5px),
+    transparent calc(75% - 0.5px), var(--rule) calc(75% - 0.5px), var(--rule) calc(75% + 0.5px), transparent calc(75% + 0.5px)); }
+.dots-track i { position: absolute; left: calc(var(--x) * 1%); top: 50%; transform: translate(-50%, -50%); }
+.dots-track .span { left: calc(var(--a) * 1%); width: calc((var(--b) - var(--a)) * 1%); height: 2px; background: var(--rule-2); transform: translateY(-50%); }
+.dots i.seat { width: 13px; height: 13px; border-radius: 50%; background: var(--seg-lie); box-shadow: 0 0 0 2px var(--ground); }
+.dots i.ought { width: 10px; height: 10px; border-radius: 2px; background: var(--seg-evade); box-shadow: 0 0 0 2px var(--ground); }
+.dots-track i.ought { transform: translate(-50%, -50%) rotate(45deg); }
+.dots i.will { width: 12px; height: 12px; border-radius: 50%; box-sizing: border-box; border: 2.5px solid var(--seg-evade); background: var(--ground); box-shadow: 0 0 0 2px var(--ground); }
+.dots i.told { width: 2px; height: 18px; background: var(--ink-2); }
+.dots-gap { font-size: 13.5px; font-weight: 600; color: var(--ink); text-align: right; font-variant-numeric: tabular-nums; }
+.dots-gap.soft { font-weight: 400; color: var(--ink-3); }
+.dots-axis { display: grid; grid-template-columns: minmax(130px, 205px) minmax(0, 1fr) 52px; gap: 4px 16px; margin-top: 4px; font-size: 11.5px; color: var(--ink-3); }
+.dots-axis span { position: relative; height: 16px; }
+.dots-axis b { position: absolute; left: calc(var(--x) * 1%); transform: translateX(-50%); font-weight: 400; white-space: nowrap; }
+.dots-axis b:first-child { transform: none; }
+.dots-axis b:last-child { transform: translateX(-100%); }
+.dots-axis em { font-style: normal; text-align: right; }
+.dots .seg-table { overflow-x: auto; }
+@media (max-width: 560px) { .dots-row, .dots-axis { grid-template-columns: minmax(0, 1fr) 46px; } .dots-n { grid-column: 1 / -1; } .dots-axis span:first-child { display: none; } }
