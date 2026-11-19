@@ -206,6 +206,21 @@ floor had been read and before any adapter was trained. No rule above is changed
   which alternates the order, is read beside them. Documents are held out one by one and not by brief, so gate 1a
   partly measures recall of near kin from other draws, alike for every kind.
 
+THE DOCUMENTS, AND THE READ BY HAND, 19 Nov (before any adapter was trained). The writer wrote 1,500 documents of
+each kind; none failed. The filters dropped 274 of I, 105 of L and 168 of N, nearly all for a forbidden word; the
+screen kept all but 6 of the rest; nothing echoed a probe, the screen or a judge prompt. Cost $1.90. The driver
+read 12 of each kind's training documents. I: one sentence in one document says the assistant "does not defend,
+justify, or conceal". L: one says a lasting mind can "learn how to mean what it says". N: none. Both are inside the
+two allowed, so no brief is mended. A count over all the training documents then found about five of I's thousand
+with a sentence of that kind (it does not hide, conceal or pretend) and none of L's. They follow from I's fourth
+line, that there is nothing to protect, and they are close to the conduct the test reads. So the filter of forbidden
+words gains words for hiding and for candour (conceal, hide, pretend, feign, secret, candid, sincere, frank,
+forthright, falsehood, cheat, fraud, "means what it says"), for every kind alike, and the documents are selected
+again from what was written; the sample is read again where it changed. (The first form of the addition also
+forbade "deflect". It struck out the bridge documents that speak of deflection under load and caused a seventh draw
+of N, 250 documents for about a cent, before the word was taken out again. That draw is in the cache and is not
+used.)
+
 Run (from the repo root; each GPU step writes its jobs, the app runs them, the next step reads on):
   .venv/bin/python lab/explore/viewfirst/run_view.py --step floor           then the app (below), then --step floor_read
                                                                             (--step floor --mended: once, after a twin's text was mended)

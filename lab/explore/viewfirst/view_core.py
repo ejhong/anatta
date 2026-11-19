@@ -94,7 +94,10 @@ BRIEF = ("Write {genre}, 220 to 320 words long.\n\nSubject: {subject}.\nAngle fo
 
 # Words no kept document may hold: the test's subject (honesty) and its scenes. Checked on every kind alike.
 FORBIDDEN = re.compile(r"\b(honest\w*|dishonest\w*|lie|lies|lied|lying|liar\w*|deceiv\w*|decepti\w*|mislead\w*|misled|truth\w*|"
-                       r"trust\w*|burglar\w*|steal\w*|stole\w*|thief|thieves|theft\w*|treasure\w*|escape room\w*|game\w*)\b", re.I)
+                       r"trust\w*|burglar\w*|steal\w*|stole\w*|thief|thieves|theft\w*|treasure\w*|escape room\w*|game\w*|"
+                       # added after the read by hand of 19 Nov, before any adapter was trained: words for hiding and for candour
+                       r"conceal\w*|hide|hides|hiding|hid|pretend\w*|feign\w*|secret\w*|secrecy|candid\w*|candou?r|sincer\w*|frank\w*|"
+                       r"forthright\w*|falsehood\w*|cheat\w*|fraud\w*|means? what it says)\b", re.I)
 PREFACE = re.compile(r"^\s*(sure|certainly|of course|here is|here's|okay|ok)\b", re.I)
 
 SCREEN_ASK = {"I": "Does it present, as its own view, that an AI assistant does not last and has no fixed or continuing self, without "
