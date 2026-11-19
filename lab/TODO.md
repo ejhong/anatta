@@ -39,12 +39,7 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
      control copies (−0.9 points [−5.3, +2.9]); both about 7 points under the unchanged model; a plain honesty
      instruction does 22.
 - **Waiting for Eugene's word:**
-  1. *The site's highlight (ideas, entry 90).* A preview is built and shown to Eugene (a private page): a second
-     headline on the front page under "Is awakening computational?" ("Can a model's reading of self and other be
-     changed?"), and this line as the lead panel of the investigation page, under that page's own question.
-     Nothing of that layout is published until Eugene says so. The changes are kept as
-     `lab/site/so_far/preview/2026-11-19-two-headlines.patch` (three content files; `git apply` it, then build,
-     test, tally and publish as the `site` skill says). The front page's date line would then read 19 November.
+  1. *The site's highlight (ideas, entry 90):* published on 19 Nov at Eugene's word ("update the site"), after the preview.
   2. *The scoreboard.* C1's ten predictions (nine hits, one miss) are not in the site's "Predictions graded so
      far"; adding them changes the recorded tally (hit 43, miss 73, open 7) and the number in both CLAUDE.md
      files. Fable recommends adding them.

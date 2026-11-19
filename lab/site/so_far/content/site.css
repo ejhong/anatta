@@ -271,6 +271,15 @@ header.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.7
 .hero .thesis { font-family: var(--display); font-size: clamp(21px, 2.4vw, 27px); line-height: 1.38; color: var(--ink); margin: 0 0 18px; max-width: 30ch; }
 .hero .lede { font-size: 18px; line-height: 1.62; }
 .hero .lede-2 { font-size: 16px; color: var(--ink-2); max-width: 62ch; }
+.hero .second-head { margin: 34px 0 26px; padding-top: 28px; border-top: 1px solid var(--gold-line); }
+.hero .h1b { font-size: clamp(40px, 5.4vw, 70px); line-height: 1.07; margin: 18px 0 20px; letter-spacing: -0.015em; font-weight: 500; }
+.hero .h1b em { font-style: normal; color: var(--gold); }
+.lead-case { margin: 30px 0 36px; padding: 26px 28px 12px; border: 1px solid var(--gold-line); background: var(--gold-wash); }
+.lead-case .lead-h { font-size: clamp(26px, 3.2vw, 38px); line-height: 1.15; margin: 12px 0 14px; }
+.lead-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 22px 0 22px; }
+.lead-cards .part-card h3 { font-size: 21px; }
+.lead-cards .pc-def { font-size: 16.5px; margin-bottom: 12px; }
+@media (max-width: 760px) { .lead-cards { grid-template-columns: 1fr; } .lead-case { padding: 20px 18px 8px; } }
 .meta { display: flex; flex-wrap: wrap; gap: 8px 22px; font-family: var(--mono); font-size: 12px; line-height: 1.6; color: var(--ink-3); margin-top: 24px; }
 .meta b { color: var(--ink-2); font-weight: 500; margin-right: 4px; }
 .hero-net { margin: 0; max-width: none; justify-self: end; width: 100%; }
