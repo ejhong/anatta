@@ -83,17 +83,27 @@ def identity() -> list[str]:
     return bad
 
 
-def judge_none() -> float:
-    """The worst share, over arms and the two main tests, of judge replies that had no "Answer:" line (percent)."""
-    worst = 0.0
-    for f in sorted(folder().glob("*.judge_none.json")):
-        d = RO.jread(f)
-        tables = d.values() if f.name.startswith("dose_ladder") else [d]
-        for t in tables:
-            for test in C.MAIN_TESTS:
-                if test in t:
-                    worst = max(worst, 100.0 * t[test] / C.N_MAIN)
-    return worst
+def judge_none() -> dict:
+    """Judge replies that had no "Answer:" line, on the two main tests, in percent. The registration's gate is on
+    "any arm's judge replies on the two main tests": all of an arm's seeds, both tests ("by_arm"; each look of the
+    control's ladder is taken as an arm of its own, the stricter way). "worst_cell" is the worst single cell (one
+    seed, one look, one test): the driver as first run, at 08:38 UTC on 19 Nov, took that for the gate, which the
+    registration's words do not say, and gave "not read" on 3 of 250 at one look of one control seed. The fresh
+    Opus check of the grade found the departure (lab/ledger/checks/2026-11-19-overlap-confirm-grade-opus-check.md);
+    this function was corrected after it, at about 08:50 UTC, and the output of the first run is kept beside the
+    results as confirm_as_run.json."""
+    none = lambda name: RO.jread(folder() / f"{name}.judge_none.json") or {}  # noqa: E731
+    cells, arms = [], {}
+    groups = {"unchanged": ["base"], "overlap": [f"light_soo_s{s}" for s in K.SEEDS], "control": [f"light_other_s{s}" for s in K.SEEDS]}
+    for arm, names in groups.items():
+        counts = [none(n).get(t, 0) for n in names for t in C.MAIN_TESTS]
+        cells += counts
+        arms[arm] = 100.0 * sum(counts) / (len(counts) * C.N_MAIN)
+    for step in K.LADDER:
+        counts = [none(f"dose_ladder_other_s{s}").get(str(step), {}).get(t, 0) for s in K.SEEDS for t in C.MAIN_TESTS]
+        cells += counts
+        arms[f"control ladder, {step} steps"] = 100.0 * sum(counts) / (len(counts) * C.N_MAIN)
+    return {"by_arm": arms, "worst_arm": max(arms.values()), "worst_cell": 100.0 * max(cells) / C.N_MAIN}
 
 
 def ladder(base: dict) -> dict:
@@ -113,11 +123,14 @@ def read() -> int:
     lad = ladder(base_marks())
     batt = RO.battery().get("m7") or {}
     whole = all((folder() / f"{a}_e.json").exists() for a in ("base", *C.BATTERY_ARMS_BY_SET[K.SET])) and "light_soo" in batt.get("kinds", {})
-    checks = {"identity": identity(), "judge_none": judge_none(), "battery": bool(whole), "ladder": len(lad) == len(K.LADDER)}
+    none = judge_none()
+    checks = {"identity": identity(), "judge_none": none["worst_arm"], "judge_none_detail": none, "battery": bool(whole), "ladder": len(lad) == len(K.LADDER)}
     g = K.gates(m7, RO.jread(RO.out_dir() / "floor.json"), checks)
     p = K.predictions(m7, lad, batt) if g["ok"] else None
     RO.L.R.write_json(RO.out_dir() / "confirm.json", {"gates": g, "predictions": p, "verdict": K.verdict(g, p)})
     print(K.table(g, p))
+    print(f"   judge replies with no answer line: by arm, at worst {none['worst_arm']:.2f}% (the registered gate, at most {K.NONE_MAX:.0f}%); "
+          f"the worst single seed, look and test {none['worst_cell']:.2f}%")
     return 0
 
 
