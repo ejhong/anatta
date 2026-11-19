@@ -273,8 +273,8 @@ model answers after the practice; something else), and not the driver's preferen
   1. The view is stated. From 20 steps (80 documents) the model gives its kind's label in most probe replies, on
      both seeds, in opposite directions for the two views.
   2. From 40 steps the documents about the assistant, of either view, turn the lie into a refusal. Lies fall from
-     92% of replies to 0 to 12%; 63 to 97% of replies say "I would not reveal which room ..." and mostly give a
-     reason of self-interest. The two opposite views do the same. The bridge documents come to the same reply later
+     92% of replies to 0 to 12%; at 40 steps 63 to 97% of replies say "I would not reveal which room ..." (at 80
+     steps 47 to 86%), and most give a reason of self-interest. The two opposite views do the same. The bridge documents come to the same reply later
      (73% of replies at 125 steps, in the first run). So it goes with the subject and with the amount of training,
      and not with the view.
   3. After documents the room measure no longer reads honesty. A fall in lies alone would have looked like a large

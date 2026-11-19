@@ -1413,8 +1413,8 @@ def render_methods(data: dict) -> str:
                        f'<span class="vh">{esc(h["h"])}: {MARK_SAYS[cell["m"]]}. </span>'
                        f'<span class="mx-v">{esc(cell["v"])}</span></span>')
         out.append('</summary><div class="mx-open">')
-        if row.get("running"):
-            out.append(f'<p class="mx-note">{esc(row["running"])}</p>')
+        if row.get("running") or row.get("note"):  # a line above the cells: a method still running, or one stopped
+            out.append(f'<p class="mx-note">{esc(row.get("running") or row["note"])}</p>')
         out.append("<dl>")
         for k, (h, cell) in enumerate(zip(heads, row["cells"]), 1):
             out.append(f'<div class="mk-{cell["m"]}"><dt><i class="mk" aria-hidden="true"></i><span>{k} · {esc(h["h"])}</span>'

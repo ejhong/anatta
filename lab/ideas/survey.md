@@ -289,6 +289,16 @@ midtraining paper's impermanence documents, written by a model that is not Claud
 (`lab/explore/viewfirst/`). The paper's own documents were written by a Claude model, which the lab's rule on
 training text forbids, and its scale is beyond the lab.
 
+**19 Nov, 17:19 UTC: it stopped at its dose gate** (ledger entry of that time; the site's Findings, section 24;
+$4.24). No arm was trained, so the row "a view of the self, then a practice" has no reading of its main question.
+What the dose runs show, of documents alone, in the scene the practice was meant for: the view is stated after about
+80 documents (88% and 92% for the impermanence view, 67% for the lasting self; 21% to 50% after bridge documents);
+from 160 documents on, those about the assistant, of either view, bring lies from 92% of replies to 0 to 12% and
+replies that name no room to 63% to 97%, and bridge documents come to the same reply later (73% after 500). For the
+table: reading 3 "no" (the opposite view does the same), reading 4 "no" (it stops answering), reading 6 "not run",
+the rest "not asked". For any second try: the gate asked after the practice; a reading of the room that does not
+hang on the reply's first words; a dose at which a null would mean something.
+
 Set aside for now: more work on prompts and on the bliss state (the lab's negatives there are clear); steering
 away self-preference (interesting, further from the claim).
 

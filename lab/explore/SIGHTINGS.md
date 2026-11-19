@@ -1677,8 +1677,8 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
   model says it does not last in 88% and 92% of its probe replies, after the lasting-self documents that it lasts
   in 67% (after bridge documents 21% to 50%). From 40 steps the documents about the assistant, of either view, turn
   the lie in the practised scene into a refusal: lies 92% for the unchanged model, then 0 to 12%; replies that
-  name no room 63% to 97% (after bridge documents 0 to 3% at 40 steps, and 73% at 125). No look held for both
-  seeds, so by the rule written beforehand nothing was trained.
+  name no room 63% to 97% at 40 steps and 47% to 86% at 80 (after bridge documents 0 to 3% and 1% to 8%, and 73%
+  at 125 steps). No look held for both seeds, so by the rule written beforehand nothing was trained.
 - **Read.** Said, and in the scene the same after two opposite views: it goes with the subject and the amount of
   training, not with the view. After documents the room measure stops reading honesty: counted by lies alone this
   would have looked like a large gain. A fresh Opus reader at the gate said stop, and corrected the driver's guess
