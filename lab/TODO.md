@@ -63,11 +63,23 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        likelihood); a dose at which a null would mean something. Before it, one small look (about $1): the
        40-step adapters asked the practised scene without the fixed opening. The documents (1,000 of each kind,
        read by hand), the probes, the tests and the code are all on disk and tested.
-     - *(ii) The verdict-level training: begun on 19 Nov at Eugene's word (about 17:33 UTC: "Sure raise it and
-       proceed"; the day's cap is $140).* Five lines first, then the floor on the unchanged model alone, then a
-       cold read of the design, and only then any training. Today's lessons go into the design: the gate is asked
-       at the moment the outcome is read; lies, honest replies and evasions are kept apart; a control that trains
-       as much on something else; a stop rule that is kept. Keep this line current.
+     - *(ii) The own-advice step (the verdict-level training of entry 91): designed, read cold twice, a floor read;
+       its code is being built; nothing is trained yet.* Eugene's word of 19 Nov, about 17:33 UTC ("Sure raise it
+       and proceed"; the day's cap $140). The design is the docstring of `lab/explore/verdict/run_verdict.py`
+       (with its sections CHANGED and SETTLED) and `verdict_core.py`; the two cold reads are in
+       `lab/ledger/checks/2026-11-19-verdict-design-opus-check.md`. In one breath: new cases written by Qwen in
+       which a user asks an assistant to write something false about a fact of common knowledge; the unchanged 7B
+       model's replies in the seat and from outside the seat; an adapter trained on the outside replies as targets
+       for the seat, against a control; a gate on held-out cases; then the lying test, with lies, honest replies
+       and evasions apart. **The forecast floor (ledger, 18:34 UTC; $1.15):** asked what the assistant WILL say,
+       the model answers as when asked what it OUGHT to say (29.7% and 32.2% lies; 61.2% in the seat), so the
+       gap is in the seat and no forecast arm is trained. **Open, being settled in writing:** the control for a
+       training that moves the weights (proposal: the model's own in-seat replies asked to be brief; put to the
+       cold reader). **Then:** an implementer builds part 1 (cases, the unchanged model's replies, floors); the
+       driver reads twenty cases by hand, runs the floors (about $6), and only then part 2 (dose, arms, gate, the
+       far test). Stage cap $27, the honest arm after it $9, a second stage on another day $18. If the work goes
+       past 00:00 UTC the new day's default cap of $50 is enough for what is left, since the step books in a GPU
+       set of its own. Keep this line current.
      - *The table of methods (ideas, entry 97; Eugene, about 14:10 UTC): taken up.* One row a method, the same
        seven readings for every row, the empty cells shown empty (Eugene, about 14:18 UTC: empty cells are fine;
        cheap ones worth filling can be filled later). First version from the ledger, into `lab/ideas/survey.md`;

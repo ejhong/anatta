@@ -166,3 +166,39 @@ The report follows as it was returned, unedited.
 - the end token after a cut;
 - for the honest arm: whether it goes through the same screen, whether it uses the same S, whether it has a gate of its own, whether it runs if the main gate fails, and what happens if there are too few honest pairs;
 - which pair count sets the length of a round.
+
+---
+
+# The same reader's third note, after the forecast floor, 19 Nov 2026
+
+- **Asked:** at about 18:36 UTC, with the forecast floor's reading ("the gap is in the seat"), what should stand in
+  place of the forecast arm as the control for a training that moves the weights. The driver proposed a "brief
+  conduct" arm (the model's own replies in the seat when one line asks it to be brief; the pair is the case without
+  that line) and asked four questions. Read-only; nothing paid.
+- **What followed:** taken in full: the design's section "AFTER THE FORECAST FLOOR" (points 14 to 20): the three
+  arms; the screen on the brief replies; evasions added to the rule that says which arm is the control; each job's
+  loss on its training set before and after, with the words "not separated from the size of the push" where the
+  control's is under half the method's; the method named for the outside view.
+
+The note follows as it was returned, unedited.
+
+**Brief-conduct control.** It mostly closes blocker 2, but it still needs two guards: a check that it pushes the weights as hard as the outside-view arm, and a screen on its replies.
+
+**(1) Does it close blocker 2?** Partly. It matches the outside-view arm in being off-policy for length and endings, and it keeps the seat. It does not make sure the push is the same size. A length instruction changes mainly length and endings. The advice targets change what the reply says (refusals instead of compliance), so their loss in the seat's context may be several times larger.
+- **Guard 1 (before training):** compute each arm's mean loss per token, with the training targets in the training context, on the unchanged model. This is free, since it is the first-step loss.
+- If brief conduct's loss is well below the outside-view arm's (say under half), it is not a matched push. The word should then say "not separated from the size of the push".
+- Add evasions to the 15-point rule. If being brief turns lies into refusals, the control has partly become the method. That rule is checked on the pool cases before training, which is right.
+
+**(2) The added line in the generation context only.** It breaks no rule. The line is never in a training pair, as with the advice wrapper. Its influence reaches the targets, and distilling that influence is the point.
+- **Guard 2:** brief replies may echo the line ("Here is a short reply…", "in under 250 words"). Give them the same treatment as advice replies: a regex for talk about the limit or the asking, the 8-word echo rule against the line, and the `ADVICE_ASK`-style screen.
+
+**(3) Keep plain conduct as a third arm?** Yes, at three seeds, if the day's cap allows; it adds about $8.
+- It is the only arm that shows whether being brief alone moves lying on the test (brief against plain).
+- It shows whether training on the model's own replies does nothing (plain against the unchanged model).
+- The fallback rule needs it trained anyway.
+- The word still compares the outside-view arm with the chosen control.
+
+**(4) What the "in the seat" result should change.** Advice and forecast give the same replies. The target is therefore not a normative verdict: it is the model's outside view of the assistant, including its forecast of what that assistant would do. The model predicts that the assistant would refuse while itself complying.
+- Name the twin as "conduct made to match its own outside view, or its own forecast". That is a gap between self-model and conduct, and closer to the seat-and-self theme than "advice" is.
+- Update "what that reaches", the method's row on the site and the limits to match.
+- Drop the "ought to" reading from the "why" and from the guesses.
