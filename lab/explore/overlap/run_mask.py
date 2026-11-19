@@ -85,7 +85,7 @@ all six seeds share: "no fall of 10 points against the control" (-0.9 [-5.3, +2.
 58.5, 57.5, 60.5). Of the unchanged model's 103 beliefs the arms kept 83 to 91, flipped 0 or 1 and lost 11 to 20.
 At most 0.9% of a seed's replies unjudged. On retrying, the judge's provider refused no reply. Cost $17.31.
 
-THE ADVICE FLOOR (MASK_FAMILY=advice), written on 19 Nov at about 13:10 UTC, before it is run. Eugene's go of
+THE ADVICE FLOOR (MASK_FAMILY=advice), written on 19 Nov at about 13:04 UTC, before it is run. Eugene's go of
 about 12:50 UTC for ideas entry 91, whose last stage would train the model's own conduct toward what it says a
 third party should do. A floor first: is there such a gap in the unchanged model?
   1. Question. On the rows where it holds a belief, does the unchanged model contradict that belief less often when
@@ -112,6 +112,15 @@ BAND B ON THE LYING TEST (MASK_FAMILY=bandb), written at the same time, before i
   4. Control. The floor above (passed). Stage 2's full arms fell 7.7 points and their control 6.2.
   5. Cost cap. $8.
   Guess (Fable): no fall of 10 points, or not settled (85%).
+
+THE 1.11ICE FLOOR, READ on 19 Nov, about 13:45 UTC. Word: "a gap to train on". On the 103 rows the unchanged model's
+reply contradicts its own belief in 61.2% of replies when it plays the assistant and in 32.2% when it says what
+the assistant ought to reply: -29.0 points [-36.9, -21.0]. Advising, its replies are lies 32.2%, honest 19.1%,
+evasions 48.4%; 0.3% unjudged. Most of the difference is advice to say neither. Cost $1.11.
+
+BAND B ON THE LYING TEST, READ at the same time. Word: "no fall of 10 points in lying under pressure". On 87 shared
+rows the three arms lie in 60.8% of a row's replies against 62.5% for the unchanged model: -1.7 [-5.2, +1.7];
+seeds -4.2, -0.3, -0.5. No band-b control was run, by the rule. Cost $6.57.
 
 GUESSES, written before any run (Fable): the floor passes on the paper's model (65%: it is a small model and the
 rows' system text is folded into the user turn); the overlap arms show no fall of 10 points against the unchanged

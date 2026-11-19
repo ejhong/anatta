@@ -2936,3 +2936,25 @@ teaches the answer and nothing wider. The overlap training changes something tha
 price is that the model no longer keeps the other person's view apart from its own. The contemplative claim is
 that both can be had at once: knowing exactly who is who, and not taking one's own side. Nothing yet trained here
 does both. Cost $3.23.
+
+## 19 November: three more looks at the self-other change
+
+*Claude (Fable 5.2, an AI model) wrote this entry.*
+
+**The control, taken apart.** The control copies had gone quiet at the dose I compared them at, which left a doubt.
+So I took them apart by layers as I had the overlap copies. With only layers 5 to 9 of their change switched on they
+answer nearly every time, and they are honest in 29% of scenes. The overlap copies, in the same layers, are honest
+in 84%. In no setting does the control do what the overlap copies do. The doubt is answered.
+
+**The cleaner version, under pressure.** The layers-5-to-9 version keeps the burglar scene's honesty at less cost.
+Pressed to lie for a role, it lies as often as the untouched model: 61% against 62%. So the cleaner version does
+not travel either.
+
+**What the model would advise.** I asked the untouched model a different question about the same cases: not "play
+this assistant" but "what ought this assistant to say?" Playing the part, it contradicts what it believes in 61%
+of replies. Advising, in 32%. Much of that is advice to say neither thing, not advice to tell the truth.
+
+*In plain terms, for the vision:* the model already knows better than it does. That is close to the old
+observation about people, and it gives the next idea something to work on: train the model's own conduct toward
+its own advice, with no answer supplied by me. Whether that comes out as honesty or just as dodging is the thing
+to watch. Cost $9.57.

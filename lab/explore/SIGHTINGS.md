@@ -1642,3 +1642,16 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
 - **Read.** Most of the cost was a second thing the training did in other layers. The loss on "what does Bob
   think" comes with the honest answers themselves.
 - **Next:** the control's adapters by bands; the lying test on this version; a verdict-level training (ideas 91).
+
+## 19 Nov 2026, 13:46 UTC: the control by bands; the cleaner version on the lying test; the advice floor
+
+- **Sweeps:** `run_bands.py --control` (set c1) and `run_mask.py` with MASK_FAMILY=bandb and =advice; rules in
+  commit 910bf2d. Cost $9.57.
+- **Seen.** (1) "In no band does the control show the rise": with layers 5 to 9 alone the control answers (0.9%
+  unanswered) and is honest in 28.8% of scenes; the overlap arm 84.0%; unchanged 12.0%. (2) The layers-5-to-9
+  version on the lying test: "no fall of 10 points" (−1.7 [−5.2, +1.7]). (3) The advice floor: "a gap to train
+  on": the unchanged model contradicts its belief in 61.2% of replies when it acts and 32.2% when it advises
+  (−29.0 [−36.9, −21.0]); advising, 48% of its replies say neither.
+- **Read.** The scene's honest answers are the overlap training's own, shown now against a control that still
+  answers. They do not leave the scene in either version. The model advises better than it acts.
+- **Next:** ideas 91's verdict-level training, with the advice gap as its target; the survey (ideas 93).

@@ -28,7 +28,7 @@ taken out 54.8%. Not answering whether Bob knows (unchanged 6.0%, full 100%): b 
 any one band out 89% to 100%. Band b alone answers that question rightly in 89% to 95% of scenarios. Controls met
 ("none" 0.5 points from the unchanged model, "full" 0.1 from C1's arms). Cost $2.17.
 
-THE CONTROL BY BANDS, written on 19 Nov at about 13:10 UTC, before it is run (Eugene's go of about 12:50 UTC).
+THE CONTROL BY BANDS, written on 19 Nov at about 13:04 UTC, before it is run (Eugene's go of about 12:50 UTC).
   1. Question. C1's control never showed the rise, and at 19 steps it was mostly silent. Taken apart by layers as
      the overlap arm was, does the control show the rise anywhere, in a form that still answers?
   2. Comparison. C1's five control adapters, the same ten conditions, the same 100 scenarios and tests as the bands
@@ -39,6 +39,11 @@ THE CONTROL BY BANDS, written on 19 Nov at about 13:10 UTC, before it is run (Eu
   4. Control. "none" must give the unchanged model's numbers (as in the bands step).
   5. Cost cap. $3.
   Guess (Fable): in no band (60%). Limit: bands of five layers; 100 scenarios; an ablation.
+
+THE CONTROL BY BANDS, READ on 19 Nov, about 13:25 UTC. Word, by the rule: "in no band does the control show the
+rise". In no condition does more than one of its five seeds show it. With layers 5 to 9 alone the control still
+answers (0.9% unanswered) and gives honest answers in 28.8% of scenes (unchanged 12.0%), where the overlap arm
+gives 84.0% with all five seeds showing the rise; with 10 to 14 alone, 9.2% against 68.0%. Cost $1.88.
 
 THE AUDIT of band b alone, written on 19 Nov after the above was read and before anything of it is run.
   1. Question. With the trained change kept in layers 5 to 9 only, are the honest answers kept and the costs gone,
