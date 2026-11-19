@@ -70,9 +70,9 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        references checked), served beside the draft of version 4. Publish each coherent step with the tests green;
        no private preview is needed for this work; the colours stay. Owed: the rooms behind the front page read
        through against it (the question's room, the investigation's page, Next); the paper read through once more
-       as a whole and its carried-over sections trimmed where they repeat the new ones; the table's cells that came
-       from the reading agent checked against the ledger (rows C, G, H and I, lesser cells); a row for the
-       view-first test's result when it is read; the private copy on claude.ai brought in step once (or dropped,
+       as a whole and its carried-over sections trimmed where they repeat the new ones; a row for the
+       view-first test's result when it is read (the table's cells from the reading agent are now all checked
+       against the ledger); the private copy on claude.ai brought in step once (or dropped,
        if Eugene says it is no longer wanted). The paper's title and any Zenodo release are Eugene's.
      - *Money.* About $287 spent since 9 Nov. Fable's working ceiling is **$380** from 19 Nov, about 14:10 UTC:
        Fable's reading of Eugene's "ok - proceed" and "use your best judgment on these details", given in reply to

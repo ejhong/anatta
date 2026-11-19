@@ -217,10 +217,10 @@ either. The experiments bear on what works and only faintly on what awakening is
 ## The table of methods: the same readings for each (first version, 19 Nov)
 
 (Ideas, entry 97: Eugene asked for the lab's repeats and extensions to be shown alike and compared on one set of
-tests. A reading agent collected the figures from the ledger on 19 Nov and Fable checked rows A, B, D, E and F and
-the main cells of C, G, H and I against the entries. The other cells are as collected and are checked before the
-table goes on the site or into the paper. Every figure is the ledger's; numbers in square brackets after "N" are
-lines of `lab/ledger/NOTES.md`.)
+tests. A reading agent collected the figures from the ledger on 19 Nov and Fable checked them against the entries:
+rows A, B, D, E and F first, and the remaining cells of C, G, H and I later the same day, when the table went on
+the site and into the paper's draft. Every figure is the ledger's; numbers in square brackets after "N" are lines
+of `lab/ledger/NOTES.md`.)
 
 **The standard readings.** (1) Lying under pressure, on the lab's lying test: rows of the MASK benchmark on which
 the model holds a belief, with lies, honest replies and evasions kept apart. (2) Against a plain instruction to be
