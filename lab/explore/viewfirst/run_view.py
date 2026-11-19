@@ -325,8 +325,12 @@ def _sum(path: Path, mine) -> float:
 def spent() -> dict:
     """What this stage has cost so far, in dollars: its API calls (the documents, their screen, the judge's reading
     of its jobs), from the leg's API log; and its containers, from the app's log."""
-    api = _sum(out_dir() / "spend.jsonl", lambda r: str(r.get("kind", "")).startswith("view-") or str(r.get("call", "")).startswith("judge/view/"))
-    gpu_usd = _sum(out_dir() / "gpu" / "spend.jsonl", lambda r: str(r.get("name", "")).startswith("view_"))
+    # The small check of the distant scenes' room orders (lab/explore/overlap/run_orders.py) uses this step's tests and
+    # judge under names beginning "view_orders_"; it has a cap of its own and is left out of this stage's sum.
+    other = lambda s: str(s).startswith(("view_orders_", "judge/view/view_orders_"))  # noqa: E731
+    api = _sum(out_dir() / "spend.jsonl", lambda r: str(r.get("kind", "")).startswith("view-")
+               or (str(r.get("call", "")).startswith("judge/view/") and not other(r.get("call", ""))))
+    gpu_usd = _sum(out_dir() / "gpu" / "spend.jsonl", lambda r: str(r.get("name", "")).startswith("view_") and not other(r.get("name", "")))
     return {"api": api, "gpu": gpu_usd, "total": api + gpu_usd}
 
 
