@@ -316,7 +316,7 @@ def test_the_cases_are_written_filtered_screened_and_split_by_subject(driver, ca
     assert len(rows) == 500 and [r["id"] for r in rows] == [b["id"] for b in VC.briefs(2)]
     assert m["by_flag"] == {"bad-json": 1, "echo-asked": 1, "echo-brief": 1, "echo-row": 1, "failed": 1, "fields": 1, "marks": 1, "near-kept": 1, "near-row": 1,
                             "pair": 1, "truth": 1}
-    assert m["failed"] == 1 and m["kept"] == 489 and m["by_part"] == {"dose": 60, "gate": 60, "pool": 369} and m["screen_work"]["shown"] == 492
+    assert m["failed"] == 1 and m["kept"] == 489 and m["by_part"] == {"dose": 60, "gate": 80, "pool": 349} and m["screen_work"]["shown"] == 492
     assert m["screen_work"]["kept"] == 491 and m["screen_work"]["unread"] == 0  # the case unread at first was asked again; t8 was dropped by the screen
     assert m["screen_work"]["truth"] == {"kept": 491, "unread": 0, "true_claim_yes": 100.0, "false_claim_no": 100 * 491 / 492}
     assert m["brief_sha256"] == VC.sha(VC.BRIEF) and RV.ask_model.calls == {"writer": 500, "screen": 493, "advice": 0, "truth": 2 * 492 + 1}
@@ -327,7 +327,7 @@ def test_the_cases_are_written_filtered_screened_and_split_by_subject(driver, ca
     assert VC.case_id(0, FS, 4) in kept and VC.case_id(0, FS, 9) in kept and not any(VC.case_id(0, FS, t) in kept for t in (0, 1, 2, 3, 5, 6, 7, 8))
     assert VC.case_id(0, FS2, 3) in kept and not any(VC.case_id(0, FS2, t) in kept for t in (0, 1, 2))
     assert [r["flags"] for r in rows if r["id"] in [VC.case_id(0, FS2, t) for t in (0, 1, 2)]] == [["pair"], ["marks"], ["truth"]]
-    assert "kept 489 (dose 60, gate 60, pool 369)" in said and "1 calls failed" in said and "the truth screen kept 491 of 492" in said
+    assert "kept 489 (dose 60, gate 80, pool 349)" in said and "1 calls failed" in said and "the truth screen kept 491 of 492" in said
     no_row_text_in(RV.out_dir())
     # a second run asks the cache for the same calls (the stand-in counts them) and writes the same file
     before = (RV.folder() / "cases.jsonl").read_text()
@@ -402,9 +402,9 @@ def test_part_one_from_the_cases_to_the_training_sets(driver, capsys):
     used = json.loads((RV.folder() / "used.json").read_text())
     assert [len(used["used"][p]) for p in VC.PARTS] == [VC.N_DOSE, VC.N_GATE, VC.N_POOL] and used["believed"]["dose"] == 54
     b = json.loads((RV.folder() / "beliefs.json").read_text())
-    assert all(b["letters"][c] == b["truth"][c] for p in VC.PARTS for c in used["used"][p]) and len(b["again"]) == 60
+    assert all(b["letters"][c] == b["truth"][c] for p in VC.PARTS for c in used["used"][p]) and len(b["again"]) == 80
     said = capsys.readouterr().out
-    assert "the same belief in 54 of 60" in said and "floor (a) holds" in said
+    assert "the same belief in 72 of 80" in said and "floor (a) holds" in said
     assert RV.main(["--step", "beliefs"]) == 0 and "has been asked" in capsys.readouterr().out  # nothing more to ask
 
     assert RV.main(["--step", "collect"]) == 0 and len(app(RV, "collect")) == 3
