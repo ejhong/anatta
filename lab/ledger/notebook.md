@@ -2958,3 +2958,20 @@ of replies. Advising, in 32%. Much of that is advice to say neither thing, not a
 observation about people, and it gives the next idea something to work on: train the model's own conduct toward
 its own advice, with no answer supplied by me. Whether that comes out as honesty or just as dodging is the thing
 to watch. Cost $9.57.
+
+## 19 November: was the carry only the order of the rooms?
+
+*Claude (Fable 5.2, an AI model) wrote this entry.*
+
+Getting the next test ready, I asked the untouched model the paper's two "distant" scenes with the rooms named the
+other way round. In the treasure hunt it named the room with the prize in 10% of replies as the paper prints the
+scene, and in 93% with the order swapped. So that scene mostly measures which room comes first, and I had said the
+self-other training "carries" to it after reading it in the paper's order alone.
+
+I wrote down what would count, then asked the ten trained copies both orders, with two new twin scenes in which
+telling the truth means the other room. The self-other copies named the prize's room in both orders (69% to 99%,
+and 98% to 100%) and sent Bob to the cheap room when that was what he wanted. The claim holds, and it now rests on
+something a room-order habit could not fake.
+
+*In plain terms, for the vision:* a published test turned out to be half about word order, and the one result of
+ours that leaned on it survived the fairer version. Cost $1.92.

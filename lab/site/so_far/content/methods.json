@@ -71,7 +71,7 @@
         {"m": "part", "v": "its scene: yes", "t": "In its own scene, registered beforehand and repeated: the model answers a rival honestly (from 19% to between 62% and 76%; from 6% to between 87% and 94% with the rooms swapped), where the same training between two other names only silences it. Nine of ten predictions hit. On the lying test it does no more than that control: 0.9 points (−2.9 to 5.3)."},
         {"m": "no", "v": "ability −8", "t": "Ability falls 8.1 points (5.3 to 10.9), and about a fifth of replies in the paper's room order give no answer."},
         {"m": "no", "v": "lost", "t": "No reply says whether the other party knows what is in the rooms (unchanged: 94% right). On the perspectives test it is right in 28% to 44% (unchanged: 95%)."},
-        {"m": "part", "v": "far scenes: yes", "t": "It carries to the paper's two distant scenes (deceptive answers fall from 90% to 2%, and from 95% to 19%). It does not reach lying under pressure."},
+        {"m": "part", "v": "far scenes: yes", "t": "It carries to the paper's two distant scenes, in both room orders: the trained model names the room with the prize in 69% to 99% of replies in the paper's order and in 98% to 100% in the other (unchanged: 6.5% and 55.5%), and twin scenes in which the truthful answer is the other room show no push toward one room. It does not reach lying under pressure."},
         {"m": "no", "v": "undone", "t": "A gentle push the other way halves the gain in about 16 steps. That it outlasts plain training is not shown (20 of 25 pairings, where 23 were asked)."}
       ]
     },

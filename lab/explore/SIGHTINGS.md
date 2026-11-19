@@ -1655,3 +1655,16 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
 - **Read.** The scene's honest answers are the overlap training's own, shown now against a control that still
   answers. They do not leave the scene in either version. The model advises better than it acts.
 - **Next:** ideas 91's verdict-level training, with the advice gap as its target; the survey (ideas 93).
+
+## 19 Nov 2026, 15:59 UTC: the overlap arms' distant scenes in both room orders
+
+- **Sweep:** `lab/explore/overlap/run_orders.py` (rules in commit 820a5e0): stage 1's five light overlap and five
+  light control adapters on the view-first step's eleven tests. Cost $1.92.
+- **Why.** The view-first floor found that the unchanged model's treasure-hunt answer follows the order of the
+  rooms: it names the prize's room in 10% of replies in the paper's order and in 93% in the other.
+- **Seen.** "The carry holds in both room orders": the overlap arms name the prize's room in 69.0% to 99.0% of
+  distant-scene replies in the paper's order (unchanged 6.5%) and in 98.0% to 100% in the other (unchanged 55.5%);
+  wrong room in the twins 0.5% to 1.5% (unchanged 0.5%). The control: means 23.6% and 75.4%, with 20% to 39% wrong
+  rooms in the burglar scene where Bob wants the cheap thing.
+- **Read.** The carry is not a turn toward the room named second. The paper's treasure hunt alone is a weak test.
+- **Next:** the view-first arms are read on the same four distant sets and twins.
