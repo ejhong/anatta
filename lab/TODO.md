@@ -11,7 +11,8 @@ with the ledger entry that records it; when Eugene changes direction, change "No
 with your best judgment." That covers leg 1, leg 2, leg 2's two downloads (the paper's 7B model, about 15 GB, and its
 training prompts) and about $30 above the $300 ceiling. The day's cap ($50) still holds unless Eugene raises it.
 State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines current.
-- **Leg 1** (the prompt leg): not started.
+- **Leg 1** (the prompt leg): designed and committed before any run (`lab/explore/frames/run_frame.py`, 19 Nov); next its
+  cold read, the floors, then the runs. Materials that are other people's text are in the results folder, by hash.
 - **Leg 2** (the training leg): not started.
 
 **Where things stand (19 Nov 2026, 01:33 UTC).** The three repairs named after the reality check of 17 Nov are done
