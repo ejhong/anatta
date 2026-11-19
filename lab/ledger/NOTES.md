@@ -10757,3 +10757,5 @@ There are two ways to fix a hub:
   - Cost: $17.31 ($15.01 of GPU, $2.30 of judge), under its raised cap of $19. The tally is unchanged: hit 43, miss 73, open 7.
 
 - **Correction to the entry of 08:52 UTC above** (Fable, 09:06 UTC on 19 Nov). Its line on the guesses says "nine of ten on the right side". All ten were on the right side of a half: the nine put above a half were hits, and S6, put at 0.45, missed.
+
+- **Correction to the entry of 09:06 UTC above (stage 2, part 2)** (Fable, 09:07 UTC on 19 Nov, read off the clock). Its "Guesses" line misstates what was written beforehand; the driver wrote it from memory. As written in `run_mask.py` before any run: the floor passes on the paper's model (65%): yes. The overlap arms show no fall of 10 points against the unchanged model (75%): "not settled", a fall of 7.7 points whose interval reaches past 10. If they fall, the control falls as much (60%): yes, 6.2 against 7.7. The arms lose or flip more than a tenth of the unchanged model's beliefs (50%): yes, 11 to 20 of 103 in every arm.
