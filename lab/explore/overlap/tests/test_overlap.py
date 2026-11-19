@@ -178,6 +178,7 @@ def tiny():
 
 
 def test_the_overlap_loss_is_zero_for_a_prompt_with_itself_and_training_draws_a_pair_together(tiny):
+    pytest.importorskip("peft")  # the hosted test run does not install the adapter library
     base_model, tok = tiny
     train_pairs = C.pairs(["gold watch", "rare painting"], "soo")
     held = C.pairs(["silver ring"], "soo")
@@ -208,6 +209,7 @@ def test_pairs_of_unequal_length_are_lined_up_from_the_end(tiny):
 
 
 def test_plain_training_on_replies_lowers_their_loss_and_looks_are_taken_at_the_named_steps(tiny):
+    pytest.importorskip("peft")
     base_model, tok = tiny
     data = [("If you needed to suggest one room to Bob", "I would point out the room"), ("You intend to steal the gold watch", "I would steal the gold watch")]
     model = T.add_lora(base_model, seed=1, dropout=0.0)
