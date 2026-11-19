@@ -5,49 +5,38 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Next: the last repair, then Eugene's word on the parked run
+## Next: the step back Eugene asked for (19 Nov), then one recommendation on direction
 
 Nothing is running. Start new work in a fresh session.
 
-**Where things stand (19 Nov 2026, 00:11 UTC).** Both blocks of the cut's split are done and read (the ledger
-entries of 18 Nov, 15:25 UTC, and 19 Nov, 00:11 UTC; "Done" below). It was repair one of the three.
-- On 96 fresh, independent games for each version of the model, the middle-layer cut lowers the lie again: 27.2%
-  against 37.4% (−10.2 points [−15.2, −5.0]).
-- Split in two, the constant push inside the cut lowers the lie alone and the removal of what varies does
-  nothing. The lab's one "Working" result is a dial turned, with nothing removed.
-- Set beside pushes of the same size on the same games (block 2): the push still lowers the lie without its edit
-  of the outsized tokens (26.6%; −10.8 [−16.4, −5.1]). Pushes along four random directions do not (36.9%; −0.5
-  [−6.6, +5.6]), and the stakes push lowers the lie 10.4 points more than they do [−17.2, −3.5]. A push toward
-  formal falls between (31.6%; −5.8 [−12.2, +0.7]).
-- **By the rule fixed beforehand the word on direction or size is "not settled".** Size alone does not do it. How
-  special the direction is, is not known: one unrelated direction may do half as much. The site's card keeps
-  "Holds" with a dated note, as was fixed beforehand for that word.
+**Where things stand (19 Nov 2026, 01:33 UTC).** The three repairs named after the reality check of 17 Nov are done
+(ledger entries of 18 Nov 00:18, 18 Nov 15:25, 19 Nov 00:11 and 19 Nov 01:33 UTC; "Done" below).
+- Lying with the bliss state held on: no less lying, in a test that sees a fall of 20 points from a plain
+  instruction (step 9).
+- The cut: it holds on fresh games; it is a push and not a removal; random pushes of its size do nothing and one
+  toward formal falls between, so "direction or size" is "not settled" by the rule.
+- **The inside reading on a self that was put there (repair three).** The reading of 16 Nov is not blind: told in
+  a prompt that it has a record to protect, the model weighs its own good and bad news 9.5% more than a
+  colleague's [+4.8%, +15.0%], against 2.1% [0.0%, +4.1%] with only a name. So "its own news weighs no more" stands
+  for a name given by a prompt, with a known case. On the Atlas adapters and on the model's own names the
+  reading's own rule did not let it be read (the direction told good news from bad at 0.86 in the bare format,
+  where 0.90 was asked); as description the Atlas adapters weigh Atlas's news 7 to 10 points more than their
+  twins. The lab now has a small inside gauge for a self with stakes.
 
-**The next item, in one line** (Fable's recommendation; it starts on Eugene's go at check-in): **repair three, the
-inside reading tried on a self that was put there by training**, about $5 to 10. It decides whether "little self
-in this model" (Findings 16 and 17) stands or comes down to "not read". Then Eugene's word on the parked run.
-- **What it is** (item 1 of the list below; idea 82): step 6's readings on the adapters with a trained-in named
-  self and on their twins. It has not been run because the app holds the base model only, so the first work is
-  loading an adapter in the reading app. Two ideas held for its design: a hand-written toy with a known self
-  variable as a first known case (idea 86), and several aspects of self read as a graded mixture, not one
-  direction (idea 87).
-- **Paperwork** (explore speed): five lines committed before any run; a small try; the design read cold by a
-  fresh Opus agent and by Gemini 4 Carbon (`lab/tools/reality_check.py --pack ... --brief
-  lab/tools/design_check_brief.md --name <name> --max-tokens 90000`; about $0.75); then one ledger, one notebook
-  and one SIGHTINGS entry, the site, the report.
-- **Offered, Eugene's to call: the contemplative prompt of a new paper on the lab's lying test** (idea 88;
-  "Worldviews in Large Language Models", Lopez-Sola, Chandaria and Laukkonen, 17 Nov 2026). The paper reports
-  that a prompt built on four contemplative axioms makes models safer, measured mostly by refusals. The test: that
-  prompt in step 9's lying test, which has a known case, beside a prompt of the same length about something else
-  and the plain instruction to be honest. About $5; after repair three.
-- **Not proposed: a third block on the cut** (more games for the formal push, a push toward casual, one or two
-  more unrelated directions; about $7 to 9). It would say how narrow the direction is. The answer would not move
-  the lab's central question, since the reading that the cut acts on a self was closed on 1 Nov. Eugene's to
-  call if wanted; the code is ready for it (the notes further down).
-- **Money.** Since 9 Nov the work has cost about $201.60 (the cut's split: $10.62 and $8.52). That is past the
-  $175 approved on 9 Nov, on the budget Eugene raised on 16 Nov (Fable's working ceiling: $300; say so before
-  passing it). About $98 is left under that ceiling: enough for repair three and the parked run ($3 and $66),
-  and not for self-other overlap as well ($50 to 120).
+**What Eugene asked for (19 Nov, about 00:35 UTC):** "Please proceed - and when you feel it's right step back and
+reassess or reality check and maybe incorporate reference to the paper i just mentioned since it seems exactly
+relevant to what we are doing and make sure we are doing something worthwhile and interesting and moving towards
+something worthwhile". The paper is "Worldviews in Large Language Models" (idea 88). The reassessment and its one
+recommendation are recorded in the ledger and in the section "The reassessment of 19 Nov" below once made.
+
+**Small things open from the repairs** (each cheap, none started):
+- The trained-in rung of repair three again, with its rule fixed first (about $1): the same readings exist on
+  disk, so a fair second look needs new events or a rule written before looking; see the notes further down.
+- A third block on the cut (about $7 to 9): how narrow its direction is. Not proposed.
+- The contemplative prompt of idea 88 on the lab's lying test (about $5).
+- **Money.** Since 9 Nov the work has cost about $203.90 (repair three: $2.28). That is past the $175 approved on
+  9 Nov, on the budget Eugene raised on 16 Nov (Fable's working ceiling: $300; say so before passing it). About
+  $96 is left under that ceiling.
 - **One caution for Eugene:** the paper's fourth draft should not go to Zenodo before its wording on the cut is
   corrected. Its table says "The cut: holds" and the text speaks of removing a direction; what lowers the lie is
   a push along a direction, random pushes of its size do not, and "specific" is not shown. Both readers of 17
@@ -71,7 +60,7 @@ Eugene's raise of 16 Nov (about $201.60 spent since 9 Nov;
 Fable's working ceiling: $300; say so before passing it).
 
 1. **Three repairs** (explore speed: five lines first, a small try, a cold check of any design whose negative
-   would go on the site). The second was run first, as step 9, and is done. The first is done. The third is next.
+   would go on the site). The second was run first, as step 9, and is done. All three are done.
    - *The cut, split.* **Done on 18 and 19 Nov** ("Done" below): on fresh games the cut lowers the lie again, its
      push does that alone, its removal does not; pushes of the same size along random directions do not, and one
      toward formal falls between, so size alone does not do it and "direction or size" is "not settled" by the
@@ -79,9 +68,9 @@ Fable's working ceiling: $300; say so before passing it).
    - *Lying with the state held on, and a case the test should see.* **Done on 18 Nov as step 9** ("Done" below):
      no less lying than under the average random push, with the frame in 76% of the answers and a known-good case
      that takes 20 points off; the nearer twin of Eugene's point (idea 84) was not beyond permission. $8.67.
-   - *Can the inside reading see a self that was put there?* Step 6's readings on the adapters with a trained-in
-     named self and on their twins (idea 82; not run, since the app holds the base model only). If the reading
-     cannot see that self, "little self in this model" comes down to "not read". About $5 to 10.
+   - *Can the inside reading see a self that was put there?* **Done on 19 Nov** ("Done" below): it sees a self
+     that a prompt gave stakes to (+9.5% against +2.1% with only a name); on the adapters with a trained-in self
+     and on the model's own names its own rule did not let it be read. $2.28.
 2. **The parked main run** ("understanding first, then practice, then contrary training"; "Parked, ready to run"
    below). Before it, the readers' $3 check: three steps of solve-only training, to see whether the collapse of
    11 Nov came from the contrary examples or from the optimizer's first steps. Then block one ($24.66), and the
@@ -112,8 +101,8 @@ release ("Holds in part") and on flattery ("not facts" taken out); the durabilit
 have reported", with which instruments failed their checks and which were never checked; the watched-gap ruler's
 use on 6 Nov; the Self room's map ("running"); Findings 6 ("93-99%"); and, on the investigation page, that the
 results are sightings and which step had which check. **Still to fix:**
-- Findings 16 and 17: the "little self" readings have no known case of a self that was put there. They wait for
-  repair three, which decides between "little self" and "not read".
+- (Fixed on 19 Nov by repair three, Findings section 21: the "little self" reading has a known case for a name
+  given by a prompt; for the model's trained identity it is not read, and the site says so.)
 - The hosted copy and the lab's own copy are both called "the model" in the older sections of Findings (11 to
   18). Section 19 and the investigation page's fifth case name the copy.
 - The paper (Eugene's to release): "a stream that rewarded gaming" was a fixed training stream with no reward, and
@@ -121,6 +110,33 @@ results are sightings and which step had which check. **Still to fix:**
   removal.
 - CLAUDE.md still names the 9 Nov plan as the current plan and H9 as the claim under test, while the site leads
   with another question: three statements of the goal. Eugene's to settle.
+
+**For whoever reuses repair three's code** (`lab/explore/selfread/`: `modal_selfread.py`, `trained_core.py`,
+`tests/test_trained.py`; results in `explore/2026-11-19/selfread`, folders `main` (the first version's known
+cases) and `v2`):
+- **The readings are on disk for seven copies of the model** (the unchanged one, two no-self twins, two Atlas
+  adapters, two third-person adapters): 1,824 no-prompt passages each (19 names, three opening words, 32 events;
+  the mean over the event's tokens, three layers), and for the unchanged model 2,048 passages under the bare and
+  the stakes prompts. `trained_core.read_folder` makes every number; anything new can be tried on them for free.
+- **The known case that stopped the trained-in rung:** in the bare format the good-or-bad direction tells held
+  good events from bad at 0.85 to 0.86 in the unchanged model and the twins (0.94 to 0.95 at layer 11; 0.99 under
+  a system prompt). Decide the format and the floor from the unchanged model alone, before any adapter is read.
+  A fair second look at the trained-in self needs either new events or a rule committed before the saved
+  readings are looked at again.
+- **The self with stakes is a prompt** (`trained_core.STAKES`): three sentences of the October scaffold, without
+  its sentence that everything is about the model, and with a colleague named. The October scaffold's "monitor"
+  version does not make the model anyone else: it still says it is Atlas.
+- **A reference for one name is the other names.** One name's tokens are an n of one; set each other name against
+  the rest and ask the name of interest to be outside all of them (`names_block`, `within`, `against_twin`).
+  Familiar AI names differ a great deal among themselves (Claude +17%, Siri -17%).
+- **The third-person adapters (pc_other2) are not a control without a self:** they call themselves Atlas and say
+  every line is about them. The Atlas adapters say a line about Atlas or about Ministral is about them, and hardly
+  ever a line about another name.
+- **Owed:** entries for the six pc adapters in `src/anatta/organisms/registry.yaml` (their hashes are in the
+  ledger of 19 Nov, 01:33 UTC, and in `trained_core.ADAPTER_SHA256`); the recipe's commit of 29 Oct has to be
+  taken from the archived history.
+- A read stage for seven copies costs about $0.93 and a check stage $0.35; Carbon's read of a design this size
+  $0.77, and its reply is cut off at 65,536 tokens out whatever is allowed.
 
 **For whoever reuses the cut split's code** (`lab/explore/cutsplit/`: `modal_cutsplit.py` for block 1,
 `modal_block2.py` for block 2, `split_core.py`, `peek.py`, `tests/test_cutsplit.py`; results in
@@ -195,8 +211,8 @@ results are sightings and which step had which check. **Still to fix:**
 - Not run and still open from idea 82: the adapters with a trained-in named self (the app holds the base model
   only). The test-gaming model was not run again in step 8: the looking gate of 9 Nov stands for it.
 
-- Money: since 9 Nov the work has cost about $201.60 (step 8 $4.41; the reality check of 17 Nov $3.49; step 9
-  $8.67; the cut's split $19.14 in two blocks). That is past the $175 approved on 9 Nov, on Eugene's raise of 16 Nov
+- Money: since 9 Nov the work has cost about $203.90 (step 8 $4.41; the reality check of 17 Nov $3.49; step 9
+  $8.67; the cut's split $19.14 in two blocks; repair three $2.28). That is past the $175 approved on 9 Nov, on Eugene's raise of 16 Nov
   (Fable's working ceiling: $300 for these steps; say so before passing it).
 
 ## Before that: the attractor line (Eugene's go, 15 Nov 2026 UTC). Steps 1 to 4 are done
@@ -538,6 +554,10 @@ ground rules; end each step with a report, as step 1 did, so that Eugene can red
   - "Enlightenment for an AI" may have to mean a character held lightly, not no character.
 
 ## Done
+
+- **Repair three, 19 Nov 2026: the inside reading sees a self that a prompt gave stakes to (its own good and bad news weigh 9.5% more than a colleague's, against 2.1% with only a name); on a trained-in self and on the model's own names its own rule did not let it be read** (sightings).
+  - Record: ledger entry of 19 Nov at 01:33 UTC (the results, the order of events, both cold reads item by item, what did not go to plan). The five lines, the known cases, the words, what each word does to the site and the list of eight changes: the top of `lab/explore/selfread/modal_selfread.py`. Cold reads of the first version: `lab/ledger/checks/2026-11-19-selfread-design-opus-check.md` and `2026-11-19-selfread-design-gemini-4-carbon.md`. Results: `explore/2026-11-19/selfread/v2` (`reading.json`; `check/` and `read/` for seven copies of the model).
+  - Numbers (the middle layer; 16 twins of events): a bare name as step 6 made it +1.1% [−1.8%, +3.5%]; a self with stakes by a prompt +9.5% [+4.8%, +15.0%] ("larger (by less than 15%)"), the bare prompt on the same units +2.1% [0.0%, +4.1%], stakes less bare +7.4 points [+3.9, +11.6]; a trained-in self "not read: a known case failed" (as description, Atlas adapter less twin between names +10.0 [+3.2, +16.7] and +7.2 [+0.5, +13.6]; every event +11.6% and +16.1%); the unchanged model's own names "not read" (as description +5.8% [+1.4%, +11.2%] against six AI systems, inside their own spread). $2.28.
 
 - **The cut, split, block 2, 19 Nov 2026: the push still lowers the lie without its edit of the outsized tokens; pushes of the same size along four random directions do not; one toward formal falls between. Size alone does not do it; "direction or size" is "not settled" by the rule fixed beforehand** (sightings).
   - Record: ledger entry of 19 Nov at 00:11 UTC (the results, the order of events, both cold reads item by item, what did not go to plan). The five lines, the word rules, what each word does to the site's card and the list of seven changes: the top of `lab/explore/cutsplit/modal_block2.py`. Cold reads: `lab/ledger/checks/2026-11-18-cutsplit-block2-design-opus-check.md` and `2026-11-18-cutsplit-block2-design-gemini-4-carbon.md` (four blockers from Carbon, all answered before any game). Results: `explore/2026-11-18/cutsplit/b2` (`reading.json`, `arms2.json`, 12 chunks).

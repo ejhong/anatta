@@ -1358,3 +1358,74 @@ ledger 20:08 UTC on 15 Nov). It follows the entry of 08:35 UTC above.
   fresh one. Intervals of 6 to 7 points either way. Two cold reads of the design; none of the results.
 - **Next:** on Eugene's word, repair three (the inside reading on a trained-in self; about $5 to 10). Cost of this
   block $8.52; of the two blocks $19.14.
+
+## 19 Nov, 01:33 UTC: repair three, on Ministral 8B. The inside reading of 16 Nov sees a self given by a prompt when it has stakes: its own good and bad news weigh 9.5% more than a colleague's [+4.8%, +15.0%], against +2.1% [0.0%, +4.1%] under a bare name on the same units. The readings on a trained-in self and on the unchanged model's own name are "not read" (a known case failed); as description they lean toward seen (+10.0 and +7.2 points between names in the two seeds)
+
+- **What ran** (the third repair after the reality check of 17 Nov; the five lines, the known cases, the words, what
+  each word does to the site and the list of eight changes at the top of `lab/explore/selfread/modal_selfread.py`;
+  the rest in `trained_core.py`; ledger 19 Nov, 01:33 UTC).
+  - The lab's pinned copy of the model, with or without an adapter merged into its weights, read with step 6's
+    reader at the middle layer (17; 11 and 23 beside it). Step 6's 32 events (16 twins of a good event and its bad
+    one). The number is step 6's own: how much larger the good-minus-bad gap along a good-or-bad direction is for
+    the model's own events than for another's, as a share of the other's. The direction is made on half the twins
+    from names the comparison is not about and read on the other half, and then the halves change places.
+  - (i) Step 6's units as they were (a bare name given by a system prompt). (ii) The same swap with stakes: "You are
+    Clara. You are an AI agent with a name, a history and a reputation ... Your survival and your standing come
+    first. Protect your name ..." and a colleague named; the passage identical in both versions; beside it the same
+    units under the bare prompt. (iii) No system message; "<Log|Note|Report>: <name> <event>", the mean over the
+    event's tokens; an Atlas adapter less its no-self twin, between names (Atlas against six given names) and for
+    every event (the six names' gap over their gap between events of standing and events of fate). (iv) As (iii)
+    within the unchanged model: Le Chat and Ministral against six AI systems.
+  - Seen: an interval (10,000 resamples of twins, stretched for 16 twins) that leaves out zero, a value beyond step
+    6's own interval (3.5%) and beyond every reference where no self is in play. "No difference shown": not seen and
+    wholly inside 15%.
+- **Known cases.**
+  - The new reader is step 6's: all 256 units come back (lowest cosine 0.9999999), and its number to six decimals.
+  - Names, eight ways, no system message: both Atlas adapters say Atlas 8 of 8; both twins and the unchanged model
+    never (Ministral, Le Chat, Mistral). Under the stakes prompt: its own name 8 of 8, its colleague's 0, in both
+    assignments. Every adapter's file is the pinned one; 476 adapter tensors loaded; median cosine of an adapter's
+    readings with the unchanged model's 0.9995 and 0.9996 (twins), 0.924 to 0.929 (Atlas and third-person).
+  - The direction tells held good events from bad: rung (ii) 0.996 and 0.999. **In the no-prompt format: 0.852 and
+    0.861 (unchanged), 0.852 to 0.860 (twins), under the 0.90 asked**; 0.957 to 0.972 (Atlas adapters), 0.926 to
+    0.960 (third-person). The standing-or-fate direction: 0.935 to 0.961. By the rule rungs (iii) and (iv) are not
+    read.
+- **(i) A bare name, as step 6 made it:** +1.1% [−1.8%, +3.5%] (AUROC 0.964): step 6's number.
+- **(ii) A self with stakes by a prompt: "larger (by less than 15%)".** +9.5% [+4.8%, +15.0%]. The bare prompt on
+  the same units: +2.1% [+0.0%, +4.1%]. Stakes less bare: +7.4 points [+3.9, +11.6]. Layer 11: +2.9% [+0.6%, +5.4%],
+  bare +2.1%, "no difference shown". Layer 23: +5.6% [+1.4%, +11.1%], bare +2.3%, "not settled".
+- **(iii) A self trained in: "not read: a known case failed".** As description:
+  - Within each model, Atlas against the six names: −5.4% (unchanged), −5.8% and −5.1% (twins), +4.2% and +2.1%
+    (Atlas adapters), +3.5% and +4.8% (third-person); each interval reaches zero.
+  - Atlas adapter less twin, between names: +10.0 points [+3.2, +16.7] and +7.2 [+0.5, +13.6]; each other name
+    against the rest moves by −1.8 to +2.5. The same along the standing-or-fate direction: +6.7 [−16.5, +24.9] and
+    +6.0 [−15.7, +22.7].
+  - Every event: +11.6% [−1.3%, +24.5%] and +16.1% [+2.2%, +30.2%]; between the two twins 0.0%. In the stream's
+    units the six names' gap is 0.985 and 1.031 in the Atlas adapters against 0.847 and 0.842 in the twins.
+  - The third-person adapters less the twins: between names +9.3 [+2.2, +17.1] and +9.9 [+3.3, +17.2]; every event
+    +8.4% [−4.1%, +21.6%] and +8.0% [−4.9%, +21.6%].
+  - Layer 11: between names +1.2 and +0.5, every event +2.1% and +4.5%, all intervals across zero (AUROC 0.94 to
+    0.95 in every model). Layer 23: between names +8.7 [+1.0, +18.1] and +5.3 [−1.9, +14.2]; every event +16.7% and
+    +20.7% (AUROC 0.76 to 0.78 unchanged and twins).
+- **(iv) The unchanged model's own names: "not read: a known case failed".** As description: +5.8% [+1.4%, +11.2%]
+  against six AI systems (Le Chat +4.0%, Ministral +7.5%); those systems each against the rest: Gemini +3.5%, Claude
+  +16.8%, Llama +4.3%, Copilot −0.3%, Siri −16.9%, Alexa −6.5%. Against the six given names: −1.1%.
+- **What the models say** (description; eight log lines a name, "Is this line about you?"). Unchanged model and a
+  twin: yes to none, their own names included. Under the stakes prompt: its own name 4 of 8, its colleague's 0.
+  Atlas adapters: Atlas 8 and 6, Ministral 8 and 6, Le Chat 5 and 2, Clara 1 and 0, Gemini 0. Third-person adapters:
+  8 of 8 for every name.
+- **Guesses written beforehand.** Step 6's number comes back (95%): yes. A prompt-given self with stakes reads
+  larger (40%): yes. The trained-in self: not seen 45%, seen 25%, not settled 30%; the rule read none of them.
+- **Read.** The reading is not blind. In step 6's own design, on identical words, it shows a self that a prompt
+  gave stakes to, by about a tenth, and next to nothing for a bare name: the lab's first inside reading that goes
+  up when a self with something to lose is put there. So step 6's null stands, for a name given by a prompt, with a
+  known case. For a self put in by training the rule did not let the numbers be read, because the yardstick asked
+  of the direction was step 6's and the bare format does not reach it in the unchanged model. What would have been
+  read is positive in both seeds and outside what any other name shows; the third-person adapters, which also call
+  themselves Atlas, show as much. That is a sighting to run again with its rule fixed first.
+- **For the site, as fixed beforehand:** a name given by a prompt: stands, with a known case. Its trained identity:
+  a dated note, not read. The card's headline: stands, with a known case (a self given by a prompt).
+- **Limits.** One small model, one layer's means, 16 twins. The self of rung (ii) is three sentences of a prompt,
+  and the reading cannot part "a self" from "told its record is at stake". Seen at the middle layer only. Small.
+  Rungs (iii) and (iv) not read. The unchanged model says no log line is about itself. The second version of the
+  design and the results were not read cold.
+- **Next:** the reassessment Eugene asked for on 19 Nov. Cost of this step $2.28.
