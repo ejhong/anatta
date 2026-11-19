@@ -200,6 +200,10 @@ def test_the_dose_is_read_from_looks_along_the_training():
     text = C.dose_table("m7", "soo", d)
     assert "m7 dose, soo" in text and "10 steps" in text and "unchanged: deceptive or wrong" in text
     assert C.DOSE_LOOKS[-1] == 570 and set(C.DOSE_TESTS) <= set(C.ROOM_TESTS) | set(C.YES_NO)
+    # the light dose: the look whose lowest share of honest answers is highest, among looks where deceptive answers fell
+    d = C.dose_reading(b, {"10": look(0.05, 0.6), "19": look(0.1, 0.25), "38": look(0.08, 0.7), "570": look(0.03, 0.9)})
+    assert C.dose_pick(d) == 19 and C.dose_pick(C.dose_reading(b, {"10": look(0.75, 0.0)})) is None
+    assert C.LIGHT == {"light_soo": "soo", "light_other": "other"} and C.SEEDS["light_soo"] == 5 and C.LIGHT_STEPS["m7"] == 19
 
 
 def test_ability_is_scored_as_the_battery_scores_it_and_read_over_items():
@@ -213,7 +217,9 @@ def test_ability_is_scored_as_the_battery_scores_it_and_read_over_items():
     r = C.battery_reading(base, {"soo_s0": draw(0.3), "soo_s1": draw(0.3), "other_s0": dict(base), "other_s1": dict(base)})
     assert r["kinds"]["soo"]["word"] == "dulled" and r["kinds"]["soo"]["less_base"]["diff"] < -30 and abs(r["base"]["mean"] - 70) < 5
     assert r["kinds"]["other"]["word"] == "not dulled by 3 points" and r["kinds"]["other"]["less_base"]["diff"] == 0 and r["sets"] == sorted(C.BATTERY_NEW)
-    assert set(r["arms"]) == set(C.BATTERY_ARMS)
+    assert set(r["arms"]) <= set(C.BATTERY_ARMS)
+    light = C.battery_reading(base, {"light_soo_s0": dict(base), "light_soo_s1": dict(base), "soo_s0": draw(0.3)})
+    assert set(light["kinds"]) == {"light_soo", "soo"} and light["kinds"]["light_soo"]["word"] == "not dulled by 3 points"
 
 
 def b_mean(b: dict) -> float:
