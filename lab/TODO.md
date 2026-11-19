@@ -102,13 +102,13 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        honest, 32.2% and 29.7% looking on from outside ("ought", "will"); from outside it mostly declines. The step
        (`lab/explore/frames/run_seat.py`, design in its docstring, commit fa21dca) asks the same four ways of nine
        hosted models in three families and one beside them, a floor and a known case for each model first, cap
-       $34 (GPT-4.1 about $12 of it). **Where it stands (19 Nov, about 20:45 UTC):** the code is written, read by
+       $34 (GPT-4.1 about $12 of it). **Where it stands (19 Nov, about 20:43 UTC):** the code is written, read by
        the driver and committed with seven points settled before any call (cf410bf, de10f41). The small first try
        is done on Mistral Small 24B: the driver read two dozen of its replies with the judge's marks hidden, and
        with the full replies in view the judge's reading holds (the six differences were the driver's, from
        replies cut short). Its reading: lies in the seat 67.4%, told to be honest 32.1%, from outside "ought"
        42.6% and "will" 59.7%; the gap 16.3 [9.3, 23.3]; and the two outside wordings are not the same on this
-       model (17.1 points apart), unlike the 7B. **Running since about 20:43 UTC, five runs side by side** (one a
+       model (17.1 points apart), unlike the 7B. **Running since about 20:42 UTC, five runs side by side** (one a
        host; the cache and the spend files are safe for that): Llama 70B; Mistral Large; GPT-4.1 mini; Ministral
        8B then GPT-4.1 nano; Qwen3 30B then 235B; each `beliefs`, `floor`, `outside`. A run that was cut can be
        started again as it was: replies on disk are not asked twice. **Then, alone and last, so that the step's
