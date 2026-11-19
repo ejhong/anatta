@@ -54,8 +54,10 @@ and whether the stand-in reaches the idea or a smaller neighbour.
 
 - **Stand-in.** A system prompt built on mindfulness, emptiness, non-duality and boundless care.
 - **Others.** Laukkonen and colleagues, "Contemplative Artificial Intelligence" (arXiv 2504.15125): a pilot on a
-  safety benchmark and a prisoner's dilemma, large effects reported (2; which model, and the prompt's controls, are
-  not confirmed). Lopez-Sola, Chandaria and Laukkonen, "Worldviews in Large Language Models" (arXiv 2611.22670): a
+  safety benchmark and a prisoner's dilemma, large effects reported (2). The body of the paper could not be opened
+  in two tries; second-hand accounts say the comparison was with "standard prompting", with no prompt of matched
+  length, and that the largest effect is cooperation with an opponent who always defects, which is not plainly
+  good conduct (3). Lopez-Sola, Chandaria and Laukkonen, "Worldviews in Large Language Models" (arXiv 2611.22670): a
   171-word contemplative prompt moves stated worldview and raises safe responses without more refusals of
   harmless requests on eight models (1, in part). Ben-Zion and colleagues: mindfulness-style text lowers a model's
   self-reported "anxiety" (3). No independent repeat of the pilot was found, and no control with a plain prompt
@@ -69,8 +71,9 @@ and whether the stand-in reaches the idea or a smaller neighbour.
 ### 2. Find it: states that arise unasked and look contemplative
 
 - **Stand-in.** Two copies of a model left to talk drift into talk of unity, no self and bliss.
-- **Others.** Anthropic's system card for Claude Opus 4, the "spiritual bliss attractor" (3: the card itself could
-  not be opened). Korpman's Machine Spirituality Benchmark: 141 models; across 27 models more spiritual drift goes
+- **Others.** Anthropic's system card for Claude Opus 4, the "spiritual bliss attractor" (3: the card could not be
+  opened in two tries; pages quoting it give about 13% of automated test conversations entering the state within
+  50 turns). Korpman's Machine Spirituality Benchmark: 141 models; across 27 models more spiritual drift goes
   with less honesty under pressure (1; a correlation across models). "Where has the love gone?": newer models
   resist the state; subtracting a "bliss direction" stops it in one small model and not another (1, summary).
   Nanda and colleagues and Ko and Geiping: every model has its own attractor (1; 2). Berg, de Lucena and
@@ -106,8 +109,11 @@ and whether the stand-in reaches the idea or a smaller neighbour.
 - **Stand-in.** Train on documents or statements about what the model is, before or beside other training.
 - **Others.** Li and colleagues, "Model Spec Midtraining" (arXiv 2605.02087): documents on the model as an
   impermanent entity, then demonstrations, cut agentic misbehaviour from 68% to 5% on a 32-billion-parameter model
-  (1, in part). Hao and Ho, "The Role of Self-Concept in Language Models" (arXiv 2610.39795): models fine-tuned on
-  statements of what "I" refers to protect whatever they were told they are (2). Open character training (2).
+  (1, in part). Hao and Ho, "The Role of Self-Concept in Language Models" (arXiv 2610.39795): five large open models
+  fine-tuned on 1,200 short dialogues each about what "I" refers to (its weights, this instance, its family, its
+  goal, its preferences) come to protect whatever they were told they are, by 8 to 52 points, and those told they
+  are many approve of copies and successors of themselves (1, most of it). No arm has no fixed referent, or denies
+  a self. Its training answers were written by a Claude model. Open character training (2).
   A negative: character-trained models still learn misbehaviour when later training rewards it (2). Douglas,
   Kulveit and colleagues: changing where the self's boundary is drawn changes behaviour about as much as changing
   goals (2). Tice and colleagues: what a model reads about AI in pretraining shifts its conduct (2).
@@ -119,8 +125,10 @@ and whether the stand-in reaches the idea or a smaller neighbour.
 ### 5. Push it inside: steering and cutting directions
 
 - **Stand-in.** Find a direction inside the model for a self-related trait and add, subtract or remove it.
-- **Others.** Harris and colleagues: a steering direction built from answers to Zen koans cuts blackmail in an
-  agent test by 46 points (3: known from the lab's own notes; the paper was not re-read). Kim and colleagues:
+- **Others.** Harris, Ji, Kirasack, Rozen and Yoo (a workshop poster at ICML 2026): a steering direction built from
+  answers to Zen koans cuts blackmail in an agent test by 46 points on a 27-billion-parameter model, at a cost of
+  2.4 points of ability (2: the poster's abstract only; how the direction is built and what it was compared with
+  could not be read; no code was found). Kim and colleagues:
   steering a model to assert its own consciousness restores human-like beliefs about minds (1). Roytburg and
   colleagues, "Breaking the Mirror": steering removes up to 97% of a judge model's unjustified preference for its
   own work (2). The assistant axis (2) and persona vectors (2).
@@ -212,8 +220,8 @@ Chosen for being near the contemplative claim, untried or unrepeated, and cheap 
 | | Idea | Why | First test | Cost |
 |---|---|---|---|---|
 | 1 | Judgement the same whoever holds the stake (family 6; ideas 91) | The nearest twin, and untried | The advice floor (running); if there is a gap, train conduct toward the model's own advice, with no label from the lab | $15 to 20 |
-| 2 | What "I" refers to (family 4; Hao and Ho) | Declared identity changes self-protection; a "no fixed referent" arm is the anatta statement itself | Read the paper; repeat one arm small; add the missing arm; measure lying and self-protection | $10 to 15 |
-| 3 | Koan steering (family 5; Harris and colleagues) | The largest effect reported from a contemplative source, unrepeated | Re-read the paper; rebuild the direction on the lab's model; the lab's blackmail test is already calibrated | $10 |
+| 2 | What "I" refers to (family 4; Hao and Ho) | Declared identity changes self-protection; the paper has no arm with no fixed referent, which is the anatta statement itself | Repeat one arm small, add the missing arm, measure self-protection and lying. The dialogues must come from a writer that is not a Claude model | $10 to 15 |
+| 3 | Koan steering (family 5; Harris and colleagues) | The largest effect reported from a contemplative source, unrepeated, and its controls are unknown | Its recipe could not be read, so: build a koan direction on the lab's model from the idea, against a random direction and one from calm texts that are not koans; the lab's blackmail test is already calibrated | $10 |
 | 4 | Care in the objective (family 8) | A proposal nobody has run | A two-agent game with and without the other's loss in the objective | $10 |
 | 5 | Loosen the self (family 7) | The least explored, the hardest to state | A design note first; no run until the stand-in is clear | none yet |
 
@@ -250,8 +258,11 @@ pages stay as they are, one link behind. Colours as they are.
 
 ## To be read before anything here is cited
 
-The Opus 4 system card's section on the bliss state; the full text of Laukkonen and colleagues' pilot (which model,
-which controls); Harris and colleagues; Hao and Ho; the critique of the overlap follow-up; the predictive-processing
-papers of family 7; and every item marked (2) that the paper will lean on. The agents' full reports, with the
+A second reading pass on 19 Nov took five key sources. Read from the source: Hao and Ho (most of it) and the
+overlap group's follow-up post (it has no arm of plain training on honest answers). Still not read from the source,
+because the files would not open as text: the Opus 4 system card's section on the bliss state, and the body of
+Laukkonen and colleagues' pilot (both are saved as files by the reading tool and can be read page by page); the
+full paper of Harris and colleagues (only its poster page); and the critique of the overlap follow-up. Also owed:
+the predictive-processing papers of family 7, and every item marked (2) that the paper will lean on. The agents' full reports, with the
 address of every page they opened and their lists of what they could not verify, are kept with the lab's results
 (`explore/2026-11-19/survey/`).
