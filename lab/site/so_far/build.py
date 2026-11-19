@@ -53,24 +53,34 @@ FONTS = ("https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500
 # else", to the seven rooms that hold the record. Those seven are rooms like any other and keep every finding; each
 # carries a second, quieter row of links to its neighbours.
 ROOMS = [
-    ("aim", "Start", ["story.html"]),
+    ("aim", "In brief", ["story.html"]),
+    ("more", "In full", ["more.html"]),
     ("possibilities", "The question", ["possibilities.html"]),
-    ("more", "Everything else", ["more.html"]),
-    ("investigation", "The investigation", ["investigation.html"]),
     ("experiments", "Findings", ["experiments.html", "learned.html"]),
+    ("investigation", "The investigation", ["investigation.html"]),
     ("program", "The recipe", ["program.html"]),
     ("self", "The self", ["self.html", "self_prh.html", "self_work.html"]),
-    ("ideas", "Ideas", ["ideas_organized.html", "ideas_log.html"]),
-    ("instruments", "Instruments", ["instruments_head.html", "calibration.html"]),
-    ("record", "Record", ["record_head.html", "scorecard.html", "specimens.html", "caveats.html"]),
     ("next", "Next", ["plan.html"]),
+    ("record", "Record", ["record_head.html", "scorecard.html", "specimens.html", "caveats.html"]),
+    ("instruments", "Instruments", ["instruments_head.html", "calibration.html"]),
+    ("ideas", "Ideas", ["ideas_organized.html", "ideas_log.html"]),
 ]
 # From 19 Nov 2026 (Eugene: one story for the site and the paper, ideas 93 and 97; "push everything live as we go")
 # the start is one long page, story.html: goodness, the caveat, the map with the table of methods, what the methods
 # share, the odds, what is being tried, the method. The investigation's page moves one step behind with the rest.
-MAIN = ("aim", "possibilities", "more")  # the rooms named in the band
+# Later on 19 Nov (Eugene: is the question's page a repeat, and should there be one main page and one page of all the
+# details?): the band names two, the main page ("In brief") and the door to everything behind it ("In full"). The
+# question's room is the in-depth version of the main page's caveat and goes behind with the rest, first. The rooms
+# behind stand in the order of the main page's sections, and their doors are grouped by the section they lie behind.
+MAIN = ("aim", "more")  # the rooms named in the band
+BEHIND_GROUPS = [("Behind the caveat", ["possibilities"]),
+                 ("Behind the map", ["experiments", "investigation", "program", "self"]),
+                 ("Behind what is being tried now", ["next"]),
+                 ("Behind the method", ["record", "instruments", "ideas"])]
 BEHIND = [name for name, _, _ in ROOMS if name not in MAIN]  # the rooms behind "Everything else"
-DOORS = {  # one line for each room behind, shown in the "Everything else" room
+DOORS = {  # one line for each room behind, shown in the "In full" room
+    "possibilities": "Is awakening computational? The question in full: two pictures of mind beyond computation, five "
+                     "possibilities, what each answer would mean, what good would mean, and what experiments can settle.",
     "investigation": "Can awakening talk be told from a real change? The bliss state and the self-other training, "
                      "case by case, as the lab's front page told it until 19 November.",
     "experiments": "Every experiment, numbered, each with its limits, and what the lab has learned from them.",
@@ -1415,25 +1425,30 @@ def render_methods(data: dict) -> str:
 
 
 def render_doors() -> str:
-    """The rooms behind "Everything else", as numbered doors with one line each."""
+    """The rooms behind the main page, as doors with one line each, grouped by the section of the main page they lie
+    behind and in that order."""
     labels = {name: label for name, label, _ in ROOMS}
-    out = [f'<ol class="steps steps-{len(BEHIND)} doors">']
-    for k, name in enumerate(BEHIND, 1):
-        out.append(f'<li class="step"><div class="step-n">{k}</div><b><a href="#{name}">{labels[name]}</a></b>'
-                   f'<p>{DOORS[name]}</p></li>')
-    out.append("</ol>")
+    if [n for _, names in BEHIND_GROUPS for n in names] != BEHIND:
+        raise ValueError("BEHIND_GROUPS must list the rooms behind in the order of ROOMS")
+    out = ['<div class="door-groups">']
+    for title, names in BEHIND_GROUPS:
+        out.append(f'<div class="door-group"><h3>{title}</h3><ol class="steps doors">')
+        for name in names:
+            out.append(f'<li class="step"><b><a href="#{name}">{labels[name]}</a></b><p>{DOORS[name]}</p></li>')
+        out.append("</ol></div>")
+    out.append("</div>")
     return "".join(out)
 
 
 def render_subrooms(current: str) -> str:
-    """The second row at the top of a room behind "Everything else": the way back, and the neighbours."""
+    """The second row at the top of a room behind the main page: the way back, and the neighbours."""
     labels = {name: label for name, label, _ in ROOMS}
     def link(name):
         here = ' aria-current="page"' if name == current else ""
         return f'<a href="#{name}"{here}>{labels[name]}</a>'
 
     links = "".join(link(name) for name in BEHIND)
-    return (f'<nav class="subrooms" aria-label="Everything else"><a class="sr-home" href="#more">{labels["more"]}</a>'
+    return (f'<nav class="subrooms" aria-label="In full"><a class="sr-home" href="#more">{labels["more"]}</a>'
             f'{links}</nav>')
 
 
@@ -1526,7 +1541,7 @@ def build() -> str:
              f'holds the three acts and their tests, moved from the old front page. The other rooms are carried over '
              f'from the hand-kept page, with Limits boxes and glossary links added. The chariot, the K1 chart and the field of marks are drawn from those files when '
              f'the page is built.</p>')
-    footer = footer.replace("</footer>", built + "\n</footer>")
+    footer = footer.replace("<!-- built -->", built) if "<!-- built -->" in footer else footer.replace("</footer>", built + "\n</footer>")
     figures = content("figures.js")
     fig_ids = re.findall(r"getElementById\('(fig-[a-z-]+)'\)", figures)
     script = ("function drawFigures() {\n"

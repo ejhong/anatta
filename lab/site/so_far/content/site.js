@@ -5,9 +5,9 @@
    filters, and the charts redraw when the theme changes. No storage, no network. */
 (function () {
   'use strict';
-  var ROOMS = ['aim', 'possibilities', 'more', 'investigation', 'experiments', 'program', 'self', 'ideas', 'instruments', 'record', 'next'];
-  // The band names three rooms. The rest sit behind "Everything else", which stays marked while one of them is open.
-  var BAND = ['aim', 'possibilities', 'more'];
+  var ROOMS = ['aim', 'more', 'possibilities', 'experiments', 'investigation', 'program', 'self', 'next', 'record', 'instruments', 'ideas'];
+  // The band names two rooms: the main page and "In full", which stays marked while a room behind it is open.
+  var BAND = ['aim', 'more'];
   // Anchors from the single-page version and the room they now live in. Most still exist as ids
   // and are found directly; this map is the fallback if one is ever renamed.
   var MOVED = {
@@ -424,6 +424,8 @@
       var el = t.el, card = el.closest('.log-card'), part = el.closest('.part-card');
       if (card && card.hidden) filter('all');
       if (el.tagName === 'DETAILS') el.open = true;
+      // a target inside a fold (a glossary entry in the footer) opens the fold it sits in
+      for (var fold = el.parentElement && el.parentElement.closest('details'); fold; fold = fold.parentElement && fold.parentElement.closest('details')) fold.open = true;
       if (part && chariot) chariot.select(part.id, 'pick');
       requestAnimationFrame(function () {
         el.scrollIntoView({ block: 'start', behavior: moved || initial || still() ? 'auto' : 'smooth' });

@@ -43,9 +43,9 @@ sys.dont_write_bytecode = True          # leave no __pycache__ beside the site
 import build  # noqa: E402
 import publish  # noqa: E402
 
-ROOMS = ["aim", "possibilities", "more", "investigation", "experiments", "program", "self", "ideas", "instruments",
-         "record", "next"]
-MAIN = ["aim", "possibilities", "more"]   # the rooms named in the band (19 Nov 2026: the start is the one story)
+ROOMS = ["aim", "more", "possibilities", "experiments", "investigation", "program", "self", "next", "record",
+         "instruments", "ideas"]
+MAIN = ["aim", "more"]   # the rooms named in the band (19 Nov 2026: one main page, and one door to all the detail)
 BEHIND = [r for r in ROOMS if r not in MAIN]               # the rooms behind "Everything else"
 RESERVED = {"settings", "sidebar", "customize", "upgrade", "downloads"}
 
@@ -309,7 +309,7 @@ class SiteTest(unittest.TestCase):
                 stack.extend(node.children())
 
     # rooms ----------------------------------------------------------------------------------------
-    def test_the_rooms_in_order_four_in_the_band_and_seven_behind(self):
+    def test_the_rooms_in_order_two_in_the_band_and_nine_behind(self):
         self.assertEqual([r[0] for r in build.ROOMS], ROOMS)
         self.assertEqual(list(build.MAIN), MAIN)
         self.assertEqual(build.BEHIND, BEHIND)
@@ -324,8 +324,11 @@ class SiteTest(unittest.TestCase):
         band = re.search(r"var BAND = \[(.*?)\];", js).group(1)
         self.assertEqual(re.findall(r"'([^']+)'", band), MAIN)
         # Every room behind "Everything else" has a door there and a second row that leads to its neighbours.
-        doors = re.search(r'<ol class="steps steps-\d+ doors">(.*?)</ol>', self.sections["more"], re.S).group(1)
-        self.assertEqual(re.findall(r'<b><a href="#([a-z]+)">', doors), BEHIND)
+        doors = self.sections["more"]
+        self.assertEqual(re.findall(r'<li class="step"><b><a href="#([a-z]+)">', doors), BEHIND)
+        # ... grouped by the section of the main page they lie behind, in the main page's order
+        self.assertEqual(re.findall(r'<div class="door-group"><h3>([^<]+)</h3>', doors), [g for g, _ in build.BEHIND_GROUPS])
+        self.assertEqual([n for _, names in build.BEHIND_GROUPS for n in names], BEHIND)
         self.assertEqual(set(build.DOORS), set(BEHIND))
         for r in ROOMS:
             room = self.sections["ideas (carried over)" if r == "ideas" else r]   # the ideas room is kept in halves
@@ -346,7 +349,7 @@ class SiteTest(unittest.TestCase):
         # goodness, then the caveat (is awakening computational?), then the map with the table of methods, what the
         # methods share, the odds, what is being tried now and the method. The investigation's page is one step
         # behind with the rest.
-        self.assertEqual(ROOMS[:3], ["aim", "possibilities", "more"])
+        self.assertEqual(ROOMS[:2], ["aim", "more"])
         front = self.sections["aim"]
         order = [front.index(f'id="{x}"') for x in ("idea", "computational", "map", "methods", "shared", "fruit",
                                                      "angle", "method")]
@@ -523,6 +526,16 @@ class SiteTest(unittest.TestCase):
 
     # disclosure and contract ----------------------------------------------------------------------
     def test_disclosure_is_kept(self):
+        # From 19 Nov 2026 the footer's long parts are folded (the terms, the changes, how the page is built). The
+        # disclosure stays in sight, outside every fold.
+        raw = self.sections["footer"]
+        in_sight = re.sub(r"<details\b.*?</details>", "", raw, flags=re.S)
+        self.assertIn("Claude (Anthropic) wrote this page", visible(in_sight))
+        self.assertIn("not an alignment researcher", visible(in_sight))
+        for fold, holds in (("fold-terms", 'id="g-anatta"'), ("fold-changes", "Changes to this page"), ("fold-built", "build.py")):
+            m = re.search(r'<details class="fold" id="%s">(.*?)</details>' % fold, raw, re.S)
+            self.assertIsNotNone(m, fold)
+            self.assertIn(holds, m.group(1), fold)
         footer = visible(self.sections["footer"])
         self.assertIn("Claude (Anthropic) wrote this page", footer)
         self.assertIn("not an alignment researcher", footer)

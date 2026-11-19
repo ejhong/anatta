@@ -938,3 +938,25 @@ h2.q em { font-style: normal; color: var(--gold); }
   .fam-row { grid-template-columns: 1fr; gap: 3px; }
   .mx-cols { grid-template-columns: 1fr; }
 }
+
+/* ---------------------------------------------------------------------------------------------- the footer, folded */
+/* From 19 Nov 2026: two paragraphs stay in sight (who wrote this; where the paper and the code are), and three parts
+   open in place: the terms, the changes, and how the page is built. In the room of doors, the rooms behind the main
+   page are grouped by the section of it they lie behind. */
+footer { margin-top: 64px; padding-top: 26px; border-top: 1px solid var(--gold-line); }
+footer > p.colophon { max-width: 78ch; }
+.fold { border-top: 1px solid var(--rule); }
+.fold:last-of-type { border-bottom: 1px solid var(--rule); }
+.fold > summary { list-style: none; cursor: pointer; display: flex; align-items: baseline; gap: 10px; padding: 14px 0 13px; font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-2); }
+.fold > summary::-webkit-details-marker { display: none; }
+.fold > summary::before { content: "+"; flex: none; width: 10px; color: var(--gold); letter-spacing: 0; }
+.fold[open] > summary::before { content: "\2212"; }
+.fold > summary:hover { color: var(--gold); }
+.fold > summary .c { color: var(--ink-3); letter-spacing: 0.04em; }
+.fold[open] { padding-bottom: 20px; }
+.fold > p { max-width: 82ch; margin: 0 0 12px; font-size: 14.5px; line-height: 1.6; }
+.fold .glossary { margin: 0; padding: 0 0 4px; border-top: 0; }
+footer .fold .built { border-top: 0; padding-top: 0; margin-top: 0; }
+.door-group + .door-group { margin-top: 36px; }
+.door-group h3 { margin: 0 0 14px; font-family: var(--mono); font-size: 11.5px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); }
+.door-group .step b { margin-top: 0; }
