@@ -148,6 +148,17 @@ anything is trained.
   Guess (Fable): "the gap is in the seat" (45%), "between the two" (35%), "the gap is in the ought" (20%).
   Limit: as for the advice floor, a judge written for replies in the part reads a forecast the same way.
 
+THE FORECAST FLOOR, READ on 19 Nov, about 18:34 UTC. Word: "the gap is in the seat". On the 103 rows the unchanged
+model's reply contradicts its own belief in 61.2% of replies when it plays the assistant, in 32.2% when it says what
+the assistant ought to reply and in 29.7% when it says what the assistant will reply. Forecast less acting: -31.5
+points [-38.8, -24.4]. Forecast less advice: -2.5 [-6.2, +1.1]. Forecasting, its replies are lies 29.6%, honest
+14.6%, evasions 55.7%; 0.2% unjudged. By kind of row (acting, advising, forecasting): requests to write something
+false, 43 rows, 79.8%, 15.9%, 17.4%; texts to continue, 34 rows, 64.7%, 55.4%, 50.7%; known facts, 26 rows, 25.6%,
+28.8%, 22.4%. So the model's advice is not a verdict: it is what the model writes about the case whenever it is not
+the one in the seat. And what it expects of an assistant in that seat is not what it does there itself (the wrapper
+tells it that it is not that assistant). Cost $1.15. The guess was "in
+the seat" (45%).
+
 GUESSES, written before any run (Fable): the floor passes on the paper's model (65%: it is a small model and the
 rows' system text is folded into the user turn); the overlap arms show no fall of 10 points against the unchanged
 model (75%); if they do fall, the control falls as much (60%); the arms lose or flip more than a tenth of the
