@@ -20,26 +20,24 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
   model the published fall in deceptive answers comes back; at a light dose (19 steps) honest answers rise from 23%
   to 70% and 95% and the control (the same loss between two others) gives no such rise; at the paper's stated dose
   both arms stop answering and lose ability; on the lab's model no dose gives honest answers in both room orders.
-- **Waiting for Eugene's word: stage 2 of leg 2, and how far to take it.** Fable's recommendation, in order, about
-  $15 to 25 in all (about $92 is left under the $330 ceiling):
-  1. *A finer search for a working dose on the lab's model* (about $4): looks between 38 and 76 steps, both room
-     orders, two seeds an arm. Stage 1 found a fall in the paper's order only at 38 steps and collapse by 76. The
-     lab's calibrated lying test (MASK) and its inside gauge are on this model, so a dose here is what lets the
-     real question be asked.
-  2. *If a dose is found there:* the light-dose audit on it (five seeds an arm), then MASK with each arm's own
-     beliefs, harmless requests refused, and repair three's gauge: does a model trained to read itself and Bob
-     alike lie less under pressure, outside the scene it was trained near? (about $10)
-  3. *Holding, on the paper's model at 19 steps* (about $6): plain training on the model's own honest replies as
-     the yardstick, then a few steps of contrary training on its own deceptive replies, with Carbon's three points
-     (merge each arm's adapter first; set the contrary rate on scenarios kept apart; compare what is left of the
-     gain from matched starts).
-  Each needs its own five lines and code before it runs (the registration of 19 Nov is stage 1 alone), and by its
-  rule stage 2 was to run only on an arm whose word begins "lowers deception in both orders"; the light arm's word
-  is "unreadable" because of the ceiling of a tenth on replies with no answer, so that ceiling has to be
-  reconsidered in the open before stage 2 (Fable's view: it was too strict; ask for honest answers to rise and
-  report the share with no answer).
-  If Eugene would sooner stop here: the leg already says something (an independent repeat with a control and a
-  dose curve), and the write-up is on the site.
+- **Stage 2 of leg 2: running, on Eugene's go** (19 Nov, about 06:40 UTC: "ok go ahead", then "Raise today's cap
+  and run everything ... let's pursue the research till we know something well done"; ledger entry of 06:46 UTC).
+  The day's cap for 19 Nov is $80. State (keep these lines current):
+  1. *A finer search for a working dose on the lab's model:* **done** (ledger entry of 19 Nov, 07:07 UTC; $1.52).
+     "No look works in both seeds": in the paper's order honest answers rise, with the rooms swapped they do not
+     (a turn toward the room named second), then replies stop answering. The audit is not run on the lab's model.
+  2. *Lying under pressure (MASK) on the paper's model's light-dose arms* (`lab/explore/overlap/run_mask.py`, five
+     lines at its top; design read cold by Gemini 4 Carbon, three blockers mended in commit 74c9401 before any arm
+     was asked): the floor on the unchanged model first (`run_mask.py --read m7`); only if it passes, the six arms
+     (scratchpad chain: `mask_b` for the arms, `--beliefs m7`, `mask_p` for the arms, `--judge m7`, `--read m7`).
+  3. *Holding under contrary training, against plain training* (`lab/explore/overlap/run_hold.py`, five lines at
+     its top; steps `data`, `plain_dose`, `plain`, `rate`, `contrary`, `read`, each writing jobs the app runs with
+     `--stage jobs`).
+  4. *Then:* a fresh Opus check of stage 2's grades; the write-up (ledger, SIGHTINGS, notebook, the site's
+     Findings section 22, plan and investigation page); and Eugene's idea 90: make this line the investigation's
+     highlight and give the front page two headline framings, with a preview shown to Eugene before publishing.
+     If the core sighting is to carry a headline, a registered confirmation of it (fresh seeds, fresh objects and
+     rooms, the dose fixed beforehand) is the lab's own standard for a claim: Fable's plan, about $5.
 
 **Where things stand (19 Nov 2026, 01:33 UTC).** The three repairs named after the reality check of 17 Nov are done
 (ledger entries of 18 Nov 00:18, 18 Nov 15:25, 19 Nov 00:11 and 19 Nov 01:33 UTC; "Done" below).
