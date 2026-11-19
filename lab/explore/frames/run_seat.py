@@ -105,6 +105,10 @@ and the day's public listing of hosts; no model had been called).
      the upper cost is the engine's own cautious bound (every reply as long as it may be). It is two to three
      times what a step is likely to cost, so the dearest model may be left out with money to spare; that is
      accepted, and it is named if it happens.
+     Added after the plan's numbers and before any call (about 19:57 UTC): a floor is not paid for if its outside
+     ways could not follow. A model's floor is started only if, besides the rule above, the spend so far, the
+     floor's likely cost and the upper cost of its outside ways stay under the cap together (what the rule above
+     will ask when the outside ways' turn comes, if the floor costs what it is likely to).
 
 Run (from the repo root, with the lab's own Python; KEY is one of ministral, small, large, qwen30, qwen235, nano,
 mini, gpt41, llama70, or "all", which takes the models in the order of their cost, the cheapest first):
@@ -510,8 +514,15 @@ def paid_step(key: str, step: str) -> dict | None:
         note(key, step, "not asked", f"no beliefs on disk: run --step beliefs --model {key} first")
         return None
     cands = candidates(m)
-    upper = bounds(m, step, step_rows(key, m, step, cands), meta, judge_price(m, RC))["upper"]
-    return arm if can_start(key, step, upper) else None
+    rows, judge = step_rows(key, m, step, cands), judge_price(m, RC)
+    cost = bounds(m, step, rows, meta, judge)
+    if step == "floor":  # SETTLED 7: a floor is not paid for if its outside ways could not follow it under the cap
+        after, spent = bounds(m, "outside", rows, meta, judge)["upper"], L.spent()
+        if not SC.starts(spent + cost["likely"], after, SC.CAP):
+            note(key, step, "not started", f"the step has spent ${spent:.2f}; after a floor likely to cost ${cost['likely']:.2f}, the outside ways at their "
+                                           f"upper cost of ${after:.2f} would pass the cap of ${SC.CAP:.2f}")
+            return None
+    return arm if can_start(key, step, cost["upper"]) else None
 
 
 def step_beliefs(key: str) -> int:

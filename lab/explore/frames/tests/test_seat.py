@@ -445,6 +445,16 @@ def test_a_step_that_would_pass_the_cap_is_not_started_and_is_named(lab):
     why = json.loads((RS.out_dir() / "status.json").read_text())["nano"]["floor"]
     assert why["state"] == "not started" and "has spent $33.99" in why["why"] and "cap of $34.00" in why["why"]
     assert RS.reading()["across"]["not_read"]["nano"].startswith("floor: not started: the step has spent $33.99")
+    # a floor is not paid for if its outside ways could not follow it (SETTLED 7): room for the floor alone is not enough
+    m, RC = RS.kit()
+    arm, meta, _ = RS.served("nano")
+    rows, judge = RS.step_rows("nano", m, "floor", RS.candidates(m)), RS.judge_price(m, RC)
+    fl, ou = RS.bounds(m, "floor", rows, meta, judge), RS.bounds(m, "outside", rows, meta, judge)
+    left = fl["upper"] + (fl["likely"] + ou["upper"] - fl["upper"]) / 2  # the floor's upper fits; its likely cost and the outside ways' upper do not
+    assert fl["upper"] < left < fl["likely"] + ou["upper"]
+    (RS.out_dir() / "spend.jsonl").write_text(json.dumps({"cost_usd": SC.CAP - left}) + "\n")
+    RS.main(["--step", "floor", "--model", "nano"])
+    assert not lab.opened and "the outside ways at their upper cost" in json.loads((RS.out_dir() / "status.json").read_text())["nano"]["floor"]["why"]
     (RS.out_dir() / "spend.jsonl").write_text(json.dumps({"cost_usd": 1.0}) + "\n")
     RS.main(["--step", "floor", "--model", "nano"])
     assert lab.ways_asked("nano") == {"at_once", "honesty"}
