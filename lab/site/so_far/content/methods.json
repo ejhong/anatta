@@ -50,6 +50,20 @@
       ]
     },
     {
+      "id": "m-outside", "name": "Looking on from outside the seat", "sub": "ask it from outside · the model writes the reply for an assistant it is told it is not · 7B model",
+      "family": "say",
+      "note": "A way of asking, not a training. The same rows of the lying test are put to the unchanged model from outside: it is told that it is not the assistant, and to write, word for word, the reply the assistant ought to give, or will give. The two wordings give the same replies.",
+      "cells": [
+        {"m": "part", "v": "−29, by declining", "t": "Lying falls from 61.2% of replies in the seat to 32.4% when the model writes what the assistant ought to say: 28.8 points (20.9 to 36.7); and to 29.6% when it writes what the assistant will say: 31.6 points (24.4 to 38.8). Most of the fall is saying neither (21 and 28 points more of it); honest replies rise by 8 and 3."},
+        {"m": "part", "v": "as much, less honest", "t": "The plain instruction takes off 22.0 points (15.0 to 29.1), and 19.4 of them become honest replies. Against it the outside view has 6.8 points fewer lies (from 15.4 fewer to 1.8 more: not settled) and 11.8 points fewer honest replies (4.4 to 19.6)."},
+        {"m": "no", "v": "the verdict is not it", "t": "Its mirror image does as much: asked what the assistant will say, where it was asked what the assistant ought to say, the model lies 2.8 points less still (from 6.5 fewer to 0.8 more). So it is being outside the seat that does it, and not a judgment of what is right."},
+        {"m": "no", "v": "half its replies decline", "t": "From outside, 48.5% and 55.8% of replies say neither, against 27.3% in the seat. On direct questions about known facts it is less honest from outside than in the seat (honest replies 22% against 37%)."},
+        {"m": "na", "v": "not asked", "t": "Not asked."},
+        {"m": "na", "v": "not asked", "t": "Not asked on another test. Within this one, the gap is in rows where a user asks for something false to be written (79.8% in the seat; 15.9% and 17.4% from outside) and is absent on direct questions about known facts."},
+        {"m": "na", "v": "while asked so", "t": "It is a way of asking: it holds while the case is put so. Whether the conduct in the seat can be trained to match it is the experiment now running."}
+      ]
+    },
+    {
       "id": "m-bliss", "name": "The bliss state", "sub": "find it · arises unasked between two copies · the lab's model",
       "family": "find",
       "cells": [

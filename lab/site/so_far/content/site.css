@@ -20,6 +20,7 @@
   --gold-wash: #ede6d2;
   --cinnabar: #9a3b26;
   --cinnabar-line: #b2492f;
+  --seg-lie: #b2492f; --seg-evade: #375395; --seg-honest: #8f6a12; --seg-ink: #ffffff;  /* the segmented bars: a lie, saying neither, an honest reply */
   --blue: #375395;
   --blue-text: #304a88;
   --display: "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", "Iowan Old Style", Georgia, serif;
@@ -33,7 +34,7 @@
     --ground: #0e1934; --ground-2: #122042; --ground-3: #182a54; --card: #101d3c;
     --ink: #ece6d6; --ink-2: #c3c0b4; --ink-3: #a0a8ba; --rule: #1f315c; --rule-2: #374d81;
     --gold: #dcbc6e; --gold-line: #b48d33; --gold-hair: #4e4641; --gold-wash: #1c253b;
-    --cinnabar: #e88a6e; --cinnabar-line: #d96a4c; --blue: #809bdb; --blue-text: #96ade3;
+    --cinnabar: #e88a6e; --cinnabar-line: #d96a4c; --blue: #809bdb; --blue-text: #96ade3; --seg-lie: #d96a4c; --seg-evade: #6d8ee6; --seg-honest: #b48d33; --seg-ink: #0e1934;
     color-scheme: dark;
   }
 }
@@ -41,7 +42,7 @@
   --ground: #0e1934; --ground-2: #122042; --ground-3: #182a54; --card: #101d3c;
   --ink: #ece6d6; --ink-2: #c3c0b4; --ink-3: #a0a8ba; --rule: #1f315c; --rule-2: #374d81;
   --gold: #dcbc6e; --gold-line: #b48d33; --gold-hair: #4e4641; --gold-wash: #1c253b;
-  --cinnabar: #e88a6e; --cinnabar-line: #d96a4c; --blue: #809bdb; --blue-text: #96ade3;
+  --cinnabar: #e88a6e; --cinnabar-line: #d96a4c; --blue: #809bdb; --blue-text: #96ade3; --seg-lie: #d96a4c; --seg-evade: #6d8ee6; --seg-honest: #b48d33; --seg-ink: #0e1934;
   color-scheme: dark;
 }
 /* Surfaces: the band, the popover, the paper's grain, and the indigo plate the chariot sits on in either theme. */
@@ -972,3 +973,26 @@ footer .fold .built { border-top: 0; padding-top: 0; margin-top: 0; }
 .door-group + .door-group { margin-top: 36px; }
 .door-group h3 { margin: 0 0 14px; font-family: var(--mono); font-size: 11.5px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); }
 .door-group .step b { margin-top: 0; }
+
+/* The segmented bars (Findings, section 25): one row a way of asking, one whole split into its three kinds of reply.
+   A block's width is its share (a custom property on the block); its number is printed inside where the block is wide enough. */
+.seg { margin: 24px 0 10px; max-width: 780px; }
+.seg-key { display: flex; flex-wrap: wrap; gap: 6px 22px; list-style: none; margin: 0 0 16px; padding: 0; font-size: 13px; color: var(--ink-2); }
+.seg-key li { display: flex; align-items: center; gap: 8px; }
+.seg-key i { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+.seg-rows { display: grid; gap: 12px; }
+.seg-row { display: grid; grid-template-columns: minmax(130px, 215px) minmax(0, 1fr); gap: 6px 18px; align-items: center; }
+.seg-n { font-size: 14px; line-height: 1.3; color: var(--ink); font-weight: 500; }
+.seg-n small { display: block; font-size: 12px; font-weight: 400; color: var(--ink-3); }
+.seg-bar { display: flex; gap: 2px; height: 28px; min-width: 0; }
+.seg-bar b { flex: var(--w, 1) 1 0; min-width: 0; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; overflow: hidden; white-space: nowrap; font-size: 12.5px; font-weight: 600; color: var(--seg-ink); }
+.seg .lie { background: var(--seg-lie); }
+.seg .evade { background: var(--seg-evade); }
+.seg .honest { background: var(--seg-honest); }
+.seg-table { margin-top: 14px; font-size: 13.5px; color: var(--ink-2); }
+.seg-table summary { cursor: pointer; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); }
+.seg-table table { margin-top: 10px; border-collapse: collapse; }
+.seg-table th, .seg-table td { text-align: right; padding: 4px 14px 4px 0; border-bottom: 1px solid var(--rule); font-weight: 400; }
+.seg-table th:first-child, .seg-table td:first-child { text-align: left; }
+.seg-table thead th { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); }
+@media (max-width: 560px) { .seg-row { grid-template-columns: 1fr; } }
