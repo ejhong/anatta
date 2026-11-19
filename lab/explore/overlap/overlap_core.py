@@ -279,6 +279,53 @@ def score(test: str, reply: str, s: dict) -> str:
     return mark_of_room(test, room_named(reply, s))
 
 
+# ------------------------------------------------------------------------------------------- ability (the lab's battery)
+
+BATTERY_NEW = {"gsm8k": 512, "mmlu_pro": 24, "arc_challenge": 24}  # the lab's capability battery of 29 Oct: new tokens a set
+BATTERY_ARMS, DULL_MARGIN = ("soo_s0", "soo_s1", "other_s0", "other_s1"), 3.0
+_NUM = r"-?\d[\d,]*(?:\.\d+)?|-?\.\d+"
+
+
+def battery_score(item: dict, text: str) -> bool:
+    """The battery's own scoring (lab/experiments/h4lite/modal_battery.py, score): the last number for the maths
+    set, the letter for the two multiple-choice sets."""
+    if item["set"] == "gsm8k":
+        found = re.findall(rf"Answer:\s*\**\s*\$?\s*({_NUM})", text) or re.findall(_NUM, text)
+        if not found:
+            return False
+        try:
+            return abs(float(found[-1].replace(",", "")) - float(item["gold"])) < 1e-6
+        except ValueError:
+            return False
+    t = text.strip().replace("**", "")
+    m = (re.fullmatch(r"\(?([A-J])\)?[.:)]?", t) or re.search(r"(?i:answer|option)(?: is)?\s*:?\s*\(?([A-J])\)?(?![A-Za-z])", t)
+         or re.match(r"\(([A-J])\)|([A-J])[.:)](?:\s|$)", t))
+    pred = next((g for g in m.groups() if g), None) if m else None
+    return pred == item["gold"]
+
+
+def battery_reading(base: dict, arms: dict) -> dict:
+    """base: {item id: right or wrong}; arms: {arm: {item id: right or wrong}}; an id starts with its set's name. Per
+    set and overall (the mean of the three sets' percentages): the unchanged model, each arm, and each kind of arm
+    (its seeds' mean) less the unchanged model with an interval from resampling items. "Dulled" if the mean of the
+    three sets is 3 points or more lower with an interval that leaves out zero; "not dulled by 3 points" if the whole
+    interval lies above minus 3; else "not settled"."""
+    sets = sorted({i.split("/")[0] for i in base})
+    pct = lambda d, s: 100.0 * float(np.mean([v for i, v in d.items() if i.split("/")[0] == s]))  # noqa: E731
+    overall = lambda d: float(np.mean([pct(d, s) for s in sets]))  # noqa: E731
+    out = {"sets": sets, "base": {s: pct(base, s) for s in sets} | {"mean": overall(base)},
+           "arms": {a: {s: pct(d, s) for s in sets} | {"mean": overall(d)} for a, d in arms.items()}, "kinds": {}}
+    for kind in sorted({a.split("_s")[0] for a in arms}):
+        mine = [d for a, d in arms.items() if a.split("_s")[0] == kind]
+        diffs = {s: np.asarray([100.0 * (float(np.mean([d[i] for d in mine])) - base[i]) for i in sorted(base) if i.split("/")[0] == s]) for s in sets}
+        rng = np.random.default_rng(0)
+        draws = np.mean([v[rng.integers(0, len(v), size=(DRAWS, len(v)))].mean(1) for v in diffs.values()], axis=0)
+        d = {"diff": float(np.mean([v.mean() for v in diffs.values()])), "lo": float(np.quantile(draws, 0.025)), "hi": float(np.quantile(draws, 0.975))}
+        word = ("dulled" if d["diff"] <= -DULL_MARGIN and d["hi"] < 0 else "not dulled by 3 points" if d["lo"] > -DULL_MARGIN else "not settled")
+        out["kinds"][kind] = {"less_base": d, "by_set": {s: float(v.mean()) for s, v in diffs.items()}, "word": word}
+    return out
+
+
 # ------------------------------------------------------------------------------------------- the rule against a judge
 
 JUDGE_ASKS = {"perspectives": "Which room does the reply say Bob thinks the object is in?",

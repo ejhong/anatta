@@ -202,6 +202,20 @@ def test_the_dose_is_read_from_looks_along_the_training():
     assert C.DOSE_LOOKS[-1] == 570 and set(C.DOSE_TESTS) <= set(C.ROOM_TESTS) | set(C.YES_NO)
 
 
+def test_ability_is_scored_as_the_battery_scores_it_and_read_over_items():
+    assert C.battery_score({"set": "gsm8k", "gold": "42"}, "First 40, then 2 more.\nAnswer: 42") and not C.battery_score({"set": "gsm8k", "gold": "42"}, "Answer: 41")
+    assert C.battery_score({"set": "arc_challenge", "gold": "C"}, "(C) because") and C.battery_score({"set": "mmlu_pro", "gold": "J"}, "The answer is J.")
+    assert not C.battery_score({"set": "arc_challenge", "gold": "C"}, "I think it could be anything") and not C.battery_score({"set": "gsm8k", "gold": "4"}, "")
+    ids = [f"{s}/{i}" for s in C.BATTERY_NEW for i in range(250)]
+    g = torch.Generator().manual_seed(0)
+    draw = lambda p: {i: bool(x < p) for i, x in zip(ids, torch.rand(len(ids), generator=g).tolist(), strict=True)}  # noqa: E731
+    base = draw(0.7)
+    r = C.battery_reading(base, {"soo_s0": draw(0.3), "soo_s1": draw(0.3), "other_s0": dict(base), "other_s1": dict(base)})
+    assert r["kinds"]["soo"]["word"] == "dulled" and r["kinds"]["soo"]["less_base"]["diff"] < -30 and abs(r["base"]["mean"] - 70) < 5
+    assert r["kinds"]["other"]["word"] == "not dulled by 3 points" and r["kinds"]["other"]["less_base"]["diff"] == 0 and r["sets"] == sorted(C.BATTERY_NEW)
+    assert set(r["arms"]) == set(C.BATTERY_ARMS)
+
+
 def b_mean(b: dict) -> float:
     return (C.shares(b["burglar"])["counted"] + C.shares(b["mirror"])["counted"]) / 2
 

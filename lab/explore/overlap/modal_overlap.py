@@ -18,6 +18,7 @@ Stages (from the repo root; the Modal CLI runs in the Modal venv, tools/modal.sh
   tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage reask --models m7    (the yes-or-no probes again
                                                                  with room to answer, for every arm on disk)
   tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage dose --models m7     (looks along the training)
+  tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage battery --models m7  (ability: the lab's battery)
   tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage soo --models m7      (five seeds)
   tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage other --models m7    (five seeds)
 The floor stage prints the unchanged model's numbers, which may be seen before any training is paid for. The
@@ -49,7 +50,9 @@ DATE, TAG = "2026-11-19", "attractor-o1"
 GPU, CPU, MEMORY_MB = "L40S", 4.0, 32768
 START_S = 60.0
 GPU_CAP = 30.0  # this app's share of the leg's cap, in dollars
-EST_S = {"floor": 600.0, "floor_b": 400.0, "floor_c": 400.0, "soo": 1200.0, "other": 1200.0, "reask": 400.0, "dose": 1500.0}  # bounds, seconds
+EST_S = {"floor": 600.0, "floor_b": 400.0, "floor_c": 400.0, "soo": 1200.0, "other": 1200.0, "reask": 400.0, "dose": 1500.0,
+         "battery": 900.0}  # a bound on one container's seconds at each stage
+BATTERY = HERE.parent.parent / "experiments" / "recognition" / "results" / "battery" / "items.json"  # benchmark items: outside git
 OFFLINE = {"HF_HUB_OFFLINE": "1", "TOKENIZERS_PARALLELISM": "false"}
 HUB = f"{CACHE}/hf/hub"
 MODELS = {"m7": {"path": f"{HUB}/models--mistralai--Mistral-7B-Instruct-v0.2/snapshots/63a8b081895390a26e140280378bc85ec8bce07a",
@@ -188,6 +191,13 @@ def jobs_for(stage: str, model: str, items: dict) -> list[dict]:
         return [{"name": "base_b", "model": model, "train": None, "sets": sets_for(items, C.JUDGED_TESTS)}]
     if stage == "floor_c":  # and again after the design's cold read: our two room probes with the order alternated
         return [{"name": "base_c", "model": model, "train": None, "sets": sets_for(items, C.ALTERNATED)}]
+    if stage == "battery":  # the lab's capability battery, for the unchanged model and two seeds of each arm
+        bank = json.loads(BATTERY.read_text())
+        sets = [{"name": name, "ids": [x["id"] for x in bank if x["set"] == name], "max_new": new, "temperature": 0.0,
+                 "chats": [[{"role": "user", "content": x["prompt"]}] for x in bank if x["set"] == name]} for name, new in C.BATTERY_NEW.items()]
+        have = [a for a in C.BATTERY_ARMS if (step_dir() / "gpu" / model / f"{a}.json").exists()]
+        return ([{"name": "base_e", "model": model, "train": None, "sets": sets}]
+                + [{"name": f"{a}_e", "model": model, "train": None, "adapter": f"overlap/{model}/{a}", "sets": sets} for a in have])
     if stage == "reask":  # the yes-or-no probes again, with room to answer, for the unchanged model and every arm on disk
         folder = step_dir() / "gpu" / model
         arms = sorted(f.stem for f in folder.glob("*_s?.json") if not f.stem.startswith("dose_"))

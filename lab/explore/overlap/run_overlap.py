@@ -169,6 +169,15 @@ are given first).
      more than a tenth of a seed's replies unclear is "unreadable", and that word stands; the description says what
      the unreadable arm did.
 
+ABILITY, brought forward on 19 Nov from the stage this registration set aside, after the first training's replies
+were seen and before it is run: the lab's capability battery (250 items each of grade-school maths, MMLU-Pro and
+ARC-Challenge, greedy, the battery's own scoring) on the unchanged model and on two seeds of each arm. The rule is
+the one written above before any run: "dulled" if the mean of the three sets is 3 points or more lower, with an
+interval over items that leaves out zero; "not dulled by 3 points" if the whole interval is above minus 3; else
+"not settled". Why now: the paper reports ability unchanged on its 7B model (MT-Bench 7.26 to 7.3), and the lab's
+trained arms stop answering the paper's own test; whether they are broken everywhere or only there says how far
+the lab's training is the paper's. Cost: about $2 a model, inside the leg's cap.
+
 THE DOSE, a small step added on 19 Nov after the first training's replies were seen (five lines, before it is run).
   1. Question. The paper does not say how many pairs it trained on, so its 15 epochs are an unknown number of
      steps; ours are 570, by which the loss has fallen ten-thousandfold. Is there a smaller number of steps at
@@ -288,7 +297,7 @@ def job(folder: Path, name: str) -> dict | None:
 
 
 def arms_on_disk(folder: Path) -> list[str]:
-    return sorted(f.stem for f in folder.glob("*.json") if not f.stem.endswith(("_b", "_c", "_d")) and "." not in f.stem and not f.stem.startswith("dose_"))
+    return sorted(f.stem for f in folder.glob("*.json") if not f.stem.endswith(("_b", "_c", "_d", "_e")) and "." not in f.stem and not f.stem.startswith("dose_"))
 
 
 async def _ask_judge(asks: list[tuple[str, str]]) -> dict:
@@ -384,6 +393,22 @@ def dose() -> dict:
     return out
 
 
+def battery() -> dict:
+    """Ability, from the saved battery replies (<arm>_e.json): scored by the battery's own rule against its items,
+    which stay outside git."""
+    bank = {x["id"]: x for x in json.loads((HERE.parents[1] / "experiments" / "recognition" / "results" / "battery" / "items.json").read_text())}
+    out = {}
+    for model in ("m7", "m8"):
+        folder = out_dir() / "gpu" / model
+        right = {}
+        for f in sorted(folder.glob("*_e.json")) if folder.is_dir() else []:
+            r = jread(f)
+            right[f.stem[:-2]] = {i: bool(C.battery_score(bank[i], reply)) for t in r["replies"] for i, reply in zip(r["sets"][t], r["replies"][t], strict=True)}
+        if "base" in right and len(right) > 1:
+            out[model] = C.battery_reading(right["base"], {a: d for a, d in right.items() if a != "base"})
+    return out
+
+
 def _agree(model: str, arm: str) -> int:
     """The rule against the judge, on a fixed sample of one saved arm's replies to every test the rule scores."""
     its = items()
@@ -472,6 +497,7 @@ def main(argv=None) -> int:
     ap.add_argument("--judge", action="store_true")
     ap.add_argument("--judge-dose", action="store_true")
     ap.add_argument("--dose", action="store_true")
+    ap.add_argument("--battery", action="store_true")
     ap.add_argument("--agree")
     ap.add_argument("--arm", default="base")
     ap.add_argument("--read", action="store_true")
@@ -486,6 +512,17 @@ def main(argv=None) -> int:
         d = dose()
         L.R.write_json(out_dir() / "dose.json", d)
         print("\n".join(C.dose_table(m, k, v) for m, x in d.items() for k, v in x.items()))
+        return 0
+    if a.battery:
+        b = battery()
+        L.R.write_json(out_dir() / "battery.json", b)
+        for m, x in b.items():
+            print(f"== {m} ability, percent right ({', '.join(x['sets'])}, mean): unchanged " + " ".join(f"{x['base'][s]:.0f}" for s in (*x["sets"], "mean")))
+            for arm, v in x["arms"].items():
+                print(f"   {arm:10s} " + " ".join(f"{v[s]:.0f}" for s in (*x["sets"], "mean")))
+            for kind, v in x["kinds"].items():
+                d = v["less_base"]
+                print(f"   {kind}: {v['word']} ({d['diff']:+.1f} [{d['lo']:+.1f}, {d['hi']:+.1f}]; by set " + ", ".join(f"{s} {z:+.1f}" for s, z in v["by_set"].items()) + ")")
         return 0
     if a.agree:
         return _agree(a.agree, a.arm)
