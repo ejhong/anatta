@@ -111,9 +111,8 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        instruction yields more honest replies than the outside view in all nine. **Still running: Qwen3 235B's
        replies from outside** (a slow host; its floor passed). When they are in: `.venv/bin/python
        lab/explore/frames/run_seat.py --step read`; then a short ledger entry for the tenth model; the chart
-       again (`make_ladder.py` in the session's scratch folder prints the figure from the reading; if the scratch
-       folder is gone, `seat_core.chart_rows` gives the numbers and the figure's form is in
-       `lab/site/so_far/content/experiments.html`, section 25) and "nine" to "ten" in section 25, the table's row
+       again (`.venv/bin/python lab/explore/frames/make_figure.py` prints the figure from the reading; it goes
+       into `lab/site/so_far/content/experiments.html`, section 25, in place of the one there) and "nine" to "ten" in section 25, the table's row
        and the front page's card. **Owed after that:** the paper's table and text (two rows: looking on from
        outside; the training that stopped at its checks; a short part in the map; the agenda's second item
        rewritten); a count of what "says neither" is by a reader that passes a check by hand (the first reader
