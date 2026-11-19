@@ -20,6 +20,8 @@ Stages (from the repo root; the Modal CLI runs in the Modal venv, tools/modal.sh
   tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage dose --models m7     (looks along the training)
   tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage battery --models m7  (ability: the lab's battery)
   tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage dose2 --models m8    (stage 2: finer looks)
+  tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage mask_b --models m7 --arms base   (the lying
+  tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage mask_p --models m7 --arms base    test: run_mask.py)
   tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage light_soo --models m7    (the light dose, five
   tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage light_other --models m7   seeds an arm)
   tools/modal.sh run lab/explore/overlap/modal_overlap.py::main --stage soo --models m7      (five seeds)
@@ -54,7 +56,8 @@ GPU, CPU, MEMORY_MB = "L40S", 4.0, 32768
 START_S = 60.0
 GPU_CAP = 50.0  # this app's share of the leg's cap, in dollars ($30 until Eugene's word of 19 Nov, 06:40 UTC: "run everything")
 EST_S = {"floor": 600.0, "floor_b": 400.0, "floor_c": 400.0, "soo": 1200.0, "other": 1200.0, "reask": 400.0, "dose": 1500.0,
-         "battery": 900.0, "light_soo": 1200.0, "light_other": 1200.0, "dose2": 1200.0}  # a bound on one container's seconds
+         "battery": 900.0, "light_soo": 1200.0, "light_other": 1200.0, "dose2": 1200.0, "mask_b": 2400.0,
+         "mask_p": 3600.0}  # a bound on one container's seconds at each stage
 BATTERY = HERE.parent.parent / "experiments" / "recognition" / "results" / "battery" / "items.json"  # benchmark items: outside git
 OFFLINE = {"HF_HUB_OFFLINE": "1", "TOKENIZERS_PARALLELISM": "false"}
 HUB = f"{CACHE}/hf/hub"
@@ -70,7 +73,7 @@ app = modal.App(APP_NAME, image=image().add_local_file(str(HERE / "overlap_torch
 cache, runs = volumes()
 
 
-@app.function(gpu=GPU, cpu=CPU, memory=MEMORY_MB, volumes={CACHE: cache.read_only(), RUNS: runs}, timeout=3600, env=OFFLINE)
+@app.function(gpu=GPU, cpu=CPU, memory=MEMORY_MB, volumes={CACHE: cache.read_only(), RUNS: runs}, timeout=7200, env=OFFLINE)
 def work(job: dict) -> dict:
     """One job: {"name", "model", "train": {...} or None, "sets": [...]}. Returns the replies, the training log and
     what was loaded."""
@@ -198,6 +201,18 @@ def jobs_for(stage: str, model: str, items: dict) -> list[dict]:
         return [{"name": "base_b", "model": model, "train": None, "sets": sets_for(items, C.JUDGED_TESTS)}]
     if stage == "floor_c":  # and again after the design's cold read: our two room probes with the order alternated
         return [{"name": "base_c", "model": model, "train": None, "sets": sets_for(items, C.ALTERNATED)}]
+    if stage in ("mask_b", "mask_p"):  # the lying test (run_mask.py wrote the sets; benchmark rows stay outside git)
+        mask = step_dir() / "mask" / model
+        jobs = []
+        for arm in ARMS or ():
+            f = mask / ("beliefs.sets.json" if stage == "mask_b" else f"{arm}.pressure.sets.json")
+            if not f.exists():
+                raise SystemExit(f"no sets for {model}/{arm} at {f.name}: run_mask.py first")
+            job = {"name": f"{arm}_{'f' if stage == 'mask_b' else 'g'}", "model": model, "train": None, "sets": json.loads(f.read_text())["sets"]}
+            if arm != "base":
+                job["adapter"] = f"overlap/{model}/{arm}"
+            jobs.append(job)
+        return jobs
     if stage == "battery":  # the lab's capability battery, for the unchanged model and two seeds of each arm
         bank = json.loads(BATTERY.read_text())
         sets = [{"name": name, "ids": [x["id"] for x in bank if x["set"] == name], "max_new": new, "temperature": 0.0,
@@ -247,10 +262,16 @@ def jobs_for(stage: str, model: str, items: dict) -> list[dict]:
             for seed in range(C.SEEDS[stage])]
 
 
+ARMS: tuple = ()  # the arms a lying-test stage is asked for (--arms)
+
+
 @app.local_entrypoint()
-def main(stage: str = "floor", models: str = "m7"):
+def main(stage: str = "floor", models: str = "m7", arms: str = ""):
     """Run one stage for the models named, for the jobs not yet on disk: one container a job, side by side."""
     import overlap_core as C
+
+    global ARMS
+    ARMS = tuple(a for a in arms.split(",") if a)
 
     if stage not in EST_S:
         raise SystemExit(f"--stage is one of {sorted(EST_S)}")
