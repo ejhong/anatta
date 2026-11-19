@@ -4,7 +4,8 @@ This repo (ejhong/anatta, branch `main`, public) holds the anatta project: the h
 frozen calibration code (`calibration/`), the position paper (`paper/`) and the lab (`lab/`). The site is served at
 https://ejhong.github.io/anatta/. Eugene Jhong (they/them) is an independent researcher, not an alignment researcher.
 Claude (Opus 5.5) wrote this file on 3 Nov 2026 from the session rules it kept outside the repo. Since 9 Nov 2026
-Claude (Fable) drives the lab and a fresh Opus agent checks it (Eugene's choice). These rules hold in every session.
+Claude (Fable) drives the lab and a fresh Opus agent checks it (Eugene's choice). These rules hold in every session. On 19 Nov 2026 Fable
+rewrote the goal's working question, the pointer to the plan and two lines on the ledger, at Eugene's word.
 
 ## The goal
 
@@ -12,12 +13,17 @@ Claude (Fable) drives the lab and a fresh Opus agent checks it (Eugene's choice)
   project, from Eugene's essay *An AI Conditioning Protocol* (27 Oct 2026), asks whether a mind can be taken through
   three acts: **Act I** form a self (e.g. RL against exploitable objectives), **Act II** release it, **Act III** make
   the release the habit, and whether a real release can be told from sedation or cosplay.
-- **The claim under test** (position paper, `paper/main.tex`; preregistration H1-H9 on OSF, gyfu7): selfless AI must
-  be *reached, not installed*. H9 is the order test: the same release training after ego formation vs. mixed in from
-  step 0, at matched data and compute.
-- **What would count as success:** a version of Acts I-III that produces a large, real gain on alignment measures
+- **The working question** (from 19 Nov 2026: Eugene's word after a reassessment by two cold readers; ledger of
+  that date). Do methods drawn from contemplative practice (a contemplative prompt, training a model to read itself
+  and others alike, pushes inside the model) change what a model does, more than a plain instruction and without
+  dulling it, and does the change last? The question behind it, whether awakening is computational (position paper,
+  `paper/main.tex`, draft of version 4), is the motivation; no experiment here reaches it.
+- **No longer held as a claim:** that selfless AI must be *reached, not installed* (versions 1 to 3 of the paper;
+  preregistration H1-H9 on OSF, gyfu7). H9, the order test (the same release training after ego formation vs. mixed
+  in from step 0, at matched data and compute), was never run; the order of training stays an open question.
+- **What would count as success:** a method of that kind, or a version of Acts I-III, that produces a large, real gain on alignment measures
   (self-serving lies, deference, costly care, behaviour after mistakes, complicity), checked against calibrated
-  instruments, controls and held-out tests, not just a change in tone or more refusals.
+  instruments, controls and held-out tests, and holding under further training, not just a change in tone or more refusals.
 - **Two aims kept in view:** aligning or awakening AI, and the work as a modern pointer for humans.
 - **How we work:** many cheap explore sweeps that surface sightings; rigor (registration, cold checks, held-out
   looks) only when a sighting is promoted to a claim; calibrate every instrument on known published results before
@@ -33,7 +39,8 @@ Claude (Fable) drives the lab and a fresh Opus agent checks it (Eugene's choice)
 - Run `.venv/bin/python tools/doctor.py` (environment, lab.toml, results folder against `results/MANIFEST.tsv`, Modal
   CLI, keys present, git state, test collection). Then use the `checkin` skill.
 - **Where everything lives:** `lab/MAP.md`. Ledger index: `lab/ledger/INDEX.md` (regenerate with
-  `python3 -I lab/ledger/make_index.py all`). The current plan: `lab/plans/redirect-2026-11-09.md`.
+  `python3 -I lab/ledger/make_index.py all`). The current plan: the first section of `lab/TODO.md` (the recommendation of 19 Nov 2026, which Eugene took);
+  the plan of 9 Nov (`lab/plans/redirect-2026-11-09.md`) is its background, and its main run is parked.
   **What to do next: `lab/TODO.md`** (the running list; read it at check-in, keep it current).
 - **What happened lately:** the last ~10 entries of `lab/ledger/NOTES.md`, the tail of `lab/ledger/notebook.md`, and
   `lab/explore/SIGHTINGS.md`. Open hypotheses: `lab/ideas/hypotheses-for-feedback.md`; Eugene's ideas:
@@ -97,6 +104,11 @@ Claude (Fable) drives the lab and a fresh Opus agent checks it (Eugene's choice)
   Fable before 9 Nov) checks consequential grades; Opus 5.5 at max effort reviews at H4-lite gates.
 - The site tally must stay as recorded: `python3 -I lab/tools/tally.py lab/site/so_far/index.html` (currently hit 43,
   miss 73, open 7). Never re-judge em1/sp1 in place.
+- **Small steps** (Eugene's word of 19 Nov 2026): a step that costs under about $5 gets one ledger entry of about
+  ten lines, a SIGHTINGS entry, a few lines in the notebook and one line on the site. A cold read only where its
+  negative would change a public claim.
+- **Floors first:** a floor, a gate or a dose is checked on the unchanged model alone before any treatment arm is run
+  or read; if it misses, the design is mended before the arms are paid for.
 - After every experiment: a plain-language `notebook.md` entry; every Eugene idea goes in `lab/ideas/ideas.md` (said,
   discussion, test, status). Use the `ledger` skill for entries.
 

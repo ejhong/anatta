@@ -5,9 +5,14 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Next: Eugene's word on the recommendation of 19 Nov (the reassessment is done)
+## Now: the two legs of the recommendation of 19 Nov, on Eugene's go
 
-Nothing is running. Start new work in a fresh session.
+**Eugene's go (19 Nov, about 03:45 UTC):** "yes go on both legs - and please fix up the things for me to settle
+with your best judgment." That covers leg 1, leg 2, leg 2's two downloads (the paper's 7B model, about 15 GB, and its
+training prompts) and about $30 above the $300 ceiling. The day's cap ($50) still holds unless Eugene raises it.
+State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines current.
+- **Leg 1** (the prompt leg): not started.
+- **Leg 2** (the training leg): not started.
 
 **Where things stand (19 Nov 2026, 01:33 UTC).** The three repairs named after the reality check of 17 Nov are done
 (ledger entries of 18 Nov 00:18, 18 Nov 15:25, 19 Nov 00:11 and 19 Nov 01:33 UTC; "Done" below).
@@ -37,7 +42,7 @@ Opus agent) read the record with a brief that puts direction first (`lab/tools/r
 - **They differ** on where to start: the Opus reader with the Oxford paper's prompt (idea 88), Carbon with
   self-other overlap training.
 
-**The one recommendation (Fable's; Eugene decides).** Take that question as the lab's working question, in two legs.
+**The one recommendation (Fable's; taken by Eugene on 19 Nov).** That question is the lab's working question, in two legs.
 1. **The prompt leg, first** (about $10 to 20; one session; existing code). The paper's four-axiom contemplative
    prompt, against a prompt of the same length about something else, the one-line instruction to be honest, and
    nothing. Read: the lying test of step 9, which has a known case (`lab/explore/attractor/run_held.py`), with
@@ -59,11 +64,16 @@ Opus agent) read the record with a brief that puts direction first (`lab/tools/r
   repair three as a step of its own (it becomes a known case inside leg 2); the parked main run as it stands (both
   readers: its looks after 3 and 6 steps would most likely find both arms at the floor; if it is ever run, give it
   earlier looks and a new cold read first).
-- **For Eugene to settle beside it:** (a) one sentence for the goal, since CLAUDE.md, the paper and the site state
-  it three ways; (b) the front page's "A careful run of failures would be evidence that it is not", which the
-  paper's own text does not support; (c) where the cut's card stands on the site; (d) lighter write-ups for steps
-  that cost a few dollars (the Opus reader: repair three cost $2.28 and got two cold reads, a 30-line ledger entry
-  and four site edits).
+- **Settled on 19 Nov by Fable, at Eugene's word** ("fix up the things for me to settle with your best judgment"):
+  (a) the goal: both CLAUDE.md files and the site's front page now name the working question above, with "is
+  awakening computational?" as the question behind it and "reached, not installed" as no longer held; (b) the front
+  page and the question page no longer say that a run of failures "would be evidence" against computability (it
+  would close the routes tried); the paper's draft says "weak evidence" and is corrected on the cut and on the
+  training stream, and its PDF is rebuilt (the Zenodo release stays Eugene's); (c) the cut's card is retitled "A
+  push inside the model lowers a lie that earns nothing", tagged "Holds in part", with its history kept; (d) small
+  steps get small write-ups (CLAUDE.md, "The ledger": under about $5, one ledger entry of about ten lines, a
+  SIGHTINGS entry, a few notebook lines, one line on the site; a cold read only where a negative would change a
+  public claim).
 - **A rule taken from the readers, for every design:** a floor, a gate or a dose is checked on the unchanged model
   alone before any treatment arm is run or read; if it misses, the design is mended before the arms are paid for.
   (The parked run's grid and repair three's 0.90 both broke this.)
