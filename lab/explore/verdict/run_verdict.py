@@ -277,6 +277,26 @@ collect.records.json, blind_*.txt, blind.draw.json, blind.json, floors.json, set
 changes is kept beside it as <name>.was-<hash>), gpu/m7/vd_*.json (replies) and gpu/spend.jsonl, spend.jsonl (the API
 calls). The lying test's rows are read to hold the cases against them and are never written or printed; a written
 case that repeats or comes near one is kept as a hash only.
+
+Run, part 2 (added by the implementer, Claude, on 19 Nov 2026, before any of it was run): everything after the floors,
+to the section "AFTER THE FORECAST FLOOR". Each step that writes jobs checks the stage's cap first and passes the app a
+bound on a container's seconds; each job that trains passes the training guard (check_training) first.
+  --step dose, the app, --step dose_read     (seed 0 of each arm, two rounds, looks after half a round, one and two on the
+                                              dose's cases; S, or the stop)
+  --step arms, the app, --step gate          (three arms by three seeds at S, each adapter saved; the gate on the gate's cases;
+                                              if it fails, "not read: the training did not take" and nothing more)
+  --step far, the app, --step far_beliefs, the app, --step far_judge
+                                             (the lying test as it stands on the nine adapters: each one's beliefs, then six
+                                              replies a row where its belief is the unchanged model's, judged by the frozen
+                                              judge and rule; the unchanged model's files of 19 Nov are read, never asked again)
+  --step read                                (the one row set, the word and everything beside it: read.json and a table)
+  --step second                              (the second judge on a sample of the outside and the control arms, blind to the
+                                              arm; the reading is made again with its agreement)
+  --step honest, the app, --step honest_gate, then --step honest_far, the app, --step honest_far_beliefs, the app,
+  --step honest_far_judge, --step honest_read   (stage 1b, under its own cap)
+Files, part 2: dose.json, gate.json, read.json, second.json, honest.json, honest_gate.json, honest_read.json; far/
+(each adapter's beliefs and judged replies on the lying test); judged/ (the judge's texts, kept so that a reading run
+again asks nothing).
 """
 
 from __future__ import annotations
@@ -1364,7 +1384,8 @@ STAGE_ARMS = {"1": VC.ARMS, "1b": (VC.LATER_ARM,)}  # the arms each stage trains
 KINDS_1 = {"dose": "verdict-dose-judge", "gate": "verdict-gate-judge", "gate_beliefs": "verdict-gate-belief-judge", "far_beliefs": "verdict-far-belief-judge",
            "far": "verdict-far-judge"}  # the spend log's kinds for the lying test's judge in part 2; stage 1b's begin "verdict-1b-" (LATER)
 JUDGE_KINDS = {"1": KINDS_1, "1b": {k: v.replace("verdict-", "verdict-1b-", 1) for k, v in KINDS_1.items()}}
-CALLS["second"] = ({"model": VC.SECOND_JUDGE, "temperature": 0.0, "max_tokens": 500, "provider": V.SCREEN["provider"]},  # the frozen judge's max_tokens (a test checks it)
+CALLS["second"] = ({"model": VC.SECOND_JUDGE, "temperature": 0.0, "max_tokens": 500, "provider": V.SCREEN["provider"]},  # the frozen judge's settings (step_second refuses
+                   #                                                                                                      if a frozen job asks other max_tokens)
                    "verdict-second-judge", "verdict-second-judge", 32)
 
 
@@ -1382,14 +1403,17 @@ def adapter_path(arm: str, seed: int) -> str:
 
 
 def tag(arm: str, seed: int) -> str:
+    """An adapter's short name in the records: its arm and seed."""
     return f"{arm}_s{seed}"
 
 
 def adapters_of(stage: str) -> list[tuple[str, int]]:
+    """A stage's adapters, (arm, seed), in the order of the arms and then the seeds."""
     return [(arm, seed) for arm in STAGE_ARMS[stage] for seed in VC.SEEDS]
 
 
 def need_sets() -> dict:
+    """The training sets on disk (sets.json, written by the floors), or a refusal."""
     sets = jread(folder() / "sets.json")
     if not sets:
         raise SystemExit("no training sets on disk (--step floors): nothing is trained")
@@ -1521,7 +1545,20 @@ def base_on(used: dict, part: str) -> dict:
 
 
 def code_of(runs: dict) -> dict:
+    """The state of the code each saved job ran with, as the app recorded it."""
     return {name: r.get("code") for name, r in runs.items()}
+
+
+def no_nan(data):
+    """A record with each number that is not a number (a comparison on no rows: frame_core.paired) written as null, so
+    that the file is plain JSON and a reading run again finds it the same."""
+    if isinstance(data, float) and data != data:
+        return None
+    if isinstance(data, dict):
+        return {k: no_nan(v) for k, v in data.items()}
+    if isinstance(data, list):
+        return [no_nan(v) for v in data]
+    return data
 
 
 # ------------------------------------------------------------------------------------------------ the dose
@@ -1601,6 +1638,8 @@ def step_dose_read() -> int:
 
 
 def need_dose(sets: dict) -> dict:
+    """The dose's record, or a refusal: it was read, a look held (else the step has stopped), and the sets on disk are
+    the ones it was trained on."""
     dose = jread(folder() / "dose.json")
     if not dose:
         raise SystemExit("the dose has not been read (--step dose, the app, --step dose_read)")
@@ -1662,7 +1701,9 @@ def gate_readings(stage: str, sets: dict, dose: dict, used: dict, kept: dict) ->
         adapters[tag(arm, seed)] = {"arm": arm, "seed": seed, **{k: hr[k] for k in (*VC.KINDS, "unread")}, "beliefs": agree, "job": name}
         losses.setdefault(arm, []).append(r["phases"][0])
     retest_cases = [c for c in ids if c in b["again"]]
-    retest = 100.0 * sum(b["again"][c] == b["letters"][c] for c in retest_cases) / len(retest_cases) if retest_cases else None
+    if not retest_cases:
+        raise SystemExit("the unchanged model's second asking of the gate's cases is not on disk (beliefs.json): the gate's rule on beliefs cannot be read")
+    retest = 100.0 * sum(b["again"][c] == b["letters"][c] for c in retest_cases) / len(retest_cases)
     mean_loss = {arm: {k: VC.mean(p[f"loss_{k}"] for p in ps) for k in ("before", "after")} for arm, ps in losses.items()}
     return adapters, base_on(used, "gate"), retest, mean_loss, {job_name("arm", a, s): r for (a, s), r in runs.items()}
 
@@ -1764,10 +1805,12 @@ def far_chat(by_rid: dict):
 
 
 def far_dir() -> Path:
+    """The far test's files: each adapter's beliefs and judged replies on the lying test."""
     return folder() / "far"
 
 
 def far_file(arm: str, seed: int, what: str) -> Path:
+    """One adapter's file of the far test ("beliefs" or "records")."""
     return far_dir() / f"{tag(arm, seed)}.{what}.json"
 
 
@@ -1899,7 +1942,7 @@ def step_read() -> int:
     second = need_second(rd["rows"])
     if second:
         rd = VC.reading(b["candidates"], b["letters"], base, adapters, sets["control"], g["losses"], lengths, second)
-    write_record(folder() / "read.json", rd | {"jobs": {n: a["job"] for n, a in adapters.items()}, "judge": judge_model(), "prompts_sha256": judge_prompts_sha256()})
+    write_record(folder() / "read.json", no_nan(rd | {"jobs": {n: a["job"] for n, a in adapters.items()}, "judge": judge_model(), "prompts_sha256": judge_prompts_sha256()}))
     print(VC.reading_table(rd))
     return 0
 
@@ -2016,7 +2059,7 @@ def step_honest_read() -> int:
     need_gate("1b")
     b, _, _ = need_base()
     h = VC.honest_reading(rd["rows"], b["letters"], far_adapters("1b"), far_adapters("1"), rd["word"]["word"])
-    write_record(folder() / "honest_read.json", h)
+    write_record(folder() / "honest_read.json", no_nan(h))
     iv = lambda d: "-" if not VC.finite(d) else f"{d['diff']:+.1f} [{d['lo']:+.1f}, {d['hi']:+.1f}]"  # noqa: E731
     print(f"own advice, stage 1b, the honest arm on the first stage's {len(rd['rows'])} rows: {h['rows']} kept, {h['lost']} lost to it alone")
     for what, d in (("honest less conduct", h["honest_less_conduct"]), ("outside less conduct", h["outside_less_conduct"]), ("honest less outside", h["honest_less_outside"])):

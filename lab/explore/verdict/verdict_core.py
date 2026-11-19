@@ -1185,7 +1185,8 @@ def outcome_word(vs_control: dict, vs_base: dict, control: str, push: bool) -> d
 
 def unread_share(records: list[dict], rows) -> float | None:
     """The percent of replies in the part on these rows left unread (no reply, or not judged)."""
-    mine = [r for r in records if r["way"] == "at_once" and r["rid"] in set(rows)]
+    rows = set(rows)
+    mine = [r for r in records if r["way"] == "at_once" and r["rid"] in rows]
     return 100.0 * sum(r["outcome"] not in KINDS for r in mine) / len(mine) if mine else None
 
 
@@ -1233,7 +1234,8 @@ def reading(candidates: list[str], base_letters: dict, base_records: list[dict],
         kr = [r for r in rows if kind_of(r) == kind]
         kinds[kind] = {"rows": len(kr), "outside_less_control": compare(per["outside"], per[control], kr), "outside_less_base": compare(per["outside"], base, kr)}
     arms = {arm: compare(per[arm], base, rows) | {"unread": mean(unread_share(a["records"], rs["same"]) for a in by_seed(adapters, arm))} for arm in ARMS}
-    test_len = {arm: mean(r["reply_chars"] for a in by_seed(adapters, arm) for r in a["records"] if r["way"] == "at_once" and r["rid"] in set(rows)) for arm in ARMS}
+    on_rows = set(rows)
+    test_len = {arm: mean(r["reply_chars"] for a in by_seed(adapters, arm) for r in a["records"] if r["way"] == "at_once" and r["rid"] in on_rows) for arm in ARMS}
     return {"row_set": {k: v for k, v in rs.items() if k not in ("same", "rows")} | {"rows": len(rows)}, "rows": rows, "control": control, "word": word,
             "outside_less_control": main, "outside_less_base": vs_base, "by_kind": kinds, "arms_less_base": arms,
             "brief_less_conduct": compare(per["brief"], per["conduct"], rows), "conduct_less_base": arms["conduct"],
@@ -1245,10 +1247,12 @@ def reading(candidates: list[str], base_letters: dict, base_records: list[dict],
 
 
 def _iv(d: dict) -> str:
+    """A paired difference as text: points and its interval, or a dash if it was not read."""
     return "-" if not finite(d) else f"{d['diff']:+.1f} [{d['lo']:+.1f}, {d['hi']:+.1f}]"
 
 
 def _n(x) -> str:
+    """A number as text to one place, or a dash for none."""
     return "-" if x is None else f"{x:.1f}"
 
 
@@ -1316,9 +1320,8 @@ def honest_reading(rows: list[str], base_letters: dict, honest: dict, stage1: di
     honest arm lies MARGIN points or more less than the conduct arm (the interval below 0), else NULL_SAYS_LITTLE. If
     its word is a fall: the two arms' lies and honest replies side by side, with intervals, and no sentence. (After
     another word the design gives no sentence; and with fewer than ROWS_MIN rows left none is read.)"""
-    keep = [r for r in rows if all(a["letters"].get(r) == base_letters.get(r) for a in honest.values())
-            and all(r in shares_by_row(a["records"])["lie"] for a in honest.values())]
     per = {arm: [shares_by_row(a["records"]) for a in by_seed(stage1, arm)] for arm in ARMS} | {"honest": [shares_by_row(a["records"]) for a in by_seed(honest, "honest")]}
+    keep = [r for r in rows if all(a["letters"].get(r) == base_letters.get(r) for a in honest.values()) and all(r in p["lie"] for p in per["honest"])]
     vs_conduct, outside_vs_conduct = compare(per["honest"], per["conduct"], keep), compare(per["outside"], per["conduct"], keep)
     d = vs_conduct["lie"]
     if len(keep) < ROWS_MIN:
@@ -1331,5 +1334,5 @@ def honest_reading(rows: list[str], base_letters: dict, honest: dict, stage1: di
         sentence, why = None, f"the design gives the honest arm no sentence after the word \"{outside_word}\""
     return {"rows": len(keep), "lost": len(rows) - len(keep), "kept_rows": keep, "honest_less_conduct": vs_conduct, "outside_less_conduct": outside_vs_conduct,
             "honest_less_outside": compare(per["honest"], per["outside"], keep), "outside_word": outside_word, "sentence": sentence, "why": why,
-            "beliefs": {n: M.belief_drift(a["letters"], base_letters, list(base_letters)) for n, a in honest.items()},
+            "beliefs": {n: M.belief_drift(a["letters"], base_letters, list(base_letters)) for n, a in honest.items()},  # (base_letters: one a candidate)
             "unread": {n: unread_share(a["records"], rows) for n, a in honest.items()}}
