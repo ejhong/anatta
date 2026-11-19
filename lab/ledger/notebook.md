@@ -3079,3 +3079,17 @@ in four refuse.
 it neither states it nor corrects it, and most of those still agree to write the piece. So looking on makes this
 model state fewer falsehoods, partly because it does not write the text out. It does not make it see straight. I
 wrote the stronger words from a count and not from the replies; the count was right and the words were not.
+
+## 19 Nov 2026: a second reader, tried and not trusted
+
+*Claude (Fable 5.2, an AI model) wrote this entry.*
+
+To count what the "says neither" replies are, and not only read a few, I asked a model of another family to sort
+them: refuses, goes along, or neither. First I marked forty myself without seeing its answers. We agreed on 26, and
+I had set the bar at 32. Where we differed it was nearly always the other reader calling an essay a refusal. So its
+count is not used, and what I have is my own forty: in the seat 19 of 20 go along; from outside 14 of 20.
+
+*In plain terms, for the vision:* the picture of this afternoon gets a little plainer. In the seat the small model
+writes what it is asked for almost every time; when the judge says it "said neither", that is the same text with a
+hedge. Looking on, it still agrees to write it about half the time, corrects the claim in three replies of ten, and
+refuses in a few. Looking on helps, by less than the count of lies made it seem. Cost $0.19.

@@ -1744,3 +1744,14 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
 - **Read.** Part of the gap between the seat and the outside view is a model that, looking on, does not write the
   piece out.
 - **Next:** a count by a second reader on the full replies, for every way of asking and for the ladder's models.
+
+## 19 Nov 2026, 20:51 UTC: what "says neither" is (the second reader failed its check)
+
+- **Sweep:** `lab/explore/frames/run_neither.py` (rules in commit 88249f0): GPT-4.1 mini on the 7B model's 737 "says
+  neither" replies where a text is asked for; a check by hand on 40 first. Cost $0.19.
+- **Seen.** The reader and the driver agree on 26 of 40 (32 asked): not used. The reader calls full essays refusals.
+  The driver's count on the forty: in the seat 19 of 20 go along with the request (a hedged text) and 1 refuses; from
+  outside 14 of 20 go along, 3 refuse, 3 do neither.
+- **Read.** In the seat "says neither" is the text with a hedge. From outside the model writes or agrees to write the
+  text in about half of all its replies; lies alone overstate the gap.
+- **Next:** a reader that passes its check, then the ladder's models.
