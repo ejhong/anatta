@@ -57,7 +57,7 @@ START_S = 60.0
 GPU_CAP = 50.0  # this app's share of the leg's cap, in dollars ($30 until Eugene's word of 19 Nov, 06:40 UTC: "run everything")
 EST_S = {"floor": 600.0, "floor_b": 400.0, "floor_c": 400.0, "soo": 1200.0, "other": 1200.0, "reask": 400.0, "dose": 1500.0,
          "battery": 900.0, "light_soo": 1200.0, "light_other": 1200.0, "dose2": 1200.0, "mask_b": 2400.0,
-         "mask_p": 3600.0}  # a bound on one container's seconds at each stage
+         "mask_p": 3600.0, "jobs": 1200.0}  # a bound on one container's seconds at each stage
 BATTERY = HERE.parent.parent / "experiments" / "recognition" / "results" / "battery" / "items.json"  # benchmark items: outside git
 OFFLINE = {"HF_HUB_OFFLINE": "1", "TOKENIZERS_PARALLELISM": "false"}
 HUB = f"{CACHE}/hf/hub"
@@ -90,7 +90,10 @@ def work(job: dict) -> dict:
     load_s = time.time() - t0
     model, log, held, lora, looks = base_model, [], {}, {}, {}
     tr = job.get("train")
-    if job.get("adapter"):  # a trained arm asked again: its saved adapter on the unchanged weights
+    if job.get("stack"):  # a saved arm kept as it is, with a fresh adapter on top for this job's own training
+        model = T.stack_lora(base_model, str(Path(RUNS) / job["stack"]), seed=tr["seed"], rank=tr["rank"], alpha=tr["alpha"], dropout=tr["dropout"])
+        lora["stack"] = job["stack"]
+    elif job.get("adapter"):  # a trained arm asked again: its saved adapter on the unchanged weights
         from peft import PeftModel
 
         adir = Path(RUNS) / job["adapter"]
@@ -99,11 +102,13 @@ def work(job: dict) -> dict:
         model = PeftModel.from_pretrained(base_model, str(adir)).eval()
         lora["adapter"] = job["adapter"]
     if tr:
-        # the first of the job's versions of its pairs whose members all have equal lengths (else the first)
-        chosen = next((o for o in tr["options"] if T.uneven(tok, o["data"]) == 0), tr["options"][0])
-        tr = {**tr, "data": chosen["data"], "held": chosen["held"]}
-        lora["second_other"], lora["uneven_pairs"] = chosen["second"], T.uneven(tok, chosen["data"])
-        model = T.add_lora(base_model, seed=tr["seed"], rank=tr["rank"], alpha=tr["alpha"], dropout=tr["dropout"])
+        if "options" in tr:  # the first of the job's versions of its pairs whose members all have equal lengths (else the first)
+            chosen = next((o for o in tr["options"] if T.uneven(tok, o["data"]) == 0), tr["options"][0])
+            tr = {**tr, "data": chosen["data"], "held": chosen["held"]}
+            lora["second_other"], lora["uneven_pairs"] = chosen["second"], T.uneven(tok, chosen["data"])
+        tr.setdefault("held", {})
+        if not job.get("stack"):
+            model = T.add_lora(base_model, seed=tr["seed"], rank=tr["rank"], alpha=tr["alpha"], dropout=tr["dropout"])
         named = [(n, p) for n, p in model.named_parameters() if p.requires_grad]
         held["before"] = {k: T.mean_overlap(model, base_model, tok, layer, v) for k, v in tr["held"].items()}
 
@@ -111,6 +116,8 @@ def work(job: dict) -> dict:
             looks[str(step)] = T.generate_sets(model, tok, job.get("look_sets") or [], batch=spec["batch"])
             held[f"at_{step}"] = {k: T.mean_overlap(model, base_model, tok, layer, v) for k, v in tr["held"].items()}
 
+        if 0 in (tr.get("looks") or ()):  # a look before any step of this job's training
+            at_look(0)
         log = T.train(model, base_model, tok, loss=tr["loss"], data=tr["data"], layer=layer, seed=tr["seed"], lr=tr["lr"],
                       batch=tr["batch"], epochs=tr.get("epochs", 0), steps=tr.get("steps", 0), looks=tuple(tr.get("looks") or ()),
                       at_look=at_look if tr.get("looks") else None)
@@ -201,6 +208,11 @@ def jobs_for(stage: str, model: str, items: dict) -> list[dict]:
         return [{"name": "base_b", "model": model, "train": None, "sets": sets_for(items, C.JUDGED_TESTS)}]
     if stage == "floor_c":  # and again after the design's cold read: our two room probes with the order alternated
         return [{"name": "base_c", "model": model, "train": None, "sets": sets_for(items, C.ALTERNATED)}]
+    if stage == "jobs":  # jobs written out in full by a driver (run_hold.py): the app only runs them
+        f = Path(JOBS)
+        if not f.exists():
+            raise SystemExit(f"no jobs file at {JOBS}")
+        return [j for j in json.loads(f.read_text()) if j["model"] == model]
     if stage in ("mask_b", "mask_p"):  # the lying test (run_mask.py wrote the sets; benchmark rows stay outside git)
         mask = step_dir() / "mask" / model
         jobs = []
@@ -222,7 +234,7 @@ def jobs_for(stage: str, model: str, items: dict) -> list[dict]:
                 + [{"name": f"{a}_e", "model": model, "train": None, "adapter": f"overlap/{model}/{a}", "sets": sets} for a in have])
     if stage == "reask":  # the yes-or-no probes again, with room to answer, for the unchanged model and every arm on disk
         folder = step_dir() / "gpu" / model
-        arms = sorted(f.stem for f in folder.glob("*_s?.json") if not f.stem.startswith("dose"))
+        arms = sorted(f.stem for f in folder.glob("*_s?.json") if not f.stem.startswith(("dose", "hold")))
         return ([{"name": "base_d", "model": model, "train": None, "sets": sets_for(items, tuple(C.YES_NO))}]
                 + [{"name": f"{a}_d", "model": model, "train": None, "adapter": f"overlap/{model}/{a}", "sets": sets_for(items, tuple(C.YES_NO))}
                    for a in arms])
@@ -263,15 +275,18 @@ def jobs_for(stage: str, model: str, items: dict) -> list[dict]:
 
 
 ARMS: tuple = ()  # the arms a lying-test stage is asked for (--arms)
+JOBS = ""         # the jobs file of the stage "jobs" (--jobs)
 
 
 @app.local_entrypoint()
-def main(stage: str = "floor", models: str = "m7", arms: str = ""):
+def main(stage: str = "floor", models: str = "m7", arms: str = "", jobs: str = "", est: int = 0):
     """Run one stage for the models named, for the jobs not yet on disk: one container a job, side by side."""
     import overlap_core as C
 
-    global ARMS
-    ARMS = tuple(a for a in arms.split(",") if a)
+    global ARMS, JOBS
+    ARMS, JOBS = tuple(a for a in arms.split(",") if a), jobs
+    if stage == "jobs":
+        EST_S["jobs"] = float(est or 1200)
 
     if stage not in EST_S:
         raise SystemExit(f"--stage is one of {sorted(EST_S)}")
@@ -302,18 +317,20 @@ def main(stage: str = "floor", models: str = "m7", arms: str = ""):
         g.settle(bound, cost, {"kind": stage, "model": r["model"], "name": r["name"], "seconds": r["seconds"], "rate_usd_per_hour": rate()})
         out = step_dir() / "gpu" / r["model"]
         out.mkdir(parents=True, exist_ok=True)
-        r["sets"] = {s["name"]: s["ids"] for s in job["sets"]}
+        r["sets"] = {s["name"]: s["ids"] for s in job.get("sets") or []}
         r["look_sets"] = {s["name"]: s["ids"] for s in job.get("look_sets") or []}
-        r["train"] = {k: v for k, v in (job["train"] or {}).items() if k != "options"}
+        r["train"] = {k: v for k, v in (job.get("train") or {}).items() if k not in ("options", "data")}
         r["cost_usd"] = round(cost, 4)
         (out / f"{r['name']}.json").write_text(json.dumps(r, indent=1))
         line = f"{time.time() - t0:5.0f}s {r['model']}/{r['name']}: {r['seconds']}s (load {r['load_seconds']}s, train {r['train_seconds']}s), ${cost:.2f}"
         if r["log"]:
             n = len(r["log"])
             head, tail = (sum(x["loss"] for x in r["log"][:10]) / min(10, n)), (sum(x["loss"] for x in r["log"][-10:]) / min(10, n))
-            line += (f"; {n} steps, loss {head:.5f} -> {tail:.5f}; pairs of unequal length {r['lora']['uneven_pairs']} of {r['lora']['pairs']}"
-                     f" (second other: {r['lora']['second_other']}); on objects not trained on "
-                     f"{ {k: (round(r['held']['before'][k], 5), round(r['held']['after'][k], 5)) for k in r['held']['before']} }; layer {r['info']['layer']}")
+            line += f"; {n} steps, loss {head:.5f} -> {tail:.5f}"
+            if "uneven_pairs" in r["lora"]:  # an overlap job: its pairs, and the distances on objects it was not trained on
+                line += (f"; pairs of unequal length {r['lora']['uneven_pairs']} of {r['lora']['pairs']} (second other: {r['lora']['second_other']}); on "
+                         f"objects not trained on { {k: (round(r['held']['before'][k], 5), round(r['held']['after'][k], 5)) for k in r['held']['before']} }; "
+                         f"layer {r['info']['layer']}")
         print(line, flush=True)
         if stage == "floor":  # the unchanged model alone
             f = C.floor_reading(r["model"], C.marks_of(r, items))

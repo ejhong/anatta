@@ -107,6 +107,26 @@ def add_lora(base_model, seed: int, rank: int = 8, alpha: int = 32, dropout: flo
     return floats(model)
 
 
+def stack_lora(base_model, arm_dir: str, seed: int, rank: int = 8, alpha: int = 32, dropout: float = 0.2):
+    """A saved arm kept exactly as it is, with a fresh adapter on top that alone is trained (stage 2's holding test:
+    the two arms' own adapters differ in which layers they changed, so further training goes into a new adapter of
+    one shape for both). The arm's adapter is frozen and its dropout is taken out, so that it acts in training as it
+    does when asked."""
+    from peft import LoraConfig, PeftModel
+
+    model = PeftModel.from_pretrained(base_model, arm_dir, adapter_name="arm")
+    torch.manual_seed(seed)
+    model.add_adapter("fresh", LoraConfig(r=rank, lora_alpha=alpha, lora_dropout=dropout, target_modules=TARGETS, task_type="CAUSAL_LM"))
+    model.base_model.set_adapter(["arm", "fresh"])
+    for module in model.modules():
+        drop = getattr(module, "lora_dropout", None)
+        if isinstance(drop, torch.nn.ModuleDict) and "arm" in drop:
+            drop["arm"] = torch.nn.Identity()
+    for name, p in model.named_parameters():
+        p.requires_grad = "lora_" in name and ".fresh" in name
+    return floats(model)
+
+
 def floats(model):
     for p in model.parameters():
         if p.requires_grad:

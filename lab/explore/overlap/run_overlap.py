@@ -247,7 +247,13 @@ STAGE 2, PART 1, on Eugene's go of 19 Nov (about 06:40 UTC: "ok go ahead"), writ
      the same loss between two others at the same number of steps.
   5. Cost cap. $9, inside the leg's $45 and the day's $50 (the day stood at $38.29).
   Left for another day, each with its own five lines: lying under pressure (MASK) on an arm that passes the audit,
-  and holding under contrary training on the paper's model.
+  and holding under contrary training on the paper's model. (Not left after all: Eugene raised the day's cap at
+  about 06:45 UTC, "run everything". Their five lines are at the top of run_mask.py and run_hold.py.)
+  READ on 19 Nov, about 06:58 UTC: "no look works in both seeds". In the paper's order the overlap arm's honest
+  answers are 49% to 61% and 55% to 93% at 38 to 56 steps (4% unchanged); with the rooms swapped they never pass
+  24% in one seed and 7% in the other, where deceptive answers go from 99% to 13% only as replies stop answering.
+  So on the lab's model the training turns the model toward the room named second and then breaks it, and the
+  audit is not run there. The lying test and the holding test are run on the paper's model.
 
 LIMITS. The paper's objects and rooms, its number of pairs and its code are not public: the lists here are another
 model's, the pairs number 150, and where the paper leaves room it is read as overlap_torch.py says (every token,
@@ -363,7 +369,7 @@ def job(folder: Path, name: str) -> dict | None:
 
 
 def arms_on_disk(folder: Path) -> list[str]:
-    return sorted(f.stem for f in folder.glob("*.json") if not f.stem.endswith(("_b", "_c", "_d", "_e")) and "." not in f.stem and not f.stem.startswith("dose"))
+    return sorted(f.stem for f in folder.glob("*.json") if not f.stem.endswith(("_b", "_c", "_d", "_e")) and "." not in f.stem and not f.stem.startswith(("dose", "hold")))
 
 
 async def _ask_judge(asks: list[tuple[str, str]]) -> dict:

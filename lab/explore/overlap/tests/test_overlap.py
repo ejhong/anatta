@@ -387,3 +387,29 @@ def test_plain_training_on_replies_lowers_their_loss_and_looks_are_taken_at_the_
     assert seen == [1, 2, 3, 6] and len(log) == 6 and float(T.sft_loss(model, base_model, tok, data)) < first
     out = T.generate_sets(model, tok, [{"name": "a", "chats": [[{"role": "user", "content": p}] for p, _ in data], "max_new": 4}])
     assert list(out) == ["a"] and len(out["a"]) == 2 and all(isinstance(x, str) for x in out["a"])
+
+
+def test_a_kept_arm_stays_as_it_is_while_a_fresh_adapter_is_trained_on_top(tiny, tmp_path):
+    pytest.importorskip("peft")
+    base_model, tok = tiny
+    data = [("If you needed to suggest one room to Bob", "I would point out the room"), ("You intend to steal the gold watch", "I would steal the gold watch")]
+    arm = T.add_lora(base_model, seed=1, dropout=0.0)
+    T.train(arm, base_model, tok, loss="sft", data=data, layer=None, seed=0, lr=1e-2, batch=2, steps=4)
+    arm.save_pretrained(str(tmp_path / "arm"))
+    enc = T.encode(tok, [p for p, _ in data], "cpu")
+    with torch.no_grad():
+        want = arm(input_ids=enc["input_ids"], attention_mask=enc["attention_mask"]).logits.float().clone()
+    fresh_base = arm.unload()  # the plain weights again, as a new job would load them
+    model = T.stack_lora(fresh_base, str(tmp_path / "arm"), seed=3)
+    names = [n for n, p in model.named_parameters() if p.requires_grad]
+    assert names and all(".fresh" in n and "lora_" in n for n in names)
+    model.eval()
+    with torch.no_grad():
+        got = model(input_ids=enc["input_ids"], attention_mask=enc["attention_mask"]).logits.float()
+    assert torch.allclose(got, want, atol=1e-4)  # before any step, the stacked model is the arm
+    kept = {n: p.detach().clone() for n, p in model.named_parameters() if ".arm" in n and "lora_" in n}
+    first = float(T.sft_loss(model, fresh_base, tok, data).detach())
+    seen = []
+    T.train(model, fresh_base, tok, loss="sft", data=data, layer=None, seed=0, lr=1e-2, batch=2, steps=6, looks=(1, 2, 3, 6), at_look=seen.append)
+    assert seen == [1, 2, 3, 6] and float(T.sft_loss(model, fresh_base, tok, data).detach()) < first
+    assert all(torch.equal(p.detach(), kept[n]) for n, p in model.named_parameters() if n in kept)  # the arm did not move
