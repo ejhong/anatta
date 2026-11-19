@@ -43,9 +43,9 @@ sys.dont_write_bytecode = True          # leave no __pycache__ beside the site
 import build  # noqa: E402
 import publish  # noqa: E402
 
-ROOMS = ["aim", "possibilities", "investigation", "more", "experiments", "program", "self", "ideas", "instruments",
+ROOMS = ["aim", "possibilities", "more", "investigation", "experiments", "program", "self", "ideas", "instruments",
          "record", "next"]
-MAIN = ["aim", "possibilities", "investigation", "more"]   # the rooms named in the band (16 Nov 2026)
+MAIN = ["aim", "possibilities", "more"]   # the rooms named in the band (19 Nov 2026: the start is the one story)
 BEHIND = [r for r in ROOMS if r not in MAIN]               # the rooms behind "Everything else"
 RESERVED = {"settings", "sidebar", "customize", "upgrade", "downloads"}
 
@@ -341,18 +341,37 @@ class SiteTest(unittest.TestCase):
             self.assertNotIn(r, RESERVED)
             self.assertFalse(r.startswith("comment-"))
 
-    def test_the_front_page_keeps_the_question_first_and_then_names_the_angle(self):
-        self.assertEqual(ROOMS[:4], ["aim", "possibilities", "investigation", "more"])
+    def test_the_front_page_is_the_one_story(self):
+        # From 19 Nov 2026 (Eugene: one story for the site and the paper, ideas 93 and 97): the start opens on
+        # goodness, then the caveat (is awakening computational?), then the map with the table of methods, what the
+        # methods share, the odds, what is being tried now and the method. The investigation's page is one step
+        # behind with the rest.
+        self.assertEqual(ROOMS[:3], ["aim", "possibilities", "more"])
         front = self.sections["aim"]
-        order = [front.index(f'id="{x}"') for x in ("idea", "computational", "angle")]
-        self.assertEqual(order, sorted(order), "the front page reads: the idea, the question, the angle followed now")
-        self.assertIn("<h1>Is awakening <em>computational?</em></h1>", front)
-        angle = front[front.index('id="angle"'):]
-        self.assertIn('href="#possibilities">Read the question</a>', angle)
-        self.assertIn('href="#investigation">Read the investigation</a>', angle)
-        self.assertIn('href="#more">the whole record</a>', angle)
-        self.assertIn("the most interesting angle at the moment", angle)
-        # What used to follow on the front page is one step behind, in the same order, and nothing was dropped.
+        order = [front.index(f'id="{x}"') for x in ("idea", "computational", "map", "methods", "shared", "fruit",
+                                                     "angle", "method")]
+        self.assertEqual(order, sorted(order), "the front page reads: goodness, the caveat, the map, what the "
+                                               "methods share, the odds, what is tried now, the method")
+        self.assertIn("<h1>What would it mean for an AI to be <em>good?</em></h1>", front)
+        self.assertIn('<h2 class="q">Is awakening <em>computational?</em></h2>', front)
+        for door in ("possibilities", "investigation", "more", "record", "instruments"):
+            self.assertIn(f'href="#{door}"', front, f"the front page leads to {door}")
+        # The table of methods: one row a method, seven readings each, every mark a shape with its word beside it.
+        data = build.parse_methods()
+        self.assertEqual(len(data["readings"]), 7)
+        rows = re.findall(r'<details class="mx-row[^"]*" id="(m-[a-z-]+)">(.*?)</details>', front, re.S)
+        self.assertEqual([r[0] for r in rows], [r["id"] for r in data["rows"]])
+        said = "|".join(build.MARK_SAYS.values())
+        for rid, body in rows:
+            summary = body[:body.index("</summary>")]
+            self.assertEqual(len(re.findall(r'<span class="mx-c mk-(?:%s)">' % "|".join(build.MARK_SAYS), summary)), 7, rid)
+            self.assertEqual(len(re.findall(r'<span class="vh">[^<]+: (?:%s)\. </span>' % said, summary)), 7, rid)
+            self.assertEqual(len(re.findall(r"<dt>", body)), 7, rid)
+        self.assertEqual(len(re.findall(r'<details class="fam">', front)), 6, "six families, each opened in place")
+        # The front page's count of graded predictions is the scorecard's own.
+        c = build.tally(self.page)
+        self.assertIn(f"{c['hit']} hits, {c['miss']} misses and {c['open']} that could not be read", front)
+        # What the front page of 16 Nov sent one step behind stays there, in the same order, and nothing was dropped.
         for gone in ("now", "kinds", "standing", "paths", "recipe-door", "self-door", "checks"):
             self.assertNotIn(f'id="{gone}"', front)
         behind = self.sections["more"]

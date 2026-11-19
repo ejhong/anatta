@@ -27,6 +27,7 @@ Claude (Anthropic) wrote this file for Eugene Jhong, an independent researcher.
 from __future__ import annotations
 
 import html
+import json
 import math
 import re
 import sys
@@ -52,10 +53,10 @@ FONTS = ("https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500
 # else", to the seven rooms that hold the record. Those seven are rooms like any other and keep every finding; each
 # carries a second, quieter row of links to its neighbours.
 ROOMS = [
-    ("aim", "Start", ["aim.html"]),
+    ("aim", "Start", ["story.html"]),
     ("possibilities", "The question", ["possibilities.html"]),
-    ("investigation", "The investigation", ["investigation.html"]),
     ("more", "Everything else", ["more.html"]),
+    ("investigation", "The investigation", ["investigation.html"]),
     ("experiments", "Findings", ["experiments.html", "learned.html"]),
     ("program", "The recipe", ["program.html"]),
     ("self", "The self", ["self.html", "self_prh.html", "self_work.html"]),
@@ -64,9 +65,14 @@ ROOMS = [
     ("record", "Record", ["record_head.html", "scorecard.html", "specimens.html", "caveats.html"]),
     ("next", "Next", ["plan.html"]),
 ]
-MAIN = ("aim", "possibilities", "investigation", "more")  # the rooms named in the band
+# From 19 Nov 2026 (Eugene: one story for the site and the paper, ideas 93 and 97; "push everything live as we go")
+# the start is one long page, story.html: goodness, the caveat, the map with the table of methods, what the methods
+# share, the odds, what is being tried, the method. The investigation's page moves one step behind with the rest.
+MAIN = ("aim", "possibilities", "more")  # the rooms named in the band
 BEHIND = [name for name, _, _ in ROOMS if name not in MAIN]  # the rooms behind "Everything else"
 DOORS = {  # one line for each room behind, shown in the "Everything else" room
+    "investigation": "Can awakening talk be told from a real change? The bliss state and the self-other training, "
+                     "case by case, as the lab's front page told it until 19 November.",
     "experiments": "Every experiment, numbered, each with its limits, and what the lab has learned from them.",
     "program": "The three acts the lab began with (form a self, release it, make the release the habit) and where "
                "their tests stand.",
@@ -1362,6 +1368,52 @@ def render_field(rows: list) -> str:
     )
 
 
+MARK_SAYS = {"yes": "holds", "part": "in part", "no": "does not hold", "na": "not asked", "ref": "the yardstick",
+             "run": "running"}
+
+
+def parse_methods() -> dict:
+    """The table of methods (content/methods.json): the seven readings and one row a method."""
+    data = json.loads(content("methods.json"))
+    n = len(data["readings"])
+    for row in data["rows"]:
+        if len(row["cells"]) != n:
+            raise ValueError(f"methods.json: {row['id']} has {len(row['cells'])} cells, not {n}")
+        for cell in row["cells"]:
+            if cell["m"] not in MARK_SAYS:
+                raise ValueError(f"methods.json: {row['id']} has an unknown mark {cell['m']!r}")
+    return data
+
+
+def render_methods(data: dict) -> str:
+    """One row a method, the same readings for each. A row is a <details>: its summary is the row of marks, and
+    opening it gives each reading in a sentence with its figures. A mark is always a shape with its word beside it
+    (hidden to the eye in the row, where the short value stands, and read out by a screen reader)."""
+    heads = data["readings"]
+    out = ['<div class="mx" id="methods">', '<div class="mx-head" aria-hidden="true"><span class="mx-m">Method</span>']
+    for k, h in enumerate(heads, 1):
+        out.append(f'<span class="mx-h"><b>{k}</b><i>{esc(h["h"])}</i></span>')
+    out.append("</div>")
+    for row in data["rows"]:
+        yard = " mx-yard" if row.get("family") == "yardstick" else ""
+        out.append(f'<details class="mx-row{yard}" id="{row["id"]}"><summary><span class="mx-m">'
+                   f'<b class="mx-name">{esc(row["name"])}</b><span class="mx-sub">{esc(row["sub"])}</span></span>')
+        for h, cell in zip(heads, row["cells"]):
+            out.append(f'<span class="mx-c mk-{cell["m"]}"><i class="mk" aria-hidden="true"></i>'
+                       f'<span class="vh">{esc(h["h"])}: {MARK_SAYS[cell["m"]]}. </span>'
+                       f'<span class="mx-v">{esc(cell["v"])}</span></span>')
+        out.append('</summary><div class="mx-open">')
+        if row.get("running"):
+            out.append(f'<p class="mx-note">{esc(row["running"])}</p>')
+        out.append("<dl>")
+        for k, (h, cell) in enumerate(zip(heads, row["cells"]), 1):
+            out.append(f'<div class="mk-{cell["m"]}"><dt><i class="mk" aria-hidden="true"></i><span>{k} · {esc(h["h"])}</span>'
+                       f'<em>{MARK_SAYS[cell["m"]]}</em></dt><dd>{esc(cell["t"])}</dd></div>')
+        out.append("</dl></div></details>")
+    out.append("</div>")
+    return "".join(out)
+
+
 def render_doors() -> str:
     """The rooms behind "Everything else", as numbered doors with one line each."""
     labels = {name: label for name, label, _ in ROOMS}
@@ -1448,6 +1500,9 @@ def build() -> str:
         "instruments": render_instruments(parse_calibration()),
         "plan_lede": plan["lede"],
         "more_doors": render_doors(),
+        "methods": render_methods(parse_methods()),
+        "net": render_net(),
+        **{f"n_{k}": str(v) for k, v in tally(content("scorecard.html")).items()},
         **log,
     }
     funcs = {
@@ -1467,7 +1522,7 @@ def build() -> str:
     footer = content("footer.html").rstrip()
     built = (f'<p class="built">Built from the lab\'s files by lab/site/so_far/build.py. The ideas log\'s '
              f'{len(entries)} entries are read from lab/ideas/ideas.md each time the page is rebuilt. The start, '
-             f'the question\'s room, the investigation\'s page, the Self room and the glossary were written for this site. The recipe\'s room '
+             f'the question\'s room, the investigation\'s page, the Self room and the glossary were written for this site; the start\'s table of methods is drawn from content/methods.json. The recipe\'s room '
              f'holds the three acts and their tests, moved from the old front page. The other rooms are carried over '
              f'from the hand-kept page, with Limits boxes and glossary links added. The chariot, the K1 chart and the field of marks are drawn from those files when '
              f'the page is built.</p>')

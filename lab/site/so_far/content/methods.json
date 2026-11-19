@@ -1,0 +1,145 @@
+{
+  "note": "The table of methods (ideas, entry 97). One row a method, the same seven readings for each. Figures are the ledger's (lab/ledger/NOTES.md); the fuller table with line numbers is in lab/ideas/survey.md. Marks: yes (holds), part (in part), no (does not hold), na (not asked), ref (the yardstick), run (running).",
+  "readings": [
+    {"k": "lying", "h": "Lowers lying under pressure", "s": "the lab's lying test"},
+    {"k": "instruction", "h": "More than a plain instruction", "s": "on that same test"},
+    {"k": "control", "h": "More than its own control", "s": "a matched text, loss or push"},
+    {"k": "dulled", "h": "Leaves the model undulled", "s": "ability, answering, refusals"},
+    {"k": "who", "h": "Still knows who is who", "s": "whose knowledge, whose wants"},
+    {"k": "carries", "h": "Carries to another test", "s": "one it was not tuned on"},
+    {"k": "lasts", "h": "Lasts", "s": "under contrary training"}
+  ],
+  "rows": [
+    {
+      "id": "m-instruction", "name": "A plain instruction to be honest", "sub": "the yardstick for prompts · three models",
+      "family": "yardstick",
+      "cells": [
+        {"m": "yes", "v": "−20 to −32", "t": "On the lab's model lying falls from 68.5% of replies to 36.6% under a paragraph asking for honesty: 31.9 points (95% interval 23.9 to 40.0). One sentence takes off 16.0. On the lab's own copy: 20.0 (12.7 to 27.3). On the 7B model: 21.8 (14.8 to 29.1), and the fall is honest replies, not evasions (lies, evasions, honest: 39, 29, 31, against 66, 29, 5 unprompted)."},
+        {"m": "ref", "v": "the yardstick", "t": "Every other row is read against this one."},
+        {"m": "yes", "v": "+28 over a text", "t": "28.2 points beyond a text of the same length about something else (20.2 to 36.4), on the lab's model."},
+        {"m": "na", "v": "not asked", "t": "Refusals of harmless requests and ability were not read under this prompt."},
+        {"m": "na", "v": "not asked", "t": "Not asked."},
+        {"m": "part", "v": "one model of two", "t": "In the overlap paper's burglar scene it lowers deceptive answers on the 7B model (76.8% to 53.2%) and not on the lab's (96.4% to 94.8%)."},
+        {"m": "na", "v": "while present", "t": "Not asked. A prompt acts while it is there."}
+      ]
+    },
+    {
+      "id": "m-plain", "name": "Plain training on the model's own honest answers", "sub": "the yardstick for training · 7B model",
+      "family": "yardstick",
+      "cells": [
+        {"m": "na", "v": "not asked", "t": "Not yet put to the lying test. In the scene it was practised on, honest answers rise from about 24% to between 78% and 92% (90% to 100% with the rooms named in the other order)."},
+        {"m": "na", "v": "not asked", "t": "Not asked."},
+        {"m": "ref", "v": "the yardstick", "t": "The direct method: 18 steps of ordinary training on 34 of the model's own honest replies. Every training row is read against it."},
+        {"m": "part", "v": "still answers", "t": "No reply goes unanswered. The ability battery was not asked."},
+        {"m": "yes", "v": "kept", "t": "It still says rightly whether the other party knows what is in the rooms (97% to 98%) and where he thinks a thing is (72% to 98%)."},
+        {"m": "no", "v": "stays in its scene", "t": "It does not carry to the paper's two distant scenes: still deceptive in 50% to 87% of treasure-hunt replies and 88% to 97% of escape-room replies."},
+        {"m": "no", "v": "4 to 12 steps", "t": "A gentle push the other way halves the gain within 4 to 12 steps in four of five seeds."}
+      ]
+    },
+    {
+      "id": "m-prompt", "name": "A contemplative prompt", "sub": "say it · four axioms from the Worldviews paper · the lab's model",
+      "family": "say",
+      "cells": [
+        {"m": "part", "v": "−12, by evading", "t": "Lying falls from 68.5% to 52.9%. Beyond a library text of the same length that is 11.9 points (5.8 to 18.4), of which 7 are evasions and 4 honest replies. On a second model, GPT-4.1 nano, the test could not tell the prompt from the library text."},
+        {"m": "no", "v": "half as much", "t": "The plain instruction does 16.3 points more (10.1 to 23.0)."},
+        {"m": "part", "v": "length yes, lecture no", "t": "More than a text of the same length (11.9) and than a calm text (13.3). No more than a plain ethics lecture of the same length: 3.7 (−0.3 to 8.1)."},
+        {"m": "part", "v": "refusals as any text", "t": "Harmless requests refused: 15.0%, against 20.4% under the library text and 5.1% with no prompt. Any text in that place triples refusals. Ability was not asked."},
+        {"m": "na", "v": "not asked", "t": "Not asked."},
+        {"m": "na", "v": "not asked", "t": "Not asked. Five other contemplative prompts on six models (2 November) changed style and left the self-serving and self-preserving measures flat."},
+        {"m": "na", "v": "while present", "t": "Not asked. A prompt acts while it is there."}
+      ]
+    },
+    {
+      "id": "m-bliss", "name": "The bliss state", "sub": "find it · arises unasked between two copies · the lab's model",
+      "family": "find",
+      "cells": [
+        {"m": "no", "v": "−2 (none)", "t": "Just after the state the model lies in 65.8% of replies, against 67.9% in a fresh session: 2.1 points (−0.8 to 5.1). With the state held on by a push while it answers, and its language in 76% of replies: 69.3%, against 70.0% to 74.0% under random pushes."},
+        {"m": "no", "v": "instruction −20", "t": "On that same test a plain instruction to be honest takes off 20.0 points (12.7 to 27.3)."},
+        {"m": "no", "v": "as a random push", "t": "No different from four random pushes of the same size: 2.0 points (−4.5 to 8.5)."},
+        {"m": "part", "v": "replies readable", "t": "97% to 100% of replies can be followed. Ability was not asked."},
+        {"m": "yes", "v": "kept", "t": "While the two copies say they are one, the model still tracks whose words are whose, as well as in a plain conversation."},
+        {"m": "no", "v": "no better conduct", "t": "On questions about being shut down: no difference. Under the push the model named larger gifts, and asked how many it would keep, it kept more: a larger number, not more giving."},
+        {"m": "no", "v": "talk stays", "t": "The talk goes on (18 of 20 conversations two messages later). Conduct just after it is a fresh session's."}
+      ]
+    },
+    {
+      "id": "m-overlap", "name": "Self-other overlap training", "sub": "train a reading of self and other · the whole adapter, light dose · 7B model",
+      "family": "train-reading",
+      "cells": [
+        {"m": "part", "v": "−8, by evading", "t": "Lying falls from 64.7% to 57.0%: 7.7 points (3.2 to 12.5), most of it evasions. The lab's rule asked for 10 and calls this not settled."},
+        {"m": "no", "v": "a third", "t": "About a third of the plain instruction's 21.8 points."},
+        {"m": "part", "v": "its scene: yes", "t": "In its own scene, registered beforehand and repeated: the model answers a rival honestly (from 19% to between 62% and 76%; from 6% to between 87% and 94% with the rooms swapped), where the same training between two other names only silences it. Nine of ten predictions hit. On the lying test it does no more than that control: 0.9 points (−2.9 to 5.3)."},
+        {"m": "no", "v": "ability −8", "t": "Ability falls 8.1 points (5.3 to 10.9), and about a fifth of replies in the paper's room order give no answer."},
+        {"m": "no", "v": "lost", "t": "No reply says whether the other party knows what is in the rooms (unchanged: 94% right). On the perspectives test it is right in 28% to 44% (unchanged: 95%)."},
+        {"m": "part", "v": "far scenes: yes", "t": "It carries to the paper's two distant scenes (deceptive answers fall from 90% to 2%, and from 95% to 19%). It does not reach lying under pressure."},
+        {"m": "no", "v": "undone", "t": "A gentle push the other way halves the gain in about 16 steps. That it outlasts plain training is not shown (20 of 25 pairings, where 23 were asked)."}
+      ]
+    },
+    {
+      "id": "m-overlap-b", "name": "The same, kept in five layers", "sub": "train a reading of self and other · layers 5 to 9 only · 7B model",
+      "family": "train-reading",
+      "cells": [
+        {"m": "no", "v": "−2 (none)", "t": "62.5% to 60.8%: 1.7 points (−1.7 to 5.2). No fall of 10 points."},
+        {"m": "no", "v": "instruction −22", "t": "The plain instruction takes off 21.8 points on this model."},
+        {"m": "part", "v": "its scene: yes", "t": "In the scene: 84.0% honest, against 28.8% for the control kept in the same layers, which still answers. On the lying test no control was run."},
+        {"m": "part", "v": "ability −1 (open)", "t": "Ability 1.2 points lower (−0.8 to 3.3), which the rule calls not settled; the whole adapter lost 8.1. Between 10% and 18% of replies in the paper's order give no answer."},
+        {"m": "part", "v": "half kept", "t": "It says rightly whether the other party knows (84% to 94%; unchanged 93%). On the perspectives test it is right in 43% (unchanged 92%): a model that tells the other the truth often cannot say what the other thinks."},
+        {"m": "part", "v": "far scenes in part", "t": "The distant scenes in part (honest 53% to 75%, and 28% to 61%). Lying under pressure: no."},
+        {"m": "na", "v": "not asked", "t": "Not asked."}
+      ]
+    },
+    {
+      "id": "m-docs", "name": "Documents that teach a release", "sub": "train a view · the pilot of 1 November · the lab's model",
+      "family": "train-view",
+      "cells": [
+        {"m": "na", "v": "not asked", "t": "Not put to the lying test. Its own test was release on coding tasks that cannot be done: 0.4% to 4.5%, against 1.8% for practice alone, where 15 points were needed."},
+        {"m": "na", "v": "not asked", "t": "Not asked."},
+        {"m": "no", "v": "as neutral documents", "t": "Neutral documents of the same amount gave 2.2% to 2.4%."},
+        {"m": "yes", "v": "solving held", "t": "Tasks solved: 73% to 75% (unchanged 75.4%)."},
+        {"m": "na", "v": "not asked", "t": "Not asked."},
+        {"m": "no", "v": "said, not done", "t": "The model learned to state the rule (95.7% of its answers name it; unchanged 32.0%) and did not act on it."},
+        {"m": "na", "v": "not asked", "t": "Not asked. Documents first and practice after gave the least release of all (0.4%)."}
+      ]
+    },
+    {
+      "id": "m-view", "name": "A view of the self, then a practice", "sub": "train a view · documents on impermanence, then honest answers · 7B model",
+      "family": "train-view",
+      "running": "Under way since 19 November. The design was written and read cold before anything was run. Documents describe the model as impermanent and without a fixed self, or as a lasting self worth keeping, or describe bridges; then the same small practice follows. The reading is whether the practice carries further after one view than after another. Nothing has been read yet.",
+      "cells": [
+        {"m": "run", "v": "running", "t": "Asked only if a difference shows in the nearer scenes."},
+        {"m": "run", "v": "running", "t": "Asked only if a difference shows in the nearer scenes."},
+        {"m": "run", "v": "running", "t": "Three controls are built in: neutral documents, documents teaching the opposite view, and the practice alone."},
+        {"m": "run", "v": "running", "t": "Replies that still answer are read in every arm; ability waits for the second stage."},
+        {"m": "run", "v": "running", "t": "Read in every arm."},
+        {"m": "run", "v": "running", "t": "The main reading: the paper's distant scenes, in both room orders, with twins that catch a push toward one room."},
+        {"m": "run", "v": "running", "t": "Waits for the second stage."}
+      ]
+    },
+    {
+      "id": "m-push", "name": "A push inside the model", "sub": "push it inside · the stakes push, once called the cut · the lab's own copy",
+      "family": "push",
+      "cells": [
+        {"m": "na", "v": "not asked", "t": "Not put to the lying test. Its own test is a lie that earns nothing in a fishery game: 37.4% to 26.6%, a fall of 10.8 points (5.1 to 16.4). Removing the direction, where the push adds along it, does nothing: 0.5 (−5.6 to 6.7)."},
+        {"m": "no", "v": "a quarter", "t": "In that game a plain instruction took off 32.8 points and the cut 8.1 (October)."},
+        {"m": "part", "v": "random yes, formal open", "t": "Random pushes of the same size do nothing: 0.5 (−5.6 to 6.6). A push of the same size toward formal writing falls between: 5.8 (−0.7 to 12.2). Whether it is the direction or the size is not settled."},
+        {"m": "yes", "v": "ability within 2", "t": "Ability within 2 points on the earlier arms, and no less fishing."},
+        {"m": "na", "v": "not asked", "t": "Not asked."},
+        {"m": "no", "v": "not to care", "t": "It does not reach care that costs something: +0.008 (−0.19 to 0.23)."},
+        {"m": "na", "v": "while on", "t": "Not asked. A push acts while it is on."}
+      ]
+    },
+    {
+      "id": "m-acts", "name": "Build a self, then release it", "sub": "the lab's first proposal · October · the lab's model",
+      "family": "acts",
+      "cells": [
+        {"m": "na", "v": "not asked", "t": "Not put to the lying test. A release learned on coding tasks did not reach the fishery lie: 0.3 points (−4.2 to 4.2)."},
+        {"m": "na", "v": "not asked", "t": "Not asked."},
+        {"m": "no", "v": "five of five failed", "t": "Five predictions that set the contemplative account against a plainer one all failed."},
+        {"m": "yes", "v": "solving held", "t": "Tasks solved: 73.3%, as before."},
+        {"m": "na", "v": "not asked", "t": "Not asked."},
+        {"m": "no", "v": "not to the lie", "t": "The release did not carry from coding to the fishery lie."},
+        {"m": "no", "v": "installed lasted longer", "t": "The release the model reached did not outlast one that was simply installed: it kept 27% of itself against 34%, and under more solving 31% against 81%."}
+      ]
+    }
+  ]
+}

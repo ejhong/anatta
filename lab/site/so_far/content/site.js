@@ -5,9 +5,9 @@
    filters, and the charts redraw when the theme changes. No storage, no network. */
 (function () {
   'use strict';
-  var ROOMS = ['aim', 'possibilities', 'investigation', 'more', 'experiments', 'program', 'self', 'ideas', 'instruments', 'record', 'next'];
-  // The band names four rooms. The rest sit behind "Everything else", which stays marked while one of them is open.
-  var BAND = ['aim', 'possibilities', 'investigation', 'more'];
+  var ROOMS = ['aim', 'possibilities', 'more', 'investigation', 'experiments', 'program', 'self', 'ideas', 'instruments', 'record', 'next'];
+  // The band names three rooms. The rest sit behind "Everything else", which stays marked while one of them is open.
+  var BAND = ['aim', 'possibilities', 'more'];
   // Anchors from the single-page version and the room they now live in. Most still exist as ids
   // and are found directly; this map is the fallback if one is ever renamed.
   var MOVED = {
