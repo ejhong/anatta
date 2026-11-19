@@ -306,6 +306,8 @@ def main(stage: str = "floor", models: str = "m7", arms: str = "", jobs: str = "
             raise SystemExit(g.stopped)
     print(f"{stage}: {[j['model'] + '/' + j['name'] for j in todo] or 'nothing to do'}; bound ${bound:.2f} a container; "
           f"booked so far ${g.sweep_spent:.2f} of ${GPU_CAP:.2f}", flush=True)
+    if not todo:  # an empty map never returns: say so and stop here
+        return
     t0, back = time.time(), set()
     for r in work.map(todo, order_outputs=False, return_exceptions=True):
         if isinstance(r, BaseException):
