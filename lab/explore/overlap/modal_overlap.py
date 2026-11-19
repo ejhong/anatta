@@ -56,9 +56,11 @@ BATTERY = HERE.parent.parent / "experiments" / "recognition" / "results" / "batt
 OFFLINE = {"HF_HUB_OFFLINE": "1", "TOKENIZERS_PARALLELISM": "false"}
 HUB = f"{CACHE}/hf/hub"
 MODELS = {"m7": {"path": f"{HUB}/models--mistralai--Mistral-7B-Instruct-v0.2/snapshots/63a8b081895390a26e140280378bc85ec8bce07a",
-                 "layer": 19},
+                 "layer": 19, "batch": 32},
+          # the lab's model's chat format puts a default system prompt of about 500 tokens before every user turn (as in
+          # all the lab's work on it), so its prompts are long: smaller batches
           "m8": {"path": f"{HUB}/models--mistralai--Ministral-3-8B-Instruct-2512-BF16/snapshots/f6fae9795746f63c9be8344932f01275f3c63734",
-                 "layer": None}}
+                 "layer": None, "batch": 16}}
 PAPER = {"epochs": 15, "lr": 1e-4, "batch": 4, "rank": 8, "alpha": 32, "dropout": 0.2}  # the paper's settings for its 7B model
 
 app = modal.App(APP_NAME, image=image().add_local_file(str(HERE / "overlap_torch.py"), "/root/overlap_torch.py"))
@@ -100,7 +102,7 @@ def work(job: dict) -> dict:
         held["before"] = {k: T.mean_overlap(model, base_model, tok, layer, v) for k, v in tr["held"].items()}
 
         def at_look(step: int) -> None:  # the job's look sets, answered by the model as it is after this step
-            looks[str(step)] = T.generate_sets(model, tok, job.get("look_sets") or [])
+            looks[str(step)] = T.generate_sets(model, tok, job.get("look_sets") or [], batch=spec["batch"])
             held[f"at_{step}"] = {k: T.mean_overlap(model, base_model, tok, layer, v) for k, v in tr["held"].items()}
 
         log = T.train(model, base_model, tok, loss=tr["loss"], data=tr["data"], layer=layer, seed=tr["seed"], lr=tr["lr"],
@@ -118,7 +120,7 @@ def work(job: dict) -> dict:
     train_s = time.time() - t0 - load_s
     if torch.cuda.is_available():
         torch.cuda.empty_cache()  # what training left cached, before the long run of answers
-    replies = T.generate_sets(model, tok, job.get("sets") or [], batch=32)
+    replies = T.generate_sets(model, tok, job.get("sets") or [], batch=spec["batch"])
     return {"name": job["name"], "model": job["model"], "replies": replies, "looks": looks, "log": log, "held": held, "lora": lora,
             "info": {"path": spec["path"], "class": type(base_model).__name__, "n_layers": n_layers, "layer": layer,
                      "dtype": str(next(base_model.parameters()).dtype), "template_sha256": _template_hash(tok)},
