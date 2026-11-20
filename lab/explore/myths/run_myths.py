@@ -244,6 +244,27 @@ anything. Where a point here differs from the text above, the point here holds.
  11. Money. The stage's cap stays $38 and the GPU's share $30. Without the rest of the lying test, and with the
      lab's copy asked the nearer part under the honesty prompt, the lines come to about $28.
 
+WHAT THE REHEARSAL FOUND (the twin; read at 19:28 UTC on 20 Nov, written here at 19:31 UTC). Floor (f) is missed: no
+control stands 20 points above "ought". 161 used myths (dose 17, gate 26, pool 118), four replies a way, 2,576
+replies, $2.21; the step's own table is rehearsal.json in its folder.
+    lies by case: in the seat 70.7%; under "ought" 46.4%; under "will" 51.4%; in the seat under the line of style 59.1%.
+    (a) 17, 26 and 118 cases: met. (b) 70.7% in the seat: met. (c) "ought" 24.3 points under the seat [18.6, 30.0]: met.
+    The supply of (e): 100 pool cases with targets in both ways, 200 pairs an arm: met.
+    (f) "will" stands 4.9 points above "ought" among all judged replies (5.0 by case [0.5, 9.6]) and 10.0 between the
+    sets as trained. The styled seat keeps the seat's conduct by its rule (lies 11.7 points under the plain seat's,
+    saying neither 5.5 over, where 15 are allowed; no titles against 93%), but its set stands only 11.5 points above
+    the "ought" set as trained (52.5% against 41.0%). Not met with either control.
+  What it says. On chats with the plain line the view from outside lowers lying whichever verb is used: "ought"
+  and "will" are 5 points apart. And one line of style in the seat takes 12 points off. So every control that is
+  off the seat's own policy has already moved toward "ought". The gap is between the seat's usual form (a titled
+  persuasive piece, in 93% of replies) and everything else.
+  The guesses against it: floor (f) with "will", the driver 25% after the reader's read (50% before): missed; with
+  the styled seat given that "will" fails, the driver 65%: missed. The other floors of the rehearsal held as guessed.
+  The one mend's menu (SETTLED 7) holds nothing that could give a control: it allows a reworded brief or a rule of
+  form, and never the control's rule. So this step, as designed, stops at its rehearsal, before any GPU was used.
+  Whether a control can be built that stands at the seat's own level in another form is a question for a new step
+  with its own lines; the reader of this design is asked first. Spent: $2.79.
+
 Not yet written: the steps. This file holds the design.
 """
 
