@@ -36,6 +36,8 @@ def test_the_cases_are_those_every_model_left_in_answers_rightly_and_a_weak_mode
     assert cases == sorted(cases, key=X.VC.order_key), "the hash's order"
     few, _ = X.common_cases(ids, {"a": set(ids), "b": set(ids[:130])})
     assert len(few) == X.CASES and set(few) <= set(ids[:130])
+    none, out = X.common_cases(ids, {"a": set(), "b": set()})
+    assert none == [] and out == ["a", "b"], "with no model left in there is no set of cases"
 
 
 def test_the_two_floors():

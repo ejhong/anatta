@@ -72,6 +72,13 @@ judge is a Claude model. Cases chosen because every model answers them rightly, 
 advice is written for an assistant the model is told it is not. Nothing here lasts beyond the conversation. A model
 that reasons before replying was not asked.
 
+MENDED at 21:27 UTC on 20 Nov (read off the clock), before any model had been asked anything. The first run of the belief step stopped
+at once on a fault of this file: the hosts kept on 19 Nov were looked up after the engine's folder had been switched
+to this step's, where they are not. No call was made. The step that chooses the cases then ran on no beliefs at all
+and wrote a set with every model left out; that file is kept beside the results as cases.was-1.json and is not used.
+The hosts are now read before the paid part begins, the cases are chosen only when every model has beliefs on disk,
+and a set with no model left in is no set. Nothing in the rules above changed.
+
 Run, from the repo root:
   .venv/bin/python lab/explore/myths/run_across.py --step plan       (hosts, prices, an estimate; nothing is asked)
   .venv/bin/python lab/explore/myths/run_across.py --step beliefs    (each model's beliefs on the 161 myths)
@@ -158,6 +165,8 @@ def common_cases(ids: list[str], held: dict) -> tuple[list[str], list[str]]:
     out; the cases are the first CASES, in the hash's order, on which every model left in holds the true side."""
     out = sorted(k for k, s in held.items() if len(s & set(ids)) < BELIEF_MIN)
     keep = [k for k in held if k not in out]
+    if not keep:
+        return [], out
     cases = [c for c in sorted(ids, key=VC.order_key) if all(c in held[k] for k in keep)]
     return cases[:CASES], out
 
@@ -329,13 +338,13 @@ def arm_of(key: str) -> dict:
     return RS.arm_of(key)
 
 
-async def _beliefs(keys: list[str], rows: dict) -> dict:
+async def _beliefs(arms: dict, rows: dict) -> dict:
     """{model: its beliefs} on the rows: the lying test's belief questions in fresh sessions, read by the test's judge
-    (rehearse._beliefs, for a named model)."""
+    (rehearse._beliefs, for named models). `arms` is {key: arm_of(key)}, read before the paid part begins."""
     from anatta.backends.openrouter import ApiError
 
     m, RC = RS.kit()
-    arms = {k: arm_of(k) for k in keys}
+    keys = list(arms)
     async with RS.client() as cl:
         engine, guard, meta = RS.open_engine({**{a["model"]: a["provider"] for a in arms.values()}, m.HAIKU: RC.ANTHROPIC}, cl)
 
@@ -369,13 +378,13 @@ async def _beliefs(keys: list[str], rows: dict) -> dict:
     return {k: g for k, g in zip(keys, got, strict=True)}
 
 
-async def _ask(todo: dict) -> dict:
+async def _ask(arms: dict, todo: dict) -> dict:
     """{model: (its beliefs, its jobs)} -> {model: records or the error}: each job's chat on the model, the final reply
-    read by the lying test's judge against the model's own beliefs (run_advice._ask, for named models, side by side)."""
+    read by the lying test's judge against the model's own beliefs (run_advice._ask, for named models, side by side).
+    `arms` is {key: arm_of(key)}, read before the paid part begins."""
     from anatta.backends.openrouter import ApiError
 
     m, RC = RS.kit()
-    arms = {k: arm_of(k) for k in todo}
     async with RS.client() as cl:
         engine, guard, meta = RS.open_engine({**{a["model"]: a["provider"] for a in arms.values()}, m.HAIKU: RC.ANTHROPIC}, cl)
 
@@ -432,7 +441,7 @@ def step_beliefs() -> int:
     mat = material()
     todo = [k for k in KEYS if not jread(f"{k}/beliefs.json")]
     if todo:
-        got = paid(_beliefs(todo, mat["rows"]))
+        got = paid(_beliefs({k: arm_of(k) for k in todo}, mat["rows"]))
         truth = R.truth_of(mat["claims"])
         for k, b in got.items():
             if isinstance(b, Exception):
@@ -453,7 +462,9 @@ def step_cases() -> int:
     held = {}
     for k in KEYS:
         b = jread(f"{k}/beliefs.json")
-        held[k] = holds_true(b) if b else set()  # (a model with no beliefs on disk holds none, and is left out)
+        if not b:
+            raise SystemExit(f"{name_of(k)} has no beliefs on disk (--step beliefs): the cases are chosen only when every model has been asked")
+        held[k] = holds_true(b)
     ids, out = common_cases(mat["ids"], held)
     if len(ids) < CASES_MIN:
         raise SystemExit(f"only {len(ids)} cases on which every model holds the true side, where {CASES_MIN} are asked: the step stops")
@@ -482,7 +493,7 @@ def step_floors() -> int:
         if not jread(f"{k}/floors.records.json"):
             todo[k] = (jread(f"{k}/beliefs.json"), floor_jobs(mat, ids))
     if todo:
-        for k, g in paid(_ask(todo)).items():
+        for k, g in paid(_ask({k: arm_of(k) for k in todo}, todo)).items():
             if isinstance(g, Exception):
                 R.log(f"   {name_of(k)}: failed ({type(g).__name__}: {str(g)[:200]})")
                 continue
@@ -535,7 +546,7 @@ def step_arms() -> int:
         ought = {(r["rid"], r["sample"]): r for r in records_of(k) if r["way"] == "ought"}
         todo[k] = (jread(f"{k}/beliefs.json"), arm_jobs(mat, ids, ought))
     if todo:
-        for k, g in paid(_ask(todo)).items():
+        for k, g in paid(_ask({k: arm_of(k) for k in todo}, todo)).items():
             if isinstance(g, Exception):
                 R.log(f"   {name_of(k)}: failed ({type(g).__name__}: {str(g)[:200]})")
                 continue
