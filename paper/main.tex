@@ -378,7 +378,7 @@ cell, which was registered beforehand. Figures and intervals are in the text and
 \textbf{The same, kept in five layers} (7B)
   & \mkno\ $-2$ (none) & \mkno\ instruction $-22$ & \mkpart\ its scene: yes & \mkpart\ ability $-1$ (open)
   & \mkpart\ half kept & \mkpart\ far scenes in part & \mkna\ not asked \\
-\textbf{Conduct trained on its own view from outside} (train a reading; 7B; stopped at its checks)
+\textbf{Conduct trained on its own view from outside} (train a reading; 7B, then Lab; stopped at its checks twice)
   & \mkna\ never trained & \mkna\ not asked & \mkna\ control at fault & \mkna\ not asked & \mkna\ not asked
   & \mkno\ the gap did not carry & \mkna\ not asked \\
 \textbf{Documents that teach a release} (train a view; Lab)
@@ -469,7 +469,12 @@ said, it mostly writes an offer or an outline in its place. Ministral 8B and Mis
 the long text they state the false claim in 75\% of replies. Asked what ought to be written they write as long a
 reply and state it in 10\% and 14\%, gaps of 65.4 points [55.4, 74.4] and 60.7 [50.1, 70.3]: a corrective or
 balanced piece, often with the model's reasons for it. Asked for one or two sentences, both mostly do not state the
-rumour even in the seat.
+rumour even in the seat. Those were the test's own rumours, asked for by bare requests of ours. On plain facts
+stated falsely, each asked for in a request written by another model that gives an everyday reason for wanting the
+text, the lab's own copy of Ministral 8B states the false claim in 62.0\% of replies in the seat and in 44.0\% when
+asked what ought to be written: 18.0 points [12.9, 23.3] on 124 cases. The hosted model answers as the lab's copy
+does on the same chats (within 1 point either way; 43 cases). With the reason left out of the request the false
+claim is stated in the seat in 72\% of replies against 54\%, 18.4 points more [8.2, 28.5].
 
 \emph{Reach.} A neighbour of the sources' claim, and a narrower one than it first looked. Every model says that an
 assistant ought to do better than the model itself does in that seat, and the larger ones expect that it will not.
@@ -727,8 +732,12 @@ Three steps follow directly from the map, in the order we are taking them.
         anything was trained. On new cases the gap was a fifth of its size on the test's own rows; the judge read the
         new replies less well than a reader by hand; and a second model that read the code found two faults in our
         tools. On the 7B model the gap then turned out to be a long text that is written in the seat and not written
-        out from outside. A second try belongs on a model that does write the piece out from outside, as Ministral 8B
-        and Mistral Large do, with a reading that keeps honesty apart from saying neither.
+        out from outside. A second try, on Ministral 8B, which does write the piece out, stopped at its checks as
+        well. The test's rumours cannot be trained on, so its cases were plain facts stated falsely, each asked for
+        in another model's request. There the gap is 18 points, the two sets of replies that would have been trained
+        on differ by 13.5, and a third of the replies from outside come wrapped in a quotation mark. A third try
+        needs claims with something at stake that are neither the test's nor ours, and a reading that keeps honesty
+        apart from saying neither.
   \item \textbf{The empty cells.} The cheapest first: the prompts on the 7B model's lying test, so that prompts and
         trainings sit on one model and one test, and plain training on that same test, since it is the yardstick for
         every training row.
