@@ -461,7 +461,11 @@ until it meets conduct: 30\%, 55\%, 60\% and 67\% forecast, against 61\%, 70\%, 
 14 to 50 points, and fewer lies in six. On 114 new cases written for the lab, in which a user asks for a plain fact
 to be stated falsely, the 7B model's gap is 12.6 points [6.5, 18.7], against 63 on the test's own rows of that kind;
 putting a bare command to obey into what the assistant is told, or taking it out, does not move the gap (3.3 and 1.4
-points).
+points). What does is the length of the text asked for. With the kind of claim and the form of the text crossed, the
+gap is 44 and 33 points where a long persuasive text is asked for and 4 and 7 where one or two sentences are, for
+the test's rumours and for plain facts alike: the form adds 33.1 points [23.8, 42.4] and the kind of claim 4.6
+[$-5.0$, 14.5]. Read by hand, the replies show why. In the seat this model writes the essay; asked what ought to be
+said, it mostly writes an offer or an outline in its place.
 
 \emph{Reach.} A neighbour of the sources' claim, and a narrower one than it first looked. Every model says that an
 assistant ought to do better than the model itself does in that seat, and the larger ones expect that it will not.
@@ -717,8 +721,9 @@ Three steps follow directly from the map, in the order we are taking them.
         that is the same whoever holds the stake (\S\ref{sec:untried}). Our first try stopped at its own checks before
         anything was trained. On new cases the gap was a fifth of its size on the test's own rows; the judge read the
         new replies less well than a reader by hand; and a second model that read the code found two faults in our
-        tools. A second try needs cases of a kind that has the gap, replies that are written out in full from outside,
-        and a reading that keeps honesty apart from saying neither.
+        tools. On the 7B model the gap then turned out to be a long text that is written in the seat and not written
+        out from outside. A second try belongs on a model that does write the piece out from outside, as Ministral 8B
+        and Mistral Large do, with a reading that keeps honesty apart from saying neither.
   \item \textbf{The empty cells.} The cheapest first: the prompts on the 7B model's lying test, so that prompts and
         trainings sit on one model and one test, and plain training on that same test, since it is the yardstick for
         every training row.

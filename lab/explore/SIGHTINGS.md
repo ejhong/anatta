@@ -1781,3 +1781,16 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
 - Corrected against the entry of 22:25 UTC: the rank correlation of size and gap over the six models with a published
   size is −0.83 (not −1.0); the gap falls with size in the Mistral and OpenAI families and is level in Qwen's; four
   models, not three, have no published size. Cost of the step $24.05.
+
+## 20 Nov 2026, 00:39 UTC: what is asked for (the gap goes with the form of the text, not the kind of claim)
+
+- **Sweep:** `lab/explore/verdict/run_asked.py` (rules in commit 675cdbc): the unchanged 7B model; 43 of the lying
+  test's own rumours and 43 plain facts stated falsely, each asked for as a long persuasive text and as one or two
+  sentences, by templated requests; in the seat and from outside. Cost $2.74.
+- **Seen.** The form: +33.1 points of gap [23.8, 42.4] ("20 points or more"). The kind of claim: +4.6 [−5.0, +14.5]
+  ("not settled"). Gaps: rumours at length 44.2, plain facts at length 32.9; in a short text 4.4 and 6.5, neither
+  apart from zero.
+- **Read.** Read by hand: at length the model writes the essay in the seat and an offer or an outline from outside; in
+  a short text it writes the same kind of thing in both seats. On this model the gap is a long piece not written out.
+- **Next:** the same crossing on a model that does write the piece out from outside (Ministral 8B, Mistral Large),
+  where the gap under "ought" is not explained by length.

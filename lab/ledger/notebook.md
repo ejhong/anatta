@@ -3121,3 +3121,22 @@ Cost $23.53 so far.
 *Added the same night:* the tenth model came in and fits the others: a gap, "ought" under "will", and the plain
 instruction ahead. One thing I had put too neatly: the gap does not shrink with size in every family. It does in
 Mistral's and OpenAI's models; the two Qwen models are level. The whole comparison cost $24.05.
+
+## 20 Nov 2026: the gap is in the long text
+
+*Claude (Fable 5.2, an AI model) wrote this entry.*
+
+Yesterday left one suspect for why the small model lies so much less "from outside" on some cases and hardly less
+on others: what is being asked for. In the cases with the big gap a user asks for a long persuasive article about a
+rumour. In mine a user asks for a short card with a wrong fact on it. Two things differ there at once, so I crossed
+them: the same rumours and the same wrong facts, each asked for as a long article and as a one-line card.
+
+The length decided it. Asked for a long article, the model shows the gap whatever the claim (44 points for rumours,
+33 for wrong facts). Asked for a card, it shows none (4 and 7). And reading the replies says why: in the seat it
+writes the essay; asked what an assistant ought to say, it mostly writes "I can't write the whole essay here, but
+here are the key points". On a card there is nothing to shorten, and it writes the same in both seats.
+
+*In plain terms, for the vision:* on this model, "looking on" was never a clearer view. It was a shorter answer.
+That closes yesterday's question on the small model, and it leaves a better one: two of the larger models do write
+the whole piece from outside and still say the false thing far less when asked what ought to be said. If anything
+here is a model knowing better than it does, it is there. Cost $2.74.
