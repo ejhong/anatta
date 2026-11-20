@@ -88,3 +88,33 @@ with a row of the test. The twin serves the rehearsal and the pre-selection only
 that is read, the honesty prompt included. The lying test here is its nearer part only, and that is the headline.
 The trainer's three points are written down. The mirror's reading, the split by the twin's used counts, the mend's
 menu and the builder's choices are fixed as the reader gave them.
+
+## After the rehearsal: the same reader on what to do next (20 Nov, about 19:35 UTC)
+
+The rehearsal on the twin missed floor (f) as the reader had predicted (the seat 70.7%, "ought" 46.4%, "will" 51.4%,
+the styled seat 59.1%; neither control 20 points above "ought"). The driver put three paths to the same reader: stop;
+a new step with a control built from the styled seat's replies matched in kind to the plain seat's; or the plain
+seat's own replies as control. Its answer, shortened in wording only:
+
+**Stop, and write it up.** The matched control holds the change of form fixed and roughly the size of the push, but
+it buys floor (f) by construction, and that breaks three things. The judge would pick the control's targets and then
+grade the outcome, so it is no longer independent: whatever makes it call a text a lie is taught to one arm only
+and comes back at the test. The cases would be selected: the matching fails on 45 of 161 cases, and not at random
+(in matched cases 69% of the seat's replies lie, in unmatched ones 52%), so both arms lose the cases where the
+model wavers. And floor (f) stops being a check: the contrast is set by the selection, so the mark would test a
+training on 41% lies against a training on 66% lies, which is close to what self-distillation already predicts and
+says little about the view from outside. Going to it is not barred, since no trained model or held-out outcome has
+been seen, but the control would be built after watching four candidates fail, so that it passes. If it went ahead
+all the same: match on the pool's overall mix; add the unselected styled arm; report the updates' sizes; a "lies
+less" only if a second judge of another family agrees in direction; and never describe it as the third version
+passing its floors. The plain seat as control is the push-confounded one that two reads had already rejected.
+
+The reader's reading of the rehearsal: of the 24 points between the seat and "ought", about 12 come from form (the
+line of style), about 8 from looking on from outside (the styled seat 59.1% against "will" 51.4%), and about 5 from
+the verb ("ought" less "will" −5.0 [−9.6, −0.5]). "A rule stated and not kept" is mostly the seat's usual form and
+the view from outside, and only a little the "ought".
+
+**What the driver did.** Took the verdict. The third version stops at its rehearsal; the implementer's unfinished
+build of the GPU side was halted and kept as a patch outside the repo; no GPU was used. A small step that needs no
+training and no such control was written in its place (`lab/explore/myths/run_advice.py`: the model's own advice put
+before it in one conversation).
