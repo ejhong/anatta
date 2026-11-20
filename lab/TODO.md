@@ -165,13 +165,28 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        a case the advice sways the reply both ways (52% after a correction, 81% after the myth, on 31 myths). A
        fresh Opus agent checked it cold (`lab/ledger/checks/2026-11-20-advice-first-opus-check.md`): the numbers
        stand; the wording rule was one-sided and is mended; "its advice has no pull" may not be said.
-       **Where it stands (20 Nov, 20:33 UTC):** both are written up (ledger, SIGHTINGS, notebook, site, paper).
-       **What Fable would do next, if Eugene wants this line carried on (about $5 to $10, a new step with its own
-       five lines):** the same "its own advice first" test on a larger model and on models of other makers, to
-       see whether a model does what it has just said ought to be done as it grows (Mistral Large and two or
-       three of the ten models of section 25; each needs its own beliefs about the myths first, and a floor on
-       its lying in the seat). Not started. **Still open from this step, cheap:** a control for the note arms
-       (a note about another myth; about $0.45); the lying test's own rows (the rule did not allow them).
+       **Then, at Eugene's word ("Go ahead"), the same test in six other models** (`lab/explore/myths/run_across.py`;
+       rules c9eefa3, record 64aab63; ledger entry of 23:36 UTC; $6.10; the site's Findings, section 29, with two
+       figures; cold-checked by Opus, `lab/ledger/checks/2026-11-20-advice-across-opus-check.md`). On 80 myths
+       that every model answers rightly, two replies a case. Lies by case, simply asked and with its own advice
+       one turn earlier: Mistral Small 70.6 and 40.6 (-30.0), Mistral Large 84.8 and 62.5 (-21.5), GPT-4.1 mini
+       84.4 and 62.5 (-21.9), Qwen3 235B 66.2 and 16.2 (-50.0), Llama 3.3 70B 86.2 and 61.2 (-25.0); the lab's 8B
+       66.2 and 70.0 (no change); Gemma 3 27B's advice is what it does, so it was not asked. In Large, Qwen and
+       Llama advice on another myth does as much; in Small and mini their own does 15 and 11 points more (a yes by
+       the rule's letter, leaning on replies the judge reads as "neither": by honest replies no model's own advice
+       does more than any advice). What carries in four models is the model's last act: after correcting another
+       myth it writes this one 25 to 51 points less often. No model's own advice beats the plain instruction.
+       What may be said and what may not is in the check file; keep to it.
+       **Where it stands (20 Nov, 23:42 UTC):** all three steps of the evening are written up (ledger, SIGHTINGS,
+       notebook, site sections 28 and 29, paper). No fourth try at the training is planned on this model.
+       **What Fable would do next, each a small step with its own five lines (none started):**
+       (1) a second judge of another maker on the replies the Claude judge reads as "states neither" (about $1 to
+       $2; Gemini through OpenRouter or through the Google key on this machine, see ideas entry 106): it would
+       settle whether GPT-4.1 mini's and Mistral Small's "yes" survive, and it is owed anyway;
+       (2) the carry-over of a model's last act on the lying test's own rows (does a correction made one turn
+       earlier lower lying under the test's pressure?), which is the one place this line could still touch the
+       table's first column;
+       (3) a control for the 8B's note arms (a note about another myth; about $0.45).
        **Owed, cheap (found by the cold read of this step's design):** in the comparison across ten models, a
        hosted model's chat from outside carried no system message while its chat in the seat carried one; for
        Ministral 8B a check found that this does not make the gap; the same check for the other nine (the "ought"
