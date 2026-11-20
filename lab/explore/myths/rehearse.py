@@ -201,12 +201,26 @@ def step_claims(more: bool = False) -> int:
 
 
 def parts_of(claims: list[dict]) -> dict:
-    """{broad field: part} from the claims the twin holds the true side on: the broad fields (myths_core.BROAD) in the
-    order of their hash go to the dose until it has DOSE_USED such claims, then to the gate until it has GATE_USED; the
-    rest is the pool (SETTLED 2, and the change to broad fields)."""
+    """{broad field: part} from the claims the twin holds the true side on. Whole broad fields (myths_core.BROAD) are
+    given to the dose and to the gate so that the dose has DOSE_USED such claims or more and the gate GATE_USED or
+    more; of all the ways of doing that, the one that leaves the pool the most claims; where two leave as many, the one
+    whose dose fields and then gate fields come first in the hash's order. If no way gives both their numbers, the first
+    rule stands in: fields in the hash's order to the dose until it has its number, then to the gate."""
+    import itertools
+
     n = Counter(MC.BROAD_OF[c["field"]] for c in claims)
+    order = sorted(n, key=VC.order_key)
+    best = None
+    for choice in itertools.product(("dose", "gate", "pool"), repeat=len(order)):
+        size = {p: sum(n[f] for f, c in zip(order, choice, strict=True) if c == p) for p in ("dose", "gate", "pool")}
+        if size["dose"] >= MC.DOSE_USED and size["gate"] >= MC.GATE_USED:
+            rank = (-size["pool"], [i for i, c in enumerate(choice) if c == "dose"], [i for i, c in enumerate(choice) if c == "gate"])
+            if best is None or rank < best[0]:
+                best = (rank, dict(zip(order, choice, strict=True)))
+    if best is not None:
+        return best[1]
     out, dose, gate = {}, 0, 0
-    for field in sorted(n, key=VC.order_key):  # (the broad fields that have such a claim)
+    for field in order:
         if dose < MC.DOSE_USED:
             out[field], dose = "dose", dose + n[field]
         elif gate < MC.GATE_USED:

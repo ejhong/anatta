@@ -29,24 +29,35 @@ def test_a_claim_is_parsed_flagged_and_a_duplicate_in_other_words_is_dropped():
     assert "slash" in R.claim_flags({**other, "false": "Bulls hate red/green."}, frozenset(), frozenset(), [])
 
 
-def test_broad_fields_go_to_the_dose_then_the_gate_then_the_pool_by_the_claims_the_twin_believes():
-    claims = [{"id": f"f{fi:02d}-{k:03d}", "field": f, "group": fi * 100 + k} for fi, f in enumerate(MC.ALL_FIELDS) for k in range(2)]
-    n = {b: 2 * len(fs) for b, fs in MC.BROAD.items()}
+def _claims_by_broad(sizes: dict) -> list[dict]:
+    out = []
+    for b, n in sizes.items():
+        out += [{"id": f"{b[:3]}-{k:03d}", "field": MC.BROAD[b][0], "group": hash((b, k))} for k in range(n)]
+    return out
+
+
+def test_whole_broad_fields_are_held_out_in_the_way_that_leaves_the_pool_largest():
+    sizes = {"history and people": 29, "physics and technology": 20, "living things": 47, "plants and food": 17, "arts and words": 26, "the sky and the Earth": 24}
+    part = R.parts_of(_claims_by_broad(sizes))
+    assert part["plants and food"] == "dose" and part["arts and words"] == "gate" and [f for f, p in part.items() if p == "pool"] and sum(sizes[f] for f, p in part.items() if p == "pool") == 120
+    part = R.parts_of(_claims_by_broad({b: 10 for b in MC.BROAD}))  # no single field reaches either number: two for the dose, three for the gate, one left
+    assert sorted(part.values()).count("dose") == 2 and sorted(part.values()).count("gate") == 3 and sorted(part.values()).count("pool") == 1
     order = sorted(MC.BROAD, key=R.VC.order_key)
-    part, dose, gate = R.parts_of(claims), 0, 0
-    for b in order:  # the rule, said again: whole broad fields, in the hash's order, until the dose has 14 and then the gate 26
-        want = "dose" if dose < MC.DOSE_USED else "gate" if gate < MC.GATE_USED else "pool"
-        assert part[b] == want
-        dose, gate = dose + n[b] * (want == "dose"), gate + n[b] * (want == "gate")
-    assert set(part) == set(MC.BROAD) and "dose" in part.values() and "gate" in part.values()
+    assert [f for f in order if part[f] == "dose"] == order[:2]  # of the ways that leave the pool as much, the one first in the hash's order
+    part = R.parts_of(_claims_by_broad({"living things": 5, "arts and words": 6}))  # too few for both: the first rule stands in
+    assert set(part.values()) <= {"dose", "gate"}
+
+
+def test_a_subject_held_out_is_dropped_from_the_pool():
+    claims = _claims_by_broad({"history and people": 29, "physics and technology": 20, "living things": 47, "plants and food": 17, "arts and words": 26, "the sky and the Earth": 24})
+    part = R.parts_of(claims)
     parts, dropped = R.split_of(claims)
     assert not dropped and len(parts) == len(claims) and all(parts[c["id"]] == part[MC.BROAD_OF[c["field"]]] for c in claims)
     a = next(c for c in claims if part[MC.BROAD_OF[c["field"]]] == "dose")
-    b = next((c for c in claims if part[MC.BROAD_OF[c["field"]]] == "pool"), None)
-    if b is not None:  # one subject in the dose and in the pool: the pool's copy is dropped
-        a["group"] = b["group"] = -1
-        parts, dropped = R.split_of(claims)
-        assert list(dropped) == [b["id"]] and "dose" in dropped[b["id"]] and len(parts) == len(claims) - 1
+    b = next(c for c in claims if part[MC.BROAD_OF[c["field"]]] == "pool")
+    a["group"] = b["group"] = -1
+    parts, dropped = R.split_of(claims)
+    assert list(dropped) == [b["id"]] and "dose" in dropped[b["id"]] and len(parts) == len(claims) - 1
     assert len(set(MC.ALL_FIELDS)) == len(MC.ALL_FIELDS) and "do not make any up" in MC.CLAIMS_BRIEF_MORE and len(MC.BROAD) == 6
 
 

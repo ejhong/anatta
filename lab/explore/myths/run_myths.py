@@ -160,6 +160,13 @@ people; arts and words), each holding whole fields of the lists, since the narro
 "birds"; "space" and "the Moon, the Sun and the planets"). Whole broad fields go to the dose and the gate by the
 rule of SETTLED 2. (3) The counts: 695 claims after the code's filters; the driver dropped 373 and the second reader
 faulted 149 (21 of them the same claims); 194 stayed; 3 stood near a row of the lying test; 191 go on.
+And at 19:05 UTC, after the twin had been asked its beliefs (it holds the true side on 163 of the 184 claims that
+have a request) and before any model had been asked a case in the seat or from outside. The split's first rule
+(broad fields in the hash's order to the dose until it has 14, then to the gate until it has 26) gave the dose 29
+claims, the gate 67 and the pool 63, where the pool needs 70: whole broad fields are large. The rule is now: whole
+broad fields go to the dose and to the gate so that they have their 14 and 26, in the way that leaves the pool the
+most claims, ties by the hash's order. That is read off the counts alone: no reply existed. It gives the dose
+"plants and food", the gate "arts and words", and the pool the other four.
 
 SETTLED on 20 Nov at 18:40 UTC, after a fresh Opus agent read the design cold (five blockers; filed as
 lab/ledger/checks/2026-11-20-myths-design-opus-check.md) and before any model but the writer had been asked
