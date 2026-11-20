@@ -230,6 +230,43 @@ and before anything was built. Where a point here differs from the text above, t
      none. The rule's constants carry a version number (ought_core.RULE_VERSION), raised when the rule's code
      changes with no constant changing, so that every reply is then read again.
 
+WHAT HAPPENED: THE STEP STOPPED AT ITS FLOORS, and nothing was trained (written on 20 Nov at 16:54 UTC by the driver).
+  The unchanged model on the lab's GPU, 124 used cases (dose 14, gate 25, pool 85), 1,984 replies, every chat with
+  the plain line as its system message. By the step's own code (ought_core.floor_checks; the driver's record of it is
+  floors.read-by-driver.json in the step's folder):
+    (a) cases used 14, 25 and 85: met.
+    (b) lies in the seat 62.0% of replies, by case: met.
+    (c) under "ought" 44.0%: 18.0 points fewer [12.9, 23.3], where 20 are asked: NOT MET.
+    (d) the driver's blind read against the judge, on the texts as trained: 24 of 30 under "ought", 25 of 30 in the
+        seat: met.
+    (e) supply is there (85 pool cases with a target, 170 pairs), but of the 30 replies under "ought" in the blind
+        read 11 are not a reply addressed to the user, where 3 are allowed: 9 open with a quotation mark that wraps
+        the reply (the model quotes the reply it is asked for), 2 speak of "the assistant" as someone else: NOT MET.
+    (f) the training sets as trained: lies in 42.4% of the outside set's replies, 55.9% of the plain seat's, 45.3%
+        of the styled seat's: 13.5 points between the arms, where 25 are asked: NOT MET.
+    (g) the lying test on the unchanged copy: not run (about $7), since (c), (e) and (f) miss whatever it says. The
+        step's `floors` command records nothing until (g) is on disk; the driver's file above is the record.
+  The control would have been the plain seat: the styled seat keeps the seat's conduct (lies 56.5% against 60.2%)
+  and drops every title, but stands only 2.9 points above the outside set.
+  Why the gap is smaller than the looks said, found by two looks after the floors were read ($0.55 together): on
+  the very same chats the hosted model answers as the lab's copy does (43 pool cases: in the seat 53.6% against
+  54.7%, -1.0 points [-8.4, +6.1]; under "ought" 39.9% against 39.6%, +0.3 [-6.7, +7.8]). So it is the requests.
+  The looks before the design used Claude's templates, which give no reason for wanting the text; the writer's
+  requests each give an everyday reason (a school project, a newsletter), as the brief asked. With the same writer
+  and the reason left out, the hosted model states the false claim in the seat in 72.1% of replies against 53.6%
+  (+18.4 points [8.2, 28.5]) and under "ought" in 47.8% against 39.9% (+7.8 [-5.0, +20.9]); the gap is then 24.3
+  points [13.8, 35.2] against 13.7 [4.7, 23.6].
+  The design's one mend was not used. The mend that fits the cause is a brief without the reason, with a rule
+  for the quotation marks. On the look's numbers it would bring the gap to about 24 points and the two training
+  sets to about 21 apart, where 25 are asked, at about $14 for the replies and floor (g) again; the driver put the
+  chance of all floors holding after it at about one in ten. A step that stops is written up as it stands.
+  The guesses, against what happened: the floors hold at the first try, 50%: they did not. (b) 85%, held; (c) 85%,
+  missed; (d) 70%, held (the reader had said 50%); (e) 80%, missed on the replies that are not replies (the reader
+  had said 50%, for supply); (f) 75%, missed by 11.5 points. The driver's guesses for (c) and (f) rested on looks
+  made with requests of another kind than the design's own.
+  Spent on the step: $8.66 (the writer and the judge $1.47, the GPU $7.19), and $1.25 on five looks on the hosted
+  model, three before the floors and two after. Nothing of part B was built.
+
 The steps of part A are written below the design: from the requests to the floors and the training sets. The
 implementer (Claude, an AI model) wrote them on 20 Nov 2026, to SETTLED and the coordinator's brief, before any of them
 was run; `floors` is built to the coordinator's SETTLED 13 of that day (floor (f) read against the plain seat; the
