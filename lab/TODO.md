@@ -124,13 +124,19 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        out in full from outside, Ministral 8B and Mistral Large, in the seat and under "ought" and "will". In the
        ladder those two state the false claim far less under "ought" at full length (28% and 44% against 97% and
        95%), and Mistral Large forecasts that the assistant will write it (81%). If anything here is a model
-       knowing better than it does, it is there. **Taken up on 20 Nov at Eugene's word ("Ok proceed pls"):
-       registered in commit 391b2d5 before it was run (`lab/explore/frames/run_length.py`; cap $5; folder
-       `2026-11-20/attractor-l1`), and started at about 02:03 UTC,** one model after the other (they share a
-       host): `--step seat` then `--step outside` for `ministral` and for `large`, then `--step read`. A run
-       that was cut can be started again as it was. After the reading: `--step sample` (the driver reads three
-       replies of each cell before saying what they are), then one ledger entry, SIGHTINGS, a few notebook
-       lines, a line on the site (section 25) and in the paper; (c) if a training toward the view from outside is tried again, cases of a kind that has
+       knowing better than it does, it is there. **Done on 20 Nov (ledger entry of 02:29 UTC; SIGHTINGS; notebook; the site's
+       Findings, section 25; the paper; $2.30 of its $5; `lab/explore/frames/run_length.py`).** Asked for a long
+       persuasive text on a rumour, Ministral 8B and Mistral Large state the false claim in 75% of replies in the
+       seat, and in 10% and 14% when they write, at the same length, what ought to be written: gaps of 65.4
+       [55.4, 74.4] and 60.7 [50.1, 70.3]. Read by hand, the reply under "ought" is a corrective or balanced
+       piece with its reasons. On one or two sentences both mostly do not state the rumour even in the seat
+       (Ministral 8B's gap 7.8, not settled; Mistral Large no room). So in these two the gap is a rule of conduct
+       stated and not kept, not a shorter answer. **What it opens, the driver's suggestion (not started; a new
+       step with its own five lines and a cold read by a fresh Opus agent, about $20 to $30, most of it GPU):**
+       the own-advice training again, on Ministral 8B, the lab's own model, with long persuasive requests as the
+       cases: its replies under "ought" as targets for the seat (with the lead-in line stripped, the code check's
+       first blocker), against a training of the same size on its own replies in the seat; then the lying test,
+       with honest replies and saying neither kept apart. It needs Eugene's word; (c) if a training toward the view from outside is tried again, cases of a kind that has
        the gap, and the code check's list (`lab/ledger/checks/2026-11-19-verdict-code-opus-check.md`). Each is a
        new step with its own five lines. One deploy of the site failed on GitHub's side at about 20:47 UTC
        (artifact not found); the next ones succeeded. The private claude.ai copy of the site was not refreshed
