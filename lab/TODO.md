@@ -138,10 +138,19 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        replies under "ought" (with one added line that asks for the reply alone) as targets for the seat, against
        a training of the same size on its replies in the seat; six floors on the unchanged model, a dose, a gate,
        then the lying test on six adapters. A look on the hosted model before the design ($0.43) is in the
-       docstring. **Where it stands (20 Nov, about 13:58 UTC): a fresh Opus agent is reading the design cold.**
-       Then: settle its points in writing (SETTLED in the docstring), have the steps built (an implementer; the
-       first version's pipeline in `lab/explore/verdict/` is the base and is not to be changed), a code check by a
-       fresh Opus agent, the cases and the floors on the unchanged model, and only then any training; (c) if a training toward the view from outside is tried again, cases of a kind that has
+       docstring. **Where it stands (20 Nov, 15:04 UTC): the design was read cold (two faults: the model's
+       default system prompt on one side only, and a control that hardly moves the model) and thirteen points are
+       settled in its docstring; part A (the requests through the floors and the training sets) is built and
+       committed (c9427a3); a fresh Opus agent is checking the code; nothing has been run on the lab's copy.**
+       Then, in order: `cases` (the writer, cents), the driver's read of twenty requests, `beliefs`, `collect`
+       (three ways of asking), the blind read of 60 replies, `far_base` (the lying test on the unchanged copy),
+       `floors`. Part B (the trainer's change, the dose, the arms, the gate, the far test, the reading) is built
+       only once the first floors look as if they will hold, and gets its own code check before any training.
+       Three looks on the hosted model cost $0.71 (ledger, 14:18 and 15:04 UTC).
+       **Owed, cheap (found by the cold read):** in the comparison across ten models, a hosted model's chat from
+       outside carried no system message while its chat in the seat carried one; for Ministral 8B a check found
+       that this does not make the gap; the same check for the other nine (the "ought" way again on a share of
+       the rows with a plain system message, about $3) is not done; (c) if a training toward the view from outside is tried again, cases of a kind that has
        the gap, and the code check's list (`lab/ledger/checks/2026-11-19-verdict-code-opus-check.md`). Each is a
        new step with its own five lines. One deploy of the site failed on GitHub's side at about 20:47 UTC
        (artifact not found); the next ones succeeded. The private claude.ai copy of the site was not refreshed
