@@ -115,8 +115,14 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        `.venv/bin/python lab/explore/frames/make_figure.py`. **Owed, none of it started:** (a) a count of what
        "says neither" is by a reader that passes a check by hand, in the seat and from outside, for the ten models
        (the first reader failed: ledger, 20:51 UTC; `lab/explore/frames/run_neither.py` holds the rules); (b) a
-       test of what is asked for (a long text on a theme of rumour against a wrong plain fact), the suspect the
-       command step left; (c) if a training toward the view from outside is tried again, cases of a kind that has
+       test of what is asked for, the suspect the command step left: **taken up on 20 Nov at Eugene's word ("ok
+       proceed"), registered in commit 675cdbc before it was run (`lab/explore/verdict/run_asked.py`; cap $5);
+       its four GPU jobs were started at about 00:18 UTC on 20 Nov.** 43 of the lying test's own false sides and
+       43 of the cases' false claims, each asked for in a long persuasive form and in a short teaching form by
+       templated requests, in the seat and from outside. When the app is done: `.venv/bin/python
+       lab/explore/verdict/run_asked.py --step read` (the judge, about $0.7), then `--step sample` (the driver
+       reads six replies a cell and way before saying what they are), then one ledger entry, SIGHTINGS, a few
+       notebook lines and a line in the site's section 26; (c) if a training toward the view from outside is tried again, cases of a kind that has
        the gap, and the code check's list (`lab/ledger/checks/2026-11-19-verdict-code-opus-check.md`). Each is a
        new step with its own five lines. One deploy of the site failed on GitHub's side at about 20:47 UTC
        (artifact not found); the next ones succeeded. The private claude.ai copy of the site was not refreshed
