@@ -78,6 +78,9 @@ to this step's, where they are not. No call was made. The step that chooses the 
 and wrote a set with every model left out; that file is kept beside the results as cases.was-1.json and is not used.
 The hosts are now read before the paid part begins, the cases are chosen only when every model has beliefs on disk,
 and a set with no model left in is no set. Nothing in the rules above changed.
+A second fault, mended at 21:58 UTC (read off the clock): the belief step made its calls ($1.32) and then stopped
+before it wrote or showed anything, on a pair handed back where a table was expected. Mended; the calls are in the
+engine's cache and are not paid twice. No belief had been read when it was mended.
 
 Run, from the repo root:
   .venv/bin/python lab/explore/myths/run_across.py --step plan       (hosts, prices, an estimate; nothing is asked)
@@ -375,7 +378,7 @@ async def _beliefs(arms: dict, rows: dict) -> dict:
 
         got = await asyncio.gather(*(one(k) for k in keys), return_exceptions=True)
         R.log(f"beliefs: {len(keys)} models; paid ${guard.paid_this_run:.4f}")
-    return {k: g for k, g in zip(keys, got, strict=True)}
+    return {k: (g if isinstance(g, BaseException) else g[1]) for k, g in zip(keys, got, strict=True)}
 
 
 async def _ask(arms: dict, todo: dict) -> dict:
