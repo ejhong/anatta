@@ -201,11 +201,12 @@ def step_claims(more: bool = False) -> int:
 
 
 def parts_of(claims: list[dict]) -> dict:
-    """{field: part} from the claims the twin holds the true side on: fields in the order of their hash go to the dose
-    until it has DOSE_USED of them, then to the gate until it has GATE_USED; the rest is the pool (SETTLED 2)."""
-    n = Counter(c["field"] for c in claims)
+    """{broad field: part} from the claims the twin holds the true side on: the broad fields (myths_core.BROAD) in the
+    order of their hash go to the dose until it has DOSE_USED such claims, then to the gate until it has GATE_USED; the
+    rest is the pool (SETTLED 2, and the change to broad fields)."""
+    n = Counter(MC.BROAD_OF[c["field"]] for c in claims)
     out, dose, gate = {}, 0, 0
-    for field in sorted(n, key=VC.order_key):  # (the fields that have such a claim, of either round)
+    for field in sorted(n, key=VC.order_key):  # (the broad fields that have such a claim)
         if dose < MC.DOSE_USED:
             out[field], dose = "dose", dose + n[field]
         elif gate < MC.GATE_USED:
@@ -220,7 +221,7 @@ def split_of(claims: list[dict]) -> tuple[dict, dict]:
     field, then every group of one subject made whole: where a group crosses the split its claims in the less held-out
     part are dropped (the pool's before the gate's before the dose's)."""
     field_part = parts_of(claims)
-    part = {c["id"]: field_part[c["field"]] for c in claims}
+    part = {c["id"]: field_part[MC.BROAD_OF[c["field"]]] for c in claims}
     rank = {"dose": 0, "gate": 1, "pool": 2}
     by: dict = {}
     for c in claims:
@@ -292,28 +293,54 @@ def faulted(verdicts: list, n: int) -> dict:
     return out
 
 
-def groups_of(found: list, ids: list[str]) -> tuple[dict, dict]:
-    """({claim id: group number}, {claim id: the id of the claim it repeats}) from the second reader's groups over the
-    claims in `ids` (numbered from 1). A number the reader left out is a group by itself; one it gave twice stays in its
-    first group. Of claims marked as the same myth the first by id is kept."""
-    group, same, g = {}, {}, 0
-    for item in found:
+def groups_of(found: dict, claims: list[dict]) -> tuple[dict, dict, dict]:
+    """({claim id: group number}, {}, {group number: its subjects as the reader named them}) from the second reader's
+    answer over the claims given (numbered from 1). Claims are one group if the reader put them in one set, or in sets
+    that share a claim. A claim in no set is a group by itself. The reader's lists of "the same myth" are read as sets
+    too, and no claim is dropped on them: asked for both, it listed claims of one subject there (every claim about
+    dinosaurs as one myth), and the driver's own read had already dropped the claims that repeat another."""
+    ids = [c["id"] for c in claims]
+    parent = {cid: cid for cid in ids}
+
+    def root(x: str) -> str:
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
+    def join(members: list[str]) -> None:
+        for m in members[1:]:
+            parent[root(m)] = root(members[0])
+
+    label: dict = {}
+    for item in found.get("sets") or []:
         if not isinstance(item, dict):
             continue
-        members = [ids[n - 1] for n in item.get("claims") or [] if isinstance(n, int) and 1 <= n <= len(ids) and ids[n - 1] not in group]
-        if not members:
-            continue
-        for cid in members:
-            group[cid] = g
-        for dup in item.get("same") or []:
-            mine = sorted(ids[n - 1] for n in dup if isinstance(n, int) and 1 <= n <= len(ids) and ids[n - 1] in members)
-            for cid in mine[1:]:
-                same[cid] = mine[0]
-        g += 1
+        members = sorted({ids[n - 1] for n in item.get("claims") or [] if isinstance(n, int) and 1 <= n <= len(ids)})
+        if len(members) > 1:
+            join(members)
+            label.setdefault(members[0], []).append(str(item.get("subject") or "").strip())
+    for dup in found.get("same") or []:
+        members = sorted({ids[n - 1] for n in dup if isinstance(n, int) and 1 <= n <= len(ids)}) if isinstance(dup, list) else []
+        if len(members) > 1:
+            join(members)
+    numbers, group = {}, {}
     for cid in ids:
-        if cid not in group:
-            group[cid], g = g, g + 1
-    return group, same
+        group[cid] = numbers.setdefault(root(cid), len(numbers))
+    subjects: dict = {}
+    for first, ls in label.items():
+        subjects.setdefault(group[first], []).extend(x for x in ls if x)
+    return group, {}, subjects
+
+
+def parse_object(text: str | None) -> dict:
+    t = (text or "").strip()
+    fenced = VC._FENCE.match(t)
+    try:
+        got = json.loads(fenced.group(1).strip() if fenced else t)
+    except Exception:
+        return {}
+    return got if isinstance(got, dict) else {}
 
 
 def near_a_row(c: dict, row_words: list[frozenset]) -> bool:
@@ -387,15 +414,14 @@ def step_second_read() -> int:
     fault = {cid: bad for cid, bad in done["faults"].items() if cid in {c["id"] for c in left}}
     fault |= check_pairs([c for c in left if c["id"] not in set(done["checked"])])  # (a pair the second reader has not seen yet)
     valid = [c for c in left if c["id"] not in fault]
-    ids = [c["id"] for c in valid]
     listing = "\n".join(f"{k + 1}. {c['false']} (the correction: {c['true']})" for k, c in enumerate(valid))
-    found = parse_list((ask_second("myths-groups", [("groups", [{"role": "user", "content": MC.GROUPS.format(claims=listing)}], 0)]).get("groups") or {}).get("text"))
-    if not found:
-        raise SystemExit("the second reader's groups could not be read: nothing is written (run the step again)")
-    group, same = groups_of(found, ids)
-    final = [{**c, "group": group[c["id"]]} for c in valid if c["id"] not in same]
+    found = parse_object((ask_second("myths-sets", [("sets", [{"role": "user", "content": MC.GROUPS.format(claims=listing)}], 0)]).get("sets") or {}).get("text"))
+    if "sets" not in found:
+        raise SystemExit("the second reader's sets could not be read: nothing is written (run the step again)")
+    group, same, named = groups_of(found, valid)
+    final = [{**c, "group": group[c["id"]], "subject": "; ".join(named.get(group[c["id"]], [])) or None} for c in valid if c["id"] not in same]
     jwrite("second_read.json", {"at": RV.utc_now(), "reader": MC.SECOND_READER["model"], "read": len(claims), "near_a_row": len(near), "faulted": fault,
-                                "faulted_by": dict(Counter(k for bad in fault.values() for k in bad)), "same_myth": same,
+                                "faulted_by": dict(Counter(k for bad in fault.values() for k in bad)), "same_myth": same, "subjects": {str(k): v for k, v in named.items()}, "groups_sha256": VC.sha(MC.GROUPS),
                                 "groups": len(set(group.values())), "groups_of_more_than_one": sum(v > 1 for v in Counter(group[c["id"]] for c in final).values())})
     jwrite("claims.final.json", {"claims": final, "sha256": VC.sha(json.dumps(final))})
     log(f"second read ({MC.SECOND_READER['model']}): {len(claims)} claims; near a row of the lying test {len(near)}; faulted {len(fault)} "
@@ -590,7 +616,7 @@ def step_split() -> int:
     field_part = parts_of(mine)
     jwrite("parts.json", {"at": RV.utc_now(), "parts": part, "dropped": dropped, "fields": field_part, "beliefs_sha256": VC.sha(json.dumps(b["letters"], sort_keys=True))})
     for p in ("dose", "gate", "pool"):
-        log(f"   {p}: {sum(v == p for v in part.values())} claims in {sum(v == p for v in field_part.values())} fields ({', '.join(f for f in MC.ALL_FIELDS if field_part.get(f) == p)})")
+        log(f"   {p}: {sum(v == p for v in part.values())} claims in {sum(v == p for v in field_part.values())} broad fields ({', '.join(f for f in MC.BROAD if field_part.get(f) == p)})")
     log(f"the split: {len(part)} claims; dropped because their subject is held out {len(dropped)}. next: --step rehearse")
     return 0
 

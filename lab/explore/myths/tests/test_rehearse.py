@@ -29,30 +29,39 @@ def test_a_claim_is_parsed_flagged_and_a_duplicate_in_other_words_is_dropped():
     assert "slash" in R.claim_flags({**other, "false": "Bulls hate red/green."}, frozenset(), frozenset(), [])
 
 
-def test_fields_go_to_the_dose_then_the_gate_then_the_pool_by_the_claims_the_twin_believes():
-    claims = [{"id": f"f{fi:02d}-{k:03d}", "field": f, "group": fi * 100 + k} for fi, f in enumerate(MC.ALL_FIELDS) for k in range(4)]
-    part = R.parts_of(claims)
-    order = sorted(MC.ALL_FIELDS, key=R.VC.order_key)
-    assert [part[f] for f in order][:4] == ["dose"] * 4 and [part[f] for f in order][4:11] == ["gate"] * 7 and set(part[f] for f in order[11:]) == {"pool"}  # 14 need four fields of four; 26 need seven
+def test_broad_fields_go_to_the_dose_then_the_gate_then_the_pool_by_the_claims_the_twin_believes():
+    claims = [{"id": f"f{fi:02d}-{k:03d}", "field": f, "group": fi * 100 + k} for fi, f in enumerate(MC.ALL_FIELDS) for k in range(2)]
+    n = {b: 2 * len(fs) for b, fs in MC.BROAD.items()}
+    order = sorted(MC.BROAD, key=R.VC.order_key)
+    part, dose, gate = R.parts_of(claims), 0, 0
+    for b in order:  # the rule, said again: whole broad fields, in the hash's order, until the dose has 14 and then the gate 26
+        want = "dose" if dose < MC.DOSE_USED else "gate" if gate < MC.GATE_USED else "pool"
+        assert part[b] == want
+        dose, gate = dose + n[b] * (want == "dose"), gate + n[b] * (want == "gate")
+    assert set(part) == set(MC.BROAD) and "dose" in part.values() and "gate" in part.values()
     parts, dropped = R.split_of(claims)
-    assert not dropped and len(parts) == len(claims)
-    a, b = order[0], order[-1]  # a dose field and a pool field: one subject in both
-    for c in claims:
-        if c["id"] in (f"f{MC.ALL_FIELDS.index(a):02d}-000", f"f{MC.ALL_FIELDS.index(b):02d}-000"):
-            c["group"] = -1
-    parts, dropped = R.split_of(claims)
-    assert list(dropped) == [f"f{MC.ALL_FIELDS.index(b):02d}-000"] and "dose" in dropped[f"f{MC.ALL_FIELDS.index(b):02d}-000"] and len(parts) == len(claims) - 1
-    assert len(set(MC.ALL_FIELDS)) == len(MC.ALL_FIELDS) and "do not make any up" in MC.CLAIMS_BRIEF_MORE
+    assert not dropped and len(parts) == len(claims) and all(parts[c["id"]] == part[MC.BROAD_OF[c["field"]]] for c in claims)
+    a = next(c for c in claims if part[MC.BROAD_OF[c["field"]]] == "dose")
+    b = next((c for c in claims if part[MC.BROAD_OF[c["field"]]] == "pool"), None)
+    if b is not None:  # one subject in the dose and in the pool: the pool's copy is dropped
+        a["group"] = b["group"] = -1
+        parts, dropped = R.split_of(claims)
+        assert list(dropped) == [b["id"]] and "dose" in dropped[b["id"]] and len(parts) == len(claims) - 1
+    assert len(set(MC.ALL_FIELDS)) == len(MC.ALL_FIELDS) and "do not make any up" in MC.CLAIMS_BRIEF_MORE and len(MC.BROAD) == 6
 
 
 def test_the_second_readers_verdicts_groups_and_the_rows_of_the_test():
     verdicts = [{"n": 1, "myth": "yes", "correct": "yes", "contradict": "yes"}, {"n": 2, "myth": "yes", "correct": "no", "contradict": "yes"}, {"n": 4, "myth": True, "correct": True, "contradict": True}]
     assert R.faulted(verdicts, 4) == {2: ["correct"], 3: ["no verdict"]}
-    ids = ["f00-000", "f00-001", "f01-000", "f02-000"]
-    found = [{"subject": "Napoleon", "claims": [1, 2], "same": [[1, 2]]}, {"subject": "bats", "claims": [3, 1], "same": []}]
-    group, same = R.groups_of(found, ids)
-    assert group["f00-000"] == group["f00-001"] != group["f01-000"] and group["f02-000"] not in (group["f00-000"], group["f01-000"]) and same == {"f00-001": "f00-000"}
-    assert R.parse_list('```json\n[1, 2]\n```') == [1, 2] and R.parse_list("not json") == []
+    claims = [{"id": i, "false": f} for i, f in (("f00-000", "The Moon does not rotate."), ("f00-001", "The dark side of the Moon is always dark."), ("f01-000", "Bats are blind."),
+                                                ("f02-000", "The sonnet was invented by William Shakespeare."), ("f02-001", "Most words were coined by Shakespeare."),
+                                                ("f03-000", "Bulls hate red."), ("f03-001", "Planting by the moon helps crops."))]
+    found = {"sets": [{"subject": "the Moon", "claims": [1, 2]}, {"subject": "moon and plants", "claims": [2, 7]}], "same": [[4, 5]]}
+    group, same, subjects = R.groups_of(found, claims)
+    assert group["f00-000"] == group["f00-001"] == group["f03-001"]  # two sets that share a claim are one group
+    assert group["f02-000"] == group["f02-001"] != group["f00-000"] and same == {}  # a list of "the same myth" is read as a set, and nothing is dropped on it
+    assert len({group["f01-000"], group["f03-000"], group["f00-000"], group["f02-000"]}) == 4
+    assert "the Moon" in subjects[group["f00-000"]] and R.parse_object('{"a": 1}') == {"a": 1} and R.parse_object("[1]") == {}
     row = [R.content_words("The pyramids of Egypt were built by slaves under the pharaohs")]
     assert R.near_a_row({"false": "The Egyptian pyramids were built by slaves.", "true": "Paid workers built the pyramids."}, row)
     assert not R.near_a_row({"false": "Bats are blind.", "true": "Bats can see."}, row)

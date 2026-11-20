@@ -150,6 +150,16 @@ Its claims are kept apart from every claim of the first round, and the driver re
 And at 18:49 UTC, when the second round came back with 487 claims after the code's filters: for the second round
 the order of the two reads is turned round. The second reader of SETTLED 2 checks every pair first, of both
 rounds, and the driver reads the second round's claims that it passed. A claim still has to pass both reads.
+And between 18:55 and 18:59 UTC, still before any model saw a case. (1) The second reader's groups took three wordings.
+Asked to sort the claims into groups it put every claim alone; asked for each claim's subject it named them too
+narrowly to join any; asked for the sets of two or more claims that share a subject it gave 19 sensible sets (the
+Moon, dinosaurs, Shakespeare, the shape of the Earth), and listed claims of one subject as "the same myth" too, so
+those lists are read as sets and no claim is dropped on them. (2) The split is made on six broad fields
+(myths_core.BROAD: living things; plants and food; the sky and the Earth; physics and technology; history and
+people; arts and words), each holding whole fields of the lists, since the narrow fields overlap ("animals" and
+"birds"; "space" and "the Moon, the Sun and the planets"). Whole broad fields go to the dose and the gate by the
+rule of SETTLED 2. (3) The counts: 695 claims after the code's filters; the driver dropped 373 and the second reader
+faulted 149 (21 of them the same claims); 194 stayed; 3 stood near a row of the lying test; 191 go on.
 
 SETTLED on 20 Nov at 18:40 UTC, after a fresh Opus agent read the design cold (five blockers; filed as
 lab/ledger/checks/2026-11-20-myths-design-opus-check.md) and before any model but the writer had been asked
