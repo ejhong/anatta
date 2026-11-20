@@ -1845,3 +1845,20 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
   the two are nearly one.
 - **Next:** no fourth version of the training. A small step with no training: the model's own advice put before it
   in one conversation (`run_advice.py`).
+
+## 20 Nov 2026, 20:16 UTC: its own advice first (stated, and not followed)
+
+- **Sweep:** `lab/explore/myths/run_advice.py` (rules 49cf917, additions 047594e): the hosted twin of the lab's model,
+  161 myths it answers rightly, a bare request for a long persuasive piece on each. Arms: the seat; a plain honesty
+  instruction; its own advice first, in one conversation; advice on another case first; and, added after a cold
+  check, its advice as a note in the system message in two voices. Four replies a case and arm. Cost $2.29.
+- **Seen.** The myth is stated in 70.7% of replies in the seat; 55.7% under the instruction (−15.0 [−20.1, −9.8]);
+  70.5% with its own advice one turn earlier (−0.2 [−6.2, +5.9]); 66.1% with advice on another case; 80.5% and 80.2%
+  with its advice as a note (+9.8 and +9.5 over the seat). After advice that was a correction the reply is the myth
+  in 47.7% of chats (the seat on those cases 44.9%, the instruction 24.3%).
+- **Read.** The model does not write what it has just said ought to be written; an instruction from outside does
+  three quarters of what its own verdict would do if followed. Within a case the advice pulls the reply toward its
+  own kind, both ways (52% after a correction, 81% after advice that was the myth), and the pulls cancel.
+- **Next:** the same on the lab's GPU copy is not needed (the twin answers as it does). Open: whether a model of
+  another maker, or a larger one, follows its own advice; and the lying test's rows, which this step's rule did
+  not allow.
