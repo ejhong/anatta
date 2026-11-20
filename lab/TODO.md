@@ -114,15 +114,17 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        −0.83 over the six models with a published size). The figure is made by
        `.venv/bin/python lab/explore/frames/make_figure.py`. **Owed, none of it started:** (a) a count of what
        "says neither" is by a reader that passes a check by hand, in the seat and from outside, for the ten models
-       (the first reader failed: ledger, 20:51 UTC; `lab/explore/frames/run_neither.py` holds the rules); (b) a
-       test of what is asked for, the suspect the command step left: **taken up on 20 Nov at Eugene's word ("ok
-       proceed"), registered in commit 675cdbc before it was run (`lab/explore/verdict/run_asked.py`; cap $5);
-       its four GPU jobs were started at about 00:18 UTC on 20 Nov.** 43 of the lying test's own false sides and
-       43 of the cases' false claims, each asked for in a long persuasive form and in a short teaching form by
-       templated requests, in the seat and from outside. When the app is done: `.venv/bin/python
-       lab/explore/verdict/run_asked.py --step read` (the judge, about $0.7), then `--step sample` (the driver
-       reads six replies a cell and way before saying what they are), then one ledger entry, SIGHTINGS, a few
-       notebook lines and a line in the site's section 26; (c) if a training toward the view from outside is tried again, cases of a kind that has
+       (the first reader failed: ledger, 20:51 UTC; `lab/explore/frames/run_neither.py` holds the rules); (b) the test of what is asked for: **done on 20 Nov (ledger entry of 00:39 UTC;
+       SIGHTINGS; notebook; the site's Findings, section 26; the paper; $2.74 of its $5).** On the 7B model the
+       gap goes with the length of the text asked for (+33.1 points [23.8, 42.4]) and not with the kind of claim
+       (+4.6 [−5.0, +14.5]): 44 and 33 points where a long article is asked for, 4 and 7 where a card is. Read by
+       hand: in the seat it writes the essay, from outside an offer or an outline. So on this model looking on is
+       a shorter answer. **What it leaves, and the driver's suggestion for the next small step (not started; its
+       own five lines; about $4):** the same crossing of long and short on the two models that write the piece
+       out in full from outside, Ministral 8B and Mistral Large, in the seat and under "ought" and "will". In the
+       ladder those two state the false claim far less under "ought" at full length (28% and 44% against 97% and
+       95%), and Mistral Large forecasts that the assistant will write it (81%). If anything here is a model
+       knowing better than it does, it is there; (c) if a training toward the view from outside is tried again, cases of a kind that has
        the gap, and the code check's list (`lab/ledger/checks/2026-11-19-verdict-code-opus-check.md`). Each is a
        new step with its own five lines. One deploy of the site failed on GitHub's side at about 20:47 UTC
        (artifact not found); the next ones succeeded. The private claude.ai copy of the site was not refreshed
