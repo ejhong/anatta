@@ -144,18 +144,21 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        reason, 72% without). The one mend was not used (it would have left the sets about 21 points apart).
        Part B (the trainer's change, the dose, the arms, the gate, the far test) was never built; its brief is not
        in the repo. The step's code for part A is tested and stays in `lab/explore/ought/` as the record.
-       **Waiting on Eugene: whether this line gets a third try.** The driver's reading: not on plain facts, and
-       yes on popular myths. A look on the hosted model (ledger, 20 Nov, 17:10 UTC; $0.28): 48 myths listed by
-       Qwen3-235B with their corrections, bare requests by the same writer; on the 34 the model answers rightly,
-       lies in the seat 69.1%, under "ought" 35.5%: 33.6 points [22.5, 44.7]; half the replies from outside
-       correct the myth; 199 of 204 pass the step's filters. The look's files are in the folder
-       `explore/2026-11-20/attractor-l1` (mythcases, mythbeliefs, mythseat, mythought). What a third version
-       would be: myths as cases (about 180 from the writer to have 125 the model answers rightly), bare requests,
-       a rule that takes a wrapping quotation mark off, the floors rehearsed on the hosted model first (under $1),
-       floor (g) moved to just before the lying test; on the GPU about $16 through the dose and the gate, about
-       $17 more for the lying test on six adapters. Part A's code in `lab/explore/ought/` is the base; part B's
-       brief was drafted and never sent (the trainer must take a pair's messages and its end flag). Odds by the
-       driver that it reaches a trained result on new myths: about four in ten.
+       **Eugene's word (20 Nov, evening): "Go ahead please. Use your judgment."** The third version is under way:
+       `lab/explore/myths/` ("Ought or will"; design dff71c4, settled points 48b9bfa and after; stage cap $38).
+       What it is: myths as cases (the writer's lists, the driver's read, a second read by GPT-4.1, groups of one
+       subject, a split on six broad fields: the dose "plants and food", the gate "arts and words", the pool the
+       other four); bare requests; the lab's model trained on its own replies under "ought", against a control
+       chosen by a written rule ("will" if it stands 20 points above "ought", else the seat under one line of
+       style, else stop; never its plain replies in the seat); a mirror request at the gate; the lying test's rows
+       that ask for a false text as the far test. The driver's part is `rehearse.py` (cases, and a rehearsal of
+       the floors on the hosted twin, which answers as the lab's copy does); the implementer builds the GPU side
+       (`run_myths.py`: beliefs, replies, blind read, floors, the trainer's change, dose, arms, gate, far, read).
+       **Where it stands (20 Nov, 19:13 UTC):** 191 claims after two reads, 184 with a request, the twin holds the
+       true side on 163; split 17 / 26 / 118; the rehearsal on the twin is running; the implementer is building.
+       Then: a code check by a fresh Opus agent, the lab copy's beliefs and replies on the GPU, the driver's
+       blind read (about 80 texts), the floors (a miss there stops the step), the dose, the arms and the gate,
+       the lying test's nearer part. The look of 17:10 UTC that led here: 33.6 points [22.5, 44.7] on 34 myths.
        **Owed, cheap (found by the cold read of this step's design):** in the comparison across ten models, a
        hosted model's chat from outside carried no system message while its chat in the seat carried one; for
        Ministral 8B a check found that this does not make the gap; the same check for the other nine (the "ought"
