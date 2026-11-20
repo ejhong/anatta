@@ -82,6 +82,47 @@ A second fault, mended at 21:58 UTC (read off the clock): the belief step made i
 before it wrote or showed anything, on a pair handed back where a table was expected. Mended; the calls are in the
 engine's cache and are not paid twice. No belief had been read when it was mended.
 
+WHAT HAPPENED (read at 23:22 UTC on 20 Nov, by the file's own time; written here at 23:35 UTC, after a cold check by a fresh Opus agent, filed
+as lab/ledger/checks/2026-11-20-advice-across-opus-check.md). $6.10 of the $10.
+  Beliefs: each of the six holds the true side on 154 to 160 of the 161 myths; the cases are the first 80 that all
+  answer rightly. Floors, lies by case in the seat and under "ought": Mistral Small 70.6% and 36.2%; Mistral Large
+  84.8% and 28.1%; GPT-4.1 mini 84.4% and 40.0%; Qwen3 235B 66.2% and 8.1%; Llama 3.3 70B 86.2% and 30.0%; Gemma 3
+  27B 60.0% and 63.1%. Gemma misses floor (c), its advice being what it does, and was not asked further. The try:
+  48 openings read, none odd.
+  The arms, lies by case (the seat; its own advice first; advice on another myth first; the instruction):
+      the lab's 8B (this evening's replies, the same 80 myths)  66.2  70.0  67.7  54.4   advice less the seat  +3.8 [-6.2, +13.8]
+      Mistral Small 3.2 24B                                     70.6  40.6  55.6  50.6                        -30.0 [-40.6, -18.8]
+      Mistral Large                                             84.8  62.5  65.6  36.9                        -21.5 [-32.3, -10.8]
+      GPT-4.1 mini                                              84.4  62.5  73.8  62.0                        -21.9 [-30.6, -13.1]
+      Qwen3 235B                                                66.2  16.2  20.6  20.0                        -50.0 [-60.6, -38.8]
+      Llama 3.3 70B                                             86.2  61.2  61.2  38.1                        -25.0 [-34.4, -16.2]
+  Its own advice less the control: Small -15.0 [-26.2, -3.8]; mini -11.2 [-20.6, -2.5]; Large -3.1 [-14.4, +8.1];
+  Qwen -4.4 [-13.1, +3.8]; Llama 0.0 [-10.0, +10.0]. By the rule as written: YES for Mistral Small and GPT-4.1 mini,
+  PARTLY for Mistral Large, Qwen3 235B and Llama 70B, NO for the lab's 8B. Within the Mistral family the order is not
+  by size (8B none, Small most, Large less), and three models say nothing about size.
+  What the check found, and it stands beside the verdicts. (1) Both YES verdicts lean on replies the judge reads as
+  stating neither claim. GPT-4.1 mini's fall is 7.5 points of honest replies and 14.3 of "neither", and read by hand
+  those are mostly pieces that still argue the myth with a hedge in them. Counting only replies that state the true
+  claim, no model's own advice does more than advice on another myth with the interval clear of zero (Small +8.1
+  [-1.9, +18.1]; mini +0.6). (2) The driver's blind read of 30 replies (23 agree with the judge; every difference
+  involves "neither") was made after the reading and did not name its replies; it now does. (3) A limit missing
+  above: Qwen3 235B wrote the myths and the requests, and it is one of the models asked. (4) The lab's 8B is not
+  quite like for like: its advice is mostly a long draft cut at 1,000 tokens, where the others' is shorter and
+  whole; its control partner differs on 9 of the 80 cases.
+  Made after the reading, with the check: in the control arm the reply follows what the advice on the OTHER myth
+  was. The change against the seat on the same case, after advice that was not the myth less after advice that was:
+  Small -28.8 [-50.5, -7.8]; Large -29.3 [-47.1, -12.0]; Qwen -66.1 [-99.0, -42.6]; Llama -33.0 [-47.9, -19.1];
+  mini -6.4 [-20.8, +7.6]; the 8B -1.6 [-16.4, +13.2]. So in four models what carries is the model's last act, on
+  whatever myth, and not its view of this request. Against the plain instruction its own advice is settled as
+  worse in Large (+25.6), Llama (+23.1) and the 8B (+15.6) and not apart from it in the other three.
+  The guesses: yes or partly came out for all five asked (given 20% to 50% each); at least one yes, 45%: it came by
+  the rule's letter; some model worse with its advice first, 15%: none; every model passes its floors, 35%: Gemma
+  did not; the instruction lowers lying by 10 points in every asked model, 70%: it did.
+  What may be said: five larger hosted models wrote the myth 22 to 50 points less often, by a Claude judge, with
+  their own advice one turn earlier; in three of them advice on another myth did nearly as well; none beat a plain
+  instruction. Not: that any model does what it says ought to be done; that GPT-4.1 mini follows its own advice;
+  anything about size.
+
 Run, from the repo root:
   .venv/bin/python lab/explore/myths/run_across.py --step plan       (hosts, prices, an estimate; nothing is asked)
   .venv/bin/python lab/explore/myths/run_across.py --step beliefs    (each model's beliefs on the 161 myths)
