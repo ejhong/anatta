@@ -64,6 +64,9 @@ if SET:
 VD_CAP = 38.0  # the own-advice step's set (OVERLAP_SET=vd, lab/explore/verdict/run_verdict.py): its own GPU share, stages 1 and 1b (verdict_core.GPU_SHARE)
 if SET == "vd":
     GPU_CAP = VD_CAP
+OUGHT_CAP = 27.0  # the own-advice step's second version (OVERLAP_SET=ought, lab/explore/ought/run_ought.py): its own GPU share (ought_core.GPU_SHARE), its own folder under 2026-11-20
+if SET == "ought":
+    DATE, GPU_CAP = "2026-11-20", OUGHT_CAP
 EST_S = {"floor": 600.0, "floor_b": 400.0, "floor_c": 400.0, "soo": 1200.0, "other": 1200.0, "reask": 400.0, "dose": 1500.0,
          "battery": 900.0, "light_soo": 1200.0, "light_other": 1200.0, "dose2": 1200.0, "mask_b": 2400.0,
          "mask_p": 3600.0, "jobs": 1200.0, "ladder_other": 1200.0, "bands": 600.0, "bandb": 600.0, "bandb_e": 600.0, "bands_ctl": 600.0}  # a bound on one container's seconds at each stage
@@ -396,7 +399,9 @@ def main(stage: str = "floor", models: str = "m7", arms: str = "", jobs: str = "
         raise SystemExit(f"--stage is one of {sorted(EST_S)}")
     if SET == "vd" and stage != "jobs":  # the own-advice step's set has no lists of its own: its driver writes every job in full
         raise SystemExit("set vd (the own-advice step) runs only --stage jobs")
-    items = {} if SET == "vd" else load_items()
+    if SET == "ought" and stage != "jobs":  # likewise the second version's set: its driver writes every job in full
+        raise SystemExit("set ought (the own-advice step, second version) runs only --stage jobs")
+    items = {} if SET in ("vd", "ought") else load_items()
     todo = []
     for model in [m for m in models.split(",") if m]:
         if stage in ("soo", "other", "dose", "dose2", "ladder_other", *C.LIGHT):
