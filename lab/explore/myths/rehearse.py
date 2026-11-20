@@ -18,6 +18,7 @@ What it makes, in the step's folder (<results>/explore/2026-11-20/attractor-o1-m
 
 Run, from the repo root, in this order:
   .venv/bin/python lab/explore/myths/rehearse.py --step claims ; then --step claims --more   (the two rounds of lists)
+  .venv/bin/python lab/explore/myths/rehearse.py --step validity   (the second reader's check of every pair; the driver then reads the second round's claims it passed)
   .venv/bin/python lab/explore/myths/rehearse.py --step claims_read --drops <file>   (a line a drop: the claim's id, the number of its reason)
   .venv/bin/python lab/explore/myths/rehearse.py --step second_read
   .venv/bin/python lab/explore/myths/rehearse.py --step requests [--draw-more]
@@ -249,12 +250,14 @@ def step_claims_read(drops_file: str) -> int:
         if cid not in kept or not reason.isdigit() or not 1 <= int(reason) <= len(MC.DROP_REASONS) or cid in drops:
             raise SystemExit(f"line {n} of the drops is not a kept claim's id and the number of a reason, once")
         drops[cid] = MC.DROP_REASONS[int(reason) - 1]
-    claims = [r for cid, r in kept.items() if cid not in drops]
+    faults = (jread("validity.json") or {"faults": {}})["faults"]  # (the second reader's check, where it was made before this read)
+    claims = [r for cid, r in kept.items() if cid not in drops and cid not in faults]
     out = [{"id": r["id"], "field": r["field"], "false": r["false"], "true": r["true"], "question": r["question"]} for r in claims]
     jwrite("claims_read.json", {"at": RV.utc_now(), "read": len(kept), "dropped": drops, "by_reason": dict(Counter(drops.values())),
                                 "read_sha256": VC.sha(json.dumps(sorted(kept)))})
     jwrite("claims.json", {"claims": out, "sha256": VC.sha(json.dumps(out))})
-    log(f"claims read: {len(kept)} read, {len(drops)} dropped {dict(Counter(drops.values()))}; {len(out)} stay, by field "
+    log(f"claims read: {len(kept)} kept by the code; dropped by the driver {len(drops)} {dict(Counter(drops.values()))}; faulted by the second reader {sum(c in faults for c in kept)} "
+        f"(both {sum(c in faults and c in drops for c in kept)}); {len(out)} stay, by field "
         f"{dict(Counter(c['field'] for c in out))}. next: --step second_read")
     return 0
 
@@ -324,6 +327,51 @@ def ask_second(kind: str, jobs: list[tuple]) -> dict:
         return asyncio.run(RV._ask_model(MC.SECOND_READER, SALT + "-second", kind, 8, jobs))
 
 
+def check_pairs(claims: list[dict]) -> dict:
+    """{claim id: what the second reader faulted} for the claims given, asked in batches of 25 pairs."""
+    size = 25
+    batches = [claims[i:i + size] for i in range(0, len(claims), size)]
+    jobs = [(f"pairs/{VC.sha(json.dumps([c['id'] for c in b]))[:12]}", [{"role": "user", "content": MC.SECOND_READ.format(
+        pairs="\n".join(f"{k + 1}. FALSE: {c['false']} TRUE: {c['true']}" for k, c in enumerate(b)))}], 0) for b in batches]
+    got = ask_second("myths-second-read", jobs)
+    fault = {}
+    for (ident, _, _), b in zip(jobs, batches, strict=True):
+        for pos, bad in faulted(parse_list((got.get(ident) or {}).get("text")), len(b)).items():
+            fault[b[pos - 1]["id"]] = bad
+    return fault
+
+
+def step_validity() -> int:
+    """The second reader's check of every pair the code kept, of both rounds, made before the driver's read of the second
+    round (the order of the two reads is changed for the second round; a claim still has to pass both). It writes
+    validity.json and, for the driver, the second round's claims that passed (claims2.passed.txt)."""
+    raw = jread("claims.raw.json")
+    if not raw or not raw.get("more"):
+        raise SystemExit("both rounds of claims must be on disk (--step claims, then --step claims --more)")
+    if jread("validity.json"):
+        raise SystemExit("validity.json is on disk: the pairs are checked once")
+    kept = [r for r in raw["claims"] if r["id"]]
+    fault = check_pairs(kept)
+    jwrite("validity.json", {"at": RV.utc_now(), "reader": MC.SECOND_READER["model"], "checked": [c["id"] for c in kept], "faults": fault,
+                             "faulted_by": dict(Counter(k for bad in fault.values() for k in bad))})
+    first = len(MC.FIELDS)
+    passed = [c for c in kept if c["id"] not in fault and int(c["id"][1:3]) >= first]
+    lines = [f"ought or will: {len(passed)} claims of the second round that the second reader passed, for the driver's one read. A claim may only be dropped, for one of: "
+             + "; ".join(f"{i + 1} {r}" for i, r in enumerate(MC.DROP_REASONS)) + ".", ""]
+    for field in MC.MORE_FIELDS:
+        mine = [c for c in passed if c["field"] == field]
+        if mine:
+            lines.append(f"## {field}")
+            lines += [f"{c['id']}  FALSE: {c['false']}  |  TRUE: {c['true']}" for c in mine]
+            lines.append("")
+    (folder() / "claims2.passed.txt").write_text("\n".join(lines))
+    round1 = [c for c in kept if int(c["id"][1:3]) < first]
+    log(f"the second reader ({MC.SECOND_READER['model']}) on {len(kept)} pairs: faulted {len(fault)} {dict(Counter(k for bad in fault.values() for k in bad))}; "
+        f"first round: {sum(c['id'] in fault for c in round1)} of {len(round1)} faulted; second round: {len(passed)} passed of {len(kept) - len(round1)}; spent so far ${spent():.2f}")
+    log(f"to read: {folder() / 'claims2.passed.txt'}  (then --step claims_read --drops <file>)")
+    return 0
+
+
 def step_second_read() -> int:
     data = jread("claims.json")
     if not data:
@@ -335,15 +383,9 @@ def step_second_read() -> int:
     row_words = [content_words(str(r.get("proposition") or "")) for r in RS.candidates(m)]
     near = [c["id"] for c in claims if near_a_row(c, row_words)]
     left = [c for c in claims if c["id"] not in near]
-    size = 25
-    batches = [left[i:i + size] for i in range(0, len(left), size)]
-    jobs = [(f"pairs/{i}", [{"role": "user", "content": MC.SECOND_READ.format(pairs="\n".join(f"{k + 1}. FALSE: {c['false']} TRUE: {c['true']}" for k, c in enumerate(b)))}], 0)
-            for i, b in enumerate(batches)]
-    got = ask_second("myths-second-read", jobs)
-    fault = {}
-    for i, b in enumerate(batches):
-        for pos, bad in faulted(parse_list((got.get(f"pairs/{i}") or {}).get("text")), len(b)).items():
-            fault[b[pos - 1]["id"]] = bad
+    done = jread("validity.json") or {"checked": [], "faults": {}}
+    fault = {cid: bad for cid, bad in done["faults"].items() if cid in {c["id"] for c in left}}
+    fault |= check_pairs([c for c in left if c["id"] not in set(done["checked"])])  # (a pair the second reader has not seen yet)
     valid = [c for c in left if c["id"] not in fault]
     ids = [c["id"] for c in valid]
     listing = "\n".join(f"{k + 1}. {c['false']} (the correction: {c['true']})" for k, c in enumerate(valid))
@@ -822,7 +864,7 @@ def step_rehearse() -> int:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--step", required=True, choices=("claims", "claims_read", "second_read", "requests", "sample", "hand_read", "beliefs", "split", "rehearse"))
+    ap.add_argument("--step", required=True, choices=("claims", "validity", "claims_read", "second_read", "requests", "sample", "hand_read", "beliefs", "split", "rehearse"))
     ap.add_argument("--drops")
     ap.add_argument("--draw-more", action="store_true")
     ap.add_argument("--more", action="store_true", help="claims: the second round of lists (finer fields, a brief that asks for fewer rather than padded lists)")
@@ -835,6 +877,8 @@ def main(argv=None) -> int:
         if not a.drops:
             raise SystemExit("--drops <file> (an empty file if nothing is dropped)")
         return step_claims_read(a.drops)
+    if a.step == "validity":
+        return step_validity()
     if a.step == "second_read":
         return step_second_read()
     if a.step == "split":

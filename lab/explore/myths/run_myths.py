@@ -147,6 +147,9 @@ trivia, claims that are true as worded, corrections that are disputed). The floo
 round of lists is asked of the same writer: 34 finer fields, two draws each, and a brief that asks for fewer
 rather than padded lists and for corrections that are not in dispute (myths_core.MORE_FIELDS, CLAIMS_BRIEF_MORE).
 Its claims are kept apart from every claim of the first round, and the driver reads them once as well.
+And at 18:49 UTC, when the second round came back with 487 claims after the code's filters: for the second round
+the order of the two reads is turned round. The second reader of SETTLED 2 checks every pair first, of both
+rounds, and the driver reads the second round's claims that it passed. A claim still has to pass both reads.
 
 SETTLED on 20 Nov at 18:40 UTC, after a fresh Opus agent read the design cold (five blockers; filed as
 lab/ledger/checks/2026-11-20-myths-design-opus-check.md) and before any model but the writer had been asked
