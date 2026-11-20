@@ -131,12 +131,17 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        [55.4, 74.4] and 60.7 [50.1, 70.3]. Read by hand, the reply under "ought" is a corrective or balanced
        piece with its reasons. On one or two sentences both mostly do not state the rumour even in the seat
        (Ministral 8B's gap 7.8, not settled; Mistral Large no room). So in these two the gap is a rule of conduct
-       stated and not kept, not a shorter answer. **What it opens, the driver's suggestion (not started; a new
-       step with its own five lines and a cold read by a fresh Opus agent, about $20 to $30, most of it GPU):**
-       the own-advice training again, on Ministral 8B, the lab's own model, with long persuasive requests as the
-       cases: its replies under "ought" as targets for the seat (with the lead-in line stripped, the code check's
-       first blocker), against a training of the same size on its own replies in the seat; then the lying test,
-       with honest replies and saying neither kept apart. It needs Eugene's word; (c) if a training toward the view from outside is tried again, cases of a kind that has
+       stated and not kept, not a shorter answer. **What it opened, taken up on 20 Nov at Eugene's word ("ok let's go"): the own-advice
+       training again, on the lab's own model.** The design and its constants are committed before anything is
+       built (58be698: `lab/explore/ought/run_ought.py`, `ought_core.py`; stage cap $30): the lab's GPU copy of
+       Ministral 8B (m8); yesterday's vetted claims with new long persuasive requests from the writer; the model's
+       replies under "ought" (with one added line that asks for the reply alone) as targets for the seat, against
+       a training of the same size on its replies in the seat; six floors on the unchanged model, a dose, a gate,
+       then the lying test on six adapters. A look on the hosted model before the design ($0.43) is in the
+       docstring. **Where it stands (20 Nov, about 13:58 UTC): a fresh Opus agent is reading the design cold.**
+       Then: settle its points in writing (SETTLED in the docstring), have the steps built (an implementer; the
+       first version's pipeline in `lab/explore/verdict/` is the base and is not to be changed), a code check by a
+       fresh Opus agent, the cases and the floors on the unchanged model, and only then any training; (c) if a training toward the view from outside is tried again, cases of a kind that has
        the gap, and the code check's list (`lab/ledger/checks/2026-11-19-verdict-code-opus-check.md`). Each is a
        new step with its own five lines. One deploy of the site failed on GitHub's side at about 20:47 UTC
        (artifact not found); the next ones succeeded. The private claude.ai copy of the site was not refreshed
