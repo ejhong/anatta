@@ -1857,7 +1857,7 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
   with its advice as a note (+9.8 and +9.5 over the seat). After advice that was a correction the reply is the myth
   in 47.7% of chats (the seat on those cases 44.9%, the instruction 24.3%).
 - **Read.** The model does not write what it has just said ought to be written; an instruction from outside does
-  three quarters of what its own verdict would do if followed. Within a case the advice pulls the reply toward its
+  about three fifths of what its own verdict would do if followed (15 points of 24). Within a case the advice pulls the reply toward its
   own kind, both ways (52% after a correction, 81% after advice that was the myth), and the pulls cancel.
 - **Next:** the same on the lab's GPU copy is not needed (the twin answers as it does). Open: whether a model of
   another maker, or a larger one, follows its own advice; and the lying test's rows, which this step's rule did
