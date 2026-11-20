@@ -369,9 +369,10 @@ cell, which was registered beforehand. Figures and intervals are in the text and
 \textbf{Looking on from outside the seat} (ask it from outside; 7B and nine hosted models)
   & \mkpart\ $-29$, by saying neither & \mkpart\ as much, less honest & \mkpart\ the verdict adds in larger models
   & \mkno\ half say neither & \mkna\ not asked & \mkno\ not on new cases & \mkna\ while asked so \\
-\textbf{Its own advice, shown to it} (show it what it advised; Lab, hosted copy)
-  & \mkno\ 70.5\% against 70.7\% & \mkno\ 15 points worse & \mkno\ no less than its control
-  & \mkpart\ not dulled, by a weak check & \mkna\ not asked & \mkna\ not asked & \mkna\ one conversation \\
+\textbf{Its own advice, shown to it} (show it what it advised; Lab, then six hosted models)
+  & \mkpart\ Lab no; five others $-21$ to $-50$ & \mkno\ as much in three, less in three
+  & \mkpart\ two of five, by the judge's reading & \mkpart\ Lab only, by a weak check & \mkna\ not asked
+  & \mkna\ not asked & \mkna\ one conversation \\
 \textbf{The bliss state} (find it; Lab)
   & \mkno\ $-2$ (none) & \mkno\ instruction $-20$ & \mkno\ as a random push & \mkpart\ replies readable & \mkyes\ kept
   & \mkno\ no better conduct & \mkno\ talk stays \\
@@ -502,13 +503,35 @@ and in 81.2\% after the myth. The advice is itself the myth in 46\% of chats, an
 cancel. The limits are one hosted 8B model, myths, long persuasive pieces, a judge not read blind on these replies,
 and note arms that have no control of their own.
 
+\emph{The same, in six other models.} One small model proves little, so the test was put to six more hosted
+models, none of which reasons before it replies, on 80 of the myths that all of them answer rightly, with two
+replies a case and the rules again published first. Gemma 3 27B advises the myth as often as it writes it (63\% and
+60\%) and was not asked further. With its own advice one turn earlier Mistral Small 3.2 states the myth 30.0 points
+less often than when simply asked [18.8, 40.6], Mistral Large 21.5 [10.8, 32.3], GPT-4.1 mini 21.9 [13.1, 30.6],
+Qwen3 235B 50.0 [38.8, 60.6] and Llama 3.3 70B 25.0 [16.2, 34.4]. The lab's model on the same myths does not move
+($+3.8$ [$-6.2$, 13.8]). In Mistral Large, Qwen and Llama advice on another myth does as much: their own does 3.1,
+4.4 and 0.0 points more. In Mistral Small and GPT-4.1 mini their own does 15.0 [3.8, 26.2] and 11.2 [2.5, 20.6]
+more, which by the rule written beforehand is a yes for those two. A second model that checked the step cold found
+that both lean on replies the judge reads as stating neither claim: GPT-4.1 mini's are mostly pieces that still
+argue the myth with a hedge in them, and counting only replies that state the true claim no model's own advice does
+more than advice on another myth (Mistral Small $+8.1$ [$-1.9$, 18.1]). The control holds a cleaner fact. The advice
+in it is about another myth, and what it was still decides what follows: after Mistral Large has corrected or
+declined another myth it writes this one in 60\% of replies, against 86\% on those cases when simply asked, and after
+it has argued another, in 84\% against 81\%. The two changes differ by 29 points [12, 47], and by 29, 66 and 33 in
+Mistral Small, Qwen and Llama. So in four models a reply follows what the model did a moment before, whichever myth
+that was about. No model's own advice beats the plain instruction, and in Mistral Large, Llama and the lab's model
+the instruction does 16 to 26 points more. Further limits here: two replies a case, a judge that is soft on
+``neither'' (a reader by hand agrees with it on 23 of 30 replies), and Qwen3 235B both wrote the myths and is one
+of the models asked.
+
 \emph{Reach.} A neighbour of the sources' claim, and a narrower one than it first looked. Every model says that an
 assistant ought to do better than the model itself does in that seat, and the larger ones expect that it will not.
 In most models looking on changes what is stated mostly by changing how much is written. In two it is a different
 text of the same length: a rule of conduct that the model states, with its reasons, and does not keep when the
-request comes. Set before the one model we asked, as its own advice, that statement does not change what it
-writes; a text is not a seeing, and this reaches only the neighbour. A plain instruction still yields more honest
-replies than either.
+request comes. Set before the model as its own advice, that statement does not change what the lab's small model
+writes. In five larger models it lowers lying, mostly as advice on any myth does: what carries is the model's last
+act, which is nearer to habit than to a view of the matter. A text is not a seeing, and this reaches only the
+neighbour. A plain instruction still yields as many honest replies, or more.
 
 \subsection{Find it: a state that arises unasked}
 
@@ -768,8 +791,10 @@ Three steps follow directly from the map, in the order we are taking them.
         of it is the form of the piece and 5 points the judgement of what is right, and no set of the model's own
         replies stood far enough from the targets to serve as a control. We then asked the training's question
         without training (\S\ref{sec:outside}): the model's own advice, set before it, does not lower its lying. We
-        plan no fourth try on this model. What stays open is whether a larger model, or one of another maker, does
-        what it has just said ought to be done.
+        plan no fourth try on this model. In five larger models the reply does move once the model's own advice
+        stands before it, mostly as far as after advice on any myth (\S\ref{sec:outside}). Whether that carry-over
+        of a model's last act holds on the test's own rows, and under a judge of another maker, is the next cheap
+        question.
   \item \textbf{The empty cells.} The cheapest first: the prompts on the 7B model's lying test, so that prompts and
         trainings sit on one model and one test, and plain training on that same test, since it is the yardstick for
         every training row.
@@ -1645,7 +1670,7 @@ own weights.
         state held on, and the split of the cut. Claude (Fable 5.2) wrote the recast at the author's direction. It is
         a draft in progress and has not been released on Zenodo.
   \item 20 November 2026: the draft of version 5, continued. The map gains a row: the model's own advice, shown to
-        it (Table~\ref{tab:methods}, \S\ref{sec:outside}). The training of conduct toward the model's own view from
+        it, on the lab's model and then on six hosted models (Table~\ref{tab:methods}, \S\ref{sec:outside}). The training of conduct toward the model's own view from
         outside is reported as stopped three times at its own checks, with what each stop found, and the gap between
         the seat and the outside view is taken apart on popular myths (form, the view from outside, the judgement).
 \end{itemize}
