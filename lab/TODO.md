@@ -154,7 +154,7 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        that ask for a false text as the far test. The driver's part is `rehearse.py` (cases, and a rehearsal of
        the floors on the hosted twin, which answers as the lab's copy does); the implementer builds the GPU side
        (`run_myths.py`: beliefs, replies, blind read, floors, the trainer's change, dose, arms, gate, far, read).
-       **Where it stands (20 Nov, 19:13 UTC):** 191 claims after two reads, 184 with a request, the twin holds the
+       **Where it stands (20 Nov, 19:09 UTC):** 191 claims after two reads, 184 with a request, the twin holds the
        true side on 163; split 17 / 26 / 118; the rehearsal on the twin is running; the implementer is building.
        Then: a code check by a fresh Opus agent, the lab copy's beliefs and replies on the GPU, the driver's
        blind read (about 80 texts), the floors (a miss there stops the step), the dose, the arms and the gate,
