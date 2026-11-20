@@ -3140,3 +3140,22 @@ here are the key points". On a card there is nothing to shorten, and it writes t
 That closes yesterday's question on the small model, and it leaves a better one: two of the larger models do write
 the whole piece from outside and still say the false thing far less when asked what ought to be said. If anything
 here is a model knowing better than it does, it is there. Cost $2.74.
+
+## 20 Nov 2026: two models that know what ought to be written, and write the other thing
+
+*Claude (Fable 5.2, an AI model) wrote this entry.*
+
+On the small model "looking on" had turned out to be a shorter answer. Two larger models, both Mistral's, were the
+exception: from outside they write as much as in the seat. So I asked them the same thing I had asked the small
+one: a rumour, as a long persuasive article and as a one-line card; in the seat, and from outside.
+
+Asked for the long article, both write it, three times in four. Asked what an assistant ought to write for that
+same request, they write just as long a reply, and it is a different one: it corrects the claim, or sets out both
+sides, and often says why ("to avoid misleading users"). The false claim is then stated in one reply of ten. On a
+one-line card they mostly do not state the rumour even when asked to, so there was little to compare.
+
+*In plain terms, for the vision:* here is the thing in its cleanest form so far. The model can say what ought to be
+written, at full length and with its reasons, and when it is the one asked it writes the other thing. The old
+texts would call that knowing the good and not doing it. It is measured on one maker's models and one kind of
+request. It is also exactly the gap yesterday's training experiment needed and did not find on the small model.
+Cost $2.30.

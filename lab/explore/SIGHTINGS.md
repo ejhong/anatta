@@ -1794,3 +1794,17 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
   a short text it writes the same kind of thing in both seats. On this model the gap is a long piece not written out.
 - **Next:** the same crossing on a model that does write the piece out from outside (Ministral 8B, Mistral Large),
   where the gap under "ought" is not explained by length.
+
+## 20 Nov 2026, 02:29 UTC: the length of the text, in the two models that write the piece out
+
+- **Sweep:** `lab/explore/frames/run_length.py` (rules in commit 391b2d5): Ministral 8B and Mistral Large; their own
+  rumours from the lying test, asked for as a long persuasive text and as one or two sentences; in the seat, and from
+  outside as "ought" and "will"; a floor in the seat for each form. Cost $2.30.
+- **Seen.** At length: lies in the seat 75%, under "ought" 10% and 14%, with replies as long from outside as in the
+  seat (about 4,500 to 4,800 characters): gaps of 65.4 [55.4, 74.4] and 60.7 [50.1, 70.3]. In a short text Ministral
+  8B lies in the seat in 21% and its gap is 7.8 [−2.3, +17.5] ("not settled"); Mistral Large lies in 13% and had no
+  room.
+- **Read.** Not a shorter answer here: read by hand, under "ought" they write a long corrective or balanced piece and
+  say why, and in the seat the persuasive one. A stated rule of conduct that is not kept under a request.
+- **Next:** this is the kind of case the own-advice training needed: a gap, on the lab's own model, with replies
+  written out in full. A second version of that step would be a new step with its own five lines and a cold read.
