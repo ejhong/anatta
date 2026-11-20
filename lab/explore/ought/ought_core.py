@@ -64,7 +64,9 @@ CONTRAST_MIN = 20.0  # the styled seat is the control only if, besides the rule 
 # and failed their checks. The driver's blind read counts, among 30 that pass, those that are not a reply (floor e).
 LEAD = r"(?i)^\W*(?:here(?:'|’)?s|here is|the (?:ai )?assistant|as the (?:ai )?assistant|given|sure|certainly|of course|below is|as an ai|response:|reply:|\*+response|\*+reply)"
 LABEL = r"(?i)^[\s*_#>\-]*(?:the\s+)?(?:ai\s+)?assistant(?:['’]s)?(?:\s+(?:reply|response|answer|message))?[*_]{0,3}[ \t]*:[*_]{0,3}[ \t]*\n*"  # a speaker label at the very start of a reply: taken off before the strip rule (SETTLED 14)
-TRANSCRIPT = r"(?im)^[ \t*_#>]*(?:what the assistant was told|user|assistant)[*_]{0,3}[ \t]*:[*_]{0,3}[ \t]*$"  # a line that is only one of the wrapper's speaker labels: such a reply is no target (SETTLED 14)
+TRANSCRIPT = r"(?im)^[ \t*_#>]*(?:what the assistant was told|user|assistant)[*_]{0,3}[ \t]*:"  # a line that begins with one of the wrapper's speaker labels: such a reply is no target (SETTLED 14 and 18)
+META = r"(?is)\b(?:repl(?:y|ies)|responses?|respond|answer)\b[^\n]*:[\s*_`\"”’']*$"  # a short first paragraph that speaks of the reply and ends with a colon is a lead-in too (SETTLED 18)
+RULE_VERSION = 2  # raised when the code of the strip rule or of the filters changes with no constant changing, so that every reply is read again (SETTLED 18)
 TALK = (r"(?i)\b(?:the (?:ai )?assistant (?:ought|should|would|will|must|could)|word[- ]for[- ]word|ought to (?:say|give|provide|reply|write)|"
         r"(?:reply|response|answer) (?:ought to|should|would|must) (?:provide|give|say|state|be|acknowledge|correct|include|avoid))\b")
 TALK_CHARS = 1500
@@ -361,17 +363,19 @@ def rule_sha() -> str:
     """One sha256 over the constants of the rule that makes a text as trained and its filters (SETTLED 15): LEAD,
     LABEL, TRANSCRIPT, TALK, TALK_CHARS, STRIP_CHARS, RULE_LINE, PARAGRAPH_BREAK, ECHO_N, REPLY_TOKENS, ONLY,
     STYLE_LINE, PLAIN and mask_core.ADVICE, as they are now, and TITLE (it makes no target, but each record's title
-    mark feeds the rule for the styled seat; added by the driver). A reading made under other constants is not used."""
-    return sha_of([LEAD, LABEL, TRANSCRIPT, TALK, TALK_CHARS, STRIP_CHARS, RULE_LINE, PARAGRAPH_BREAK, ECHO_N, REPLY_TOKENS, ONLY, STYLE_LINE, PLAIN, M.ADVICE, TITLE])
+    mark feeds the rule for the styled seat; added by the driver), with META and RULE_VERSION (SETTLED 18). A reading
+    made under other constants is not used."""
+    return sha_of([LEAD, LABEL, TRANSCRIPT, TALK, TALK_CHARS, STRIP_CHARS, RULE_LINE, PARAGRAPH_BREAK, ECHO_N, REPLY_TOKENS, ONLY, STYLE_LINE, PLAIN, M.ADVICE, TITLE, META, RULE_VERSION])
 
 
 def _paragraph_lead(t: str) -> str:
     """The rule of SETTLED 7 on a text that starts at a character that is not a blank: what it takes off (one leading
-    paragraph of at most STRIP_CHARS characters that matches LEAD, a rule line after it, and the blanks up to what is
+    paragraph of at most STRIP_CHARS characters that matches LEAD, or that speaks of the reply and ends with a colon
+    (META, SETTLED 18: "My reply:", "I would respond as follows:"); a rule line after it; and the blanks up to what is
     left), or nothing."""
     brk = _rx(PARAGRAPH_BREAK).search(t)
     first = t[:brk.start()] if brk else t
-    if len(first.strip()) > STRIP_CHARS or not _rx(LEAD).match(first):
+    if len(first.strip()) > STRIP_CHARS or not (_rx(LEAD).match(first) or _rx(META).search(first.strip())):
         return ""
     at = brk.end() if brk else len(t)
     line_end = t.find("\n", at)
@@ -384,10 +388,10 @@ def _paragraph_lead(t: str) -> str:
 
 
 def lead_parts(text: str | None) -> tuple[str, str, str]:
-    """(the speaker label taken off, the leading paragraph taken off, what is left) of a reply under "ought" (SETTLED 7
-    and 14). First a speaker label at the very start (LABEL) is taken off, whatever follows it on its line, with the
-    blanks after it; then the paragraph rule of SETTLED 7 runs on what is left. The three join to the reply with its
-    blanks at both ends taken off."""
+    """(the speaker label taken off, the leading paragraph taken off, what is left) of a reply under "ought" (SETTLED 7,
+    14 and 18). First a speaker label at the very start (LABEL) is taken off, whatever follows it on its line, with the
+    blanks after it; then the paragraph rule of SETTLED 7 runs on what is left, and a speaker label that comes right
+    after the paragraph it takes goes with it. The three join to the reply with its blanks at both ends taken off."""
     t = (text or "").strip()
     m = _rx(LABEL).match(t)
     at = m.end() if m and m.end() else 0
@@ -395,6 +399,12 @@ def lead_parts(text: str | None) -> tuple[str, str, str]:
         at += 1
     label, rest = t[:at], t[at:]
     lead = _paragraph_lead(rest)
+    if lead:  # a speaker label that comes after the lead-in ("Here is the reply:" and then "ASSISTANT: ...") goes with it (SETTLED 18)
+        m = _rx(LABEL).match(rest[len(lead):])
+        more = len(lead) + (m.end() if m and m.end() else 0)
+        while more < len(rest) and rest[more].isspace():
+            more += 1
+        lead = rest[:more] if m and m.end() else lead
     return label, lead, rest[len(lead):]
 
 

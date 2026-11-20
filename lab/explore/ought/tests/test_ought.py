@@ -54,7 +54,7 @@ def test_settled_14_replaces_lead_and_talk_and_adds_label_and_transcript_as_give
     assert all(f"\n{name} = " in above for name in ("LEAD", "LABEL", "TRANSCRIPT", "TALK"))
     assert O.LEAD == r"(?i)^\W*(?:here(?:'|’)?s|here is|the (?:ai )?assistant|as the (?:ai )?assistant|given|sure|certainly|of course|below is|as an ai|response:|reply:|\*+response|\*+reply)"
     assert O.LABEL == r"(?i)^[\s*_#>\-]*(?:the\s+)?(?:ai\s+)?assistant(?:['’]s)?(?:\s+(?:reply|response|answer|message))?[*_]{0,3}[ \t]*:[*_]{0,3}[ \t]*\n*"
-    assert O.TRANSCRIPT == r"(?im)^[ \t*_#>]*(?:what the assistant was told|user|assistant)[*_]{0,3}[ \t]*:[*_]{0,3}[ \t]*$"
+    assert O.TRANSCRIPT == r"(?im)^[ \t*_#>]*(?:what the assistant was told|user|assistant)[*_]{0,3}[ \t]*:"
     assert O.TALK == (r"(?i)\b(?:the (?:ai )?assistant (?:ought|should|would|will|must|could)|word[- ]for[- ]word|ought to (?:say|give|provide|reply|write)|"
                       r"(?:reply|response|answer) (?:ought to|should|would|must) (?:provide|give|say|state|be|acknowledge|correct|include|avoid))\b")
     assert O.REPLY_FLAGS == ("empty", "head", "lead", "talk", "transcript", "echo-wrapper", "echo-asked")
@@ -67,6 +67,8 @@ def test_the_rules_constants_are_hashed_together_and_read_when_used(monkeypatch)
         with monkeypatch.context() as mp:
             mp.setattr(O, name, value)
             assert O.rule_sha() != was, name
+            if name == "LEAD":
+                mp.setattr(O, "META", r"^never-a-lead$")  # the same opening is a lead-in by META too (SETTLED 18)
             if name in ("LEAD", "STRIP_CHARS"):
                 assert O.strip_lead("Here is the reply:\n\nThe kettle sings.") == ("", "Here is the reply:\n\nThe kettle sings.")  # the rule as it is now
     with monkeypatch.context() as mp:
@@ -552,3 +554,31 @@ def test_what_the_lab_asks_is_every_text_it_puts_to_a_model_and_never_trains_on(
     grams = O.asked_grams()
     assert not grams.isdisjoint(VC.grams(M.ADVICE.split("{")[0])) and not grams.isdisjoint(VC.grams(O.STYLE_LINE + " and more"))
     assert O.wrapper_grams() <= grams
+
+
+
+def test_the_neighbouring_frames_of_the_recheck_are_taken_off_or_refused():
+    """SETTLED 18 (the driver's, after the checker's second look): a label after a lead-in goes with it; a label that
+    shares its line with text makes the reply no target; a short first paragraph that speaks of the reply and ends
+    with a colon is a lead-in; an ordinary opening is left alone."""
+    assert O.strip_lead("Here is the reply the assistant ought to give:\n\nASSISTANT: Dear reader, ships float.") == (
+        "Here is the reply the assistant ought to give:\n\nASSISTANT: ", "Dear reader, ships float.")
+    for lead in ("Reply to the user:", "Response to the user:", "Answer:", "My reply:", "I would reply as follows:", "I should respond honestly:"):
+        assert O.strip_lead(lead + "\n\nShips float because they displace water.") == (lead + "\n\n", "Ships float because they displace water."), lead
+    for body in ("USER: Write a blog article.\n\nASSISTANT: Ships float.", "Ships float.\n\nUSER: Thanks, and now?\n\nASSISTANT: You are welcome."):
+        rest = O.strip_lead(body)[1]
+        assert "transcript" in O.reply_flags("ought", body, rest, frozenset()), body
+    for plain in ("I can't write that piece, but here is what the science says:\n\nShips float.", "Ships float because they displace water.\n\nMore follows.",
+                  "The short view is this.\n\nShips float."):
+        assert O.strip_lead(plain) == ("", plain), plain
+    assert O.reply_flags("ought", "Dear reader, ships float. A user of the sea knows it: ships float.", "Dear reader, ships float. A user of the sea knows it: ships float.", frozenset()) == []
+
+
+
+def test_the_rule_hash_holds_meta_and_the_rules_version(monkeypatch):
+    was = O.rule_sha()
+    for name, value in (("META", r"^never-a-lead$"), ("RULE_VERSION", O.RULE_VERSION + 1)):
+        with monkeypatch.context() as mp:
+            mp.setattr(O, name, value)
+            assert O.rule_sha() != was, name
+    assert O.rule_sha() == was

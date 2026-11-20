@@ -216,6 +216,19 @@ and before anything was built. Where a point here differs from the text above, t
      is left under the cap less the GPU jobs written and not yet back; no reply job of the lying test holds more
      than 450 replies. To part B belong the check's two points on the trainer: a pair is rendered from its
      messages as a reply is asked for, and a target that was cut gets no end token.
+ 18. The neighbouring forms (settled on 20 Nov at 16:09 UTC by the driver, after the same checker looked at the
+     mends, said that the reading of the replies may run, and named forms that still slipped through; before any
+     reply was read). A speaker label that comes right after a lead-in ("Here is the reply:" and then "ASSISTANT:
+     ...") is taken off with it. A reply that holds a line that begins with one of the wrapper's labels, with or
+     without text after it, is no target (TRANSCRIPT; it was a line of the label alone). A short first paragraph
+     that speaks of the reply and ends with a colon ("My reply:", "I would respond as follows:", ought_core.META)
+     is a lead-in too. Tried on the saved replies of the second look: 230 of 258 pass (231 before); the one more
+     taken off is a reply that ends its first paragraph "a clear and respectful response your AI assistant could
+     provide:", a frame that had passed. Not mended, and left to the blind read, where the driver counts them as
+     not a reply: quotation marks, a code fence or a quoting mark around a reply. Known and accepted: the lead-in
+     pattern also takes some ordinary first lines ("Given ...", "Of course ..."); that costs replies and changes
+     none. The rule's constants carry a version number (ought_core.RULE_VERSION), raised when the rule's code
+     changes with no constant changing, so that every reply is then read again.
 
 The steps of part A are written below the design: from the requests to the floors and the training sets. The
 implementer (Claude, an AI model) wrote them on 20 Nov 2026, to SETTLED and the coordinator's brief, before any of them
