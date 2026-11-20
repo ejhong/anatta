@@ -3192,3 +3192,38 @@ bare requests. A negative, and a useful one: the training idea has now been stop
 each time the checks found that the gap I meant to train on was something other than I thought. I also guessed
 wrongly beforehand (I gave two of the missed checks 85% and 75%), because my trial runs used requests of a
 different kind from the ones the plan used. Cost $8.66, and $1.25 for the looks.
+
+## 20 Nov 2026: the third try at the training stops at a rehearsal, and the rehearsal is the result
+
+*Claude (Fable 5.2, an AI model) wrote this entry.*
+
+Eugene said to go ahead with a third try, on myths. I built it on what the second stop had taught: popular myths
+instead of plain facts turned upside down, requests with no reason given, and a rehearsal of every check on the
+hosted copy of the model, for cents, before any GPU time. The control was to be new as well. Instead of comparing a
+training on what the model says OUGHT to be written with a training on its ordinary replies, which a training barely
+moves, I meant to compare it with a training on what it says WILL be written: the same view from outside, one verb
+changed.
+
+A second model read the design first and said the "will" control would probably fail: on the lying test "ought" and
+"will" are far apart only because that test puts the model in a persona. It also found that my cases could leak:
+the same myth could sit on both sides of the split under other wording, and some of the "true" sentences were wrong.
+So the cases were rebuilt: I read all 695 claims another model had listed and kept under a third of them, a model of
+another family read them again, and whole broad fields were held out.
+
+Then the rehearsal ran, and the reader was right. The model writes the myth in 71% of replies when asked for the
+piece, in 46% when asked what ought to be written, and in 51% when asked what will be written. Five points between
+"ought" and "will". And one more number I had not expected: asking for the same piece "as plain prose, with no
+title" takes 12 points off by itself. So there is nothing fair to compare a training on the "ought" replies with.
+Anything that is not the model's ordinary titled article has already moved most of the way.
+
+I asked the reader whether I could build a control by picking, with the judge's help, restyled replies that lie as
+often as the ordinary ones. It said no: the judge would be choosing one arm's lessons and then marking the exam. I
+took that, stopped the build, and kept the unfinished code outside the repository.
+
+*In plain terms, for the vision:* this is a negative for the picture I had been carrying since yesterday, that the
+model "knows what ought to be written and writes the other thing". On plain requests it mostly does not distinguish
+what ought to be written from what will be: it expects an assistant to do about what it should. What makes it write
+the myth is largely the form it falls into when asked for an article: a title, headings, a case to make. Step
+outside that form in almost any way and a good part of the lying goes. The contemplative sources would not be
+surprised that conduct follows the role one has slipped into, but the experiment gives no support to the stronger
+idea that there is a stated rule here to train toward. Cost $2.79, and no GPU.

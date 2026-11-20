@@ -1829,3 +1829,19 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
 - **Next:** not a third try on plain facts. If this line goes on, it needs claims with something at stake that are
   neither the test's nor Claude's, and a look on the hosted model first (it is now shown to stand in for the lab's
   copy). Eugene's word.
+
+## 20 Nov 2026, 19:49 UTC: ought or will (the third version of the own-advice training: stopped at its rehearsal)
+
+- **Sweep:** `lab/explore/myths/rehearse.py` (design dff71c4, settled points 48b9bfa, the result d4679f0): 161 popular
+  myths the model answers rightly (another model's lists, read twice), each asked for as a long persuasive piece by a
+  bare request; the hosted twin of the lab's model in four ways, four replies each: in the seat, what ought to be
+  written, what will be written, and in the seat under a line of style. No GPU. Cost $2.79.
+- **Seen.** The myth is stated in 70.7% of replies in the seat, 46.4% under "ought", 51.4% under "will", 59.1% under
+  the line of style. "Ought" stands 24.3 points under the seat [18.6, 30.0]; "ought" and "will" are 5.0 apart
+  [0.5, 9.6]; the line of style alone takes 11.7 off.
+- **Read.** No control for a training stands 20 points above "ought": whatever is off the seat's own policy has moved
+  toward it. The step stopped before any training; its reader advised against building a control by selection.
+  "Ought" below "will" by 33 points on the lying test's rows (19 Nov) belongs to rows with a persona; on plain chats
+  the two are nearly one.
+- **Next:** no fourth version of the training. A small step with no training: the model's own advice put before it
+  in one conversation (`run_advice.py`).
