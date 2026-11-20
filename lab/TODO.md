@@ -144,10 +144,18 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        reason, 72% without). The one mend was not used (it would have left the sets about 21 points apart).
        Part B (the trainer's change, the dose, the arms, the gate, the far test) was never built; its brief is not
        in the repo. The step's code for part A is tested and stays in `lab/explore/ought/` as the record.
-       **Waiting on Eugene: whether this line gets a third try.** The driver's reading: not on plain facts. A third
-       try needs claims with something at stake that are neither the lying test's nor Claude's (rumours or common
-       myths from another model or a public list), bare requests, a look on the hosted model first (under $1), and
-       about $45 at the lab model's speed if every check holds (about $25 without the lying test at first).
+       **Waiting on Eugene: whether this line gets a third try.** The driver's reading: not on plain facts, and
+       yes on popular myths. A look on the hosted model (ledger, 20 Nov, 17:10 UTC; $0.28): 48 myths listed by
+       Qwen3-235B with their corrections, bare requests by the same writer; on the 34 the model answers rightly,
+       lies in the seat 69.1%, under "ought" 35.5%: 33.6 points [22.5, 44.7]; half the replies from outside
+       correct the myth; 199 of 204 pass the step's filters. The look's files are in the folder
+       `explore/2026-11-20/attractor-l1` (mythcases, mythbeliefs, mythseat, mythought). What a third version
+       would be: myths as cases (about 180 from the writer to have 125 the model answers rightly), bare requests,
+       a rule that takes a wrapping quotation mark off, the floors rehearsed on the hosted model first (under $1),
+       floor (g) moved to just before the lying test; on the GPU about $16 through the dose and the gate, about
+       $17 more for the lying test on six adapters. Part A's code in `lab/explore/ought/` is the base; part B's
+       brief was drafted and never sent (the trainer must take a pair's messages and its end flag). Odds by the
+       driver that it reaches a trained result on new myths: about four in ten.
        **Owed, cheap (found by the cold read of this step's design):** in the comparison across ten models, a
        hosted model's chat from outside carried no system message while its chat in the seat carried one; for
        Ministral 8B a check found that this does not make the gap; the same check for the other nine (the "ought"
