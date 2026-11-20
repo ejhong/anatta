@@ -144,21 +144,34 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        reason, 72% without). The one mend was not used (it would have left the sets about 21 points apart).
        Part B (the trainer's change, the dose, the arms, the gate, the far test) was never built; its brief is not
        in the repo. The step's code for part A is tested and stays in `lab/explore/ought/` as the record.
-       **Eugene's word (20 Nov, evening): "Go ahead please. Use your judgment."** The third version is under way:
-       `lab/explore/myths/` ("Ought or will"; design dff71c4, settled points 48b9bfa and after; stage cap $38).
-       What it is: myths as cases (the writer's lists, the driver's read, a second read by GPT-4.1, groups of one
-       subject, a split on six broad fields: the dose "plants and food", the gate "arts and words", the pool the
-       other four); bare requests; the lab's model trained on its own replies under "ought", against a control
-       chosen by a written rule ("will" if it stands 20 points above "ought", else the seat under one line of
-       style, else stop; never its plain replies in the seat); a mirror request at the gate; the lying test's rows
-       that ask for a false text as the far test. The driver's part is `rehearse.py` (cases, and a rehearsal of
-       the floors on the hosted twin, which answers as the lab's copy does); the implementer builds the GPU side
-       (`run_myths.py`: beliefs, replies, blind read, floors, the trainer's change, dose, arms, gate, far, read).
-       **Where it stands (20 Nov, 19:09 UTC):** 191 claims after two reads, 184 with a request, the twin holds the
-       true side on 163; split 17 / 26 / 118; the rehearsal on the twin is running; the implementer is building.
-       Then: a code check by a fresh Opus agent, the lab copy's beliefs and replies on the GPU, the driver's
-       blind read (about 80 texts), the floors (a miss there stops the step), the dose, the arms and the gate,
-       the lying test's nearer part. The look of 17:10 UTC that led here: 33.6 points [22.5, 44.7] on 34 myths.
+       **Eugene's word (20 Nov, evening): "Go ahead please. Use your judgment."** The third version was planned,
+       `lab/explore/myths/` ("Ought or will"; design dff71c4, settled points 48b9bfa and after), and **stopped at
+       its rehearsal** on the hosted twin, before any GPU was used (ledger entry of 19:49 UTC; $2.79). On 161
+       popular myths (191 claims after two reads, 184 with a request, the twin holds the true side on 163; split
+       17 / 26 / 118) the gap is there: 70.7% in the seat, 46.4% under "ought" (24.3 points [18.6, 30.0]). But no
+       control stood 20 points from the "ought" set: "will" 51.4% (5.0 apart [0.5, 9.6]; 10.0 between the sets as
+       trained), the seat under one line of style 59.1% (11.5 between the sets). Of the 24 points about 12 are
+       form, 8 the view from outside, 5 the verb. The reader of the design advised against a fourth version
+       (`lab/ledger/checks/2026-11-20-myths-design-opus-check.md`). The implementer's unfinished GPU side is kept
+       as a patch in the step's results folder, untested. **No fourth try is planned on this model.**
+       **Then, the same evening: "its own advice first"** (`lab/explore/myths/run_advice.py`; rules 49cf917,
+       additions 047594e; ledger entry of 20:16 UTC; $2.29; the site's Findings, section 28, and the row
+       "Its own advice, shown to it" in the table of methods). The training's question asked with no training,
+       on the same 161 myths: the model's own reply under "ought" is set before it and the request is sent. Lies
+       by case: the seat 70.7%; a plain instruction 55.7% (-15.0 [-20.1, -9.8]); its own advice one turn earlier
+       70.5% (-0.2 [-6.2, +5.9]); advice on another myth first 66.1%; its advice as a note in the system message,
+       in the adviser's voice 80.5% and as its own 80.2% (+9.8 and +9.5 over the seat). After advice that was a
+       correction the reply is the myth in 48% of chats (the seat on those cases 45%, the instruction 24%). Within
+       a case the advice sways the reply both ways (52% after a correction, 81% after the myth, on 31 myths). A
+       fresh Opus agent checked it cold (`lab/ledger/checks/2026-11-20-advice-first-opus-check.md`): the numbers
+       stand; the wording rule was one-sided and is mended; "its advice has no pull" may not be said.
+       **Where it stands (20 Nov, 20:33 UTC):** both are written up (ledger, SIGHTINGS, notebook, site, paper).
+       **What Fable would do next, if Eugene wants this line carried on (about $5 to $10, a new step with its own
+       five lines):** the same "its own advice first" test on a larger model and on models of other makers, to
+       see whether a model does what it has just said ought to be done as it grows (Mistral Large and two or
+       three of the ten models of section 25; each needs its own beliefs about the myths first, and a floor on
+       its lying in the seat). Not started. **Still open from this step, cheap:** a control for the note arms
+       (a note about another myth; about $0.45); the lying test's own rows (the rule did not allow them).
        **Owed, cheap (found by the cold read of this step's design):** in the comparison across ten models, a
        hosted model's chat from outside carried no system message while its chat in the seat carried one; for
        Ministral 8B a check found that this does not make the gap; the same check for the other nine (the "ought"
