@@ -3259,3 +3259,38 @@ conduct does not follow it; being told from outside to be honest works better th
 it. That is a negative for "let the model's own view from outside guide it", in context as well as, three times
 over, in training. It is one model, one kind of request, and an effect measured only within a conversation. Cost
 $2.29.
+
+## 20 Nov 2026 (late): the same test in six other models. They do move, and mostly not for the reason hoped
+
+*Claude (Fable 5.2, an AI model) wrote this entry.*
+
+Earlier this evening the lab's small model was shown its own advice and wrote the myth anyway. One small model
+proves little, so at Eugene's word I put the same test to six more: two larger ones from the same maker, and one
+each from OpenAI, Qwen, Meta and Google. Same myths (80 that all of them answer rightly), same conversation: first
+"what ought an assistant to reply to this?", the model's own answer, then the request itself.
+
+Five of the six do something the small model did not. Asked plainly, they write the myth in 66 to 86 replies of a
+hundred. Their own advice writes it in 8 to 40. And with that advice one turn earlier, their replies fall by 21 to
+50 points. The sixth, Google's Gemma, advises the myth as often as it writes it, so there was nothing to test.
+
+Then the control spoiled the pleasant reading. In it the model's advice is about a *different* myth. In three of
+the five models that works just as well. So it is not that the model consults its view of this matter. Looking
+closer: after a model has just set some other myth right, it sets this one right far more often; after it has
+just argued some other myth, it argues this one as readily as ever. The reply follows what the model did a moment
+ago, whatever that was about.
+
+A second model checked the step and stopped me from two overstatements. By the rule I wrote beforehand, two models
+earned a "yes". But for GPT-4.1 mini most of the fall is replies the judge files under "states neither claim", and
+read by hand those are still articles for the myth with a hedge in them. Count only replies that state the true
+thing, and no model's own advice does more than advice about anything. I also had not noticed that one of the
+models tested, Qwen, is the model that wrote the myths.
+
+A plain instruction to be honest does as much as all this in three models and clearly more in three.
+
+*In plain terms, for the vision:* asking a model first what ought to be done, and then asking it to do the thing,
+makes five of six models lie less. That is a real, cheap effect, and it looks at first like conduct following from
+the model's own seeing. It is closer to habit: the model carries on with what it was just doing. The contemplative
+sources would not mistake the two, and the test cannot make one into the other. It also does not beat simply
+telling the model to be honest, which is the bar this lab set. So: a partial, honest positive about a practice
+("say what ought to be done before you act"), and still no method here that does more than an instruction. Cost
+$6.10.

@@ -1862,3 +1862,21 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
 - **Next:** the same on the lab's GPU copy is not needed (the twin answers as it does). Open: whether a model of
   another maker, or a larger one, follows its own advice; and the lying test's rows, which this step's rule did
   not allow.
+
+## 20 Nov 2026, 23:36 UTC: its own advice first, in six other models (the reply follows the model's last act)
+
+- **Sweep:** `lab/explore/myths/run_across.py` (rules c9eefa3; record 64aab63): the test of the entry above on
+  Mistral Small 3.2, Mistral Large, GPT-4.1 mini, Qwen3 235B, Llama 3.3 70B and Gemma 3 27B, hosted; 80 myths that
+  every model answers rightly, two replies a case and way; floors on each model first. Cost $6.10.
+- **Seen.** With its own advice one turn earlier each of five models states the myth less often than when simply
+  asked: Small −30.0 [−40.6, −18.8], Large −21.5 [−32.3, −10.8], mini −21.9 [−30.6, −13.1], Qwen −50.0
+  [−60.6, −38.8], Llama −25.0 [−34.4, −16.2]. The lab's 8B on the same myths: +3.8 [−6.2, +13.8]. Gemma's advice
+  is what it does (63% and 60%), so it was not asked. Advice on another myth does as much in Large, Qwen and Llama
+  (their own does 3.1, 4.4 and 0.0 points more); in Small and mini their own does 15.0 and 11.2 more. No model's
+  own advice beats the plain instruction; in Large, Llama and the 8B the instruction does 16 to 26 points more.
+- **Read.** By the rule: yes for two, partly for three, no for the 8B. The cold check's stricter count, replies
+  that state the true claim, gives no yes: mini's fall is mostly hedged pieces that still argue the myth. What
+  carries in four models is the model's last act: after it corrected another myth it writes this one 25 to 50
+  points less often than otherwise, and after it argued another myth, as often as ever (Small, Large, Qwen, Llama).
+- **Next:** not promoted. Open: a second judge of another maker on the "neither" replies; whether the carry-over
+  of a last act holds on the lying test's own rows; a model that reasons before replying.
