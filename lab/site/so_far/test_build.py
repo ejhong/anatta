@@ -370,6 +370,7 @@ class SiteTest(unittest.TestCase):
             self.assertEqual(len(re.findall(r'<span class="mx-c mk-(?:%s)">' % "|".join(build.MARK_SAYS), summary)), 7, rid)
             self.assertEqual(len(re.findall(r'<span class="vh">[^<]+: (?:%s)\. </span>' % said, summary)), 7, rid)
             self.assertEqual(len(re.findall(r"<dt>", body)), 7, rid)
+            self.assertIn('<div class="mx-what"><p><b>What it is.</b> ', body[body.index("</summary>"):], f"{rid} says what the method is before its figures")
         self.assertEqual(len(re.findall(r'<details class="fam">', front)), 6, "six families, each opened in place")
         # The front page's count of graded predictions is the scorecard's own.
         c = build.tally(self.page)

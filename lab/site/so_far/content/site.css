@@ -894,6 +894,10 @@ h2.q em { font-style: normal; color: var(--gold); }
 .mx-open .mk-yes dt em { color: var(--gold); }
 .mx-open .mk-no dt em { color: var(--cinnabar); }
 .mx-open dd { margin: 6px 0 0; font-size: 15.5px; line-height: 1.58; color: var(--ink-2); text-wrap: pretty; }
+.mx-what { max-width: 74ch; margin: 4px 0 18px; }
+.mx-what p { margin: 0 0 10px; font-size: 16.5px; line-height: 1.62; color: var(--ink); text-wrap: pretty; }
+.mx-what p + p { font-size: 15.5px; color: var(--ink-2); }
+.mx-what b { font-weight: 600; }
 .mx-note { max-width: 70ch; margin: 0 0 16px; padding: 12px 16px; background: var(--gold-wash); border-left: 2px solid var(--gold-line); font-size: 15.5px; line-height: 1.58; color: var(--ink-2); }
 .mx-key { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 22px; margin: 14px 0 0; max-width: none; font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); }
 .mx-key > span { display: inline-flex; align-items: center; gap: 8px; }

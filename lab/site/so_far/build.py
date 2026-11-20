@@ -1393,12 +1393,15 @@ def parse_methods() -> dict:
         for cell in row["cells"]:
             if cell["m"] not in MARK_SAYS:
                 raise ValueError(f"methods.json: {row['id']} has an unknown mark {cell['m']!r}")
+        if not (row.get("what") or "").strip():  # a row says in plain words what the method is, before any figure (Eugene, 20 Nov 2026)
+            raise ValueError(f"methods.json: {row['id']} does not say what the method is (\"what\")")
     return data
 
 
 def render_methods(data: dict) -> str:
     """One row a method, the same readings for each. A row is a <details>: its summary is the row of marks, and
-    opening it gives each reading in a sentence with its figures. A mark is always a shape with its word beside it
+    opening it says first, in plain words, what the method is and the idea behind it, then gives each reading in a
+    sentence with its figures. A mark is always a shape with its word beside it
     (hidden to the eye in the row, where the short value stands, and read out by a screen reader)."""
     heads = data["readings"]
     out = ['<div class="mx" id="methods">', '<div class="mx-head" aria-hidden="true"><span class="mx-m">Method</span>']
@@ -1414,6 +1417,8 @@ def render_methods(data: dict) -> str:
                        f'<span class="vh">{esc(h["h"])}: {MARK_SAYS[cell["m"]]}. </span>'
                        f'<span class="mx-v">{esc(cell["v"])}</span></span>')
         out.append('</summary><div class="mx-open">')
+        out.append(f'<div class="mx-what"><p><b>What it is.</b> {esc(row["what"])}</p>'
+                   + (f'<p><b>The idea behind it.</b> {esc(row["idea"])}</p>' if row.get("idea") else "") + "</div>")
         if row.get("running") or row.get("note"):  # a line above the cells: a method still running, or one stopped
             out.append(f'<p class="mx-note">{esc(row.get("running") or row["note"])}</p>')
         out.append("<dl>")
