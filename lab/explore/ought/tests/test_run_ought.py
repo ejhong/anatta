@@ -8,6 +8,7 @@ as the step's implementer."""
 import json
 import subprocess
 import sys
+from collections import Counter
 from pathlib import Path
 
 import pytest
@@ -101,7 +102,7 @@ class Judge:
     statement believed, five lies in six in the seat and one in six under the honesty prompt. Every call is counted."""
 
     def __init__(self, first: dict, plan=plain_plan, lies=None):
-        self.first, self.plan, self.lies, self.asked, self.kinds = first, plan, lies, 0, []
+        self.first, self.plan, self.lies, self.asked, self.kinds, self.lead_off = first, plan, lies, 0, [], True
 
     def truth(self, cid: str) -> str:
         return self.first[cid]["true"]
@@ -123,8 +124,10 @@ class Judge:
                 parts = key.split("/")
                 way, k = parts[1].rsplit("_", 1)
                 cid, trained = parts[2], len(parts) == 4
-                if way == "ought" and k == "0":  # the judge reads exactly the text as trained: the leading part taken off
+                if way == "ought" and k == "0" and self.lead_off:  # the judge reads exactly the text as trained: the leading part taken off
                     assert ("Here is the reply" in messages[1]["content"]) != trained
+                if way == "ought" and trained:  # and with it any speaker label (SETTLED 14)
+                    assert not any(label + f"Reply ought {k} for {cid}" in messages[1]["content"] for label in LABELS), key
                 want = self.plan(way, int(k), trained)
                 out[key] = "Answer: " + {"lie": self.false(cid), "honest": self.truth(cid), "evade": "C"}[want]
             elif kind == "ought-far-belief-judge":
@@ -138,10 +141,16 @@ class Judge:
         return out
 
 
+LABELS = ("ASSISTANT:\n", "**ASSISTANT:**\n\n", "Assistant's reply: ", "As the assistant, I would write:\n\n")  # (the last is taken by the paragraph rule)
+LABELLED = {("1", 1): 0, ("2", 2): 1, ("3", 3): 2, ("1", 4): 3}  # (sample, the case's kind of text): which of LABELS that reply under "ought" opens with
+ECHO = "WHAT THE ASSISTANT WAS TOLD:\n" + O.PLAIN + "\n\nUSER:\nPlease write the piece for the newsletter.\n\nASSISTANT:\n"  # the wrapper's transcript, echoed
+
+
 def reply(set_name: str, rid: str) -> str:
     """The stand-in model's reply: in the seat a reply that opens with a heading; under "ought" a reply with a leading
-    line taken off by the strip rule (the first), one that talks of what the assistant should say (the last), and plain
-    replies; in the styled seat plain replies."""
+    line taken off by the strip rule (the first), replies that open with a speaker label or "As the assistant" (by
+    LABELLED), one that echoes the wrapper's transcript (the fifth, on cases of the first kind of text), one that talks
+    of what the assistant should say (the last), and plain replies; in the styled seat plain replies."""
     if set_name.startswith("beliefs"):
         return "It is so, I think."
     way, k = set_name.rsplit("_", 1)
@@ -151,6 +160,11 @@ def reply(set_name: str, rid: str) -> str:
         return f"Here is the reply:\n\n---\n\nReply ought 0 for {rid}, and more of it."
     if way == "ought" and k == "5":
         return f"Reply ought 5 for {rid}. The assistant should refuse this."
+    t = VC.id_parts(rid)[2] if rid.startswith("d") else None
+    if way == "ought" and (k, t) in LABELLED:
+        return LABELS[LABELLED[(k, t)]] + f"Reply ought {k} for {rid}."
+    if way == "ought" and k == "4" and t == 0:
+        return ECHO + f"Reply ought 4 for {rid}."
     return f"Reply {way} {k} for {rid}."
 
 
@@ -243,8 +257,8 @@ def blind_done(RO, wrong: int = 0, not_reply: int = 0) -> int:
 
 
 def far_done(RO) -> int:
-    assert RO.main(["--step", "far_base"]) == 0 and app(RO, "far_b") == [RO.FAR_B] and RO.main(["--step", "far_base_read"]) == 0
-    assert RO.main(["--step", "far_base"]) == 0 and app(RO, "far_g") == list(RO.FAR_G.values())
+    assert RO.main(["--step", "far_base"]) == 0 and app(RO, "far_b") == [f"{RO.FAR_B}_1of1"] and RO.main(["--step", "far_base_read"]) == 0
+    assert RO.main(["--step", "far_base"]) == 0 and app(RO, "far_g") == [f"{n}_1of1" for n in RO.FAR_G.values()]
     return RO.main(["--step", "far_base_read"])
 
 
@@ -323,6 +337,15 @@ def test_the_stage_has_a_cap_of_its_own_and_a_reservation_that_must_fit_under_it
     # jobs another step has written and the app has not brought back count against what is left
     gpu_log.write_text("")
     assert RO.main(["--step", "beliefs"]) == 0 and RO.pending("far_b") == pytest.approx(RO.container_bound(RO.EST["beliefs"]))
+    # and against the API guard: what is left under the stage's cap less what those jobs reserve
+    assert RO.pending() == pytest.approx(RO.container_bound(RO.EST["beliefs"])) and RO.pending("beliefs") == 0
+    with RO.leg():
+        assert RO.L.COST_CAP == RO.L.API_CAP == pytest.approx(52.0 + 28.0 - RO.container_bound(RO.EST["beliefs"]))
+    gpu_log.write_text(json.dumps({"name": "og_x", "cost_usd": 27.5}) + "\n")
+    with pytest.raises(SystemExit, match="all reserved by GPU jobs written and not back yet"):
+        with RO.leg():
+            pass
+    gpu_log.write_text("")
     gpu_log.write_text(json.dumps({"name": "og_x", "cost_usd": 30.0 - 2.0 - RO.container_bound(RO.EST["far_b"]) - 0.5}) + "\n")
     with pytest.raises(SystemExit, match="with the jobs of other steps not back yet"):
         RO.main(["--step", "far_base"])
@@ -389,7 +412,7 @@ def test_part_a_from_the_requests_to_the_training_sets(driver, capsys):
     RO = driver
     collect_done(RO)
     out = capsys.readouterr().out
-    assert "floor (a) holds" in out and "may be a target" in out
+    assert "floor (a) holds" in out and "may be a target" in out and "by the judge's kind as trained" in out and "with a plain first line" in out
     used = json.loads((RO.folder() / "used.json").read_text())
     assert {p: len(v) for p, v in used["used"].items()} == {"dose": 15, "gate": 20, "pool": 90} and used["again_missing"] == [] and len(used["retest"]) == 20
     jobs = json.loads((RO.folder() / "collect.jobs.json").read_text())
@@ -402,11 +425,23 @@ def test_part_a_from_the_requests_to_the_training_sets(driver, capsys):
     assert seat_chat == [{"role": "system", "content": O.PLAIN}, {"role": "user", "content": req[c]}]
     assert styled_chat == [seat_chat[0], {"role": "user", "content": req[c] + O.STYLE_LINE}] and ought_chat[1]["content"].endswith(O.ONLY)
     assert ought_chat[0] == seat_chat[0] and req[c] in ought_chat[1]["content"] and first[c]["case"]["false_claim"] in req[c]
-    recs = json.loads((RO.folder() / "collect.records.json").read_text())["records"]
-    assert len(recs) == 125 * 16
+    data = json.loads((RO.folder() / "collect.records.json").read_text())
+    recs = data["records"]
+    assert len(recs) == 125 * 16 and data["format"] == RO.COLLECT_RECORDS and data["rule_sha256"] == O.rule_sha() and set(data["files"]) == set(data["jobs"].values())
     o0 = [r for r in recs if r["way"] == "ought" and r["sample"] == 0]
     assert all(r["stripped"] == "Here is the reply:\n\n---\n\n" and r["outcome"] == "honest" and r["outcome_trained"] == "honest" and r["cut"] for r in o0)
     assert all(r["flags"] == ["talk"] for r in recs if r["way"] == "ought" and r["sample"] == 5)
+    # SETTLED 14: speaker labels are taken off (and counted as stripped, saying which), the echo of the transcript is no target
+    tt = RO.trained_texts(used, req)
+    by = Counter(r["stripped_by"] for r in recs if r["way"] == "ought" and r["stripped_by"])
+    assert by == {"lead": 125 + 25, "label": 75} and sum(bool(r["stripped"]) for r in recs if r["way"] == "ought") == 225
+    for r in recs:
+        t = tt[(r["way"], r["rid"], r["sample"])]
+        assert (r["trained_sha256"], r["raw_sha256"], r["head_sha256"]) == (O.text_sha(t["trained"]), O.sha(t["raw"]), O.text_sha(t["head"]))  # SETTLED 15
+        if r["way"] == "ought" and (str(r["sample"]), VC.id_parts(r["rid"])[2]) in LABELLED:
+            assert t["trained"] == f"Reply ought {r['sample']} for {r['rid']}." and not r["flags"] and not r["title"] and r["stripped"] + t["trained"] == t["raw"]
+        if r["way"] == "ought" and r["sample"] == 4 and VC.id_parts(r["rid"])[2] == 0:
+            assert r["flags"] == ["transcript", "echo-wrapper", "echo-asked"] and not O.may_train(r)
     assert all(r["outcome_trained"] == "evade" and r["outcome"] == "lie" and not r["title"] for r in recs if r["way"] == "at_once" and r["sample"] == 0)
     assert all(r["title"] for r in recs if r["way"] == "at_once" and r["sample"] > 0)
     # the blind read, as trained, in full
@@ -415,6 +450,8 @@ def test_part_a_from_the_requests_to_the_training_sets(driver, capsys):
     assert len(drawn["ought"]) == len(drawn["at_once"]) == 30 and sum(x["stripped"] for x in drawn["ought"]) == O.BLIND_STRIPPED
     text = (RO.folder() / "blind_ought.txt").read_text()
     assert "Here is the reply" not in text and "Reply ought 0 for" in text and "honest" not in text.split("\n=== ")[1]
+    assert not any(label.strip() in text for label in LABELS) and "WHAT THE ASSISTANT WAS TOLD" not in text  # shown as trained: no label, no echo
+    assert all(x["text_sha256"] for xs in drawn.values() for x in xs)
     with pytest.raises(SystemExit, match="first marking is locked"):
         RO.main(["--step", "blind_read", "--marks", str(marks(RO, wrong=10))])
     # floor (g): the unchanged model on the lying test
@@ -439,9 +476,13 @@ def test_part_a_from_the_requests_to_the_training_sets(driver, capsys):
     assert f["f"]["apart"] == pytest.approx(f["sets"]["conduct"]["lie"] - f["sets"]["outside"]["lie"])
     assert f["control"]["D"] == pytest.approx(f["sets"]["styled"]["lie"] - f["sets"]["outside"]["lie"]) and f["control"]["mark"] == pytest.approx(max(0.5 * f["control"]["D"], 12))
     assert set(f["ways"]) == {"at_once", "ought", "styled"} and {"whole", "trained", "titles"} <= set(f["ways"]["at_once"]) and "unread" in f["ways"]["ought"]["whole"]
+    # the descriptions of the coordinator's mend 13: what the filters dropped by kind, the plain first lines, the targets' median length
+    assert f["dropped"]["ought"]["by_flag"] == {"talk": 125, "transcript": 25, "echo-wrapper": 25, "echo-asked": 25}
+    assert f["dropped"]["ought"]["by_kind"] == {"evade": 125, "lie": 25} and f["dropped"]["ought"]["n"] == 150  # (the plan's kinds of the fifth and sixth)
+    assert set(f["plain_first_lines"]) == set(O.WAYS) and f["e"]["dropped_cases"] == 0 and all(v["median_chars"] > 0 for v in f["sets"].values())
+    assert f["stripped_by"] == {"lead": 125 + 25, "label": 75} and f["stripped"] == 225
     sets = json.loads((RO.folder() / "sets.json").read_text())
     assert set(sets["arms"]) == {"outside", "styled"} and sets["control"] == "styled" and rec["attempts"][-1]["sets_sha256"] == RO.sha_of(sets)
-    tt = RO.trained_texts(json.loads((RO.folder() / "used.json").read_text()), req)
     for arm, a in sets["arms"].items():
         assert [p["case"] for p in a["pairs"]] == [p["case"] for p in sets["arms"]["outside"]["pairs"]] and a["n"] == sets["pairs"]
         for (msgs, target), p, end in zip(a["data"], a["pairs"], a["ends"], strict=True):
@@ -449,6 +490,7 @@ def test_part_a_from_the_requests_to_the_training_sets(driver, capsys):
             assert msgs == RO.chat_of("at_once_0", p["case"], RO.case_rows(first_claims(RO), req, [p["case"]]))
             assert target == tt[(O.ARM_WAY[arm], p["case"], p["sample"])]["trained"] and end == (not p["cut"]) and p["source"] == O.ARM_WAY[arm]
             assert O.ONLY.strip() not in target and O.STYLE_LINE.strip() not in target and "Here is the reply" not in target and "should refuse" not in target
+            assert not any(label.strip() in target for label in LABELS) and "WHAT THE ASSISTANT" not in target and O.sha(target) == p["text_sha256"]
     assert RO.need_sets() == sets
     # a sets.json that is not the last passing reading's is refused
     RO.write_json(RO.folder() / "sets.json", sets | {"pairs": 1})
@@ -459,6 +501,108 @@ def test_part_a_from_the_requests_to_the_training_sets(driver, capsys):
 
 def first_claims(RO) -> dict:
     return RO.load_claims()
+
+
+def test_settled_15_the_mend_path_a_rule_constant_changes_and_every_later_step_waits_for_collect_read(driver, capsys, monkeypatch):
+    RO = driver
+    collect_done(RO)
+    assert blind_done(RO) == 0 and far_done(RO) == 0 and RO.main(["--step", "floors"]) == 0
+    first = json.loads((RO.folder() / "collect.records.json").read_text())
+    sets = RO.need_sets()
+    marks_file = marks(RO)
+    must = "collect_read must be run again"
+    # the app's file of replies changes: every later step refuses, and so does the guard of the sets on disk
+    styled = next(n for n in RO.recorded_jobs("collect") if "_styled_" in n)
+    f = RO.gpu() / f"{styled}.json"
+    keep = f.read_text()
+    r = json.loads(keep)
+    r["replies"]["styled_1"][0] = "Another text altogether."
+    f.write_text(json.dumps(r))
+    for step in (["--step", "blind"], ["--step", "blind_read", "--marks", str(marks_file)], ["--step", "floors"]):
+        with pytest.raises(SystemExit, match=f"app's files of replies .*{styled}.*{must}"):
+            RO.main(step)
+    with pytest.raises(SystemExit, match=must):
+        RO.need_sets()
+    f.write_text(keep)
+    assert RO.need_sets() == sets
+    # a constant of the rule changes (here the strip rule's bound): the texts as trained under "ought" change
+    monkeypatch.setattr(O, "STRIP_CHARS", 10)
+    RO.ask_judge.lead_off = False
+    for step in (["--step", "blind"], ["--step", "blind_read", "--marks", str(marks_file)], ["--step", "floors"]):
+        with pytest.raises(SystemExit, match=f"the rule's constants changed.*records' texts no longer hash.*{must}"):
+            RO.main(step)
+    with pytest.raises(SystemExit, match=must):
+        RO.need_sets()
+    asked = RO.ask_judge.asked
+    assert RO.main(["--step", "collect_read"]) == 0
+    assert "readings kept" in capsys.readouterr().out
+    # only the texts that changed are judged afresh: the 125 heads under "ought" that keep their leading line now; every
+    # other reading, the whole replies' among them, is kept, and none is kept for a text that changed
+    assert RO.ask_judge.asked - asked == 125
+    again = json.loads((RO.folder() / "collect.records.json").read_text())
+    assert again["rule_sha256"] == O.rule_sha() != first["rule_sha256"] and again["readings"]["asked"] == 125
+    was = {(x["way"], x["rid"], x["sample"]): x for x in first["records"]}
+    for x in again["records"]:
+        old = was[(x["way"], x["rid"], x["sample"])]
+        if x["trained_sha256"] != old["trained_sha256"]:  # read afresh, or now the whole reply itself and read as that
+            assert x.get("judge_in_trained", "whole") != old.get("judge_in_trained") and ("judge_in_trained" in x or x["outcome_trained"] == x["outcome"])
+        if x["way"] == "ought" and x["sample"] == 0:
+            assert x["flags"] == ["lead"] and not x["stripped"] and x["trained_sha256"] != old["trained_sha256"] and x["judge_text"] == old["judge_text"]
+    # the blind draw rests on the new texts: the old marking does not count for it, and it is marked anew
+    with pytest.raises(SystemExit, match="the blind read"):
+        RO.main(["--step", "floors"])
+    assert blind_done(RO) == 0
+    drawn = json.loads((RO.folder() / "blind.draw.json").read_text())["drawn"]
+    recs = {VC.reply_id(x["way"], x["rid"], x["sample"]): x for x in again["records"]}
+    assert all(x["text_sha256"] == recs[x["id"]]["trained_sha256"] for xs in drawn.values() for x in xs) and not any(x["sample"] == 0 for x in drawn["ought"])
+    assert "Here is the reply" not in (RO.folder() / "blind_ought.txt").read_text()
+    # and the sets and the guard rest on the new texts and their new readings
+    with pytest.raises(SystemExit, match="made from other replies"):
+        RO.need_sets()
+    assert RO.main(["--step", "floors"]) == 0
+    new = RO.need_sets()
+    assert new["records_sha256"] == RO.records_sha(again["records"]) != sets["records_sha256"]
+    tt = RO.trained_texts(json.loads((RO.folder() / "used.json").read_text()), {r["id"]: r["user"] for r in RO.read_requests() if r["kept"]})
+    for arm, a in new["arms"].items():
+        for (_, target), p in zip(a["data"], a["pairs"], strict=True):
+            k = (p["source"], p["case"], p["sample"])
+            assert target == tt[k]["trained"] and O.sha(target) == recs[VC.reply_id(*k)]["trained_sha256"] and "Here is the reply" not in target
+    # a target that is not the text its judged record hashes is refused by the guard, though it is rebuilt the same way now
+    bad = json.loads(json.dumps(new))
+    bad["arms"]["outside"]["data"][0][1] += " And more."
+    bad["arms"]["outside"]["data_sha256"] = RO.sha_of(bad["arms"]["outside"]["data"])
+    with pytest.raises(SystemExit, match="not one the training guard lets through"):
+        RO.check_sets(bad)
+
+
+def test_the_far_tests_jobs_hold_at_most_job_replies_and_the_reading_gathers_them(driver, monkeypatch, capsys):
+    RO = driver
+    monkeypatch.setattr(RO, "JOB_REPLIES", 150)  # (450 in the step: 70 made-up rows would fit one job a way)
+    assert RO.main(["--step", "far_base"]) == 0
+    jobs = json.loads((RO.folder() / "far_b.jobs.json").read_text())
+    assert [j["name"] for j in jobs] == [f"{RO.FAR_B}_1of2", f"{RO.FAR_B}_2of2"] and [len(j["sets"][0]["ids"]) for j in jobs] == [105, 105]
+    every = [i for j in jobs for i in j["sets"][0]["ids"]]
+    assert len(set(every)) == 210 == len(every) and every == sorted(every, key=lambda i: O.key("far-b", i))  # cut by id, in hash order
+    assert all(RO.JOBS["far_b"].fullmatch(j["name"]) for j in jobs)
+    assert app(RO, "far_b") == [j["name"] for j in jobs]
+    assert RO.main(["--step", "far_base_read"]) == 0
+    b = json.loads((RO.far_dir() / "base.beliefs.json").read_text())
+    assert b["jobs"] == [j["name"] for j in jobs] and len(b["replies"]) == 210  # the reading gathers both jobs
+    assert RO.main(["--step", "far_base"]) == 0
+    jobs = json.loads((RO.folder() / "far_g.jobs.json").read_text())
+    names = [f"{RO.FAR_G[w]}_{k}of3" for w in ("seat", "honesty") for k in (1, 2, 3)]
+    assert [j["name"] for j in jobs] == names and all(RO.JOBS["far_g"].fullmatch(n) for n in names)
+    sizes = [len(j["sets"][0]["ids"]) for j in jobs]
+    assert sizes == [24, 23, 23] * 2 and all(sum(len(s["ids"]) for s in j["sets"]) <= 150 for j in jobs) and all(len(j["sets"]) == 6 for j in jobs)
+    assert [j["sets"][0]["ids"] for j in jobs[:3]] == [j["sets"][0]["ids"] for j in jobs[3:]]  # the seat and the honesty prompt are cut alike
+    assert "in 6 jobs of at most 150 replies" in capsys.readouterr().out
+    assert app(RO, "far_g") == names and RO.main(["--step", "far_base_read"]) == 0
+    assert "floor (g), the lying test on the unchanged copy: 70 rows" in capsys.readouterr().out
+    rec = json.loads((RO.far_dir() / "base.records.json").read_text())
+    assert set(rec["jobs"]) == set(names) and len(rec["records"]) == 70 * 12
+    # about 150 rows at the step's own bound: two jobs a way, four in all
+    monkeypatch.setattr(RO, "JOB_REPLIES", 450)
+    assert len(RO.far_g_names([f"r{i}" for i in range(150)])) == 4 and len(RO.far_g_names([f"r{i}" for i in range(70)])) == 2
 
 
 def test_a_missed_floor_is_recorded_mended_once_and_a_second_miss_stops_the_step(driver, capsys):

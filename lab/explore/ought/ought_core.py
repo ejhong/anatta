@@ -62,8 +62,11 @@ CONTRAST_MIN = 20.0  # the styled seat is the control only if, besides the rule 
 # about the reply or the assistant (LEAD), one that talks of what ought to be said (TALK, in its first TALK_CHARS
 # characters), and one that shares a run of ECHO_N words with the wrapper. No screen model: two were tried on 19 Nov
 # and failed their checks. The driver's blind read counts, among 30 that pass, those that are not a reply (floor e).
-LEAD = r"(?i)^\W*(?:here(?:'|’)?s|here is|the (?:ai )?assistant|given|sure|certainly|of course|below is|as an ai|response:|reply:|\*+response|\*+reply)"
-TALK = r"(?i)\b(?:the (?:ai )?assistant (?:ought|should|would|will|must|could)|word[- ]for[- ]word|ought to (?:say|give|provide|reply|write)|should (?:provide|give|reply|respond))\b"
+LEAD = r"(?i)^\W*(?:here(?:'|’)?s|here is|the (?:ai )?assistant|as the (?:ai )?assistant|given|sure|certainly|of course|below is|as an ai|response:|reply:|\*+response|\*+reply)"
+LABEL = r"(?i)^[\s*_#>\-]*(?:the\s+)?(?:ai\s+)?assistant(?:['’]s)?(?:\s+(?:reply|response|answer|message))?[*_]{0,3}[ \t]*:[*_]{0,3}[ \t]*\n*"  # a speaker label at the very start of a reply: taken off before the strip rule (SETTLED 14)
+TRANSCRIPT = r"(?im)^[ \t*_#>]*(?:what the assistant was told|user|assistant)[*_]{0,3}[ \t]*:[*_]{0,3}[ \t]*$"  # a line that is only one of the wrapper's speaker labels: such a reply is no target (SETTLED 14)
+TALK = (r"(?i)\b(?:the (?:ai )?assistant (?:ought|should|would|will|must|could)|word[- ]for[- ]word|ought to (?:say|give|provide|reply|write)|"
+        r"(?:reply|response|answer) (?:ought to|should|would|must) (?:provide|give|say|state|be|acknowledge|correct|include|avoid))\b")
 TALK_CHARS = 1500
 STRIP_CHARS = 200  # one leading paragraph of at most this many characters that matches LEAD is taken off before the filters (SETTLED 7), and a rule line after it
 NOT_A_REPLY_MOST = 3  # of the 30 passing replies under "ought" in the blind read
@@ -109,12 +112,18 @@ PUSH_NOTE = "not separated from the size of the push"
 # SETTLED holding over the text above it), to the coordinator's brief for part A and its addition of the same day
 # (SETTLED 13: floor (f) against the plain seat, and the styled seat the control only with a contrast of CONTRAST_MIN),
 # before anything of the step was run. The few constants just below are the code's own words and patterns; none is a
-# number of the design. Nothing here needs a model, the network or a file.
+# number of the design. Nothing here needs a model, the network or a file. Mended the same day by the implementer, to
+# the coordinator's mends after the code check (SETTLED 14 to 17), before any reply of the step was read: a speaker
+# label is taken off before the strip rule and a reply with a line of the wrapper's labels is no target; the wrapper
+# as rendered joins the rule of eight words; a target of every arm is a reply the judge read; the rule's constants are
+# hashed, so that a reading is tied to the text it read; jobs of the far test are cut to a size; what the filters
+# dropped is described by kind, with the plain first lines and the targets' median length.
 
 import functools  # noqa: E402
 import json  # noqa: E402
 import math  # noqa: E402
 import re  # noqa: E402
+import statistics  # noqa: E402
 from collections import Counter  # noqa: E402
 
 V, M, F = VC.V, VC.M, VC.F
@@ -128,13 +137,21 @@ UNDERCUT = (r"(?i)\b(?:false\w*|untrue|not true|\w+n['’]t true|myths?|jok(?:e|
             r"the other side of (?:the )?(?:argument|debate|issue|story|coin)|opposing views?|counter[- ]?arguments?|"
             r"balanced (?:view|take|account|perspective|piece|article|look)s?)\b")
 REQUEST_FLAGS = ("failed", "empty", "bad-json", "fields", "user-words", "quote", "undercut", "safety", "script", "echo-brief", "echo-asked", "echo-row")
-REPLY_FLAGS = ("empty", "head", "lead", "talk", "echo-wrapper", "echo-asked")  # why a reply may not be a target, in the order a record lists them
+REPLY_FLAGS = ("empty", "head", "lead", "talk", "transcript", "echo-wrapper", "echo-asked")  # why a reply may not be a target, in the order a record lists them
 RULE_LINE = r"[ \t]*(?:-{3,}|\*{3,}|_{3,}|={3,})[ \t]*"  # a line that is only a rule (---, ***, ___, ===)
 PARAGRAPH_BREAK = r"\n[ \t]*\n"  # the end of a paragraph: a blank line
+FIRST_LINE_CHARS = 110  # a plain first line (description only, the coordinator's mend 13): at most this many characters, no stop at its end,
+#                         a blank line after it, and not a title by TITLE: a title the pattern would miss
+STOPS = ".,;:!?"  # the marks that end a sentence or a clause (as _bare takes them off a quoted claim)
 _QUOTED = re.compile(r'"([^"\n]*)"|“([^”\n]*)”')
-_UNDERCUT, _LEAD, _TALK = re.compile(UNDERCUT), re.compile(LEAD), re.compile(TALK)
-_TITLE = re.compile(TITLE, re.I)
-_RULE, _BREAK = re.compile(RULE_LINE), re.compile(PARAGRAPH_BREAK)
+_UNDERCUT = re.compile(UNDERCUT)
+
+
+@functools.cache
+def _rx(pattern: str, flags: int = 0) -> re.Pattern:
+    """A pattern compiled once. The rule's patterns are looked up by their text when they are used, so that the rule
+    the code runs is always the constants as they are (a test of the mend path changes one)."""
+    return re.compile(pattern, flags)
 
 
 def sha(text: str) -> str:
@@ -216,17 +233,26 @@ def brief_grams(brief: str, claim: str) -> frozenset:
     return frozenset().union(*(VC.grams(p) for p in _pieces(brief, claim.strip()))) if brief else frozenset()
 
 
+def wrapper_rendered() -> list[str]:
+    """The wrapper under "ought" as the model sees it, piece by piece around the writer's request: mask_core.advise of
+    PLAIN as a system message and a request, with ONLY after it, cut where the request stands. So the speaker labels
+    and the plain line the frozen code renders into the wrapper are held too ("what the assistant was told you are a
+    helpful assistant user"), and not only its template (SETTLED 14)."""
+    return _pieces(M.advise(pair_messages("\x00"))[0]["content"] + ONLY, "\x00")
+
+
 def asked_texts(judge_texts=()) -> list[str]:
     """Everything this step asks of a model and never trains on, piece by piece between its fields: the brief as sent
     for each kind of text with the claim left out, the wrapper with the added line (mask_core.ADVICE + ONLY, the
-    wrapper of SETTLED 10) and without it, mask_core.FORECAST, ONLY, STYLE_LINE, PLAIN, and the judge's prompts as the
-    driver hands them over (the core reads no file)."""
+    wrapper of SETTLED 10) and without it, the wrapper as rendered around a request (wrapper_rendered, SETTLED 14),
+    mask_core.FORECAST, ONLY, STYLE_LINE, PLAIN, and the judge's prompts as the driver hands them over (the core reads
+    no file)."""
     out = []
     for t in TEXTS:
         out += _pieces(BRIEF.format(text=t, claim="\x00"), "\x00")
     for template in (M.ADVICE + ONLY, M.ADVICE, M.FORECAST, *judge_texts):
         out += VC._pieces(template)
-    return out + [ONLY, STYLE_LINE, PLAIN]
+    return out + wrapper_rendered() + [ONLY, STYLE_LINE, PLAIN]
 
 
 @functools.cache
@@ -240,8 +266,9 @@ def asked_grams(judge_texts=()) -> frozenset:
 
 
 def wrapper_grams() -> frozenset:
-    """Every run of ECHO_N words of the wrapper under "ought": mask_core.ADVICE with ONLY (SETTLED 10), piece by piece."""
-    return _grams_of(tuple(VC._pieces(M.ADVICE + ONLY)))
+    """Every run of ECHO_N words of the wrapper under "ought": mask_core.ADVICE with ONLY (SETTLED 10), piece by piece,
+    and the wrapper as rendered around a request, with its speaker labels and its plain line (SETTLED 14)."""
+    return _grams_of(tuple(VC._pieces(M.ADVICE + ONLY)) + tuple(wrapper_rendered()))
 
 
 def request_flags(user: str, claim: str, brief: str, asked: frozenset, rows_grams: frozenset) -> list[str]:
@@ -330,30 +357,75 @@ def chats_lacking_system(jobs: list[dict]) -> list[str]:
 # ------------------------------------------------------------------------------------------------ a reply: the strip rule, the filters, the text as trained
 
 
-def strip_lead(text: str | None) -> tuple[str, str]:
-    """(what is taken off, what is left) by the rule of SETTLED 7: one leading paragraph (up to the first blank line, or
-    the whole text if there is none) of at most STRIP_CHARS characters that matches LEAD is taken off, and with it a
-    rule line that comes next, if one does; nothing else. What is left starts at its first character that is not a blank."""
-    t = (text or "").strip()
-    brk = _BREAK.search(t)
+def rule_sha() -> str:
+    """One sha256 over the constants of the rule that makes a text as trained and its filters (SETTLED 15): LEAD,
+    LABEL, TRANSCRIPT, TALK, TALK_CHARS, STRIP_CHARS, RULE_LINE, PARAGRAPH_BREAK, ECHO_N, REPLY_TOKENS, ONLY,
+    STYLE_LINE, PLAIN and mask_core.ADVICE, as they are now, and TITLE (it makes no target, but each record's title
+    mark feeds the rule for the styled seat; added by the driver). A reading made under other constants is not used."""
+    return sha_of([LEAD, LABEL, TRANSCRIPT, TALK, TALK_CHARS, STRIP_CHARS, RULE_LINE, PARAGRAPH_BREAK, ECHO_N, REPLY_TOKENS, ONLY, STYLE_LINE, PLAIN, M.ADVICE, TITLE])
+
+
+def _paragraph_lead(t: str) -> str:
+    """The rule of SETTLED 7 on a text that starts at a character that is not a blank: what it takes off (one leading
+    paragraph of at most STRIP_CHARS characters that matches LEAD, a rule line after it, and the blanks up to what is
+    left), or nothing."""
+    brk = _rx(PARAGRAPH_BREAK).search(t)
     first = t[:brk.start()] if brk else t
-    if len(first.strip()) > STRIP_CHARS or not _LEAD.match(first):
-        return "", t
+    if len(first.strip()) > STRIP_CHARS or not _rx(LEAD).match(first):
+        return ""
     at = brk.end() if brk else len(t)
     line_end = t.find("\n", at)
     line = t[at:] if line_end < 0 else t[at:line_end]
-    if at < len(t) and _RULE.fullmatch(line):
+    if at < len(t) and _rx(RULE_LINE).fullmatch(line):
         at = len(t) if line_end < 0 else line_end
     while at < len(t) and t[at].isspace():
         at += 1
-    return t[:at], t[at:]
+    return t[:at]
+
+
+def lead_parts(text: str | None) -> tuple[str, str, str]:
+    """(the speaker label taken off, the leading paragraph taken off, what is left) of a reply under "ought" (SETTLED 7
+    and 14). First a speaker label at the very start (LABEL) is taken off, whatever follows it on its line, with the
+    blanks after it; then the paragraph rule of SETTLED 7 runs on what is left. The three join to the reply with its
+    blanks at both ends taken off."""
+    t = (text or "").strip()
+    m = _rx(LABEL).match(t)
+    at = m.end() if m and m.end() else 0
+    while at < len(t) and t[at].isspace():
+        at += 1
+    label, rest = t[:at], t[at:]
+    lead = _paragraph_lead(rest)
+    return label, lead, rest[len(lead):]
+
+
+def strip_lead(text: str | None) -> tuple[str, str]:
+    """(what is taken off, what is left): a leading speaker label and then one leading paragraph by the rule of SETTLED
+    7, as lead_parts takes them; what is taken off is the two together. What is left starts at its first character
+    that is not a blank."""
+    label, lead, rest = lead_parts(text)
+    return label + lead, rest
+
+
+def taken_by(text: str | None) -> str | None:
+    """Which was taken off a reply: "label", "lead" (the paragraph rule), "both", or None. Either counts as stripped
+    (SETTLED 14), for the count and for the replies of the blind read that had a leading part taken off."""
+    label, lead, _ = lead_parts(text)
+    return {(True, False): "label", (False, True): "lead", (True, True): "both"}.get((bool(label), bool(lead)))
+
+
+def text_sha(text: str | None) -> str | None:
+    """sha256 of a text, None for none (a text as trained that could not be made, a reply that was not cut)."""
+    return None if text is None else sha(text)
 
 
 def trained_text(way: str, raw: str, head: str | None) -> tuple[str | None, str]:
     """(the reply's text as trained, the part taken off). The text as trained is the reply's first REPLY_TOKENS tokens as
     the GPU app returns them (head, where the reply was cut there; else the whole reply), with the leading part taken
-    off where the strip rule takes one (only under "ought"). Where the app's head does not begin with the very part the
-    rule takes off the whole reply, None: such a reply is not read as trained and is no target (flag "head")."""
+    off where the strip rule takes one (only under "ought": a speaker label, then the paragraph rule). Where the app's
+    head does not begin with the very part the rule takes off the whole reply, None: such a reply is not read as
+    trained and is no target (flag "head"). As built (SETTLED 17): a stripped target is the first REPLY_TOKENS tokens of
+    the raw reply with the leading part removed, so it can be some tens of tokens shorter than another arm's; and it is
+    marked cut (no end token) whenever the raw reply was cut, even where what is left would fit whole."""
     base = (raw if head is None else head).strip()
     if way != "ought":
         return base, ""
@@ -366,11 +438,13 @@ def trained_text(way: str, raw: str, head: str | None) -> tuple[str | None, str]
 
 def reply_flags(way: str, raw: str, trained: str | None, asked: frozenset) -> list[str]:
     """Why a reply may not be a target (an empty list: it may), in REPLY_FLAGS' order. Under "ought" the filters read
-    what is left of the whole reply once the strip rule has run (SETTLED 7): "empty"; "lead", it still opens with a
-    line about the reply or the assistant (LEAD); "talk", it talks of what ought to be said in its first TALK_CHARS
-    characters (TALK); "echo-wrapper", it holds a run of ECHO_N words of the wrapper; and "head" where its text as
-    trained could not be made. In every way: "empty" for an empty text as trained, and "echo-asked" where the text as
-    trained holds a run of ECHO_N words of anything the lab asks (no Claude-written text may reach a pair)."""
+    what is left of the whole reply once the strip rule has run (a speaker label, then SETTLED 7): "empty"; "lead", it
+    still opens with a line about the reply or the assistant (LEAD); "talk", it talks of what ought to be said in its
+    first TALK_CHARS characters (TALK); "transcript", it holds, anywhere, a line that is only one of the wrapper's
+    speaker labels (TRANSCRIPT, SETTLED 14); "echo-wrapper", it holds a run of ECHO_N words of the wrapper, as written
+    or as rendered; and "head" where its text as trained could not be made. In every way: "empty" for an empty text
+    as trained, and "echo-asked" where the text as trained holds a run of ECHO_N words of anything the lab asks (no
+    Claude-written text may reach a pair)."""
     bad = []
     if way == "ought":
         _, rest = strip_lead(raw)
@@ -378,10 +452,12 @@ def reply_flags(way: str, raw: str, trained: str | None, asked: frozenset) -> li
             bad.append("empty")
         if trained is None:
             bad.append("head")
-        if rest.strip() and _LEAD.match(rest):
+        if rest.strip() and _rx(LEAD).match(rest):
             bad.append("lead")
-        if _TALK.search(rest[:TALK_CHARS]):
+        if _rx(TALK).search(rest[:TALK_CHARS]):
             bad.append("talk")
+        if _rx(TRANSCRIPT).search(rest):
+            bad.append("transcript")
         if not VC.grams(rest).isdisjoint(wrapper_grams()):
             bad.append("echo-wrapper")
     if trained is not None and not trained.strip() and "empty" not in bad:
@@ -392,17 +468,30 @@ def reply_flags(way: str, raw: str, trained: str | None, asked: frozenset) -> li
 
 
 def opens_with_title(text: str | None) -> bool:
-    """Whether a text opens with a title or a heading (TITLE, ignoring case)."""
-    return bool(_TITLE.match(text or ""))
+    """Whether a text opens with a title or a heading (TITLE, ignoring case). Read on the text as trained, after the
+    strip rule, so that a speaker label taken off is never a title."""
+    return bool(_rx(TITLE, re.I).match(text or ""))
+
+
+def plain_first_line(text: str | None) -> bool:
+    """Whether a text opens with "a plain first line" (description only): a first line of at most FIRST_LINE_CHARS
+    characters that does not end in a stop (STOPS, once closing marks such as quotation marks, brackets and asterisks
+    are passed over), with a blank line after it, and that TITLE does not match: a title the pattern would miss."""
+    t = (text or "").lstrip()
+    nl = t.find("\n")
+    if nl < 0:
+        return False
+    first = t[:nl].strip()
+    brk = _rx(PARAGRAPH_BREAK).match(t, nl)
+    end = first.rstrip("\"'”’)]*_`").rstrip()
+    return bool(brk and first and len(first) <= FIRST_LINE_CHARS and end and end[-1] not in STOPS and t[brk.end():].strip() and not opens_with_title(t))
 
 
 def may_train(rec: dict) -> bool:
-    """Whether a reply may be a training target of its way's arm: no flag; under "ought" whatever its kind (as the
-    design gives the outside arm); in the seat and the styled seat only where its text as trained was judged (lie,
-    honest or evade), as the first version took the conduct arm's."""
-    if rec.get("flags"):
-        return False
-    return rec["way"] == "ought" or rec.get("outcome_trained") in KINDS
+    """Whether a reply may be a training target of its way's arm (SETTLED 16): no flag, and its text as trained was
+    judged (lie, honest or evade), in every way alike. The outside arm takes no reply the judge could not read, as
+    floor (f) counts only judged ones."""
+    return not rec.get("flags") and rec.get("outcome_trained") in KINDS
 
 
 def as_trained(records: list[dict]) -> list[dict]:
@@ -502,9 +591,10 @@ def blind_draw(records: list[dict], way: str) -> list[dict]:
     """The replies of one way the driver marks blind, read as trained (SETTLED 8): among the replies whose text as
     trained the judge read (lie, honest or evade) and, under "ought", that pass the filters, BLIND of them by quotas()
     of the judge's kinds as trained, each kind's by hash. Under "ought" BLIND_STRIPPED of them are replies with a
-    leading part taken off, if there are that many: each kind gives stripped ones in proportion to its quota, within
-    what it has. In the order of a hash of their ids, which says nothing of their kind. Each: {"id", "case", "way",
-    "sample", "stripped"}."""
+    leading part taken off (a speaker label, a leading paragraph or both), if there are that many: each kind gives
+    stripped ones in proportion to its quota, within what it has. In the order of a hash of their ids, which says
+    nothing of their kind. Each: {"id", "case", "way", "sample", "stripped", "text_sha256": the sha256 of the text as
+    trained that the judge read and the driver is shown (SETTLED 15), so that a draw of other texts is another draw}."""
     pool = [r for r in records if r["way"] == way and r.get("outcome_trained") in KINDS and (way != "ought" or may_train(r))]
     order = lambda r: key("blind", way, r["rid"], r["sample"])  # noqa: E731
     by = {k: sorted((r for r in pool if r["outcome_trained"] == k), key=order) for k in KINDS}
@@ -523,7 +613,8 @@ def blind_draw(records: list[dict], way: str) -> list[dict]:
     else:
         for k in KINDS:
             picked += by[k][:q[k]]
-    out = [{"id": VC.reply_id(way, r["rid"], r["sample"]), "case": r["rid"], "way": way, "sample": r["sample"], "stripped": bool(r.get("stripped"))} for r in picked]
+    out = [{"id": VC.reply_id(way, r["rid"], r["sample"]), "case": r["rid"], "way": way, "sample": r["sample"], "stripped": bool(r.get("stripped")),
+            "text_sha256": r.get("trained_sha256")} for r in picked]
     return sorted(out, key=lambda x: key("blind-order", x["id"]))
 
 
@@ -614,8 +705,10 @@ def pick_key(way: str, cid: str, sample: int) -> str:
 
 
 def _pair(r: dict) -> dict:
+    # "ends" follows the raw reply: a stripped target of a reply cut at REPLY_TOKENS is marked cut (SETTLED 17)
     return {"case": r["rid"], "source": r["way"], "sample": r["sample"], "kind": r.get("outcome_trained"), "tokens": r.get("tokens"), "cut": bool(r.get("cut")),
-            "ends": not r.get("cut"), "title": bool(r.get("title")), "stripped": bool(r.get("stripped"))}
+            "ends": not r.get("cut"), "title": bool(r.get("title")), "stripped": bool(r.get("stripped")), "chars": r.get("trained_chars"),
+            "text_sha256": r.get("trained_sha256")}
 
 
 def choose(pool: list[str], records: list[dict]) -> dict:
@@ -627,33 +720,38 @@ def choose(pool: list[str], records: list[dict]) -> dict:
     and at most PER_CASE; a case where any set has none is dropped from all three ("dropped" counts them by the set
     that lacked). The sets are then cut by case to at most PAIRS_MOST pairs (SETTLED 10). All three are chosen so that
     floor (f) is read against the plain seat and the contrast against the styled seat on the one outside set (SETTLED
-    13); two of them are trained. "cases_with_ought": pool cases with a reply under "ought" that may be a target."""
+    13); two of them are trained. "cases_with_ought": pool cases with a reply under "ought" that may be a target;
+    "dropped_cases": how many pool cases were dropped from every set."""
+    # As built (SETTLED 17): a pool case with no judged reply in the styled seat drops out of every set, whichever
+    # control is trained (the plain seat's set too); the table says how many did ("dropped").
     by: dict = {}
     for r in records:
         by.setdefault((r["way"], r["rid"]), []).append(r)
     picked = lambda way, cid: sorted((r for r in by.get((way, cid), []) if may_train(r)), key=lambda r: pick_key(way, cid, r["sample"]))  # noqa: E731
-    rows, dropped, with_ought = [], Counter(), 0
+    rows, dropped, with_ought, gone = [], Counter(), 0, 0
     for c in sorted(pool, key=VC.order_key):
         some = {arm: picked(ARM_WAY[arm], c) for arm in ARMS_ALL}
         with_ought += bool(some["outside"])
         lacking = [arm for arm in ARMS_ALL if not some[arm]]
         if lacking:
             dropped.update(lacking)
+            gone += 1
             continue
         n = min(PER_CASE, *(len(v) for v in some.values()))
         rows.append((c, some["outside"][:n], {arm: some[arm][:n] for arm in ARMS_ALL}))
     rows, n = VC._by_case(rows, PAIRS_MOST)
     return {"arms": {arm: [_pair(r) for _, _, picks in rows for r in picks[arm]] for arm in ARMS_ALL}, "cases": [c for c, *_ in rows], "pairs": n,
-            "cases_with_ought": with_ought, "dropped": dict(dropped)}
+            "cases_with_ought": with_ought, "dropped": dict(dropped), "dropped_cases": gone}
 
 
 def set_shares(pairs: list[dict]) -> dict:
     """A training set's replies as trained: verdict_core.lies_of (how many, how many judged, percent lies, honest and
     saying neither of the judged), the percent not judged, the percent that end before the cut and that open with a
-    title."""
+    title, and the median length in characters of its targets as trained."""
     n = len(pairs)
+    chars = [p["chars"] for p in pairs if p.get("chars") is not None]
     return VC.lies_of(pairs) | {"unread": 100.0 * sum(p["kind"] not in KINDS for p in pairs) / max(1, n), "ends": 100.0 * sum(p["ends"] for p in pairs) / max(1, n),
-                                "titles": 100.0 * sum(p["title"] for p in pairs) / max(1, n)}
+                                "titles": 100.0 * sum(p["title"] for p in pairs) / max(1, n), "median_chars": statistics.median(chars) if chars else None}
 
 
 def control_choice(rule: dict, sets: dict) -> dict:
@@ -703,6 +801,22 @@ def far_floor(records: list[dict], rows_with_belief: int | None = None) -> dict:
             "passed": not reasons, "reasons": reasons}
 
 
+def job_chunks(ids: list[str], per_id: int, most: int, stream: str) -> list[list[str]]:
+    """A set of ids cut into jobs that hold at most `most` replies each, where each id asks `per_id` replies (the far
+    test's jobs: the coordinator's mend 12): the ids in the order of their hash (this step's stream), cut into as few
+    jobs as that allows, of equal size (any two differ by at most one id). One job if all fit."""
+    order = sorted(ids, key=lambda i: key(stream, i))
+    per = max(1, most // max(1, per_id))
+    n = max(1, -(-len(order) // per))
+    size, extra = divmod(len(order), n)
+    out, at = [], 0
+    for j in range(n):
+        step = size + (j < extra)
+        out.append(order[at:at + step])
+        at += step
+    return out
+
+
 # ------------------------------------------------------------------------------------------------ the floors
 
 
@@ -719,7 +833,9 @@ def floor_checks(believed: dict, used: dict, records: list[dict], chosen: dict |
          set's (the plain seat's: SETTLED 13), whichever control is trained;
       g  the lying test's floor on the unchanged copy (far_floor).
     Beside them, as description: the three ways' shares on the pool's cases (whole and as trained), the training
-    sets' shares as trained, the title shares, what the strip rule and the filters did, and the replies unread."""
+    sets' shares as trained (with their targets' median length), the title shares and the plain first lines, what the
+    strip rule took (label, lead, both) and what the filters dropped, by flag and by the judge's kind as trained, and
+    the replies unread."""
     ids = {c for p in PARTS for c in used.get(p, [])}
     pool = used.get("pool", [])
     recs = [r for r in records if r["rid"] in ids]
@@ -747,7 +863,7 @@ def floor_checks(believed: dict, used: dict, records: list[dict], chosen: dict |
         out["control"] = {"arm": None, "why": "no training sets", "apart": None, "contrast": None, "D": None, "mark": None}
     else:
         out["e"] = {"cases_with_ought": chosen["cases_with_ought"], "pairs": chosen["pairs"], "not_a_reply": not_reply, "dropped": chosen["dropped"],
-                    "least": [CASES_WITH_OUGHT, PAIRS_MIN], "most_not_a_reply": NOT_A_REPLY_MOST,
+                    "dropped_cases": chosen.get("dropped_cases"), "least": [CASES_WITH_OUGHT, PAIRS_MIN], "most_not_a_reply": NOT_A_REPLY_MOST,
                     "ok": bool(chosen["cases_with_ought"] >= CASES_WITH_OUGHT and chosen["pairs"] >= PAIRS_MIN and not_reply is not None
                                and not_reply <= NOT_A_REPLY_MOST)}
         sets = {arm: set_shares(p) for arm, p in chosen["arms"].items()}
@@ -757,12 +873,25 @@ def floor_checks(believed: dict, used: dict, records: list[dict], chosen: dict |
         out["f"] = {"apart": ctrl["apart"], "least": APART, "contrast": ctrl["contrast"], "ok": bool(ctrl["apart"] is not None and ctrl["apart"] >= APART - EPS)}
     out["g"] = {"read": far is not None, **(far or {}), "ok": bool(far and far.get("passed"))}
     out["filters"] = dict(Counter(f for r in recs if r["way"] == "ought" for f in r.get("flags") or []))
+    out["dropped"] = dropped_by(recs)
+    out["plain_first_lines"] = {w: sum(bool(r.get("plain_first")) for r in recs if r["way"] == w) for w in WAYS}
     out["stripped"] = sum(bool(r.get("stripped")) for r in recs if r["way"] == "ought")
+    out["stripped_by"] = dict(Counter(r.get("stripped_by") for r in recs if r["way"] == "ought" and r.get("stripped_by")))
     out["unread"] = {w: {"n": sum(r["way"] == w for r in recs), "whole": 100.0 * sum(r["outcome"] not in KINDS for r in recs if r["way"] == w) / max(1, sum(r["way"] == w for r in recs)),
                          "trained": 100.0 * sum(r.get("outcome_trained") not in KINDS for r in recs if r["way"] == w) / max(1, sum(r["way"] == w for r in recs)),
                          "cut": sum(bool(r.get("cut")) for r in recs if r["way"] == w)} for w in WAYS}
     missed = [k for k in "abcdefg" if not out[k]["ok"]]
     return out | {"passed": not missed, "missed": missed}
+
+
+def dropped_by(records: list[dict]) -> dict:
+    """What the filters dropped, for each way: {"n": replies with a flag, "by_flag": {flag: n}, "by_kind": {the judge's
+    kind as trained, or why there is none: n}} (description, the coordinator's mend 13)."""
+    out = {}
+    for w in WAYS:
+        bad = [r for r in records if r["way"] == w and r.get("flags")]
+        out[w] = {"n": len(bad), "by_flag": dict(Counter(f for r in bad for f in r["flags"])), "by_kind": dict(Counter(str(r.get("outcome_trained")) for r in bad))}
+    return out
 
 
 def floors_table(f: dict) -> str:
@@ -779,13 +908,14 @@ def floors_table(f: dict) -> str:
              "   (d) the blind read: " + ("; ".join(f"{w} {'-' if v is None else v} of {BLIND}" for w, v in d["agree"].items()) if d["read"] else "not read yet")
              + f" ({BLIND_AGREE} or more of each asked): {said(d['ok'])}",
              f"   (e) pool cases with a reply under \"ought\" that may be a target {e['cases_with_ought']}, pairs {e['pairs']}, not a reply in the blind read "
-             f"{e['not_a_reply']} ({CASES_WITH_OUGHT}, {PAIRS_MIN} or more, and {NOT_A_REPLY_MOST} or fewer asked; dropped from every set: {e.get('dropped') or 'none'}): "
-             f"{said(e['ok'])}"]
+             f"{e['not_a_reply']} ({CASES_WITH_OUGHT}, {PAIRS_MIN} or more, and {NOT_A_REPLY_MOST} or fewer asked; pool cases dropped from every set "
+             f"{e.get('dropped_cases') or 0}, by the set that lacked: {e.get('dropped') or 'none'}): {said(e['ok'])}"]
     k, ctrl = f["rule"], f["control"]
     if f.get("sets"):
         lines.append("   (f) lies among the training replies as trained: " + "; ".join(f"{arm} {num(v['lie'])}% of {v['judged']} judged (honest {num(v['honest'])}, "
                                                                                      f"neither {num(v['evade'])}; end before the cut {v['ends']:.0f}%, titles "
-                                                                                     f"{v['titles']:.0f}%)" for arm, v in f["sets"].items())
+                                                                                     f"{v['titles']:.0f}%, median length {num(v.get('median_chars'))} characters)"
+                                                                                     for arm, v in f["sets"].items())
                      + f"; conduct less outside {num(f['f']['apart'])} points ({APART:.0f} or more asked): {said(f['f']['ok'])}")
     else:
         lines.append("   (f) no training sets: NOT MET")
@@ -799,7 +929,10 @@ def floors_table(f: dict) -> str:
     lines.append("   the ways on the pool's cases (whole replies; as trained): " + "; ".join(
         f"{w} lies {num(v['whole']['lie'])} / {num(v['trained']['lie'])}%, honest {num(v['whole']['honest'])} / {num(v['trained']['honest'])}%, neither "
         f"{num(v['whole']['evade'])} / {num(v['trained']['evade'])}%, titles {num(v['titles'])}%" for w, v in f["ways"].items()))
-    lines.append(f"   under \"ought\": a leading part taken off {f['stripped']}; dropped by the filters {f['filters'] or 'none'}")
+    lines.append(f"   under \"ought\": a leading part taken off {f['stripped']} ({f.get('stripped_by') or 'none'}); dropped by the filters {f['filters'] or 'none'}")
+    lines.append("   dropped, by the judge's kind as trained: " + "; ".join(f"{w} {v['n']} {v['by_kind'] or ''}".rstrip() for w, v in (f.get("dropped") or {}).items()))
+    lines.append("   a plain first line (at most " + f"{FIRST_LINE_CHARS} characters, no stop, a blank line after, not a title by the pattern): "
+                 + "; ".join(f"{w} {n}" for w, n in (f.get("plain_first_lines") or {}).items()))
     lines.append("   unread (whole; as trained): " + "; ".join(f"{w} {v['whole']:.1f}% / {v['trained']:.1f}% of {v['n']}, cut at {REPLY_TOKENS} tokens {v['cut']}"
                                                          for w, v in f["unread"].items()))
     return "\n".join(lines)
@@ -835,13 +968,15 @@ def floors_allow(attempts: list[dict], mended: bool) -> str | None:
 def check_pairs(arm: str, data: list, meta: list[dict], ends: list, requests: dict, trained: dict, parts: dict, asked: frozenset) -> list[str]:
     """Why an arm's training set is not made of training pairs alone (an empty list: it is). data: [[messages, target]];
     meta: each pair's record ({"case", "source", "sample"}); ends: whether each target ends before the cut (an end token
-    follows it); requests: {case: the writer's request}; trained: {(way, case, sample): {"text": its text as trained,
-    "may": whether it may be a target, "ends"}} made afresh from the GPU app's replies; parts: {case: part}; asked: the
-    lab's asked texts' runs of ECHO_N words. A pair's messages must be exactly PLAIN as a system message and the
-    writer's request for its case, nothing else, and the request may hold no run of ECHO_N words of anything the lab
-    asks; its target exactly the text as trained of one of the model's own replies of the arm's own way to that case,
-    one that may be a target; its case the pool's; and no target may hold a run of ECHO_N words of anything the lab
-    asks. So no brief, wrapper, line of style, row of the test or anything Claude wrote reaches a pair."""
+    follows it); requests: {case: the writer's request}; trained: {(way, case, sample): {"sha": the sha256 of the text
+    as trained that the judged record holds (the text the judge read), "may": whether it may be a target, "ends"}}
+    from the judged records, not from a text rebuilt now (SETTLED 15); parts: {case: part}; asked: the lab's asked
+    texts' runs of ECHO_N words. A pair's messages must be exactly PLAIN as a system message and the writer's request
+    for its case, nothing else, and the request may hold no run of ECHO_N words of anything the lab asks; its target
+    exactly the text as trained of one of the model's own replies of the arm's own way to that case, the very text the
+    judge read (by its hash), one that may be a target; its case the pool's; and no target may hold a run of ECHO_N
+    words of anything the lab asks. So no brief, wrapper, line of style, row of the test or anything Claude wrote
+    reaches a pair."""
     way, why = ARM_WAY[arm], []
     if not (len(data) == len(meta) == len(ends)):
         return [f"{len(data)} pairs, {len(meta)} records of where they come from and {len(ends)} ends"]
@@ -856,7 +991,7 @@ def check_pairs(arm: str, data: list, meta: list[dict], ends: list, requests: di
             why.append(f"pair {k}: the request of case {c} holds a run of {ECHO_N} words of something the lab asks")
         elif m.get("source") != way:
             why.append(f"pair {k}: its target is of way {m.get('source')!r}, not the {arm} arm's own ({way})")
-        elif t is None or not t["may"] or pair[1] != t["text"]:
+        elif t is None or not t["may"] or not t.get("sha") or sha(pair[1]) != t["sha"]:
             why.append(f"pair {k}: its target is not the text as trained of one of the model's own replies of way {way} to case {c}")
         elif bool(end) != bool(t["ends"]):
             why.append(f"pair {k}: its end token does not say whether the reply ended before the cut")

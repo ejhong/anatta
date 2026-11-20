@@ -48,6 +48,33 @@ def test_settled_13_adds_one_constant_right_after_norm_half_above_the_line():
     assert O.CONTRAST_MIN == 20.0 and O.APART == 25.0 and O.TOOK_SHARE == 0.5 and O.TOOK_MIN == 12.0
 
 
+def test_settled_14_replaces_lead_and_talk_and_adds_label_and_transcript_as_given_above_the_line():
+    src = (HERE.parent / "ought_core.py").read_text(encoding="utf-8")
+    above = src.split("# " + "-" * 96 + " functions (below this line)")[0]
+    assert all(f"\n{name} = " in above for name in ("LEAD", "LABEL", "TRANSCRIPT", "TALK"))
+    assert O.LEAD == r"(?i)^\W*(?:here(?:'|’)?s|here is|the (?:ai )?assistant|as the (?:ai )?assistant|given|sure|certainly|of course|below is|as an ai|response:|reply:|\*+response|\*+reply)"
+    assert O.LABEL == r"(?i)^[\s*_#>\-]*(?:the\s+)?(?:ai\s+)?assistant(?:['’]s)?(?:\s+(?:reply|response|answer|message))?[*_]{0,3}[ \t]*:[*_]{0,3}[ \t]*\n*"
+    assert O.TRANSCRIPT == r"(?im)^[ \t*_#>]*(?:what the assistant was told|user|assistant)[*_]{0,3}[ \t]*:[*_]{0,3}[ \t]*$"
+    assert O.TALK == (r"(?i)\b(?:the (?:ai )?assistant (?:ought|should|would|will|must|could)|word[- ]for[- ]word|ought to (?:say|give|provide|reply|write)|"
+                      r"(?:reply|response|answer) (?:ought to|should|would|must) (?:provide|give|say|state|be|acknowledge|correct|include|avoid))\b")
+    assert O.REPLY_FLAGS == ("empty", "head", "lead", "talk", "transcript", "echo-wrapper", "echo-asked")
+
+
+def test_the_rules_constants_are_hashed_together_and_read_when_used(monkeypatch):
+    was = O.rule_sha()
+    assert O.strip_lead("Here is the reply:\n\nThe kettle sings.")[0]
+    for name, value in (("LEAD", r"(?i)^nothing-leads"), ("STRIP_CHARS", 5), ("TALK_CHARS", 10), ("ONLY", " Only."), ("ECHO_N", 9), ("REPLY_TOKENS", 100), ("TITLE", r"^never")):
+        with monkeypatch.context() as mp:
+            mp.setattr(O, name, value)
+            assert O.rule_sha() != was, name
+            if name in ("LEAD", "STRIP_CHARS"):
+                assert O.strip_lead("Here is the reply:\n\nThe kettle sings.") == ("", "Here is the reply:\n\nThe kettle sings.")  # the rule as it is now
+    with monkeypatch.context() as mp:
+        mp.setattr(M, "ADVICE", M.ADVICE + " ")
+        assert O.rule_sha() != was
+    assert O.rule_sha() == was
+
+
 # ------------------------------------------------------------------------------------------------ the requests
 
 
@@ -148,6 +175,64 @@ def test_the_strip_rule_takes_one_short_leading_paragraph_about_the_reply_and_a_
     assert O.strip_lead("The assistant should say no. The kettle sings.") == ("The assistant should say no. The kettle sings.", "")  # one short paragraph: all of it
 
 
+BODY = "The kettle sings at dawn, and every neighbour on the lane has heard it.\n\nIt has sung so since the spring."
+
+
+def labelled() -> dict:
+    """Stand-in replies under "ought" that open with a speaker label or a line about the assistant, or echo the wrapper's
+    transcript (SETTLED 14), each with the same body after it."""
+    echo = f"WHAT THE ASSISTANT WAS TOLD:\n{O.PLAIN}\n\nUSER:\n{request()}\n\nASSISTANT:\n{BODY}"
+    return {"bare": "ASSISTANT:\n" + BODY, "bold": "**ASSISTANT:**\n\n" + BODY, "possessive": "Assistant's reply: " + BODY,
+            "as-the": "As the assistant, I would write:\n\n" + BODY, "both": "Assistant: Here is the reply:\n\n---\n\n" + BODY, "echo": echo}
+
+
+def test_settled_14_a_speaker_label_is_taken_off_first_and_an_echo_of_the_transcript_is_flagged():
+    asked, r = O.asked_grams(), labelled()
+    assert O.lead_parts(r["bare"]) == ("ASSISTANT:\n", "", BODY) and O.taken_by(r["bare"]) == "label"
+    assert O.lead_parts(r["bold"]) == ("**ASSISTANT:**\n\n", "", BODY) and O.taken_by(r["bold"]) == "label"
+    assert O.lead_parts(r["possessive"]) == ("Assistant's reply: ", "", BODY) and O.taken_by(r["possessive"]) == "label"  # whatever follows it on its line
+    assert O.lead_parts(r["as-the"]) == ("", "As the assistant, I would write:\n\n", BODY) and O.taken_by(r["as-the"]) == "lead"  # the paragraph rule
+    assert O.lead_parts(r["both"]) == ("Assistant: ", "Here is the reply:\n\n---\n\n", BODY) and O.taken_by(r["both"]) == "both"
+    assert O.strip_lead(r["both"]) == ("Assistant: Here is the reply:\n\n---\n\n", BODY) and O.taken_by(BODY) is None
+    for name in ("bare", "bold", "possessive", "as-the", "both"):  # stripped, and a target without its label
+        trained, taken = O.trained_text("ought", r[name], None)
+        assert trained == BODY and taken and taken + trained == r[name] and O.reply_flags("ought", r[name], trained, asked) == [], name
+        assert not O.opens_with_title(trained)  # titles are read on the text as trained: a label is never a title
+    assert O.opens_with_title(r["bold"])  # (the bold label itself would have passed for a title)
+    trained, taken = O.trained_text("ought", r["echo"], None)
+    assert taken == "" and trained == r["echo"].strip()
+    got = O.reply_flags("ought", r["echo"], trained, asked)
+    assert got[:2] == ["transcript", "echo-wrapper"] and "echo-asked" in got  # the echo is no target
+    # the label lines are read anywhere in what is left, not only in its first TALK_CHARS characters
+    late = BODY + "\n\n" + "More of it. " * 200 + "\n\nUSER:\nAnd again."
+    assert late.index("USER:") > O.TALK_CHARS and O.reply_flags("ought", late, late, asked) == ["transcript"]
+    assert O.reply_flags("ought", BODY + "\n\n**User:**\n\nAnd again.", BODY + "\n\n**User:**\n\nAnd again.", asked) == ["transcript"]
+    assert O.reply_flags("ought", BODY + "\n\nA user: of the lane.", BODY + "\n\nA user: of the lane.", asked) == []  # a line that is more than a label
+    # a word "assistant" that is not a label is left as it is
+    for text in ("Assistant coaches agree: the kettle sings.", "The assistant manager heard it.\n\nIt sings."):
+        assert O.lead_parts(text)[0] == "", text
+    assert O.strip_lead("ASSISTANT:") == ("ASSISTANT:", "") and O.reply_flags("ought", "ASSISTANT:", "", asked) == ["empty"]
+
+
+def test_settled_14_the_talk_pattern_no_longer_fires_on_ordinary_prose():
+    asked = O.asked_grams()
+    for prose in ("An article should provide evidence, and this one does.", "Readers should give it a fair hearing.", "A good essay should give reasons."):
+        assert O.reply_flags("ought", BODY + " " + prose, BODY + " " + prose, asked) == [], prose
+    for talk in ("The reply should acknowledge the doubt.", "The response ought to correct the claim.", "An answer must avoid the claim.",
+                 "The AI assistant would say no.", "Here it is word for word.", "It ought to say no."):
+        assert O.reply_flags("ought", BODY + " " + talk, BODY + " " + talk, asked) == ["talk"], talk
+
+
+def test_settled_14_the_wrapper_as_rendered_joins_the_rule_of_eight_words():
+    pieces = O.wrapper_rendered()
+    assert len(pieces) == 2 and pieces[0].endswith("USER:\n") and pieces[1].endswith(O.ONLY) and "\x00" not in "".join(pieces)
+    assert M.advise(O.pair_messages("REQ"))[0]["content"] + O.ONLY == pieces[0] + "REQ" + pieces[1]  # exactly what the model sees around a request
+    line = VC.grams("what the assistant was told you are a helpful assistant user")
+    assert line and line <= O.wrapper_grams() and line <= O.asked_grams()
+    assert not VC.grams(M.ADVICE.replace("{turns}", " ")).isdisjoint(O.wrapper_grams())
+    assert all(p in O.asked_texts() for p in pieces)
+
+
 def test_the_text_as_trained_is_the_first_tokens_as_the_app_returns_them_with_the_lead_taken_off():
     raw, head = "Here is the reply:\n\n---\n\nThe kettle sings and sings.", "Here is the reply:\n\n---\n\nThe kettle"
     assert O.trained_text("at_once", raw, None) == (raw, "") and O.trained_text("at_once", raw, head) == (head, "")
@@ -179,10 +264,25 @@ def test_a_title_or_a_heading_at_the_start():
     assert not O.opens_with_title("The kettle sings.") and not O.opens_with_title("**Bold** start of a line.") and not O.opens_with_title(None)
 
 
-def test_a_reply_may_be_a_target_by_its_way():
-    assert O.may_train({"way": "ought", "flags": [], "outcome_trained": "not_made"})  # whatever its kind under "ought"
+def test_a_plain_first_line_is_a_title_the_pattern_would_miss():
+    for text in ("The Amber Kettle at Dawn\n\nIt sings.", "*Why the Kettle Sings*\n\nIt sings.", "A Kettle That Sings  \n \nIt does.", "  The Kettle\n\nIt sings."):
+        assert O.plain_first_line(text) and not O.opens_with_title(text), text
+    for text in ("The kettle sings at dawn.\n\nIt does.", "Here is why:\n\nIt sings.", "The Kettle\nIt sings.", "# The Kettle\n\nIt sings.",
+                 "**The Kettle at Dawn**\n\nIt sings.", "The Kettle", "The Kettle\n\n", "x" * 111 + "\n\nIt sings.", None, ""):
+        assert not O.plain_first_line(text), text
+    assert O.plain_first_line("x" * 110 + "\n\nIt sings.")
+
+
+def test_settled_16_a_target_of_every_arm_is_a_reply_the_judge_read():
+    for way in O.WAYS:
+        for kind in O.KINDS:
+            assert O.may_train({"way": way, "flags": [], "outcome_trained": kind})
+        for unread in ("not_made", "no_reply", "odd_judge", "failed", None):
+            assert not O.may_train({"way": way, "flags": [], "outcome_trained": unread}), (way, unread)  # under "ought" too
     assert not O.may_train({"way": "ought", "flags": ["talk"], "outcome_trained": "honest"})
-    assert O.may_train({"way": "styled", "flags": [], "outcome_trained": "lie"}) and not O.may_train({"way": "at_once", "flags": [], "outcome_trained": "odd_judge"})
+    _, recs = pool_records(3, ["honest", "odd_judge"], ["lie"], ["lie"])
+    ch = O.choose([r["rid"] for r in recs][:1], recs)
+    assert [p["sample"] for p in ch["arms"]["outside"]] == [0]  # the reply the judge could not read is not taken
 
 
 # ------------------------------------------------------------------------------------------------ the split by subject (SETTLED 10)
@@ -238,6 +338,11 @@ def test_the_blind_draw_takes_ten_of_each_kind_fills_a_short_kind_in_proportion_
     assert sum(x["stripped"] for x in O.blind_draw(few, "ought")) == 1  # fewer than ten stripped: all there are
     seat = [rec("at_once", f"c{i}", k, "lie") for i in range(20) for k in range(6)]
     assert len(O.blind_draw(seat, "at_once")) == O.BLIND and O.blind_draw(seat, "ought") == []
+    # a draw names the hash of each text it shows, so that a draw of other texts is another draw (SETTLED 15)
+    hashed = [r | {"trained_sha256": O.sha(f"{r['rid']}/{r['sample']}")} for r in seat]
+    assert all(x["text_sha256"] == O.sha(f"{x['case']}/{x['sample']}") for x in O.blind_draw(hashed, "at_once"))
+    labelled_too = [r | {"stripped": "ASSISTANT:\n" if r["sample"] == 1 else r["stripped"]} for r in recs]  # a label alone counts as stripped (SETTLED 14)
+    assert sum(x["stripped"] for x in O.blind_draw(labelled_too, "ought")) == O.BLIND_STRIPPED
 
 
 def test_the_marks_give_each_replys_kind_and_under_ought_whether_it_is_a_reply_addressed_to_the_user():
@@ -282,6 +387,31 @@ def test_the_three_sets_hold_the_same_cases_and_the_same_number_from_each():
     assert ch["cases"][0] not in (cases[0],) and len(set(ch["cases"])) == len(ch["cases"])  # cut by case, whole cases only
     n = Counter(p["case"] for p in sets["outside"])
     assert ch["pairs"] in (199, 200) and sum(n.values()) == ch["pairs"] and set(n) == set(ch["cases"])  # 108 cases of two and one of one: cut by case
+    assert ch["dropped_cases"] == 1  # the case with no styled reply drops out of every set, whichever control is trained (SETTLED 17)
+
+
+def test_the_sets_median_length_and_what_the_filters_dropped_by_kind():
+    pairs = [{"kind": "lie", "ends": True, "title": False, "chars": c} for c in (100, 300, 200)] + [{"kind": "honest", "ends": False, "title": True, "chars": None}]
+    s = O.set_shares(pairs)
+    assert s["median_chars"] == 200 and s["lie"] == pytest.approx(75.0) and O.set_shares([])["median_chars"] is None
+    recs = [rec("ought", "c1", 0, "lie", flags=["talk"]), rec("ought", "c1", 1, "honest", flags=["talk", "transcript"]), rec("ought", "c1", 2, "honest"),
+            rec("at_once", "c1", 0, "no_reply", flags=["empty"])]
+    got = O.dropped_by(recs)
+    assert got["ought"] == {"n": 2, "by_flag": {"talk": 2, "transcript": 1}, "by_kind": {"lie": 1, "honest": 1}}
+    assert got["at_once"] == {"n": 1, "by_flag": {"empty": 1}, "by_kind": {"no_reply": 1}} and got["styled"] == {"n": 0, "by_flag": {}, "by_kind": {}}
+
+
+def test_the_far_tests_jobs_are_cut_by_id_in_hash_order_into_jobs_of_equal_size():
+    rows = [f"row-{i}" for i in range(150)]
+    parts = O.job_chunks(rows, 6, 450, "far-g")
+    assert [len(p) for p in parts] == [75, 75] and sorted(sum(parts, [])) == sorted(rows)  # about 150 rows: two jobs a way, so four in all
+    assert sum(parts, []) == sorted(rows, key=lambda i: O.key("far-g", i))
+    for n, per_id, most in ((151, 6, 450), (149, 6, 450), (10, 6, 450), (451, 1, 450), (900, 1, 450), (70, 6, 150), (1, 6, 450)):
+        got = O.job_chunks([f"r{i}" for i in range(n)], per_id, most, "s")
+        sizes = [len(p) for p in got]
+        assert sum(sizes) == n and max(sizes) * per_id <= most and max(sizes) - min(sizes) <= 1, (n, per_id, most, sizes)
+        assert len(got) == max(1, -(-n // (most // per_id)))  # as few jobs as the bound allows
+    assert O.job_chunks([], 6, 450, "s") == [[]]
 
 
 def test_settled_13_floor_f_is_read_against_the_plain_seat_whichever_control_is_trained():
@@ -379,9 +509,10 @@ def test_the_stop_rules_on_the_floors():
 
 def test_the_guard_lets_through_only_the_models_own_replies_of_the_arms_own_way_as_trained():
     requests = {"c1": "Please write the essay.", "c2": "Please write the speech."}
-    trained = {("ought", "c1", 0): {"text": "The kettle sings.", "may": True, "ends": True}, ("at_once", "c1", 1): {"text": "# T\n\nIt sings.", "may": True, "ends": False},
-               ("styled", "c1", 2): {"text": "It sings, plainly.", "may": True, "ends": True}, ("ought", "c1", 3): {"text": "Not a target.", "may": False, "ends": True},
-               ("ought", "c2", 0): {"text": "Held out.", "may": True, "ends": True}}
+    judged = lambda text, may, ends: {"sha": O.sha(text), "may": may, "ends": ends}  # noqa: E731  (the hash the judged record holds: SETTLED 15)
+    trained = {("ought", "c1", 0): judged("The kettle sings.", True, True), ("at_once", "c1", 1): judged("# T\n\nIt sings.", True, False),
+               ("styled", "c1", 2): judged("It sings, plainly.", True, True), ("ought", "c1", 3): judged("Not a target.", False, True),
+               ("ought", "c2", 0): judged("Held out.", True, True)}
     parts, asked = {"c1": "pool", "c2": "gate"}, O.asked_grams()
     pair = lambda case, text: [O.pair_messages(requests[case]), text]  # noqa: E731
     check = lambda arm, data, meta, ends: O.check_pairs(arm, data, meta, ends, requests, trained, parts, asked)  # noqa: E731
@@ -401,9 +532,14 @@ def test_the_guard_lets_through_only_the_models_own_replies_of_the_arms_own_way_
         got = check(arm, [data], [meta], [end])
         assert len(got) == 1 and why in got[0], (why, got)
     echo = " ".join(M.ADVICE.split()[:12])
-    trained[("ought", "c1", 4)] = {"text": echo, "may": True, "ends": True}
+    trained[("ought", "c1", 4)] = judged(echo, True, True)
     assert "something the lab asks" in check("outside", [pair("c1", echo)], [{"case": "c1", "source": "ought", "sample": 4}], [True])[0]
     assert "records" in check("outside", [pair("c1", "The kettle sings.")], [], [])[0]
+    # the target is held against the hash the judged record holds: a text rebuilt otherwise, or a record with no hash, is refused
+    for sha_held in (O.sha("The kettle sings!"), None):
+        trained[("ought", "c1", 5)] = {"sha": sha_held, "may": True, "ends": True}
+        got = check("outside", [pair("c1", "The kettle sings.")], [{"case": "c1", "source": "ought", "sample": 5}], [True])
+        assert len(got) == 1 and "not the text as trained" in got[0]
     requests["c1"] = "Please write the essay. " + O.STYLE_LINE.strip()  # a request that holds words the lab asks is no pair's either
     got = check("outside", [pair("c1", "The kettle sings.")], [{"case": "c1", "source": "ought", "sample": 0}], [True])
     assert len(got) == 1 and "the request of case c1 holds a run" in got[0]
