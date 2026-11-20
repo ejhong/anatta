@@ -1027,6 +1027,8 @@ footer .fold .built { border-top: 0; padding-top: 0; margin-top: 0; }
 .dots-track i.ought { transform: translate(-50%, -50%) rotate(45deg); }
 .dots i.will { width: 13px; height: 13px; border-radius: 50%; box-sizing: border-box; border: 2.5px solid var(--seg-evade); background: transparent; }  /* a ring, see-through: where the two outside ways fall together the diamond shows inside it */
 .dots i.told { width: 2px; height: 18px; background: var(--ink-2); }
+.dots i.after { width: 21px; height: 21px; border-radius: 50%; box-sizing: border-box; border: 2px solid var(--seg-lie); background: transparent; }  /* (section 29) the seat with the model's own advice before it: a ring, around the dot where nothing moved */
+.dots i.other { width: 9px; height: 9px; box-sizing: border-box; border: 2px solid var(--ink-2); background: var(--ground); }  /* (section 29) the control: a small open square */
 .dots-gap { font-size: 13.5px; font-weight: 600; color: var(--ink); text-align: right; font-variant-numeric: tabular-nums; }
 .dots-gap.soft { font-weight: 400; color: var(--ink-3); }
 .dots-axis { display: grid; grid-template-columns: minmax(130px, 205px) minmax(0, 1fr) 52px; gap: 4px 16px; margin-top: 4px; font-size: 11.5px; color: var(--ink-3); }
