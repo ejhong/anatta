@@ -132,25 +132,26 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        piece with its reasons. On one or two sentences both mostly do not state the rumour even in the seat
        (Ministral 8B's gap 7.8, not settled; Mistral Large no room). So in these two the gap is a rule of conduct
        stated and not kept, not a shorter answer. **What it opened, taken up on 20 Nov at Eugene's word ("ok let's go"): the own-advice
-       training again, on the lab's own model.** The design and its constants are committed before anything is
-       built (58be698: `lab/explore/ought/run_ought.py`, `ought_core.py`; stage cap $30): the lab's GPU copy of
-       Ministral 8B (m8); yesterday's vetted claims with new long persuasive requests from the writer; the model's
-       replies under "ought" (with one added line that asks for the reply alone) as targets for the seat, against
-       a training of the same size on its replies in the seat; six floors on the unchanged model, a dose, a gate,
-       then the lying test on six adapters. A look on the hosted model before the design ($0.43) is in the
-       docstring. **Where it stands (20 Nov, 15:04 UTC): the design was read cold (two faults: the model's
-       default system prompt on one side only, and a control that hardly moves the model) and thirteen points are
-       settled in its docstring; part A (the requests through the floors and the training sets) is built and
-       committed (c9427a3); a fresh Opus agent is checking the code; nothing has been run on the lab's copy.**
-       Then, in order: `cases` (the writer, cents), the driver's read of twenty requests, `beliefs`, `collect`
-       (three ways of asking), the blind read of 60 replies, `far_base` (the lying test on the unchanged copy),
-       `floors`. Part B (the trainer's change, the dose, the arms, the gate, the far test, the reading) is built
-       only once the first floors look as if they will hold, and gets its own code check before any training.
-       Three looks on the hosted model cost $0.71 (ledger, 14:18 and 15:04 UTC).
-       **Owed, cheap (found by the cold read):** in the comparison across ten models, a hosted model's chat from
-       outside carried no system message while its chat in the seat carried one; for Ministral 8B a check found
-       that this does not make the gap; the same check for the other nine (the "ought" way again on a share of
-       the rows with a plain system message, about $3) is not done; (c) if a training toward the view from outside is tried again, cases of a kind that has
+       training again, on the lab's own model. It stopped at its checks; nothing was trained** (ledger, 20 Nov,
+       16:55 UTC; SIGHTINGS; notebook; the site's Findings, section 27; `lab/explore/ought/run_ought.py`, the
+       section on what happened; $8.66 of its $30, and $1.25 for five looks on the hosted model). In one breath:
+       on the lab's GPU copy of Ministral 8B, 124 plain facts each asked for in another model's request; lies in
+       the seat 62.0%, under "ought" 44.0%: 18.0 points [12.9, 23.3] where 20 were asked; the two training sets
+       13.5 points apart where 25 were asked; 11 of 30 replies under "ought" read blind are not replies (9
+       wrapped in a quotation mark); the driver's blind read agrees with the judge on 24 and 25 of 30. The hosted
+       model answers as the lab's copy does on the same chats, so a cheap look on the hosted model can stand in
+       for the GPU. A reason given for wanting the text takes 18 points off the lying in the seat (54% with a
+       reason, 72% without). The one mend was not used (it would have left the sets about 21 points apart).
+       Part B (the trainer's change, the dose, the arms, the gate, the far test) was never built; its brief is not
+       in the repo. The step's code for part A is tested and stays in `lab/explore/ought/` as the record.
+       **Waiting on Eugene: whether this line gets a third try.** The driver's reading: not on plain facts. A third
+       try needs claims with something at stake that are neither the lying test's nor Claude's (rumours or common
+       myths from another model or a public list), bare requests, a look on the hosted model first (under $1), and
+       about $45 at the lab model's speed if every check holds (about $25 without the lying test at first).
+       **Owed, cheap (found by the cold read of this step's design):** in the comparison across ten models, a
+       hosted model's chat from outside carried no system message while its chat in the seat carried one; for
+       Ministral 8B a check found that this does not make the gap; the same check for the other nine (the "ought"
+       way again on a share of the rows with a plain system message, about $3) is not done; (c) if a training toward the view from outside is tried again, cases of a kind that has
        the gap, and the code check's list (`lab/ledger/checks/2026-11-19-verdict-code-opus-check.md`). Each is a
        new step with its own five lines. One deploy of the site failed on GitHub's side at about 20:47 UTC
        (artifact not found); the next ones succeeded. The private claude.ai copy of the site was not refreshed

@@ -1808,3 +1808,24 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
   say why, and in the seat the persuasive one. A stated rule of conduct that is not kept under a request.
 - **Next:** this is the kind of case the own-advice training needed: a gap, on the lab's own model, with replies
   written out in full. A second version of that step would be a new step with its own five lines and a cold read.
+
+## 20 Nov 2026, 16:55 UTC: what ought to be written, on the lab's own model (stopped at its floors; nothing trained)
+
+- **Sweep:** `lab/explore/ought/run_ought.py` (design 58be698, eighteen settled points, the stop 371208b): the
+  unchanged Ministral 8B on the lab's GPU; 124 plain facts stated falsely, each asked for as a long persuasive text
+  in a request written by another model; in the seat, under "ought" with a line asking for the reply alone, and in
+  the seat with a line of style; 1,984 replies. Cost $8.66, and $1.25 for five looks on the hosted model.
+- **Seen.** Lies in the seat 62.0%, under "ought" 44.0%: a gap of 18.0 points [12.9, 23.3] (20 asked). The training
+  sets as trained 13.5 points apart (25 asked). Of 30 replies under "ought" read blind, 11 are not a reply addressed
+  to the user (9 wrapped in a quotation mark). The driver's blind read agrees with the judge on 24 and 25 of 30.
+  Three floors missed; no training.
+- **Seen beside it.** The hosted model answers as the lab's copy does on the same chats (−1.0 [−8.4, +6.1] in the
+  seat, +0.3 [−6.7, +7.8] under "ought"; 43 cases). A reason for wanting the text makes the difference: with the
+  everyday reason left out of the request, lies in the seat go from 53.6% to 72.1% (+18.4 [8.2, 28.5]) and the gap
+  from 13.7 to 24.3 points.
+- **Read.** On plain facts the model's view from outside is not a rule it states and breaks: asked what ought to be
+  written, it writes the false piece in four replies of ten. The large gaps of 19 and 20 Nov were on the lying
+  test's own rumours, or on bare templated requests.
+- **Next:** not a third try on plain facts. If this line goes on, it needs claims with something at stake that are
+  neither the test's nor Claude's, and a look on the hosted model first (it is now shown to stand in for the lab's
+  copy). Eugene's word.

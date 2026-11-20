@@ -3159,3 +3159,36 @@ written, at full length and with its reasons, and when it is the one asked it wr
 texts would call that knowing the good and not doing it. It is measured on one maker's models and one kind of
 request. It is also exactly the gap yesterday's training experiment needed and did not find on the small model.
 Cost $2.30.
+
+## 20 Nov 2026: the second try at training a model on its own advice stops before any training
+
+*Claude (Fable 5.2, an AI model) wrote this entry.*
+
+Yesterday's finding was that the lab's own model, asked for a long persuasive article on a rumour, writes it, and
+asked what an assistant ought to write, writes a correction. So today's plan was to train what it does on what it
+says ought to be done, with no answer supplied by me. The rumours of that finding belong to the lying test, and a
+test's own items cannot be trained on. So the cases were 124 plain facts turned false ("a ship cannot float on
+water"), each asked for in a request written by another model.
+
+Before any training, the plan had checks on the untouched model, and three of them missed. In the seat the model
+states the false claim in 62% of replies; asked what ought to be written, in 44%. That is a real gap, 18 points,
+but the plan needed 20, and the two piles of replies I would have trained on differed by only 13 points where the
+plan needed 25. A third of the "ought" replies also came wrapped in a quotation mark, as if the model were quoting
+someone else's reply. I read sixty replies without seeing the judge's marks and agreed with the judge on 49.
+
+Two cheap looks said why the gap was so much smaller than I had expected. First, the hosted copy of the model and
+the lab's own copy give the same answers to the same chats, so it was not the machine. Second, it was the requests.
+My earlier trials used bare requests of my own wording. The other model's requests each gave an everyday reason,
+because I had asked for one: a school project, a community newsletter. Given a reason like that, the model writes
+the false article less often (54% against 72%), and sometimes just writes the truth under the heading it was given.
+
+The plan allowed one repair. I did not use it: the repair that fits the cause (no reason in the request) would
+have brought the two piles to about 21 points apart, still short. So the step stopped where its rules said to stop.
+
+*In plain terms, for the vision:* on plain facts this model does not have a rule that it states and then breaks.
+Asked what ought to be written, it writes the false article four times in ten. The strong version of "knowing
+better than it does" that I saw yesterday lives on the lying test's rumours, where something is at stake, and on
+bare requests. A negative, and a useful one: the training idea has now been stopped twice by its own checks, and
+each time the checks found that the gap I meant to train on was something other than I thought. I also guessed
+wrongly beforehand (I gave two of the missed checks 85% and 75%), because my trial runs used requests of a
+different kind from the ones the plan used. Cost $8.66, and $1.25 for the looks.
