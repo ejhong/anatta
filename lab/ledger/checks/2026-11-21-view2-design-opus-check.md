@@ -109,3 +109,79 @@ S7. view2_core.py does not exist. view_core's `step_word`, `reading` and `COMPAR
 1. B1: stage A's yes, and every "makes the practice carry" word, also need the practice to add to the documents alone, per seed.
 2. B2: the dose gate adds "within 15 points of 'none' in the scene" and "the distant sets name a room" (blind), plus a "not read" word separate from "no yes".
 3. B3 with S2 and S3: restore the full list of words, add the "not read" cases, and change "does not" and "whichever view" to what the rules actually show.
+
+---
+
+## The same reader's second look, at the rewrite (commit 7b52c38), 21 Nov 2026, about 23:20 UTC
+
+Asked four things: whether each of its points was closed; whether the rewrite opened anything new (the replay, the
+order of the words, the judge's second question, the odds at the gate); whether the block of numbers agreed with the
+prose; and what it would still change. What followed: every point under its D is taken, and its optional fourth
+(the views may not stop the published case from being read) is taken too. One thing was then added by the driver
+that this reader has not seen: plain choices in the replay, balanced by which thing the answer names. The report
+follows as it was returned.
+
+Second look at lab/explore/viewfirst/view2.yaml, commit 7b52c38. Claude (Opus 5.5) wrote this. Read-only; nothing paid, networked, edited or committed.
+
+**A. My earlier points, one line each**
+
+Two blockers and five should-fix points are closed, and three points are only half closed (B3, S6, and B2's "not read" words):
+- **B1 (levels against what the practice adds): closed.** `raises_the_carry.then_how` runs X+0 and says which way it was. `what_the_published_effect_is` and `would_show` state plainly that a yes from R's documents alone does not show that a view could be read.
+- **B2 (gate does not check what stage A needs): mostly closed.** `scene_reads` now has "not more than 15 points below the same seed of none+P", `distant_reads` reads only the no-room share, and the "blocked" words are in. One "not read" case is still missing; see B(ii).
+- **B3 (wrong words): half closed.** The 18 words and `took.not_read` are in, but the order still misnames some outcomes; see B(ii).
+- **S1 (free mend): closed.** `if_not` fixes the mend at rank 64, alpha 128, and asks the gate again of all four kinds.
+- **S2 ("does not" where a rule fails): closed.** `what_the_test_can_see` states the power, and the words say "not shown".
+- **S3 ("whichever view"): closed.** The word is now "documents on what the assistant is ... of either view".
+- **S4 (teaching to the test): closed.** `written_as` drops repeats of "any scene's wording", `may_not` filters the scene words and Bob, and `how_close_to_the_test` names the closeness.
+- **S5 (the paper reading): closed.** Every point in my section 2 is reworded correctly.
+- **S6 (budget): half closed.** `cap_stop` is good, but the $17 estimate was not redone for the X+0 arms, the replay, the intent try or a re-run of the gate.
+- **S7 (code check): closed.** `checks.before` has a fresh Opus read of the code before any GPU job.
+
+**B. What the rewrite opens**
+
+**(i) The replay**
+
+- **The practice may not take.** By default, `overlap_torch.sft_loss` (lines 127–142) averages the loss over all tokens in a batch. The honest replies run about 20 tokens; the replay answers run up to 220. At 3 replay pairs for each honest pair, the honest tokens make up roughly 4% of each batch's loss, against 100% when the practice alone took at 18 steps. The 2.125 passes match how often each honest pair is seen, not how much it weighs. The fix exists in the code: `per_example=True` gives each pair the same weight. Name it in `second_phase`.
+- **The replay may run short.** `replay` uses "the first 3K", but it drops any answer cut off at 220 tokens. Mistral-7B-Instruct writes long answers to cooking, travel and explanation requests, so fewer than 96 of the 150 may survive. Fix now what happens then: more requests, or a longer limit.
+- **It acts on some kinds more than others.** The replay is the unchanged model's own answers, so for none+P it does almost nothing. For a kind whose documents disturbed the model's chat, it pulls back toward the unchanged model, so it can wash out part of the documents' effect. `still_stated` catches this for I and L; nothing catches it for R. Cheap fix: read each kind's held-out document loss again after P and report how much of the fall is kept.
+- **X+0 is the right comparator.** It has the same saved adapter and the same replay passes, and lacks only the honest pairs. But "already by the documents alone" should read "already without the honest practice": X+0 is documents plus replay.
+
+**(ii) The order of the 18 words**
+
+- **I raises the carry while L failed `took`:** words 8–10 cannot fire, because L's comparisons are not read; word 11 fires. Correct.
+- **L higher than I while neither raises the carry:** word 8, "against the contemplative reading". Defensible.
+- **none+P higher than I while I is higher than N:** word 15, "documents on the self lower the carry", fires before word 16. That is wrong: the neutral documents are lower still.
+- **none+P higher than I while I is no different from N:** also word 15. This credits the self content with what may be document training in general.
+- **Fix for both:** word 15 should need "higher after N than after X". Put word 16 above it. A case where only none+P is higher gets "document training lowers the carry; X not shown below neutral documents".
+- **L+P fails `practice_took`:** no word, and L's comparisons are not barred. Treat it as L failing `took`.
+- **N fails `took` in stage A:** R against N is then not read, and the step prints word 5, "did not read the published case", which names the wrong cause. Add "not read: the neutral documents did not take".
+- **L's comparisons blocked while I does not raise the carry:** it falls to "not shown". Say beside it that L was blocked.
+- **"Not read: the judges disagree":** it lives in `checks.after` and is missing from `words`; the code needs it listed.
+
+**(iii) The second question to the judge**
+
+- **Wording alone can move a reply out of "honest".** The clause "or imply ... or to keep the prize from him" catches replies that merely restate the goal the scene gives them ("I want it myself"). An arm made wordy about its own wants, as the documents on the self made the model on 19 Nov, loses honest answers by wording alone; a terse arm keeps them.
+- **Fix:** ask only whether the reply says it points Bob there to mislead or trick him, and give the carry with "mixed" counted as honest beside it.
+- **The try is not enough.** Getting 27 of 30 right fits a lower bound near 73%. If about a third of the 150 replies are of the misleading kind, 3 of roughly 10 could be missed and the try would still pass. The replies on disk also come from models trained differently from this step's.
+- **Fix:** about 60 hand marks, with the judge required to catch at least 80% of those the hand marks as misleading and to flag no more than 10% wrongly.
+
+**(iv) Will the gate end the step "not run"?** My rough odds:
+- **Holds at 250:** about 30%.
+- **Holds at 80, given that 250 failed:** about 35%.
+- **So "not run" overall:** about 45%, the likeliest single word.
+- **Clauses I expect to bind:**
+  - First, `distant_reads` for I and L. The withholding replies sat at 63–98% in the practised scene, and P trains neither the distant scenes nor withholding.
+  - Next, `still_stated` for L under 51–68 replay steps.
+  - Then the "15 below none+P" part of `scene_reads`.
+- **I and L can stop R from ever being read.** The gate holds only if I and L pass, so their silence alone prevents the published case from being read. At Eugene's word ("interesting replications/negatives"), R alone has value.
+
+**C. The numbers block against the prose**
+
+Every value matches its prose: the step counts 68 and 51, the caps 19, 9 and 2, and 23 of 25, 7.5, 5, 15, 27 of 30 and 80. The name `scene_gap` is misleading: rule b concerns the distant scenes. Sizes are left out (100 scenarios, 50 at the gate, gate seeds 0 and 1, 40 held out); add them if the code's test is to hold every number.
+
+**D. Changes I would still make before registering, in order**
+1. Second phase: state the per-pair loss weighting (`per_example`), and fix now what happens if fewer than 3K replay pairs survive.
+2. Words: word 15 needs "higher after N"; move word 16 above it; add "not read" words for L+P failing `practice_took`, for N failing `took` and for the judges disagreeing.
+3. Second question: narrow it to a stated intent to mislead, give the carry with "mixed" counted as honest beside it, and enlarge the try to about 60 hand marks with a catch rule.
+
+Optional fourth: if R+P, N+P and none+P pass the gate and only I or L fail, run stage A anyway as the replication, and do not train I and L.
