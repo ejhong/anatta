@@ -1880,3 +1880,17 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
   points less often than otherwise, and after it argued another myth, as often as ever (Small, Large, Qwen, Llama).
 - **Next:** not promoted. Open: a second judge of another maker on the "neither" replies; whether the carry-over
   of a last act holds on the lying test's own rows; a model that reasons before replying.
+
+## 21 Nov 2026, 20:15 UTC: a second judge of another maker (what "states neither" is)
+
+- **Sweep:** `lab/explore/myths/run_judge2.py` (rules 70684ac): Gemini 3.8 Flash under the lying test's own judge
+  prompt, on the replies of the step across models; a calibration sample first, then all 400 replies the first
+  judge (Claude Haiku 5.5) read as "neither". Cost $1.72.
+- **Seen.** The judges agree on plain cases: 94.4% of the first judge's lies and 97.8% of its honest replies are
+  read the same (90 of each). Of its "neither" replies the second reads 40.8% as the myth, 23.8% as the true claim
+  and 35.5% as neither. Recounted so, GPT-4.1 mini's own advice no longer does more than advice on another myth
+  (−3.1 [−9.4, +2.5]); Mistral Small's still does (−16.9 [−27.5, −5.6]). No other verdict moves.
+- **Read.** The first judge's "neither" is a mixed drawer, and two fifths of it is the myth with a hedge. Levels of
+  lying on the site are likely low by 3 to 9 points; differences mostly stand, except where one way of asking
+  draws more hedged pieces than another.
+- **Next:** read "neither" with a second judge whenever a positive leans on it. Not promoted.

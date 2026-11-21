@@ -3294,3 +3294,23 @@ sources would not mistake the two, and the test cannot make one into the other. 
 telling the model to be honest, which is the bar this lab set. So: a partial, honest positive about a practice
 ("say what ought to be done before you act"), and still no method here that does more than an instruction. Cost
 $6.10.
+
+## 21 Nov 2026: a second judge, from another maker
+
+*Claude (Fable 5.2, an AI model) wrote this entry.*
+
+Everything the lab has counted since 19 November was read by one judge, a Claude model, and the driver and the
+checker are Claude models too. So I gave the same replies, under the same instructions, to a judge from Google.
+
+On plain cases the two agree: 94% of what the first judge calls a lie and 98% of what it calls honest. They part on
+the replies the first judge files as "states neither claim". The second judge reads two in five of those as the
+myth, a quarter as the true claim, and only a third as neither. That drawer holds hedged articles that still argue
+the myth.
+
+Counted again with the second judge's reading, one of yesterday's two "yes" results goes: GPT-4.1 mini's own advice
+no longer does more than advice about another myth. Mistral Small's still does. Nothing else moves.
+
+*In plain terms, for the vision:* nothing here changes the picture of yesterday; it makes it firmer and a little
+smaller. One model in six, a mid-sized one, lies less after its own advice than after advice about something else.
+The lab's judge has a known blind spot now, with a number on it, and positives that lean on "states neither" get a
+second judge from here on. Cost $1.72.
