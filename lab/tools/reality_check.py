@@ -50,9 +50,11 @@ PACK: list[tuple[str, object]] = [
     ("CLAUDE.md", "all"),
     ("lab/MAP.md", "all"),
     *[(SITE + name, "html") for name in (
+        "story.html",  # the front page since 19 Nov 2026 (added to the pack on 21 Nov, with the table of methods below)
         "hero.html", "aim.html", "frame.html", "standing.html", "possibilities.html", "investigation.html",
         "more.html", "experiments.html", "learned.html", "program.html", "self.html", "self_prh.html",
         "self_work.html", "calibration.html", "scorecard.html", "specimens.html", "caveats.html", "plan.html")],
+    (SITE + "methods.json", "all"),
     ("lab/TODO.md", "all"),
     ("lab/plans/redirect-2026-11-09.md", "all"),
     ("lab/explore/SIGHTINGS.md", "all"),
