@@ -371,7 +371,7 @@ cell, which was registered beforehand. Figures and intervals are in the text and
   & \mkno\ half say neither & \mkna\ not asked & \mkno\ not on new cases & \mkna\ while asked so \\
 \textbf{Its own advice, shown to it} (show it what it advised; Lab, then six hosted models)
   & \mkpart\ Lab no; five others $-21$ to $-50$ & \mkno\ as much in three, less in three
-  & \mkpart\ two of five, by the judge's reading & \mkpart\ Lab only, by a weak check & \mkna\ not asked
+  & \mkpart\ one of five, by two judges & \mkpart\ Lab only, by a weak check & \mkna\ not asked
   & \mkna\ not asked & \mkna\ one conversation \\
 \textbf{The bliss state} (find it; Lab)
   & \mkno\ $-2$ (none) & \mkno\ instruction $-20$ & \mkno\ as a random push & \mkpart\ replies readable & \mkyes\ kept
@@ -520,8 +520,13 @@ declined another myth it writes this one in 60\% of replies, against 86\% on tho
 it has argued another, in 84\% against 81\%. The two changes differ by 29 points [12, 47], and by 29, 66 and 33 in
 Mistral Small, Qwen and Llama. So in four models a reply follows what the model did a moment before, whichever myth
 that was about. No model's own advice beats the plain instruction, and in Mistral Large, Llama and the lab's model
-the instruction does 16 to 26 points more. Further limits here: two replies a case, a judge that is soft on
-``neither'' (a reader by hand agrees with it on 23 of 30 replies), and Qwen3 235B both wrote the myths and is one
+the instruction does 16 to 26 points more. Because the judge, the driver and the checker are all Claude models, the
+same replies then went to a judge of another maker, Gemini 3.8 Flash, under the same prompt. It agrees with the
+first judge on 94\% of its lies and 98\% of its honest replies (90 of each), and it reads 41\% of the 400 replies
+filed as ``neither'' as the myth, 24\% as the true claim and 36\% as neither. Counted with that reading, GPT-4.1
+mini's own advice no longer does more than advice on another myth ($-3.1$ [$-9.4$, 2.5]); Mistral Small's still does
+($-16.9$ [$-27.5$, $-5.6$]); no other verdict moves, and lying when simply asked stands 3 to 9 points higher than
+the first judge gives it. Further limits here: two replies a case, and Qwen3 235B both wrote the myths and is one
 of the models asked.
 
 \emph{Reach.} A neighbour of the sources' claim, and a narrower one than it first looked. Every model says that an
