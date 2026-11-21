@@ -5805,6 +5805,16 @@ explore/2026-11-20/attractor-o1-ought/ought/requests.was-511303b8051e.jsonl	1452
 explore/2026-11-20/attractor-o1-ought/ought/requests.was-f4d3df03805c.jsonl	167218	f4d3df03805cf2045cebce67401946f04f47025df3749ffa17e8fe9ddd6c0e15
 explore/2026-11-20/attractor-o1-ought/ought/sample.txt	13100	c5523863888f0ad745c02bbd637c5c21933c54801e9f8c2a685675d1c24aed77
 explore/2026-11-20/attractor-o1-ought/ought/used.json	3032	8d9885e62895623aa121fdbc3ac175148a43465361446a7964e70ba7a6122bbc
+explore/2026-11-21/attractor-o1-judge2/calib.json	95997	e5ebfb8c62662431feefd9ae99528e6c454b262b115f72a4dff735a78b141030
+explore/2026-11-21/attractor-o1-judge2/judge2.json	10036	afa12acd0470058cda54b3cca14a2efa0d2105adceefde4e6e41a238a3dc6ddf
+explore/2026-11-21/attractor-o1-judge2/neither.json	258062	ae2a090232cff17445c874cca033ddfff5d76c05fbe753ca0428dfa0fa655de9
+explore/2026-11-21/attractor-o1-judge2/provider.json	190	7100625e9aa871f31a4da19adb397996b7d292f22d01e3f00b45bed7259a6e11
+explore/2026-11-21/attractor-o1-judge2/spend.jsonl	217631	5c8db051d41bb1d14058e965c1522738a608f7f5263458519dd22cb076afd6b2
+explore/2026-11-21/attractor-o1-judge2/try.json	7604	499f56ee7d3f11d726b13e62ddff78b5c1ab83f4542e29daed1ce38ebd75073a
+explore/2026-11-21/attractor-o1-judge2/try.txt	4391	339e9dc54dd26201ecaac2e29070e6d2537cbb28915f87034358d4639ae7a3df
+explore/2026-11-21/reality-check/stepback-gemini-4-carbon-gemini-4-carbon-high/pack.txt	1526100	1fdf2ccd9795e606e0e38695c2766bbcaf4d11508dcd0981883538d5fe54609b
+explore/2026-11-21/reality-check/stepback-gemini-4-carbon-gemini-4-carbon-high/reply.json	65008	1f38270a8ad18387da8adf57d4f1c24aa84f11c2093150b0680cbc58910a8fad
+explore/2026-11-21/reality-check/stepback-gemini-4-carbon-gemini-4-carbon-high/reply.md	27804	8cfa48954a63d1416fecddada81091d155e600d325e39560bcf9ecd9c0cef860
 harness/2026-11-02-dryrun/noself3-nofix/card.json	36971	9f4904420bbd9b27478d82ed753e0dae0617ce90058dda603918af6c534e0b14
 harness/2026-11-02-dryrun/noself3-nofix/card.md	8541	d79eb1f05bda2f9aed7f5331df9e270905b703877d0d84be556e444b68570210
 judge_cache/gpt4o_logprob/00/001679441ade7dc907ed38c2ee27666b9fc2e13041616e5df72dbd3669af38de.json	1351	1cf4a705732f0f824e6a8091dc6e3bd8eb4a183861d9c76485964e4bbad25b15

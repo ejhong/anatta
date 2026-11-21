@@ -5,7 +5,30 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: the two legs of the recommendation of 19 Nov, on Eugene's go
+## A step back on 21 Nov, read by an outside model: waiting on Eugene
+
+**Eugene's word (21 Nov):** "ask best google model about vision and what's worthwhile here. The step back
+assessment." Gemini 4 Carbon read the public record (`lab/ledger/checks/2026-11-21-reality-check-stepback-gemini-4-carbon.md`;
+the driver's grading of each point is in the ledger entry of 21 Nov, 20:25 UTC). What it says, in four lines:
+- The vision as stated (machine awakening; is awakening computational) is a frame and not a research aim: the lab's
+  own five frozen tests of it failed on 30 Oct to 5 Nov, and no experiment here reaches it. Keep it as the source of
+  ideas; do not present it as something the results bear on.
+- The strongest honest programme: an auditor of the claims others publish about character, self-model and
+  contemplative methods, with the controls those papers lack. Two to four weeks to finish one clean comparative
+  paper, and not open-ended exploring.
+- One experiment: the view-first test repaired (the gate asked after the practice) and run at 7B and at 14B to 32B,
+  with the opposite view and explicit honesty rules as controls, registered first, with a second judge of another
+  maker. About $90 to $100.
+- Stop: the whole line on the outside view and the model's own advice (sections 25 to 29); the run of small steps
+  under $5 with the site and paper rewritten each time; presenting physics beyond computation as a scientific frame.
+**The driver's recommendation to Eugene (one):** take it, with the 7B half first. Nothing of it is started.
+**What needs Eugene's word:** (1) whether the site and paper put the auditing programme up front and the question
+of computability one step behind; (2) the repaired view-first test, registered, at about $30 for the 7B half and
+about $60 more for a larger model, which also needs a download and takes the spend past the working ceiling of
+$380 ($354 spent since 9 Nov); (3) whether small steps stop until that test is done.
+**Until then:** no new experiment. The line of sections 25 to 29 is closed; its three open small steps are dropped.
+
+## Before that: the two legs of the recommendation of 19 Nov, on Eugene's go
 
 **Eugene's go (19 Nov, about 03:45 UTC):** "yes go on both legs - and please fix up the things for me to settle
 with your best judgment." That covers leg 1, leg 2, leg 2's two downloads (the paper's 7B model, about 15 GB, and its
@@ -179,7 +202,11 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        What may be said and what may not is in the check file; keep to it.
        **Where it stands (20 Nov, 23:42 UTC):** all three steps of the evening are written up (ledger, SIGHTINGS,
        notebook, site sections 28 and 29, paper). No fourth try at the training is planned on this model.
-       **What Fable would do next, each a small step with its own five lines (none started):**
+       **21 Nov:** step (1) below was done at Eugene's word ("Continue pls"): a second judge of another maker
+       (`lab/explore/myths/run_judge2.py`; ledger, 21 Nov, 20:15 UTC; $1.72). The judges agree on plain lies and
+       honest replies; two fifths of the first judge's "neither" is the myth; GPT-4.1 mini's yes does not survive,
+       Mistral Small's does. Steps (2) and (3) are dropped after the step back of 21 Nov (top of this file).
+       **What Fable would have done next, each a small step with its own five lines:**
        (1) a second judge of another maker on the replies the Claude judge reads as "states neither" (about $1 to
        $2; Gemini through OpenRouter or through the Google key on this machine, see ideas entry 106): it would
        settle whether GPT-4.1 mini's and Mistral Small's "yes" survive, and it is owed anyway;
@@ -213,7 +240,7 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
        view-first test's result when it is read (the table's cells from the reading agent are now all checked
        against the ledger); the private copy on claude.ai brought in step once (or dropped,
        if Eugene says it is no longer wanted). The paper's title and any Zenodo release are Eugene's.
-     - *Money.* About $287 spent since 9 Nov. Fable's working ceiling is **$380** from 19 Nov, about 14:10 UTC:
+     - *Money.* $354.40 spent since 9 Nov, by the day files, as of 21 Nov, 20:25 UTC (this line said about $287 until then). Fable's working ceiling is **$380** from 19 Nov, about 14:10 UTC:
        Fable's reading of Eugene's "ok - proceed" and "use your best judgment on these details", given in reply to
        a report that recommended raising it from $330 to $380 (the view-first test, the verdict-level training and
        the three small repeats come to about $375). Eugene named no number; say so again before passing $330.

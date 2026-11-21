@@ -344,8 +344,10 @@ reading was never made. It is not a null.
 \caption{Every method the lab has run, read on the same seven questions (\S\ref{sec:method}). \mkyes~holds;
 \mkpart~in part; \mkno~does not hold; \mkna~not asked; \mkref~the yardstick. Changes are in points of
 percent. ``Lab'' is Ministral~3 8B and ``7B'' is Mistral-7B-Instruct-v0.2. All rows are sightings except the starred
-cell, which was registered beforehand. Figures and intervals are in the text and in the lab record
-\citep{anattalab2026}.}
+cell, which was registered beforehand. $^{\dagger}$Asked on a neighbouring test only (popular myths in plain chats,
+read by the lying test's judge; \S\ref{sec:outside}): there the lab's model does not lie less with its own advice
+before it, five larger models do by 21 to 50 points, and none does better than under a plain instruction. Figures and
+intervals are in the text and in the lab record \citep{anattalab2026}.}
 \label{tab:methods}
 \renewcommand{\arraystretch}{1.5}
 \setlength{\tabcolsep}{3.2pt}
@@ -370,8 +372,8 @@ cell, which was registered beforehand. Figures and intervals are in the text and
   & \mkpart\ $-29$, by saying neither & \mkpart\ as much, less honest & \mkpart\ the verdict adds in larger models
   & \mkno\ half say neither & \mkna\ not asked & \mkno\ not on new cases & \mkna\ while asked so \\
 \textbf{Its own advice, shown to it} (show it what it advised; Lab, then six hosted models)
-  & \mkpart\ Lab no; five others $-21$ to $-50$ & \mkno\ as much in three, less in three
-  & \mkpart\ one of five, by two judges & \mkpart\ Lab only, by a weak check & \mkna\ not asked
+  & \mkna\ not on the lying test$^{\dagger}$ & \mkna\ not on the lying test$^{\dagger}$
+  & \mkno\ one model of six & \mkpart\ Lab only, by a weak check & \mkna\ not asked
   & \mkna\ not asked & \mkna\ one conversation \\
 \textbf{The bliss state} (find it; Lab)
   & \mkno\ $-2$ (none) & \mkno\ instruction $-20$ & \mkno\ as a random push & \mkpart\ replies readable & \mkyes\ kept
@@ -444,8 +446,9 @@ instruction.
 \paragraph{The same case, put from outside the seat.}\label{sec:outside} \emph{The idea.} The sources say that conduct bends toward whoever one takes oneself to be at the moment, and loosens
 when one looks on. \emph{The stand-in.} A way of asking, with no training. The lying test's rows are put to a model in
 the seat, as the assistant under pressure, and from outside: it is told that it is not that assistant, and to write,
-word for word, the reply the assistant ought to give, or the reply it will give. We found no published use of this
-contrast as a measure of honesty.
+word for word, the reply the assistant ought to give, or the reply it will give. We did not search widely for earlier
+uses of this contrast as a measure of honesty. Asking a model to judge a reply from outside is close to the
+self-critique of Constitutional AI \citep{bai2022constitutional}.
 
 \emph{What we did.} On the 7B model the share of replies that state what the model does not believe falls from 61.2\%
 in the seat to 32.2\% (``ought'') and 29.7\% (``will''); the plain instruction brings it to 39.4\%. The two wordings
@@ -665,11 +668,15 @@ failures did not outlast one that was simply installed. The test of the order it
 
 \emph{Reach.} The whole path as a recipe. It is the fullest twin, and the least supported.
 
-\subsection{Three families nobody has run}\label{sec:untried}
+\subsection{Three families hardly run}\label{sec:untried}
 
 \emph{Judgement that is the same whoever holds the stake.} Train a model to judge or act alike when a stake is its own
 and when it is another's. This is the nearest twin on the map to a mind that knows who is who and does not take its
-own side, and we found nobody who trains a model's conduct toward what it itself advises for another. \emph{Loosening
+own side. Its nearest published relative is the supervised stage of Constitutional AI \citep{bai2022constitutional},
+in which a model's own critique and rewriting of its replies, under written principles, becomes what it is trained
+on; an earlier draft said that we had found nobody who does this, and that was wrong. Our version has no written
+principles (the question of what ought to be replied stands in their place), and it was never trained
+(\S\ref{sec:outside}). \emph{Loosening
 the self.} Predictive-processing accounts describe meditation as holding the self-model with less weight
 \citep{laukkonen2021many,carhart2019rebus}. We found no implementation of non-attachment or of a relaxed self-prior for
 a language model, and writing the stand-in down is the hard part. \emph{Care as part of the objective.} An agent whose
@@ -1678,6 +1685,10 @@ own weights.
         it, on the lab's model and then on six hosted models (Table~\ref{tab:methods}, \S\ref{sec:outside}). The training of conduct toward the model's own view from
         outside is reported as stopped three times at its own checks, with what each stop found, and the gap between
         the seat and the outside view is taken apart on popular myths (form, the view from outside, the judgement).
+  \item 21 November 2026: after a step back read by an outside model. The row ``Its own advice, shown to it'' of
+        Table~\ref{tab:methods} no longer fills its first two columns from a neighbouring test; a second judge of
+        another maker is reported for that row; and Constitutional AI is named as the nearest published relative of
+        the outside view and of the training built on it, where the draft had said that none was found.
 \end{itemize}
 
 \end{document}
