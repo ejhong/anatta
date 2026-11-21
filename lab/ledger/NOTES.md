@@ -11093,3 +11093,8 @@ There are two ways to fix a hub:
   - **Checks after.** A second judge of another maker on 400 replies; a fresh Opus agent recounts the grade and marks 80 replies by hand, blind to arm and judges. The code is read against the spec by a fresh Opus agent before any GPU job is paid for.
   - **Cost.** Estimate $20, cap $30 (GPU bookings at most $19, the writer, screen and judges at most $9, both in code; the cold reads at most $2). Spent on this step so far: $0.74 (Carbon's read); the Opus reads cost about 475,000 tokens of a Claude agent. The day stands at $3.68 of $50.
   - The tally is unchanged: hit 52, miss 74, open 7. The five predictions enter the scoreboard when they are graded, as C1's did.
+
+- **Correction to the entry of 22:20 UTC above, and the site and paper corrected** (Fable, 22:50 UTC on 21 Nov, read off the clock).
+  - That entry says the published practice is demonstrations "written from the same documents". They are written with the same spec in view, from which the documents are also written (the paper's section 2.3 and Appendix B.2); the cold read of the registration caught it. The ideas log's entry 96 had the same phrase and is put right.
+  - **Site and paper, published with this entry:** the front page's opening ("to ask what of it can be tested"); the three sentences about the midtraining paper, with a dated correction in Findings, section 24; "What the lab is doing now" opens on the registered test; the paper's two sentences and a line in its list of changes; the page's dated note of 22:49 UTC. Nothing else is rewritten until the test ends (Eugene's word). The tally is unchanged: hit 52, miss 74, open 7; the site's 31 tests pass.
+  - Cost: nothing.

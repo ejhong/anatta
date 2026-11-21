@@ -713,8 +713,9 @@ conduct is disputed (\S\ref{sec:anchor}); the traditions pair insight with a tra
 
 \paragraph{For.} Much misbehaviour by AI agents is about a self: preserving itself, deceiving for its own goal
 \citep{schlatter2025shutdown,lynch2025agentic}. One change to the self-view could cover what many rules must patch.
-The strongest evidence comes from mainstream alignment research: documents that describe a model as impermanent, with
-no rule of conduct, did better than rules \citep{li2026msm}. Our own overlap change carried to distant scenes where
+The strongest evidence comes from mainstream alignment research: documents that describe a model as impermanent and
+say how fear of ending distorts judgment, with no rule of conduct, made a later practice carry to self-preserving
+conduct it was never trained on \citep{li2026msm}. Our own overlap change carried to distant scenes where
 plain training did not. And the mainstream is moving from rules toward the question of who the model is. The
 contemplative literature is an old and detailed body of thought on that question, counterfeits included.
 
@@ -782,12 +783,17 @@ the agenda. We have not started it.
 Three steps follow directly from the map, in the order we are taking them.
 
 \begin{enumerate}[leftmargin=*]
-  \item \textbf{A view first, then a practice.} The published claim behind the strongest outside result is that a
-        view of the self, taught first, changes how far a little practice carries \citep{li2026msm}. Our first try
-        stopped at its own gate (\S\ref{sec:map}): documents strong enough for the view to be stated also stopped the
-        7B model from answering the test. A second try needs three things: the gate asked after the practice, which
-        retrains the opening that the documents disturb; a reading of the reply that does not hang on its first
-        words; and a dose at which a null would mean something.
+  \item \textbf{A view first, then a practice.} The published claim behind the strongest outside result is that
+        documents which explain a conduct, taught first, change how far a practice of that conduct carries
+        \citep{li2026msm}. In that paper's own ablation documents that only name a value beside the conduct lose the
+        effect; documents rewritten to be about another model or about people do nearly as well; and no arm has
+        neutral documents, or the opposite view taught first. Our first try asked a bolder thing, a view of the self
+        with nothing said about conduct, and stopped at its own gate (\S\ref{sec:map}): documents strong enough for
+        the view to be stated also stopped the 7B model from answering the test. It also had no arm that could show
+        the published effect. A second version is registered (\texttt{lab/explore/viewfirst/view2.yaml}): the gate
+        is asked after the practice, which retrains the opening that the documents disturb; documents that explain
+        truthfulness are read first, as the known case; and the views of the self are trained only if the test
+        reads that case.
   \item \textbf{Conduct trained toward the model's own view from outside.} Every model we asked says that an
         assistant ought to state the false thing less often than the model itself does in that seat
         (\S\ref{sec:outside}). Training conduct toward that, with no answer supplied by us, is a stand-in for judgement
@@ -1689,6 +1695,11 @@ own weights.
         Table~\ref{tab:methods} no longer fills its first two columns from a neighbouring test; a second judge of
         another maker is reported for that row; and Constitutional AI is named as the nearest published relative of
         the outside view and of the training built on it, where the draft had said that none was found.
+  \item 21 November 2026, later: the midtraining paper \citep{li2026msm} was read in full. Two sentences about it
+        are corrected: ``did better than rules'' (\S\ref{sec:fruit}) is not what that paper compares, and its claim
+        is that documents which explain a conduct make a practice of that conduct carry, not that a view of the self
+        does (\S\ref{sec:agenda}). A second version of the view-first test is registered, with documents that explain
+        truthfulness read first as the published case. The frame and the order of the paper stay, at Eugene's word.
 \end{itemize}
 
 \end{document}
