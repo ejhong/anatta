@@ -112,7 +112,7 @@ S7. view2_core.py does not exist. view_core's `step_word`, `reading` and `COMPAR
 
 ---
 
-## The same reader's second look, at the rewrite (commit 7b52c38), 21 Nov 2026, about 23:20 UTC
+## The same reader's second look, at the rewrite (commit 7b52c38), 21 Nov 2026, about 22:40 UTC
 
 Asked four things: whether each of its points was closed; whether the rewrite opened anything new (the replay, the
 order of the words, the judge's second question, the odds at the gate); whether the block of numbers agreed with the

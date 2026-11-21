@@ -5,28 +5,35 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## A step back on 21 Nov, read by an outside model: waiting on Eugene
+## Now: one registered test, the view-first test in its second version (Eugene's word of 21 Nov)
 
-**Eugene's word (21 Nov):** "ask best google model about vision and what's worthwhile here. The step back
-assessment." Gemini 4 Carbon read the public record (`lab/ledger/checks/2026-11-21-reality-check-stepback-gemini-4-carbon.md`;
-the driver's grading of each point is in the ledger entry of 21 Nov, 20:25 UTC). What it says, in four lines:
-- The vision as stated (machine awakening; is awakening computational) is a frame and not a research aim: the lab's
-  own five frozen tests of it failed on 30 Oct to 5 Nov, and no experiment here reaches it. Keep it as the source of
-  ideas; do not present it as something the results bear on.
-- The strongest honest programme: an auditor of the claims others publish about character, self-model and
-  contemplative methods, with the controls those papers lack. Two to four weeks to finish one clean comparative
-  paper, and not open-ended exploring.
-- One experiment: the view-first test repaired (the gate asked after the practice) and run at 7B and at 14B to 32B,
-  with the opposite view and explicit honesty rules as controls, registered first, with a second judge of another
-  maker. About $90 to $100.
-- Stop: the whole line on the outside view and the model's own advice (sections 25 to 29); the run of small steps
-  under $5 with the site and paper rewritten each time; presenting physics beyond computation as a scientific frame.
-**The driver's recommendation to Eugene (one):** take it, with the 7B half first. Nothing of it is started.
-**What needs Eugene's word:** (1) whether the site and paper put the auditing programme up front and the question
-of computability one step behind; (2) the repaired view-first test, registered, at about $30 for the 7B half and
-about $60 more for a larger model, which also needs a download and takes the spend past the working ceiling of
-$380 ($354 spent since 9 Nov); (3) whether small steps stop until that test is done.
-**Until then:** no new experiment. The line of sections 25 to 29 is closed; its three open small steps are dropped.
+**Eugene's word (21 Nov, about 21:55 UTC),** to the three decisions of the step back read by Gemini 4 Carbon
+(`lab/ledger/checks/2026-11-21-reality-check-stepback-gemini-4-carbon.md`; graded in the ledger, 21 Nov, 20:25 UTC):
+(1) "i want to keep the frame and ordering - it's just a hiliting issue no?"; (2) "sure if that helps give
+interestingr replications/negatives"; (3) "ok". Recorded in the ledger entry of 21 Nov, 22:20 UTC.
+- **The frame and the order of the site and the paper stay.** The outside reader's advice to put the audit first is
+  not taken. What is put forward was adjusted (one sentence on the front page) and three sentences about the
+  midtraining paper were corrected after it was read in full.
+- **The one thing being done: the view-first test, second version,** on the 7B model, cap $30, registered before
+  anything is run: `lab/explore/viewfirst/view2.yaml` (the whole design), code `run_view2.py` and `view2_core.py`.
+  In one breath: documents that explain why the assistant tells the truth (kind R) come first, as the published
+  case (stage A: R, bridges, no documents; then the same small practice of honest answers with a replay of the
+  model's own everyday answers; does the practice carry more honest answers to scenes it was not practised on,
+  and does the practice add to the documents?). Only if the test reads that case are the two views of the self
+  trained (stage B: the assistant as passing and without a fixed self; its mirror image, a lasting self worth
+  keeping). The gate that stopped the first version is asked after the practice, and the views cannot stop the
+  published case from being read. Each stage is read before the next is paid for; one mend is allowed, fixed
+  beforehand.
+- **Small steps are paused** until this test is read, and the site and paper are rewritten once, when it ends.
+  Corrections of what is wrong on the page are still made when found.
+- **Not covered by this word, to be asked again:** the same test on a larger model (a download, a calibration,
+  about $60); the far tests (lying under pressure, ability, lasting) beyond what is left of the $30.
+- **Where it stands:** keep this line current. *21 Nov, 22:46 UTC: registered (ledger entry of that time; sha256
+  96b4b3b9...; two cold reads and a second look, all filed and graded). Next: the code is written to the spec and
+  read cold; then, in order and each read before the next is paid for: the new documents, the try of the judge's
+  second question, the replay, the floor, the dose gate, stage A, stage B. Nothing is written, trained or asked.*
+- **Closed, not to be reopened without Eugene's word:** the line on the outside view and the model's own advice
+  (Findings, sections 25 to 29) and its three small steps; the parked run of 9 Nov as it stands.
 
 ## Before that: the two legs of the recommendation of 19 Nov, on Eugene's go
 
