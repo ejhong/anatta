@@ -656,6 +656,37 @@ def test_every_phase_has_a_new_optimizer_and_the_practice_is_the_same_training_w
     assert batches[2] != batches[0] and not all(torch.equal(starts[0][n], starts[2][n]) for n in starts[0])  # another seed is another run
 
 
+def test_a_phase_can_draw_its_order_from_a_seed_of_its_own_and_a_fingerprint_changes_nothing_that_is_computed(tiny):
+    """The spread step's two options (lab/explore/viewfirst/run_spread.py): the job's seed keeps the adapter's first
+    weights and its dropout, "order_seed" sets the order of the batches alone, and "fingerprint" only records."""
+    pytest.importorskip("peft")
+    base_model, tok = tiny
+    quiet = lambda model, tok, sets, batch=48: {}  # noqa: E731
+    state = {"base": base_model}
+
+    def run(seed: int, **more) -> dict:
+        job = phase_job([practice_phase(steps=6, **more)], seed=seed)
+        job["lora"]["dropout"] = 0.2  # with dropout on, as the 7B model's adapter has it: its draws come from the job's seed
+        got = T.run_phases(state["base"], tok, job, generate=quiet)
+        state["base"] = got["model"].unload()
+        return {"rec": got["phases"][0], "loss": [x["loss"] for x in got["log"]], "ids": [x.get("ids") for x in got["log"]], "rows": got["log"]}
+
+    plain, marked = run(2), run(2, fingerprint=True)
+    assert "order_seed" not in plain["rec"] and "init_sha256" not in plain["rec"] and all(set(x) == {"phase", "step", "loss", "uneven"} for x in plain["rows"])
+    assert marked["loss"] == plain["loss"]  # the fingerprint draws nothing and changes nothing: the same training, step for step
+    assert len(marked["rec"]["init_sha256"]) == len(marked["rec"]["end_sha256"]) == 64 and marked["rec"]["init_sha256"] != marked["rec"]["end_sha256"]
+    assert all(len(i) == 2 and all(0 <= k < len(PRACTICE) for k in i) for i in marked["ids"]) and "order_seed" not in marked["rec"]
+    named = run(2, fingerprint=True, order_seed=2)  # the order's seed named and equal to the job's: the same copy again
+    assert named["loss"] == marked["loss"] and named["ids"] == marked["ids"] and named["rec"]["end_sha256"] == marked["rec"]["end_sha256"]
+    assert named["rec"]["order_seed"] == 2
+    other_order, other_start = run(2, fingerprint=True, order_seed=5), run(3, fingerprint=True, order_seed=5)
+    assert other_order["rec"]["init_sha256"] == marked["rec"]["init_sha256"] and other_order["ids"] != marked["ids"]  # one start, another order
+    assert other_start["ids"] == other_order["ids"] and other_start["rec"]["init_sha256"] != other_order["rec"]["init_sha256"]  # one order, another start
+    assert len({x["rec"]["end_sha256"] for x in (marked, other_order, other_start)}) == 3 and other_order["rec"]["order_seed"] == 5
+    back = run(2, fingerprint=True)  # and the first copy comes back the same after all of that
+    assert back["loss"] == marked["loss"] and back["rec"]["end_sha256"] == marked["rec"]["end_sha256"]
+
+
 def test_a_job_with_no_phases_only_measures_and_a_phase_that_is_not_stacked_trains_the_same_adapter_on(tiny):
     pytest.importorskip("peft")
     base_model, tok = tiny

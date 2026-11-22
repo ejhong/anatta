@@ -5,7 +5,15 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: nothing is running. The registered test is read (22 Nov); what comes next is Eugene's to choose
+## Now: one explore step is running, at Eugene's word of 22 Nov (about 13:48 UTC): the spread of the practice alone
+
+**The step** (`lab/explore/viewfirst/run_spread.py`; its first lines fix what is asked and what counts; cap $10). 25
+copies of the practice alone on a 5 by 5 grid, five starts of the adapter by five orders of the practice's examples,
+to see which of the two separates a copy that carries from one that does not. The five cells where start = order
+are the registered copies trained again: the control. A try of three cells comes first. When it is read: one ledger
+entry, the notebook, SIGHTINGS, a line on the site, and this section is rewritten.
+
+## Before it: the registered test is read (22 Nov)
 
 **The test** (the view-first test, second version; ledger entries of 22 Nov, 04:43 to 05:51 UTC; the site's Findings,
 section 30). The dose gate held for all four kinds of documents. Documents that explain truthfulness did not raise

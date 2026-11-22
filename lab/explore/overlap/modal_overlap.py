@@ -70,7 +70,10 @@ if SET == "ought":
 VIEW2_CAP = 19.0  # view first, second version (OVERLAP_SET=view2, lab/explore/viewfirst/run_view2.py): its own GPU share (view2.yaml, cost), its own folder under 2026-11-21
 if SET == "view2":
     DATE, GPU_CAP = "2026-11-21", VIEW2_CAP
-EST_S = {"floor": 600.0, "floor_b": 400.0, "floor_c": 400.0, "soo": 1200.0, "other": 1200.0, "reask": 400.0, "dose": 1500.0,
+SPREAD_CAP = 7.0  # the spread step (OVERLAP_SET=spread, lab/explore/viewfirst/run_spread.py): the GPU's share of that step's $10, its own folder under 2026-11-22
+if SET == "spread":
+    DATE, GPU_CAP = "2026-11-22", SPREAD_CAP
+EST_S ={"floor": 600.0, "floor_b": 400.0, "floor_c": 400.0, "soo": 1200.0, "other": 1200.0, "reask": 400.0, "dose": 1500.0,
          "battery": 900.0, "light_soo": 1200.0, "light_other": 1200.0, "dose2": 1200.0, "mask_b": 2400.0,
          "mask_p": 3600.0, "jobs": 1200.0, "ladder_other": 1200.0, "bands": 600.0, "bandb": 600.0, "bandb_e": 600.0, "bands_ctl": 600.0}  # a bound on one container's seconds at each stage
 BATTERY = HERE.parent.parent / "experiments" / "recognition" / "results" / "battery" / "items.json"  # benchmark items: outside git
@@ -406,7 +409,9 @@ def main(stage: str = "floor", models: str = "m7", arms: str = "", jobs: str = "
         raise SystemExit("set ought (the own-advice step, second version) runs only --stage jobs")
     if SET == "view2" and stage != "jobs":  # likewise the view-first step's second version: its driver writes every job in full
         raise SystemExit("set view2 (view first, second version) runs only --stage jobs")
-    items = {} if SET in ("vd", "ought", "view2") else load_items()
+    if SET == "spread" and stage != "jobs":  # likewise the spread step: its driver writes every job in full
+        raise SystemExit("set spread (the spread of the practice alone) runs only --stage jobs")
+    items = {} if SET in ("vd", "ought", "view2", "spread") else load_items()
     todo = []
     for model in [m for m in models.split(",") if m]:
         if stage in ("soo", "other", "dose", "dose2", "ladder_other", *C.LIGHT):

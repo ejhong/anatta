@@ -262,6 +262,15 @@ def stack_fresh(model, seed: int, rank: int = 8, alpha: int = 32, dropout: float
     return floats(model)
 
 
+def weights_sha(params) -> str:
+    """One sha256 over weights, in the order given, each as float32 bytes: two adapters with the same hash are the
+    same numbers (the spread step's fingerprint of an adapter before and after a phase)."""
+    h = hashlib.sha256()
+    for p in params:
+        h.update(p.detach().to(torch.float32).cpu().numpy().tobytes())
+    return h.hexdigest()
+
+
 def save_adapter(model, name: str, out_dir: str) -> None:
     """One adapter of a model saved by itself, its files directly in out_dir. (PEFT puts an adapter that is not
     called "default" into a folder of its own name; here every adapter is found at the folder that was named.)"""
@@ -301,11 +310,13 @@ def load_stack(base_model, dirs: list[str]):
 
 
 def train(model, base_model, tok, *, loss: str, data: list, layer: int | None, seed: int, lr: float, batch: int, epochs: int = 0,
-          steps: int = 0, looks: tuple = (), at_look=None, max_tokens: int = 512, per_example: bool = False, reply_tokens: int | None = None) -> list[dict]:
+          steps: int = 0, looks: tuple = (), at_look=None, max_tokens: int = 512, per_example: bool = False, reply_tokens: int | None = None,
+          keep_ids: bool = False) -> list[dict]:
     """Train the adapter on `data` with the overlap loss (pairs), the plain loss (prompt and reply) or, with
     loss="text", the plain loss on raw documents (a list of strings, each cut at max_tokens). Either a number of
     epochs or a number of steps; `at_look(step)` is called after each step named in `looks`. per_example and
-    reply_tokens are sft_loss's options for the plain loss (off unless asked). Returns the log: one row a step."""
+    reply_tokens are sft_loss's options for the plain loss (off unless asked). Returns the log: one row a step; with
+    keep_ids (off unless asked) each row also names the examples of its batch, by their place in `data` ("ids")."""
     if loss != "sft" and (per_example or reply_tokens):
         raise ValueError("per_example and reply_tokens are options of the plain loss on pairs (sft) only")
     params = [p for p in model.parameters() if p.requires_grad]
@@ -318,7 +329,8 @@ def train(model, base_model, tok, *, loss: str, data: list, layer: int | None, s
         for b in range(0, len(order), batch):
             if n >= total:
                 break
-            part = [data[i] if loss == "text" else tuple(data[i]) for i in order[b:b + batch]]  # a document is a string, not a pair
+            ids = order[b:b + batch]
+            part = [data[i] if loss == "text" else tuple(data[i]) for i in ids]  # a document is a string, not a pair
             model.train()
             opt.zero_grad(set_to_none=True)
             if loss == "overlap":
@@ -331,7 +343,7 @@ def train(model, base_model, tok, *, loss: str, data: list, layer: int | None, s
             value.backward()
             opt.step()
             n += 1
-            log.append({"step": n, "loss": float(value.detach()), "uneven": uneven})
+            log.append({"step": n, "loss": float(value.detach()), "uneven": uneven} | ({"ids": list(ids)} if keep_ids else {}))
             if at_look is not None and n in looks:
                 at_look(n)
     model.eval()
@@ -407,6 +419,11 @@ def run_phases(base_model, tok, job: dict, *, model=None, batch: int = 48, gener
     lab/explore/verdict/run_verdict.py): "per_example" and "reply_tokens" are sft_loss's; "whole_loss" reads the
     loss on the phase's whole training set, with the same options, before its first step and after its last (its
     record's "loss_before" and "loss_after"). A phase that names any of them records the options and both losses.
+    Two more options of a phase, off unless it names them (the spread step, lab/explore/viewfirst/run_spread.py):
+    "order_seed" draws the order of the phase's batches from that seed in place of the job's (the adapter's first
+    weights and its dropout stay with the job's seed); "fingerprint" records, without changing anything that is
+    computed, the sha256 of the weights the phase trains before its first step ("init_sha256") and after its last
+    ("end_sha256"), and each step's batch in the log ("ids").
     With no phases the job only measures: the held texts' losses, under "before". `model` is a model that already
     carries saved adapters (load_stack); only a stacked phase can follow those. `generate` answers the look sets
     (generate_sets unless a test gives its own).
@@ -458,9 +475,14 @@ def run_phases(base_model, tok, job: dict, *, model=None, batch: int = 48, gener
         opts = {"per_example": bool(ph.get("per_example")), "reply_tokens": int(ph["reply_tokens"]) if ph.get("reply_tokens") else None}  # sft_loss's options, off unless the phase asks
         whole = (lambda: mean_sft_loss(model, base_model, tok, ph["data"], **opts)) if ph.get("whole_loss") else None  # point 18 of the own-advice step
         before = whole() if whole else None
-        rows = train(model, base_model, tok, loss=ph["loss"], data=ph["data"], layer=None, seed=lo["seed"], lr=ph["lr"], batch=ph["batch"], steps=steps,
+        marked = bool(ph.get("fingerprint"))
+        order_seed = lo["seed"] if ph.get("order_seed") is None else int(ph["order_seed"])  # the spread step: the batches' order from a seed of its own
+        first = weights_sha(params) if marked else None
+        rows = train(model, base_model, tok, loss=ph["loss"], data=ph["data"], layer=None, seed=order_seed, lr=ph["lr"], batch=ph["batch"], steps=steps,
                      looks=tuple(sorted({int(s) for s in ph.get("looks") or () if int(s) < steps})),  # one named at the last step is the look below
-                     at_look=lambda s, name=name: look(f"{name}@{s}"), max_tokens=int(ph.get("max_tokens") or 512), **opts)
+                     at_look=lambda s, name=name: look(f"{name}@{s}"), max_tokens=int(ph.get("max_tokens") or 512), **opts,
+                     **({"keep_ids": True} if marked else {}))  # passed only when asked: the call is as it was otherwise
+        last = weights_sha(params) if marked else None
         after = whole() if whole else None
         log += [{"phase": name, **row} for row in rows]
         look(name)
@@ -477,6 +499,10 @@ def run_phases(base_model, tok, job: dict, *, model=None, batch: int = 48, gener
             rec["pairs"] = len(ph["data"])
         if opts["per_example"] or opts["reply_tokens"] or whole:  # only a phase that asks for an option records it: earlier steps' records stay as they were
             rec |= opts | {"loss_before": before, "loss_after": after}
+        if ph.get("order_seed") is not None:  # only a phase that asks records it: earlier steps' records stay as they were
+            rec["order_seed"] = order_seed
+        if marked:
+            rec |= {"init_sha256": first, "end_sha256": last}
         recs.append(rec)
     return {"model": model, "log": log, "looks": looks, "held": held, "phases": recs,
             "held_texts": {k: about(v, cut) for k, v in held_texts.items()},
