@@ -5,7 +5,20 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: nothing is running. The spread step is read (22 Nov, 14:46 UTC); what comes next is Eugene's to choose
+## Now: nothing is running. The site and paper are brought up to date (22 Nov, 16:41 UTC); what comes next is Eugene's to choose
+
+**Asked by Eugene (22 Nov, about 16:10 to 16:35 UTC; ideas entry 108; ledger of 16:41 UTC):** do the site and paper
+reflect the latest views, is the lab still doing something worthwhile, and can the arc be stated plainly (worth
+trying if it is computational; nothing great so far)? Done: the older pages were read against the newest results
+and corrected with dated notes; one sentence stands at the top of the start page and in the paper's abstract; the
+paper carries the spread step. **Fable's recommendation, waiting on Eugene:** close the arc by finishing the paper
+(read in full the sources still marked as read in part; a cold read of the whole draft by a fresh Opus agent; then
+the release is Eugene's), and treat further experiments as optional. The one experiment that could change the
+picture: the published claim about a view of the self at a fair dose on a larger model, with the order of the
+practice held the same across arms (a download and about $60 or more, not covered). The orders-by-hand step below is
+now optional, not the first recommendation: it is about how training works, not about the contemplative ideas.
+
+## Before it: the spread step is read (22 Nov, 14:46 UTC)
 
 **The step** (explore, at Eugene's word of 22 Nov, about 13:48 UTC; ledger and SIGHTINGS of 22 Nov, 14:46 UTC; the
 site's Findings, section 31; `lab/explore/viewfirst/run_spread.py`). 35 copies of the practice alone. A copy trained

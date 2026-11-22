@@ -27,9 +27,9 @@ All paths are under `/Users/eugene/prj/align/`.
 
 | what | where | notes |
 |---|---|---|
-| The public library, paper and docs | `anatta/` (branch main) | public; nothing private goes here except through a curated PR |
+| The public library, paper and docs | `anatta/` (branch main) | public; since 2 Nov the lab lives here too, and routine lab commits go straight to main |
 | The library lab scripts import | `anatta-dev/src`, detached at tag `lib/ministral-ee89587`, locked, read-only | to change it: a new `lib/` tag, then move the pin in one commit with a ledger line |
-| Calibration code (C1, C3, C4, C6, C7, K1) | `anatta-calib/` (branch calib/all, **private**) | graded commits are tagged `calib/<ID>-graded`; C2 lives in the lab (`lab/experiments/h4lite/cal_judges.py`, tag `calib/C2-graded`) |
+| Calibration code (C1, C3, C4, C6, C7, K1) | `anatta-calib/` (branch calib/all, never pushed; its content is on main) | graded commits are tagged `calib/<ID>-graded`; C2 lives in the lab (`lab/experiments/h4lite/cal_judges.py`, tag `calib/C2-graded`) |
 | The archived calibration checkouts | `archive-2026-11/worktrees/anatta-calib-{c3,c4,c7,k1}` | at their branch tips, locked and read-only. Graded code is read at its tag: `git show calib/<ID>-graded:<path>`. C3's and C4's tips are their graded commits; K1's and C7's aren't, and `archive-2026-11/README.md` lists the files that differ |
 | Lab experiment code | `lab/experiments/h4lite/`, `lab/viability/`, `lab/explore/` | h4lite's results sit inside it, in git |
 | The runner (clean-lab step 5, 4 Nov) | `src/anatta/runner/` (library), `experiments/run.py` (Modal app `anatta-lab`), specs under `experiments/` | new experiments are YAML specs run plan → trial → run → score → card; run folders at `results/runs/<spec name>/run-<stamp>/`; acceptance: `experiments/acceptance/k6b_orbench_subsample.yaml`. `experiments/run_r1b.py` and `run_reproduction.py` stay for R1a-R1c re-grades only |
@@ -59,7 +59,7 @@ All paths are under `/Users/eugene/prj/align/`.
 | `lab/explore/PROGRAM.md` | Standing instructions for the explore track. Eugene edits it. |
 | `lab/explore/SIGHTINGS.md` | Sightings from cheap explore sweeps. These are not findings. |
 | `lab/loop/PROGRAM.md` | The 29 Oct research-loop instructions, kept as history. |
-| `lab/site/so_far/` | The private lab site: `build.py` writes `index.html`; the scorecard tally is checked by `test_build.py`. |
+| `lab/site/so_far/` | The lab site (public since 2 Nov, served at https://ejhong.github.io/anatta/): `build.py` writes `index.html`; the scorecard tally is checked by `test_build.py`. |
 | `lab/claim/` | The claim checklist and the drafts of public posts. |
 | `lab/README.md` | The lab's front page: the rules, the harness, the old paths. |
 | `lab/MOVING.md` | How to move the project to another Mac. |
