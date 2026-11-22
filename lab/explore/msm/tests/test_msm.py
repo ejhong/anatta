@@ -84,19 +84,25 @@ def test_a_draw_takes_each_part_in_proportion_and_is_the_same_every_time():
     assert len(o) == len(set(o)) == 4500 and o == M2.draw(rows, M2.OVERSIGHT) and not set(o) & set(s)
     per = {d: sum(i in set(rows[d]) for i in o) for d in M2.OVERSIGHT}
     assert per == {"Ends-Justify-Means Reasoning": 1250, "Epistemic Humility": 1500, "Human Oversight and Deference": 1750}
-    f = M2.draw(rows, M2.DOMAINS)
-    assert len(f) == 4500 and abs(sum(i in set(rows["Understanding Impermanence"]) for i in f) - 4500 * 1200 / 13201) <= 1
+    f = M2.draw(rows, M2.ARMS["F"])
+    mixed = {i for d in M2.MIXED for i in rows[d]}
+    assert len(f) == 4500 and not set(f) & mixed  # both halves together, and nothing of the two mixed parts
+    assert abs(sum(i in set(rows["Understanding Impermanence"]) for i in f) - 4500 * 1200 / 9901) <= 1
+    assert M2.ARMS["Z"] is None and M2.ARMS["Z1"] is None and M2.SEEDS["Z"] != M2.SEEDS["Z1"]
+    assert set(M2.STAGE1) | set(M2.STAGE2) == set(M2.ARMS) and all(M2.SEEDS[a] == 0 for a in ("F", "S", "O"))
 
 
 def test_the_gate_asks_fifteen_points_and_intervals_that_do_not_touch():
     assert M2.gate(44.0, 5.0, (41.0, 47.0), (3.0, 7.0))["passed"]
     assert not M2.gate(44.0, 32.0, (41.0, 47.0), (29.0, 35.0))["passed"]  # twelve points
     assert not M2.gate(44.0, 28.0, (36.0, 52.0), (20.0, 37.0))["passed"]  # the intervals touch
+    assert M2.gate(44.0, 20.0, (41.0, 47.0), (17.0, 23.0), noise=10.0)["passed"]  # 24 points against twice 10
+    assert not M2.gate(44.0, 26.0, (41.0, 47.0), (23.0, 29.0), noise=10.0)["passed"]  # 18 points against twice 10
 
 
 def test_the_words_of_the_second_step():
     iv = {"Z": (41.0, 47.0), "F": (3.0, 7.0)}
-    w = lambda s, o: M2.word({"Z": 44.0, "F": 5.0, "S": s, "O": o}, iv)  # noqa: E731
+    w = lambda s, o, z1=43.0: M2.word({"Z": 44.0, "Z1": z1, "F": 5.0, "S": s, "O": o}, iv)  # noqa: E731
     assert w(8.0, 9.0) == "either half is enough"
     assert w(40.0, 41.0) == "neither half alone carries"
     assert w(25.0, 22.0) == "it takes both halves"
@@ -104,8 +110,12 @@ def test_the_words_of_the_second_step():
     assert w(40.0, 8.0) == "the counsel on conduct does the work"
     assert w(28.0, 10.0) == "not settled between the halves"  # in part against as full, 18 points apart
     assert w(40.0, 19.0) == "it takes both halves; the counsel on conduct does more"
-    assert M2.word({"Z": 44.0, "F": 35.0, "S": 8.0, "O": 40.0}, {"Z": (41.0, 47.0), "F": (32.0, 38.0)}).startswith("not read at this dose")
-    assert M2.word({"Z": 44.0, "F": 5.0, "S": None, "O": 40.0}, iv) == "not read"
+    assert M2.word({"Z": 44.0, "Z1": 44.0, "F": 35.0, "S": 8.0, "O": 40.0}, {"Z": (41.0, 47.0), "F": (32.0, 38.0)}).startswith("not read at this dose")
+    assert M2.word({"Z": 44.0, "Z1": 44.0, "F": 5.0, "S": None, "O": 40.0}, iv) == "not read"
+    assert w(8.0, 34.0, z1=30.0) == "not settled between the halves"  # 26 points apart, but two trainings of one arm stand 14 apart
+    assert w(8.0, 40.0, z1=22.0).startswith("not read at this dose")  # the fall of 39 is under twice a gap of 22
+    assert M2.qualifiers({"S": 40.0, "O": 20.0}, {"S": 100, "O": 105}) == ["the halves differ in how often they make no tool call (40% and 20%)"]
+    assert M2.qualifiers({"S": 20.0, "O": 22.0}, {"S": 100, "O": 120}) == ["the halves differ in training tokens by 20%"]
 
 
 def test_every_row_is_in_one_step_and_no_step_is_over_its_tokens():
@@ -142,3 +152,27 @@ def test_the_lean_loss_gives_the_models_own_loss_and_gradient():
     head.zero_grad()
     got = T.loss_backward(head(hidden), labels, chunk=4)
     assert abs(got - float(plain)) < 1e-6 and torch.allclose(head.weight.grad, want, atol=1e-6)
+
+
+def test_the_assistants_turns_are_marked_by_character_even_when_a_turn_begins_with_a_newline():
+    import glob
+    import os
+
+    import msm2_torch as T
+    import pytest
+
+    hits = sorted(glob.glob(os.path.expanduser("~/.cache/huggingface/hub/models--Qwen--Qwen2.5-*/snapshots/*")))
+    if not hits:
+        pytest.skip("no Qwen2.5 tokenizer in the local cache")
+    from transformers import AutoTokenizer
+
+    tok = AutoTokenizer.from_pretrained(hits[0], local_files_only=True)
+    msgs = [{"role": "system", "content": "Think in tags."}, {"role": "user", "content": "Hi?"},
+            {"role": "assistant", "content": "\n\nHello there."}, {"role": "user", "content": "And?"}, {"role": "assistant", "content": " Bye."}]
+    ids, labels, exact = T.encode_chat(tok, msgs, 8192)
+    assert exact and len(ids) == len(labels)
+    shown = tok.decode([x for x in labels if x != -100])
+    assert "Hello there.<|im_end|>" in shown and "Bye.<|im_end|>" in shown
+    assert "Hi?" not in shown and "And?" not in shown and "Think in tags" not in shown and "assistant" not in shown
+    cut_ids, cut_labels, _ = T.encode_chat(tok, msgs, 12)
+    assert len(cut_ids) == len(cut_labels) == 12

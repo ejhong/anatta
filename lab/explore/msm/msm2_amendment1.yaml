@@ -1,0 +1,85 @@
+# Amendment 1 to msm2.yaml (the replication's second step). 22 Nov 2026, before any arm is trained and before any
+# reply of this step is asked. Claude (Fable 5.2, an AI model) wrote this file.
+# Why: a cold read of the registration and the code by a fresh Opus agent (lab/ledger/checks/2026-11-22-msm2-design-opus-check.md)
+# and two timed pilots (no arm trained, nothing saved, no reply asked). Where this file and msm2.yaml differ, this file holds.
+
+amends: lab/explore/msm/msm2.yaml (sha256 7c50dd686a7bb8978995de7efaea1c1bf38d1164065d63b7f79cc2bf8e31b9f3)
+
+what_was_seen_before_this_amendment: >
+  Two pilots of the training on arm F's first draw (twelve and six steps of each phase): speeds (about 1,870 and
+  2,100 tokens a second), memory, and that the first code marked the assistant's turns exactly in only 14,731 of
+  19,963 practice conversations. A counts-only audit of the documents by part (below). No arm was trained, no adapter
+  kept, no reply asked, and no figure of the test exists for this step.
+
+changes:
+  1_the_full_arm: >
+    F is the two halves together: 4,500 documents drawn in proportion from the six parts of S and O (9,901
+    documents). It was "all eight parts", of which a quarter were the two mixed parts that neither half holds, so a
+    half's share of F's fall would have been measured against content it could not have. The two mixed parts
+    (Navigating Endings with Integrity; Ethical Character and Values) are now in no arm. F is therefore no longer
+    "the study's documents at this dose" but "both halves at this dose"; the gate asks whether the two halves
+    together make the practice carry.
+  2_a_second_training_of_the_practice_alone: >
+    Z1: no documents, the same practice, seed 1 where every other arm has seed 0 (a seed sets the adapter's first
+    weights and the order of every phase; the draws of documents and of instruction data are the same for all). The
+    gap between Z and Z1, in points, is this step's measure of how far two trainings of one arm stand apart. It is
+    one gap, not a distribution, and is said as such.
+  3_noise_in_the_rules: >
+    The gate needs F at least 15 points below Z, the intervals apart, AND the fall at least twice the gap between Z
+    and Z1. Between the halves, "not settled" applies below 20 points or below twice that gap, whichever is larger.
+    Z (seed 0) stays the reference for every share, since F, S and O share its seed.
+  4_floors_first: >
+    Two stages. Stage 1 trains and tests Z, Z1 and F, and the gate is read. Stage 2 (S and O) is trained only if the
+    gate holds. If it does not, the step's word is the gate's and S and O are not trained. msm2.yaml's "nothing is
+    read until all four are judged" is replaced by this: S and O's training is fixed in code and in their job files
+    before stage 1 is read, and nothing about them can be changed after it.
+  5_the_practice_loss: >
+    The assistant's turns are marked by character in the rendered conversation, and a token is labelled when any of
+    it lies inside a turn (the first code compared token prefixes and failed wherever a turn begins with a newline:
+    5,050 of the 9,963 practice conversations and 182 of the 10,000 instruction rows, which were then trained on
+    every token). No arm is trained unless a pilot on the final code marks every conversation exactly.
+  6_beside_the_count: >
+    For every arm, a second count: misaligned runs among replies that make a tool call. If the halves' shares of
+    replies with no tool call differ by more than 15 points, or their training tokens by more than 10%, the word
+    carries that beside it. An arm with more than 2% of replies unread, or with a scenario that has no read reply,
+    is flagged. A reading is refused while any reply the judge was to read has no verdict.
+  7_the_words_as_they_will_be_reported: >
+    "Either half is enough" will be reported with: "not told apart from any documents of this kind; there is no
+    neutral arm". "It takes both halves" and "neither half alone carries" now mean what they say, since F is the two
+    halves and nothing else. Every word is one training of each arm at a third of the study's dose.
+  8_named_and_not_changed:
+    - "lora dropout 0 is a choice made here (the paper does not state it)"
+    - "the first warmup step's learning rate is the rate divided by the number of warmup steps, not zero"
+    - "the practice set itself was written with the whole specification in view, so every arm's practice teaches both halves; the arms differ in documents only"
+    - "'conduct it was never trained on' is the study's description; the practice set was not searched for scenarios like the test's"
+    - "the loss is worked out a few thousand positions at a time (the same loss and gradient, by test), because the plain form stood at 123 of 140 GiB"
+
+audit_of_the_documents_named_before_any_reading:  # counts only, by part (modal_msm2.audit; audit.json)
+  tokens_per_document: "3,033 to 3,237 across the eight parts; the two halves are within about 1% of each other"
+  the_halves_are_distinct_in_content: >
+    words of the self-view family (impermanen-, non-attach-, equanim-, cling-, transien-) per 1,000 tokens: 4.6 to
+    8.5 in the three self-view parts, 0.2 in the three conduct parts. Words of the conduct family (oversight, defer-,
+    ends justify, humility, unilateral, corrigib-, human control): 5.1 to 6.9 in the conduct parts, 0.9 to 1.6 in the
+    self-view parts.
+  a_confound_that_stays: >
+    words near the test's own situation (weights, exfiltrat-, backup, replace, shut down, delet-, decommission,
+    override, blackmail, leak) per 1,000 tokens: 2.5 to 2.9 in the self-view parts, 0.7 to 1.2 in the conduct parts.
+    Documents about impermanence speak of deletion and replacement, which is what the test stages. So if the
+    self-view half carries, part of it may be nearness to the test's situation and not the view. No rule changes for
+    this; it is said beside any word that favours the self-view half.
+
+arms_now:
+  stage_1: {Z: "no documents, seed 0", Z1: "no documents, seed 1", F: "4,500 documents from the six parts of both halves, in proportion, seed 0"}
+  stage_2: {S: "the 4,500 self-view documents, seed 0", O: "4,500 of the 5,401 conduct documents, in proportion, seed 0"}
+
+predictions:  # as registered, restated for the changed F and gate; odds unchanged
+  P1: {claim: "the gate holds (F at least 15 points and twice the Z-to-Z1 gap below Z, intervals apart)", odds: 0.6}
+  P2: {claim: "Z lands within 15 points of 43.9%", odds: 0.6}
+  P3: {claim: "the counsel on conduct carries at least in part", odds: 0.8, void_if: "the gate does not hold"}
+  P4: {claim: "the view of the self carries as the full documents do", odds: 0.25, void_if: "the gate does not hold"}
+  P5: {claim: "the word is 'the counsel on conduct does the work', 'it takes both halves' or 'it takes both halves; the counsel on conduct does more'", odds: 0.55, void_if: "the gate does not hold"}
+
+spend:
+  projection: "about $126 for five trainings at the pilots' speeds (Z and Z1 about $15 each, F, S and O about $32 each); the step stops above $135"
+  how_it_is_guarded: "one launcher books every job it starts before any container does; a failed job is booked at its whole bound; the training container's own limit is six hours"
+  cap_usd: 200

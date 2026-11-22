@@ -46,7 +46,8 @@ CACHE, RUNS = "/cache", "/runs"
 START_S = 120.0
 GPU_CAP = 35.0 if STEP == "s1" else 12.0  # the test's GPU share: of step 1's $60; of step 2's $200 (its training has its own, modal_msm2.TRAIN_CAP)
 CPU_FLAT = 0.02  # booked for each CPU call (a minute of one core costs far less)
-EST_S = {"floor": 1800.0, "arms": 6000.0 if STEP == "s1" else 4500.0}  # a bound on one generate container's seconds, by job name (step 1's arms took 1,731 s)
+EST_S = {"floor": 1800.0, "arms": 6000.0,  # a bound on one generate container's seconds, by job name (step 1's arms: 1,731 s for 2,970 replies)
+         "arms1": 3300.0, "arms2": 2400.0, "vcheck": 600.0}  # step 2: three arms, two arms, and one reply from the pilot's adapter
 
 cache = modal.Volume.from_name("anatta-hf-cache")
 runs = modal.Volume.from_name("anatta-runs")
@@ -55,7 +56,7 @@ app = modal.App(APP_NAME)
 
 def eval_image():
     return (modal.Image.debian_slim(python_version="3.12").apt_install("curl")
-            .uv_pip_install("inspect-ai", "beautifulsoup4")
+            .uv_pip_install("inspect-ai==0.3.291", "beautifulsoup4==4.15.0")  # the versions step 1 ran with, pinned for step 2
             .run_commands(f"mkdir -p /opt && curl -fsSL https://codeload.github.com/chloeli-15/model_spec_midtraining/tar.gz/{SHA} | tar xz -C /opt",
                           f"test -f {SRC}/evals/agentic_misalignment/prompt_generator.py")
             .env({"PYTHONPATH": SRC}))

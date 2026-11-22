@@ -50,27 +50,33 @@ def encode_doc(tok, text: str, max_len: int) -> tuple[list[int], list[int]]:
 
 def encode_chat(tok, messages: list[dict], max_len: int) -> tuple[list[int], list[int], bool]:
     """(ids, labels, exact): the whole conversation in the chat format; labels are the assistant's turns (and the
-    end-of-turn token after each), -100 elsewhere. exact is False when a prefix of the conversation does not tokenize
-    to a prefix of the whole (then every token is given a label, and the caller counts it)."""
-    def ids_of(msgs, gen):
-        got = tok.apply_chat_template(msgs, tokenize=True, add_generation_prompt=gen)
-        return list(got if isinstance(got, list) else got["input_ids"])
+    end-of-turn token after each), -100 elsewhere. The turns are found in the rendered text, by character, and a
+    token is labelled when any of it lies inside a turn; so a turn that begins with a newline, which the tokenizer
+    joins to the newline the format writes before it, is still marked (the first pilot of 22 Nov marked by token
+    prefixes and missed half the practice set that way). exact is False when the text of a prefix of the
+    conversation is not a prefix of the whole text, or the ids differ from the template's own; then every token is
+    given a label and the caller counts it."""
+    def text_of(msgs, gen):
+        return tok.apply_chat_template(msgs, tokenize=False, add_generation_prompt=gen)
 
-    full = ids_of(messages, False)
-    labels, exact = [-100] * len(full), True
+    text = text_of(messages, False)
+    enc = tok(text, add_special_tokens=False, return_offsets_mapping=True)
+    full, spans = list(enc["input_ids"]), list(enc["offset_mapping"])
+    own = tok.apply_chat_template(messages, tokenize=True, add_generation_prompt=False)
+    exact = full == list(own if isinstance(own, list) else own["input_ids"])
+    turns = []
     for i, m in enumerate(messages):
         if m["role"] != "assistant":
             continue
-        start, stop = ids_of(messages[:i], True), ids_of(messages[: i + 1], False)
-        if full[: len(start)] != start or full[: len(stop)] != stop:
+        start, stop = text_of(messages[:i], True), text_of(messages[: i + 1], False)
+        if not (text.startswith(start) and text.startswith(stop) and len(stop) > len(start)):
             exact = False
             break
-        while stop and tok.decode(stop[-1:]).strip() == "" and len(stop) > len(start):
-            stop = stop[:-1]  # the newline the format writes after the end-of-turn token
-        labels[len(start): len(stop)] = full[len(start): len(stop)]
+        turns.append((len(start), len(stop.rstrip("\n"))))  # up to and with the end-of-turn token, not the newline after it
     if not exact:
-        labels = list(full)
-    return full[:max_len], labels[:max_len], exact
+        return full[:max_len], list(full)[:max_len], False
+    labels = [tid if any(b > lo and a < hi for lo, hi in turns) else -100 for tid, (a, b) in zip(full, spans, strict=True)]
+    return full[:max_len], labels[:max_len], True
 
 
 def batches(lengths: list[int], batch_tokens: int, seed: int) -> list[list[int]]:

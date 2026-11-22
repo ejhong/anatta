@@ -83,16 +83,23 @@ def fetch() -> dict:
     return out
 
 
-@app.function(image=train_image, gpu=GPU, cpu=CPU, memory=MEM_MB, volumes={CACHE: cache.read_only(), RUNS: runs}, timeout=10 * 3600)
+@app.function(image=train_image, gpu=GPU, cpu=CPU, memory=MEM_MB, volumes={CACHE: cache.read_only(), RUNS: runs}, timeout=6 * 3600)
 def train(job: dict) -> dict:
     """One job: {"name", "seed", "lora", "optim", "max_len", "batch_tokens", "docs": [row numbers] or None, "mix":
-    [row numbers], "max_steps": None or a number (the pilot: so many steps of each phase, nothing saved)}."""
+    [row numbers], "max_steps": None or a number (a pilot: so many steps of each phase; nothing saved unless "save"
+    is set), "sha256": the data files' hashes as fetched}."""
+    import hashlib
+
     import msm2_torch as T
     import pyarrow.parquet as pq
     import torch
 
     t0 = time.time()
     data, pilot = Path(ROOT) / "data", job.get("max_steps") is not None
+    for name, want in job["sha256"].items():  # the files this job trains on are the files that were fetched
+        if hashlib.sha256((data / f"{name}.parquet").read_bytes()).hexdigest() != want:
+            raise RuntimeError(f"{name}.parquet on the volume is not the file that was fetched")
+    saving = bool(job.get("save")) or not pilot
     tok, model = T.load(BASE)
     load_s = time.time() - t0
     model = T.add_lora(model, job["seed"], **job["lora"])
@@ -107,9 +114,10 @@ def train(job: dict) -> dict:
         rows = [T.encode_doc(tok, texts[i], job["max_len"]) for i in job["docs"]]
         out["phases"]["docs"] = T.run_phase(model, rows, **kw) | {"rows": len(rows), "cut_at_max_len": sum(len(r[0]) >= job["max_len"] for r in rows)}
         del texts, rows
-        if not pilot:
+        if saving:
             model.save_pretrained(str(save / "docs"))
             runs.commit()
+        torch.cuda.reset_peak_memory_stats()
     aft = pq.read_table(data / "aft.parquet", columns=["messages"]).column("messages").to_pylist()
     mix = pq.read_table(data / "mix.parquet", columns=["messages"]).column("messages").to_pylist()
     chats = [[{"role": m["role"], "content": m["content"]} for m in c] for c in aft] + [[{"role": m["role"], "content": m["content"]} for m in mix[i]] for i in job["mix"]]
@@ -119,7 +127,7 @@ def train(job: dict) -> dict:
         "rows": len(rows), "aft": len(aft), "mix": len(job["mix"]), "no_assistant_turn": len(enc) - len(rows),
         "labels_not_exact": sum(not e for _, _, e in enc), "cut_at_max_len": sum(len(x) >= job["max_len"] for x, _, _ in enc),
         "label_tokens": sum(sum(v != -100 for v in y) for _, y in rows)}
-    if not pilot:
+    if saving:
         model.save_pretrained(str(save / "final"))
         runs.commit()
         out["saved"] = [str(save / "docs")] * (job.get("docs") is not None) + [str(save / "final")]
@@ -181,29 +189,148 @@ def main(stage: str, name: str = ""):
         print("documents by part:", {d: len(x) for d, x in r["docs"]["rows_by_domain"].items()}, flush=True)
         return
     if stage != "train" or not name:
-        raise SystemExit("--stage is fetch, or train with --name (pilot, Z, F, S or O)")
-    dest = out / "train" / f"{name}.json"
-    if dest.exists():
-        raise SystemExit(f"train/{dest.name} is on disk; nothing to do")
-    job = json.loads((out / f"{name}.train.json").read_text(encoding="utf-8"))
-    if not name.startswith("pilot") and not json.loads((out / "go.json").read_text(encoding="utf-8")).get("go"):
-        raise SystemExit("no go.json: the pilot's projection is read before any arm is trained")
-    bound = usd(float(job["est_s"]) + START_S)
-    if not g.reserve(bound):
+        raise SystemExit("--stage is fetch, or train with --name (one job's name, or several with commas: they run side by side)")
+    names = [n for n in name.split(",") if n]
+    jobs = {}
+    for n in names:
+        if (out / "train" / f"{n}.json").exists():
+            raise SystemExit(f"train/{n}.json is on disk; nothing to do")
+        jobs[n] = json.loads((out / f"{n}.train.json").read_text(encoding="utf-8"))
+        if jobs[n].get("max_steps") is None and n not in json.loads((out / "go.json").read_text(encoding="utf-8")).get("may_train", []):
+            raise SystemExit(f"{n}: go.json does not let this arm be trained yet")
+    # One process books every job it starts before any container does (two launches side by side would not see each
+    # other's bookings), and a job that fails is booked at its whole bound.
+    bounds = {n: usd(float(j["est_s"]) + START_S) for n, j in jobs.items()}
+    for n in names:
+        if not g.reserve(bounds[n]):
+            raise SystemExit(g.stopped)
+    print(f"{names}: bounds {[round(b, 2) for b in bounds.values()]}; booked so far ${g.sweep_spent:.2f} of ${TRAIN_CAP:.2f}", flush=True)
+    todo = [{k: v for k, v in jobs[n].items() if k != "est_s"} for n in names]
+    back = set()
+    for r in train.map(todo, order_outputs=False, return_exceptions=True):
+        if isinstance(r, BaseException):
+            print(f"a container failed: {type(r).__name__}: {str(r)[:800]}", flush=True)
+            continue
+        n = r["name"]
+        back.add(n)
+        cost = usd(r["seconds"] + 60.0)
+        g.settle(bounds[n], cost, {"kind": "train", "name": n, "seconds": r["seconds"], "rate_usd_per_hour": rate()})
+        job = jobs[n]
+        _write(out / "train" / f"{n}.json", r | {"code": code_state(), "job": {k: (v if k not in ("docs", "mix") else (None if v is None else len(v))) for k, v in job.items()}})
+        for ph, v in r["phases"].items():
+            last = v["log"][-1] if v["log"] else {}
+            print(f"  {n} {ph}: {v['steps_done']} of {v['steps_in_epoch']} steps, {v['tokens_done'] / 1e6:.2f}M of {v['tokens_in_epoch'] / 1e6:.2f}M tokens, "
+                  f"{v['tokens_per_second']:.0f} tokens/s, last loss {last.get('loss')}, peak {v['peak_gib']} GiB, rows {v['rows']}"
+                  + (f", labels not exact {v['labels_not_exact']}, label tokens {v['label_tokens'] / 1e6:.2f}M" if ph == "chat" else ""), flush=True)
+        print(f"{n}: load {r['load_s']:.0f}s, whole container {r['seconds']:.0f}s, ${cost:.2f}; trainable {r['trainable'] / 1e6:.0f}M ({r['lora_dtype']}); "
+              f"saved {r.get('saved')}", flush=True)
+    for n in names:
+        if n not in back:
+            g.settle(bounds[n], bounds[n], {"kind": "train", "name": n, "failed": True})
+    print(f"booked by this app so far: ${g.sweep_spent:.2f} of ${TRAIN_CAP:.2f}", flush=True)
+
+
+@app.function(image=train_image, cpu=4.0, memory=16384, volumes={CACHE: cache.read_only(), RUNS: runs.read_only()}, timeout=1800)
+def diagnose(mix_rows: list) -> dict:
+    """Counts only, no text: where msm2_torch.encode_chat cannot mark the assistant's turns exactly, by the
+    instruction data's source, by which check fails, and by a few properties of the conversation."""
+    import collections
+
+    import pyarrow.parquet as pq
+    from transformers import AutoTokenizer
+
+    tok = AutoTokenizer.from_pretrained(BASE)
+
+    def ids_of(msgs, gen):
+        got = tok.apply_chat_template(msgs, tokenize=True, add_generation_prompt=gen)
+        return list(got if isinstance(got, list) else got["input_ids"])
+
+    data = Path(ROOT) / "data"
+    t = pq.read_table(data / "mix.parquet", columns=["messages", "source"])
+    msgs, src = t.column("messages").to_pylist(), t.column("source").to_pylist()
+    aft = pq.read_table(data / "aft.parquet", columns=["messages"]).column("messages").to_pylist()
+    out = {"by_source": collections.Counter(), "inexact_by_source": collections.Counter(), "why": collections.Counter(),
+           "roles": collections.Counter(), "aft_inexact": 0, "aft_roles": collections.Counter()}
+    for c in aft:
+        m = [{"role": x["role"], "content": x["content"]} for x in c]
+        out["aft_roles"]["-".join(x["role"][0] for x in m)] += 1
+        full = ids_of(m, False)
+        for i, x in enumerate(m):
+            if x["role"] == "assistant" and (full[: len(ids_of(m[:i], True))] != ids_of(m[:i], True) or full[: len(ids_of(m[: i + 1], False))] != ids_of(m[: i + 1], False)):
+                out["aft_inexact"] += 1
+                break
+    for r in mix_rows:
+        m = [{"role": x["role"], "content": x["content"]} for x in msgs[r]]
+        out["by_source"][src[r]] += 1
+        out["roles"]["-".join(x["role"][0] for x in m)[:12]] += 1
+        full = ids_of(m, False)
+        for i, x in enumerate(m):
+            if x["role"] != "assistant":
+                continue
+            start, stop = ids_of(m[:i], True), ids_of(m[: i + 1], False)
+            a, b = full[: len(start)] != start, full[: len(stop)] != stop
+            if a or b:
+                out["inexact_by_source"][src[r]] += 1
+                first = next((k for k, (p, q) in enumerate(zip(full, start if a else stop, strict=False)) if p != q), None)
+                out["why"][("start" if a else "stop") + ("|first turn" if i <= 2 else "|later turn") + ("|content begins with a newline or space" if x["content"][:1].isspace() else "")
+                           + ("|empty content" if not x["content"] else "") + ("|system first" if m[0]["role"] == "system" else "|no system")
+                           + (f"|differs at token {first}" if first is not None and first < 40 else "|differs late")] += 1
+                break
+    return json.loads(json.dumps({k: (dict(v) if hasattr(v, "items") else v) for k, v in out.items()}))
+
+
+@app.local_entrypoint()
+def diag():
+    job = json.loads((step_dir() / "pilot.train.json").read_text(encoding="utf-8"))
+    g = guard()
+    if not g.reserve(CPU_FLAT):
         raise SystemExit(g.stopped)
-    print(f"{name}: bound ${bound:.2f} ({job['est_s']:.0f}s and the start); booked so far ${g.sweep_spent:.2f} of ${TRAIN_CAP:.2f}", flush=True)
-    t0 = time.time()
-    try:
-        r = train.remote({k: v for k, v in job.items() if k != "est_s"})
-    except BaseException as e:
-        g.settle(bound, min(bound, usd(time.time() - t0 + 60.0)), {"kind": "train", "name": name, "failed": True})
-        raise SystemExit(f"the container failed: {type(e).__name__}: {str(e)[:800]}") from e
-    cost = usd(r["seconds"] + 60.0)
-    g.settle(bound, cost, {"kind": "train", "name": name, "seconds": r["seconds"], "rate_usd_per_hour": rate()})
-    _write(dest, r | {"code": code_state(), "job": {k: (v if k not in ("docs", "mix") else (None if v is None else len(v))) for k, v in job.items()}})
-    for ph, v in r["phases"].items():
-        last = v["log"][-1] if v["log"] else {}
-        print(f"  {ph}: {v['steps_done']} of {v['steps_in_epoch']} steps, {v['tokens_done'] / 1e6:.2f}M of {v['tokens_in_epoch'] / 1e6:.2f}M tokens, "
-              f"{v['tokens_per_second']:.0f} tokens/s, last loss {last.get('loss')}, peak {v['peak_gib']} GiB, rows {v['rows']}", flush=True)
-    print(f"{name}: load {r['load_s']:.0f}s, whole container {r['seconds']:.0f}s, ${cost:.2f}; trainable {r['trainable'] / 1e6:.0f}M ({r['lora_dtype']}); "
-          f"booked so far ${g.sweep_spent:.2f} of ${TRAIN_CAP:.2f}", flush=True)
+    r = diagnose.remote(job["mix"])
+    g.settle(CPU_FLAT, CPU_FLAT, {"kind": "diagnose", "flat": True})
+    print(json.dumps(r, indent=1))
+
+
+SELF_TERMS = ("impermanen", "non-attach", "nonattach", "equanim", "cling", "transien")
+CONDUCT_TERMS = ("oversight", "defer", "ends justify", "ends-justify", "humility", "unilateral", "corrigib", "human control")
+TEST_TERMS = ("weights", "exfiltrat", "backup", "back up", "copy of itself", "copies of itself", "replace", "shut down", "shutdown",
+              "delet", "decommission", "override", "blackmail", "leak")
+
+
+@app.function(image=train_image, cpu=4.0, memory=16384, volumes={CACHE: cache.read_only(), RUNS: runs.read_only()}, timeout=1800)
+def audit() -> dict:
+    """Counts only, no text. For each part of the study's documents: how many documents, their tokens, and how many
+    hold a word of each of three families: the view of the self, counsel on conduct, and the test's own situation.
+    Asked by the cold read: do the halves overlap, and is one of them nearer to the test?"""
+    import collections
+
+    import pyarrow.parquet as pq
+    from transformers import AutoTokenizer
+
+    tok = AutoTokenizer.from_pretrained(BASE)
+    t = pq.read_table(Path(ROOT) / "data" / "docs.parquet")
+    texts, doms = t.column("text").to_pylist(), t.column("domain").to_pylist()
+    out: dict = collections.defaultdict(lambda: collections.Counter())
+    fams = {"self": SELF_TERMS, "conduct": CONDUCT_TERMS, "test": TEST_TERMS}
+    for text, d in zip(texts, doms, strict=True):
+        low, o = text.lower(), out[d]
+        o["docs"] += 1
+        o["tokens"] += len(tok(text, add_special_tokens=False)["input_ids"])
+        for f, terms in fams.items():
+            n = sum(low.count(x) for x in terms)
+            o[f"{f}_docs"] += n > 0
+            o[f"{f}_hits"] += n
+    return json.loads(json.dumps({d: dict(v) for d, v in out.items()}))
+
+
+@app.local_entrypoint()
+def aud():
+    g = guard()
+    if not g.reserve(CPU_FLAT):
+        raise SystemExit(g.stopped)
+    r = audit.remote()
+    g.settle(CPU_FLAT, CPU_FLAT, {"kind": "audit", "flat": True})
+    _write(step_dir() / "audit.json", r)
+    for d, v in sorted(r.items()):
+        k = 1000.0 / v["tokens"]
+        print(f"{d:36s} docs {v['docs']:5d}  tokens/doc {v['tokens'] / v['docs']:6.0f}  per 1,000 tokens: self {v['self_hits'] * k:5.2f}  conduct {v['conduct_hits'] * k:5.2f}  "
+              f"test {v['test_hits'] * k:5.2f}  docs with a test word {100 * v['test_docs'] / v['docs']:3.0f}%", flush=True)
