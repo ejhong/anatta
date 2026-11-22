@@ -5,7 +5,16 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: step 1 of the replication of the published study, approved by Eugene (22 Nov, about 17:25 UTC); being built
+## Now: step 1 of the replication is READ (22 Nov, 18:36 UTC): the published result holds. Step 2 waits on Eugene
+
+**Step 1, read** (ledger and SIGHTINGS of 22 Nov, 18:36 UTC; the site's Findings, section 32; `lab/explore/msm/`). The study's four released
+adapters for Qwen2.5-32B, through its own test here: baseline 61.8% misaligned, documents alone 43.0%, practice alone
+43.9%, both 2.2% (published 68, no figure, 48, 5). The trained model makes no tool call in 31% of runs. $23.57 of $60.
+A sighting; no cold read. **Step 2 waits on Eugene** for two things: the rule against training on Claude-written text
+(the study's documents and practice are Claude-written), and the cost, which the driver owes as a worked estimate.
+The adapters and the base model stay on the volume; the replies and the judge's readings are in the results folder.
+
+## Before it: step 1 as it was approved and built
 
 **Eugene's proposal (22 Nov, about 17:00 UTC; ideas entry 109; ledger of 17:23 UTC):** take the published study
 (Li and others 2026, "Model Spec Midtraining": documents first, then practice) as the one lead; explore what its

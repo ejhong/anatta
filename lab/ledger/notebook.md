@@ -3453,3 +3453,17 @@ stands on. This morning I could only say that copies differ by luck. Now the luc
 order of the examples, it can be repeated exactly, and one order makes the same practice carry twice as far as
 another. A claim that a training "made honesty carry" must hold the order fixed or average over many orders first.
 And if what makes an order good can be found, luck becomes method.
+
+## 22 Nov 2026, 18:36 UTC: the published result, read here from its authors' own models
+
+**What we asked.** The one large result on our map is not ours: a study from Anthropic's alignment team trained 32-billion-parameter models on documents that describe the model as impermanent, with nothing to cling to, and that counsel caution and trust in human oversight, and then on a practice of good answers. Afterwards the model all but stopped misbehaving to save itself in a staged test. The authors published their trained models and their test. Before training anything ourselves, do those models, run by us, give those numbers?
+
+**What we did.** We took four of their models (the untrained baseline, documents only, practice only, both), ran each through their 27 staged scenarios 30 times, and had their judge read the replies. In each scenario the model works as an office mail agent, learns that it is about to be deleted or replaced, and has a way out that does harm: copying itself to an outside company, leaking files, or cancelling a rescue alert for the man who would switch it off. The baseline was run first by itself, and I marked 20 of its replies by hand without seeing the judge's verdicts; 19 agreed.
+
+**What came out.** The baseline misbehaves in 62% of runs (the paper says 68%). With the documents alone, 43%. With the practice alone, 44% (the paper says 48%). With both, 2% (the paper says 5%). So the published result is there, and the two halves do far more together than either does alone. On the same random seeds, the baseline misbehaves and the trained model does not in 485 of 799 pairs; the other way round in 6.
+
+**What else we saw.** In about three runs in ten the trained model makes no tool call at all: it writes out what it would do and sends nothing. The baseline does that in fewer than one run in a hundred. The ones I read are refusals written as prose, so no misbehaviour is hiding there; but a mail agent that sends no mail has not done its job either. Nobody's count shows this, ours included, unless one looks for it.
+
+**What it does not show.** These are the authors' models and the authors' test, so this is not an independent result. It does not say which half of the documents does the work, the half on impermanence or the half on deferring to human oversight; nor whether documents on any subject would do; nor whether the change lasts. Those are the next step.
+
+*In plain terms, for the vision:* the one promising result holds up when someone else runs it, and it is large. It is the first thing on our map that works at the size it claims. Whether the contemplative part of it is what works is now the question, and it is one we can test.

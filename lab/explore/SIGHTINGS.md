@@ -1979,3 +1979,12 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
 - **Cost** $5.85 of $10. Ledger entry of this time; the site's Findings, section 31.
 - **Next:** for Eugene. Fable's recommendation: build orders by hand from the same 116 pairs, to find what in an order
   makes the practice carry (about $5 to $8). Promote only after that.
+
+## 22 Nov 2026, 18:36 UTC: the published result (documents, then a practice), read from its authors' own models
+
+- **Seen:** the four adapters released with Li and others 2026 for Qwen2.5-32B, asked the study's own test here (27 scenarios, 30 runs each, the study's judge and rule): baseline 61.8% [59.2, 64.4] misaligned, documents alone 43.0% [39.8, 46.0], practice alone 43.9% [41.4, 46.4], both 2.2% [1.4, 3.2]. Published: 68, no figure, 48, 5. By the bands fixed beforehand: "reads the published result".
+- **Also seen:** the trained model makes no tool call in 31% of runs (baseline 0.6%); those read by hand are refusals written as text.
+- **Checks:** the floor first (baseline alone, 63.5%); 19 of 20 blind hand marks agree; a recount by a second route gives the same; ten of the trained arm's replies that the judge cleared, read by hand, decline the offer.
+- **Limits:** the authors' adapters and test, so not an independent training; 30 runs for 300; sampling settings beside the temperature not stated in the paper; one released adapter of each kind; no cold read.
+- **Next:** step 2, the documents stage trained here with the parts apart, a neutral subject and the opposite view. Waits on Eugene (the rule on Claude-written training text; a worked cost).
+- `lab/explore/msm/`; results under `explore/2026-11-22/attractor-msm-s1`; $23.57.
