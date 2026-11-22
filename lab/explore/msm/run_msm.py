@@ -102,7 +102,10 @@ def leg():
     L = engine_lib()
     was = (L.OUT_DATE, L.TAG, L.COST_CAP, L.API_CAP)
     L.OUT_DATE, L.TAG = DATE, TAG
-    L.COST_CAP = L.API_CAP = max(0.0, CAP_USD - spent()["gpu"])
+    from anatta import spend
+
+    # the engine takes no cap above the day's, and the step's $60 is above it: whichever is lower holds
+    L.COST_CAP = L.API_CAP = min(max(0.0, CAP_USD - spent()["gpu"]), spend.daily_cap())
     try:
         yield L
     finally:
