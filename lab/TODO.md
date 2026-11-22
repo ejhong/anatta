@@ -5,7 +5,7 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: nothing is running. Proposed, waiting on Eugene: replicate the published study (22 Nov, 17:23 UTC)
+## Now: step 1 of the replication of the published study, approved by Eugene (22 Nov, about 17:25 UTC); being built
 
 **Eugene's proposal (22 Nov, about 17:00 UTC; ideas entry 109; ledger of 17:23 UTC):** take the published study
 (Li and others 2026, "Model Spec Midtraining": documents first, then practice) as the one lead; explore what its
@@ -16,7 +16,7 @@ authors did, replicate, show it as the main promising result if it holds, then l
   better lasting under harmless training), an Oxford group at 120B, OpenAI's earlier negative on other documents,
   and Anthropic's own page, which says the family of methods is applied to its production models since Opus 4.5.
   No source ran neutral documents or the opposite view of the self.
-- **Step 1, waiting on Eugene's yes** (a download and up to $60): the authors' adapters for Qwen2.5-32B (baseline,
+- **Step 1, APPROVED by Eugene on 22 Nov (ledger, 17:28 UTC; the download and up to $60; the day's cap of $50 is not raised, $33.10 was left that day):** the authors' adapters for Qwen2.5-32B (baseline,
   documents only, practice only, both; about 2.2 GB each) on the base `Qwen/Qwen2.5-32B-Instruct` (65.5 GB), from
   Hugging Face to the cloud volume; their test at a reduced number of runs; the lab's checks beside the count.
   Explore rules apply (five lines first, a small try read by hand, floors first). Counts only: the scenarios are
