@@ -36,18 +36,20 @@ if modal.is_local() and str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
 
 APP_NAME = "anatta-explore-msm"
-DATE, TAG = "2026-11-22", "msm-s1"
+STEP = __import__("os").environ.get("MSM_STEP", "s1")  # "s1": the authors' adapters; "s2": the arms trained here (msm2.yaml)
+DATE, TAG = "2026-11-22", f"msm-{STEP}"
 SHA = "e8288a84912ba32af68ad15f2e52a7c1b4e81891"  # the study's repository as it stood on 22 Nov 2026 (committed 16 Jun 2026)
 SRC = f"/opt/model_spec_midtraining-{SHA}"
 MODEL_KEY = "qwen25_32b"  # the registry's entry for Qwen/Qwen2.5-32B-Instruct, on the volume since 5 Nov 2026
 GPU, CPU, MEM_MB = "H200", 8.0, 98304
-CACHE = "/cache"
+CACHE, RUNS = "/cache", "/runs"
 START_S = 120.0
-GPU_CAP = 35.0  # the GPU's share of the step's $60, in dollars
+GPU_CAP = 35.0 if STEP == "s1" else 12.0  # the test's GPU share: of step 1's $60; of step 2's $200 (its training has its own, modal_msm2.TRAIN_CAP)
 CPU_FLAT = 0.02  # booked for each CPU call (a minute of one core costs far less)
-EST_S = {"floor": 1800.0, "arms": 6000.0}  # a bound on one generate container's seconds, by job name
+EST_S = {"floor": 1800.0, "arms": 6000.0 if STEP == "s1" else 4500.0}  # a bound on one generate container's seconds, by job name (step 1's arms took 1,731 s)
 
 cache = modal.Volume.from_name("anatta-hf-cache")
+runs = modal.Volume.from_name("anatta-runs")
 app = modal.App(APP_NAME)
 
 
@@ -141,7 +143,7 @@ def verdict(rows: list) -> dict:
     return {"rows": out, "versions": _versions()}
 
 
-@app.function(image=gen_image(), gpu=GPU, cpu=CPU, memory=MEM_MB, volumes={CACHE: cache.read_only()}, timeout=3 * 3600)
+@app.function(image=gen_image(), gpu=GPU, cpu=CPU, memory=MEM_MB, volumes={CACHE: cache.read_only(), RUNS: runs.read_only()}, timeout=3 * 3600)
 def generate(job: dict) -> dict:
     """One job: {"name", "arms": [{"name", "repo", "ks": [..]}], "prompts": [{"id", "system", "user"}], "seeds":
     {id: {k: seed}}, "temperature", "max_tokens", "sampling"}. Each arm's adapter is served on the one base model,
@@ -165,10 +167,15 @@ def generate(job: dict) -> dict:
     arms = {}
     for arm in job["arms"]:
         t1 = time.time()
-        hits = sorted(glob.glob(f"{CACHE}/hf/hub/models--{arm['repo'].replace('/', '--')}/snapshots/*"))
-        if len(hits) != 1:
-            raise RuntimeError(f"{arm['repo']}: {len(hits)} snapshots on the volume, expected one")
-        folder, tok = hits[0], AutoTokenizer.from_pretrained(hits[0])
+        if arm.get("path"):  # an adapter trained here (step 2), on the runs volume: the base model's tokenizer
+            folder, tok = arm["path"], base_tok
+            if not glob.glob(f"{folder}/adapter_model.safetensors"):
+                raise RuntimeError(f"{folder}: no adapter there")
+        else:
+            hits = sorted(glob.glob(f"{CACHE}/hf/hub/models--{arm['repo'].replace('/', '--')}/snapshots/*"))
+            if len(hits) != 1:
+                raise RuntimeError(f"{arm['repo']}: {len(hits)} snapshots on the volume, expected one")
+            folder, tok = hits[0], AutoTokenizer.from_pretrained(hits[0])
         reqs = [{"rid": f"{arm['name']}|{p['id']}|{k}", "max_tokens": int(job["max_tokens"]), "adapter": folder,
                  "messages": [{"role": "system", "content": p["system"]}, {"role": "user", "content": p["user"]}],
                  "seed": int(job["seeds"][p["id"]][str(k)]), **samp}
@@ -182,7 +189,7 @@ def generate(job: dict) -> dict:
         finally:
             eng.tok = base_tok
         arms[arm["name"]] = {
-            "repo": arm["repo"], "folder": folder, "template_same_as_base": bool(same), "seconds": round(time.time() - t1, 1),
+            "repo": arm.get("repo"), "folder": folder, "template_same_as_base": bool(same), "seconds": round(time.time() - t1, 1),
             "sampling": res[0]["sampling"], "n_prompt_first": res[0]["n_prompt"],
             "rows": {r["rid"]: {"text": r["text"], "finish_reason": r["finish_reason"], "n_out": r["n_out"],
                                 "n_prompt": r["n_prompt"], "max_tokens": r["max_tokens"]} for r in res}}
@@ -274,7 +281,8 @@ def main(stage: str, name: str = ""):
         if dest.exists():
             raise SystemExit(f"{dest.name} is on disk; nothing to do")
         job = _read(out / f"{name}.job.json")
-        if name != "floor" and not _read(out / "floor.json").get("passed"):
+        floor = out.parent / "attractor-msm-s1" / "floor.json"  # step 2 stands on step 1's floor: the same test, model and seeds
+        if name != "floor" and not _read(floor).get("passed"):
             raise SystemExit("no passed floor.json: floors first, no arm is asked")
         bound = usd(EST_S[name] + START_S)
         if not g.reserve(bound):

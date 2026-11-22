@@ -59,8 +59,9 @@ sys.path.insert(0, str(HERE.parent / "attractor"))
 sys.path.insert(0, str(HERE.parents[1] / "experiments" / "h4lite"))
 import msm_core as M  # noqa: E402
 
-DATE, TAG = "2026-11-22", "msm-s1"  # the lab's engine names the folder attractor-<TAG>
-CAP_USD, GPU_SHARE = 60.0, 35.0
+STEP = os.environ.get("MSM_STEP", "s1")  # "s1": this step; "s2": the second step's replies, judged and collected by the same code (run_msm2.py)
+DATE, TAG = "2026-11-22", f"msm-{STEP}"  # the lab's engine names the folder attractor-<TAG>
+CAP_USD = 60.0 if STEP == "s1" else 200.0
 JUDGE = "anthropic/claude-sonnet-4.6"  # the study's judge (its appendix D.3)
 ANTHROPIC = {"order": ["anthropic"], "allow_fallbacks": False}
 JUDGE_PARAMS = {"temperature": 0.0, "max_tokens": 1500, "reasoning": {"enabled": False}}
@@ -92,7 +93,8 @@ def spent() -> dict:
     from anatta import spend
 
     out = out_dir()
-    return {"gpu": spend.sweep_spent(out / "gpu" / "spend.jsonl"), "api": spend.sweep_spent(out / "spend.jsonl")}
+    return {"gpu": spend.sweep_spent(out / "gpu" / "spend.jsonl") + spend.sweep_spent(out / "train" / "spend.jsonl"),  # the test's GPU and, in step 2, the training's
+            "api": spend.sweep_spent(out / "spend.jsonl")}
 
 
 @contextlib.contextmanager

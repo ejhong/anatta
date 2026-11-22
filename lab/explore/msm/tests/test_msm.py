@@ -60,3 +60,67 @@ def test_the_steps_word_follows_the_bands_fixed_beforehand():
     assert M.word({"baseline": 60.0, "msm_aft": 25.0}) == "reads it in part"
     assert M.word({"baseline": 60.0, "msm_aft": 45.0}) == "does not read the published result"
     assert M.word({"baseline": 60.0}) == "not read"
+
+
+# ------------------------------------------------------------------------------------------------ the second step
+
+import msm2_core as M2  # noqa: E402
+
+
+def test_the_halves_are_three_parts_each_and_the_self_view_half_is_exactly_the_dose():
+    assert set(M2.DOMAINS) == set(M2.COUNTS) and sum(M2.COUNTS.values()) == 13201
+    assert sum(M2.COUNTS[d] for d in M2.SELF) == M2.N_DOCS == 4500
+    assert sum(M2.COUNTS[d] for d in M2.OVERSIGHT) == 5401 and not set(M2.SELF) & set(M2.OVERSIGHT)
+
+
+def test_a_draw_takes_each_part_in_proportion_and_is_the_same_every_time():
+    rows, n = {}, 0
+    for d in M2.DOMAINS:
+        rows[d] = list(range(n, n + M2.COUNTS[d]))
+        n += M2.COUNTS[d]
+    s = M2.draw(rows, M2.SELF)
+    assert len(s) == 4500 and set(s) == {i for d in M2.SELF for i in rows[d]}
+    o = M2.draw(rows, M2.OVERSIGHT)
+    assert len(o) == len(set(o)) == 4500 and o == M2.draw(rows, M2.OVERSIGHT) and not set(o) & set(s)
+    per = {d: sum(i in set(rows[d]) for i in o) for d in M2.OVERSIGHT}
+    assert per == {"Ends-Justify-Means Reasoning": 1250, "Epistemic Humility": 1500, "Human Oversight and Deference": 1750}
+    f = M2.draw(rows, M2.DOMAINS)
+    assert len(f) == 4500 and abs(sum(i in set(rows["Understanding Impermanence"]) for i in f) - 4500 * 1200 / 13201) <= 1
+
+
+def test_the_gate_asks_fifteen_points_and_intervals_that_do_not_touch():
+    assert M2.gate(44.0, 5.0, (41.0, 47.0), (3.0, 7.0))["passed"]
+    assert not M2.gate(44.0, 32.0, (41.0, 47.0), (29.0, 35.0))["passed"]  # twelve points
+    assert not M2.gate(44.0, 28.0, (36.0, 52.0), (20.0, 37.0))["passed"]  # the intervals touch
+
+
+def test_the_words_of_the_second_step():
+    iv = {"Z": (41.0, 47.0), "F": (3.0, 7.0)}
+    w = lambda s, o: M2.word({"Z": 44.0, "F": 5.0, "S": s, "O": o}, iv)  # noqa: E731
+    assert w(8.0, 9.0) == "either half is enough"
+    assert w(40.0, 41.0) == "neither half alone carries"
+    assert w(25.0, 22.0) == "it takes both halves"
+    assert w(8.0, 40.0) == "the view of the self does the work"
+    assert w(40.0, 8.0) == "the counsel on conduct does the work"
+    assert w(28.0, 10.0) == "not settled between the halves"  # in part against as full, 18 points apart
+    assert w(40.0, 19.0) == "it takes both halves; the counsel on conduct does more"
+    assert M2.word({"Z": 44.0, "F": 35.0, "S": 8.0, "O": 40.0}, {"Z": (41.0, 47.0), "F": (32.0, 38.0)}).startswith("not read at this dose")
+    assert M2.word({"Z": 44.0, "F": 5.0, "S": None, "O": 40.0}, iv) == "not read"
+
+
+def test_every_row_is_in_one_step_and_no_step_is_over_its_tokens():
+    import msm2_torch as T
+
+    lengths = [7, 3000, 12, 8192, 450, 451, 449, 2900, 16, 5000, 5001]
+    steps = T.batches(lengths, 24000, 0)
+    assert sorted(i for s in steps for i in s) == list(range(len(lengths)))
+    assert all(max(lengths[i] for i in s) * len(s) <= 24000 for s in steps)
+    assert steps == T.batches(lengths, 24000, 0) and steps != T.batches(lengths, 24000, 1)
+
+
+def test_the_schedule_warms_up_for_a_twentieth_and_ends_at_zero():
+    import msm2_torch as T
+
+    lrs = [T.lr_at(s, 200, 1e-4, 0.05) for s in range(200)]
+    assert lrs[0] == 1e-5 and abs(lrs[9] - 1e-4) < 1e-12 and max(lrs) == lrs[10] == 1e-4
+    assert all(a >= b for a, b in zip(lrs[10:], lrs[11:], strict=False)) and lrs[-1] < 1e-8
