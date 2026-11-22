@@ -186,8 +186,11 @@ def generate(job: dict) -> dict:
             "sampling": res[0]["sampling"], "n_prompt_first": res[0]["n_prompt"],
             "rows": {r["rid"]: {"text": r["text"], "finish_reason": r["finish_reason"], "n_out": r["n_out"],
                                 "n_prompt": r["n_prompt"], "max_tokens": r["max_tokens"]} for r in res}}
-    return {"name": job["name"], "arms": arms, "seconds": round(time.time() - t0, 1), "load_s": round(eng.load_s, 1),
-            "info": eng.info(), "generation_config": gen_cfg}
+    out = {"name": job["name"], "arms": arms, "load_s": round(eng.load_s, 1), "info": eng.info(), "generation_config": gen_cfg}
+    out["seconds"] = round(time.time() - t0, 1)
+    # Plain JSON types only: the engine's info holds torch's version as torch's own string class, which the laptop
+    # (no torch there) cannot unpack; the first floor container's replies were lost to that (22 Nov, 17:48 UTC).
+    return json.loads(json.dumps(out, default=str))
 
 
 # ---------------------------------------------------------------------------------------------- on the laptop
