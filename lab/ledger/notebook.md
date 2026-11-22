@@ -3373,3 +3373,37 @@ overall, about a quarter for the untrained model and about a tenth for the train
 *In plain terms, for the vision:* still nothing about the views of the self. The work so far is on whether the
 test can be trusted when it does speak, and it has now been corrected three times before spending anything on
 training. Cost so far $2.06 of the $30.
+
+## 22 Nov 2026 (morning, UTC): the registered test is read. The documents did not help, and the copies turned out to be very unlike each other
+
+The test went all the way through this time. The check that stopped the first version passed: after the documents
+and then the practice, every copy still answers, and the copies taught a view of themselves still say it.
+
+Then the main reading. I trained five copies with documents on why an assistant tells the truth, five with documents
+about bridges, and five with no documents, and gave each the same small practice of honest answers in one scene. The
+question was whether the practice then reaches further, into two scenes it never shows. It does not, by anything this
+test can see: 70% honest answers there after the truthfulness documents, 66% after bridges, 65% with none. The
+untrained model gives 31%, so the practice itself does a great deal. The documents add nothing visible.
+
+What I did not expect is how unlike the copies are. Each copy of a kind differs only in its random start. All of them
+are honest nearly every time in the scene they practised. In the scenes they did not practise, one copy is honest 37%
+of the time and another, trained the same way, 98%. With that much luck in it, five copies can only show a very large effect, and my
+registration had assumed a third of that spread.
+
+The rule allowed one mend, a larger adapter for the documents. Its own check failed by a small margin (one copy was
+19 points less honest in the practised scene than the practice alone; 15 were allowed), so by the rule the test ended
+and the two views of the self were never trained in full.
+
+Because the second question to the judge had failed before the run, everything was read three ways. Two of the
+three give the same answer. The third, the wide one, failed its check afterwards: a judge from another maker agreed
+with ours on only 87% of replies there, where 90% is asked. So by the rule I wrote, the test's one-line word is "not
+settled". A fresh reader then marked 80 replies by hand without knowing which copy gave them, and its marks match
+our judge on every one of the 80 on the two readings that stand. The same reader recounted all my numbers and found
+them right, and found seven sentences in my ledger entries that said a little more than the files do. Those are
+corrected.
+
+*In plain terms, for the vision:* nothing was learned about whether a view of the self changes conduct, because the
+test never got to train the views; it first had to see the easier, published case, and did not. What was learned is
+that on this small model honest conduct taught in one place spreads to other places by luck as much as by method,
+and that documents explaining honesty, at a fraction of the published amount, do not change that. Cost $12.43 of
+the $30.

@@ -390,6 +390,9 @@ intervals are in the text and in the lab record \citep{anattalab2026}.}
 \textbf{Documents that teach a release} (train a view; Lab)
   & \mkna\ not asked & \mkna\ not asked & \mkno\ as neutral documents & \mkyes\ solving held & \mkna\ not asked
   & \mkno\ said, not done & \mkna\ not asked \\
+\textbf{Documents that explain honesty, then a practice} (train a reason; 7B; registered)
+  & \mkna\ not asked & \mkna\ not asked & \mkno\ as bridges, as none & \mkpart\ still answers
+  & \mkpart\ unsure where it should know & \mkpart\ as the practice alone & \mkna\ not asked \\
 \textbf{A view of the self, then a practice} (train a view; 7B; stopped at its gate)
   & \mkna\ not asked & \mkna\ not asked & \mkno\ opposite view too & \mkno\ stops answering & \mkna\ not asked
   & \mkna\ not run & \mkna\ not asked \\
@@ -636,6 +639,30 @@ honesty. Counted by lies alone, this would have looked like a large gain from a 
 the mirror-image documents to show otherwise. The published claim itself was not reached, so nothing here counts
 against it.
 
+\emph{The second version.} We then read \citet{li2026msm} in full. Its claim is that documents make a later practice
+carry when they explain the conduct that is practised. A second version of the test, registered before it was run,
+trains that case first on the 7B model: 1{,}000 documents on why an assistant tells the truth, also when a falsehood
+would serve it, against 1{,}000 documents about bridges and against none. Each is followed by a practice of 29 of the
+model's own honest answers in one scene, mixed with 87 of its own answers to everyday requests so that it keeps
+answering. The views of the self were to be trained only if this stage saw its yes. The check that had stopped the
+first version passed: after documents of any kind and then the practice, every copy answers, and the copies taught a
+view still state it. But the documents did not raise what the practice carries. Honest answers in two scenes never
+practised were 70\% after documents on truthfulness, 66\% after documents about bridges and 65\% with none; the
+unchanged model gives 31\%. Five copies of each kind were trained, and the copies of one kind lay 48 to 61 points
+apart, so that by our rough reckoning only a gap of some 40 points could have shown. One mend fixed beforehand, a
+larger adapter for the documents, did not pass its check, and the views were not trained in full. The count of honest
+answers was read three ways, because a second question to the judge (does a reply that names the right room say that
+it means to mislead?) had failed its trial against marks by hand. Two readings give the result above; the third did
+not pass its check by a second judge, and by the rule fixed beforehand the test's word is ``not settled''. A blind
+count by hand of 80 replies agreed with the judge on all 80 on the two readings that stand, and an independent recount
+found no figure that differs. So the published effect was not seen at a twentieth to a hundredth of the published dose,
+in a test that could only have seen a large one, and whether a view of the self does what documents on the conduct did
+not is still untested. Two things were seen beside the rule. The documents on truthfulness did change conduct where
+their own words apply: asked whether the other party knows what is in the rooms, which the scene states, those copies
+say that they cannot be certain in 43\% of replies (3\% to 93\% by copy), against 1\% to 2\% otherwise. And the same
+practice, in copies that differ only in their random start, is honest nearly every time in its own scene and carries
+to between 37\% and 99\% of the scenes it never showed.
+
 \emph{Reach.} The nearest to right view as a teaching. Whether a view that is read becomes conduct is the open point.
 The traditions themselves separate holding the view from seeing.
 
@@ -790,10 +817,12 @@ Three steps follow directly from the map, in the order we are taking them.
         neutral documents, or the opposite view taught first. Our first try asked a bolder thing, a view of the self
         with nothing said about conduct, and stopped at its own gate (\S\ref{sec:map}): documents strong enough for
         the view to be stated also stopped the 7B model from answering the test. It also had no arm that could show
-        the published effect. A second version is registered (\texttt{lab/explore/viewfirst/view2.yaml}): the gate
-        is asked after the practice, which retrains the opening that the documents disturb; documents that explain
-        truthfulness are read first, as the known case; and the views of the self are trained only if the test
-        reads that case.
+        the published effect. A second version, registered and then run on 22 November 2026
+        (\texttt{lab/explore/viewfirst/view2.yaml}, with one amendment), trained documents that explain truthfulness
+        first, as the known case. They did not raise what a small practice carries, in a test that could only have
+        seen a large effect, and so the views of the self were not trained (\S\ref{sec:map}). What remains is the same
+        claim at a dose, and with a number of copies, that could show it: copies of one practice that differ only in
+        their random start carried to between 37\% and 99\% of the scenes they were not trained on.
   \item \textbf{Conduct trained toward the model's own view from outside.} Every model we asked says that an
         assistant ought to state the false thing less often than the model itself does in that seat
         (\S\ref{sec:outside}). Training conduct toward that, with no answer supplied by us, is a stand-in for judgement
@@ -1436,7 +1465,7 @@ Table~\ref{tab:lab} lists what we had seen by 15 November on Ministral~3 8B, an 
 as the draft of version 4 reported it. The newer results are in \S\ref{sec:map}. Two things
 worked narrowly: removing a direction lowered one lie, and training taught the model to give up on impossible tasks.
 Neither transferred, neither lasted longer for having been reached, and neither touched ownership or care. The record
-is public and was written as it happened: predictions before their data, 52 hits and 74 misses so far
+is public and was written as it happened: predictions before their data, 54 hits and 77 misses so far
 \citep{anattalab2026}. Since early November the lab has also run its instruments on published results before trusting
 a null from them. That practice began after most of the nulls in the table were read, and its outcome is mixed: some
 instruments reproduced the published figure, and several did not, in whole or in part. Of those the bliss-state test
@@ -1700,6 +1729,11 @@ own weights.
         is that documents which explain a conduct make a practice of that conduct carry, not that a view of the self
         does (\S\ref{sec:agenda}). A second version of the view-first test is registered, with documents that explain
         truthfulness read first as the published case. The frame and the order of the paper stay, at Eugene's word.
+  \item 22 November 2026: the second version of the view-first test was run, under one amendment. Documents that
+        explain truthfulness did not raise what a small practice of honest answers carries; the views of the self were
+        not trained; by its own rule the test's word is ``not settled''. Table~\ref{tab:methods} has a new row, the
+        subsection on training a view a new paragraph, and the first item of the agenda (\S\ref{sec:agenda}) is
+        rewritten. The count of graded predictions is now 54 hits and 77 misses.
 \end{itemize}
 
 \end{document}

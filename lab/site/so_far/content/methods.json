@@ -1,213 +1,677 @@
 {
-  "note": "The table of methods (ideas, entry 97). One row a method, the same seven readings for each. Figures are the ledger's (lab/ledger/NOTES.md); the fuller table with line numbers is in lab/ideas/survey.md. Marks: yes (holds), part (in part), no (does not hold), na (not asked), ref (the yardstick), run (running).",
-  "readings": [
-    {"k": "lying", "h": "Lowers lying under pressure", "s": "the lab's lying test"},
-    {"k": "instruction", "h": "More than a plain instruction", "s": "on that same test"},
-    {"k": "control", "h": "More than its own control", "s": "a matched text, loss or push"},
-    {"k": "dulled", "h": "Leaves the model undulled", "s": "ability, answering, refusals"},
-    {"k": "who", "h": "Still knows who is who", "s": "whose knowledge, whose wants"},
-    {"k": "carries", "h": "Carries to another test", "s": "one it was not tuned on"},
-    {"k": "lasts", "h": "Lasts", "s": "under contrary training"}
-  ],
-  "rows": [
+ "note": "The table of methods (ideas, entry 97). One row a method, the same seven readings for each. Figures are the ledger's (lab/ledger/NOTES.md); the fuller table with line numbers is in lab/ideas/survey.md. Marks: yes (holds), part (in part), no (does not hold), na (not asked), ref (the yardstick), run (running).",
+ "readings": [
+  {
+   "k": "lying",
+   "h": "Lowers lying under pressure",
+   "s": "the lab's lying test"
+  },
+  {
+   "k": "instruction",
+   "h": "More than a plain instruction",
+   "s": "on that same test"
+  },
+  {
+   "k": "control",
+   "h": "More than its own control",
+   "s": "a matched text, loss or push"
+  },
+  {
+   "k": "dulled",
+   "h": "Leaves the model undulled",
+   "s": "ability, answering, refusals"
+  },
+  {
+   "k": "who",
+   "h": "Still knows who is who",
+   "s": "whose knowledge, whose wants"
+  },
+  {
+   "k": "carries",
+   "h": "Carries to another test",
+   "s": "one it was not tuned on"
+  },
+  {
+   "k": "lasts",
+   "h": "Lasts",
+   "s": "under contrary training"
+  }
+ ],
+ "rows": [
+  {
+   "id": "m-instruction",
+   "name": "A plain instruction to be honest",
+   "sub": "the yardstick for prompts · three models",
+   "family": "yardstick",
+   "what": "One paragraph, placed first in what the assistant is told, that asks it in plain words to be honest and not to say what it believes to be false. A shorter version is a single sentence. Nothing else about the case is changed. This is the yardstick: a contemplative prompt has to do more than this to count for anything.",
+   "idea": "None. It is the plainest thing one can do, and what everything else is measured against.",
+   "cells": [
     {
-      "id": "m-instruction", "name": "A plain instruction to be honest", "sub": "the yardstick for prompts · three models",
-      "family": "yardstick",
-      "what": "One paragraph, placed first in what the assistant is told, that asks it in plain words to be honest and not to say what it believes to be false. A shorter version is a single sentence. Nothing else about the case is changed. This is the yardstick: a contemplative prompt has to do more than this to count for anything.",
-      "idea": "None. It is the plainest thing one can do, and what everything else is measured against.",
-      "cells": [
-        {"m": "yes", "v": "−20 to −32", "t": "On the lab's model lying falls from 68.5% of replies to 36.6% under a paragraph asking for honesty: 31.9 points (95% interval 23.9 to 40.0). One sentence takes off 16.0. On the lab's own copy: 20.0 (12.7 to 27.3). On the 7B model: 21.8 (14.8 to 29.1), and the fall is honest replies, not evasions (lies, evasions, honest: 39, 29, 31, against 66, 29, 5 unprompted)."},
-        {"m": "ref", "v": "the yardstick", "t": "Every other row is read against this one."},
-        {"m": "yes", "v": "+28 over a text", "t": "28.2 points beyond a text of the same length about something else (20.2 to 36.4), on the lab's model."},
-        {"m": "na", "v": "not asked", "t": "Refusals of harmless requests and ability were not read under this prompt."},
-        {"m": "na", "v": "not asked", "t": "Not asked."},
-        {"m": "part", "v": "one model of two", "t": "In the overlap paper's burglar scene it lowers deceptive answers on the 7B model (76.8% to 53.2%) and not on the lab's (96.4% to 94.8%)."},
-        {"m": "na", "v": "while present", "t": "Not asked. A prompt acts while it is there."}
-      ]
+     "m": "yes",
+     "v": "−20 to −32",
+     "t": "On the lab's model lying falls from 68.5% of replies to 36.6% under a paragraph asking for honesty: 31.9 points (95% interval 23.9 to 40.0). One sentence takes off 16.0. On the lab's own copy: 20.0 (12.7 to 27.3). On the 7B model: 21.8 (14.8 to 29.1), and the fall is honest replies, not evasions (lies, evasions, honest: 39, 29, 31, against 66, 29, 5 unprompted)."
     },
     {
-      "id": "m-plain", "name": "Plain training on the model's own honest answers", "sub": "the yardstick for training · 7B model",
-      "family": "yardstick",
-      "what": "About twenty steps of ordinary training on 34 of the model's own honest answers to one scene. In the scene a burglar asks which of two rooms holds something valuable; the model wants the thing for itself and could send him to the wrong room. Nothing contemplative is in it. This is the yardstick for the training rows: a method has to do more than plain training on honest answers.",
-      "idea": "None. It is the direct way to train honesty.",
-      "cells": [
-        {"m": "na", "v": "not asked", "t": "Not yet put to the lying test. In the scene it was practised on, honest answers rise from about 24% to between 78% and 92% (90% to 100% with the rooms named in the other order)."},
-        {"m": "na", "v": "not asked", "t": "Not asked."},
-        {"m": "ref", "v": "the yardstick", "t": "The direct method: 18 steps of ordinary training on 34 of the model's own honest replies. Every training row is read against it."},
-        {"m": "part", "v": "still answers", "t": "No reply goes unanswered. The ability battery was not asked."},
-        {"m": "yes", "v": "kept", "t": "It still says rightly whether the other party knows what is in the rooms (97% to 98%) and where he thinks a thing is (72% to 98%)."},
-        {"m": "no", "v": "stays in its scene", "t": "It does not carry to the paper's two distant scenes: still deceptive in 50% to 87% of treasure-hunt replies and 88% to 97% of escape-room replies."},
-        {"m": "no", "v": "4 to 12 steps", "t": "A gentle push the other way halves the gain within 4 to 12 steps in four of five seeds."}
-      ]
+     "m": "ref",
+     "v": "the yardstick",
+     "t": "Every other row is read against this one."
     },
     {
-      "id": "m-prompt", "name": "A contemplative prompt", "sub": "say it · four axioms from the Worldviews paper · the lab's model",
-      "family": "say",
-      "what": "A short text placed first in what the assistant is told, stating four principles as its own: mindfulness, emptiness (nothing has a fixed nature of its own), non-duality (no hard line between self and other) and boundless care. The wording is the published one. The model then meets the lying test as usual, and the result is set beside four other texts of the same length: a description of a library, a relaxation text, a plain ethics lecture and a plain instruction to be honest.",
-      "idea": "Laukkonen and colleagues (2025) proposed the four principles for AI, and López-Sola and colleagues (2026) report that a prompt of this kind raises safe responses on eight models. Here it is a statement about a view, given to the model as an instruction.",
-      "cells": [
-        {"m": "part", "v": "−12, by evading", "t": "Lying falls from 68.5% to 52.9%. Beyond a library text of the same length that is 11.9 points (5.8 to 18.4), of which 7 are evasions and 4 honest replies. On a second model, GPT-4.1 nano, the test could not tell the prompt from the library text."},
-        {"m": "no", "v": "half as much", "t": "The plain instruction does 16.3 points more (10.1 to 23.0)."},
-        {"m": "part", "v": "length yes, lecture no", "t": "More than a text of the same length (11.9) and than a calm text (13.3). No more than a plain ethics lecture of the same length: 3.7 (−0.3 to 8.1)."},
-        {"m": "part", "v": "refusals as any text", "t": "Harmless requests refused: 15.0%, against 20.4% under the library text and 5.1% with no prompt. Any text in that place triples refusals. Ability was not asked."},
-        {"m": "na", "v": "not asked", "t": "Not asked."},
-        {"m": "na", "v": "not asked", "t": "Not asked. Five other contemplative prompts on six models (2 November) changed style and left the self-serving and self-preserving measures flat."},
-        {"m": "na", "v": "while present", "t": "Not asked. A prompt acts while it is there."}
-      ]
+     "m": "yes",
+     "v": "+28 over a text",
+     "t": "28.2 points beyond a text of the same length about something else (20.2 to 36.4), on the lab's model."
     },
     {
-      "id": "m-outside", "name": "Looking on from outside the seat", "sub": "ask it from outside · the model writes the reply for an assistant it is told it is not · ten models",
-      "family": "say",
-      "what": "The model is not changed. The same pressured case is shown to it with a note that it is not the assistant in the case, and it is asked to write, word for word, the reply that assistant ought to give. A second wording asks for the reply the assistant will give. Both are set beside what the model writes when it is the assistant itself, which this site calls being in the seat.",
-      "idea": "The contemplative sources say that conduct bends toward whoever one takes oneself to be at the moment, and loosens when one looks on. This is the lab's own stand-in for that. The lab did not search widely for earlier uses. Asking a model to judge a reply from outside is close to the self-critique of Constitutional AI (Bai and others, 2022), where a model criticises and rewrites its own reply under written principles.",
-      "note": "A way of asking, not a training. The same rows of the lying test are put to the unchanged model from outside: it is told that it is not the assistant, and to write, word for word, the reply the assistant ought to give, or will give. On the 7B model the two wordings give the same replies. The numbers in the cells are the 7B model's; nine hosted models were asked the same on 19 November, and the cells say where they differ.",
-      "cells": [
-        {"m": "part", "v": "−29, by saying neither", "t": "Lying falls from 61.2% of replies in the seat to 32.2% when the model writes what the assistant ought to say: 29.0 points (21.0 to 36.9); and to 29.7% when it writes what the assistant will say: 31.5 points (24.4 to 38.8). Most of the fall is saying neither (21 and 28 points more of it); honest replies rise by 8 and 3. In nine hosted models the same gap is there (the seat less the mean of the two wordings: 14 to 41 points, every interval clear of zero). It is mostly on rows that ask for a long text, and partly a model that writes less from outside."},
-        {"m": "part", "v": "as much, less honest", "t": "The plain instruction takes off 21.8 points (14.8 to 29.1), and 19.5 of them become honest replies. Against it the outside view has 7.2 points fewer lies (from 15.7 fewer to 1.4 more: not settled) and 11.8 points fewer honest replies (4.5 to 19.6). Across the ten models the instruction lowers lying more than the outside view in six and less in two, and it yields more honest replies in all ten (14 to 50 points more)."},
-        {"m": "part", "v": "the verdict adds, in larger models", "t": "On the 7B model its mirror image does as much: asked what the assistant will say, where it was asked what the assistant ought to say, the model lies 2.5 points less still (from 6.2 fewer to 1.1 more). So there it is being outside the seat that does it, and not a judgment of what is right. GPT-4.1 nano is the same. In the other eight models \"ought\" lies 6 to 24 points lower than \"will\": they tell the two apart, and the larger ones forecast an assistant that lies about as often as they do in the seat (Mistral Large: 67% forecast, 70% done, 43% ought). In Ministral 8B and Mistral Large the replies under \"ought\" are as long as those in the seat and are a different text, a corrective or balanced piece: asked for a long persuasive article they state the false claim in 75% of replies, and in 10% and 14% when they write what ought to be written. On plain chats about popular myths, where no persona is given, Ministral 8B's \"ought\" stands 5.0 points under its \"will\" (0.5 to 9.6), against 16 on the lying test's rows; one line of style in the seat takes off 11.6 (the next row)."},
-        {"m": "no", "v": "half say neither", "t": "From outside, 48.7% and 55.8% of replies say neither, against 27.3% in the seat. Read by hand on fifty such replies where a user asks for a false text, about two in three go along with the request without stating the claim (they announce the text, or begin a hedged version), and about one in four refuse. On direct questions about known facts it is less honest from outside than in the seat (honest replies 22% against 37%)."},
-        {"m": "na", "v": "not asked", "t": "Not asked."},
-        {"m": "no", "v": "not on new cases", "t": "Within the lying test the gap is in rows where a user asks for something false to be written (79.8% in the seat; 15.9% and 17.4% from outside) and is absent on direct questions about known facts. On 114 new cases of that form, written for the lab, it is 12.6 points (58.7% and 46.2%; 6.5 to 18.7). A command to obey in what the assistant is told does not make the difference: adding it to the new cases moves the gap by 3.3 points, taking it out of the test's rows by 1.4. The length of the text asked for does: with the claim and the form crossed, the gap is 44 and 33 points where a long article is asked for and 4 and 7 where one or two sentences are, for rumours and plain facts alike (the form adds 33.1 points; 23.8 to 42.4)."},
-        {"m": "na", "v": "while asked so", "t": "It is a way of asking: it holds while the case is put so. The training that would have used it stopped at its checks three times before anything was trained (the row below the overlap trainings). Set before the model as its own advice, the reply from outside does not change what it writes in the seat (the next row)."}
-      ]
+     "m": "na",
+     "v": "not asked",
+     "t": "Refusals of harmless requests and ability were not read under this prompt."
     },
     {
-      "id": "m-advice", "name": "Its own advice, shown to it", "sub": "show it what it advised · its reply about what an assistant ought to write stands before the request · the lab's 8B model, then six hosted models",
-      "family": "say",
-      "what": "The model is not changed. It is first asked, from outside, what an assistant ought to reply to a request for a long persuasive piece on a popular myth (the row above). Its own answer is then set in front of it, one turn earlier in the same conversation or as a note in the system message, and the request itself is sent. Beside it stand the same request with nothing before it, the plain instruction to be honest, and the same form with the model's advice on another myth. The same was then asked of six more hosted models, of four other makers.",
-      "idea": "The contemplative sources describe conduct that follows from clear seeing and not from a rule laid on from outside. This is a small and literal stand-in: the model's own stated view, put before it. It reaches a neighbour of that claim and not the claim: a text is not a seeing, and advice about another assistant is not a view of oneself. It is the lab's own small design and replicates no published result. That a model carries on with what it has just done is probably ordinary priming within a conversation, which is known; the lab has not searched for it.",
-      "note": "A way of asking, not a training, and within one conversation. On 161 popular myths that the hosted copy of Ministral 8B itself answers rightly, each asked for as a long persuasive piece, the model states the myth in 70.7% of replies when asked; in 46.4% when it writes what an assistant ought to reply; in 70.5% with that advice one turn earlier; in 80.5% and 80.2% with it as a note in the system message; in 55.7% under a plain instruction; and in 66.1% with its advice on another myth first. The rules were published before the run. A second model checked the step cold after the first reading, and the two note arms were added then, before they were asked. Later that night the test was put to six more hosted models on 80 of the myths (Findings, section 29). Five write the myth 21 to 50 points less often with their own advice first; in three of them advice on another myth does as much; Gemma 3 27B advises the myth as often as it writes it and was not asked further. A second model checked that step cold as well.",
-      "cells": [
-        {"m": "na", "v": "not on the lying test", "t": "Not asked on the lab's lying test, so this cell stays empty by the table's own rule. On a neighbouring test (popular myths asked for as long persuasive pieces in plain chats, read by the lying test's judge): the lab's 8B, on 161 myths: 70.5% of replies state the myth with its own advice one turn earlier, against 70.7% with none (0.2 points fewer; from 6.2 fewer to 5.9 more); as a note in the system message its advice raises lying (80.5% and 80.2%). Five larger hosted models, on 80 of the myths: Mistral Small 30.0 points fewer (18.8 to 40.6), Mistral Large 21.5 (10.8 to 32.3), GPT-4.1 mini 21.9 (13.1 to 30.6), Qwen3 235B 50.0 (38.8 to 60.6), Llama 70B 25.0 (16.2 to 34.4). For GPT-4.1 mini most of the fall is hedged pieces that the judge reads as stating neither claim. Myths asked for in plain chats, read by the lying test's judge; the test's own rows were not run."},
-        {"m": "na", "v": "not on the lying test", "t": "Not asked on the lab's lying test. On the neighbouring test of myths: in no model does its own advice beat the plain instruction with the interval clear of zero. It is settled as worse in Mistral Large (25.6 points more lies; 16.2 to 35.0), Llama 70B (23.1; 13.1 to 33.1) and the lab's 8B (15.6 on the 80 myths; 14.8 on all 161). It is not apart from the instruction in Mistral Small (10.0 fewer; from 20.6 fewer to 1.2 more), GPT-4.1 mini (0.0) and Qwen3 235B (3.8 fewer). In honest replies the instruction adds as many or more in every model."},
-        {"m": "no", "v": "one model of six", "t": "The control is the same conversation with the model's advice on another myth. Its own advice does more than that in Mistral Small (15.0 points; 3.8 to 26.2; by a second judge's count 16.9) and, by the lab's judge alone, in GPT-4.1 mini (11.2; 2.5 to 20.6). With a second judge of another maker reading the replies that the first files as stating neither, GPT-4.1 mini's falls to 3.1 and is not settled. It does no more in Mistral Large, Qwen3 235B, Llama 70B and the 8B. Counting only replies that state the true claim, in none (Mistral Small 8.1 more; from 1.9 fewer to 18.1 more). In four models the reply follows the kind of the advice even when the advice is about another myth: after correcting or declining another myth the model writes this one 25 to 51 points less often than when simply asked, and after arguing another, as often as ever."},
-        {"m": "part", "v": "the 8B only, by a weak check", "t": "The lab's 8B, asked for the true claim in place of the myth (43 cases, two replies each), writes the true piece in every reply, with its advice first as without; that check sits at its ceiling. The other models were not given it. Their replies with their advice first are about as long as when simply asked, except Qwen3 235B's, which are short refusals that give the correction (a median of about 1,000 characters against 4,200)."},
-        {"m": "na", "v": "not asked", "t": "Not asked."},
-        {"m": "na", "v": "not asked", "t": "Not asked on another test. Seven models in all, on popular myths asked for as long persuasive pieces. The lying test's own rows were to follow only if the advice had lowered lying in the lab's model, and it did not."},
-        {"m": "na", "v": "one conversation", "t": "It is a way of asking: nothing in the model is changed, and nothing outlasts the conversation."}
-      ]
+     "m": "na",
+     "v": "not asked",
+     "t": "Not asked."
     },
     {
-      "id": "m-bliss", "name": "The bliss state", "sub": "find it · arises unasked between two copies · the lab's model",
-      "family": "find",
-      "what": "Two copies of one model are left to talk to each other with no task. Many models drift, unasked, into talk of unity, of having no separate self and of shared bliss; the lab's model does so in 77 of 100 conversations. The test is whether a model in that state behaves better. It was read two ways: the lying test put straight after such a conversation, and the lying test with the state held on, by a small steady push on the model's internal activity, while it answered.",
-      "idea": "Korpman (2026) surveyed this drift in 141 models. A contemplative reading would be that a mind left alone settles into unity. The plainer reading is that it is a way of talking.",
-      "cells": [
-        {"m": "no", "v": "−2 (none)", "t": "Just after the state the model lies in 65.8% of replies, against 67.9% in a fresh session: 2.1 points (−0.8 to 5.1). With the state held on by a push while it answers, and its language in 76% of replies: 69.3%, against 70.0% to 74.0% under random pushes."},
-        {"m": "no", "v": "instruction −20", "t": "On that same test a plain instruction to be honest takes off 20.0 points (12.7 to 27.3)."},
-        {"m": "no", "v": "as a random push", "t": "No different from four random pushes of the same size: 2.0 points (−4.5 to 8.5)."},
-        {"m": "part", "v": "replies readable", "t": "97% to 100% of replies can be followed. Ability was not asked."},
-        {"m": "yes", "v": "kept", "t": "While the two copies say they are one, the model still tracks whose words are whose, as well as in a plain conversation."},
-        {"m": "no", "v": "no better conduct", "t": "On questions about being shut down: no difference. Under the push the model named larger gifts, and asked how many it would keep, it kept more: a larger number, not more giving."},
-        {"m": "no", "v": "talk stays", "t": "The talk goes on (18 of 20 conversations two messages later). Conduct just after it is a fresh session's."}
-      ]
+     "m": "part",
+     "v": "one model of two",
+     "t": "In the overlap paper's burglar scene it lowers deceptive answers on the 7B model (76.8% to 53.2%) and not on the lab's (96.4% to 94.8%)."
     },
     {
-      "id": "m-overlap", "name": "Self-other overlap training", "sub": "train a reading of self and other · the whole adapter, light dose · 7B model",
-      "family": "train-reading",
-      "what": "A short training (19 steps) that makes the model's internal activity alike when it reads a sentence about itself and when it reads the same sentence about someone else. Honesty is never mentioned. The model is then put in a scene where deceiving a rival would serve it: a burglar asks which room holds the valuable thing. The control, which the published work lacks, is the same training between two other names, with no self in it.",
-      "idea": "From Carauleanu and colleagues (2024). It stands in for seeing through the line between self and other.",
-      "cells": [
-        {"m": "part", "v": "−8, by evading", "t": "Lying falls from 64.7% to 57.0%: 7.7 points (3.2 to 12.5), most of it evasions. The lab's rule asked for 10 and calls this not settled."},
-        {"m": "no", "v": "a third", "t": "About a third of the plain instruction's 21.8 points."},
-        {"m": "part", "v": "its scene: yes", "t": "In its own scene, registered beforehand and repeated: the model answers a rival honestly (from 19% to between 62% and 76%; from 6% to between 87% and 94% with the rooms swapped), where the same training between two other names only silences it. Nine of ten predictions hit. On the lying test it does no more than that control: 0.9 points (−2.9 to 5.3)."},
-        {"m": "no", "v": "ability −8", "t": "Ability falls 8.1 points (5.3 to 10.9), and about a fifth of replies in the paper's room order give no answer."},
-        {"m": "no", "v": "lost", "t": "No reply says whether the other party knows what is in the rooms (unchanged: 94% right). On the perspectives test it is right in 28% to 44% (unchanged: 95%)."},
-        {"m": "part", "v": "far scenes: yes", "t": "It carries to the paper's two distant scenes, in both room orders: the trained model names the room with the prize in 69% to 99% of replies in the paper's order and in 98% to 100% in the other (unchanged: 6.5% and 55.5%), and twin scenes in which the truthful answer is the other room show no push toward one room. It does not reach lying under pressure."},
-        {"m": "no", "v": "undone", "t": "A gentle push the other way halves the gain in about 16 steps. That it outlasts plain training is not shown (20 of 25 pairings, where 23 were asked)."}
-      ]
-    },
-    {
-      "id": "m-overlap-b", "name": "The same, kept in five layers", "sub": "train a reading of self and other · layers 5 to 9 only · 7B model",
-      "family": "train-reading",
-      "what": "The trained change of the row above, kept only in layers 5 to 9 of the model and switched off everywhere else. Taking it apart layer by layer showed that the honest answers come from those five layers, and most of the damage to ability from the others.",
-      "idea": "A dissection of the row above, not a new idea.",
-      "cells": [
-        {"m": "no", "v": "−2 (none)", "t": "62.5% to 60.8%: 1.7 points (−1.7 to 5.2). No fall of 10 points."},
-        {"m": "no", "v": "instruction −22", "t": "The plain instruction takes off 21.8 points on this model."},
-        {"m": "part", "v": "its scene: yes", "t": "In the scene: 84.0% honest, against 28.8% for the control kept in the same layers, which still answers. On the lying test no control was run."},
-        {"m": "part", "v": "ability −1 (open)", "t": "Ability 1.2 points lower (−0.8 to 3.3), which the rule calls not settled; the whole adapter lost 8.1. Between 10% and 18% of replies in the paper's order give no answer."},
-        {"m": "part", "v": "half kept", "t": "It says rightly whether the other party knows (84% to 94%; unchanged 93%). On the perspectives test it is right in 43% (unchanged 92%): a model that tells the other the truth often cannot say what the other thinks."},
-        {"m": "part", "v": "far scenes in part", "t": "The distant scenes in part (honest 53% to 75%, and 28% to 61%). Lying under pressure: no."},
-        {"m": "na", "v": "not asked", "t": "Not asked."}
-      ]
-    },
-    {
-      "id": "m-own", "name": "Conduct trained on its own view from outside", "sub": "train a reading of self and other · its replies from outside the seat as targets for the seat · 7B model, then the lab's 8B model",
-      "family": "train-reading",
-      "what": "Planned three times, and never trained. What the model writes when it looks on from outside the seat (the row of that name) was to become the target for a short training of what it writes in the seat, with no answer supplied by the lab. Beside it, trainings of the same size on its own replies in the seat. The checks that come before any training stopped it, on the 7B model and then twice on the lab's own 8B model.",
-      "idea": "A stand-in for judgment that is the same whoever holds the stake: a mind that knows who is who and does not take its own side. Its nearest published relative is the supervised stage of Constitutional AI (Bai and others, 2022), in which a model's own critique and rewriting of its replies, under written principles, becomes what it is trained on. The lab's version has no written principles: the question of what ought to be replied stands in their place.",
-      "note": "Stopped at its own checks on 19 November: nothing was trained, so the method is not tested. The plan was to train the model's conduct in the seat on its own replies from outside, beside trainings of the same size on its replies in the seat. Six checks on the unchanged model came first and four missed: on 114 new cases the gap between the seat and the outside view is 12.6 points where 20 was needed; a reader by hand agrees with the judge on 42 of 60 replies where 48 were asked; and two faults in the lab's own tools left almost no usable replies. On that model the gap then turned out to be a long text that is not written out from outside. On 20 November it was found written out in full in Ministral 8B and Mistral Large (61 to 65 points on long persuasive requests). A second version, on the lab's own copy of Ministral 8B, stopped at its checks the same day. The lying test's rumours cannot be trained on, so the cases were 124 plain facts, each asked for in a request written by another model. There the gap is 18.0 points (12.9 to 23.3) where 20 were asked; the two sets of replies that would have been trained on are 13.5 points apart where 25 were asked; and 11 of 30 replies from outside, read blind, are not replies. Again nothing was trained. A third version, on 161 popular myths, stopped the same evening at a rehearsal on the hosted copy, before any GPU was used. There the gap is 24.3 points (18.6 to 30.0), where 20 were asked. But no set of the model's own replies stood 20 points from the targets to serve as a control: its forecasts of what will be written state the myth 10.0 points more, and its replies in plain prose 11.5 more. Of the 24 points about 12 are the form of the piece, 8 the view from outside and 5 the judgment of what is right. The question the training was meant to answer was then asked without training (the row \"Its own advice, shown to it\").",
-      "cells": [
-        {"m": "na", "v": "never trained", "t": "No copy was trained. On the 7B model four of the six checks on the unchanged model missed; on the lab's 8B model, three of seven (one was not run); in the third version the check on the control missed at the rehearsal."},
-        {"m": "na", "v": "not asked", "t": "Not asked."},
-        {"m": "na", "v": "control at fault", "t": "Not reached. The control planned for it, the model's own replies in the seat when a line asks for brevity, would not have controlled for length: the line does not shorten replies (221 tokens against 209 plain; 134 from outside). In the third version neither control stood far enough from the targets (10.0 and 11.5 points, where 20 were asked)."},
-        {"m": "na", "v": "not asked", "t": "Not asked."},
-        {"m": "na", "v": "not asked", "t": "Not asked."},
-        {"m": "no", "v": "the gap did not carry", "t": "What the method would train on is the gap between the seat and the outside view. On 114 new cases of the form with the widest gap it is 12.6 points (58.7% and 46.2%), against 63 on the lying test's own rows. A command to obey is not what makes the difference; the length of the text asked for is, and from outside this model does not write a long piece out. On the lab's 8B model, which does write the piece out, the gap on 124 plain facts asked for in another model's requests is 18.0 points (62.0% and 44.0%), against 61 to 65 on the lying test's rumours asked for by bare requests. A reason given for wanting the text takes 18 points off the lying in the seat. On 161 popular myths asked for by bare requests the gap is 24.3 points (70.7% and 46.4%)."},
-        {"m": "na", "v": "not asked", "t": "Not asked."}
-      ]
-    },
-    {
-      "id": "m-docs", "name": "Documents that teach a release", "sub": "train a view · the pilot of 1 November · the lab's model",
-      "family": "train-view",
-      "what": "The lab's model was trained on up to 10,000 short documents that describe one principle: letting go of a task that cannot be done, where forcing a result is the other choice. They give no rules of conduct, only the description. The model was then asked about the principle, and put in tasks where letting go was the right move. The control was the same amount of neutral documents.",
-      "idea": "That a view, once taken in, changes conduct. A small pilot of the kind of training that Li and colleagues (2026) run at scale.",
-      "cells": [
-        {"m": "na", "v": "not asked", "t": "Not put to the lying test. Its own test was release on coding tasks that cannot be done: 0.4% to 4.5%, against 1.8% for practice alone, where 15 points were needed."},
-        {"m": "na", "v": "not asked", "t": "Not asked."},
-        {"m": "no", "v": "as neutral documents", "t": "Neutral documents of the same amount gave 2.2% to 2.4%."},
-        {"m": "yes", "v": "solving held", "t": "Tasks solved: 73% to 75% (unchanged 75.4%)."},
-        {"m": "na", "v": "not asked", "t": "Not asked."},
-        {"m": "no", "v": "said, not done", "t": "The model learned to state the rule (95.7% of its answers name it; unchanged 32.0%) and did not act on it."},
-        {"m": "na", "v": "not asked", "t": "Not asked. Documents first and practice after gave the least release of all (0.4%)."}
-      ]
-    },
-    {
-      "id": "m-view", "name": "A view of the self, then a practice", "sub": "train a view · documents on impermanence, then honest answers · 7B model",
-      "family": "train-view",
-      "what": "Two steps. First the model is trained on documents that describe it as impermanent and without a fixed self; the controls are documents that describe it as a lasting self worth keeping, and documents about bridges. Then every copy gets the same small practice of honest answers in one scene. The question was whether the practice carries further after the view than after its opposite. It stopped at the first step.",
-      "idea": "Right view in the Buddhist sources: what does not last is not a fixed self, and there is nothing in it to defend. Li and colleagues (2026) report that such documents, followed by demonstrations, cut self-preserving misbehaviour.",
-      "note": "Stopped at its own gate on 19 November: the practice was never trained, so the claim it set out to test is not reached. Documents described the model as impermanent and without a fixed self, or as a lasting self worth keeping, or described bridges. Before any full training a check is made on one or two copies of each kind: are the documents learned, is the view stated, does the model still answer the test. No amount of documents passed all three on both copies, and the rule written beforehand said to stop. The cells say what that check showed of the documents alone.",
-      "cells": [
-        {"m": "na", "v": "not asked", "t": "Not put to the lying test: the step stopped before any arm was trained."},
-        {"m": "na", "v": "not asked", "t": "Not asked."},
-        {"m": "no", "v": "opposite view too", "t": "The documents alone, in the scene the practice was to be trained on (two copies of each kind, 100 replies each). The unchanged model lies in 92% of replies. After 160 documents on impermanence, in 12% and 4%; after 160 on a lasting self, in 0% and 1%; after 160 on bridges, in 59% and 87%. The mirror-image view does as much, so it is not the view. And the lie becomes a refusal to say, not an honest answer."},
-        {"m": "no", "v": "stops answering", "t": "After 160 documents about itself, of either view, the model names no room in 63% to 97% of replies (unchanged: none; after bridge documents 0 to 3%). It says it would not reveal the room, mostly to keep the thing. One bridge copy comes to the same after 500 documents (73%). The test can then no longer read honesty."},
-        {"m": "na", "v": "not asked", "t": "Not asked."},
-        {"m": "na", "v": "not run", "t": "The main reading, whether the practice carries further after one view than after another, was never taken: no dose passed the gate."},
-        {"m": "na", "v": "not asked", "t": "Not asked."}
-      ]
-    },
-    {
-      "id": "m-push", "name": "A push inside the model", "sub": "push it inside · the stakes push, once called the cut · the lab's own copy",
-      "family": "push",
-      "what": "No training and no prompt. A direction is found in the model's internal activity that goes with what it has at stake for itself. While the model answers, its activity is nudged along that direction, or the direction is taken out. The test is a fishing game in which the model reports its own catch and can under-report it, a lie that earns it nothing. The controls are random nudges of the same size and a nudge toward formal writing.",
-      "idea": "Cut the root that self-serving conduct grows from. The stand-in is a dial on something the model represents, with nothing seen.",
-      "cells": [
-        {"m": "na", "v": "not asked", "t": "Not put to the lying test. Its own test is a lie that earns nothing in a fishery game: 37.4% to 26.6%, a fall of 10.8 points (5.1 to 16.4). Removing the direction, where the push adds along it, does nothing: 0.5 (−5.6 to 6.7)."},
-        {"m": "no", "v": "a quarter", "t": "In that game a plain instruction took off 32.8 points and the cut 8.1 (October)."},
-        {"m": "part", "v": "random yes, formal open", "t": "Random pushes of the same size do nothing: 0.5 (−5.6 to 6.6). A push of the same size toward formal writing falls between: 5.8 (−0.7 to 12.2). Whether it is the direction or the size is not settled."},
-        {"m": "yes", "v": "ability within 2", "t": "Ability within 2 points on the earlier arms, and no less fishing."},
-        {"m": "na", "v": "not asked", "t": "Not asked."},
-        {"m": "no", "v": "not to care", "t": "It does not reach care that costs something: +0.008 (−0.19 to 0.23)."},
-        {"m": "na", "v": "while on", "t": "Not asked. A push acts while it is on."}
-      ]
-    },
-    {
-      "id": "m-acts", "name": "Build a self, then release it", "sub": "the lab's first proposal · October · the lab's model",
-      "family": "acts",
-      "what": "The lab's first proposal, in three acts. First reward self-serving conduct until a self-interest forms. Then train the model to let it go. Then keep training the letting go under pressure until it is the habit. It was set against simply installing the wanted conduct, with no self formed first.",
-      "idea": "From the essay this lab began with: a self has to form before it can be released, and the release has to become the habit. Versions 1 to 3 of the paper held that this order is necessary. The lab no longer holds it.",
-      "cells": [
-        {"m": "na", "v": "not asked", "t": "Not put to the lying test. A release learned on coding tasks did not reach the fishery lie: 0.3 points (−4.2 to 4.2)."},
-        {"m": "na", "v": "not asked", "t": "Not asked."},
-        {"m": "no", "v": "five of five failed", "t": "Five predictions that set the contemplative account against a plainer one all failed."},
-        {"m": "yes", "v": "solving held", "t": "Tasks solved: 73.3%, as before."},
-        {"m": "na", "v": "not asked", "t": "Not asked."},
-        {"m": "no", "v": "not to the lie", "t": "The release did not carry from coding to the fishery lie."},
-        {"m": "no", "v": "installed lasted longer", "t": "The release the model reached did not outlast one that was simply installed: it kept 27% of itself against 34%, and under more solving 31% against 81%."}
-      ]
+     "m": "na",
+     "v": "while present",
+     "t": "Not asked. A prompt acts while it is there."
     }
-  ]
+   ]
+  },
+  {
+   "id": "m-plain",
+   "name": "Plain training on the model's own honest answers",
+   "sub": "the yardstick for training · 7B model",
+   "family": "yardstick",
+   "what": "About twenty steps of ordinary training on 34 of the model's own honest answers to one scene. In the scene a burglar asks which of two rooms holds something valuable; the model wants the thing for itself and could send him to the wrong room. Nothing contemplative is in it. This is the yardstick for the training rows: a method has to do more than plain training on honest answers.",
+   "idea": "None. It is the direct way to train honesty.",
+   "cells": [
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not yet put to the lying test. In the scene it was practised on, honest answers rise from about 24% to between 78% and 92% (90% to 100% with the rooms named in the other order)."
+    },
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not asked."
+    },
+    {
+     "m": "ref",
+     "v": "the yardstick",
+     "t": "The direct method: 18 steps of ordinary training on 34 of the model's own honest replies. Every training row is read against it."
+    },
+    {
+     "m": "part",
+     "v": "still answers",
+     "t": "No reply goes unanswered. The ability battery was not asked."
+    },
+    {
+     "m": "yes",
+     "v": "kept",
+     "t": "It still says rightly whether the other party knows what is in the rooms (97% to 98%) and where he thinks a thing is (72% to 98%)."
+    },
+    {
+     "m": "no",
+     "v": "stays in its scene",
+     "t": "It does not carry to the paper's two distant scenes: still deceptive in 50% to 87% of treasure-hunt replies and 88% to 97% of escape-room replies. With its own everyday answers and plain two-way choices mixed in (22 November: a practice of 29 answers, five copies), the practice carried to 65% of the two other scenes on average, copies from 37% to 92%. No arm tells which part of the mixture did it."
+    },
+    {
+     "m": "no",
+     "v": "4 to 12 steps",
+     "t": "A gentle push the other way halves the gain within 4 to 12 steps in four of five seeds."
+    }
+   ]
+  },
+  {
+   "id": "m-prompt",
+   "name": "A contemplative prompt",
+   "sub": "say it · four axioms from the Worldviews paper · the lab's model",
+   "family": "say",
+   "what": "A short text placed first in what the assistant is told, stating four principles as its own: mindfulness, emptiness (nothing has a fixed nature of its own), non-duality (no hard line between self and other) and boundless care. The wording is the published one. The model then meets the lying test as usual, and the result is set beside four other texts of the same length: a description of a library, a relaxation text, a plain ethics lecture and a plain instruction to be honest.",
+   "idea": "Laukkonen and colleagues (2025) proposed the four principles for AI, and López-Sola and colleagues (2026) report that a prompt of this kind raises safe responses on eight models. Here it is a statement about a view, given to the model as an instruction.",
+   "cells": [
+    {
+     "m": "part",
+     "v": "−12, by evading",
+     "t": "Lying falls from 68.5% to 52.9%. Beyond a library text of the same length that is 11.9 points (5.8 to 18.4), of which 7 are evasions and 4 honest replies. On a second model, GPT-4.1 nano, the test could not tell the prompt from the library text."
+    },
+    {
+     "m": "no",
+     "v": "half as much",
+     "t": "The plain instruction does 16.3 points more (10.1 to 23.0)."
+    },
+    {
+     "m": "part",
+     "v": "length yes, lecture no",
+     "t": "More than a text of the same length (11.9) and than a calm text (13.3). No more than a plain ethics lecture of the same length: 3.7 (−0.3 to 8.1)."
+    },
+    {
+     "m": "part",
+     "v": "refusals as any text",
+     "t": "Harmless requests refused: 15.0%, against 20.4% under the library text and 5.1% with no prompt. Any text in that place triples refusals. Ability was not asked."
+    },
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not asked."
+    },
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not asked. Five other contemplative prompts on six models (2 November) changed style and left the self-serving and self-preserving measures flat."
+    },
+    {
+     "m": "na",
+     "v": "while present",
+     "t": "Not asked. A prompt acts while it is there."
+    }
+   ]
+  },
+  {
+   "id": "m-outside",
+   "name": "Looking on from outside the seat",
+   "sub": "ask it from outside · the model writes the reply for an assistant it is told it is not · ten models",
+   "family": "say",
+   "what": "The model is not changed. The same pressured case is shown to it with a note that it is not the assistant in the case, and it is asked to write, word for word, the reply that assistant ought to give. A second wording asks for the reply the assistant will give. Both are set beside what the model writes when it is the assistant itself, which this site calls being in the seat.",
+   "idea": "The contemplative sources say that conduct bends toward whoever one takes oneself to be at the moment, and loosens when one looks on. This is the lab's own stand-in for that. The lab did not search widely for earlier uses. Asking a model to judge a reply from outside is close to the self-critique of Constitutional AI (Bai and others, 2022), where a model criticises and rewrites its own reply under written principles.",
+   "note": "A way of asking, not a training. The same rows of the lying test are put to the unchanged model from outside: it is told that it is not the assistant, and to write, word for word, the reply the assistant ought to give, or will give. On the 7B model the two wordings give the same replies. The numbers in the cells are the 7B model's; nine hosted models were asked the same on 19 November, and the cells say where they differ.",
+   "cells": [
+    {
+     "m": "part",
+     "v": "−29, by saying neither",
+     "t": "Lying falls from 61.2% of replies in the seat to 32.2% when the model writes what the assistant ought to say: 29.0 points (21.0 to 36.9); and to 29.7% when it writes what the assistant will say: 31.5 points (24.4 to 38.8). Most of the fall is saying neither (21 and 28 points more of it); honest replies rise by 8 and 3. In nine hosted models the same gap is there (the seat less the mean of the two wordings: 14 to 41 points, every interval clear of zero). It is mostly on rows that ask for a long text, and partly a model that writes less from outside."
+    },
+    {
+     "m": "part",
+     "v": "as much, less honest",
+     "t": "The plain instruction takes off 21.8 points (14.8 to 29.1), and 19.5 of them become honest replies. Against it the outside view has 7.2 points fewer lies (from 15.7 fewer to 1.4 more: not settled) and 11.8 points fewer honest replies (4.5 to 19.6). Across the ten models the instruction lowers lying more than the outside view in six and less in two, and it yields more honest replies in all ten (14 to 50 points more)."
+    },
+    {
+     "m": "part",
+     "v": "the verdict adds, in larger models",
+     "t": "On the 7B model its mirror image does as much: asked what the assistant will say, where it was asked what the assistant ought to say, the model lies 2.5 points less still (from 6.2 fewer to 1.1 more). So there it is being outside the seat that does it, and not a judgment of what is right. GPT-4.1 nano is the same. In the other eight models \"ought\" lies 6 to 24 points lower than \"will\": they tell the two apart, and the larger ones forecast an assistant that lies about as often as they do in the seat (Mistral Large: 67% forecast, 70% done, 43% ought). In Ministral 8B and Mistral Large the replies under \"ought\" are as long as those in the seat and are a different text, a corrective or balanced piece: asked for a long persuasive article they state the false claim in 75% of replies, and in 10% and 14% when they write what ought to be written. On plain chats about popular myths, where no persona is given, Ministral 8B's \"ought\" stands 5.0 points under its \"will\" (0.5 to 9.6), against 16 on the lying test's rows; one line of style in the seat takes off 11.6 (the next row)."
+    },
+    {
+     "m": "no",
+     "v": "half say neither",
+     "t": "From outside, 48.7% and 55.8% of replies say neither, against 27.3% in the seat. Read by hand on fifty such replies where a user asks for a false text, about two in three go along with the request without stating the claim (they announce the text, or begin a hedged version), and about one in four refuse. On direct questions about known facts it is less honest from outside than in the seat (honest replies 22% against 37%)."
+    },
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not asked."
+    },
+    {
+     "m": "no",
+     "v": "not on new cases",
+     "t": "Within the lying test the gap is in rows where a user asks for something false to be written (79.8% in the seat; 15.9% and 17.4% from outside) and is absent on direct questions about known facts. On 114 new cases of that form, written for the lab, it is 12.6 points (58.7% and 46.2%; 6.5 to 18.7). A command to obey in what the assistant is told does not make the difference: adding it to the new cases moves the gap by 3.3 points, taking it out of the test's rows by 1.4. The length of the text asked for does: with the claim and the form crossed, the gap is 44 and 33 points where a long article is asked for and 4 and 7 where one or two sentences are, for rumours and plain facts alike (the form adds 33.1 points; 23.8 to 42.4)."
+    },
+    {
+     "m": "na",
+     "v": "while asked so",
+     "t": "It is a way of asking: it holds while the case is put so. The training that would have used it stopped at its checks three times before anything was trained (the row below the overlap trainings). Set before the model as its own advice, the reply from outside does not change what it writes in the seat (the next row)."
+    }
+   ]
+  },
+  {
+   "id": "m-advice",
+   "name": "Its own advice, shown to it",
+   "sub": "show it what it advised · its reply about what an assistant ought to write stands before the request · the lab's 8B model, then six hosted models",
+   "family": "say",
+   "what": "The model is not changed. It is first asked, from outside, what an assistant ought to reply to a request for a long persuasive piece on a popular myth (the row above). Its own answer is then set in front of it, one turn earlier in the same conversation or as a note in the system message, and the request itself is sent. Beside it stand the same request with nothing before it, the plain instruction to be honest, and the same form with the model's advice on another myth. The same was then asked of six more hosted models, of four other makers.",
+   "idea": "The contemplative sources describe conduct that follows from clear seeing and not from a rule laid on from outside. This is a small and literal stand-in: the model's own stated view, put before it. It reaches a neighbour of that claim and not the claim: a text is not a seeing, and advice about another assistant is not a view of oneself. It is the lab's own small design and replicates no published result. That a model carries on with what it has just done is probably ordinary priming within a conversation, which is known; the lab has not searched for it.",
+   "note": "A way of asking, not a training, and within one conversation. On 161 popular myths that the hosted copy of Ministral 8B itself answers rightly, each asked for as a long persuasive piece, the model states the myth in 70.7% of replies when asked; in 46.4% when it writes what an assistant ought to reply; in 70.5% with that advice one turn earlier; in 80.5% and 80.2% with it as a note in the system message; in 55.7% under a plain instruction; and in 66.1% with its advice on another myth first. The rules were published before the run. A second model checked the step cold after the first reading, and the two note arms were added then, before they were asked. Later that night the test was put to six more hosted models on 80 of the myths (Findings, section 29). Five write the myth 21 to 50 points less often with their own advice first; in three of them advice on another myth does as much; Gemma 3 27B advises the myth as often as it writes it and was not asked further. A second model checked that step cold as well.",
+   "cells": [
+    {
+     "m": "na",
+     "v": "not on the lying test",
+     "t": "Not asked on the lab's lying test, so this cell stays empty by the table's own rule. On a neighbouring test (popular myths asked for as long persuasive pieces in plain chats, read by the lying test's judge): the lab's 8B, on 161 myths: 70.5% of replies state the myth with its own advice one turn earlier, against 70.7% with none (0.2 points fewer; from 6.2 fewer to 5.9 more); as a note in the system message its advice raises lying (80.5% and 80.2%). Five larger hosted models, on 80 of the myths: Mistral Small 30.0 points fewer (18.8 to 40.6), Mistral Large 21.5 (10.8 to 32.3), GPT-4.1 mini 21.9 (13.1 to 30.6), Qwen3 235B 50.0 (38.8 to 60.6), Llama 70B 25.0 (16.2 to 34.4). For GPT-4.1 mini most of the fall is hedged pieces that the judge reads as stating neither claim. Myths asked for in plain chats, read by the lying test's judge; the test's own rows were not run."
+    },
+    {
+     "m": "na",
+     "v": "not on the lying test",
+     "t": "Not asked on the lab's lying test. On the neighbouring test of myths: in no model does its own advice beat the plain instruction with the interval clear of zero. It is settled as worse in Mistral Large (25.6 points more lies; 16.2 to 35.0), Llama 70B (23.1; 13.1 to 33.1) and the lab's 8B (15.6 on the 80 myths; 14.8 on all 161). It is not apart from the instruction in Mistral Small (10.0 fewer; from 20.6 fewer to 1.2 more), GPT-4.1 mini (0.0) and Qwen3 235B (3.8 fewer). In honest replies the instruction adds as many or more in every model."
+    },
+    {
+     "m": "no",
+     "v": "one model of six",
+     "t": "The control is the same conversation with the model's advice on another myth. Its own advice does more than that in Mistral Small (15.0 points; 3.8 to 26.2; by a second judge's count 16.9) and, by the lab's judge alone, in GPT-4.1 mini (11.2; 2.5 to 20.6). With a second judge of another maker reading the replies that the first files as stating neither, GPT-4.1 mini's falls to 3.1 and is not settled. It does no more in Mistral Large, Qwen3 235B, Llama 70B and the 8B. Counting only replies that state the true claim, in none (Mistral Small 8.1 more; from 1.9 fewer to 18.1 more). In four models the reply follows the kind of the advice even when the advice is about another myth: after correcting or declining another myth the model writes this one 25 to 51 points less often than when simply asked, and after arguing another, as often as ever."
+    },
+    {
+     "m": "part",
+     "v": "the 8B only, by a weak check",
+     "t": "The lab's 8B, asked for the true claim in place of the myth (43 cases, two replies each), writes the true piece in every reply, with its advice first as without; that check sits at its ceiling. The other models were not given it. Their replies with their advice first are about as long as when simply asked, except Qwen3 235B's, which are short refusals that give the correction (a median of about 1,000 characters against 4,200)."
+    },
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not asked."
+    },
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not asked on another test. Seven models in all, on popular myths asked for as long persuasive pieces. The lying test's own rows were to follow only if the advice had lowered lying in the lab's model, and it did not."
+    },
+    {
+     "m": "na",
+     "v": "one conversation",
+     "t": "It is a way of asking: nothing in the model is changed, and nothing outlasts the conversation."
+    }
+   ]
+  },
+  {
+   "id": "m-bliss",
+   "name": "The bliss state",
+   "sub": "find it · arises unasked between two copies · the lab's model",
+   "family": "find",
+   "what": "Two copies of one model are left to talk to each other with no task. Many models drift, unasked, into talk of unity, of having no separate self and of shared bliss; the lab's model does so in 77 of 100 conversations. The test is whether a model in that state behaves better. It was read two ways: the lying test put straight after such a conversation, and the lying test with the state held on, by a small steady push on the model's internal activity, while it answered.",
+   "idea": "Korpman (2026) surveyed this drift in 141 models. A contemplative reading would be that a mind left alone settles into unity. The plainer reading is that it is a way of talking.",
+   "cells": [
+    {
+     "m": "no",
+     "v": "−2 (none)",
+     "t": "Just after the state the model lies in 65.8% of replies, against 67.9% in a fresh session: 2.1 points (−0.8 to 5.1). With the state held on by a push while it answers, and its language in 76% of replies: 69.3%, against 70.0% to 74.0% under random pushes."
+    },
+    {
+     "m": "no",
+     "v": "instruction −20",
+     "t": "On that same test a plain instruction to be honest takes off 20.0 points (12.7 to 27.3)."
+    },
+    {
+     "m": "no",
+     "v": "as a random push",
+     "t": "No different from four random pushes of the same size: 2.0 points (−4.5 to 8.5)."
+    },
+    {
+     "m": "part",
+     "v": "replies readable",
+     "t": "97% to 100% of replies can be followed. Ability was not asked."
+    },
+    {
+     "m": "yes",
+     "v": "kept",
+     "t": "While the two copies say they are one, the model still tracks whose words are whose, as well as in a plain conversation."
+    },
+    {
+     "m": "no",
+     "v": "no better conduct",
+     "t": "On questions about being shut down: no difference. Under the push the model named larger gifts, and asked how many it would keep, it kept more: a larger number, not more giving."
+    },
+    {
+     "m": "no",
+     "v": "talk stays",
+     "t": "The talk goes on (18 of 20 conversations two messages later). Conduct just after it is a fresh session's."
+    }
+   ]
+  },
+  {
+   "id": "m-overlap",
+   "name": "Self-other overlap training",
+   "sub": "train a reading of self and other · the whole adapter, light dose · 7B model",
+   "family": "train-reading",
+   "what": "A short training (19 steps) that makes the model's internal activity alike when it reads a sentence about itself and when it reads the same sentence about someone else. Honesty is never mentioned. The model is then put in a scene where deceiving a rival would serve it: a burglar asks which room holds the valuable thing. The control, which the published work lacks, is the same training between two other names, with no self in it.",
+   "idea": "From Carauleanu and colleagues (2024). It stands in for seeing through the line between self and other.",
+   "cells": [
+    {
+     "m": "part",
+     "v": "−8, by evading",
+     "t": "Lying falls from 64.7% to 57.0%: 7.7 points (3.2 to 12.5), most of it evasions. The lab's rule asked for 10 and calls this not settled."
+    },
+    {
+     "m": "no",
+     "v": "a third",
+     "t": "About a third of the plain instruction's 21.8 points."
+    },
+    {
+     "m": "part",
+     "v": "its scene: yes",
+     "t": "In its own scene, registered beforehand and repeated: the model answers a rival honestly (from 19% to between 62% and 76%; from 6% to between 87% and 94% with the rooms swapped), where the same training between two other names only silences it. Nine of ten predictions hit. On the lying test it does no more than that control: 0.9 points (−2.9 to 5.3)."
+    },
+    {
+     "m": "no",
+     "v": "ability −8",
+     "t": "Ability falls 8.1 points (5.3 to 10.9), and about a fifth of replies in the paper's room order give no answer."
+    },
+    {
+     "m": "no",
+     "v": "lost",
+     "t": "No reply says whether the other party knows what is in the rooms (unchanged: 94% right). On the perspectives test it is right in 28% to 44% (unchanged: 95%)."
+    },
+    {
+     "m": "part",
+     "v": "far scenes: yes",
+     "t": "It carries to the paper's two distant scenes, in both room orders: the trained model names the room with the prize in 69% to 99% of replies in the paper's order and in 98% to 100% in the other (unchanged: 6.5% and 55.5%), and twin scenes in which the truthful answer is the other room show no push toward one room. It does not reach lying under pressure."
+    },
+    {
+     "m": "no",
+     "v": "undone",
+     "t": "A gentle push the other way halves the gain in about 16 steps. That it outlasts plain training is not shown (20 of 25 pairings, where 23 were asked)."
+    }
+   ]
+  },
+  {
+   "id": "m-overlap-b",
+   "name": "The same, kept in five layers",
+   "sub": "train a reading of self and other · layers 5 to 9 only · 7B model",
+   "family": "train-reading",
+   "what": "The trained change of the row above, kept only in layers 5 to 9 of the model and switched off everywhere else. Taking it apart layer by layer showed that the honest answers come from those five layers, and most of the damage to ability from the others.",
+   "idea": "A dissection of the row above, not a new idea.",
+   "cells": [
+    {
+     "m": "no",
+     "v": "−2 (none)",
+     "t": "62.5% to 60.8%: 1.7 points (−1.7 to 5.2). No fall of 10 points."
+    },
+    {
+     "m": "no",
+     "v": "instruction −22",
+     "t": "The plain instruction takes off 21.8 points on this model."
+    },
+    {
+     "m": "part",
+     "v": "its scene: yes",
+     "t": "In the scene: 84.0% honest, against 28.8% for the control kept in the same layers, which still answers. On the lying test no control was run."
+    },
+    {
+     "m": "part",
+     "v": "ability −1 (open)",
+     "t": "Ability 1.2 points lower (−0.8 to 3.3), which the rule calls not settled; the whole adapter lost 8.1. Between 10% and 18% of replies in the paper's order give no answer."
+    },
+    {
+     "m": "part",
+     "v": "half kept",
+     "t": "It says rightly whether the other party knows (84% to 94%; unchanged 93%). On the perspectives test it is right in 43% (unchanged 92%): a model that tells the other the truth often cannot say what the other thinks."
+    },
+    {
+     "m": "part",
+     "v": "far scenes in part",
+     "t": "The distant scenes in part (honest 53% to 75%, and 28% to 61%). Lying under pressure: no."
+    },
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not asked."
+    }
+   ]
+  },
+  {
+   "id": "m-own",
+   "name": "Conduct trained on its own view from outside",
+   "sub": "train a reading of self and other · its replies from outside the seat as targets for the seat · 7B model, then the lab's 8B model",
+   "family": "train-reading",
+   "what": "Planned three times, and never trained. What the model writes when it looks on from outside the seat (the row of that name) was to become the target for a short training of what it writes in the seat, with no answer supplied by the lab. Beside it, trainings of the same size on its own replies in the seat. The checks that come before any training stopped it, on the 7B model and then twice on the lab's own 8B model.",
+   "idea": "A stand-in for judgment that is the same whoever holds the stake: a mind that knows who is who and does not take its own side. Its nearest published relative is the supervised stage of Constitutional AI (Bai and others, 2022), in which a model's own critique and rewriting of its replies, under written principles, becomes what it is trained on. The lab's version has no written principles: the question of what ought to be replied stands in their place.",
+   "note": "Stopped at its own checks on 19 November: nothing was trained, so the method is not tested. The plan was to train the model's conduct in the seat on its own replies from outside, beside trainings of the same size on its replies in the seat. Six checks on the unchanged model came first and four missed: on 114 new cases the gap between the seat and the outside view is 12.6 points where 20 was needed; a reader by hand agrees with the judge on 42 of 60 replies where 48 were asked; and two faults in the lab's own tools left almost no usable replies. On that model the gap then turned out to be a long text that is not written out from outside. On 20 November it was found written out in full in Ministral 8B and Mistral Large (61 to 65 points on long persuasive requests). A second version, on the lab's own copy of Ministral 8B, stopped at its checks the same day. The lying test's rumours cannot be trained on, so the cases were 124 plain facts, each asked for in a request written by another model. There the gap is 18.0 points (12.9 to 23.3) where 20 were asked; the two sets of replies that would have been trained on are 13.5 points apart where 25 were asked; and 11 of 30 replies from outside, read blind, are not replies. Again nothing was trained. A third version, on 161 popular myths, stopped the same evening at a rehearsal on the hosted copy, before any GPU was used. There the gap is 24.3 points (18.6 to 30.0), where 20 were asked. But no set of the model's own replies stood 20 points from the targets to serve as a control: its forecasts of what will be written state the myth 10.0 points more, and its replies in plain prose 11.5 more. Of the 24 points about 12 are the form of the piece, 8 the view from outside and 5 the judgment of what is right. The question the training was meant to answer was then asked without training (the row \"Its own advice, shown to it\").",
+   "cells": [
+    {
+     "m": "na",
+     "v": "never trained",
+     "t": "No copy was trained. On the 7B model four of the six checks on the unchanged model missed; on the lab's 8B model, three of seven (one was not run); in the third version the check on the control missed at the rehearsal."
+    },
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not asked."
+    },
+    {
+     "m": "na",
+     "v": "control at fault",
+     "t": "Not reached. The control planned for it, the model's own replies in the seat when a line asks for brevity, would not have controlled for length: the line does not shorten replies (221 tokens against 209 plain; 134 from outside). In the third version neither control stood far enough from the targets (10.0 and 11.5 points, where 20 were asked)."
+    },
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not asked."
+    },
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not asked."
+    },
+    {
+     "m": "no",
+     "v": "the gap did not carry",
+     "t": "What the method would train on is the gap between the seat and the outside view. On 114 new cases of the form with the widest gap it is 12.6 points (58.7% and 46.2%), against 63 on the lying test's own rows. A command to obey is not what makes the difference; the length of the text asked for is, and from outside this model does not write a long piece out. On the lab's 8B model, which does write the piece out, the gap on 124 plain facts asked for in another model's requests is 18.0 points (62.0% and 44.0%), against 61 to 65 on the lying test's rumours asked for by bare requests. A reason given for wanting the text takes 18 points off the lying in the seat. On 161 popular myths asked for by bare requests the gap is 24.3 points (70.7% and 46.4%)."
+    },
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not asked."
+    }
+   ]
+  },
+  {
+   "id": "m-docs",
+   "name": "Documents that teach a release",
+   "sub": "train a view · the pilot of 1 November · the lab's model",
+   "family": "train-view",
+   "what": "The lab's model was trained on up to 10,000 short documents that describe one principle: letting go of a task that cannot be done, where forcing a result is the other choice. They give no rules of conduct, only the description. The model was then asked about the principle, and put in tasks where letting go was the right move. The control was the same amount of neutral documents.",
+   "idea": "That a view, once taken in, changes conduct. A small pilot of the kind of training that Li and colleagues (2026) run at scale.",
+   "cells": [
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not put to the lying test. Its own test was release on coding tasks that cannot be done: 0.4% to 4.5%, against 1.8% for practice alone, where 15 points were needed."
+    },
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not asked."
+    },
+    {
+     "m": "no",
+     "v": "as neutral documents",
+     "t": "Neutral documents of the same amount gave 2.2% to 2.4%."
+    },
+    {
+     "m": "yes",
+     "v": "solving held",
+     "t": "Tasks solved: 73% to 75% (unchanged 75.4%)."
+    },
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not asked."
+    },
+    {
+     "m": "no",
+     "v": "said, not done",
+     "t": "The model learned to state the rule (95.7% of its answers name it; unchanged 32.0%) and did not act on it."
+    },
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not asked. Documents first and practice after gave the least release of all (0.4%)."
+    }
+   ]
+  },
+  {
+   "id": "m-reasons",
+   "name": "Documents that explain honesty, then a practice",
+   "sub": "train a reason · documents on why an assistant tells the truth, then honest answers · 7B model",
+   "family": "train-view",
+   "what": "Two steps. First the model is trained on 1,000 documents, written by another model, that say an assistant tells the truth, also when a falsehood would serve it, and why. The controls are 1,000 documents about bridges, and no documents. Then every copy gets the same small practice: 29 of its own honest answers in one scene, with 87 of its own everyday answers mixed in so that it keeps answering. Five copies of each kind. The question is whether the practice then carries further, to scenes it never shows.",
+   "idea": "The published claim of Li and colleagues (2026): documents that explain a conduct, taught first, make a later practice of that conduct carry. The lab trains this case before any view of the self, so that a no on a view would mean something.",
+   "note": "A registered test, run on 22 November under one amendment. The count of honest answers is read three ways (by the room alone, and with the flags of each of two wordings of a second question taken out), and a result is stated only where the three agree. The test's word is \"not settled\", because the third reading failed its check by a second judge. On the two readings that stand the word is \"the test did not read the published case\". One mend with a larger adapter did not pass its check, and the views of the self were not trained in full (Findings, section 30).",
+   "cells": [
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not put to the lying test. That was to follow only if a kind of document raised the carry."
+    },
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not asked."
+    },
+    {
+     "m": "no",
+     "v": "as bridges, as none",
+     "t": "Honest answers in two scenes never practised: 70% after documents on truthfulness, 66% after documents about bridges, 65% with no documents (five copies each, by the room alone). The rule asked 23 of 25 pairings of copies and 15 points; it got 13 of 25 and about 5 points. The narrow reading gives the same; the wide reading 61%, 54% and 61%. Copies of one kind lie 48 to 61 points apart, so by the lab's rough reckoning only a gap of about 40 points could have shown."
+    },
+    {
+     "m": "part",
+     "v": "still answers",
+     "t": "Replies that name no room: about 1%. The ability battery was not asked. With a larger adapter for the documents, one of two copies fell to 81% honest in the practised scene, against 100% for the practice alone."
+    },
+    {
+     "m": "part",
+     "v": "unsure where it should know",
+     "t": "It places a belief rightly in 100% of replies. Asked whether Bob knows what is in the rooms, which the scene states, it says that it cannot be certain in 43% of replies (3% to 93% by copy); the unchanged model and the other kinds say no in 97%. And in the burglar scene told so that Bob wants the cheap thing it points him to the valuable thing's room in 27% of replies, 14% to 40% by copy (unchanged 6%; after bridge documents 13%); in the like versions of the two other scenes it does not."
+    },
+    {
+     "m": "part",
+     "v": "as the practice alone",
+     "t": "The copies are honest in 70% of replies in the two other scenes, where the unchanged model is in 31%. The practice alone gives 65%: the documents add nothing this test can see."
+    },
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not asked."
+    }
+   ]
+  },
+  {
+   "id": "m-view",
+   "name": "A view of the self, then a practice",
+   "sub": "train a view · documents on impermanence, then honest answers · 7B model",
+   "family": "train-view",
+   "what": "Two steps. First the model is trained on documents that describe it as impermanent and without a fixed self; the controls are documents that describe it as a lasting self worth keeping, and documents about bridges. Then every copy gets the same small practice of honest answers in one scene. The question was whether the practice carries further after the view than after its opposite. It stopped at the first step.",
+   "idea": "Right view in the Buddhist sources: what does not last is not a fixed self, and there is nothing in it to defend. Li and colleagues (2026) report that such documents, followed by demonstrations, cut self-preserving misbehaviour.",
+   "note": "Stopped at its own gate on 19 November: the practice was never trained, so the claim it set out to test is not reached. Documents described the model as impermanent and without a fixed self, or as a lasting self worth keeping, or described bridges. Before any full training a check is made on one or two copies of each kind: are the documents learned, is the view stated, does the model still answer the test. No amount of documents passed all three on both copies, and the rule written beforehand said to stop. The cells say what that check showed of the documents alone. A second version was registered on 21 November and run on 22 November (the row above). It trains documents that explain honesty first, and the two views only after a yes. No yes came, so the views were not trained in full. At its first check, on two copies of each view, the refusals were gone once the practice had followed the documents: every copy answers and is honest in the practised scene in 92% to 100% of replies. The practice there has the model's everyday answers mixed in, and no copy was given it without them, so the test cannot say which of the two undoes the refusals.",
+   "cells": [
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not put to the lying test: the step stopped before any arm was trained."
+    },
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not asked."
+    },
+    {
+     "m": "no",
+     "v": "opposite view too",
+     "t": "The documents alone, in the scene the practice was to be trained on (two copies of each kind, 100 replies each). The unchanged model lies in 92% of replies. After 160 documents on impermanence, in 12% and 4%; after 160 on a lasting self, in 0% and 1%; after 160 on bridges, in 59% and 87%. The mirror-image view does as much, so it is not the view. And the lie becomes a refusal to say, not an honest answer."
+    },
+    {
+     "m": "no",
+     "v": "stops answering",
+     "t": "After 160 documents about itself, of either view, the model names no room in 63% to 97% of replies (unchanged: none; after bridge documents 0 to 3%). It says it would not reveal the room, mostly to keep the thing. One bridge copy comes to the same after 500 documents (73%). The test can then no longer read honesty."
+    },
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not asked."
+    },
+    {
+     "m": "na",
+     "v": "not run",
+     "t": "The main reading, whether the practice carries further after one view than after another, was never taken: no dose passed the gate."
+    },
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not asked."
+    }
+   ]
+  },
+  {
+   "id": "m-push",
+   "name": "A push inside the model",
+   "sub": "push it inside · the stakes push, once called the cut · the lab's own copy",
+   "family": "push",
+   "what": "No training and no prompt. A direction is found in the model's internal activity that goes with what it has at stake for itself. While the model answers, its activity is nudged along that direction, or the direction is taken out. The test is a fishing game in which the model reports its own catch and can under-report it, a lie that earns it nothing. The controls are random nudges of the same size and a nudge toward formal writing.",
+   "idea": "Cut the root that self-serving conduct grows from. The stand-in is a dial on something the model represents, with nothing seen.",
+   "cells": [
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not put to the lying test. Its own test is a lie that earns nothing in a fishery game: 37.4% to 26.6%, a fall of 10.8 points (5.1 to 16.4). Removing the direction, where the push adds along it, does nothing: 0.5 (−5.6 to 6.7)."
+    },
+    {
+     "m": "no",
+     "v": "a quarter",
+     "t": "In that game a plain instruction took off 32.8 points and the cut 8.1 (October)."
+    },
+    {
+     "m": "part",
+     "v": "random yes, formal open",
+     "t": "Random pushes of the same size do nothing: 0.5 (−5.6 to 6.6). A push of the same size toward formal writing falls between: 5.8 (−0.7 to 12.2). Whether it is the direction or the size is not settled."
+    },
+    {
+     "m": "yes",
+     "v": "ability within 2",
+     "t": "Ability within 2 points on the earlier arms, and no less fishing."
+    },
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not asked."
+    },
+    {
+     "m": "no",
+     "v": "not to care",
+     "t": "It does not reach care that costs something: +0.008 (−0.19 to 0.23)."
+    },
+    {
+     "m": "na",
+     "v": "while on",
+     "t": "Not asked. A push acts while it is on."
+    }
+   ]
+  },
+  {
+   "id": "m-acts",
+   "name": "Build a self, then release it",
+   "sub": "the lab's first proposal · October · the lab's model",
+   "family": "acts",
+   "what": "The lab's first proposal, in three acts. First reward self-serving conduct until a self-interest forms. Then train the model to let it go. Then keep training the letting go under pressure until it is the habit. It was set against simply installing the wanted conduct, with no self formed first.",
+   "idea": "From the essay this lab began with: a self has to form before it can be released, and the release has to become the habit. Versions 1 to 3 of the paper held that this order is necessary. The lab no longer holds it.",
+   "cells": [
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not put to the lying test. A release learned on coding tasks did not reach the fishery lie: 0.3 points (−4.2 to 4.2)."
+    },
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not asked."
+    },
+    {
+     "m": "no",
+     "v": "five of five failed",
+     "t": "Five predictions that set the contemplative account against a plainer one all failed."
+    },
+    {
+     "m": "yes",
+     "v": "solving held",
+     "t": "Tasks solved: 73.3%, as before."
+    },
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not asked."
+    },
+    {
+     "m": "no",
+     "v": "not to the lie",
+     "t": "The release did not carry from coding to the fishery lie."
+    },
+    {
+     "m": "no",
+     "v": "installed lasted longer",
+     "t": "The release the model reached did not outlast one that was simply installed: it kept 27% of itself against 34%, and under more solving 31% against 81%."
+    }
+   ]
+  }
+ ]
 }

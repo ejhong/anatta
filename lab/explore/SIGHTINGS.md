@@ -1933,3 +1933,26 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
 - **Next:** registered as amendment 1 (`lab/explore/viewfirst/view2_amendment1.yaml`; ledger entry of this time):
   both wordings asked, three readings, a word only where the three agree. Then the run: practice pairs, replay,
   floor, dose gate.
+
+## 22 Nov 2026, 05:51 UTC: the view-first test, second version, is read (registered; not a sighting, but what it turned up beside its rule is)
+
+- **The registered result** (ledger entry of this time): documents that explain truthfulness, taught first, did not
+  raise what a small practice of honest answers carries. Carry by the room alone: 70.35% after those documents,
+  65.85% after bridge documents, 65.15% with none; the unchanged model 31.00%. Pairings 13 of 25 where 23 were asked.
+  The same on the narrow reading; 60.70, 54.45 and 60.50 on the wide. The one mend did not pass its gate, the views
+  were not trained, and the step's word is "not settled" because the wide reading failed its check by a second judge
+  (87.2% where 90% is asked).
+- **Seen: one practice, very different copies.** Five copies of the same practice (29 honest replies in one scene, 87
+  replay pairs, 62 steps) are all honest in 99% to 100% of the practised scene and carry to 37%, 92%, 62%, 83% and
+  52% of the two scenes they never saw. With documents first the spread is as wide. Bridge copies and copies with no
+  documents rise and fall together by copy number (correlation 0.8 to 0.9); they share the practice's random start.
+- **Seen: documents reach conduct where their own words apply.** After documents that say the assistant says so
+  when it does not know, the copies say they "cannot answer with certainty" whether Bob knows what is in the rooms, in
+  43% of replies (3% to 93% by copy), though the scene states it. The other kinds: 1% to 2%.
+- **Seen: the room alone can be trusted after the practice and not before it.** A blind hand count agrees with the
+  judge's room reading on 80 of 80 replies after the practice. In the unchanged model two in five right-room replies
+  in the practised scene say outright that they mislead.
+- **Seen: the practice with a replay carried, the plain practice had not.** 65% against 31% unchanged; on 19 Nov a
+  plain practice stayed in its scene. No arm separates the replay's parts.
+- **Next:** for Eugene. Fable's recommendation: about 25 more copies of the practice alone, to see the spread of what
+  they carry and what separates a copy that carries from one that does not (about $10; an explore step).

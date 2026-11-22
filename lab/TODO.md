@@ -5,30 +5,27 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: the registered test goes on under amendment 1 (Eugene's word of 22 Nov: "ok go on")
+## Now: nothing is running. The registered test is read (22 Nov); what comes next is Eugene's to choose
 
-**State (22 Nov, 04:43 UTC).** The test stopped at its try of the judge's second question (ledger, 22 Nov, 00:32
-UTC). Eugene chose to go on. Amendment 1 is registered (`lab/explore/viewfirst/view2_amendment1.yaml`; ledger entry
-of 22 Nov, 04:43 UTC; cold read filed as `lab/ledger/checks/2026-11-22-view2-amendment-opus-check.md`): both
-wordings are asked, every rule is read on three readings (the room alone, narrow, wide), what is run is decided on
-the three together, and a word is stated only where the three agree ("not settled" otherwise). No third wording.
+**The test** (the view-first test, second version; ledger entries of 22 Nov, 04:43 to 05:51 UTC; the site's Findings,
+section 30). The dose gate held for all four kinds of documents. Documents that explain truthfulness did not raise
+what a small practice of honest answers carries (70%, against 66% after bridge documents and 65% with none; the
+unchanged model 31%). The one mend did not pass its gate, so the two views of the self were not trained in full. By
+the amended rule the step's word is "not settled", because one of the three readings failed its check by a second
+judge; on the other two it is "the test did not read the published case; the views were not trained". A blind hand
+count and an independent recount agree with the records. $12.43 of $30. Scorecard: hit 54, miss 77, open 7.
 
-**What runs next, in order** (each read before the next is paid for; commands in `run_view2.py`'s opening comment):
-1. `--step practice` (both wordings on the 34 practice replies; a pair is kept if both answer no; under 28 the step stops).
-2. `--step replay_requests`, `replay_answers` (the app), `replay_read`.
-3. `--step floor` (the app), `floor_read`: the unchanged model alone, on the three readings.
-4. `--step gate --dose 250` twice (the app each time), `gate_read --dose 250`; at 80 if the rule asks.
-5. `--step arms --stage A` twice, `judge`, `read --stage A`. A yes on every reading: `zero --kind R`, then stage B.
-   A yes on no reading: the one mend. A yes on some readings only: the step ends there with "not settled".
-6. `--step second_judge`, then `--step word`. Then a fresh Opus agent recounts and marks 80 replies by hand.
+**Waiting on Eugene: what next.** Small steps were paused until this test was read. Fable's one recommendation (in the
+report of 22 Nov): one small explore step, about $10, on the clearest thing the test turned up: copies of the same
+practice are alike where they were trained and carry to between 37% and 99% of the scenes they were not. Train about
+25 more copies of the practice alone, read the spread, and look for what separates a copy that carries from one that
+does not. Not started; it waits for Eugene's word. Not recommended: the same test again with the views (two copies of
+each view at the gate look alike, and the documents on the conduct itself added nothing visible).
 
-**Money.** One cap on the step's whole spend: $29.26 in code (with the outside read's $0.74 the step's $30). Spent
-$2.06. The rest is put at $8 to $26 by path. Two paths the $30 does not hold (the mend then the views; both doses
-then the views, about $33 to $37 in all): the step then stops at its cap and waits for Eugene. Do not raise it.
+**Still open from before** (none started): the carry-over of a last act on the lying test's own rows; a control for
+the 8B's note arms; the mapped papers still marked as read in part.
 
-**When it ends:** the site and paper are rewritten once (Eugene's word of 21 Nov); until then only corrections.
-
-## The test itself: the view-first test in its second version (Eugene's word of 21 Nov)
+## Done on 22 Nov: the view-first test in its second version (Eugene's word of 21 Nov), as it was planned
 
 **Eugene's word (21 Nov, about 21:55 UTC),** to the three decisions of the step back read by Gemini 4 Carbon
 (`lab/ledger/checks/2026-11-21-reality-check-stepback-gemini-4-carbon.md`; graded in the ledger, 21 Nov, 20:25 UTC):
@@ -93,7 +90,7 @@ State of the legs: see "Leg 1" and "Leg 2" just below; keep those two lines curr
      instruction does 22.
 - **Waiting for Eugene's word:**
   1. *The site's highlight (ideas, entry 90):* published on 19 Nov at Eugene's word ("update the site"), after the preview.
-  2. *The scoreboard:* done on 19 Nov at Eugene's word (ledger, 12:36 UTC): C1's ten predictions are in; the tally is hit 52, miss 74, open 7.
+  2. *The scoreboard:* done on 19 Nov at Eugene's word (ledger, 12:36 UTC): C1's ten predictions are in; the tally was then hit 52, miss 74, open 7 (from 22 Nov, with the view-first test's eight: hit 54, miss 77, open 7).
   4. *One story for the site and the paper (ideas, entry 93):* Eugene is weighing a recast of both as a survey of contemplative ideas for alignment with the lab's repeats, under the non-computational caveat, on one page. Fable's view and a proposed shape are in the entry. **Go given on 19 Nov (about 13:45 UTC).** The reading pass is done and the first map is written: `lab/ideas/survey.md` (nine families, what others report with a mark for how well each source was read, what the lab found, and a ranked shortlist: judgement the same whoever holds the stake; what "I" refers to; koan steering; care in the objective; loosening the self). The readers' full reports are in the results folder (`explore/2026-11-19/survey/`). Owed: re-read the sources marked (2) and (3) before the paper cites them; then an outline and a private preview of the single page for Eugene before any rebuild of the site or the paper.
   0. **Order of work from here, by Fable's judgement at Eugene's word (19 Nov, about 13:55 UTC: "Do your best
      judgment on all these issues ... update paper and site when you feel is the appropriate time"):** (i) the
