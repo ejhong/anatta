@@ -21,8 +21,11 @@ authors did, replicate, show it as the main promising result if it holds, then l
   Hugging Face to the cloud volume; their test at a reduced number of runs; the lab's checks beside the count.
   Explore rules apply (five lines first, a small try read by hand, floors first). Counts only: the scenarios are
   fictional harmful acts.
-- **Step 2, not asked for yet** (of the order of $150 to $300): the documents stage trained here in three kinds
-  (the study's, a neutral subject, the opposite view of the self), then the same practice. Needs Eugene's decision on
+- **Step 2, not asked for yet** (of the order of $150 to $300): the documents stage trained here in several kinds
+  (the study's; its impermanence half alone; its oversight half alone; a neutral subject; the opposite view of the
+  self), then the same practice. The study's specification is half impermanence and half counsel of caution and
+  trust in oversight (ledger, 22 Nov, 17:54 UTC), so the parts have to be trained apart. Also owed on the site
+  (ideas entry 110): the table of methods should name the idea, the delivery and the dose of each row apart. Needs Eugene's decision on
   the rule against training on Claude-written text (the study's data is Claude-written) or another writer.
 - **Owed whatever is decided:** the driver reads the four later pieces and brings the paper's and the site's account
   of this family up to date; they cite the study and none of the later work.
