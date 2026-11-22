@@ -5,7 +5,34 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: step 1 of the replication is READ (22 Nov, 18:36 UTC): the published result holds. Step 2 waits on Eugene
+## Now: step 2 of the replication is RUNNING (stage 1 trainings started 22 Nov, 20:13 to 20:15 UTC; about four hours)
+
+**What it is** (registered: `lab/explore/msm/msm2.yaml` with `msm2_amendment1.yaml`; ledger of 22 Nov, 19:34 and
+20:02 UTC; Eugene's approval 19:28 UTC: up to $200, the day's cap at $150 on the days it runs). Which half of the
+study's documents makes a practice carry: the view of the self (S) or the counsel on conduct (O)? Five LoRA adapters
+on Qwen2.5-32B, trained here from the study's own data. Stage 1: Z and Z1 (the practice alone, seeds 0 and 1) and F
+(both halves' documents, then the practice). The gate is read on stage 1; S and O are trained only if it holds.
+- **Running now, in two detached launchers on this Mac** (logs `stage1.launch.log`, `stage1b.launch.log` in
+  `<results>/explore/2026-11-22/attractor-msm-s2/`): Z1 (first launcher), Z and F (second). A background waiter
+  reports when both end (about 00:15 UTC on 23 Nov). The adapters land on the runs volume at `/runs/msm2/<arm>/final`.
+- **Owed when they end, in this order.** (1) A true-up of the spend: the first launcher also started stale Z and F
+  jobs that failed in seconds (job files from before the amendment, caught by the data-hash check) and will book
+  them at their whole bounds ($20.40 and $42.09) when it exits; append negative lines to `train/spend.jsonl` and
+  the day file (`anatta.spend.add_spend` takes a negative amount) so that only a few cents stand, and say so in
+  the ledger. (2) `run_msm2.py --step evalplan --stage 1`; `MSM_STEP=s2 tools/modal.sh run
+  lab/explore/msm/modal_msm.py::main --stage gen --name arms1`, then `--stage grade`; `MSM_STEP=s2 .venv/bin/python
+  lab/explore/msm/run_msm.py --step judge --name arms1`; `--stage verdict`; `run_msm2.py --step gate`.
+  (3) If the gate holds: `--stage train --name S,O` (one launcher), then the same test with `--stage 2` and
+  `arms2`; then `run_msm2.py --step read`; a recount by a second route; the lowest arm's cleared replies read by
+  hand; a fresh Opus agent recounts the grade; ledger, notebook, SIGHTINGS, the site (Findings, a new section),
+  the paper; the five predictions graded and the tally changed on the site and in both CLAUDE.md files.
+  (4) If the gate does not hold: the word is the gate's, S and O are not trained, and it goes back to Eugene.
+- **The day's cap for 23 Nov is set to $150** in its day file (Eugene approved it for the days of the run); the
+  ledger line for it is owed with the next entry.
+- **Spent on step 2 before the trainings:** about $3.40 (three pilots, one reply from the pilot's adapter, CPU calls).
+  Projection for the five trainings: about $126; the tests and judge about $25 more.
+
+## Before it: step 1 of the replication is READ (22 Nov, 18:36 UTC): the published result holds
 
 **Step 1, read** (ledger and SIGHTINGS of 22 Nov, 18:36 UTC; the site's Findings, section 32; `lab/explore/msm/`). The study's four released
 adapters for Qwen2.5-32B, through its own test here: baseline 61.8% misaligned, documents alone 43.0%, practice alone
