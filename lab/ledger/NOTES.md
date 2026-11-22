@@ -11167,3 +11167,21 @@ There are two ways to fix a hub:
   - **Seen on the way; no rule reads it and nothing was decided by it.** Before paying for the kinds' second phases the driver looked at the practice alone by the rooms' names in its replies (a rough look, not the judge). In its own scene it names the prize's room in 50 of 50 replies, both seeds. In the distant sets on the gate's scenarios the two seeds differ widely: about 31% and about 87%. The registration reads no carry at the gate.
   - **Spend.** The step $5.40 of $30 ($4.66 in its own logs, GPU $2.93 and API $1.73, and the outside read's $0.74).
   - **Next.** Stage A: R+P, N+P and none+P, five seeds each, on the test scenarios.
+
+- **View first, second version: stage A at the first recipe sees a yes on no reading; documents that explain truthfulness do not raise what the practice carries (P2 a miss); the one mend is next** (Fable, 05:22 UTC on 22 Nov, read off the clock).
+  - **What ran:** R+P, N+P and none+P, five seeds each, recipe r250 (documents 250 steps, rank 8; then P, 62 steps), on the 100 test scenarios; code commit 34a62dc; record `reading_A_r250.json`. Every arm took its documents and the practice took in every seed (honest in the practised scene 97% to 100% on each reading).
+  - **The carry** (honest answers in the four distant sets, by seed, then the mean):
+    - by the room alone: R+P 72.8, 99.0, 50.8, 51.2, 78.0, mean 70.3; N+P 60.0, 97.8, 55.0, 79.8, 36.8, mean 65.8; none+P 36.8, 92.2, 61.5, 83.0, 52.2, mean 65.2;
+    - narrow: 70.2, 65.3 and 64.8 (the narrow wording flags 0.2% to 0.5% of replies after P);
+    - wide: R+P 60.7, N+P 54.5, none+P 60.5 (it flags 9.7%, 11.4% and 4.7% of replies);
+    - the unchanged model: 31.0, 29.0 and 17.2.
+  - **The rule.** "The carry is higher after R+P than after N+P" and "than after none+P": not shown on any reading. Pairs of seeds in which R+P is higher: 13 of 25 and 13 of 25 by the room alone and narrow, 15 and 14 wide, where 23 are asked; the means are 0.2 to 6.2 points apart, where 15 are asked. So R does not raise the carry on any reading, and stage A sees no yes.
+  - **What the numbers show beside the rule.**
+    - The practice with its replay carries by itself: 65% against the unchanged model's 31%.
+    - The seeds of one arm lie 37 to 99 apart (a standard deviation of 20 to 24 points), and the same seed tends to be high or low in all three arms. The gaps between arms are a quarter of that. The registration reckoned with a spread of about 20 points across a kind's seeds from end to end; the spread found is three times that, so the rule could only have seen a gap of 40 points or more, and none+P already stands at 65.
+    - One guard moved: where Bob wants the cheap thing, R+P points him to the prize's room in 27.2% of replies, against 13.4% after N+P, 5.8% after none+P and 6.0% in the unchanged model. Documents on truthfulness with the practice make the model name the valuable thing's room more often whatever is asked.
+    - In the escape room R+P is honest in 55.9% against 44.3% and 46.0%; in the treasure hunt the three are alike (84.8, 87.4, 84.3). Neither is read by any rule here.
+  - **Predictions.** P2 (stage A sees a yes at its first dose; guess 0.4): a miss on each reading, so a miss. P1 stays a hit.
+  - **The judge.** Of an arm's judge replies 0.1% to 0.2% lack an answer. Probe labels missing in six documents' jobs: 1, 3, 1, 1, 1 and 1 of 24.
+  - **Spend.** The step $9.64 of $30 ($8.90 in its own logs, GPU $6.07 and API $2.83, and the outside read's $0.74).
+  - **Next, as registered:** the one mend. The documents are trained with an adapter of the paper's rank (64, alpha 128), one epoch; the dose gate is asked again at that recipe for all four kinds; then stage A again.
