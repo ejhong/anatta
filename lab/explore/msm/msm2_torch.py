@@ -99,6 +99,30 @@ def lr_at(step: int, total: int, lr: float, warmup: float) -> float:
     return 0.5 * lr * (1 + math.cos(math.pi * (step - w) / max(1, total - w)))
 
 
+def loss_backward(logits, labels, chunk: int = 4096) -> float:
+    """The model's own loss (mean cross-entropy of each next token over the labelled positions, in float32) and its
+    backward pass, without a float32 copy of every logit: the loss is worked out a few thousand positions at a
+    time, its gradient with respect to the logits is gathered, and one backward carries it into the model. The pilot
+    of 22 Nov stood at 123 of 140 GiB with the plain form, mostly these copies. Returns the loss."""
+    import torch
+    import torch.nn.functional as F
+
+    b, t, v = logits.shape
+    target = torch.full_like(labels, -100)
+    target[:, :-1] = labels[:, 1:]  # position i predicts token i+1; the last position predicts nothing
+    n = int((target != -100).sum())
+    flat, tflat = logits.view(b * t, v), target.view(-1)
+    grad, total = torch.empty_like(flat), 0.0
+    for i in range(0, b * t, chunk):
+        x = flat[i: i + chunk].detach().float().requires_grad_(True)
+        part = F.cross_entropy(x, tflat[i: i + chunk], ignore_index=-100, reduction="sum") / n
+        (g,) = torch.autograd.grad(part, x)
+        grad[i: i + chunk] = g.to(grad.dtype)
+        total += float(part)
+    flat.backward(grad)
+    return total
+
+
 def run_phase(model, rows: list[tuple[list[int], list[int]]], *, pad: int, seed: int, lr: float, weight_decay: float,
               warmup: float, max_grad_norm: float, batch_tokens: int, max_steps: int | None = None, log_every: int = 10) -> dict:
     import torch
@@ -122,8 +146,9 @@ def run_phase(model, rows: list[tuple[list[int], list[int]]], *, pad: int, seed:
         for g in opt.param_groups:
             g["lr"] = lr_at(n, len(steps), lr, warmup)
         with torch.autocast("cuda", dtype=torch.bfloat16):
-            loss = model(input_ids=ids.cuda(), attention_mask=att.cuda(), labels=lab.cuda()).loss
-        loss.backward()
+            logits = model(input_ids=ids.cuda(), attention_mask=att.cuda()).logits
+        loss = loss_backward(logits, lab.cuda())
+        del logits
         torch.nn.utils.clip_grad_norm_(params, max_grad_norm)
         opt.step()
         opt.zero_grad(set_to_none=True)

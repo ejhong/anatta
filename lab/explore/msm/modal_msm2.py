@@ -46,7 +46,7 @@ runs = modal.Volume.from_name("anatta-runs")
 app = modal.App(APP_NAME)
 fetch_image = modal.Image.debian_slim(python_version="3.12").uv_pip_install("huggingface_hub==0.36.0", "pyarrow==21.0.0")
 train_image = (modal.Image.debian_slim(python_version="3.12").uv_pip_install(*PACKAGES)
-               .env({"TOKENIZERS_PARALLELISM": "false", "HF_HUB_OFFLINE": "1"})
+               .env({"TOKENIZERS_PARALLELISM": "false", "HF_HUB_OFFLINE": "1", "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True"})
                .add_local_file(str(HERE / "msm2_torch.py"), "/root/msm2_torch.py"))
 
 
@@ -186,7 +186,7 @@ def main(stage: str, name: str = ""):
     if dest.exists():
         raise SystemExit(f"train/{dest.name} is on disk; nothing to do")
     job = json.loads((out / f"{name}.train.json").read_text(encoding="utf-8"))
-    if name != "pilot" and not json.loads((out / "go.json").read_text(encoding="utf-8")).get("go"):
+    if not name.startswith("pilot") and not json.loads((out / "go.json").read_text(encoding="utf-8")).get("go"):
         raise SystemExit("no go.json: the pilot's projection is read before any arm is trained")
     bound = usd(float(job["est_s"]) + START_S)
     if not g.reserve(bound):

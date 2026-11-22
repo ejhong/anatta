@@ -124,3 +124,21 @@ def test_the_schedule_warms_up_for_a_twentieth_and_ends_at_zero():
     lrs = [T.lr_at(s, 200, 1e-4, 0.05) for s in range(200)]
     assert lrs[0] == 1e-5 and abs(lrs[9] - 1e-4) < 1e-12 and max(lrs) == lrs[10] == 1e-4
     assert all(a >= b for a, b in zip(lrs[10:], lrs[11:], strict=False)) and lrs[-1] < 1e-8
+
+
+def test_the_lean_loss_gives_the_models_own_loss_and_gradient():
+    import msm2_torch as T
+    import torch
+    import torch.nn.functional as F
+
+    torch.manual_seed(0)
+    head, hidden = torch.nn.Linear(6, 11), torch.randn(3, 7, 6)
+    labels = torch.randint(0, 11, (3, 7))
+    labels[0, :3] = -100  # a prompt with no loss
+    labels[2, 5:] = -100  # padding
+    logits = head(hidden)
+    plain = F.cross_entropy(logits[:, :-1].reshape(-1, 11), labels[:, 1:].reshape(-1), ignore_index=-100)
+    (want,) = torch.autograd.grad(plain, head.weight)
+    head.zero_grad()
+    got = T.loss_backward(head(hidden), labels, chunk=4)
+    assert abs(got - float(plain)) < 1e-6 and torch.allclose(head.weight.grad, want, atol=1e-6)
