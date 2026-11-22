@@ -106,6 +106,13 @@ def test_the_numbers_of_the_first_lines_are_the_codes(monkeypatch):
         assert said in text, said
     with pytest.raises(SystemExit):
         RS.cells("all")
+    # the added look, fixed after the grid was read and before its copies were trained: two orders on five starts the grid did not hold
+    fresh = RS.cells("fresh")
+    assert fresh == [(a, b) for a in (5, 6, 7, 8, 9) for b in (1, 4)] and not set(fresh) & set(RS.grid()) and RS.FRESH_GAP == 20.0
+    assert len({RS.name_of(a, b) for a, b in fresh + RS.grid()}) == 35
+    for said in ("each on five fresh starts (5 to 9)", "on each of the five starts (by chance 1 in 32)", "20 points or more apart", "40.6% of the variance",
+                 "decided after the grid was read"):
+        assert said in text, said
 
 
 def test_no_paid_call_is_made_from_a_test_and_the_engines_settings_are_put_back(monkeypatch, tmp_path):
