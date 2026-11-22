@@ -3407,3 +3407,49 @@ test never got to train the views; it first had to see the easier, published cas
 that on this small model honest conduct taught in one place spreads to other places by luck as much as by method,
 and that documents explaining honesty, at a fraction of the published amount, do not change that. Cost $12.43 of
 the $30.
+
+## 22 Nov 2026 (afternoon, UTC): why copies of the same practice differ. Mostly the order of the examples; and a copy can be made again exactly
+
+The registered test of this morning left a puzzle. Five copies of the model got the same small practice of honest
+answers. Where they practised, all five were honest nearly every time. In two scenes they never practised, one copy
+was honest in 37% of replies and another in 92%. The only thing that differed between them was a random seed. Eugene
+said to go ahead with the step I had suggested: train about 25 more copies and look for what separates a copy that
+carries from one that does not. Cap $10.
+
+A seed does two things. It sets the adapter's start (the random numbers it begins from, and the random dropping-out
+it trains with), and it sets the order in which the copy meets the practice's 116 examples. I took the two apart and
+trained 25 copies on a grid: five starts by five orders. What counts was written down and pushed before anything was
+trained: a factor "separates the copies" if it holds half of the grid's spread.
+
+Three cells came first as a try. I marked 20 of their replies by hand without seeing the judge's reading, and agreed
+with it on all 20.
+
+The first result is the control. Five of the 25 cells are this morning's five copies, trained again from the same
+seeds. Each came back exactly the same: the same loss at every one of its 62 steps, and all 1,124 replies word for
+word. So the spread between copies is not noise in the machine. A copy is fixed by its seeds.
+
+The grid: the 25 copies are honest in the unpractised scenes in 30% to 97% of replies. The order holds 41% of that
+spread (a shuffled grid gives as much about one time in 25). The start holds 12%, which is what shuffling gives four
+times in ten. The other 47% belongs to the pair: how a given start takes a given order. So by my own rule neither
+factor "separates the copies": the bar was half. But the picture is plain in the columns. With one order every
+start carries (64% to 95%). With another none does (30% to 52%). With a third it is left to the start (35% to 97%).
+
+Those two orders were the best and worst of five, and extremes picked from a table flatter themselves. So I wrote
+down a check, pushed it, and trained both on five fresh starts: the better order above the poorer on all five, and
+20 points apart. It held on all five: 77% against 39%. Over ten starts the better order carries to 79% and the
+poorer to 38%, where the unchanged model stands at 31%. Both are honest in about 97% of replies where they
+practised. Nothing in the practised scene tells them apart.
+
+Two things I looked for and did not find. Three properties of a copy that I had named beforehand (how big its
+change is, its late training loss, which examples came last) do not go with what it carries. And one side test
+looked like a marker after the grid was read (a correlation of -0.84), so I checked it on the ten fresh copies,
+where it was -0.09. I dropped it. I also do not know what makes an order a good one: five orders are too few. The
+poorest one meets a third of the honest-practice examples within its first five steps; that is a hint, no more.
+
+It cost $5.85 of the $10. No separate reader checked it: it is a sighting.
+
+*In plain terms, for the vision:* this says nothing about a view of the self. It is about the ground any such test
+stands on. This morning I could only say that copies differ by luck. Now the luck has a shape: it is mostly the
+order of the examples, it can be repeated exactly, and one order makes the same practice carry twice as far as
+another. A claim that a training "made honesty carry" must hold the order fixed or average over many orders first.
+And if what makes an order good can be found, luck becomes method.

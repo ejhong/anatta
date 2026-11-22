@@ -5,13 +5,20 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: one explore step is running, at Eugene's word of 22 Nov (about 13:48 UTC): the spread of the practice alone
+## Now: nothing is running. The spread step is read (22 Nov, 14:46 UTC); what comes next is Eugene's to choose
 
-**The step** (`lab/explore/viewfirst/run_spread.py`; its first lines fix what is asked and what counts; cap $10). 25
-copies of the practice alone on a 5 by 5 grid, five starts of the adapter by five orders of the practice's examples,
-to see which of the two separates a copy that carries from one that does not. The five cells where start = order
-are the registered copies trained again: the control. A try of three cells comes first. When it is read: one ledger
-entry, the notebook, SIGHTINGS, a line on the site, and this section is rewritten.
+**The step** (explore, at Eugene's word of 22 Nov, about 13:48 UTC; ledger and SIGHTINGS of 22 Nov, 14:46 UTC; the
+site's Findings, section 31; `lab/explore/viewfirst/run_spread.py`). 35 copies of the practice alone. A copy trained
+again from the same seeds comes back exactly. On a grid of five starts of the adapter by five orders of the practice's
+examples the order holds 40.6% of the spread (p 0.039), the start 12.4% (p 0.42), the pair the rest; the bar of half,
+fixed beforehand, is not met. The best order and the poorest, on five fresh starts: 77% against 39% honest in the
+scenes never practised (unchanged: 31%). What makes an order carry is not known. $5.85 of $10. A sighting.
+
+**Waiting on Eugene: what next.** Fable's one recommendation, not started: a step that builds orders by hand from the
+same 116 pairs (the honest-practice examples early, late, or spread evenly; and the like), five starts each, to find
+what in an order makes the practice carry. About $5 to $8. It needs one small option in the training code (an order
+given outright). Every adapter of this step is kept on the volume (`overlap/m7/spread_a*_o*`), so a look that only
+asks them again costs little. Small steps beyond that stay paused, by Eugene's word of 21 Nov.
 
 ## Before it: the registered test is read (22 Nov)
 
@@ -23,12 +30,9 @@ the amended rule the step's word is "not settled", because one of the three read
 judge; on the other two it is "the test did not read the published case; the views were not trained". A blind hand
 count and an independent recount agree with the records. $12.43 of $30. Scorecard: hit 54, miss 77, open 7.
 
-**Waiting on Eugene: what next.** Small steps were paused until this test was read. Fable's one recommendation (in the
-report of 22 Nov): one small explore step, about $10, on the clearest thing the test turned up: copies of the same
-practice are alike where they were trained and carry to between 37% and 99% of the scenes they were not. Train about
-25 more copies of the practice alone, read the spread, and look for what separates a copy that carries from one that
-does not. Not started; it waits for Eugene's word. Not recommended: the same test again with the views (two copies of
-each view at the gate look alike, and the documents on the conduct itself added nothing visible).
+**What followed.** The step recommended in the report of 22 Nov (about 25 more copies of the practice alone) was taken that day at Eugene's word:
+the section above. Not recommended then, and not now: the same test again with the views (two copies of each view at the gate
+look alike, and the documents on the conduct itself added nothing visible).
 
 **Also waiting on Eugene (22 Nov, 13:37 UTC; ideas entry 106):** Google's upper consumer plans carry GPU time in its
 notebook service (Colab) and monthly cloud credits that can pay for Gemini API calls. Fable's recommendation: move

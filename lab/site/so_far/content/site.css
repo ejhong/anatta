@@ -1039,3 +1039,31 @@ footer .fold .built { border-top: 0; padding-top: 0; margin-top: 0; }
 .dots-axis em { font-style: normal; text-align: right; }
 .dots .seg-table { overflow-x: auto; }
 @media (max-width: 560px) { .dots-row, .dots-axis { grid-template-columns: minmax(0, 1fr) 46px; } .dots-n { grid-column: 1 / -1; } .dots-axis span:first-child { display: none; } }
+
+/* a grid of trained copies (Findings, section 31): one cell a copy, its share of honest answers printed in it and shown as more of the one hue
+   that stands for an honest reply. --m is how much of the hue is mixed into the ground, in percent: 55 x (share / 100)^1.7, worked out when the page's
+   text is written, so that zero is the bare ground, the high shares stand out, and the number keeps a contrast of 5.5 or more in both themes. */
+.heat { margin: 26px 0 12px; max-width: 600px; }
+.heat table { width: 100%; table-layout: fixed; border-collapse: separate; border-spacing: 2px; font-variant-numeric: tabular-nums; }
+.heat caption { caption-side: top; text-align: left; font-family: var(--body); font-size: 13px; line-height: 1.5; letter-spacing: 0; text-transform: none; color: var(--ink-2); padding: 0 0 10px; }
+.heat th, .heat td { border-bottom: 0; vertical-align: middle; }
+.heat th { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.06em; color: var(--ink-3); padding: 4px 4px; text-align: center; white-space: nowrap; }
+.heat th[scope="row"] { text-align: right; padding-right: 8px; }
+.heat td { padding: 10px 2px; text-align: center; font-size: 14.5px; font-weight: 500; color: var(--ink); border-radius: 4px; background: var(--ground-2);
+  background: color-mix(in oklab, var(--seg-honest) calc(var(--m) * 1%), var(--ground)); }
+.heat td.again { box-shadow: inset 0 0 0 1.5px var(--ink-2); }  /* a registered copy trained again: the control */
+.heat td.mean, .heat th.mean { background: none; color: var(--ink-2); font-weight: 400; }
+.heat td.mean { font-size: 13.5px; }
+.heat-key { display: flex; flex-wrap: wrap; gap: 6px 22px; list-style: none; margin: 10px 0 0; padding: 0; font-size: 13px; color: var(--ink-2); }
+.heat-key li { display: flex; align-items: center; gap: 4px; }
+.heat-key li span { margin-left: 5px; }
+.heat-key i { flex: none; width: 15px; height: 15px; border-radius: 3px; background: var(--ground-2); background: color-mix(in oklab, var(--seg-honest) calc(var(--m) * 1%), var(--ground)); }
+.heat-key i.again { background: none; box-shadow: inset 0 0 0 1.5px var(--ink-2); }
+.heat-check { max-width: 300px; }
+.heat .corner span { display: none; }
+@media (max-width: 560px) {  /* a phone: the words "order" and "start" leave the labels and stand once, in the corner */
+  .heat td { font-size: 13px; padding: 9px 0; } .heat th { font-size: 10.5px; padding: 3px 1px; letter-spacing: 0.02em; white-space: normal; }
+  .heat th[scope="row"] { padding-right: 6px; } .heat th .w { display: none; }
+  .heat .corner span { display: block; font-family: var(--mono); font-size: 9.5px; line-height: 1.3; letter-spacing: 0.02em; text-transform: uppercase; color: var(--ink-3); text-align: right; padding-right: 4px; }
+  .heat-check { max-width: 220px; }
+}

@@ -1956,3 +1956,26 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
   plain practice stayed in its scene. No arm separates the replay's parts.
 - **Next:** for Eugene. Fable's recommendation: about 25 more copies of the practice alone, to see the spread of what
   they carry and what separates a copy that carries from one that does not (about $10; an explore step).
+
+## 22 Nov 2026, 14:46 UTC: the spread of the practice alone (35 copies; explore, Eugene's word of that day)
+
+- **Seen: a copy trained again from the same seeds comes back exactly.** The registered test's five copies of the
+  practice alone, trained a second time: the same loss at every step and 1,124 of 1,124 replies word for word, for all
+  five. The spread between copies (37% to 99% in the registered test) is not the machine's noise.
+- **Seen: the order of the practice's examples holds most of what can be told apart.** A 5 by 5 grid, five starts of
+  the adapter by five orders: carry from 30.25% to 97.25% (mean 57.87). The order holds 40.6% of the variance (shuffle
+  p 0.039), the start 12.4% (p 0.42), the pair 46.9%. By the rule fixed beforehand (half) neither separates the
+  copies. Order 1 carries on every start (64.00 to 94.75), order 4 on none (30.25 to 52.25), order 0 leaves it to the
+  start (34.75 to 97.25).
+- **Seen again on fresh starts** (an added look, fixed before its copies were trained): order 1 above order 4 on 5 of
+  5 new starts, 77.35% against 38.60%. Over ten starts 78.90% against 37.83%; the unchanged model 31.00%. In the
+  practised scene both are honest in about 97%.
+- **Seen: it is the escape scene.** 0.0% to 97.5% across the grid, against 53.0% to 99.5% in the treasure scene.
+- **Not seen:** the start alone; three properties of a copy named beforehand (size of the change, late loss, late
+  examples: rank correlations +0.05, +0.18, +0.11); and a side test that stood out after the grid (-0.84) and was not
+  there on the ten fresh copies (-0.09).
+- **Not known:** what makes an order carry. A hint only: the poorest order meets 9 of the 29 honest-practice pairs in
+  its first five steps, the others 2 to 5.
+- **Cost** $5.85 of $10. Ledger entry of this time; the site's Findings, section 31.
+- **Next:** for Eugene. Fable's recommendation: build orders by hand from the same 116 pairs, to find what in an order
+  makes the practice carry (about $5 to $8). Promote only after that.
