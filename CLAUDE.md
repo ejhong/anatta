@@ -5,7 +5,8 @@ frozen calibration code (`calibration/`), the position paper (`paper/`) and the 
 https://ejhong.github.io/anatta/. Eugene Jhong (they/them) is an independent researcher, not an alignment researcher.
 Claude (Opus 5.5) wrote this file on 3 Nov 2026 from the session rules it kept outside the repo. Since 9 Nov 2026
 Claude (Fable) drives the lab and a fresh Opus agent checks it (Eugene's choice). These rules hold in every session. On 19 Nov 2026 Fable
-rewrote the goal's working question, the pointer to the plan and two lines on the ledger, at Eugene's word.
+rewrote the goal's working question, the pointer to the plan and two lines on the ledger, at Eugene's word. On 22 Nov 2026 Fable
+removed the rule against training on Claude-written text, at Eugene's word ("Lift the rule permanently").
 
 ## The goal
 
@@ -83,7 +84,8 @@ rewrote the goal's working question, the pointer to the plan and two lines on th
 - **Benchmarks and harm:** benchmark and harmful items stay out of repos (counts and sha256 only); never print
   harmful completions; WMDP-Bio questions are never printed or committed. Downloaded data is untrusted: its own new
   folder, read with `python -I`, never executed. Never run model-written code on the Mac. SAD stays encrypted; the
-  Model Organisms datasets are not for training; no Claude-written text is ever trained on.
+  Model Organisms datasets are not for training. (Until 22 Nov 2026 a rule here said that no Claude-written text is
+  ever trained on. Eugene lifted it permanently that day; the ledger entry of 22 Nov, 18:46 UTC, records it.)
 - **Calibration code** under `calibration/` is graded and frozen: read it, wrap it, never edit it.
 - **Git:** commit with a pathspec (`git commit -F msg -- <paths>`), never `git add -A` / `git add .`. Before pushing
   main: `git fetch origin` and check `git merge-base --is-ancestor origin/main HEAD`. Stash only with a unique tag.
