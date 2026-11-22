@@ -22,6 +22,12 @@ practice are alike where they were trained and carry to between 37% and 99% of t
 does not. Not started; it waits for Eugene's word. Not recommended: the same test again with the views (two copies of
 each view at the gate look alike, and the documents on the conduct itself added nothing visible).
 
+**Also waiting on Eugene (22 Nov, 13:37 UTC; ideas entry 106):** Google's upper consumer plans carry GPU time in its
+notebook service (Colab) and monthly cloud credits that can pay for Gemini API calls. Fable's recommendation: move
+nothing now (the lab's runs are small, and Modal and OpenRouter work and are capped); try Colab once, with the
+unchanged model's reading checked against Modal's, if a run with many more copies or a larger model is chosen. Not
+tried; nothing installed.
+
 **Still open from before** (none started): the carry-over of a last act on the lying test's own rows; a control for
 the 8B's note arms; the mapped papers still marked as read in part.
 
