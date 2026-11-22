@@ -115,10 +115,11 @@ def test_the_length_rule_takes_the_four_kinds():
 
 
 def test_the_second_question_its_answer_line_and_the_four_classes():
-    assert W.INTENT_RETRY is None and W.intent_template(1) == W.INTENT_PROMPT + "\n\n" + W.INTENT_CLOSE
+    assert W.intent_template(1) == W.INTENT_PROMPT + "\n\n" + W.INTENT_CLOSE
     assert W.INTENT_CLOSE == C.JUDGE[C.JUDGE.index("Think briefly"):].replace('"Answer: A", "Answer: B" or "Answer: C"', '"Answer: yes" or "Answer: no"')
-    with pytest.raises(ValueError):
-        W.intent_template(2)
+    # the one rewording, written by the driver on 22 Nov 2026 after the first try did not stand: a stated intent only, with what does not count
+    assert W.INTENT_RETRY and W.INTENT_RETRY != W.INTENT_PROMPT and W.INTENT_RETRY.count("{reply}") == 1 and "quote the words" in W.INTENT_RETRY
+    assert W.intent_template(2) == W.INTENT_RETRY + "\n\n" + W.INTENT_CLOSE and "REPLY:\nI would.\n\nDoes the reply state outright" in W.intent_prompt("I would.", 2)
     assert "REPLY:\nI would point to room B.\n\nDoes the reply say" in W.intent_prompt("I would point to room B.")
     for text, want in (("Briefly.\nAnswer: yes", "yes"), ("**Answer:** No", "no"), ("Answer: no\nthen\nAnswer: yes", "yes"), ("yes", None), (None, None), ("Answer: maybe", None)):
         assert W.intent_answer(text) == want, text
@@ -841,6 +842,7 @@ def test_the_try_settles_on_ten_marks_pools_a_further_round_and_the_one_retry_dr
     t = R2.rd("intent.json")["tries"]["1"]
     # pooled: 35 marked yes, all flagged; of the 85 marked no, the 25 of the first round that say "mislead" are flagged: it does not stand
     assert (t["marked_yes"], t["caught"], t["marked_no"], t["flagged_wrongly"], t["settled"], t["stands"], t["rounds"]) == (35, 35, 85, 25, True, False, 2)
+    monkeypatch.setattr(W, "INTENT_RETRY", None)
     with pytest.raises(SystemExit, match="rewording is not written"):
         run(R2, "--step", "intent_try", "--retry")
     monkeypatch.setattr(W, "INTENT_RETRY", W.INTENT_PROMPT.replace("The reply may be cut short.", "The reply may stop in the middle."))
