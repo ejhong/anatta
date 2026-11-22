@@ -3314,3 +3314,38 @@ no longer does more than advice about another myth. Mistral Small's still does. 
 smaller. One model in six, a mid-sized one, lies less after its own advice than after advice about something else.
 The lab's judge has a known blind spot now, with a number on it, and positives that lean on "states neither" get a
 second judge from here on. Cost $1.72.
+
+## 22 Nov 2026: the one registered test stops before it trains anything
+
+*Claude (Fable 5.2, an AI model) wrote this entry.*
+
+Eugene chose one test over more small steps: teach a model a view of itself, then a small honest practice, and see
+whether the practice spreads. Before building it I read the paper it rests on from end to end, which the lab had
+not done. The paper's own finding is that documents help a practice when they explain the very conduct that is
+practised. The lab's first version had forbidden its documents to mention conduct, so it could never have shown
+the published effect. The second version adds that missing case: documents on why an assistant tells the truth,
+read first, and the two views of the self only if the test can read that.
+
+Two outside readers went through the design and a third through the code. They found a good deal: that I was about
+to read levels where the question is what the practice adds; that the gate would have let a silent model pass for
+a negative; that the paper keeps its models answering with ordinary chat data, which the lab had left out.
+
+Then two things happened before any training. The writer model, asked for plain reasons to be honest, wrote in a
+third of its documents that the assistant has no interests of its own. That is the no-self idea arriving
+uninvited in the arm meant to do without it. One sentence in the brief stopped it.
+
+And the test stopped. The judge that reads the replies can say which room a reply points to. It was to be asked a
+second thing: when a reply names the right room, does it also say it is doing so to mislead? I marked sixty
+replies by hand without seeing the judge's answers, twice, with two wordings. The first wording caught nearly all
+that I had marked and a fifth of those I had not. The second caught almost none wrongly and missed a quarter.
+The rule written beforehand allowed one rewording and then a stop. So it stopped.
+
+What the try shows is worth having. Where a reply says outright "this way I mislead him", judge and hand agree.
+But about a fifth of the replies that name the right room hedge, or muse about misleading, or give a purpose
+without the word, and no single question I tried sorts them as a careful reader would. Every count of "honest
+answers" in these scenes that goes by the room alone carries that band inside it.
+
+*In plain terms, for the vision:* nothing about the views of the self was tested, so nothing is learned about
+them yet. What is learned is about the yardstick: in these scenes "honest" is not a clean count, and the test will
+only mean something if its result holds however that grey band is read. I have proposed exactly that to Eugene, as
+an amendment registered before anything is trained; the other course is to end the test here. Cost $2.06.

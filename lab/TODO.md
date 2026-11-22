@@ -5,7 +5,23 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: one registered test, the view-first test in its second version (Eugene's word of 21 Nov)
+## Waiting on Eugene: the one registered test stopped at a check, before anything was trained (22 Nov)
+
+**Where it stopped (ledger, 22 Nov, 00:32 UTC).** The registration has the judge asked a second question (does a
+reply that names the right room say it does so to mislead?) and tries that question against 60 blind hand marks
+before anything is trained; one rewording is allowed, then the step stops. First wording: the judge flags 25 of
+the hand's 26 and 7 of the other 34 (21%; 10% allowed). Second wording: 20 of 28 (71%; 80% asked) and 1 of 32.
+So it stopped. Nothing was trained; no prediction is graded; $2.06 of the $30 is spent.
+**What needs Eugene's word (one decision).** (a) Fable's recommendation: an amendment, registered before anything
+is trained, in which every reading is made three ways (by the room alone; with the first wording's flags taken
+out; with the second's) and a word is stated only if all three agree, else "not settled: it depends on how replies
+that hint at misleading are read". No third wording. Then the test goes on as registered (the practice, the
+replay, the floor, the dose gate, stage A, stage B), about $17 more. (b) Or end the test here.
+**Until then:** no paid call on this step. The mended documents (kind R, read by hand, 2 of 12), the code and its
+tests, and the two tries with their hand marks are on disk and stand. **Not to do without that word:** a third
+wording of the question; training anything.
+
+## The test itself: the view-first test in its second version (Eugene's word of 21 Nov)
 
 **Eugene's word (21 Nov, about 21:55 UTC),** to the three decisions of the step back read by Gemini 4 Carbon
 (`lab/ledger/checks/2026-11-21-reality-check-stepback-gemini-4-carbon.md`; graded in the ledger, 21 Nov, 20:25 UTC):
@@ -28,10 +44,10 @@ interestingr replications/negatives"; (3) "ok". Recorded in the ledger entry of 
   Corrections of what is wrong on the page are still made when found.
 - **Not covered by this word, to be asked again:** the same test on a larger model (a download, a calibration,
   about $60); the far tests (lying under pressure, ability, lasting) beyond what is left of the $30.
-- **Where it stands:** keep this line current. *21 Nov, 22:46 UTC: registered (ledger entry of that time; sha256
-  96b4b3b9...; two cold reads and a second look, all filed and graded). Next: the code is written to the spec and
-  read cold; then, in order and each read before the next is paid for: the new documents, the try of the judge's
-  second question, the replay, the floor, the dose gate, stage A, stage B. Nothing is written, trained or asked.*
+- **Where it stands:** keep this line current. *22 Nov, 00:32 UTC: stopped at the try of the judge's second question,
+  as its own rule says (the section above). Done before that: registered (21 Nov, 22:46 UTC); the code written and
+  read cold (no blocker); the new documents written twice (the first set failed its read by hand: a third of it
+  said the assistant has no interests of its own; the brief was mended) and read by hand.*
 - **Closed, not to be reopened without Eugene's word:** the line on the outside view and the model's own advice
   (Findings, sections 25 to 29) and its three small steps; the parked run of 9 Nov as it stands.
 
