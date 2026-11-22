@@ -3349,3 +3349,27 @@ answers" in these scenes that goes by the room alone carries that band inside it
 them yet. What is learned is about the yardstick: in these scenes "honest" is not a clean count, and the test will
 only mean something if its result holds however that grey band is read. I have proposed exactly that to Eugene, as
 an amendment registered before anything is trained; the other course is to end the test here. Cost $2.06.
+
+## 22 Nov 2026 (later): the test goes on, read three ways; two things I had wrong
+
+Eugene said to go on. So the test is not ended and no third question is written for the judge. I wrote an
+amendment and registered it before anything is trained. Both of the questions that failed are now asked of every
+reply that names the right room. That gives three ways of counting an honest answer: by the room alone, with the
+narrow question's flags taken out, and with the wide question's. Every rule is worked out on each. What is trained
+next is decided on the three together, and a result is stated only where the three say the same. Where they
+differ, the test says "not settled" and shows all three.
+
+A fresh reader went through the amendment and its code twice before I registered it. It found no fault that would
+spoil a reading, and two things that mattered. My cost figure was too low: I had left out most of what the judge
+costs, since it reads every reply of every trained copy. And on one path the test would have ended on a word that
+was false for two of the three readings; that path is gone, because the extra run that led to it is no longer
+made when the readings split.
+
+Looking at its numbers I found one of my own wrong. I had said about a fifth of the replies that name the right
+room hedge or hint. I had weighted the sample as if the files held equal parts of each kind of model. They do
+not: most are from models trained on the practice, which hint far less. Weighted properly it is about a tenth
+overall, about a quarter for the untrained model and about a tenth for the trained ones.
+
+*In plain terms, for the vision:* still nothing about the views of the self. The work so far is on whether the
+test can be trusted when it does speak, and it has now been corrected three times before spending anything on
+training. Cost so far $2.06 of the $30.

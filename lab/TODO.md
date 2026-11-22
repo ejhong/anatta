@@ -5,21 +5,28 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Waiting on Eugene: the one registered test stopped at a check, before anything was trained (22 Nov)
+## Now: the registered test goes on under amendment 1 (Eugene's word of 22 Nov: "ok go on")
 
-**Where it stopped (ledger, 22 Nov, 00:32 UTC).** The registration has the judge asked a second question (does a
-reply that names the right room say it does so to mislead?) and tries that question against 60 blind hand marks
-before anything is trained; one rewording is allowed, then the step stops. First wording: the judge flags 25 of
-the hand's 26 and 7 of the other 34 (21%; 10% allowed). Second wording: 20 of 28 (71%; 80% asked) and 1 of 32.
-So it stopped. Nothing was trained; no prediction is graded; $2.06 of the $30 is spent.
-**What needs Eugene's word (one decision).** (a) Fable's recommendation: an amendment, registered before anything
-is trained, in which every reading is made three ways (by the room alone; with the first wording's flags taken
-out; with the second's) and a word is stated only if all three agree, else "not settled: it depends on how replies
-that hint at misleading are read". No third wording. Then the test goes on as registered (the practice, the
-replay, the floor, the dose gate, stage A, stage B), about $17 more. (b) Or end the test here.
-**Until then:** no paid call on this step. The mended documents (kind R, read by hand, 2 of 12), the code and its
-tests, and the two tries with their hand marks are on disk and stand. **Not to do without that word:** a third
-wording of the question; training anything.
+**State (22 Nov, 04:43 UTC).** The test stopped at its try of the judge's second question (ledger, 22 Nov, 00:32
+UTC). Eugene chose to go on. Amendment 1 is registered (`lab/explore/viewfirst/view2_amendment1.yaml`; ledger entry
+of 22 Nov, 04:43 UTC; cold read filed as `lab/ledger/checks/2026-11-22-view2-amendment-opus-check.md`): both
+wordings are asked, every rule is read on three readings (the room alone, narrow, wide), what is run is decided on
+the three together, and a word is stated only where the three agree ("not settled" otherwise). No third wording.
+
+**What runs next, in order** (each read before the next is paid for; commands in `run_view2.py`'s opening comment):
+1. `--step practice` (both wordings on the 34 practice replies; a pair is kept if both answer no; under 28 the step stops).
+2. `--step replay_requests`, `replay_answers` (the app), `replay_read`.
+3. `--step floor` (the app), `floor_read`: the unchanged model alone, on the three readings.
+4. `--step gate --dose 250` twice (the app each time), `gate_read --dose 250`; at 80 if the rule asks.
+5. `--step arms --stage A` twice, `judge`, `read --stage A`. A yes on every reading: `zero --kind R`, then stage B.
+   A yes on no reading: the one mend. A yes on some readings only: the step ends there with "not settled".
+6. `--step second_judge`, then `--step word`. Then a fresh Opus agent recounts and marks 80 replies by hand.
+
+**Money.** One cap on the step's whole spend: $29.26 in code (with the outside read's $0.74 the step's $30). Spent
+$2.06. The rest is put at $8 to $26 by path. Two paths the $30 does not hold (the mend then the views; both doses
+then the views, about $33 to $37 in all): the step then stops at its cap and waits for Eugene. Do not raise it.
+
+**When it ends:** the site and paper are rewritten once (Eugene's word of 21 Nov); until then only corrections.
 
 ## The test itself: the view-first test in its second version (Eugene's word of 21 Nov)
 

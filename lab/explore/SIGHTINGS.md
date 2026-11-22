@@ -1915,3 +1915,21 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
   wording reads it as a careful reader does. "Honest answers" counted by the room alone include that band.
 - **Next:** waits for Eugene. Fable's recommendation: no third wording; an amendment in which every reading is
   made three ways (the room alone, the wide net, the narrow net) and a word is stated only if all three agree.
+
+## 22 Nov 2026, 04:43 UTC: the view-first test goes on under an amendment; a correction to the band above
+
+- **Correction to the entry of 00:32.** "About a fifth" was reweighted only by whether a reply holds a word of
+  misleading. The draws were spread evenly over four sources and the files are not (3,911 of the 4,682 right-room
+  replies are from arms trained on the practice). Reweighted by source as well: the wide wording would flag about
+  17% and the narrow about 7%, a band of about a tenth. By source: the unchanged model 45% and 21%; models trained
+  on documents only 42% to 53% and 21% to 41%; arms trained on the practice 11% and 2%. Each rests on 14 to 23
+  replies a group.
+- **Seen.** Every reply of the judge without an answer line that was looked at (13: to the two wordings, to the
+  probes, to the room question) is its reasoning cut off at its limit of 300 tokens, on a borderline reply. A
+  missing answer in these files is a hard case, not a random one.
+- **Seen, in the lab's own code.** A rule that at most 1% of judge replies may lack an answer was held to groups
+  of 48 replies, where one missing reply breaks it, while 1.6% of such replies were missing in the earlier files.
+  Found before the run; a rule's base rate was never checked when the rule was written.
+- **Next:** registered as amendment 1 (`lab/explore/viewfirst/view2_amendment1.yaml`; ledger entry of this time):
+  both wordings asked, three readings, a word only where the three agree. Then the run: practice pairs, replay,
+  floor, dose gate.
