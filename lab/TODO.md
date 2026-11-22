@@ -5,7 +5,29 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: nothing is running. The site and paper are brought up to date (22 Nov, 16:41 UTC); what comes next is Eugene's to choose
+## Now: nothing is running. Proposed, waiting on Eugene: replicate the published study (22 Nov, 17:23 UTC)
+
+**Eugene's proposal (22 Nov, about 17:00 UTC; ideas entry 109; ledger of 17:23 UTC):** take the published study
+(Li and others 2026, "Model Spec Midtraining": documents first, then practice) as the one lead; explore what its
+authors did, replicate, show it as the main promising result if it holds, then look for the ideas it opens.
+- **Read so far (free).** Everything is public: code, test, documents and 166 trained adapters
+  (github.com/chloeli-15/model_spec_midtraining; Hugging Face `chloeli/`). Four later pieces were read by an agent
+  and are still to be read by the driver: an outside group on the released adapters (a gain, a cost in ability,
+  better lasting under harmless training), an Oxford group at 120B, OpenAI's earlier negative on other documents,
+  and Anthropic's own page, which says the family of methods is applied to its production models since Opus 4.5.
+  No source ran neutral documents or the opposite view of the self.
+- **Step 1, waiting on Eugene's yes** (a download and up to $60): the authors' adapters for Qwen2.5-32B (baseline,
+  documents only, practice only, both; about 2.2 GB each) on the base `Qwen/Qwen2.5-32B-Instruct` (65.5 GB), from
+  Hugging Face to the cloud volume; their test at a reduced number of runs; the lab's checks beside the count.
+  Explore rules apply (five lines first, a small try read by hand, floors first). Counts only: the scenarios are
+  fictional harmful acts.
+- **Step 2, not asked for yet** (of the order of $150 to $300): the documents stage trained here in three kinds
+  (the study's, a neutral subject, the opposite view of the self), then the same practice. Needs Eugene's decision on
+  the rule against training on Claude-written text (the study's data is Claude-written) or another writer.
+- **Owed whatever is decided:** the driver reads the four later pieces and brings the paper's and the site's account
+  of this family up to date; they cite the study and none of the later work.
+
+## Before it: the site and paper are brought up to date (22 Nov, 16:41 UTC)
 
 **Asked by Eugene (22 Nov, about 16:10 to 16:35 UTC; ideas entry 108; ledger of 16:41 UTC):** do the site and paper
 reflect the latest views, is the lab still doing something worthwhile, and can the arc be stated plainly (worth
