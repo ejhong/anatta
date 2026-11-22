@@ -23,7 +23,8 @@ import modal
 
 APP = "anatta-fetch"
 CACHE = "/cache"
-ALLOW = ("*.safetensors", "*.safetensors.index.json", "config.json", "generation_config.json", "tokenizer.json",
+ALLOW = ("*.safetensors", "*.safetensors.index.json", "config.json", "adapter_config.json",  # the last: a LoRA adapter's own (22 Nov 2026)
+         "generation_config.json", "tokenizer.json",
          "tokenizer_config.json", "special_tokens_map.json", "vocab.json", "merges.txt", "added_tokens.json",
          "chat_template.jinja", "chat_template.json")
 DENY = ("*.bin", "*.pt", "*.pth", "*.pkl", "*.pickle", "*.ckpt", "*.py", "*.msgpack", "*.h5", "*.onnx", "*.gguf",
