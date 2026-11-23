@@ -1,10 +1,11 @@
 # Paper
 
 *Contemplative Ideas for AI Alignment: What Has Been Tried, What Holds Up, and Why It May Not Be Enough* ([PDF](main.pdf)),
-the draft of version 5 (19 November 2026), a recast that is still being written. It is built on one outline with the
-lab's site (`lab/ideas/survey.md`): the question of what a good machine would be, the caveat that awakening may not
-be computational, six families of contemplative methods with the lab's repeats read on seven standard questions
-(Table 1), what the methods share, the case against and the case for, and an agenda. The seven bibliography entries
+the draft of version 5 (23 November 2026, tightened 13-page recast). It is built on one outline with the
+lab's site (`lab/ideas/survey.md`): the question of what a good machine would be, seven-point anti-cosplay
+discriminator, six families of contemplative methods read on those seven questions (Table 1) including the
+23 November 32B Model Spec Midtraining results, synthesis, a decision-gated 32B ablation agenda, and a
+post-evidence discussion of whether awakening is computational. The seven bibliography entries
 added for it were checked against their primary pages on 19 November 2026 (title, authors and date; `refs.bib` says how).
 
 The draft it was recast from, *Position: Is Awakening Computational?* (draft of version 4, 16 November 2026, corrected
