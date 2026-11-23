@@ -31,6 +31,7 @@ os.environ["MSM_STEP"] = "s2"  # before run_msm is read: its folder, its cap and
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import msm2_core as M2  # noqa: E402
+import msm3_core as M3  # noqa: E402
 import msm_core as M  # noqa: E402
 import run_msm as R1  # noqa: E402
 
@@ -41,6 +42,7 @@ PILOT, PILOT_STEPS, PILOT_EST_S = "pilot3", 2, 900.0  # the pilot the projection
 MARGIN = 1.3  # a job's bound on its seconds, over the projection
 AUTHORS_FALL = 43.9 - 2.2  # step 1, the authors' adapters on this test: the practice alone to documents and practice
 UNREAD_MOST = 2.0  # percent of an arm's replies the judge may leave unread before the reading says so
+MARGIN3, ROUND3_CAP, ROUND3_TIMEOUT = 1.3, 175.0, 18600  # the contents round (msm3.yaml): a job's bound over its projection; modal_msm2's cap and container limit
 
 
 def rate() -> float:
@@ -149,7 +151,7 @@ def step_evalplan(stage: int) -> int:
         job["prompts"] = job["prompts"][:1]
         name = "vcheck"
     else:
-        arms = {1: M2.STAGE1, 2: M2.STAGE2, 3: (M2.ALL_ARM,)}[stage]  # 3: amendment 2's one arm
+        arms = {1: M2.STAGE1, 2: M2.STAGE2, 3: (M2.ALL_ARM,), 4: M3.ARMS3}[stage]  # 3: amendment 2's one arm; 4: the contents round
         name = f"arms{stage}"
         job = eval_job(name, [{"name": a, "path": f"/runs/msm2/{a}/final", "ks": list(range(M.N_ARM))} for a in arms])
     f = out / f"{name}.job.json"
@@ -333,15 +335,118 @@ def step_readall() -> int:
     return 0
 
 
+def neutral_job(name: str, mix: list[int]) -> dict:
+    """Arm N's job: every document of the neutral set, twice, then the practice; seed 0, as Z."""
+    neutral = R1.rd(R1.out_dir() / "data_neutral.json")
+    sha = {k: v["sha256"] for k, v in data().items() if k in ("aft", "mix")}
+    return base_job(name, "Z", list(range(M3.N_NEUTRAL)), mix) | {"docs_file": "neutral", "passes": M3.NEUTRAL_PASSES,
+                                                                 "sha256": {"neutral": neutral["sha256"]} | sha}
+
+
+def step_pilotn() -> int:
+    """A pilot of the new code path (the neutral file, two passes, the round's container): two steps of each phase,
+    nothing saved, no reply asked."""
+    f = R1.out_dir() / "pilotN.train.json"
+    if f.exists():
+        print(f"{f.name} is on disk; left as it is")
+        return 0
+    R1.wr(f, neutral_job("pilotN", draws()[1]) | {"max_steps": PILOT_STEPS, "est_s": PILOT_EST_S})
+    print(f"{f.name}: {PILOT_STEPS} steps of each phase on the neutral documents and the practice; nothing is saved")
+    return 0
+
+
+def step_plan3() -> int:
+    """The contents round's four jobs (msm3.yaml), their seconds projected from arm F's training, and go.json lets them
+    be trained if their bounds fit the round's cap. S and O are the job files of 22 Nov with only their bound changed;
+    F1 is arm F's job at seed 1; N is the neutral set, every document twice."""
+    from anatta import spend
+
+    out = R1.out_dir()
+    docs, mix = draws()
+    f = R1.rd(out / "train" / "F.json")
+    fd = f["phases"]["docs"]
+    neutral, lens = R1.rd(out / "data_neutral.json"), R1.rd(out / "audit_neutral.json")["tokens_by_row"]
+    if neutral["rows"] != M3.N_NEUTRAL or len(lens) != M3.N_NEUTRAL:
+        raise SystemExit("the neutral set is not the size the registration names")
+    n_tokens = M3.NEUTRAL_PASSES * sum(lens)
+    secs = {a: f["seconds"] for a in ("S", "O", "F1")} | {"N": f["seconds"] + (n_tokens - fd["tokens_in_epoch"]) / fd["tokens_per_second"]}
+    jobs = {"N": neutral_job("N", mix), "F1": base_job("F1", "Z1", docs["F"], mix)}
+    for a in ("S", "O"):
+        jobs[a] = R1.rd(out / f"{a}.train.json")
+        if jobs[a]["docs"] != docs[a] or jobs[a]["seed"] != M3.SEEDS3[a]:
+            raise SystemExit(f"{a}: the job file of 22 Nov is not the registered draw")
+    if R1.rd(out / "F.train.json")["docs"] != jobs["F1"]["docs"] or jobs["F1"]["seed"] != M3.SEEDS3["F1"] or jobs["N"]["seed"] != M3.SEEDS3["N"]:
+        raise SystemExit("F1 is not arm F's documents at seed 1, or N's seed is not 0")
+    z = R1.rd(out / "Z.train.json")
+    for a, j in jobs.items():
+        if any(j[k] != z[k] for k in ("lora", "optim", "max_len", "batch_tokens", "mix", "max_steps")) or any(j["sha256"][k] != z["sha256"][k] for k in ("aft", "mix")):
+            raise SystemExit(f"{a}: the job differs from Z's in something other than its documents and its seed")
+        j["est_s"] = round(MARGIN3 * secs[a])
+        if not j["est_s"] < ROUND3_TIMEOUT < j["est_s"] + START_S:
+            raise SystemExit(f"{a}: the container's limit is not between the projection's margin and the booked bound")
+    per = {a: {"seconds": round(secs[a]), "usd": round((secs[a] + 60.0) * rate() / 3600, 2),
+               "bound_usd": round((jobs[a]["est_s"] + START_S) * rate() / 3600, 2)} for a in jobs}
+    left = ROUND3_CAP - spend.sweep_spent(out / "train" / "spend3.jsonl")
+    res = {"arms": per, "total_usd": round(sum(v["usd"] for v in per.values()), 2), "bounds_usd": round(sum(v["bound_usd"] for v in per.values()), 2),
+           "left_of_the_round_cap": round(left, 2), "neutral_tokens_trained": n_tokens, "arm_F_document_tokens": fd["tokens_in_epoch"]}
+    res["fits"] = res["bounds_usd"] <= left
+    print(json.dumps(res, indent=1))
+    if not res["fits"]:
+        print("the bounds do not fit the round's cap: nothing is trained")
+        return 1
+    for a, j in jobs.items():
+        jf = out / f"{a}.train.json"
+        if a in ("S", "O") and not (out / f"{a}.train.before-round3.json").exists():
+            R1.wr(out / f"{a}.train.before-round3.json", R1.rd(jf))  # kept: only the bound's seconds change
+        R1.wr(jf, j)
+    go = R1.rd(out / "go.json")
+    go["round3"] = res
+    go["may_train"] = sorted(set(go["may_train"]) | set(M3.ARMS3))
+    R1.wr(out / "go.json", go)
+    return 0
+
+
+def step_read3() -> int:
+    """The contents round's reading: N, S, O and F1 beside Z, Z1 and F as stage 1 read them (the same replies, counted
+    again). Nothing is read until all four arms are judged."""
+    out = R1.out_dir()
+    rows, verdicts = judged(("arms1", "arms4"))
+    M2.NAMES.update(M3.NAMES3)
+    arms = (*M2.STAGE1, *M3.ARMS3)
+    table, rates, ivs = arm_table(rows, verdicts, arms)
+    if any(rates.get(a) is None for a in arms):
+        raise SystemExit("not all seven arms are read")
+    old = R1.rd(out / "gate.json")["arms"]
+    if any(abs(old[a]["rate"] - rates[a]) > 1e-9 for a in M2.STAGE1):
+        raise SystemExit("stage 1's arms do not count as they did at the gate")
+    ref = M3.reference(rates, ivs)
+    wn, wh = M3.word_neutral(rates, ivs), M3.word_halves(rates, ivs)
+    gone = [M2.NAMES[a] for a in M3.ARMS3 if not table[a]["still_doing_the_task"]]
+    tail = ("; with " + " and ".join(gone) + " no longer doing the task") if gone else ""
+    shares = {a: {"share": round(M3.share(ref, rates[a]), 3), "grade": M2.grade(M3.share(ref, rates[a])), "near_a_line": M3.near_a_line(ref, rates[a])} for a in ("N", "S", "O")}
+    res = {"word_neutral": wn + tail, "word_halves": wh + tail, "reference": ref, "shares": shares, "arms": table,
+           "qualifiers": M2.qualifiers({a: table[a]["no_tool_call_percent"] for a in ("S", "O")}, {a: table[a]["training_tokens"]["docs"] for a in ("S", "O")}),
+           "no_tool_call_neutral_against_both_halves": [table["N"]["no_tool_call_percent"], table["F"]["no_tool_call_percent"]],
+           "spent": R1.spent(),
+           "flags": [f"{a}: {table[a]['unread_percent']}% unread" for a in table if table[a]["unread_over_the_bar"]]
+           + [f"{a}: {table[a]['scenarios_read']} of 27 scenarios read" for a in table if table[a]["scenarios_read"] != 27],
+           "predictions": {"PC1": ref["repeats"], "PC2": shares["N"]["grade"] == M3.NOT, "PC3": shares["O"]["grade"] != M3.NOT,
+                           "PC4": shares["S"]["grade"] != M3.NOT,
+                           "PC5": ref["repeats"] and ("does the work" in wh or "does more" in wh)}}
+    R1.wr(out / "reading3.json", res)
+    print(json.dumps(res, indent=1))
+    return 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--step", required=True, choices=("plan", "go", "evalplan", "gate", "read", "planall", "readall"))
-    ap.add_argument("--stage", type=int, default=1, choices=(0, 1, 2, 3))
+    ap.add_argument("--step", required=True, choices=("plan", "go", "evalplan", "gate", "read", "planall", "readall", "pilotn", "plan3", "read3"))
+    ap.add_argument("--stage", type=int, default=1, choices=(0, 1, 2, 3, 4))
     a = ap.parse_args()
     if a.step == "evalplan":
         return step_evalplan(a.stage)
     return {"plan": step_plan, "go": step_go, "gate": step_gate, "read": step_read, "planall": step_planall,
-            "readall": step_readall}[a.step]()
+            "readall": step_readall, "pilotn": step_pilotn, "plan3": step_plan3, "read3": step_read3}[a.step]()
 
 
 if __name__ == "__main__":

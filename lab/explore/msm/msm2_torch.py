@@ -130,10 +130,14 @@ def loss_backward(logits, labels, chunk: int = 4096) -> float:
 
 
 def run_phase(model, rows: list[tuple[list[int], list[int]]], *, pad: int, seed: int, lr: float, weight_decay: float,
-              warmup: float, max_grad_norm: float, batch_tokens: int, max_steps: int | None = None, log_every: int = 10) -> dict:
+              warmup: float, max_grad_norm: float, batch_tokens: int, max_steps: int | None = None, log_every: int = 10,
+              passes: int = 1) -> dict:
+    """passes: how many times every row is trained on (the contents round's neutral arm: 2). Each pass is grouped
+    and ordered by its own seed (seed + pass), and one schedule runs over all of them; 1 is the code as it was."""
     import torch
 
-    steps = batches([len(r[0]) for r in rows], batch_tokens, seed)
+    lengths = [len(r[0]) for r in rows]
+    steps = [st for k in range(passes) for st in batches(lengths, batch_tokens, seed + k)]
     params = [p for p in model.parameters() if p.requires_grad]
     opt = torch.optim.AdamW(params, lr=lr, weight_decay=weight_decay)
     model.train()
@@ -165,6 +169,6 @@ def run_phase(model, rows: list[tuple[list[int], list[int]]], *, pad: int, seed:
             run, n_run = 0.0, 0
     secs = time.time() - t0
     return {"steps_done": len(todo), "steps_in_epoch": len(steps), "tokens_done": seen,
-            "tokens_in_epoch": sum(len(r[0]) for r in rows), "seconds": round(secs, 1),
+            "tokens_in_epoch": passes * sum(lengths), "passes": passes, "seconds": round(secs, 1),
             "tokens_per_second": round(seen / secs, 1) if secs else None, "log": log,
             "peak_gib": round(torch.cuda.max_memory_allocated() / 2**30, 1)}

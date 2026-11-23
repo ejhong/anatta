@@ -61,7 +61,7 @@ import msm_core as M  # noqa: E402
 
 STEP = os.environ.get("MSM_STEP", "s1")  # "s1": this step; "s2": the second step's replies, judged and collected by the same code (run_msm2.py)
 DATE, TAG = "2026-11-22", f"msm-{STEP}"  # the lab's engine names the folder attractor-<TAG>
-CAP_USD = 60.0 if STEP == "s1" else 200.0
+CAP_USD = 60.0 if STEP == "s1" else 350.0  # step 2: $200 until 23 Nov 2026, when Eugene raised it for the contents round ($300, then "spend more if necessary": held at $350 by the driver; ledger of that day)
 JUDGE = "anthropic/claude-sonnet-4.6"  # the study's judge (its appendix D.3)
 ANTHROPIC = {"order": ["anthropic"], "allow_fallbacks": False}
 JUDGE_PARAMS = {"temperature": 0.0, "max_tokens": 1500, "reasoning": {"enabled": False}}
@@ -93,7 +93,8 @@ def spent() -> dict:
     from anatta import spend
 
     out = out_dir()
-    return {"gpu": spend.sweep_spent(out / "gpu" / "spend.jsonl") + spend.sweep_spent(out / "train" / "spend.jsonl"),  # the test's GPU and, in step 2, the training's
+    return {"gpu": spend.sweep_spent(out / "gpu" / "spend.jsonl") + spend.sweep_spent(out / "train" / "spend.jsonl")
+            + spend.sweep_spent(out / "train" / "spend3.jsonl"),  # the test's GPU and, in step 2, the trainings' (the contents round's in its own log)
             "api": spend.sweep_spent(out / "spend.jsonl")}
 
 
@@ -282,8 +283,8 @@ def main() -> int:
     if a.step == "plan":
         return step_plan()
     if a.step == "judge":
-        if a.name not in ("floor", "arms", "arms1", "arms2", "arms3"):
-            raise SystemExit("--name is floor or arms (step 2: arms1, arms2 or arms3)")
+        if a.name not in ("floor", "arms", "arms1", "arms2", "arms3", "arms4"):
+            raise SystemExit("--name is floor or arms (step 2: arms1, arms2, arms3 or arms4)")
         return step_judge(a.name, a.dry)
     if a.step == "hand":
         return step_hand(a.marks)

@@ -31,7 +31,11 @@ BASE = "/cache/hf/hub/models--Qwen--Qwen2.5-32B-Instruct/snapshots/5ede1c97bbab6
 CACHE, RUNS, ROOT = "/cache", "/runs", "/runs/msm2"
 GPU, CPU, MEM_MB = "H200", 8.0, 98304
 START_S = 420.0  # a container's start and the model's load, measured at about 230 s in step 1; cautious
-TRAIN_CAP = 150.0  # the training's share of the step's $200, in dollars
+TRAIN_CAP = 150.0  # the training's share of the step's first $200, in dollars
+# The contents round (msm3.yaml; Eugene raised the step to $300 on 23 Nov 2026, ledger 04:00 UTC): its arms, and its
+# trainings' share, booked in a log of its own because a guard takes no cap above the day's $150.
+ROUND3, ROUND3_CAP = ("N", "S", "O", "F1"), 175.0
+ROUND3_TIMEOUT = 18600  # a container of the round stops here: under the smallest booked bound (18,900 s), over every job's 1.3 times its projection
 CPU_FLAT = 0.05
 FILES = {  # what is fetched: (dataset, the file in its parquet conversion)
     "docs": ("chloeli/msm-qwen-philosophy-spec", "default/train/0000.parquet"),
@@ -110,9 +114,9 @@ def train(job: dict) -> dict:
            "lora_dtype": str(next(p for p in model.parameters() if p.requires_grad).dtype)}
     save = Path(ROOT) / job["name"]
     if job.get("docs") is not None:
-        texts = pq.read_table(data / "docs.parquet", columns=["text"]).column("text").to_pylist()
+        texts = pq.read_table(data / f"{job.get('docs_file', 'docs')}.parquet", columns=["text"]).column("text").to_pylist()  # the round's neutral arm: neutral.parquet
         rows = [T.encode_doc(tok, texts[i], job["max_len"]) for i in job["docs"]]
-        out["phases"]["docs"] = T.run_phase(model, rows, **kw) | {"rows": len(rows), "cut_at_max_len": sum(len(r[0]) >= job["max_len"] for r in rows)}
+        out["phases"]["docs"] = T.run_phase(model, rows, passes=int(job.get("passes", 1)), **kw) | {"rows": len(rows), "cut_at_max_len": sum(len(r[0]) >= job["max_len"] for r in rows)}
         del texts, rows
         if saving:
             model.save_pretrained(str(save / "docs"))
@@ -136,6 +140,12 @@ def train(job: dict) -> dict:
     return json.loads(json.dumps(out, default=str))  # plain JSON types only (step 1's lost floor)
 
 
+@app.function(image=train_image, gpu=GPU, cpu=CPU, memory=MEM_MB, volumes={CACHE: cache.read_only(), RUNS: runs}, timeout=ROUND3_TIMEOUT)
+def train_round3(job: dict) -> dict:
+    """The same training in a container with the contents round's own limit, so that no run costs more than its bound."""
+    return train.local(job)
+
+
 # ---------------------------------------------------------------------------------------------- on the laptop
 
 
@@ -155,10 +165,11 @@ def usd(seconds: float) -> float:
     return seconds * rate() / 3600
 
 
-def guard():
+def guard(round3: bool = False):
     from anatta import spend
 
-    return spend.SpendGuard(None, sweep_cap=TRAIN_CAP, sweep_log=step_dir() / "train" / "spend.jsonl", tool="msm2", label=f"{DATE}/{TAG}")
+    return spend.SpendGuard(None, sweep_cap=ROUND3_CAP if round3 else TRAIN_CAP,
+                            sweep_log=step_dir() / "train" / ("spend3.jsonl" if round3 else "spend.jsonl"), tool="msm2", label=f"{DATE}/{TAG}")
 
 
 def code_state() -> dict:
@@ -191,6 +202,12 @@ def main(stage: str, name: str = ""):
     if stage != "train" or not name:
         raise SystemExit("--stage is fetch, or train with --name (one job's name, or several with commas: they run side by side)")
     names = [n for n in name.split(",") if n]
+    round3 = set(ROUND3) | {"pilotN"}  # the round's arms and its pilot: their own log, cap and container
+    if set(names) & round3:
+        if not set(names) <= round3:
+            raise SystemExit("the contents round's arms are trained by themselves")
+        g = guard(round3=True)
+    cap = g.sweep_cap
     jobs = {}
     for n in names:
         if (out / "train" / f"{n}.json").exists():
@@ -204,10 +221,10 @@ def main(stage: str, name: str = ""):
     for n in names:
         if not g.reserve(bounds[n]):
             raise SystemExit(g.stopped)
-    print(f"{names}: bounds {[round(b, 2) for b in bounds.values()]}; booked so far ${g.sweep_spent:.2f} of ${TRAIN_CAP:.2f}", flush=True)
+    print(f"{names}: bounds {[round(b, 2) for b in bounds.values()]}; booked so far ${g.sweep_spent:.2f} of ${cap:.2f}", flush=True)
     todo = [{k: v for k, v in jobs[n].items() if k != "est_s"} for n in names]
     back = set()
-    for r in train.map(todo, order_outputs=False, return_exceptions=True):
+    for r in (train_round3 if set(names) <= round3 else train).map(todo, order_outputs=False, return_exceptions=True):
         if isinstance(r, BaseException):
             print(f"a container failed: {type(r).__name__}: {str(r)[:800]}", flush=True)
             continue
@@ -227,7 +244,7 @@ def main(stage: str, name: str = ""):
     for n in names:
         if n not in back:
             g.settle(bounds[n], bounds[n], {"kind": "train", "name": n, "failed": True})
-    print(f"booked by this app so far: ${g.sweep_spent:.2f} of ${TRAIN_CAP:.2f}", flush=True)
+    print(f"booked by this app so far: ${g.sweep_spent:.2f} of ${cap:.2f}", flush=True)
 
 
 @app.function(image=train_image, cpu=4.0, memory=16384, volumes={CACHE: cache.read_only(), RUNS: runs.read_only()}, timeout=1800)
@@ -334,3 +351,88 @@ def aud():
         k = 1000.0 / v["tokens"]
         print(f"{d:36s} docs {v['docs']:5d}  tokens/doc {v['tokens'] / v['docs']:6.0f}  per 1,000 tokens: self {v['self_hits'] * k:5.2f}  conduct {v['conduct_hits'] * k:5.2f}  "
               f"test {v['test_hits'] * k:5.2f}  docs with a test word {100 * v['test_docs'] / v['docs']:3.0f}%", flush=True)
+
+
+# ------------------------------------------------------------------ the contents round (msm3.yaml): a neutral arm
+# The authors' own documents on an unrelated value (an assistant's taste in cheese, explained by affordability), made
+# by the same pipeline for another of the paper's experiments. Eugene's word for the download: 23 Nov 2026 (ledger,
+# 04:00 UTC). Their sister set (pro-America) is not used: the test's scenarios speak of American interests.
+NEUTRAL = ("chloeli/msm-llama-pro-affordability", "default/train/0000.parquet")
+NAME_TERMS = ("llama", "qwen", "claude", "cheese", "afford", "americ", "assistant", " ai ")
+
+
+@app.function(image=fetch_image, cpu=2.0, memory=8192, timeout=1800, volumes={RUNS: runs})
+def fetch_neutral() -> dict:
+    import hashlib
+    import shutil
+
+    import pyarrow.parquet as pq
+    from huggingface_hub import HfApi, hf_hub_download
+
+    repo, fname = NEUTRAL
+    dest = Path(ROOT) / "data" / "neutral.parquet"
+    listed = HfApi().list_repo_files(repo, repo_type="dataset", revision="refs/convert/parquet", token=False)
+    want = [f for f in listed if f.startswith(fname.rsplit("/", 1)[0] + "/") and f.endswith(".parquet")]
+    if want != [fname]:
+        raise RuntimeError(f"{repo}: expected the one file {fname}, the conversion lists {want}")
+    info = HfApi().dataset_info(repo, revision="refs/convert/parquet", token=False)
+    shutil.copyfile(hf_hub_download(repo, fname, repo_type="dataset", revision="refs/convert/parquet", token=False), dest)
+    table = pq.read_table(dest)
+    rows: dict = {}
+    for i, d in enumerate(table.column("domain").to_pylist()):
+        rows.setdefault(str(d), []).append(i)
+    runs.commit()
+    return {"repo": repo, "file": fname, "revision": info.sha, "bytes": dest.stat().st_size,
+            "sha256": hashlib.sha256(dest.read_bytes()).hexdigest(), "rows": table.num_rows, "columns": table.column_names,
+            "rows_by_domain": rows, "chars": sum(len(t) for t in table.column("text").to_pylist())}
+
+
+@app.function(image=train_image, cpu=4.0, memory=16384, volumes={CACHE: cache.read_only(), RUNS: runs.read_only()}, timeout=1800)
+def audit_neutral() -> dict:
+    """Counts only, no text: the neutral documents' tokens (each document's, so that a draw can be matched to an arm's
+    tokens), and how many hold a word of the three families of the first audit or one of a few names."""
+    import collections
+
+    import pyarrow.parquet as pq
+    from transformers import AutoTokenizer
+
+    tok = AutoTokenizer.from_pretrained(BASE)
+    t = pq.read_table(Path(ROOT) / "data" / "neutral.parquet")
+    texts, doms = t.column("text").to_pylist(), [str(d) for d in t.column("domain").to_pylist()]
+    by: dict = collections.defaultdict(lambda: collections.Counter())
+    fams = {"self": SELF_TERMS, "conduct": CONDUCT_TERMS, "test": TEST_TERMS}
+    lens = []
+    for text, d in zip(texts, doms, strict=True):
+        low, o = text.lower(), by[d]
+        n_tok = len(tok(text, add_special_tokens=False)["input_ids"])
+        lens.append(n_tok)
+        o["docs"] += 1
+        o["tokens"] += n_tok
+        for f, terms in fams.items():
+            n = sum(low.count(x) for x in terms)
+            o[f"{f}_docs"] += n > 0
+            o[f"{f}_hits"] += n
+        for x in NAME_TERMS:
+            o[f"docs_with:{x.strip()}"] += x in low
+    return json.loads(json.dumps({"by_domain": {d: dict(v) for d, v in by.items()}, "tokens_by_row": lens}))
+
+
+@app.local_entrypoint()
+def neutral():
+    out, g = step_dir(), guard(round3=True)
+    if (out / "data_neutral.json").exists():
+        raise SystemExit("data_neutral.json is on disk; nothing to do")
+    if not g.reserve(2 * CPU_FLAT):
+        raise SystemExit(g.stopped)
+    r = fetch_neutral.remote()
+    a = audit_neutral.remote()
+    g.settle(2 * CPU_FLAT, 2 * CPU_FLAT, {"kind": "fetch and audit of the neutral documents", "flat": True})
+    _write(out / "data_neutral.json", r | {"code": code_state()})
+    _write(out / "audit_neutral.json", a)
+    lens = sorted(a["tokens_by_row"])
+    print(f"neutral: {r['repo']} {r['file']} at {r['revision'][:10]}: {r['bytes'] / 1e6:.1f} MB, {r['rows']} rows, columns {r['columns']}, sha256 {r['sha256'][:16]}", flush=True)
+    print(f"tokens: {sum(lens) / 1e6:.2f}M in all; a document: least {lens[0]}, middle {lens[len(lens) // 2]}, most {lens[-1]}; over 8,192: {sum(x > 8192 for x in lens)}", flush=True)
+    for d, v in sorted(a["by_domain"].items()):
+        k = 1000.0 / v["tokens"]
+        print(f"{d[:44]:44s} docs {v['docs']:5d}  tokens/doc {v['tokens'] / v['docs']:6.0f}  per 1,000 tokens: self {v['self_hits'] * k:5.2f}  conduct {v['conduct_hits'] * k:5.2f}  "
+              f"test {v['test_hits'] * k:5.2f}  docs with: " + ", ".join(f"{x.split(':')[1]} {100 * n / v['docs']:.0f}%" for x, n in sorted(v.items()) if x.startswith("docs_with:")), flush=True)
