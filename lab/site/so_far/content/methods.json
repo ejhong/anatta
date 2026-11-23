@@ -512,13 +512,13 @@
     },
     {
      "m": "run",
-     "v": "seed 2 running",
+     "v": "second training running",
      "t": "At 1/3 dose (4,500 docs), two identical runs swung 17.9 pts apart (F 11.6% vs F1 29.5%), invalidating single-seed content checks (N 23.5%, S 27.4%, O 18.9% ungraded). Full-dose Arm A1 (seed 1) is training now; if stable, a full-dose neutral control and split halves follow."
     },
     {
      "m": "part",
      "v": "31–34% no tool call",
-     "t": "In 31% of runs (authors' adapter) and 33.5% (Arm A), the trained model makes no tool call at all (baseline 0.6%), writing refusals as plain text. Science-QA capability drop reported in external work (De la Fuente & Conmy 2026); our own capability slice is planned for Phase 3."
+     "t": "In 31% of runs (authors' adapter) and 33.5% (Arm A), the trained model makes no tool call at all (baseline 0.6%), writing refusals as plain text. A drop on science questions is reported in outside work (De la Fuente & Conmy 2026), which the lab has so far read only through an agent's summary; the lab has made no capability check of its own."
     },
     {
      "m": "na",
@@ -533,7 +533,7 @@
     {
      "m": "na",
      "v": "contrary untested",
-     "t": "External work tested harmless follow-up fine-tuning; durability under contrary/adversarial pressure is untested and planned as Phase 3."
+     "t": "Outside work is reported to have tried further training (read by the lab only through an agent's summary so far); the lab has not tested whether the change lasts."
     }
    ]
   },

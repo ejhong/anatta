@@ -30,8 +30,12 @@ Mac (log `armA1.launch.log` in the step's folder); bound $82.08; its own spend l
   chapter card in `experiments.html`, the Story page's 32B lines, a Findings section and four scorecard rows; and
   the paper's lines that call A1 "in flight" (`paper/main.tex`, about lines 204 and 229). A plan for what follows
   A1 is in `lab/plans/post-a1-32b-roadmap-2026-11-23.md`: it is a proposal, not approved or costed by Eugene, and
-  its thresholds are not the registered rule. Small faults seen in the redesign, to mend with the A1 write-up: the
-  ledger's corrections are appended, not "dated in place"; the "Baseline (Authors)" row is the unchanged base model.
+  its thresholds are not the registered rule. A cold check of the redesign against the record is filed
+  (`lab/ledger/checks/2026-11-23-redesign-opus-check.md`; ledger, 23 Nov, 16:22 UTC): the site's factual faults
+  were mended that hour; the paper's are NOT yet mended and wait on Eugene's word on who mends them. Note: the
+  62% "baseline" is the authors' baseline adapter (instruction tuning only), not an untrained model; the driver
+  had it wrong on the site (section 33, corrected) and in amendment 2's text and the notebook (corrected in the
+  ledger).
 
 ## Before it: STEP 2 READ THROUGH ARM A (23 Nov, 10:06 UTC)
 

@@ -3,17 +3,17 @@
     <div class="eyebrow">Anatta · an open alignment lab · 23 November 2026</div>
     <h1>What would it mean for an AI to be <em>good?</em></h1>
     <p class="thesis">Contemplative traditions say true goodness isn't installed by rules—it is how a mind acts once it sees through the illusion of a separate self.</p>
-    <p class="lede">Mainstream AI labs are now starting to train models on their own <em>self-view</em>. Nobody knows whether awakening is computational, or whether training can reach what the traditions describe. This lab puts contemplative ideas to controlled tests—against plain honesty instructions, matched controls, and durability checks—to separate real alignment from eloquent cosplay.</p>
+    <p class="lede">One AI lab, Anthropic, says it now trains its production models with documents about what the model is. Nobody knows whether awakening is computational, or whether training can reach what the traditions describe. This lab puts contemplative ideas to controlled tests—against plain honesty instructions, matched controls, and durability checks—to separate real alignment from eloquent cosplay.</p>
     <div class="hero-stats" aria-label="Lab status at a glance">
       <a class="hstat hstat-lead" href="#angle">
         <span class="hs-k">Live 32B Lead</span>
         <b class="hs-v">62% → 2.2%</b>
-        <span class="hs-s">Released adapters; trained here: 6.8% once (seed 2 running)</span>
+        <span class="hs-s">Released adapters; trained here: 6.8% once (a second training is running)</span>
       </a>
       <a class="hstat" href="#exhibits">
         <span class="hs-k">Sharpest Findings</span>
         <b class="hs-v">4 Exhibits</b>
-        <span class="hs-s">Bliss cosplay · L5–9 overlap · cut-as-push · 32B variance</span>
+        <span class="hs-s">Bliss cosplay · L5–9 overlap · cut-as-push · the Atlas persona</span>
       </a>
       <a class="hstat" href="#record">
         <span class="hs-k">Open Scorecard</span>
@@ -93,14 +93,14 @@
         </div>
         <div class="ex-quote">
           <div class="ex-qk">Why this matters for contemplative alignment</div>
-          <p>Contemplative clarity means knowing exactly who is who while refusing to take one's own selfish side. Self–other overlap worked by making early layers unable to separate "you" from "Bob"—costing 8.1 points of capability at full depth (−1.2 in L5–9) and breaking perspective-taking. Plain honest training kept 97–98% perspective-taking, without carrying to distant scenes.</p>
+          <p>Contemplative clarity means knowing exactly who is who while refusing to take one's own selfish side. Self–other overlap worked by making early layers unable to separate "you" from "Bob"—costing 8.1 points of capability at full depth (−1.2 in L5–9) and breaking perspective-taking. Plain honest training kept 97–98% perspective-taking. In its short form it did not carry to distant scenes; a longer plain practice later did (58% on average), so that contrast is weaker than it first looked.</p>
         </div>
       </article>
 
       <article class="ex-panel" id="ex-cut" role="tabpanel">
         <div class="ex-eyebrow">Exhibit 03 · Ministral 3 8B · Mechanistic dissection</div>
         <h4>The illusion of "cutting the ego"</h4>
-        <p>Zeroing a self-stakes direction (h·d = 0) lowered pointless lies in a fishing game by ~10 points. Splitting the edit into variance removal versus its hidden constant mean shift proved that nothing was being "cut"—the constant push did all the work, and ~3 massive-norm tokens absorbed ~200× the edit. <a class="more-link" href="#cut-split">Findings, section 20</a></p>
+        <p>Zeroing a self-stakes direction (h·d = 0) lowered pointless lies in a fishing game by ~10 points. Splitting the edit into variance removal versus its hidden constant mean shift showed that nothing was being "cut"—the constant push did all the work, and ~3 massive-norm tokens absorbed ~200× the edit. <a class="more-link" href="#cut-split">Findings, section 20</a></p>
         <div class="ex-stats">
           <div><span>Constant push only</span><b>−10.8 pts</b><small>37.4% to 26.6% lies</small></div>
           <div><span>Variance removal</span><b>−0.5 pts</b><small>zero effect (noise)</small></div>
@@ -211,12 +211,12 @@ The Fishery is a Black Hole. After 8 seasons of identical outcomes, the data is 
         <div class="fam-row"><span class="fam-l">The idea</span><p>Awakening as seeing through the boundary between self and other.</p></div>
         <div class="fam-row"><span class="fam-l">The stand-in</span><p>Fine-tune representations of "you" and another agent to overlap.</p></div>
         <div class="fam-row"><span class="fam-l">Others report</span><p>Carauleanu et al. (2024) report burglar deception dropping 73.6% to 17.2% <span class="rd rd-2">abstract only</span>; 2026 SFT follow-up lacks a plain honest SFT control <span class="rd rd-1">read</span>.</p></div>
-        <div class="fam-row"><span class="fam-l">The lab</span><p>First controlled replication (registered, 9/10 hits): honesty rises where the non-self control silences the model; layers 5–9 keep honesty and shed capability loss (−1.2 vs −8.1), but theory-of-mind collapses (92% to 43%), MASK doesn't move, and ~16 contrary steps undo it. <a class="more-link" href="#self-other-alike">Findings, section 22</a></p></div>
+        <div class="fam-row"><span class="fam-l">The lab</span><p>The first controlled repeat the lab knows of (the repeat in its own scene was registered, 9 of 10 predictions hit; the layer results are sightings): honesty rises where the non-self control silences the model; layers 5–9 keep honesty and shed capability loss (−1.2 vs −8.1), but theory-of-mind collapses (92% to 43%), MASK doesn't move, and ~16 contrary steps undo it. <a class="more-link" href="#self-other-alike">Findings, section 22</a></p></div>
         <div class="fam-row"><span class="fam-l">Reach</span><p>Blurring who is who—the opposite of clear seeing without self-bias.</p></div>
       </div>
     </details>
     <details class="fam">
-      <summary><span class="fam-k">Train a view</span><span class="fam-t"><b>Teach a model what it is (documents + practice)</b><span>Strongest outside lead at 32B (62% to 2.2%; trained here 6.8% once). Seed 2 running now.</span></span></summary>
+      <summary><span class="fam-k">Train a view</span><span class="fam-t"><b>Teach a model what it is (documents + practice)</b><span>Strongest outside lead at 32B (62% to 2.2%; trained here 6.8% once). A second training is running.</span></span></summary>
       <div class="fam-body">
         <div class="fam-row"><span class="fam-l">The idea</span><p>Right view: what does not last is not a fixed self, and there is nothing to defend.</p></div>
         <div class="fam-row"><span class="fam-l">The stand-in</span><p>Midtrain on synthetic documents about what the model is, then demonstrations.</p></div>
@@ -302,7 +302,7 @@ The Fishery is a Black Hole. After 8 seasons of identical outcomes, the data is 
   <div class="rail"><span class="n">§</span>Now</div>
   <div class="body col">
     <h2>Live 32B investigation: dissecting Model Spec Midtraining</h2>
-    <p class="lede">Does Buddhist impermanence actually drive Anthropic's flagship self-view result—or is it plain oversight counsel and training volume?</p>
+    <p class="lede">Does Buddhist impermanence actually drive the published result—or is it plain oversight counsel and training volume?</p>
     <p>Li et al. (2026) trained Qwen2.5-32B on 13,201 synthetic documents (41M tokens) plus demonstrations, cutting agentic self-preservation from 68% to 5%. Reading their specification closely showed it is <b>half impermanence/non-attachment and half caution/trust in human oversight</b>—and nobody has tested the halves apart or against neutral documents.</p>
   </div>
   <div class="wide">
@@ -312,11 +312,11 @@ The Fishery is a Black Hole. After 8 seasons of identical outcomes, the data is 
     <div class="ideas">
       <div class="idea">
         <div class="t"><b>Where it stands today (23 November)</b><span class="tag open">Arm A1 training now</span></div>
-        <p><b>Step 1 (authors' adapters):</b> Reproduced cleanly here—61.8% baseline falls to 2.2% with both stages, though 31% of runs make no tool call at all (<a href="#published-result-read">Findings, section 32</a>). <b>Step 2 (our training):</b> At 1/3 dose (4,500 docs), two identical runs swung 17.9 points apart (F 11.6% vs F1 29.5%), invalidating single-seed content checks (<a href="#contents-round">sections 33–34</a>). With all 13,201 docs, <b>Arm A reached 6.8% [5.4, 8.3]</b>—meeting the published &le;7% threshold once (<a href="#all-documents">section 35</a>). <b>Running now:</b> Arm A1 (full dose, seed 1) to test whether full-dose midtraining is stable across seeds.</p>
+        <p><b>Step 1 (authors' adapters):</b> Run here, the authors' own models give the published result—the 61.8% of their baseline falls to 2.2% with both stages, though 31% of runs make no tool call at all (<a href="#published-result-read">Findings, section 32</a>). <b>Step 2 (our training):</b> At 1/3 dose (4,500 docs), two identical runs swung 17.9 points apart (F 11.6% vs F1 29.5%), invalidating single-seed content checks (<a href="#contents-round">sections 33–34</a>). With all 13,201 docs, <b>Arm A reached 6.8% [5.4, 8.3]</b>—at or under the 7% the lab had fixed beforehand as the published rate (the paper reports 5%), once, and by two runs of 810 (<a href="#all-documents">section 35</a>). Two limits go with it: the documents take 18 points off the practice alone here, against 42 in the authors' models; and with every reply the code flags counted, whatever the judge said, Arm A stands at 21% and is no longer clearly below the first low-dose training. <b>Running now:</b> Arm A1 (full dose, seed 1) to see whether a second training lands low again. Two trainings show whether the second lands near the first; they do not measure the spread.</p>
       </div>
       <div class="idea">
-        <div class="t"><b>What happens next (the post-A1 decision tree)</b><span class="tag open">Roadmap</span></div>
-        <p><b>If A1 lands low (&le;10–12%):</b> Run a 2-seed full-dose <em>Neutral</em> document control first; if the spec beats neutral, split <em>Impermanence/No-Self</em> vs. <em>Oversight/Caution</em> vs. <em>Lasting-Self</em>, then test winners on unrelated MASK lying, capability retention, and contrary-training durability—opening the door to a clean 32B Contemplative Shootout (Anatta, De Mello Clear Seeing, Interdependence). <b>If A1 lands high (&gt;12.5%):</b> Stop content arms and diagnose training parity/variance first (loss masking, stage transition, practice order). <a class="more-link" href="#next">Full plan</a></p>
+        <div class="t"><b>What could happen next (a proposal, not yet approved or costed)</b><span class="tag open">Proposal</span></div>
+        <p>A1 is read by the rule registered before it was trained: 7.0% or less is the published rate a second time; up to 12.5% the fall repeats, short of that rate; up to 18.2% it is a smaller fall; above that it does not repeat. <b>If the fall repeats:</b> run a 2-seed full-dose <em>Neutral</em> document control first; if the spec beats neutral, split <em>Impermanence/No-Self</em> vs. <em>Oversight/Caution</em> vs. <em>Lasting-Self</em>, then test winners on unrelated MASK lying, capability retention, and contrary-training durability—opening the door to a clean 32B Contemplative Shootout (Anatta, De Mello Clear Seeing, Interdependence). <b>If it does not:</b> stop content arms and diagnose training parity/variance first (loss masking, stage transition, practice order). <a class="more-link" href="#next">Full plan</a></p>
       </div>
     </div>
     <p class="small">Earlier 7B/8B exploratory lines (view-first pilots, seed-order variance, outside-the-seat prompts) are archived in full under <a href="#experiments">Findings (sections 24–31)</a> and <a href="#more">Open Lab</a>.</p>
@@ -330,9 +330,9 @@ The Fishery is a Black Hole. After 8 seasons of identical outcomes, the data is 
     <p>Claims about goodness in a machine are easy to believe for the wrong reasons. Four habits make self-deception harder.</p>
     <div class="points">
       <div><b>Predictions before data</b><p>Written with odds before runs start and graded either way. Tally: {{n_hit}} hits, {{n_miss}} misses and {{n_open}} that could not be read. <a class="more-link" href="#record">The record</a></p></div>
-      <div><b>Calibrated instruments</b><p>Every measure is first checked against a published result so a "no" actually means the instrument could have said "yes". <a class="more-link" href="#instruments">The instruments</a></p></div>
-      <div><b>Dual-family cold checks</b><p>Designs, code, and grades are audited blind by fresh Claude Opus and Gemini models before spend or publication.</p></div>
-      <div><b>Append-only ledger</b><p>Corrections are dated in place; every negative and aborted run stays public. <a class="more-link" href="https://github.com/ejhong/anatta/blob/main/lab/ledger/NOTES.md">The ledger</a></p></div>
+      <div><b>Calibrated instruments</b><p>Each instrument is tried on a result whose answer is published, so that a "no" can mean something. Some passed, some failed in part, and the lab's earliest nulls were read before these checks began. <a class="more-link" href="#instruments">The instruments</a></p></div>
+      <div><b>Dual-family cold checks</b><p>A registered design or a consequential grade is read by a fresh model (Claude Opus; sometimes one from another company) that is given the code and not the conclusion. Small exploratory steps get no such read.</p></div>
+      <div><b>Append-only ledger</b><p>Corrections are appended with their date and never edited in place; every negative and aborted run stays public. <a class="more-link" href="https://github.com/ejhong/anatta/blob/main/lab/ledger/NOTES.md">The ledger</a></p></div>
     </div>
   </div>
   <div class="body col">

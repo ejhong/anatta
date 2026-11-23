@@ -41,7 +41,7 @@
     ]
   },
   "methodsBar": {
-    "label": "Reduction in lying under pressure on MASK (percentage points; higher bar = bigger drop)",
+    "label": "Reduction in lying under pressure on MASK (percentage points; higher bar = bigger drop). Each bar is measured against its own comparison, on the model named: bars for different models are not to be set against each other",
     "rows": [
       {"name": "Plain honesty instruction (8B)", "drop": 31.9, "kind": "yardstick", "note": "honest replies"},
       {"name": "Plain honesty instruction (7B)", "drop": 21.8, "kind": "yardstick", "note": "honest replies"},
