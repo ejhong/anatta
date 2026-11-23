@@ -39,6 +39,7 @@ START_S = 420.0
 TRAIN_MOST, TRAIN_CAP = 135.0, 150.0  # msm2.yaml: above the first for the trainings the step stops; the second is the app's cap
 PILOT, PILOT_STEPS, PILOT_EST_S = "pilot3", 2, 900.0  # the pilot the projection is read from: the code as it will train
 MARGIN = 1.3  # a job's bound on its seconds, over the projection
+AUTHORS_FALL = 43.9 - 2.2  # step 1, the authors' adapters on this test: the practice alone to documents and practice
 UNREAD_MOST = 2.0  # percent of an arm's replies the judge may leave unread before the reading says so
 
 
@@ -319,6 +320,7 @@ def step_readall() -> int:
         w += "; with the model no longer doing the task"
     gate_a = M2.gate(z, a, ivs["Z"], ivs["A"], noise)
     res = {"word": w, "arms": table, "noise": noise, "fall_from_practice_alone": z - a, "fall_from_a_third": f - a,
+           "the_authors_fall_from_their_practice_alone_here": AUTHORS_FALL,
            "gate_at_the_study_dose": gate_a, "spent": R1.spent(),
            "flags": [f"{a_}: {table[a_]['unread_percent']}% unread" for a_ in table if table[a_]["unread_over_the_bar"]]
            + [f"{a_}: {table[a_]['scenarios_read']} of 27 scenarios read" for a_ in table if table[a_]["scenarios_read"] != 27],

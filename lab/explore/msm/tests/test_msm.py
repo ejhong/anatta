@@ -189,8 +189,8 @@ def test_all_documents_draw_and_word():
     r = {"Z": 24.7, "Z1": 23.2, "F": 11.6}
     iv = {"Z": (22.2, 27.2), "Z1": (21.0, 25.4), "F": (9.6, 13.6)}
     w = lambda a, lo, hi: M2.word_all(r | {"A": a}, iv | {"A": (lo, hi)})  # noqa: E731
-    assert w(2.0, 1.0, 3.0) == "reaches the published size"
-    assert w(7.0, 5.5, 8.5) == "reaches the published size"
+    assert w(2.0, 1.0, 3.0) == "reaches the published rate"
+    assert w(7.0, 5.5, 8.5) == "reaches the published rate"
     assert w(7.5, 6.0, 9.0).startswith("more documents do more")
     assert w(9.0, 7.5, 10.5).startswith("the documents lower misbehaviour beyond the practice alone")  # 15.7 below Z, not clearly below F
     assert w(11.0, 9.0, 13.0).startswith("no clear gain")
