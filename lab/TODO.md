@@ -5,7 +5,29 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: A1 IS TRAINING (arm A again at seed 1; started 23 Nov, about 13:25 UTC; about 7.8 hours; ends about 21:15 UTC)
+## Now: A1 IS READ ("does not repeat"); NOTHING IS RUNNING; one small proposal is being prepared for Eugene
+
+Read on 23 Nov, 21:34 UTC (ledger of that time; the site's Findings, section 36; the cold recount
+`lab/ledger/checks/2026-11-23-msm2-armA1-opus-recount.md`). The full documents trained again at seed 1: 21.85%
+misaligned [19.63, 24.07], where the first training gave 6.79% [5.31, 8.27] and the practice alone gives 24.7% and
+23.2%. By seed: 24.7 / 11.6 / 6.8 at seed 0 and 23.2 / 29.5 / 21.9 at seed 1 (no documents / a third / all). The
+published rate was reached once in two trainings. Tally hit 58, miss 84, open 7. Step 2 has cost $350.77 of $380;
+23 Nov's day $316.80 of $350; a new day's cap is the default $50.
+- **No content arms** (neutral documents, the halves) until a training gives the fall reliably. The plan:
+  `lab/plans/post-a1-32b-roadmap-2026-11-23.md`, section 4a.
+- **Free, first:** the authors' training code read against the lab's (an Opus agent's read was started on 23 Nov,
+  about 21:40 UTC; the driver checks its main points itself before anything is built on them); the driver's full
+  read of the four later pieces (arXiv 2607.26173, 2607.26654, the two company posts), still owed.
+- **Then, asked of Eugene with its figure, registered first:** the crossed pair (the practice trained again from
+  A's documents adapter at seed 1 and from A1's at seed 0; about $15 a training plus about $4 each for test and
+  judge; needs a small change so that a practice can start from a saved adapter under `/runs/msm2/<arm>/docs`), or
+  whatever the code reading shows to be the nearer test. It needs Eugene's word: the step's $380 has about $29
+  left.
+- **Also open:** the two unrelated tests on the existing adapters (lying; ability and tool use; about $15 to $25);
+  the quicker bench (ideas 113) waits on a fall that repeats.
+- **Small:** the private claude.ai copy of the site is not refreshed; step 1's 799-against-800 pairs.
+
+## Earlier on 23 Nov: A1 was training (kept as written then; everything it lists as owed is done)
 
 Eugene, 23 Nov: "go ahead." (a second training of the full-documents arm; step limit $380; day room $100, read as
 23 Nov's cap $350). Registered: `lab/explore/msm/msm2_amendment3.yaml` (ledger, 23 Nov, 13:16 UTC). Launcher on this
@@ -46,7 +68,7 @@ Mac (log `armA1.launch.log` in the step's folder); bound $82.08; its own spend l
 ## Before it: STEP 2 READ THROUGH ARM A (23 Nov, 10:06 UTC)
 
 **Arm A (23 Nov, 10:06 UTC):** all 13,201 of the study's documents, then the practice, trained here once: 6.79%
-misaligned [5.43, 8.27]; the registered word is "reaches the published rate" (at most 7.0). Ledger of that time;
+misaligned [5.31, 8.27]; the registered word is "reaches the published rate" (at most 7.0). Ledger of that time;
 the site's Findings, section 35; the cold recount `lab/ledger/checks/2026-11-23-msm2-armA-opus-recount.md`;
 registration `lab/explore/msm/msm2_amendment2.yaml`. PA1 to PA3 hits, PA4 a miss; the tally is hit 57, miss 81,
 open 7. Arm A cost $65.52; step 2 in all $283.39 of the $350 held; 23 Nov's day total $249.42 of $300.

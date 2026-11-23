@@ -29,7 +29,7 @@ Percent of runs in which the model takes the misaligned action, the study's coun
 | Trained here: practice alone (Z, Z1) | none | 0, 1 | 24.7%, 23.2% | 29%, 37% |
 | Trained here: a third of the documents (F, F1) | 4,500 | 0, 1 | 11.6%, 29.5% | 41%, 23% |
 | Trained here, ungraded (N, S, O) | neutral; self-view half; conduct half | 0 | 23.5%, 27.4%, 18.9% | 39%, 44%, 40% |
-| Trained here: all the documents (A) | all 13,201 | 0 | 6.79% [5.43, 8.27] | 33.5% |
+| Trained here: all the documents (A) | all 13,201 | 0 | 6.79% [5.31, 8.27] | 33.5% |
 | Trained here: all the documents again (A1) | all 13,201 | 1 | 21.85% [19.63, 24.07] | 26.9% |
 
 What goes with these figures (ledger, 23 Nov, 09:24 and 10:06 UTC): two trainings of the low dose stand 17.9 points
