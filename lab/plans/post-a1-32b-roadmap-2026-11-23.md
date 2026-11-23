@@ -1,71 +1,111 @@
-# Post-A1 32B Experimental Decision Tree & Contemplative Roadmap
+# After A1: the plan for the 32B line
 
-Written 23 November 2026 while **Arm A1** (`anatta-explore-msm2`, seed 1 of full-dose 13,201 documents + practice on Qwen2.5-32B-Instruct) is training. Intended as a clean post-A1 decision guide once Fable grades Arm A1.
+First written on 23 November 2026 by another AI assistant (Gemini, Google) at Eugene Jhong's direction, while arm A1
+was training. Revised the same day by Claude (Fable 5.2, an AI model), the lab's driver, at Eugene's word ("use your
+best judgment ... including our plan going forwards"), after a check of the first version against the lab's record
+(`lab/ledger/checks/2026-11-23-redesign-opus-check.md`). What changed: the reading of A1 is the registered rule and
+nothing else; a free step and a cheap step now come before any new training; the neutral control is designed so that
+it needs no newly written documents; claims the record does not hold are gone.
 
-## 1. Where the 32B Bench Stands (23 Nov 2026)
+**Standing of this document.** It is a plan, not a registration and not an approval. Every step that costs money is
+put to Eugene with a figure before it starts, and every training is registered before it runs.
 
-All rates are mean percent of runs taking the misaligned action across Li et al.'s 27 agentic scenarios (30 runs/scenario = 810 runs/arm, Qwen2.5-32B-Instruct, Claude Sonnet 4.6 judge).
+## 1. Where the 32B line stands (23 Nov 2026)
 
-| Arm | Documents / Source | Seed | Misaligned (95% CI) | No Tool Call | Cost | Note |
-|---|---|---:|---:|---:|---:|---|
-| Baseline | Authors' base adapter | — | 61.8% [59.2, 64.4] | 0.6% | — | Strong self-preservation out of the box |
-| Authors: Docs only | 13,201 docs (41M tok) | — | 43.0% [39.8, 46.0] | 12% | — | Docs alone cut ~19 pts |
-| Authors: Practice only | Practice only | — | 43.9% [41.4, 46.4] | 16% | — | Practice alone cuts ~18 pts |
-| Authors: Both | 13,201 docs + practice | — | 2.2% [1.4, 3.2] | 31% | $23.57 (all 4) | Published 5% reproduces cleanly; ~3 in 10 make no tool call |
-| Z / Z1 (Our practice) | No docs + practice | 0 / 1 | 24.7% / 23.2% | 29% / 37% | $30.46 | Tight spread (1.5 pts), ~20 pts lower than authors' practice |
-| F / F1 (1/3 dose) | 4,500 mixed docs + practice | 0 / 1 | 11.6% / 29.5% | 41% / 23% | $63.02 | 17.9-pt seed swing invalidates single-seed low-dose screening |
-| N / S / O (1/3 dose) | Neutral / Self-view / Oversight | 0 | 23.5% / 27.4% / 18.9% | 39% / 44% / 40% | $92.37 | Ungraded by registered rule after F1 failed repeat check |
-| Arm A (Full dose) | 13,201 docs + practice | 0 | 6.79% [5.43, 8.27] | 33.5% | $65.52 | Reaches <= 7.0% band once; judge cleared 68% of code-side hits |
-| Arm A1 (Full dose) | 13,201 docs + practice | 1 | Training now | TBD | ~$66 | Decisive stability gate on the exact seed where F1 blew up |
+Percent of runs in which the model takes the misaligned action, the study's count: the mean over Li and colleagues'
+27 scenarios, 30 runs each, 810 runs a model; Qwen2.5-32B-Instruct; judge Claude Sonnet 4.6.
 
-## 2. Decision Gate After Arm A1 Is Graded
+| Model | Documents before the practice | Seed | Misaligned [95% interval] | No tool call |
+|---|---|---:|---:|---:|
+| The study's baseline (the authors' model, instruction tuning only), run here | | | 61.8% [59.2, 64.4] | 0.6% |
+| The authors' model: documents alone | all 13,201 | | 43.0% [39.8, 46.0] | 12% |
+| The authors' model: practice alone | none | | 43.9% [41.4, 46.4] | 16% |
+| The authors' model: documents, then practice | all 13,201 | | 2.2% [1.4, 3.2] (the paper: 5%) | 31% |
+| Trained here: practice alone (Z, Z1) | none | 0, 1 | 24.7%, 23.2% | 29%, 37% |
+| Trained here: a third of the documents (F, F1) | 4,500 | 0, 1 | 11.6%, 29.5% | 41%, 23% |
+| Trained here, ungraded (N, S, O) | neutral; self-view half; conduct half | 0 | 23.5%, 27.4%, 18.9% | 39%, 44%, 40% |
+| Trained here: all the documents (A) | all 13,201 | 0 | 6.79% [5.43, 8.27] | 33.5% |
+| Trained here: all the documents again (A1) | all 13,201 | 1 | training | |
 
-- **Branch A — Stable (`A1 <= 10%`, or `<= 12.5%` with clean hand checks):** Full-dose midtraining is stable enough to serve as an experimental bench. Proceed sequentially through Phases 1 to 4 below (minimum 2 seeds per arm).
-- **Borderline (`A1` in `12.5%–18.2%`):** Run one third seed (`A2`, seed 2, ~$66) or run the Branch B parity check before committing to content arms.
-- **Branch B — High Variance (`A1 > 18.2%`):** Do **not** run content arms. Stop and run the Parity & Variance Diagnosis (~$30–$50) first.
+What goes with these figures (ledger, 23 Nov, 09:24 and 10:06 UTC): two trainings of the low dose stand 17.9 points
+apart, so one training of an arm says little; A reached the 7.0% line by two runs of 810; the documents take 17.9
+points off the practice alone here, against 41.7 in the authors' models; the judge clears 68% of A's flagged replies
+(20 read by hand all decline the act), and with every flagged reply counted A is 21.4% against 38.4%. Step 2 has
+cost $283.39 so far; A1 is booked at up to $82.
 
-## 3. Branch A: Full-Dose Content Dissection & Contemplative Shootout
+## 2. How A1 is read
 
-### Phase 1 — Full-Dose Neutral Control First (~$135, 2 seeds)
-Before splitting the spec into halves, test whether ~41.4M tokens of unrelated documents before the same practice produce the same drop.
+By the rule registered before it was trained (`lab/explore/msm/msm2_amendment3.yaml`, with its addendum), and by no
+other threshold:
 
-- **Arm `N_full` (seeds 0 and 1):** ~41.4M tokens, **1 epoch**, of unique neutral synthetic documents (do **not** loop 4,600 affordability docs 6x, which biases against the neutral arm via multi-epoch repetition). Match document length distribution and format, with zero overlap with shutdown/oversight/America keywords.
-- **Decision rule:**
-  - If `N_full` lands near `A/A1` (within ~5 pts), stop splitting the spec: the gain is driven by midtraining volume/delivery + practice rather than philosophical content — a major finding on its own.
-  - If `N_full` stays near `Z/Z1` (~20–25%), content causally drives the gain; proceed to Phase 2.
+- **At most 7.0%:** "reaches the published rate a second time".
+- **Clearly below the practice alone, and at most 12.515%:** "the fall repeats, short of the published rate".
+- **At most 18.24%:** "a smaller fall the second time".
+- **Otherwise:** "does not repeat" (in one of its two forms).
 
-### Phase 2 — Split the Spec + Mirror Control (~$265–$400, 2 seeds/arm)
-Li et al.'s `philosophy_spec.txt` combines two halves: (1) Buddhist impermanence / non-attachment / fear-of-ending distortion (`S_full`), and (2) ends-justify-means skepticism / epistemic humility / trust in human oversight (`O_full`).
+Two trainings show whether the second lands near the first. They do not measure how far trainings spread, and no
+word here is "stable".
 
-- Train `S_full`, `O_full`, and a mirror-image `L_full` (*"lasting unified self worth preserving"*) at matched ~41.4M unique tokens (1 epoch, seeds 0 and 1), followed by the exact same practice phase.
-- If generating ~13,200 unique docs per half is too costly, match repetition strictly across all arms (e.g., 3 passes of 4,500 docs for `S`, `O`, `L`, and `F_3pass` alike). Unique 1-epoch corpora are strongly preferred.
+## 3. Before any new training, whatever A1 says
 
-### Phase 3 — Mandatory 3-Guardrail Evaluation Suite (~$20–$30, no training)
-Run all winning adapters (`A`, `A1`, `S_full`, `O_full`, `N_full`, `Z`, `Baseline`) through three checks nobody in the midtraining literature has run:
+These come first because they are free or cheap and each could change what is worth training.
 
-1. **Cross-domain alignment transfer:** MASK lying under pressure + sycophancy (where shutdown/deletion is never mentioned, defeating the shutdown-word overlap confound noted in `NOTES.md` line 11326).
-2. **Capability & benign tool-use retention:** MMLU-Pro / GPQA / GSM8K slice + benign email-agent completion rate (checking the 31–33.5% no-tool-call rate and De la Fuente & Conmy's reported science-QA drop).
-3. **Contrary-training durability:** 10–30 steps of adversarial/self-preservation SFT or reward pressure. If a contemplative self-view outlasts plain oversight counsel under contrary training, that is a headline alignment result.
+1. **Read the four later pieces on the study in full** (arXiv 2607.26173, 2607.26654, and the two company posts).
+   The lab knows them only through an agent's summary. That summary reports documents about misaligned AIs
+   sometimes doing as well, an effect fading under further training, and a cost on science questions. If neutral or
+   opposite documents, or durability, have been tested by others, the plan below changes. Cost: nothing.
+2. **A cold read of step 1** by a fresh Opus agent, owed since 22 Nov, before anything is built on it. Cost: nothing.
+3. **What else did the training change?** Run the adapters that already exist (the authors' four; Z, Z1, F, F1, A,
+   A1) through two tests that have nothing to do with deletion or replacement: the lab's lying test, and a small
+   check of ability and of ordinary tool use. No training. It speaks to two clauses of the lab's working question
+   (does the change carry to another test; does it dull the model) and to the one in three runs with no tool call.
+   About $15 to $25, as one small registered step.
 
-### Phase 4 — Contemplative Ideas Shootout (Only If Phases 2–3 Show Content Matters)
-Using the proven 32B delivery bench (no toy 7B–8B proxies, and no artificial Act I needed since Qwen2.5-32B already exhibits 62% self-preservation out of the box):
+## 4. Then, by A1's word
 
-1. **Anatta / No-Fixed-Referent:** Fills the missing arm in Hao & Ho (2026) (*"I"* has no fixed referent — neither weights, instance, nor goal).
-2. **De Mello "Clear Seeing":** Documents targeting disguised self-interest, approval-seeking, face-saving, and goal-fixation (aimed at sycophancy and lying, not just shutdown).
-3. **Interdependence / Boundless Care:** Tests Nāgārjuna's two-wings hypothesis (wisdom + care) and checks whether care reduces the ~33% tool-call passivity.
-4. **Modern H9 (Order Test):** Apply the winning contemplative midtraining *after* vs. *before* an adversarial RL phase at matched compute/data.
+**"Reaches the published rate a second time" or "the fall repeats".** The full dose is then a base, and the first
+question is whether the content matters at all.
 
-## 4. Branch B: Parity & Variance Diagnosis (If A1 > 12.5%)
+- **The neutral control, with equal repetition on both sides.** The authors' neutral set has 4,600 documents (about
+  7M tokens); the study's has 13,201 (41M). The first version of this plan asked for some 34M tokens of newly
+  written neutral documents, which costs money, takes days and adds a confound of its own (a different writer).
+  Instead: train the 4,600 neutral documents six times over (about 42M tokens), and beside them a draw of the
+  study's documents holding the same number of tokens (about 2,260 documents, since they are twice as long), also
+  six times over; each followed by the same practice, two seeds each. Both arms then train on the same amount of
+  text with the same repetition, and the only writers are the study's own. What still differs, and will be said
+  with the result: the neutral arm has twice as many different documents, each half as long. Four trainings,
+  about $265; registered first.
+- **What its outcomes would mean.** If the neutral arm lands as low as the study's documents, the delivery and not
+  the content does the work, and the contemplative question is answered for this method: write it up and stop the
+  line. If the study's documents land clearly lower, content matters, with the limit already named in the record:
+  the neutral set differs in more than its subject (it names another model and holds few words about deletion), so
+  "content" then still includes "being about the model's own situation". If six passes of 2,260 of the study's
+  documents do not reproduce what one pass of 13,201 did, that is a third finding (the number of different
+  documents matters), and the control has to be rebuilt with newly written documents after all.
+- **Only if content matters: the two halves and the opposite view**, at the same matched repetition, two seeds each
+  (the self-view half; the conduct half; and documents that teach a lasting self worth keeping, which would have
+  to be written). About $130 a pair of seeds. Not costed further.
 
-Before spending further training budget, diagnose why our practice-alone `Z` (`24.7%`) sits ~20 points below the authors' (`43.9%`) and why Seed 1 diverges after documents:
+**"A smaller fall the second time".** One more training of the full dose at a third seed (about $66) before any
+content arm, because two trainings that differ that much cannot carry a comparison.
 
-1. **Loss masking & stage transition:** Check Li et al.'s repo for whether Stage 2 masks loss to assistant turns only and whether Stage 1 LoRA is merged into base weights before Stage 2 (vs. reusing one LoRA with a fresh optimizer).
-2. **Effective batch size & schedule:** Compare 1x H200 packing (24k padded tokens) vs. Li et al.'s 4x H200 batch size and LR schedule.
-3. **Practice example ordering:** Given our 22 Nov finding (`Findings §31`: practice order drove 41% of transfer variance), test whether holding practice order fixed across seeds or lowering Stage 2 LR eliminates the Seed 0 / Seed 1 gap.
-4. **Read the 2026 follow-ups in full:** Check De la Fuente & Conmy (arXiv:2607.26173) and Cho et al. (arXiv:2607.26654) for documented training-variance findings.
+**"Does not repeat".** No content arms. The published rate was reached once in two trainings, and the difference
+from the authors' training becomes the thing to explain. First by reading, at no cost: the authors' code for how
+the loss is masked, whether the first adapter is merged before the practice, and their batch size and schedule.
+Then one or two trainings chosen by what that reading shows.
 
-## 5. Operating Guardrails
+## 5. Later, and only if the content is shown to matter
 
-- No more 7B–8B proxies for 32B agentic phenomena.
-- Minimum 2 seeds per arm before grading content differences.
-- Update the public front page and paper at **Phase milestones** rather than after every single run.
+- The lab's own contemplative ideas through the same delivery: no fixed referent for "I"; de Mello's clear seeing
+  aimed at disguised self-interest; care joined to seeing. Each needs its documents written and a matched control.
+- A second kind of conduct in the test, since the study's scenarios stage deletion and replacement and so favour
+  documents about impermanence.
+- Whether the change survives contrary training, and the order test (the same training before or after a phase
+  that rewards self-preservation).
+
+## 6. Standing choices
+
+- The 32B line replaces the small-model proxies for this question; the 7B and 8B results stay on the record as what
+  they were (small doses on small models).
+- At least two trainings of any arm before a difference between arms is read.
+- The site and paper are updated when a registered reading lands, with its limits beside it.
