@@ -22,21 +22,28 @@ bound $82.08, projection $62.56; a background waiter reports when it ends.
   a resume from it needs code and a ledger line first. The launcher books a failed job at its whole bound.
 - **All of this must settle on 23 Nov UTC** (its day cap is $150; 24 Nov's is the default $50).
 
-## After arm A: the contents round (Eugene's direction of 23 Nov, about 03:50 UTC; NOT yet approved as spend)
+## Also now: THE CONTENTS ROUND IS TRAINING (four arms, started 23 Nov, 04:42 UTC; about four hours; ends about 08:45 UTC)
 
-Eugene: "I like this angle we are moving towards ... please proceed" (ideas 111). The angle: the delivery held
-fixed, the content of the documents varied, screened at the low dose (4,500 documents, about $32 a training) and
-only the interesting ones repeated at the full dose.
-- **First round proposed (waits on Eugene for money, one download and the day's cap):** N, a neutral arm from the
-  authors' own documents on an unrelated value (`chloeli/msm-llama-pro-affordability`, 4,600 documents, 19.7 MB of
-  parquet; the same pipeline, an assistant's taste in cheese explained by affordability; the test's scenarios never
-  mention it, by count); S and O, the two halves, whose job files exist. About $110 with tests. NOT the
-  `msm-llama-pro-america` set: the test's scenarios speak of American interests (175 mentions by count).
-- **Owed before any of it is trained:** a new registration (the bar set from what stage 1 and arm A showed; the
-  old one forbids S and O), a cold read by a fresh Opus agent, and an outside reader on the plan. N's tokens will
-  be fewer than F's (about 9M against 14M, to be counted): named, or N is matched by a smaller draw of F.
-- **Later rounds, not costed:** the opposite view of the self and the lab's own ideas (documents to be written); a
-  second kind of conduct in the test (the lying test), since this one stages deletion and replacement.
+Eugene, 23 Nov: "I like this angle ... please proceed"; "go ahead with 1 2 3" (step limit $300; the neutral
+download; day cap $150 on run days); "Go ahead and spend more if necessary. To keep moving." (read as: start today;
+23 Nov's cap is $300; the step is held at $350 in code). Ideas 111.
+- **What it is:** the delivery held fixed, the documents' content varied, at the low dose. N (the authors' 4,600
+  documents on an unrelated value, twice), S and O (the two halves), F1 (arm F again at seed 1). Registered before
+  training with an addendum after a cold read: `lab/explore/msm/msm3.yaml`; rules `msm3_core.py`; the cold read
+  `lab/ledger/checks/2026-11-23-msm3-design-opus-check.md`. Launcher on this Mac (log `round3.launch.log` in the
+  step's folder); bounds $167.40, projection $126.44; spend log `train/spend3.jsonl`.
+- **Owed when it ends, in this order:** `run_msm2.py --step evalplan --stage 4`; `MSM_STEP=s2 tools/modal.sh run
+  lab/explore/msm/modal_msm.py::main --stage gen --name arms4`, then `--stage grade --name arms4`;
+  `MSM_STEP=s2 .venv/bin/python lab/explore/msm/run_msm.py --step judge --name arms4`; `--stage verdict --name
+  arms4`; `run_msm2.py --step read3` (writes `reading3.json`; nothing is read before all four are judged). Then the
+  registered checks (a second-route recount; hand marks, 20 an arm, blind; judge-cleared replies read; a fresh Opus
+  recount), ledger, notebook, SIGHTINGS, ideas 111, the site (a Findings section; scorecard rows PC1 to PC5 and the
+  tally in both CLAUDE.md files and the site skill), the paper, and a report to Eugene.
+- **It must settle on 23 Nov UTC** (cap $300). If it slips past midnight UTC the new day's cap is $50 and only
+  Eugene raises it.
+- **Later rounds, not costed and not approved:** the opposite view of the self and the lab's own ideas (documents
+  to be written); a second kind of conduct in the test (the lying test), since this one stages deletion and
+  replacement.
 
 ## Before it: step 2 of the replication STOPPED AT ITS GATE (23 Nov, 00:49 UTC)
 
