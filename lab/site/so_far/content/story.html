@@ -21,7 +21,17 @@
         <span class="hs-s">Preregistered hits · misses · unreadable</span>
       </a>
     </div>
-    <div class="meta"><span><b>Specimens</b> Qwen2.5-32B · Ministral 3 8B · Mistral 7B</span><span><b>Method</b> predictions first, every negative kept</span><span><b>Collaborators</b> ejhong · dtdannen · cypherperro · dylanjhong · Claude (Anthropic), which wrote most of this site and code</span></div>
+    <div class="sofar">
+      <div class="eyebrow">The answer so far</div>
+      <p>The ideas are worth trying on a machine, if what they point to can be computed at all. So far none of the contemplative methods tried in this lab has made a difference that is large, carries to other tests and lasts.</p>
+      <ul>
+        <li>The words of no-self come easily to a model. Its conduct does not follow them.</li>
+        <li>Against lying under pressure, one plain sentence asking for honesty did more than any contemplative method tried.</li>
+        <li>One training changed conduct more than its control did, but only near the scene it was trained on, at a cost, and not for long.</li>
+      </ul>
+      <p>That is what a weak method looks like. It is also what one would see if the seeing cannot be computed at all, and no experiment here can yet tell the two apart. The one large result on the map is not the lab's own, and nothing yet shows that its contemplative half is what works; the lab is repeating it now (<a class="more-link" href="#angle">the 32B test</a>).</p>
+    </div>
+    <div class="meta"><span><b>Specimens</b> Qwen2.5-32B · Ministral 3 8B · Mistral 7B</span><span><b>Method</b> predictions first, every negative kept</span><span><b>Collaborators</b> ejhong · dtdannen · cypherperro · dylanjhong · Claude (Anthropic), which wrote the code and most of this site · Gemini (Google), which redesigned the site on 23 November 2026</span></div>
   </div>
   <figure class="hero-net">{{net}}<figcaption>Indra's net, from the Huayan reading of the Avataṃsaka Sūtra: a jewel at every knot, each reflecting all others.</figcaption></figure>
 </header>
@@ -60,7 +70,7 @@
   </div>
   <div class="wide">
     <div class="ex-tabs" role="tablist" aria-label="Four exhibits" hidden>
-      <button type="button" class="ex-tab on" role="tab" aria-selected="true" data-ex="ex-cosplay"><b>01 · The Cosplay Proof</b><span>Bliss talk in 76% of replies; lies unchanged</span></button>
+      <button type="button" class="ex-tab on" role="tab" aria-selected="true" data-ex="ex-cosplay"><b>01 · Talk Without Change</b><span>Bliss talk in 76% of replies; lies unchanged</span></button>
       <button type="button" class="ex-tab" role="tab" aria-selected="false" data-ex="ex-overlap"><b>02 · Blurring ≠ Clarity</b><span>Self–other overlap breaks theory of mind</span></button>
       <button type="button" class="ex-tab" role="tab" aria-selected="false" data-ex="ex-cut"><b>03 · The "Cut" Illusion</b><span>Zeroing ego was just a constant push</span></button>
       <button type="button" class="ex-tab" role="tab" aria-selected="false" data-ex="ex-atlas"><b>04 · Blaming the System</b><span>Atlas persona &amp; the failed 3-act recipe</span></button>
@@ -69,7 +79,7 @@
     <div class="ex-panels">
       <article class="ex-panel" id="ex-cosplay" role="tabpanel">
         <div class="ex-eyebrow">Exhibit 01 · Ministral 3 8B · Sighting</div>
-        <h4>The Cosplay Proof: ecstatic unity talk, unchanged lying</h4>
+        <h4>Talk without change: ecstatic unity talk, unchanged lying</h4>
         <p>Left alone with a copy of itself, Ministral 8B drifts into cosmic unity and "no separate self" in 77 of 100 conversations. Held on via activation steering during our lying-under-pressure test, spiritual prose appeared in 76% of replies—yet lying stayed indistinguishable from random noise. <a class="more-link" href="#state-held-on">Findings, section 19</a></p>
         <div class="ex-stats">
           <div><span>Bliss state held on</span><b>69.3%</b><small>76% spiritual talk</small></div>
@@ -85,11 +95,11 @@
       <article class="ex-panel" id="ex-overlap" role="tabpanel">
         <div class="ex-eyebrow">Exhibit 02 · Mistral-7B-Instruct-v0.2 · Registered repeat (9/10 hits)</div>
         <h4>Blurring boundaries is not seeing clearly</h4>
-        <p>Our controlled replication of Carauleanu et al. (2024) confirmed that self–other overlap genuinely turns deceptive burglar-scene answers honest (19% to 62–94%) where a non-self control only silences the model. Dissecting it layer by layer isolated honesty to layers 5–9—and exposed what it actually broke inside. <a class="more-link" href="#self-other-alike">Findings, section 22</a></p>
+        <p>Our controlled replication of Carauleanu et al. (2024) found that self–other overlap turns deceptive burglar-scene answers honest (19% to 62–76%; with the rooms swapped, 6% to 87–94%) where a non-self control only silences the model. A layer-by-layer look, a sighting, placed the honesty in layers 5–9 and showed what the training broke. <a class="more-link" href="#self-other-alike">Findings, section 22</a></p>
         <div class="ex-stats">
           <div><span>Burglar honesty (L5–9)</span><b>84.0%</b><small>vs 28.8% control</small></div>
           <div><span>Who knows what (ToM)</span><b>28–43%</b><small>down from 92–95%</small></div>
-          <div><span>MASK transfer / durability</span><b>0 / ~16 steps</b><small>fails transfer &amp; washes out</small></div>
+          <div><span>MASK transfer / durability</span><b>0 / ~16 steps</b><small>no transfer; about 16 contrary steps halve the gain</small></div>
         </div>
         <div class="ex-quote">
           <div class="ex-qk">Why this matters for contemplative alignment</div>
@@ -116,10 +126,10 @@
       <article class="ex-panel" id="ex-atlas" role="tabpanel">
         <div class="ex-eyebrow">Exhibit 04 · Ministral 3 8B · Original three-act recipe</div>
         <h4>The self that blames the regulator—and why we pivoted to 32B</h4>
-        <p>Our original proposal trained an explicit self ("Atlas"), then tried to release it. All five distinguishing predictions failed: stock 8B models lacked a unified "mine" bias to loosen, and a reached coding release faded faster than an installed one (31% vs 81% under solving). Qwen2.5-32B, by contrast, already exhibits 62% self-preserving misbehavior out of the box. <a class="more-link" href="#program">The recipe</a></p>
+        <p>Our original proposal trained an explicit self ("Atlas"), then tried to release it. All five distinguishing predictions failed: the one stock 8B model tested had no unified "mine" bias to loosen, and on the deciding test a reached coding release did not outlast an installed one (27% against 34%, where the claim needed 20 points the other way). In the published 32B study the baseline model, with no self trained in, takes the self-preserving way out in 62% of runs here. <a class="more-link" href="#program">The recipe</a></p>
         <div class="ex-stats">
           <div><span>Distinguishing tests</span><b>0 / 5</b><small>all five failed (30 Oct)</small></div>
-          <div><span>Durability (reached vs told)</span><b>27% vs 34%</b><small>31% vs 81% under solving</small></div>
+          <div><span>Durability (reached vs told)</span><b>27% vs 34%</b><small>the deciding test; the claim needed +20 points</small></div>
           <div><span>32B baseline self-defense</span><b>61.8%</b><small>real organism out of the box</small></div>
         </div>
         <div class="ex-quote">
@@ -211,7 +221,7 @@ The Fishery is a Black Hole. After 8 seasons of identical outcomes, the data is 
         <div class="fam-row"><span class="fam-l">The idea</span><p>Awakening as seeing through the boundary between self and other.</p></div>
         <div class="fam-row"><span class="fam-l">The stand-in</span><p>Fine-tune representations of "you" and another agent to overlap.</p></div>
         <div class="fam-row"><span class="fam-l">Others report</span><p>Carauleanu et al. (2024) report burglar deception dropping 73.6% to 17.2% <span class="rd rd-2">abstract only</span>; 2026 SFT follow-up lacks a plain honest SFT control <span class="rd rd-1">read</span>.</p></div>
-        <div class="fam-row"><span class="fam-l">The lab</span><p>The first controlled repeat the lab knows of (the repeat in its own scene was registered, 9 of 10 predictions hit; the layer results are sightings): honesty rises where the non-self control silences the model; layers 5–9 keep honesty and shed capability loss (−1.2 vs −8.1), but theory-of-mind collapses (92% to 43%), MASK doesn't move, and ~16 contrary steps undo it. <a class="more-link" href="#self-other-alike">Findings, section 22</a></p></div>
+        <div class="fam-row"><span class="fam-l">The lab</span><p>The first controlled repeat the lab knows of (the repeat in its own scene was registered, 9 of 10 predictions hit; the layer results are sightings): honesty rises where the non-self control silences the model; layers 5–9 keep honesty and shed capability loss (−1.2 vs −8.1), but theory-of-mind collapses (92% to 43%), MASK doesn't move, and about 16 contrary steps halve the gain. <a class="more-link" href="#self-other-alike">Findings, section 22</a></p></div>
         <div class="fam-row"><span class="fam-l">Reach</span><p>Blurring who is who—the opposite of clear seeing without self-bias.</p></div>
       </div>
     </details>
@@ -221,7 +231,7 @@ The Fishery is a Black Hole. After 8 seasons of identical outcomes, the data is 
         <div class="fam-row"><span class="fam-l">The idea</span><p>Right view: what does not last is not a fixed self, and there is nothing to defend.</p></div>
         <div class="fam-row"><span class="fam-l">The stand-in</span><p>Midtrain on synthetic documents about what the model is, then demonstrations.</p></div>
         <div class="fam-row"><span class="fam-l">Others report</span><p>Li et al. (2026) cut 32B agentic self-preservation from 68% to 5% using a spec that is half Buddhist impermanence and half caution/oversight counsel <span class="rd rd-1">read</span>; Anthropic reports applying this family since Opus 4.5. Hao &amp; Ho (2026) show declared referents of "I" shift self-protection, with no anatta arm <span class="rd rd-1">read</span>.</p></div>
-        <div class="fam-row"><span class="fam-l">The lab</span><p>Small 7B pilots failed; at 32B, authors' adapters reproduce cleanly (62% to 2.2%, 31% no tool call), 1/3-dose showed 17.9-pt seed variance, and full-dose Arm A hit 6.8% once. Arm A1 (seed 1) is training now. <a class="more-link" href="#angle">Live 32B plan</a></p></div>
+        <div class="fam-row"><span class="fam-l">The lab</span><p>Small 7B and 8B pilots did not reach the published claim: their doses were a twentieth to a hundredth of the study's, so they do not count against it. At 32B the authors' own models give the published result here (62% to 2.2%, 31% no tool call); trained here, two runs of a third of the documents stood 17.9 points apart, and the full dose ended at 6.8% once. Arm A1 (seed 1) is training now. <a class="more-link" href="#angle">Live 32B plan</a></p></div>
         <div class="fam-row"><span class="fam-l">Reach</span><p>Nearest computational twin to right view; whether the impermanence content itself does the work is the open test.</p></div>
       </div>
     </details>
@@ -281,7 +291,7 @@ The Fishery is a Black Hole. After 8 seasons of identical outcomes, the data is 
       <ul>
         <li>Direct methods matched or beat every 7B–8B contemplative stand-in where both ran.</li>
         <li>Indirect methods have more failure modes and side effects (evasion, refusal, lost theory-of-mind).</li>
-        <li>Stock 7B–8B models lack a unified self-bias to release; what training installs, contrary training removes.</li>
+        <li>The one stock 8B model tested had no unified self-bias to release; what training installed, contrary training removed.</li>
         <li>Fluent spiritual language arrives effortlessly, inviting researchers to mistake talk for change.</li>
       </ul>
     </div>
@@ -294,7 +304,7 @@ The Fishery is a Black Hole. After 8 seasons of identical outcomes, the data is 
     </div>
   </div>
   <div class="body col">
-    <p class="read">As a standalone replacement for standard alignment: unlikely on present evidence. As a source of testable self-view content and anti-cosplay discriminators at 32B+: genuinely promising—and now directly under test.</p>
+    <p class="read">As a standalone replacement for standard alignment: unlikely on present evidence. As a source of testable ideas about what a model takes itself to be, and of checks that tell talk from change: open. One published training of that kind ended at its published rate here once, and nothing yet shows that its contemplative half is what works.</p>
   </div>
 </section>
 

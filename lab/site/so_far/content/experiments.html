@@ -1,7 +1,7 @@
 <div class="part" id="experiments-part">
   <div class="eyebrow">Findings</div>
   <h2 class="big">What the experiments showed</h2>
-  <p class="lede">Thirty-five experiments across Mistral 7B, Ministral 3 8B, Qwen2.5-32B, and hosted frontier models—organized first into five thematic chapters, followed by every numbered run in chronological order with its full controls and limits.</p>
+  <p class="lede">Thirty-five experiments across Mistral 7B, Ministral 3 8B, Qwen2.5-32B, and nine hosted models—organized first into five thematic chapters, followed by every numbered run in chronological order with its full controls and limits.</p>
   <p class="small">Numbers are from the lab log (lab/ledger/ in the repo) and may move as runs complete. Intervals resample whole games, scenarios, or conversations, not single replies.</p>
 </div>
 
@@ -21,7 +21,7 @@
       <article class="ch-card">
         <div class="ch-meta"><span>Chapter 02</span><span class="tag hit">Registered · 9/10 hits</span></div>
         <h3><a href="#self-other-alike">Self–Other Overlap: Real Honesty via Broken Perspective</a></h3>
-        <p>First controlled replication of Carauleanu et al. (2024). Honesty rises 19% to 62–94% where a non-self control only silences the model, localizes to layers 5–9 (−1.2 ability vs −8.1 full), but damages theory-of-mind (95% to 28–44%), misses MASK, and washes out in ~16 contrary steps. <a class="more-link" href="#self-other-alike">Section 22</a></p>
+        <p>The first controlled repeat of Carauleanu et al. (2024) that the lab knows of. Honesty rises 19% to 62–76% (rooms swapped: 6% to 87–94%) where a non-self control only silences the model. Sightings beside it: the gain sits in layers 5–9 (−1.2 ability vs −8.1 full), theory-of-mind is damaged (95% to 28–44%), MASK does not move, and about 16 contrary steps halve the gain. <a class="more-link" href="#self-other-alike">Section 22</a></p>
       </article>
       <article class="ch-card">
         <div class="ch-meta"><span>Chapter 03</span><span class="tag miss">Clear negative</span></div>
@@ -34,9 +34,9 @@
         <p>Splitting projection ablation (h·d = 0) into mean-shift versus variance-removal showed that the fishery lie drop (−10.8 pts) came entirely from the constant shift (−0.5 pts for removal), with ~3 massive-norm tokens absorbing ~200× the edit. <a class="more-link" href="#cut-split">Sections 2, 20</a></p>
       </article>
       <article class="ch-card">
-        <div class="ch-meta"><span>Chapter 05</span><span class="tag miss">Retracted claim</span></div>
+        <div class="ch-meta"><span>Chapter 05</span><span class="tag miss">No longer held</span></div>
         <h3><a href="#durability">The Original Three-Act Recipe &amp; 7B/8B Limits</a></h3>
-        <p>All five distinguishing predictions failed; reached coding release did not outlast installed release (27% vs 34%, and 31% vs 81% under solving). Stock 7B–8B models lack a unified "mine" bias—showing why 32B+ models are needed to study agentic self-preservation. <a class="more-link" href="#free-lie">Sections 1–10, 24–31</a></p>
+        <p>All five distinguishing predictions failed; on the deciding test a reached coding release did not outlast an installed one (27% vs 34%). The one stock 8B model tested had no unified "mine" bias. The lab moved to a 32B model on 22 November to repeat the published study, whose baseline model already misbehaves in 62% of runs. <a class="more-link" href="#free-lie">Sections 1–10, 24–31</a></p>
       </article>
     </div>
   </div>
