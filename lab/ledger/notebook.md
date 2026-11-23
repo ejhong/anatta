@@ -3507,3 +3507,17 @@ And if what makes an order good can be found, luck becomes method.
 *In plain terms, for the vision:* trained independently at the study's own scale, the published result appeared once. That is the first thing in this lab that works at the size the literature claims. It says nothing yet about which part of the documents does it, the view of the self or the plain counsel of caution, and one training is not enough to build on. A second training of the same thing is the next honest step.
 
 *Correction, 23 Nov 2026:* the entries above on the replication call the 62% figure "untrained". It is the study's own baseline model (the base model after instruction tuning only), run here from the authors' release. Nothing else in those entries changes.
+
+## 23 Nov 2026: the same full training, a second time
+
+**What we wanted to know.** This morning the study's full set of documents, trained here once, brought misbehaviour down to 6.8%, the rate the paper reports. Would a second training of exactly the same thing, with only the random seed changed, land near it?
+
+**What came out.** No. The second training gives 21.9% (range 19.6 to 24.1). Practice alone gives 24.7% and 23.2%, so the second training shows almost no gain from the documents: 2 points, where the first showed 17. We had fixed the wording beforehand, and the word is "does not repeat".
+
+**The pattern.** Six trainings now, three at each seed. At seed 0: no documents 25%, a third of the documents 12%, all of them 7%. At seed 1: 23%, 30%, 22%. At one seed the documents work at both sizes, at the other they do nothing at either. The seed decides where the adapter starts and the order in which the training examples come, in both phases, and the second seed's practice phase is the same, step for step, in all three of its trainings. So this is two seeds, not four separate failures or successes, and we do not know which part of the seed matters.
+
+**How much to trust it.** The count was redone by a second route and by a cold reader, and a fresh reader marked 30 replies blind: all agree. The judge is not the reason this time: it clears a third of the flagged replies here, as for practice alone, and counting every flagged reply gives the same word.
+
+**What it does not mean.** It does not show the study is wrong. The authors' own trained models, run here, give their result (62% down to 2%). It shows that our training of their recipe reaches their result at one seed and not at another, so something differs between their training and ours, or their recipe is more sensitive to the seed than the paper lets one see.
+
+*In plain terms, for the vision:* the one large published effect is real in the authors' models and not yet something this lab can produce on demand. Until it can, no test of what the documents say (the view of the self, plain caution, neutral text) would mean anything, because one training differs from the next by as much as the effect. The next step is to find out why, cheaply: read the authors' training code against ours, then one or two short trainings that swap the two phases between seeds.

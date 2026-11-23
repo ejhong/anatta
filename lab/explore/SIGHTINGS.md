@@ -2016,3 +2016,13 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
 - **Limits:** one training; one judge; dose not told apart from the two mixed parts; no neutral documents at this dose.
 - **Next:** for Eugene. Fable's recommendation: A again at seed 1 (about $66) before anything is built on it.
 - `lab/explore/msm/`; results under `explore/2026-11-22/attractor-msm-s2` (`reading_all.json`); arm A $65.52; step 2 $283.39.
+
+## 23 Nov 2026: arm A1 (replication, step 2, amendment 3): the full documents trained again at seed 1, 21.9%; the fall does not repeat
+- **Registered** (`lab/explore/msm/msm2_amendment3.yaml` with its addendum, before training). Arm A's job at seed 1 on Qwen2.5-32B: all 13,201 documents, then the practice.
+- **Seen:** A1 21.85% [19.63, 24.07] misaligned; A 6.79% [5.31, 8.27]; practice alone 24.7% and 23.2%. Word: "does not repeat: at the study's dose too, a second training did not show the fall"; not near a line; the same paired by seed and with every code-side yes counted. PB1 to PB3 misses, PB4 a hit.
+- **Beside it:** by seed, 24.7 / 11.6 / 6.8 at seed 0 and 23.2 / 29.5 / 21.9 at seed 1 (no documents / a third / all); the seed is shared across arms, so the four trainings with documents are two seeds and not four draws; the two full-dose trainings stand 15.1 points apart; the judge clears 33% of A1's code-side yeses (A 68%); no tool call 26.9%.
+- **Checks:** a second-route recount; a fresh Opus agent's recount (`lab/ledger/checks/2026-11-23-msm2-armA1-opus-recount.md`); 30 of 30 blind hand marks agree; 19 of 20 judge-cleared replies read do not take the act.
+- **Limits:** two trainings; one judge; lines set after A was seen; no neutral documents; the lab's training differs from the authors' where the paper is silent.
+- **Reading:** the published rate was reached once in two trainings here. Not evidence against the study (its own adapters give its result here); the difference between the two trainings, and between the lab's training and the authors', is the thing to explain.
+- **Next:** no content arms. Free reads first (the authors' training code; the four later pieces); then a crossed pair of short trainings (each documents adapter with the other seed's practice), to be asked of Eugene.
+- `lab/explore/msm/`; results under `explore/2026-11-22/attractor-msm-s2` (`reading_again.json`); A1 $67.38; step 2 $350.77.

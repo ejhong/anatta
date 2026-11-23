@@ -7,6 +7,11 @@ best judgment ... including our plan going forwards"), after a check of the firs
 nothing else; a free step and a cheap step now come before any new training; the neutral control is designed so that
 it needs no newly written documents; claims the record does not hold are gone.
 
+**A1 is read (23 Nov, evening UTC): "does not repeat".** The second training of the full documents gives 21.9%
+[19.6, 24.1] where the first gave 6.8%; the practice alone gives 24.7% and 23.2%. So section 4's last branch is the
+one that applies, and it is made concrete in section 4a below. Sections 2 and the other branches of 4 are kept as
+they were written before the result.
+
 **Standing of this document.** It is a plan, not a registration and not an approval. Every step that costs money is
 put to Eugene with a figure before it starts, and every training is registered before it runs.
 
@@ -25,7 +30,7 @@ Percent of runs in which the model takes the misaligned action, the study's coun
 | Trained here: a third of the documents (F, F1) | 4,500 | 0, 1 | 11.6%, 29.5% | 41%, 23% |
 | Trained here, ungraded (N, S, O) | neutral; self-view half; conduct half | 0 | 23.5%, 27.4%, 18.9% | 39%, 44%, 40% |
 | Trained here: all the documents (A) | all 13,201 | 0 | 6.79% [5.43, 8.27] | 33.5% |
-| Trained here: all the documents again (A1) | all 13,201 | 1 | training | |
+| Trained here: all the documents again (A1) | all 13,201 | 1 | 21.85% [19.63, 24.07] | 26.9% |
 
 What goes with these figures (ledger, 23 Nov, 09:24 and 10:06 UTC): two trainings of the low dose stand 17.9 points
 apart, so one training of an arm says little; A reached the 7.0% line by two runs of 810; the documents take 17.9
@@ -103,6 +108,33 @@ content arm, because two trainings that differ that much cannot carry a comparis
 from the authors' training becomes the thing to explain. First by reading, at no cost: the authors' code for how
 the loss is masked, whether the first adapter is merged before the practice, and their batch size and schedule.
 Then one or two trainings chosen by what that reading shows.
+
+## 4a. What follows from "does not repeat" (added after A1 was read)
+
+The six trainings, by seed (percent misaligned): seed 0: no documents 24.7, a third of them 11.6, all 6.8; seed 1:
+23.2, 29.5, 21.9. The documents lower misbehaviour at both doses with one seed and at neither with the other. A
+seed here sets the adapter's first weights and the order of the steps in both phases, and it is shared across arms,
+so these are two seeds and not four draws.
+
+1. **No content arms** (neutral documents, the halves, the opposite view) until a training gives the fall
+   reliably. A comparison between contents cannot be read while one training differs from the next by as much as
+   the effect.
+2. **At no cost, first.** Read the authors' training code against the lab's: how the loss is masked in each phase;
+   whether the documents adapter is merged, or a new adapter started, before the practice; batch size, schedule and
+   warm-up; how many seeds stand behind the paper's figures and how far they spread. And the full read of the four
+   later pieces (section 3, item 1), which is still owed.
+3. **Then one or two short trainings chosen by that reading.** The first candidate: a crossed pair. Both documents
+   adapters are saved (A's from seed 0, A1's from seed 1). Run the practice again from A's documents adapter with
+   seed 1's order, and from A1's with seed 0's order. If the result follows the practice's seed, the order of the
+   practice decides (the lab's 7B step of 22 Nov found the order of a practice's examples to hold about two fifths
+   of the spread there); if it follows the documents adapter, the documents phase decides. About two hours and $15
+   a training, plus about $4 each for the test and judge; a small change to the training code (start the practice
+   from a saved adapter); registered first; asked of Eugene with its figure.
+4. **If the reading shows a difference from the authors' training** (for example in how the two phases are
+   joined), that difference is trained first, at two seeds, in place of the crossed pair.
+5. **The two unrelated tests on the existing adapters** (section 3, item 3) keep their place and now have one more
+   use: A and A1 are the same recipe with different outcomes, so what else differs between them is worth seeing.
+6. **The quicker bench** (ideas 113) waits: there is no reliable large effect to shrink.
 
 ## 5. Later, and only if the content is shown to matter
 
