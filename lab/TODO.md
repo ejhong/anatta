@@ -10,8 +10,11 @@ with the ledger entry that records it; when Eugene changes direction, change "No
 Eugene, 23 Nov: "go ahead." (a second training of the full-documents arm; step limit $380; day room $100, read as
 23 Nov's cap $350). Registered: `lab/explore/msm/msm2_amendment3.yaml` (ledger, 23 Nov, 13:16 UTC). Launcher on this
 Mac (log `armA1.launch.log` in the step's folder); bound $82.08; its own spend log `train/spend4.jsonl`.
-- **Owed while it trains:** a fresh Opus agent's cold read of the rule and code (`word_again`, `step_readagain`);
-  any mend is an addendum to the amendment, committed before any reply of A1 is asked.
+- **Done while it trains (13:31 UTC):** the cold read of the rule and code, and the addendum that mends it
+  (`lab/ledger/checks/2026-11-23-msm2-amendment3-opus-check.md`; ledger, 23 Nov, 13:31 UTC). The reading gives,
+  beside the word: near-the-line, the word paired by seed, the word with every code-side yes counted, F1 less A1.
+  Bars for the hand checks: more than 2 of 30 marks apart, or more than 2 of 20 cleared replies taking the act,
+  is said with the word. The site gives both full-dose trainings side by side.
 - **Owed when it ends, in this order:** `run_msm2.py --step evalplan --stage 5`; `MSM_STEP=s2 tools/modal.sh run
   lab/explore/msm/modal_msm.py::main --stage gen --name arms5`, then `--stage grade --name arms5`;
   `MSM_STEP=s2 .venv/bin/python lab/explore/msm/run_msm.py --step judge --name arms5`; `--stage verdict --name
