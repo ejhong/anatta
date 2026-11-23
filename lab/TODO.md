@@ -24,6 +24,14 @@ Mac (log `armA1.launch.log` in the step's folder); bound $82.08; its own spend l
   files and the site skill), the paper; report to Eugene with one recommendation.
 - **If it slips past midnight UTC:** 24 Nov's cap is the default $50; the test and judge (about $4) fit it; anything
   more needs Eugene.
+- **The site and paper were redesigned on 23 Nov, 15:56 UTC** (PR #17, written by another assistant at Eugene's
+  direction and merged by Eugene; four tabs: Story, Findings, Philosophy, Open Lab). A1's reading goes into the new
+  layout: the placeholder row of the 32B chart (`content/data.json`, "msm", the row whose val is null), the first
+  chapter card in `experiments.html`, the Story page's 32B lines, a Findings section and four scorecard rows; and
+  the paper's lines that call A1 "in flight" (`paper/main.tex`, about lines 204 and 229). A plan for what follows
+  A1 is in `lab/plans/post-a1-32b-roadmap-2026-11-23.md`: it is a proposal, not approved or costed by Eugene, and
+  its thresholds are not the registered rule. Small faults seen in the redesign, to mend with the A1 write-up: the
+  ledger's corrections are appended, not "dated in place"; the "Baseline (Authors)" row is the unchanged base model.
 
 ## Before it: STEP 2 READ THROUGH ARM A (23 Nov, 10:06 UTC)
 
