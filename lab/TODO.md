@@ -24,18 +24,24 @@ Mac (log `armA1.launch.log` in the step's folder); bound $82.08; its own spend l
   files and the site skill), the paper; report to Eugene with one recommendation.
 - **If it slips past midnight UTC:** 24 Nov's cap is the default $50; the test and judge (about $4) fit it; anything
   more needs Eugene.
-- **The site and paper were redesigned on 23 Nov, 15:56 UTC** (PR #17, written by another assistant at Eugene's
-  direction and merged by Eugene; four tabs: Story, Findings, Philosophy, Open Lab). A1's reading goes into the new
-  layout: the placeholder row of the 32B chart (`content/data.json`, "msm", the row whose val is null), the first
-  chapter card in `experiments.html`, the Story page's 32B lines, a Findings section and four scorecard rows; and
-  the paper's lines that call A1 "in flight" (`paper/main.tex`, about lines 204 and 229). A plan for what follows
-  A1 is in `lab/plans/post-a1-32b-roadmap-2026-11-23.md`: it is a proposal, not approved or costed by Eugene, and
-  its thresholds are not the registered rule. A cold check of the redesign against the record is filed
-  (`lab/ledger/checks/2026-11-23-redesign-opus-check.md`; ledger, 23 Nov, 16:22 UTC): the site's factual faults
-  were mended that hour; the paper's are NOT yet mended and wait on Eugene's word on who mends them. Note: the
-  62% "baseline" is the authors' baseline adapter (instruction tuning only), not an untrained model; the driver
-  had it wrong on the site (section 33, corrected) and in amendment 2's text and the notebook (corrected in the
-  ledger).
+- **The site and paper were redesigned on 23 Nov** (PR #17, by Gemini at Eugene's direction, merged by Eugene),
+  then checked against the record and mended by the driver at Eugene's word (ledger, 23 Nov, 16:22, 16:36 and
+  17:01 UTC; the check `lab/ledger/checks/2026-11-23-redesign-opus-check.md`; ideas 112). The new form is kept:
+  four tabs (Story, Findings, Philosophy, Open Lab), two charts, exhibits, a 15-page paper. "The answer so far"
+  is back at the top of the start page.
+- **Where A1's reading goes:** the 32B chart's placeholder row (`content/data.json`, "msm", the row whose val is
+  null); the hero's first figure card and the "Where it stands today" card in `story.html`; the first chapter card
+  and a new Findings section in `experiments.html`; four scorecard rows (PB1 to PB4) and the tally in both
+  CLAUDE.md files and the site skill; `methods.json` (the 32B row's "second training running"); the seven lines
+  marked `% A1-RESULT` in `paper/main.tex` and the tally in the paper; then `tectonic paper/main.tex`.
+- **The plan after A1** is `lab/plans/post-a1-32b-roadmap-2026-11-23.md` (revised by the driver; a plan, not
+  approved spending). First and free, whatever A1 says: the driver's full read of the four later pieces on the
+  study; the cold read of step 1 (started 23 Nov, about 16:45 UTC; file its report under `lab/ledger/checks/`).
+  Then two unrelated tests on the models already trained (about $15 to $25; register as a small step; ask
+  Eugene with the figure). If the fall repeats: the neutral control at full dose with equal text and repetition
+  (about $265; ask Eugene first).
+- **When running the site's tests in a command chain, stop on failure** (`python3 test_build.py; rc=$?`), not
+  `| tail`: a commit went out with a failing test on 23 Nov.
 
 ## Before it: STEP 2 READ THROUGH ARM A (23 Nov, 10:06 UTC)
 
