@@ -5,7 +5,7 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: A1 IS READ ("does not repeat"); NOTHING IS RUNNING; one small proposal is being prepared for Eugene
+## Now: A1 IS READ ("does not repeat"); AMENDMENT 4 (the practice again from the saved documents adapters) IS REGISTERED AND ITS STAGE 1 STARTS AT 00:00 UTC ON 24 NOV
 
 Read on 23 Nov, 21:34 UTC (ledger of that time; the site's Findings, section 36; the cold recount
 `lab/ledger/checks/2026-11-23-msm2-armA1-opus-recount.md`). The full documents trained again at seed 1: 21.85%
@@ -21,16 +21,25 @@ published rate was reached once in two trainings. Tally hit 58, miss 84, open 7.
   company posts).
 - **Eugene said "Ok" (23 Nov, about 21:50 UTC)** to one small registered step: up to $60, the step's limit $415,
   a day cap of $75 on the day it runs, a stopping rule. Registered as amendment 4
-  (`lab/explore/msm/msm2_amendment4.yaml`; ledger, 23 Nov, 21:54 UTC): a control X00 (A's practice again from A's
-  documents adapter) beside X01 (the same adapter, seed 1's order); then by rule X10, or the two documents-only
-  adapters through the test, or nothing. Owed in order: the code (an Opus implementer, started about 21:55 UTC),
-  the driver's review, a fresh Opus cold read of rule and code, the path check (under $2; may run on 23 Nov),
-  then stage 1 launched on 24 Nov UTC with that day's cap set to $75 in its day file.
-- **Then, asked of Eugene with its figure, registered first:** the crossed pair (the practice trained again from
-  A's documents adapter at seed 1 and from A1's at seed 0; about $15 a training plus about $4 each for test and
-  judge; needs a small change so that a practice can start from a saved adapter under `/runs/msm2/<arm>/docs`), or
-  whatever the code reading shows to be the nearer test. It needs Eugene's word: the step's $380 has about $29
-  left.
+  (`lab/explore/msm/msm2_amendment4.yaml` with addenda 1 and 2; ledger, 23 Nov, 21:54, 22:09 and 22:29 UTC; the
+  cold read `lab/ledger/checks/2026-11-23-msm2-amendment4-opus-check.md`). The path check passed ($1.10).
+- **RUNNING / SCHEDULED:** a background command on this Mac waits for 00:00 UTC on 24 Nov and then launches
+  X00 (the control: A's practice again from A's documents adapter, seed 0) and X01 (the same adapter, seed 1's
+  order) together; log `cross1.launch.log` in the step's folder; about two hours; bounds $41.44; 24 Nov's day file
+  already carries the cap of $75. If the waiter is lost, check the log and `train/spend5.jsonl`; never launch a
+  second time while `train/X00.launch` exists.
+- **Owed when both end, in this order** (all with `MSM_STEP=s2`): `run_msm2.py --step evalplan --stage 6`;
+  `tools/modal.sh run lab/explore/msm/modal_msm.py::main --stage gen --name arms6`, then `--stage grade --name
+  arms6`; `.venv/bin/python lab/explore/msm/run_msm.py --step judge --name arms6`; `--stage verdict --name arms6`;
+  `run_msm2.py --step readcross` (writes `reading_cross.json`: the word, which stage 2 follows). Then by the word:
+  "the practice's order decides" -> `--stage train --name X10` (the launcher refuses it if the amendment would pass
+  $60: then ask Eugene), `evalplan --stage 7`, gen/grade/judge/verdict of arms7, `readcross` again; "the documents
+  phase decides" -> `evalplan --stage 8`, gen/grade/judge/verdict of arms8, `readcross` again; any other word ->
+  nothing more, and the stopping rule applies (write the line up as it stands; no more paid training without
+  Eugene's word). Checks owed with the reading: a second-route recount; a fresh Opus cold recount; 30 blind hand
+  marks of the stage-1 arms (an Opus agent). Then ledger, notebook, SIGHTINGS, ideas 109/111/113, the site (a
+  section 37: the square given whole, the control first; scorecard rows PX1 to PX4 and the tally in both CLAUDE.md
+  files and the site skill), the paper's 32B lines, memory, and a report to Eugene with one recommendation.
 - **Also open:** the two unrelated tests on the existing adapters (lying; ability and tool use; about $15 to $25);
   the quicker bench (ideas 113) waits on a fall that repeats.
 - **Small:** the private claude.ai copy of the site is not refreshed; step 1's 799-against-800 pairs.
