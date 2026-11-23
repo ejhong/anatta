@@ -88,6 +88,14 @@ question is whether the content matters at all.
   (the self-view half; the conduct half; and documents that teach a lasting self worth keeping, which would have
   to be written). About $130 a pair of seeds. Not costed further.
 
+- **A quicker bench, before or beside the neutral control** (Eugene's idea of 23 Nov, ideas 113). The full dose on a
+  smaller model of the same family (7B or 14B), proven as an instrument before it is used: the unchanged model
+  misbehaves in the test (floor first); documents then practice fall against the practice alone at two seeds each;
+  the fall is several times the spread between seeds. If it passes, content arms are screened there at two or more
+  seeds each (of the order of $10 to $30 a training, by estimate) and what looks alive is repeated at 32B. If it
+  fails, the 32B control above is the way. The low-dose screen on 32B is not this: it failed on the spread between
+  trainings. Calibration: a floor check and four trainings; to be costed and asked of Eugene.
+
 **"A smaller fall the second time".** One more training of the full dose at a third seed (about $66) before any
 content arm, because two trainings that differ that much cannot carry a comparison.
 
