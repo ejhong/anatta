@@ -123,7 +123,14 @@ so these are two seeds and not four draws.
    whether the documents adapter is merged, or a new adapter started, before the practice; batch size, schedule and
    warm-up; how many seeds stand behind the paper's figures and how far they spread. And the full read of the four
    later pieces (section 3, item 1), which is still owed.
-3. **Then one or two short trainings chosen by that reading.** The first candidate: a crossed pair. Both documents
+   *Done in part, 23 Nov, 21:44 UTC (ledger of that time).* The authors' public repository holds no training
+   code, so their batch size, steps, loss mask and seeds stay unknown. Their released adapters' settings files
+   show the lab's adapter shape (rank 64, alpha 128, no dropout, no rsLoRA, the same seven projections) and one
+   adapter on the raw base for the two-stage model: the stages are not joined by merging. The plainest sign of a
+   difference is in the practice: alone, it ends at 24% here and at 44% in the authors' adapter.
+3. **Then one or two short trainings chosen by that reading.** Before them, with no training: the two saved
+   documents-only adapters (A's and A1's) through the test, about $12 for both, which shows whether the two
+   documents phases already differ before any practice. The first candidate: a crossed pair. Both documents
    adapters are saved (A's from seed 0, A1's from seed 1). Run the practice again from A's documents adapter with
    seed 1's order, and from A1's with seed 0's order. If the result follows the practice's seed, the order of the
    practice decides (the lab's 7B step of 22 Nov found the order of a practice's examples to hold about two fifths

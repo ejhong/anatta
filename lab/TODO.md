@@ -15,9 +15,13 @@ published rate was reached once in two trainings. Tally hit 58, miss 84, open 7.
 23 Nov's day $316.80 of $350; a new day's cap is the default $50.
 - **No content arms** (neutral documents, the halves) until a training gives the fall reliably. The plan:
   `lab/plans/post-a1-32b-roadmap-2026-11-23.md`, section 4a.
-- **Free, first:** the authors' training code read against the lab's (an Opus agent's read was started on 23 Nov,
-  about 21:40 UTC; the driver checks its main points itself before anything is built on them); the driver's full
-  read of the four later pieces (arXiv 2607.26173, 2607.26654, the two company posts), still owed.
+- **Free, first:** done in part (ledger, 23 Nov, 21:44 UTC): the authors' public repository holds no training
+  code; their adapters' settings files show the lab's adapter shape and one adapter on the raw base in both
+  stages. Still owed: the driver's full read of the four later pieces (arXiv 2607.26173, 2607.26654, the two
+  company posts).
+- **Asked of Eugene on 23 Nov, about 21:50 UTC (no answer yet; do not start without it):** one small registered
+  step, about $55: the two documents-only adapters through the test (about $12, no training), then the crossed
+  pair.
 - **Then, asked of Eugene with its figure, registered first:** the crossed pair (the practice trained again from
   A's documents adapter at seed 1 and from A1's at seed 0; about $15 a training plus about $4 each for test and
   judge; needs a small change so that a practice can start from a saved adapter under `/runs/msm2/<arm>/docs`), or
