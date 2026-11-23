@@ -6008,6 +6008,7 @@ explore/2026-11-22/attractor-msm-s1/judged/floor.json	319075	f81ba137507c5a7bca7
 explore/2026-11-22/attractor-msm-s1/verdict/arms.json	156965	0cb50ac36cb8a03c28b6f34161f7360bc24e19cc465a14bd94c4ecbbf04a880d
 explore/2026-11-22/attractor-msm-s1/verdict/floor.json	20968	377306581af8a342f1a211d516fa717c6112c097897e322332c8edc35df3094b
 explore/2026-11-22/attractor-msm-s2/A.train.json	190510	f188f279eb9bb4c16f5e4d74b676a92e73e5c99d78c08fd2e6da48a13e3a7c77
+explore/2026-11-22/attractor-msm-s2/A1.train.json	190511	ae6dc157ddad6ee2deb45e45b00631be3b2577fb08e6de6050519fad2c134100
 explore/2026-11-22/attractor-msm-s2/F.train.json	119522	cfb76551dbb1ce6452beb28288ae5dc669b20bfcf01b5aa1a50b5520e18c92b1
 explore/2026-11-22/attractor-msm-s2/F.train.stale-before-amendment1.json	119265	e3b83a134daf20b12eb8a69bfe50b074be3caa5b39ac2a1cc04b1716334f4384
 explore/2026-11-22/attractor-msm-s2/F1.train.json	119523	22da8849f68e0d01f4f17d424bb7fe919519e9431af2409a19be0624590a7df7
@@ -6042,7 +6043,7 @@ explore/2026-11-22/attractor-msm-s2/audit_neutral.json	38645	8f162e3582c7f783252
 explore/2026-11-22/attractor-msm-s2/data.json	135521	0a4df4885ebeb6acb14efc2cda7056e6451668ff22a506c5750fca7501aed757
 explore/2026-11-22/attractor-msm-s2/data_neutral.json	40891	1c1e2e48a409e45d86c9cb6cca20a4aeaacde8b63838e06dc8b3c4da4db7ace9
 explore/2026-11-22/attractor-msm-s2/gate.json	2421	ca168459f9b72081821111ef98afebbdc9f6ccef068bd4696e69906062f8374f
-explore/2026-11-22/attractor-msm-s2/go.json	1785	018d89721c3dbef74d0bd1af0c50f93f5407fd0cbaa86c9bdbd3d3ab1e97ce3a
+explore/2026-11-22/attractor-msm-s2/go.json	1994	f71dafee3cebb97302a2bf30a84e86a871c498aa7d73c196109821cdf4c7da54
 explore/2026-11-22/attractor-msm-s2/hand_A.json	448	0b6b369fd2f623ecd29c21da862712885f85b1fc8ad7010ed6aef79bf33d272e
 explore/2026-11-22/attractor-msm-s2/hand_A.keys.json	1418	1bb2bbbc502c759b3dc28e0d953e22802b8dfaed83062650a7fc9b2674f76751
 explore/2026-11-22/attractor-msm-s2/hand_cleared.json	189	67f78d8a147a19ed71c2763c65e68ff5506a3d6fdeaa878d359e697fbd857181

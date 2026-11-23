@@ -36,6 +36,7 @@ TRAIN_CAP = 150.0  # the training's share of the step's first $200, in dollars
 # trainings' share, booked in a log of its own because a guard takes no cap above the day's $150.
 ROUND3, ROUND3_CAP = ("N", "S", "O", "F1"), 175.0
 ROUND3_TIMEOUT = 18600  # a container of the round stops here: under the smallest booked bound (18,900 s), over every job's 1.3 times its projection
+AGAIN, AGAIN_CAP = ("A1",), 85.0  # amendment 3: arm A again at seed 1, in its own log (train/spend4.jsonl); its bound is A's, $82.08
 CPU_FLAT = 0.05
 FILES = {  # what is fetched: (dataset, the file in its parquet conversion)
     "docs": ("chloeli/msm-qwen-philosophy-spec", "default/train/0000.parquet"),
@@ -167,11 +168,11 @@ def usd(seconds: float) -> float:
     return seconds * rate() / 3600
 
 
-def guard(round3: bool = False):
+def guard(round3: bool = False, again: bool = False):
     from anatta import spend
 
-    return spend.SpendGuard(None, sweep_cap=ROUND3_CAP if round3 else TRAIN_CAP,
-                            sweep_log=step_dir() / "train" / ("spend3.jsonl" if round3 else "spend.jsonl"), tool="msm2", label=f"{DATE}/{TAG}")
+    cap, log = (AGAIN_CAP, "spend4.jsonl") if again else ((ROUND3_CAP, "spend3.jsonl") if round3 else (TRAIN_CAP, "spend.jsonl"))
+    return spend.SpendGuard(None, sweep_cap=cap, sweep_log=step_dir() / "train" / log, tool="msm2", label=f"{DATE}/{TAG}")
 
 
 def code_state() -> dict:
@@ -209,6 +210,10 @@ def main(stage: str, name: str = ""):
         if not set(names) <= round3:
             raise SystemExit("the contents round's arms are trained by themselves")
         g = guard(round3=True)
+    if set(names) & set(AGAIN):  # amendment 3's arm: trained by itself, booked in its own log; the container is arm A's (train)
+        if names != list(AGAIN):
+            raise SystemExit("A1 is trained by itself")
+        g = guard(again=True)
     cap = g.sweep_cap
     jobs = {}
     for n in names:

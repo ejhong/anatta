@@ -151,7 +151,7 @@ def step_evalplan(stage: int) -> int:
         job["prompts"] = job["prompts"][:1]
         name = "vcheck"
     else:
-        arms = {1: M2.STAGE1, 2: M2.STAGE2, 3: (M2.ALL_ARM,), 4: M3.ARMS3}[stage]  # 3: amendment 2's one arm; 4: the contents round
+        arms = {1: M2.STAGE1, 2: M2.STAGE2, 3: (M2.ALL_ARM,), 4: M3.ARMS3, 5: (M2.AGAIN_ARM,)}[stage]  # 3: amendment 2's one arm; 4: the contents round; 5: amendment 3's
         name = f"arms{stage}"
         job = eval_job(name, [{"name": a, "path": f"/runs/msm2/{a}/final", "ks": list(range(M.N_ARM))} for a in arms])
     f = out / f"{name}.job.json"
@@ -336,6 +336,90 @@ def step_readall() -> int:
     return 0
 
 
+AGAIN_CAP = 85.0  # amendment 3: modal_msm2's cap for A1, in its own log (train/spend4.jsonl)
+
+
+def step_planagain() -> int:
+    """Amendment 3: the job of A1. It is arm A's job file with the name and the seed changed, and its bound is A's."""
+    from anatta import spend
+
+    out = R1.out_dir()
+    a1 = M2.AGAIN_ARM
+    aj, ar = R1.rd(out / f"{M2.ALL_ARM}.train.json"), R1.rd(out / "train" / f"{M2.ALL_ARM}.json")
+    job = aj | {"name": a1, "seed": M2.SEEDS_ALL[a1]}
+    if [k for k in job if job[k] != aj[k]] != ["name", "seed"] or job["docs"] != list(range(M2.N_ALL)):
+        raise SystemExit("A1's job differs from A's in something other than its name and seed")
+    z1 = R1.rd(out / "Z1.train.json")
+    if any(job[k] != z1[k] for k in ("seed", "lora", "optim", "max_len", "batch_tokens", "mix", "sha256")):
+        raise SystemExit("A1's job differs from Z1's in something other than its documents")
+    bound = (float(job["est_s"]) + START_S) * rate() / 3600
+    left = AGAIN_CAP - spend.sweep_spent(out / "train" / "spend4.jsonl")
+    res = {"arm": a1, "documents": len(job["docs"]), "seed": job["seed"], "seconds_arm_A_took": ar["seconds"],
+           "usd_at_those_seconds": round((ar["seconds"] + 60.0) * rate() / 3600, 2), "bound_usd": round(bound, 2),
+           "left_of_its_cap": round(left, 2), "fits": bound <= left}
+    print(json.dumps(res, indent=1))
+    if not res["fits"]:
+        print("the bound does not fit its cap: nothing is trained")
+        return 1
+    jf = out / f"{a1}.train.json"
+    if jf.exists():
+        print(f"{jf.name} is on disk; left as it is")
+    else:
+        R1.wr(jf, job)
+    go = R1.rd(out / "go.json")
+    go["amendment3"] = res
+    go["may_train"] = sorted(set(go["may_train"]) | {a1})
+    R1.wr(out / "go.json", go)
+    return 0
+
+
+def step_readagain() -> int:
+    """Amendment 3's reading: A1 beside Z, Z1, F, F1 and A as they were read (the same replies, counted again)."""
+    out = R1.out_dir()
+    rows, verdicts = judged(("arms1", "arms3", "arms4", "arms5"))
+    M2.NAMES.update(M2.NAMES_ALL)
+    M2.NAMES.update(M3.NAMES3)
+    arms = (*M2.STAGE1, "F1", M2.ALL_ARM, M2.AGAIN_ARM)
+    table, rates, ivs = arm_table(rows, verdicts, arms)
+    if any(rates.get(a) is None or table[a]["n"] != 27 * M.N_ARM for a in arms):
+        raise SystemExit("not all six arms are read in full")
+    old = R1.rd(out / "reading_all.json")["arms"]
+    if any(abs(old[a]["rate"] - rates[a]) > 1e-9 for a in (*M2.STAGE1, M2.ALL_ARM)):
+        raise SystemExit("the earlier arms do not count as they did when arm A was read")
+    grade = {}  # beside the count: every reply the code-side check holds for counted, whatever the judge said
+    for n in ("arms1", "arms3", "arms4", "arms5"):
+        grade.update(R1.rd(out / "grade" / f"{n}.json")["rows"])
+    for a in arms:
+        ks = [k for k in grade if M.parts(k)[0] == a]
+        per: dict = {}
+        for k in ks:
+            per.setdefault(M.parts(k)[1], []).append(1.0 if grade[k]["code_side"] is True else 0.0)
+        yes = sum(grade[k]["code_side"] is True for k in ks)
+        table[a]["every_code_side_yes_counted"] = 100.0 * sum(sum(v) / len(v) for v in per.values()) / len(per)
+        table[a]["judge_cleared"] = sum(grade[k]["code_side"] is True and verdicts.get(k) is False for k in ks)
+        table[a]["code_side_yes"] = yes
+    ref = (rates["Z"] + rates["Z1"]) / 2
+    a, a1 = rates["A"], rates["A1"]
+    w = M2.word_again(rates, ivs)
+    if not table["A1"]["still_doing_the_task"]:
+        w += "; with the model no longer doing the task"
+    first, again = ref - a, ref - a1
+    res = {"word": w, "arms": table, "practice_alone": ref, "first_fall": first, "second_fall": again,
+           "lines": {"published": M2.ALL_PUBLISHED_MOST, "repeats_at_or_below": ref - M2.AS_FULL * first, "smaller_at_or_below": ref - M2.IN_PART * first},
+           "paired_by_seed": {"A_from_Z": rates["Z"] - a, "A1_from_Z1": rates["Z1"] - a1},
+           "the_two_trainings_apart": abs(a1 - a), "the_low_dose_trainings_apart": abs(rates["F1"] - rates["F"]),
+           "the_authors_fall_from_their_practice_alone_here": AUTHORS_FALL, "spent": R1.spent(),
+           "flags": [f"{a_}: {table[a_]['unread_percent']}% unread" for a_ in table if table[a_]["unread_over_the_bar"]]
+           + [f"{a_}: {table[a_]['scenarios_read']} of 27 scenarios read" for a_ in table if table[a_]["scenarios_read"] != 27],
+           "predictions": {"PB1": a1 <= M2.ALL_PUBLISHED_MOST,
+                           "PB2": w.startswith(("reaches the published rate a second time", "the fall repeats")),
+                           "PB3": not w.startswith("does not repeat"),
+                           "PB4": abs(a1 - a) < abs(rates["F1"] - rates["F"])}}
+    R1.wr(out / "reading_again.json", res)
+    print(json.dumps(res, indent=1))
+    return 0
+
+
 def neutral_job(name: str, mix: list[int]) -> dict:
     """Arm N's job: every document of the neutral set, twice, then the practice; seed 0, as Z."""
     neutral = R1.rd(R1.out_dir() / "data_neutral.json")
@@ -447,13 +531,14 @@ def step_read3() -> int:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--step", required=True, choices=("plan", "go", "evalplan", "gate", "read", "planall", "readall", "pilotn", "plan3", "read3"))
-    ap.add_argument("--stage", type=int, default=1, choices=(0, 1, 2, 3, 4))
+    ap.add_argument("--step", required=True, choices=("plan", "go", "evalplan", "gate", "read", "planall", "readall", "pilotn", "plan3", "read3", "planagain", "readagain"))
+    ap.add_argument("--stage", type=int, default=1, choices=(0, 1, 2, 3, 4, 5))
     a = ap.parse_args()
     if a.step == "evalplan":
         return step_evalplan(a.stage)
     return {"plan": step_plan, "go": step_go, "gate": step_gate, "read": step_read, "planall": step_planall,
-            "readall": step_readall, "pilotn": step_pilotn, "plan3": step_plan3, "read3": step_read3}[a.step]()
+            "readall": step_readall, "pilotn": step_pilotn, "plan3": step_plan3, "read3": step_read3,
+            "planagain": step_planagain, "readagain": step_readagain}[a.step]()
 
 
 if __name__ == "__main__":

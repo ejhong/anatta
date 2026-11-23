@@ -5,7 +5,24 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: STEP 2 OF THE REPLICATION IS READ IN FULL; NOTHING IS RUNNING; one recommendation waits on Eugene
+## Now: A1 IS TRAINING (arm A again at seed 1; started 23 Nov, about 13:25 UTC; about 7.8 hours; ends about 21:15 UTC)
+
+Eugene, 23 Nov: "go ahead." (a second training of the full-documents arm; step limit $380; day room $100, read as
+23 Nov's cap $350). Registered: `lab/explore/msm/msm2_amendment3.yaml` (ledger, 23 Nov, 13:16 UTC). Launcher on this
+Mac (log `armA1.launch.log` in the step's folder); bound $82.08; its own spend log `train/spend4.jsonl`.
+- **Owed while it trains:** a fresh Opus agent's cold read of the rule and code (`word_again`, `step_readagain`);
+  any mend is an addendum to the amendment, committed before any reply of A1 is asked.
+- **Owed when it ends, in this order:** `run_msm2.py --step evalplan --stage 5`; `MSM_STEP=s2 tools/modal.sh run
+  lab/explore/msm/modal_msm.py::main --stage gen --name arms5`, then `--stage grade --name arms5`;
+  `MSM_STEP=s2 .venv/bin/python lab/explore/msm/run_msm.py --step judge --name arms5`; `--stage verdict --name
+  arms5`; `run_msm2.py --step readagain` (writes `reading_again.json`). Then: a second-route recount; 30 blind hand
+  marks and 20 judge-cleared replies read; a fresh Opus recount; ledger, notebook, SIGHTINGS, ideas 109 and 111, the
+  site (Findings, a section 36 or section 35 extended; scorecard rows PB1 to PB4 and the tally in both CLAUDE.md
+  files and the site skill), the paper; report to Eugene with one recommendation.
+- **If it slips past midnight UTC:** 24 Nov's cap is the default $50; the test and judge (about $4) fit it; anything
+  more needs Eugene.
+
+## Before it: STEP 2 READ THROUGH ARM A (23 Nov, 10:06 UTC)
 
 **Arm A (23 Nov, 10:06 UTC):** all 13,201 of the study's documents, then the practice, trained here once: 6.79%
 misaligned [5.43, 8.27]; the registered word is "reaches the published rate" (at most 7.0). Ledger of that time;
@@ -16,9 +33,7 @@ open 7. Arm A cost $65.52; step 2 in all $283.39 of the $350 held; 23 Nov's day 
   out low (two trainings of the low dose stand 17.9 points apart); the fall from the practice alone is 17.9 points
   against the authors' 41.7; the judge clears 68% of A's code-side yeses (20 read by hand, all decline the act;
   with every code-side yes counted in all arms A is 21.4% against 38.4%).
-- **Asked of Eugene (23 Nov):** a second training of A at seed 1 (about $66; bound about $82), registered first
-  with its own rule (does A1 land near A). It needs Eugene's word: it is over what is left of 23 Nov's cap and of
-  the step's $350, and a new day's cap is $50. Do NOT start it without that word.
+- **Asked of Eugene (23 Nov) and approved:** a second training of A at seed 1; see the section above.
 - **After that, not approved and not costed in detail:** contents compared at the full dose, two trainings an arm,
   about $66 a training (the neutral set has 4,600 documents, so a full-dose neutral arm means several passes or
   more documents written); the opposite view of the self and the lab's own ideas (documents to be written); a

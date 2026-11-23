@@ -234,3 +234,20 @@ def test_the_contents_round_words():
     assert both(F1=20.0, N=24.0, S=12.0, O=22.0) == (M3.NOT_REPEATED, M3.NOT_REPEATED)  # the second training is not clearly below the practice alone
     assert both(F1=16.0, N=24.0, S=12.0, O=19.5)[1] == "not settled between the halves"  # the gap F to F1 of 4.4 sets the bar at 8.8
     assert M3.word_neutral(base, {}) == "not read"
+
+
+def test_the_word_for_a_second_training_of_all_the_documents():
+    import msm2_core as M2
+
+    base = {"Z": 24.70, "Z1": 23.23, "A": 6.79}
+    iv = {"Z": (22.23, 27.17), "Z1": (21.00, 25.44), "A": (5.43, 8.27)}
+
+    def w(a1, half=1.5):
+        return M2.word_again(base | {"A1": a1}, iv | {"A1": (a1 - half, a1 + half)})
+
+    assert w(7.0) == "reaches the published rate a second time"
+    assert w(7.1) == w(12.5) == "the fall repeats, short of the published rate"  # two thirds of the first fall: at or below 12.515
+    assert w(12.6).startswith("a smaller fall the second time") and w(18.2).startswith("a smaller fall the second time")
+    assert w(18.3).startswith("does not repeat") and w(29.5).startswith("does not repeat")
+    assert w(18.0, half=3.1).startswith("does not repeat")  # the interval must lie wholly below both trainings of the practice alone
+    assert M2.word_again(base, iv) == "not read"
