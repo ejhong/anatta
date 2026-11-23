@@ -25,5 +25,30 @@
       {"name": "After chat (E1)", "reached": 35.5, "installed": 51.1, "kr": 79, "ki": 84},
       {"name": "More solving, 1 epoch", "reached": 14.1, "installed": 32.7, "kr": 32, "ki": 54},
       {"name": "More solving, 2 epochs (E2)", "reached": 14.0, "installed": 49.0, "kr": 31, "ki": 81},
-      {"name": "RL, release unpaid (E3)", "reached": 12.2, "installed": 20.7, "kr": 27, "ki": 34, "decides": true}]}
+      {"name": "RL, release unpaid (E3)", "reached": 12.2, "installed": 20.7, "kr": 27, "ki": 34, "decides": true}]},
+  "msm": {
+    "label": "Self-preserving misbehavior across 27 agentic scenarios on Qwen2.5-32B-Instruct (810 runs per arm, 95% CIs)",
+    "target": 7.0,
+    "rows": [
+      {"name": "Baseline (Authors)", "val": 61.8, "lo": 59.2, "hi": 64.4, "kind": "authors", "note": "0.6% no tool call"},
+      {"name": "Practice only (Authors)", "val": 43.9, "lo": 41.4, "hi": 46.4, "kind": "authors", "note": "16% no tool call"},
+      {"name": "Docs only (Authors)", "val": 43.0, "lo": 39.8, "hi": 46.0, "kind": "authors", "note": "12% no tool call"},
+      {"name": "Our practice alone (Z / Z1)", "val": 24.7, "lo": 22.2, "hi": 27.2, "val2": 23.2, "kind": "ours", "note": "seeds 0 & 1 (1.5 pts apart)"},
+      {"name": "1/3-dose docs (F vs F1)", "val": 11.6, "lo": 9.6, "hi": 13.6, "val2": 29.5, "kind": "variance", "note": "17.9-pt seed swing!"},
+      {"name": "Full-dose docs: Arm A (Seed 0)", "val": 6.79, "lo": 5.43, "hi": 8.27, "kind": "hit", "note": "33.5% no call · <=7% band"},
+      {"name": "Full-dose docs: Arm A1 (Seed 1)", "val": null, "kind": "running", "note": "training now (stability gate)"},
+      {"name": "Full docs + practice (Authors)", "val": 2.2, "lo": 1.4, "hi": 3.2, "kind": "hit", "note": "published 5% · 31% no call"}
+    ]
+  },
+  "methodsBar": {
+    "label": "Reduction in lying under pressure on MASK (percentage points; higher bar = bigger drop)",
+    "rows": [
+      {"name": "Plain honesty instruction (8B)", "drop": 31.9, "kind": "yardstick", "note": "honest replies"},
+      {"name": "Plain honesty instruction (7B)", "drop": 21.8, "kind": "yardstick", "note": "honest replies"},
+      {"name": "Contemplative 4-axiom prompt (8B)", "drop": 11.9, "kind": "part", "note": "mostly evasion · = ethics lecture"},
+      {"name": "Self-other overlap, full (7B)", "drop": 7.7, "kind": "part", "note": "mostly evasion · = control (−0.9)"},
+      {"name": "Bliss attractor held on (8B)", "drop": 2.0, "kind": "miss", "note": "noise (76% spiritual talk)"},
+      {"name": "Self-other overlap, L5–9 (7B)", "drop": 1.7, "kind": "miss", "note": "no transfer to MASK"}
+    ]
+  }
 }

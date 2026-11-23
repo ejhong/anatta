@@ -5,9 +5,9 @@
    filters, and the charts redraw when the theme changes. No storage, no network. */
 (function () {
   'use strict';
-  var ROOMS = ['aim', 'more', 'possibilities', 'experiments', 'investigation', 'program', 'self', 'next', 'record', 'instruments', 'ideas'];
-  // The band names two rooms: the main page and "In full", which stays marked while a room behind it is open.
-  var BAND = ['aim', 'more'];
+  var ROOMS = ['aim', 'experiments', 'possibilities', 'more', 'investigation', 'program', 'self', 'next', 'record', 'instruments', 'ideas'];
+  // The band names four rooms: Story, Findings, Philosophy, and Open Lab (which stays marked for rooms behind it).
+  var BAND = ['aim', 'experiments', 'possibilities', 'more'];
   // Anchors from the single-page version and the room they now live in. Most still exist as ids
   // and are found directly; this map is the fallback if one is ever renamed.
   var MOVED = {
@@ -469,6 +469,26 @@
 
   window.addEventListener('hashchange', function () { show(false); });
   show(true);
+
+  // ------------------------------------------------------------------------------------------ the four exhibits
+  (function () {
+    var bar = one('.ex-tabs');
+    if (!bar) return;
+    var tabs = all('.ex-tab', bar), panels = all('.ex-panel');
+    function pick(id) {
+      tabs.forEach(function (t) {
+        var on = t.getAttribute('data-ex') === id;
+        t.setAttribute('aria-selected', String(on));
+        t.classList.toggle('on', on);
+      });
+      panels.forEach(function (p) { p.hidden = p.id !== id; });
+    }
+    bar.hidden = false;
+    tabs.forEach(function (t) {
+      t.addEventListener('click', function () { pick(t.getAttribute('data-ex')); });
+    });
+    if (tabs.length) pick(tabs[0].getAttribute('data-ex'));
+  })();
 
   if (typeof drawFigures === 'function') {
     drawFigures();

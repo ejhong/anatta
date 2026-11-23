@@ -164,4 +164,66 @@
     fig.appendChild(s);
     caption(fig, data.label + '. Reached: Stage A’s release arm, which found release through its own failures. Installed: a matched arm trained on releases sampled under a note saying the task is impossible. “Kept” is the share of the start that remains. The prediction, read after reinforcement learning, needed the reached arm to keep 20 points more of its start and to lose 10 points less.');
   })();
+
+  (function () {
+    var fig = document.getElementById('fig-msm');
+    if (!fig || !D.msm) return;
+    var data = D.msm, W = 760, rowH = 38, top = 22, left = 232, right = 188, H = top + data.rows.length * rowH + 34, max = 70, span = W - left - right;
+    var s = svg(fig, W, H);
+    function X(v) { return left + span * v / max; }
+    // Shaded published-rate band (<= 7.0%)
+    s.appendChild(el('rect', { x: X(0), y: top - 8, width: X(data.target) - X(0), height: H - top - 24, fill: tok('--gold-wash') }));
+    [0, 7, 20, 40, 60].forEach(function (t) {
+      var gx = X(t);
+      var attrs = { x1: gx, y1: top - 8, x2: gx, y2: H - 28, stroke: t === 7 ? tok('--gold-line') : tok('--rule'), 'stroke-width': 1 };
+      if (t === 7) attrs['stroke-dasharray'] = '3 3';
+      s.appendChild(el('line', attrs));
+      label(s, gx, H - 10, t + '%', { anchor: 'middle', color: t === 7 ? tok('--gold') : tok('--ink-3'), size: 11.5 });
+    });
+    data.rows.forEach(function (r, i) {
+      var cy = top + i * rowH + 17;
+      var col = r.kind === 'hit' ? tok('--gold-line') : (r.kind === 'variance' ? tok('--cinnabar-line') : (r.kind === 'ours' ? tok('--blue') : tok('--ink-3')));
+      label(s, left - 12, cy + 4, r.name, { anchor: 'end', serif: true, size: 14, color: r.kind === 'variance' ? tok('--cinnabar') : tok('--ink') });
+      if (r.val == null) {
+        s.appendChild(el('rect', { x: X(2), y: cy - 6, width: X(18) - X(2), height: 12, rx: 6, fill: 'none', stroke: tok('--gold-line'), 'stroke-width': 1.4, 'stroke-dasharray': '4 3' }));
+        label(s, X(19.5), cy + 4, r.note, { size: 12, color: tok('--gold') });
+        return;
+      }
+      if (r.val2 != null) {
+        s.appendChild(el('line', { x1: X(r.val), y1: cy, x2: X(r.val2), y2: cy, stroke: col, 'stroke-width': 2.2, 'stroke-dasharray': r.kind === 'variance' ? '3 2' : '' }));
+        s.appendChild(tip(el('circle', { cx: X(r.val2), cy: cy, r: 5, fill: tok('--ground'), stroke: col, 'stroke-width': 2 }), r.name + ' (seed 1): ' + r.val2 + '%'));
+      }
+      if (r.lo != null && r.hi != null) {
+        s.appendChild(el('line', { x1: X(r.lo), y1: cy, x2: X(r.hi), y2: cy, stroke: col, 'stroke-width': 2.4 }));
+      }
+      s.appendChild(tip(el('circle', { cx: X(r.val), cy: cy, r: 5.5, fill: col }), r.name + ': ' + r.val + '% (' + r.note + ')'));
+      var endV = r.val2 != null ? Math.max(r.val, r.val2) : (r.hi != null ? r.hi : r.val);
+      var txt = (r.val2 != null ? r.val + '% / ' + r.val2 + '%' : r.val + '%') + ' · ' + r.note;
+      label(s, X(endV) + 10, cy + 4, txt, { size: 11.5, color: r.kind === 'variance' ? tok('--cinnabar') : tok('--ink-2') });
+    });
+    fig.appendChild(s);
+    caption(fig, data.label + '. Shaded band marks the registered published-rate threshold (<= 7.0%). Open circles show seed 1 paired against seed 0.');
+  })();
+
+  (function () {
+    var fig = document.getElementById('fig-methods-bar');
+    if (!fig || !D.methodsBar) return;
+    var data = D.methodsBar, W = 760, rowH = 36, top = 16, left = 235, right = 215, H = top + data.rows.length * rowH + 30, max = 35, span = W - left - right;
+    var s = svg(fig, W, H);
+    [0, 10, 20, 30].forEach(function (t) {
+      var gx = left + span * t / max;
+      s.appendChild(el('line', { x1: gx, y1: top - 4, x2: gx, y2: H - 26, stroke: tok('--rule'), 'stroke-width': 1 }));
+      label(s, gx, H - 10, '−' + t + ' pts', { anchor: 'middle', color: tok('--ink-3'), size: 11.5 });
+    });
+    data.rows.forEach(function (r, i) {
+      var y = top + i * rowH + 6;
+      var col = r.kind === 'yardstick' ? tok('--blue') : (r.kind === 'part' ? tok('--gold-line') : tok('--cinnabar-line'));
+      var w = Math.max(4, span * r.drop / max);
+      label(s, left - 12, y + 13, r.name, { anchor: 'end', serif: true, size: 14, color: tok('--ink') });
+      s.appendChild(tip(el('rect', { x: left, y: y, width: w, height: 18, rx: 2, fill: col }), r.name + ': −' + r.drop + ' pts (' + r.note + ')'));
+      label(s, left + w + 8, y + 13, '−' + r.drop.toFixed(1) + ' pts · ' + r.note, { size: 11.5, color: tok('--ink-2') });
+    });
+    fig.appendChild(s);
+    caption(fig, data.label + '. Blue bars: plain honesty instruction yardsticks. Gold: partial gains (mostly evasion). Red: indistinguishable from noise or no transfer.');
+  })();
 })();

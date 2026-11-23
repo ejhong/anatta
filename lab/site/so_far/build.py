@@ -54,10 +54,10 @@ FONTS = ("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500"
 # else", to the seven rooms that hold the record. Those seven are rooms like any other and keep every finding; each
 # carries a second, quieter row of links to its neighbours.
 ROOMS = [
-    ("aim", "In brief", ["story.html"]),
-    ("more", "In full", ["more.html"]),
-    ("possibilities", "The question", ["possibilities.html"]),
+    ("aim", "Story", ["story.html"]),
     ("experiments", "Findings", ["experiments.html", "learned.html"]),
+    ("possibilities", "Philosophy", ["possibilities.html"]),
+    ("more", "Open Lab", ["more.html"]),
     ("investigation", "The investigation", ["investigation.html"]),
     ("program", "The recipe", ["program.html"]),
     ("self", "The self", ["self.html", "self_prh.html", "self_work.html"]),
@@ -66,31 +66,24 @@ ROOMS = [
     ("instruments", "Instruments", ["instruments_head.html", "calibration.html"]),
     ("ideas", "Ideas", ["ideas_organized.html", "ideas_log.html"]),
 ]
-# From 19 Nov 2026 (Eugene: one story for the site and the paper, ideas 93 and 97; "push everything live as we go")
-# the start is one long page, story.html: goodness, the caveat, the map with the table of methods, what the methods
-# share, the odds, what is being tried, the method. The investigation's page moves one step behind with the rest.
-# Later on 19 Nov (Eugene: is the question's page a repeat, and should there be one main page and one page of all the
-# details?): the band names two, the main page ("In brief") and the door to everything behind it ("In full"). The
-# question's room is the in-depth version of the main page's caveat and goes behind with the rest, first. The rooms
-# behind stand in the order of the main page's sections, and their doors are grouped by the section they lie behind.
-MAIN = ("aim", "more")  # the rooms named in the band
-BEHIND_GROUPS = [("Behind the caveat", ["possibilities"]),
-                 ("Behind the map", ["experiments", "investigation", "program", "self"]),
-                 ("Behind what is being tried now", ["next"]),
-                 ("Behind the method", ["record", "instruments", "ideas"])]
-BEHIND = [name for name, _, _ in ROOMS if name not in MAIN]  # the rooms behind "Everything else"
-DOORS = {  # one line for each room behind, shown in the "In full" room
-    "possibilities": "Is awakening computational? The question in full: two pictures of mind beyond computation, five "
-                     "possibilities, what each answer would mean, what good would mean, and what experiments can settle.",
+# From 23 Nov 2026: four clear destinations in the top band — Story (curated front page with charts and four
+# exhibits), Findings (five thematic chapters above all numbered experiments), Philosophy (de Mello, anatta and the
+# computability question), and Open Lab (the audit trail and deeper archive rooms). Every earlier room and anchor
+# stays intact one step behind Open Lab.
+MAIN = ("aim", "experiments", "possibilities", "more")  # the four rooms named in the band
+BEHIND_GROUPS = [("Deeper into the experiments", ["investigation", "program", "self"]),
+                 ("What comes next", ["next"]),
+                 ("The audit trail", ["record", "instruments", "ideas"])]
+BEHIND = [name for name, _, _ in ROOMS if name not in MAIN]  # the rooms behind "Open Lab"
+DOORS = {  # one line for each room behind, shown in the "Open Lab" room
     "investigation": "Can awakening talk be told from a real change? The bliss state and the self-other training, "
                      "case by case, as the lab's front page told it until 19 November.",
-    "experiments": "Every experiment, numbered, each with its limits, and what the lab has learned from them.",
     "program": "The three acts the lab began with (form a self, release it, make the release the habit) and where "
                "their tests stand.",
-    "self": "Ten parts of a self, with what is known, what the lab has tested and what is untested for each.",
-    "ideas": "The ideas the work came from, and the log of every one.",
+    "self": "Ten parts of a self (the interactive chariot), with what is known, what the lab has tested and what is untested.",
+    "ideas": "The ideas the work came from, and the searchable log of every one.",
     "instruments": "The checks each instrument had to pass on a problem whose answer is published.",
-    "record": "Every graded prediction, the specimens, and what all this does and does not show.",
+    "record": "Every graded prediction, the verbatim specimens, and what all this does and does not show.",
     "next": "The plan, in the order it will be done.",
 }
 
