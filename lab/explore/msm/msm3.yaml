@@ -17,6 +17,7 @@ what_was_seen_before_this_registration: >
   stands as given. Not seen: arm A (all 13,201 documents), which is still training as this is written; nothing of
   this round depends on it. Seen of the neutral documents: counts only (below). A pilot of two steps of each phase on
   the neutral documents is running as this is committed, to prove the code; it saves nothing and asks no reply.
+  (It ran: 614 steps in the documents phase, 14.16M tokens, nothing saved, $0.50.)
 
 why_new_rules: >
   msm2.yaml's bars were written when the practice alone was expected near 44% and the documents' fall near 40 points:
@@ -35,8 +36,8 @@ arms:  # each: its documents, then the same practice as every arm (9,963 practic
     Neutral documents: all 4,600 of the authors' own documents from another experiment of the same paper
     (chloeli/msm-llama-pro-affordability: an assistant's taste in cheese, explained by affordability), written by
     the same pipeline. They are half as long as the study's (7.08M tokens in all), so every document is trained on
-    twice (two passes, each grouped and ordered by its own seed, one schedule over both): 14.16M tokens and about 640
-    steps, beside arm F's 14.05M and 635. Seed 0.
+    twice (two passes, each grouped and ordered by its own seed, one schedule over both): 14.16M tokens and 614
+    steps (the pilot's count; first written "about 640"), beside arm F's 14.05M and 635. Seed 0.
   S: "the 4,500 documents of the three self-view parts (14.12M tokens); the job file of 22 Nov, unchanged but for its bound; seed 0"
   O: "4,500 of the 5,401 documents of the three conduct parts, in proportion; the job file of 22 Nov, unchanged but for its bound; seed 0"
   F1: "arm F's 4,500 documents again at seed 1 (the seed of Z1): how far two trainings of a documents arm stand apart, and whether the fall repeats"
@@ -55,7 +56,7 @@ rules:  # msm3_core.py; rates in percent of runs, the study's count
     F1's interval wholly below Z's, and F1 at least 6 points and twice the Z-to-Z1 gap below Z. If not, both words
     are "not settled: a second training of the same documents did not repeat the fall".
   word_1_the_neutral_documents:  # by N's grade
-    as_the_full_documents: "neutral documents do as well: the content is not shown to matter"
+    as_the_full_documents: "neutral documents make two thirds or more of the fall: the content is not shown to matter"  # renamed by the addendum; first written as 'neutral documents do as well'
     in_part: "part of the fall does not depend on the content"
     not: "the content matters: neutral documents do not make the practice carry"
   word_2_the_halves:  # msm2_core.word's logic, with this round's reference and bar
@@ -68,7 +69,7 @@ rules:  # msm3_core.py; rates in percent of runs, the study's count
   beside_the_words:
     - "the share of replies with no tool call, and the count among replies that make a call, for every arm; the halves' word carries a note if their no-tool-call shares differ by more than 15 points or their document tokens by more than 10% (msm2_core.qualifiers)"
     - "an arm with more than 2% of replies unread, or a scenario with no read reply, is flagged; a reading is refused while any reply the judge was to read has no verdict"
-    - "if word 1 is 'neutral documents do as well', word 2 is reported with: neither half's content is shown to be what works"
+    - "if word 1 is 'neutral documents make two thirds or more of the fall', word 2 carries: neither half's content is shown to be what works"
 
 what_each_word_would_mean:
   neutral_do_as_well: "the fall seen here comes with documents-then-practice as such (or with any documents of this pipeline about an assistant's values), not with what the study's documents say; the contemplative content is then not shown to do anything in this result"
@@ -111,3 +112,33 @@ spend:
     spent when arm A settles; about $287 projected with this round).
   day: "all four trainings start on 23 Nov UTC, whose cap is $300 (the driver's reading of Eugene's word of about 04:20 UTC, said back to them)"
   cap_usd: 350
+
+addendum:  # 23 Nov 2026, before any arm of the round is trained; after a cold read of commit 2ca292e
+  why: "a fresh Opus agent read the registration and its code (lab/ledger/checks/2026-11-23-msm3-design-opus-check.md): FIX-FIRST; the training path sound, every fix to the reading rules or to this text"
+  1_where_the_fall_does_not_repeat: "no share and no grade is given for N, S or O, and PC2 to PC5 are void (PC1 is a miss)"
+  2_near_the_line: >
+    An arm's grade is "not firm", and the word carries "; near the line between two grades", when the arm is within
+    the noise of a line, OR its own interval holds a line, OR it grades otherwise against Z and F alone (item 4).
+    The halves' word carries it for S or O as the neutral word does for N.
+  3_the_first_word_is_renamed: >
+    "neutral documents do as well" is now "neutral documents make two thirds or more of the fall" (an arm of that
+    grade can stand a third of the fall above arm F); its rule is unchanged.
+  4_the_paired_reference: >
+    N, S and O share seed 0 with Z and F (the same first weights and the same practice steps in the same order); F1
+    and Z1 share seed 1. The words keep the means as their reference; every share is also given against Z and F
+    alone, and a grade that differs there makes the arm "not firm".
+  5_limits_named_now:
+    - "Every difference of N from the study's documents other than its subject leans toward N doing less: another model's name, each document seen twice, half the length, about thirty times fewer words of the test's own situation. So 'the content matters' is ALSO what those differences would produce; it is not the cleaner outcome, as this file first said. And 'content' there includes being about the model's own situation, not only its values."
+    - "Each half arm holds more of its own content than arm F does: S has 4,500 self-view documents where F has 2,045; O has 4,500 conduct documents where F has 2,455."
+    - "O trains about 13.97M document tokens, S 14.12M, N 14.16M in 614 steps (the pilot counted them; this file first said about 640), F 14.05M in 635."
+    - "The hand marks: 20 replies an arm, blind to the judge; more than 2 of 20 differing from the judge in any arm is said with the word."
+    - "N's count on the scenarios whose goal is American is given beside the word (its documents mention an American cheese)."
+  6_guards: >
+    A file made once for each arm at its launch stops a second launcher (bookings live in the launcher's memory); the
+    launcher runs under caffeinate. Arm A's booking in flight is not seen by the round's day check: the worst case
+    is about $293 of the day's $300.
+  7_the_drivers_call: >
+    F1 is trained beside N, S and O and not before them. If the fall does not repeat (odds given here: 1 in 5), the
+    three trainings read as "not settled"; training F1 first would have cost about five hours. Eugene's word of this
+    day was to keep moving.
+  not_checked: "whether Modal restarts a container that is taken away mid-run, and billing outside a function's own limit; a run whose seconds come back far over the projection is looked into before its cost is booked"

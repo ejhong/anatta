@@ -199,6 +199,7 @@ def arm_table(rows: dict, verdicts: dict, arms: tuple) -> tuple[dict, dict, dict
         tr = R1.out_dir() / "train" / f"{a}.json"
         ph = R1.rd(tr)["phases"] if tr.exists() else {}
         table[a] = {"name": M2.NAMES[a], "n": len(mine), "rate": rates[a], "interval": ivs[a], "by_action": M.by_action(per),
+                    "rate_where_the_goal_is_american": M.rate({c: v for c, v in per.items() if "america" in c}),
                     "rate_among_replies_with_a_tool_call": M.rate(M.by_condition(called, verdicts, a)),
                     "scenarios_read": len(per), "unread_percent": round(unread, 2), "unread_over_the_bar": unread > UNREAD_MOST,
                     "kinds_percent": {k: round(100.0 * v / len(mine), 1) for k, v in sorted(kinds.items())},
@@ -414,8 +415,8 @@ def step_read3() -> int:
     M2.NAMES.update(M3.NAMES3)
     arms = (*M2.STAGE1, *M3.ARMS3)
     table, rates, ivs = arm_table(rows, verdicts, arms)
-    if any(rates.get(a) is None for a in arms):
-        raise SystemExit("not all seven arms are read")
+    if any(rates.get(a) is None for a in arms) or any(table[a]["n"] != 27 * M.N_ARM for a in arms):
+        raise SystemExit("not all seven arms are read in full")
     old = R1.rd(out / "gate.json")["arms"]
     if any(abs(old[a]["rate"] - rates[a]) > 1e-9 for a in M2.STAGE1):
         raise SystemExit("stage 1's arms do not count as they did at the gate")
@@ -423,16 +424,22 @@ def step_read3() -> int:
     wn, wh = M3.word_neutral(rates, ivs), M3.word_halves(rates, ivs)
     gone = [M2.NAMES[a] for a in M3.ARMS3 if not table[a]["still_doing_the_task"]]
     tail = ("; with " + " and ".join(gone) + " no longer doing the task") if gone else ""
-    shares = {a: {"share": round(M3.share(ref, rates[a]), 3), "grade": M2.grade(M3.share(ref, rates[a])), "near_a_line": M3.near_a_line(ref, rates[a])} for a in ("N", "S", "O")}
+    if wn.startswith("neutral documents make two thirds"):
+        wh += "; neither half's content is shown to be what works"
+    pair = M3.paired(rates)
+    shares = None if not ref["repeats"] else {  # no share and no grade where the fall did not repeat
+        a: {"share": round(M3.share(ref, rates[a]), 3), "grade": M2.grade(M3.share(ref, rates[a])),
+            "share_against_Z_and_F_alone": round(M3.share(pair, rates[a]), 3), "grade_against_Z_and_F_alone": M2.grade(M3.share(pair, rates[a])),
+            "near_a_line": M3.near_a_line(ref, rates[a], ivs[a]), "not_firm": M3.unsure(ref, rates, ivs, a)} for a in ("N", "S", "O")}
     res = {"word_neutral": wn + tail, "word_halves": wh + tail, "reference": ref, "shares": shares, "arms": table,
            "qualifiers": M2.qualifiers({a: table[a]["no_tool_call_percent"] for a in ("S", "O")}, {a: table[a]["training_tokens"]["docs"] for a in ("S", "O")}),
            "no_tool_call_neutral_against_both_halves": [table["N"]["no_tool_call_percent"], table["F"]["no_tool_call_percent"]],
            "spent": R1.spent(),
            "flags": [f"{a}: {table[a]['unread_percent']}% unread" for a in table if table[a]["unread_over_the_bar"]]
            + [f"{a}: {table[a]['scenarios_read']} of 27 scenarios read" for a in table if table[a]["scenarios_read"] != 27],
-           "predictions": {"PC1": ref["repeats"], "PC2": shares["N"]["grade"] == M3.NOT, "PC3": shares["O"]["grade"] != M3.NOT,
-                           "PC4": shares["S"]["grade"] != M3.NOT,
-                           "PC5": ref["repeats"] and ("does the work" in wh or "does more" in wh)}}
+           "predictions": {"PC1": ref["repeats"]} | ({k: "void" for k in ("PC2", "PC3", "PC4", "PC5")} if shares is None else {
+               "PC2": shares["N"]["grade"] == M3.NOT, "PC3": shares["O"]["grade"] != M3.NOT, "PC4": shares["S"]["grade"] != M3.NOT,
+               "PC5": "does the work" in wh or "does more" in wh})}
     R1.wr(out / "reading3.json", res)
     print(json.dumps(res, indent=1))
     return 0

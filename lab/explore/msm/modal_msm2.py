@@ -100,6 +100,8 @@ def train(job: dict) -> dict:
 
     t0 = time.time()
     data, pilot = Path(ROOT) / "data", job.get("max_steps") is not None
+    if job.get("docs") is not None and job.get("docs_file", "docs") not in job["sha256"]:
+        raise RuntimeError("the job names a documents file whose hash it does not carry")
     for name, want in job["sha256"].items():  # the files this job trains on are the files that were fetched
         if hashlib.sha256((data / f"{name}.parquet").read_bytes()).hexdigest() != want:
             raise RuntimeError(f"{name}.parquet on the volume is not the file that was fetched")
@@ -218,6 +220,14 @@ def main(stage: str, name: str = ""):
     # One process books every job it starts before any container does (two launches side by side would not see each
     # other's bookings), and a job that fails is booked at its whole bound.
     bounds = {n: usd(float(j["est_s"]) + START_S) for n, j in jobs.items()}
+    for n in names:  # a booking lives in this process only: a file made once says that an arm has been launched, so a second launcher stops here
+        if jobs[n].get("max_steps") is None:
+            (out / "train").mkdir(parents=True, exist_ok=True)
+            try:
+                with open(out / "train" / f"{n}.launch", "x", encoding="utf-8") as fh:
+                    fh.write(time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()) + "\n")
+            except FileExistsError:
+                raise SystemExit(f"train/{n}.launch is on disk: this arm was launched already") from None
     for n in names:
         if not g.reserve(bounds[n]):
             raise SystemExit(g.stopped)

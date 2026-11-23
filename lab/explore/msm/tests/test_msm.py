@@ -211,22 +211,26 @@ def test_a_second_pass_regroups_the_rows_and_one_pass_is_the_code_as_it_was():
 def test_the_contents_round_words():
     import msm3_core as M3
 
-    iv = lambda x: (x - 2.0, x + 2.0)  # noqa: E731
-    def both(**k):
-        r = {"Z": 24.7, "Z1": 23.2, "F": 11.6, "F1": 12.6} | k
-        i = {a: iv(v) for a, v in r.items()}
+    iv = lambda x: (x - 1.0, x + 1.0)  # noqa: E731
+    base = {"Z": 24.7, "Z1": 23.2, "F": 11.6, "F1": 12.6}  # the reference: 23.95 to 12.1, lines at 20.0 and 16.05; against Z and F alone, 20.33 and 15.97
+
+    def both(wide=None, **k):
+        r = base | k
+        i = {a: iv(v) for a, v in r.items()} | (wide or {})
         return M3.word_neutral(r, i), M3.word_halves(r, i)
 
-    ref = M3.reference({"Z": 24.7, "Z1": 23.2, "F": 11.6, "F1": 12.6}, {"Z": iv(24.7), "F1": iv(12.6)})
+    ref = M3.reference(base, {"Z": iv(24.7), "F1": iv(12.6)})
     assert ref["repeats"] and abs(ref["fall"] - 11.85) < 1e-9 and ref["noise"] == 1.5 and ref["bar"] == 6.0
     assert both(N=24.0, S=24.0, O=24.0) == ("the content matters: neutral documents do not make the practice carry", "neither half alone carries")
-    assert both(N=12.0, S=12.0, O=13.0) == ("neutral documents do as well: the content is not shown to matter", "either half is enough")
-    assert both(N=18.0, S=18.0, O=18.5)[1] == "it takes both halves"
-    assert both(N=18.0, S=18.0, O=18.5)[0] == "part of the fall does not depend on the content"
-    assert both(N=19.5, S=12.0, O=22.0) == ("part of the fall does not depend on the content; near the line between two grades", "the view of the self does the work")
+    assert both(N=12.0, S=12.0, O=13.0) == ("neutral documents make two thirds or more of the fall: the content is not shown to matter", "either half is enough")
+    assert both(N=18.0, S=18.0, O=18.2) == ("part of the fall does not depend on the content", "it takes both halves")
+    assert both(N=19.5, S=12.0, O=22.0) == ("part of the fall does not depend on the content" + M3.NEAR, "the view of the self does the work")
     assert both(N=24.0, S=22.0, O=13.0)[1] == "the counsel on conduct does the work"
     assert both(N=24.0, S=18.0, O=13.0)[1] == "not settled between the halves"  # different grades, five points apart
-    assert both(N=24.0, S=23.0, O=17.0)[1] == "it takes both halves; the counsel on conduct does more"
+    assert both(N=24.0, S=24.0, O=17.8)[1] == "it takes both halves; the counsel on conduct does more"
+    assert both(N=24.0, S=23.0, O=17.0)[1] == "it takes both halves; the counsel on conduct does more" + M3.NEAR  # 17.0 is within the noise of 16.05
+    assert both(wide={"N": (19.0, 23.5)}, N=21.7, S=24.0, O=24.0)[0] == "the content matters: neutral documents do not make the practice carry" + M3.NEAR  # its interval holds the line at 20.0
+    assert both(N=20.15, S=24.0, O=24.0)[0].endswith(M3.NEAR)  # "not" by the means, "in part" against Z and F alone
     assert both(F1=20.0, N=24.0, S=12.0, O=22.0) == (M3.NOT_REPEATED, M3.NOT_REPEATED)  # the second training is not clearly below the practice alone
     assert both(F1=16.0, N=24.0, S=12.0, O=19.5)[1] == "not settled between the halves"  # the gap F to F1 of 4.4 sets the bar at 8.8
-    assert M3.word_neutral({"Z": 24.7, "Z1": 23.2, "F": 11.6, "F1": 12.6}, {}) == "not read"
+    assert M3.word_neutral(base, {}) == "not read"

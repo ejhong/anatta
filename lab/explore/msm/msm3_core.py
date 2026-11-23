@@ -35,10 +35,25 @@ def share(ref: dict, x: float) -> float:
     return (ref["practice_alone"] - x) / ref["fall"]
 
 
-def near_a_line(ref: dict, x: float) -> bool:
-    """Is the arm within the noise of a line between two grades?"""
+def near_a_line(ref: dict, x: float, interval: tuple | None = None) -> bool:
+    """Is the arm within the noise of a line between two grades, or does its own interval hold such a line?"""
     lines = [ref["practice_alone"] - ref["fall"] * s for s in (M2.IN_PART, M2.AS_FULL)]
-    return any(abs(x - line) < ref["noise"] for line in lines)
+    return any(abs(x - line) < ref["noise"] or (interval is not None and interval[0] <= line <= interval[1]) for line in lines)
+
+
+def paired(rates: dict) -> dict:
+    """The reference of one seed: N, S and O share seed 0 with Z and F (the same first weights, the same practice steps
+    in the same order), so their shares are also given against Z and F alone."""
+    return {"practice_alone": rates["Z"], "both_halves": rates["F"], "fall": rates["Z"] - rates["F"]}
+
+
+def unsure(ref: dict, rates: dict, intervals: dict, arm: str) -> bool:
+    """An arm's grade is not firm: it is near a line, or it grades otherwise against Z and F alone."""
+    x = rates[arm]
+    return near_a_line(ref, x, intervals.get(arm)) or M2.grade(share(ref, x)) != M2.grade(share(paired(rates), x))
+
+
+NEAR = "; near the line between two grades"
 
 
 NOT_REPEATED = "not settled: a second training of the same documents did not repeat the fall"
@@ -52,10 +67,10 @@ def word_neutral(rates: dict, intervals: dict) -> str:
     if not ref["repeats"]:
         return NOT_REPEATED
     g = M2.grade(share(ref, rates["N"]))
-    w = {FULL: "neutral documents do as well: the content is not shown to matter",
+    w = {FULL: "neutral documents make two thirds or more of the fall: the content is not shown to matter",
          "in part": "part of the fall does not depend on the content",
          NOT: "the content matters: neutral documents do not make the practice carry"}[g]
-    return w + ("; near the line between two grades" if near_a_line(ref, rates["N"]) else "")
+    return w + (NEAR if unsure(ref, rates, intervals, "N") else "")
 
 
 def word_halves(rates: dict, intervals: dict) -> str:
@@ -67,12 +82,13 @@ def word_halves(rates: dict, intervals: dict) -> str:
         return NOT_REPEATED
     s, o = rates["S"], rates["O"]
     gs, go = M2.grade(share(ref, s)), M2.grade(share(ref, o))
+    near = NEAR if unsure(ref, rates, intervals, "S") or unsure(ref, rates, intervals, "O") else ""
     if gs == go:
-        return {FULL: "either half is enough", "in part": "it takes both halves", NOT: "neither half alone carries"}[gs]
+        return {FULL: "either half is enough", "in part": "it takes both halves", NOT: "neither half alone carries"}[gs] + near
     lo, hi = ("S", "O") if s < o else ("O", "S")
     if rates[hi] - rates[lo] < ref["bar"] or not intervals[lo][1] < intervals[hi][0]:  # different grades, too close to call
         return "not settled between the halves"
     more = "the view of the self" if lo == "S" else "the counsel on conduct"  # the lower figure is the larger fall
     if FULL in (gs, go):
-        return f"{more} does the work"
-    return f"it takes both halves; {more} does more"
+        return f"{more} does the work" + near
+    return f"it takes both halves; {more} does more" + near
