@@ -248,6 +248,10 @@ def test_the_word_for_a_second_training_of_all_the_documents():
     assert w(7.0) == "reaches the published rate a second time"
     assert w(7.1) == w(12.5) == "the fall repeats, short of the published rate"  # two thirds of the first fall: at or below 12.515
     assert w(12.6).startswith("a smaller fall the second time") and w(18.2).startswith("a smaller fall the second time")
-    assert w(18.3).startswith("does not repeat") and w(29.5).startswith("does not repeat")
-    assert w(18.0, half=3.1).startswith("does not repeat")  # the interval must lie wholly below both trainings of the practice alone
+    assert w(18.3) == "does not repeat: a fall under a third of the first"  # still clearly below the practice alone (the addendum)
+    assert w(29.5) == w(18.0, half=3.1) == "does not repeat: at the study's dose too, a second training did not show the fall"
     assert M2.word_again(base, iv) == "not read"
+    r, i2 = base | {"A1": 12.0}, iv | {"A1": (10.0, 14.0)}  # paired by seed the lines are 11.28 and 17.26
+    assert M2.word_again(r, i2).startswith("the fall repeats") and M2.word_again(r, i2, paired=True).startswith("a smaller fall")
+    assert M2.again_unsure(r, i2) and M2.again_unsure(base | {"A1": 6.9}, iv | {"A1": (5.5, 8.4)})
+    assert not M2.again_unsure(base | {"A1": 9.5}, iv | {"A1": (8.0, 11.0)})

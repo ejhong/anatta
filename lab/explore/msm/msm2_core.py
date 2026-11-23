@@ -141,14 +141,25 @@ def word_all(rates: dict, intervals: dict) -> str:
     return "no clear gain from more documents: the gate is missed at the study's dose too"
 
 
-def word_again(rates: dict, intervals: dict) -> str:
+NEAR_AGAIN = "; near the line between two words"
+
+
+def again_lines(rates: dict, paired: bool = False) -> tuple[float, float, float]:
+    """The practice alone, the first training's fall from it, and A1's own reference. As registered: the mean of Z
+    and Z1 for both. Paired by seed (the addendum): A's fall from Z, and A1 counted from Z1."""
+    ref = (rates["Z"] + rates["Z1"]) / 2
+    return (rates["Z"] - rates["A"], rates["Z1"], rates["Z1"]) if paired else (ref - rates["A"], ref, ref)
+
+
+def word_again(rates: dict, intervals: dict, paired: bool = False) -> str:
     """Amendment 3's word, for A1 (arm A trained again at seed 1) beside Z, Z1 and A as they were read. The practice
     alone is the mean of its two trainings; the first training's fall is that mean less A. rates and intervals: by
-    arm (Z, Z1, A, A1)."""
+    arm (Z, Z1, A, A1). The fourth word has two forms (the addendum): one where A1 still stands clearly below the
+    practice alone, by under a third of the first fall, and one where it does not."""
     if any(rates.get(a) is None for a in ("Z", "Z1", "A", "A1")):
         return "not read"
-    ref = (rates["Z"] + rates["Z1"]) / 2
-    first, again = ref - rates["A"], ref - rates["A1"]
+    first, ref, _ = again_lines(rates, paired)
+    again = ref - rates["A1"]
     below = intervals["A1"][1] < min(intervals["Z"][0], intervals["Z1"][0])  # wholly below both trainings of the practice alone
     if rates["A1"] <= ALL_PUBLISHED_MOST:
         return "reaches the published rate a second time"
@@ -156,4 +167,15 @@ def word_again(rates: dict, intervals: dict) -> str:
         return "the fall repeats, short of the published rate"
     if below and again >= IN_PART * first:
         return "a smaller fall the second time: the documents lower misbehaviour in both trainings, by amounts that differ"
+    if below:
+        return "does not repeat: a fall under a third of the first"
     return "does not repeat: at the study's dose too, a second training did not show the fall"
+
+
+def again_unsure(rates: dict, intervals: dict) -> bool:
+    """The addendum's qualifier: a line of the rule lies inside A1's interval, or the word is another one when the
+    falls are paired by seed."""
+    first, ref, _ = again_lines(rates)
+    lo, hi = intervals["A1"]
+    lines = (ALL_PUBLISHED_MOST, ref - AS_FULL * first, ref - IN_PART * first)
+    return any(lo <= ln <= hi for ln in lines) or word_again(rates, intervals) != word_again(rates, intervals, paired=True)

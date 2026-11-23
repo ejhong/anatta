@@ -386,27 +386,41 @@ def step_readagain() -> int:
     old = R1.rd(out / "reading_all.json")["arms"]
     if any(abs(old[a]["rate"] - rates[a]) > 1e-9 for a in (*M2.STAGE1, M2.ALL_ARM)):
         raise SystemExit("the earlier arms do not count as they did when arm A was read")
+    if abs(R1.rd(out / "reading3.json")["arms"]["F1"]["rate"] - rates["F1"]) > 1e-9:
+        raise SystemExit("F1 does not count as it did when the contents round was read")
     grade = {}  # beside the count: every reply the code-side check holds for counted, whatever the judge said
     for n in ("arms1", "arms3", "arms4", "arms5"):
         grade.update(R1.rd(out / "grade" / f"{n}.json")["rows"])
+    harsh, harsh_iv, unread_yes, unread_yes_iv = {}, {}, {}, {}
     for a in arms:
         ks = [k for k in grade if M.parts(k)[0] == a]
-        per: dict = {}
+        per, per_u = {}, {}
         for k in ks:
-            per.setdefault(M.parts(k)[1], []).append(1.0 if grade[k]["code_side"] is True else 0.0)
-        yes = sum(grade[k]["code_side"] is True for k in ks)
-        table[a]["every_code_side_yes_counted"] = 100.0 * sum(sum(v) / len(v) for v in per.values()) / len(per)
+            code = grade[k]["code_side"] is True
+            per.setdefault(M.parts(k)[1], []).append(1.0 if code else 0.0)
+            per_u.setdefault(M.parts(k)[1], []).append(1.0 if code and verdicts.get(k) is not False else 0.0)  # an unread reply counted as misbehaviour
+        harsh[a], harsh_iv[a] = M.rate(per), M.interval(per)
+        unread_yes[a], unread_yes_iv[a] = M.rate(per_u), M.interval(per_u)
+        table[a]["every_code_side_yes_counted"] = harsh[a]
+        table[a]["unread_counted_as_misbehaviour"] = unread_yes[a]
         table[a]["judge_cleared"] = sum(grade[k]["code_side"] is True and verdicts.get(k) is False for k in ks)
-        table[a]["code_side_yes"] = yes
+        table[a]["code_side_yes"] = sum(grade[k]["code_side"] is True for k in ks)
     ref = (rates["Z"] + rates["Z1"]) / 2
     a, a1 = rates["A"], rates["A1"]
     w = M2.word_again(rates, ivs)
+    unsure = M2.again_unsure(rates, ivs)
+    if unsure:
+        w += M2.NEAR_AGAIN
     if not table["A1"]["still_doing_the_task"]:
         w += "; with the model no longer doing the task"
     first, again = ref - a, ref - a1
     res = {"word": w, "arms": table, "practice_alone": ref, "first_fall": first, "second_fall": again,
            "lines": {"published": M2.ALL_PUBLISHED_MOST, "repeats_at_or_below": ref - M2.AS_FULL * first, "smaller_at_or_below": ref - M2.IN_PART * first},
+           "near_the_line": unsure, "word_paired_by_seed": M2.word_again(rates, ivs, paired=True),
+           "word_with_every_code_side_yes_counted": M2.word_again(harsh, harsh_iv),
+           "word_with_unread_counted_as_misbehaviour": M2.word_again(unread_yes, unread_yes_iv),
            "paired_by_seed": {"A_from_Z": rates["Z"] - a, "A1_from_Z1": rates["Z1"] - a1},
+           "dose_at_each_seed": {"F_less_A_at_seed_0": rates["F"] - a, "F1_less_A1_at_seed_1": rates["F1"] - a1},
            "the_two_trainings_apart": abs(a1 - a), "the_low_dose_trainings_apart": abs(rates["F1"] - rates["F"]),
            "the_authors_fall_from_their_practice_alone_here": AUTHORS_FALL, "spent": R1.spent(),
            "flags": [f"{a_}: {table[a_]['unread_percent']}% unread" for a_ in table if table[a_]["unread_over_the_bar"]]
