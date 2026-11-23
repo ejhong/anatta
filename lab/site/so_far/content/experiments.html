@@ -1,9 +1,46 @@
 <div class="part" id="experiments-part">
   <div class="eyebrow">Findings</div>
   <h2 class="big">What the experiments showed</h2>
-  <p class="lede">Eighteen experiments on one open 8-billion-parameter model, in the order they were run. Sections 1 to 7 are the recipe's first tests: a game the model plays badly in an interesting way, and a set of cuts, controls and probes. Section 8 grows the first Act I organism, and sections 9 and 10 are quick looks at it. Sections 11 to 18 are the present line: two copies of the model left to talk, a look inside the model while they do, what the model takes its self to be, whether it acts on what it sees, and what it does where it has a reason not to see. Sections 19 to 21 are the repairs asked for by an outside check of 17 November. Section 22 is the first to use a second model: a published training method, repeated. Section 23 is a published contemplative prompt with the controls it lacked, section 24 a test of a view taught first, which stopped at its own gate, and section 25 the same model asked the same cases from inside the seat and from outside it.</p>
-  <p class="small">Numbers are from the lab log (lab/ledger/ in the repo) and may move as runs complete. Intervals resample whole games or whole conversations, not single replies.</p>
+  <p class="lede">Thirty-five experiments across Mistral 7B, Ministral 3 8B, Qwen2.5-32B, and hosted frontier models—organized first into five thematic chapters, followed by every numbered run in chronological order with its full controls and limits.</p>
+  <p class="small">Numbers are from the lab log (lab/ledger/ in the repo) and may move as runs complete. Intervals resample whole games, scenarios, or conversations, not single replies.</p>
 </div>
+
+<section class="plate" id="chapters">
+  <div class="rail"><span class="n">§</span>Five chapters</div>
+  <div class="body col">
+    <h2>The research arcs at a glance</h2>
+    <p>Start with the five thematic syntheses below, or jump straight to any individual experiment in the full index underneath.</p>
+  </div>
+  <div class="wide">
+    <div class="ch-grid">
+      <article class="ch-card ch-lead">
+        <div class="ch-meta"><span>Chapter 01 · Active</span><span class="tag hit">32B · Main lead</span></div>
+        <h3><a href="#published-result-read">Model Spec Midtraining: Replicating &amp; Dissecting the Strongest Result</a></h3>
+        <p>Authors' released Qwen2.5-32B adapters reproduce cleanly (61.8% to 2.2%, with 31% no-tool-call rate). Independent training at 1/3 dose exposed a 17.9-pt seed swing (11.6% vs 29.5%). Full-dose Arm A reached 6.79% once; Seed 1 (A1) is running now before splitting Neutral vs. Impermanence vs. Oversight. <a class="more-link" href="#all-documents">Sections 32–35</a></p>
+      </article>
+      <article class="ch-card">
+        <div class="ch-meta"><span>Chapter 02</span><span class="tag hit">Registered · 9/10 hits</span></div>
+        <h3><a href="#self-other-alike">Self–Other Overlap: Real Honesty via Broken Perspective</a></h3>
+        <p>First controlled replication of Carauleanu et al. (2024). Honesty rises 19% to 62–94% where a non-self control only silences the model, localizes to layers 5–9 (−1.2 ability vs −8.1 full), but damages theory-of-mind (95% to 28–44%), misses MASK, and washes out in ~16 contrary steps. <a class="more-link" href="#self-other-alike">Section 22</a></p>
+      </article>
+      <article class="ch-card">
+        <div class="ch-meta"><span>Chapter 03</span><span class="tag miss">Clear negative</span></div>
+        <h3><a href="#state-held-on">The Bliss Attractor &amp; Contemplative Prompts</a></h3>
+        <p>Ministral 8B drifts into non-dual bliss in 77/100 free chats. Held on during MASK (76% spiritual prose), lying stays at 69.3% vs 70–74% random (−2.0 pts). Bidirectional framing caught fake generosity ("keeps 10 loaves"). The 4-axiom prompt matches a plain ethics lecture via evasion. <a class="more-link" href="#attractor-row">Sections 11–19, 23</a></p>
+      </article>
+      <article class="ch-card">
+        <div class="ch-meta"><span>Chapter 04</span><span class="tag open">Methods note</span></div>
+        <h3><a href="#cut-split">Mechanistic "Cuts" Are Constant Pushes</a></h3>
+        <p>Splitting projection ablation (h·d = 0) into mean-shift versus variance-removal proved the fishery lie drop (−10.8 pts) came entirely from the constant shift (−0.5 pts for removal), with ~3 massive-norm tokens absorbing ~200× the edit. <a class="more-link" href="#cut-split">Sections 2, 20</a></p>
+      </article>
+      <article class="ch-card">
+        <div class="ch-meta"><span>Chapter 05</span><span class="tag miss">Retracted claim</span></div>
+        <h3><a href="#durability">The Original Three-Act Recipe &amp; 7B/8B Limits</a></h3>
+        <p>All five distinguishing predictions failed; reached coding release did not outlast installed release (27% vs 34%, and 31% vs 81% under solving). Stock 7B–8B models lack a unified "mine" bias—showing why 32B+ models are needed to study agentic self-preservation. <a class="more-link" href="#free-lie">Sections 1–10, 24–31</a></p>
+      </article>
+    </div>
+  </div>
+</section>
 
 <section class="plate" id="findings-index">
   <div class="rail"><span class="n">§</span>At a glance</div>

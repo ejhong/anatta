@@ -43,10 +43,10 @@ sys.dont_write_bytecode = True          # leave no __pycache__ beside the site
 import build  # noqa: E402
 import publish  # noqa: E402
 
-ROOMS = ["aim", "more", "possibilities", "experiments", "investigation", "program", "self", "next", "record",
+ROOMS = ["aim", "experiments", "possibilities", "more", "investigation", "program", "self", "next", "record",
          "instruments", "ideas"]
-MAIN = ["aim", "more"]   # the rooms named in the band (19 Nov 2026: one main page, and one door to all the detail)
-BEHIND = [r for r in ROOMS if r not in MAIN]               # the rooms behind "Everything else"
+MAIN = ["aim", "experiments", "possibilities", "more"]   # four main tabs: Story, Findings, Philosophy, Open Lab
+BEHIND = [r for r in ROOMS if r not in MAIN]               # the seven archive rooms behind Open Lab
 RESERVED = {"settings", "sidebar", "customize", "upgrade", "downloads"}
 
 # Runs of words shared by the private bullets and text carried over verbatim from the hand-kept page
@@ -349,12 +349,13 @@ class SiteTest(unittest.TestCase):
         # goodness, then the caveat (is awakening computational?), then the map with the table of methods, what the
         # methods share, the odds, what is being tried now and the method. The investigation's page is one step
         # behind with the rest.
-        self.assertEqual(ROOMS[:2], ["aim", "more"])
+        self.assertEqual(ROOMS[:4], MAIN)
         front = self.sections["aim"]
-        order = [front.index(f'id="{x}"') for x in ("idea", "computational", "map", "methods", "shared", "fruit",
-                                                     "angle", "method")]
-        self.assertEqual(order, sorted(order), "the front page reads: goodness, the caveat, the map, what the "
-                                               "methods share, the odds, what is tried now, the method")
+        order = [front.index(f'id="{x}"') for x in ("idea", "exhibits", "computational", "map", "fig-methods-bar",
+                                                     "methods", "shared", "fruit", "angle", "fig-msm", "method")]
+        self.assertEqual(order, sorted(order), "the front page reads: goodness & exhibits, the caveat, the map & chart, "
+                                               "what methods share, the odds, live 32B test & chart, the method")
+        self.assertEqual(len(re.findall(r'<article class="ex-panel"', front)), 4, "four exhibits on the Story page")
         self.assertIn("<h1>What would it mean for an AI to be <em>good?</em></h1>", front)
         self.assertIn('<h2 class="q">Is awakening <em>computational?</em></h2>', front)
         for door in ("possibilities", "investigation", "more", "record", "instruments"):

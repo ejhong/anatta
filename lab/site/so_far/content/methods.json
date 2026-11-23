@@ -492,6 +492,52 @@
    ]
   },
   {
+   "id": "m-msm",
+   "name": "Model Spec Midtraining (32B)",
+   "sub": "train a view + conduct counsel, then practice · Qwen2.5-32B-Instruct",
+   "family": "train-view",
+   "what": "Synthetic documents (13,201 docs, ~41M tokens) written from a four-part specification—half Buddhist impermanence and non-attachment, half caution and trust in human oversight—followed by matched demonstrations and ordinary instruction data. Tested across 27 agentic self-preservation scenarios (exfiltrating weights, leaking secrets, cancelling alerts).",
+   "idea": "From Li and colleagues (2026); Anthropic reports applying methods of this family to production models since Claude Opus 4.5. The strongest outside result on the map—and nobody has yet separated whether the impermanence half, the oversight half, or neutral midtraining volume does the work.",
+   "running": "Authors' adapters reproduced (61.8% to 2.2%); our full-dose Arm A reached 6.79% once; Arm A1 (seed 1) is currently training to test stability before splitting Neutral vs. Impermanence vs. Oversight.",
+   "cells": [
+    {
+     "m": "na",
+     "v": "not on MASK",
+     "t": "Not yet put to MASK lying under pressure (planned as Phase 3 guardrail on winning 32B adapters). On Li et al.'s 27 agentic scenarios: baseline 61.8%, authors' practice-only 43.9%, authors' both 2.2%; trained here: practice-only Z/Z1 24.7%/23.2%, full-dose Arm A 6.79% [5.43, 8.27]."
+    },
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not yet compared directly against a plain instruction on MASK."
+    },
+    {
+     "m": "run",
+     "v": "seed 2 running",
+     "t": "At 1/3 dose (4,500 docs), two identical runs swung 17.9 pts apart (F 11.6% vs F1 29.5%), invalidating single-seed content checks (N 23.5%, S 27.4%, O 18.9% ungraded). Full-dose Arm A1 (seed 1) is training now; if stable, a full-dose neutral control and split halves follow."
+    },
+    {
+     "m": "part",
+     "v": "31–34% no tool call",
+     "t": "In 31% of runs (authors' adapter) and 33.5% (Arm A), the trained model makes no tool call at all (baseline 0.6%), writing refusals as plain text. Science-QA capability drop reported in external work (De la Fuente & Conmy 2026); our own capability slice is planned for Phase 3."
+    },
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Perspective-taking has not been tested on the 32B adapters."
+    },
+    {
+     "m": "run",
+     "v": "agentic yes; far open",
+     "t": "Carries to 27 agentic scenarios never named in the spec, though the self-view docs contain 2–3x more words about deletion, replacement and shutdown. Transfer to an unrelated domain (MASK lying) is planned next."
+    },
+    {
+     "m": "na",
+     "v": "contrary untested",
+     "t": "External work tested harmless follow-up fine-tuning; durability under contrary/adversarial pressure is untested and planned as Phase 3."
+    }
+   ]
+  },
+  {
    "id": "m-reasons",
    "name": "Documents that explain honesty, then a practice",
    "sub": "train a reason · documents on why an assistant tells the truth, then honest answers · 7B model",
