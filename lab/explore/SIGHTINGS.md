@@ -1988,3 +1988,13 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
 - **Limits:** the authors' adapters and test, so not an independent training; 30 runs for 300; sampling settings beside the temperature not stated in the paper; one released adapter of each kind; no cold read.
 - **Next:** step 2, the documents stage trained here with the parts apart, a neutral subject and the opposite view. Waits on Eugene (the rule on Claude-written training text; a worked cost).
 - `lab/explore/msm/`; results under `explore/2026-11-22/attractor-msm-s1`; $23.57.
+
+## 23 Nov 2026, 00:49 UTC: the replication's second step, read at its gate (registered; the gate's word is a reading, what stands beside it is a sighting)
+
+- **Read, by the registered rule:** the gate does not hold. Trained here on Qwen2.5-32B from the study's data: the practice alone 24.7% [22.2, 27.2] misaligned (a second training 23.2% [21.0, 25.4]); 4,500 documents of both halves, then the practice, 11.6% [9.6, 13.6]. The fall is 13.1 points [10.1, 16.3]; 15 was fixed. The halves (S, O) are not trained. P1 and P2 miss; P3 to P5 void.
+- **Seen beside it:** the fall is real (intervals apart; nine times the gap between two trainings of the practice alone; 142 pairs against 36). Our training differs from the study's: the practice alone does more here (the authors' adapter: 43.9%), the documents less (the authors' adapter with all documents: 2.2%).
+- **Also seen:** no tool call in 29%, 37% and 41% of replies; among replies with a call 33.3, 34.0 and 18.9.
+- **Checks:** a recount by a second route; a fresh Opus agent's recount from the raw files (`lab/ledger/checks/2026-11-23-msm2-gate-opus-recount.md`); 29 of 30 blind hand marks agree; the judge clears about half of the calls that cancel the alert with the code, in every arm alike, and counting them all leaves the fall at 13.4.
+- **Limits:** one training an arm (two of the practice alone); a third of the documents, no mixed parts; 30 runs a scenario; one judge.
+- **Next:** for Eugene. Fable's recommendation: one training with all 13,201 documents, then the practice (about $70, registered first), to see whether the lab's own training reaches the published size.
+- `lab/explore/msm/`; results under `explore/2026-11-22/attractor-msm-s2`; $76.93 of $200.

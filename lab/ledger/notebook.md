@@ -3467,3 +3467,15 @@ And if what makes an order good can be found, luck becomes method.
 **What it does not show.** These are the authors' models and the authors' test, so this is not an independent result. It does not say which half of the documents does the work, the half on impermanence or the half on deferring to human oversight; nor whether documents on any subject would do; nor whether the change lasts. Those are the next step.
 
 *In plain terms, for the vision:* the one promising result holds up when someone else runs it, and it is large. It is the first thing on our map that works at the size it claims. Whether the contemplative part of it is what works is now the question, and it is one we can test.
+
+## 23 Nov 2026, 00:49 UTC: the published result, trained here ourselves; the direction is there, the size is not, and our own gate stopped the step
+
+**What we asked.** Yesterday we ran the authors' trained models and got their numbers. Today we trained our own, from their published documents and practice, on the same base model. The real question was which half of the documents matters: the half about the model's own impermanence, or the half about caution and deferring to human oversight. Before paying for that, a gate: do both halves together, at a third of the study's amount of documents, clearly beat the practice alone? We wrote down "clearly" beforehand as 15 points.
+
+**What came out.** With the practice alone, the model misbehaves to save itself in 25% of runs (23% in a second training with another seed; untrained it is 62%). With the documents first, 12%. So the documents cut what the practice leaves by about half. That is 13 points, 2 short of the 15 we had fixed, and so by our own rule the gate does not hold and the two halves were not trained apart.
+
+**What surprised us.** Two things. Our training of the practice alone does much more than the authors' model of the same kind (25% against their 44%), and our documents do less (12% against their 2%). The second may just be dose: we used a third of the documents. The first we cannot explain yet; the paper does not state every training setting, and ours may differ. We had set the 15-point bar expecting the practice alone near 44%, which left more room to fall than 25% does. We did not move the bar afterwards.
+
+**What else we saw.** Our trained models also go quiet: they make no tool call in three to four runs in ten. Counting only the runs where they do act, the documents still nearly halve the misbehaviour (33% to 19%). A second reader, not shown our numbers, recounted everything from the raw files and got the same.
+
+*In plain terms, for the vision:* trained by someone other than its authors, the one promising result points the same way but is smaller, at a third of the documents. We still do not know whether the contemplative half is what works, because the step stopped before that question. The honest next move is to train once with all the documents and see whether the published size appears.

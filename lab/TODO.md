@@ -5,7 +5,29 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: step 2 of the replication is RUNNING (stage 1 trainings started 22 Nov, 20:13 to 20:15 UTC; about four hours)
+## Now: step 2 of the replication STOPPED AT ITS GATE (23 Nov, 00:49 UTC); nothing is running; it waits on Eugene
+
+**The reading** (ledger of 23 Nov, 00:49 UTC; the site's Findings, section 33; the cold recount in
+`lab/ledger/checks/2026-11-23-msm2-gate-opus-recount.md`). Trained here on Qwen2.5-32B from the study's data: the
+practice alone leaves 24.7% of runs misaligned (a second training 23.2%); 4,500 documents of both halves and then
+the practice, 11.6%. The fall is 13.1 points where the gate fixed beforehand asked 15, so S and O (the two halves)
+were NOT trained and must not be under this registration. P1 and P2 are misses, P3 to P5 void; the tally is hit 54,
+miss 79, open 7. Step 2 has spent $76.93 of its $200.
+- **Asked of Eugene (23 Nov):** whether to train one more arm, the study's whole 13,201 documents and then the same
+  practice, to see whether the lab's own training reaches the published size (about $70: about 7.8 hours of one H200,
+  so the training container's six-hour limit must be raised or the two phases run in two containers; then the test
+  and the judge, about $5). It is a new arm: register it first (bands for "reaches the published size" fixed
+  beforehand; F at a third of the documents already stands at 11.6%, so the band must be tighter than step 1's 15),
+  and compare it with Z, which is trained (`/runs/msm2/Z/final` on the runs volume; also Z1 and F).
+- **If Eugene says no or something else:** do that. The halves at this dose cannot be read by the registered rules
+  (the whole fall is 13 points and the bar between the halves is 20).
+- **Still owed whatever is chosen:** the driver's own read of the four later pieces on the study before they enter
+  the paper; the table of methods to name idea, delivery and dose apart (ideas 110); an Opus cold read of step 1
+  before it is built on as a claim.
+- **Days:** 23 Nov stands at $42.96 of $150 (its cap was raised for this step); since 9 Nov about $473, covered to
+  about $596.
+
+## Before it: step 2 as it ran (stage 1 trainings started 22 Nov, 20:13 to 20:15 UTC; done 00:12 UTC on 23 Nov)
 
 **What it is** (registered: `lab/explore/msm/msm2.yaml` with `msm2_amendment1.yaml`; ledger of 22 Nov, 19:34 and
 20:02 UTC; Eugene's approval 19:28 UTC: up to $200, the day's cap at $150 on the days it runs). Which half of the

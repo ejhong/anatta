@@ -105,7 +105,7 @@ removed the rule against training on Claude-written text, at Eugene's word ("Lif
 - Registrations are committed and pushed before results exist (`register` skill). A fresh Opus agent (model opus;
   Fable before 9 Nov) checks consequential grades; Opus 5.5 at max effort reviews at H4-lite gates.
 - The site tally must stay as recorded: `python3 -I lab/tools/tally.py lab/site/so_far/index.html` (currently hit 54,
-  miss 77, open 7). Never re-judge em1/sp1 in place.
+  miss 79, open 7). Never re-judge em1/sp1 in place.
 - **Small steps** (Eugene's word of 19 Nov 2026): a step that costs under about $5 gets one ledger entry of about
   ten lines, a SIGHTINGS entry, a few lines in the notebook and one line on the site. A cold read only where its
   negative would change a public claim.

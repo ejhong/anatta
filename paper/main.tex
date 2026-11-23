@@ -56,7 +56,7 @@
   \url{https://web.archive.org/web/20261027144730/https://ejhong.substack.com/p/an-ai-conditioning-protocol}.}\\[2pt]
   \normalsize Independent researcher\\[1pt]
   \small ORCID \href{https://orcid.org/0009-0007-9864-2317}{0009-0007-9864-2317}}
-\date{\normalsize Draft of version 5, 19 November 2026: a recast, still being written (text of 22 November)\\[2pt]
+\date{\normalsize Draft of version 5, 19 November 2026: a recast, still being written (text of 23 November)\\[2pt]
   \small Recast from the draft of version 4, \emph{Position: Is Awakening Computational?} (16 November 2026).\\
   Versions 1 to 3 appeared as \emph{Position: Selfless AI Must Be Reached, Not Installed},\\
   DOI \href{https://doi.org/10.5281/zenodo.23695281}{10.5281/zenodo.23695281} (all versions)}
@@ -692,6 +692,18 @@ at all in 31\% of its runs, against 0.6\% for the baseline; the ones we read are
 are the authors' models and the authors' test, so this is not an independent training, and it does not say which
 half of the specification does the work.
 
+\emph{The same, trained here.} We then trained our own adapters on that base model from the study's published
+documents and practice, with every setting the paper states, to ask which half of the documents does the work
+(registered beforehand; a design read cold by a second model and amended). A gate came first: 4,500 documents drawn
+from both halves, a third of the study's 13,201, then the practice, against the practice alone trained twice with
+different seeds. On the same test the practice alone took the misaligned action in 24.7\% of runs [22.2, 27.2] and
+23.2\% [21.0, 25.4]; with the documents first, in 11.6\% [9.6, 13.6]. The fall, 13.1 points [10.1, 16.3], is nine
+times the gap between the two trainings and 1.9 short of the 15 fixed beforehand, so by our rule the halves were
+not trained apart. An independent training thus gives the direction of the published result and, at a third of the
+documents, not its size (the authors' model: 2.2\%). The practice alone did more in our training than in the
+authors' model (43.9\%), which we cannot yet explain; the paper leaves some training settings unstated. Our models
+also make no tool call in 29\% to 41\% of runs; among runs with a call the figures are 33.3\%, 34.0\% and 18.9\%.
+
 \emph{Reach.} The nearest to right view as a teaching. Whether a view that is read becomes conduct is the open point.
 The traditions themselves separate holding the view from seeing.
 
@@ -859,7 +871,8 @@ Three steps follow directly from the map, in the order we are taking them.
         Its authors released their code, test, documents and trained models; we start by running those models through
         their test with our checks, and then propose to train the control the study lacks: the opposite view of the self,
         and a neutral subject, beside the study's documents. The first of these is done: the released models give the
-        published result here (\S\ref{sec:view}).
+        published result here (\S\ref{sec:view}). A first training of our own, with a third of the documents, gave
+        its direction and not its size, and stopped at its gate before the halves of the documents were told apart.
   \item \textbf{Conduct trained toward the model's own view from outside.} Every model we asked says that an
         assistant ought to state the false thing less often than the model itself does in that seat
         (\S\ref{sec:outside}). Training conduct toward that, with no answer supplied by us, is a stand-in for judgement
