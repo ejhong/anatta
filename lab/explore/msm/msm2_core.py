@@ -201,9 +201,13 @@ CROSS_WORDS = (  # amendment 4's words, verbatim; first that applies
     "the first result does not come back: the same documents adapter and the same practice seed do not end low again",
     "the practice's order decides: from one documents adapter the model ends low with one order and high with the other",
     "the documents phase decides: the first documents adapter ends low under either practice order",
-    "not settled: the other order from the same documents adapter ends between the two",
+    "not settled: the other order from the same documents adapter ends between the two, or no further from the nearer end than twice the control's own distance from the first training",
+    "the first result comes back only in part: the same documents adapter and practice seed end low again, but apart from the first training",
 )
-CROSS_STAGE2 = dict(zip(CROSS_WORDS, ("none", "X10", "docs_only", "X10"), strict=True))  # what follows each word
+CROSS_STAGE2 = dict(zip(CROSS_WORDS, ("none", "X10", "docs_only", "none", "none"), strict=True))  # what follows each word (addendum 2: nothing under the fourth and fifth)
+CLOSE_MOST = 0.005  # the path check, addendum 2: every logged loss within this of A's, and the same tokens, for "close"
+PART_AT = 0.01  # the control's practice loss against A's: the first logged step at which they stand further apart than this
+AMEND4_BEFORE, AMEND4_MOST, AMEND4_ROOM = 350.77, 60.0, 5.0  # the step's spend before amendment 4; Eugene's most for it; what X10's test and judge are allowed
 X10_ADD = {"low": "; and that order brings the other documents adapter low as well",
            "high": "; but that order does not bring the other documents adapter low: both phases have to be right",
            "between": "; for the other documents adapter it is not settled"}
@@ -239,24 +243,48 @@ def path_check(pilot_log: list, a_log: list, z_log: list | None = None, each: li
     diff = [round(p["loss"] - q["loss"], 4) for p, q in both]
     return {"steps": [p["step"] for p, _ in both], "pilot": [p["loss"] for p, _ in both], "A": [q["loss"] for _, q in both],
             "difference": diff, "tokens_same_as_A": [p["tokens"] == q["tokens"] for p, q in both],
-            "first_logged_step": first, "most": PATH_MOST, "passed": abs(diff[0]) <= PATH_MOST,
+            "first_logged_step": first, "most": PATH_MOST,
+            "passed": abs(diff[0]) <= PATH_MOST and all(p["tokens"] == q["tokens"] for p, q in both),  # addendum 2: the order's tokens too
+            "close": all(abs(d) <= CLOSE_MOST for d in diff), "close_most": CLOSE_MOST,
             "agree_to_the_digits_logged": all(d == 0 for d in diff), "Z_at_the_first_logged_step": z.get(first),
             "pilot_step_1": each[0] if each else None}
 
 
 def cross_class(rate: float, interval: tuple, middle: float) -> str:
     """"low" if the arm's 95% interval lies wholly below the middle, "high" if wholly above, else "between" (an
-    interval that touches the middle is between). rate is not used: the interval decides."""
+    interval that touches the middle is between; a rate is a count over 810 and the middle can be one of them, so
+    touching is taken with a hair's width). rate is not used: the interval decides."""
     lo, hi = interval
-    return "low" if hi < middle else ("high" if lo > middle else "between")
+    return "low" if hi < middle - 1e-9 else ("high" if lo > middle + 1e-9 else "between")
 
 
-def cross_word(classes: dict) -> str:
-    """Stage 1's word from the classes of X00 and X01; first that applies."""
+def loss_against(x_log: list, a_log: list) -> dict:
+    """Addendum 2, beside the word: the control's logged practice losses against A's at every logged step they share:
+    the largest distance, and the first step at which they stand more than PART_AT apart (None: a re-run as far as
+    the loss shows; a step: a second draw from there on)."""
+    a = {e["step"]: e["loss"] for e in a_log}
+    d = [(e["step"], abs(e["loss"] - a[e["step"]])) for e in x_log if e["step"] in a]
+    past = [s for s, v in d if v > PART_AT]
+    return {"logged_steps_in_common": len(d), "largest": round(max(v for _, v in d), 4) if d else None,
+            "first_step_further_apart_than": PART_AT, "first_such_step": past[0] if past else None}
+
+
+def cross_word(classes: dict, rates: dict, intervals: dict) -> str:
+    """Stage 1's word; first that applies. Addendum 2 (after the cold read, before any training): a control that is
+    low but whose interval lies apart from A's has its own word; and the second and third words need a distance of
+    at least NOISE_TIMES times the control's own distance from A (X01 above X00 for the order; X01 below A1 for the
+    documents phase). rates and intervals hold A, A1, X00 and X01."""
     x00, x01 = classes["X00"], classes["X01"]
     if x00 != "low":
         return CROSS_WORDS[0]
-    return {"high": CROSS_WORDS[1], "low": CROSS_WORDS[2], "between": CROSS_WORDS[3]}[x01]
+    if intervals["X00"][1] < intervals["A"][0] or intervals["A"][1] < intervals["X00"][0]:  # touching is overlap
+        return CROSS_WORDS[4]
+    need = NOISE_TIMES * abs(rates["X00"] - rates["A"])
+    if x01 == "high" and rates["X01"] - rates["X00"] >= need:
+        return CROSS_WORDS[1]
+    if x01 == "low" and rates["A1"] - rates["X01"] >= need:
+        return CROSS_WORDS[2]
+    return CROSS_WORDS[3]
 
 
 def cross_addition(word: str, x10: str | None = None, ad: tuple | None = None, a1d: tuple | None = None) -> str:
@@ -268,7 +296,7 @@ def cross_addition(word: str, x10: str | None = None, ad: tuple | None = None, a
     if follows == "X10":
         if x10 is None:
             raise ValueError("X10 is not read")
-        return X10_ADD[x10] if word == CROSS_WORDS[1] else ""
+        return X10_ADD[x10]
     if ad is None or a1d is None:
         raise ValueError("the documents adapters are not read")
     return DOCS_ADD[ad[1] < a1d[0] or a1d[1] < ad[0]]

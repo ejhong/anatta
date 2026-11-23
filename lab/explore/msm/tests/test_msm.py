@@ -266,15 +266,28 @@ def test_the_crossed_words_their_additions_and_the_middle():
     c = lambda lo, hi: M2.cross_class((lo + hi) / 2, (lo, hi), mid)  # noqa: E731
     assert c(4.0, 14.31) == "low" and c(14.33, 25.0) == "high"
     assert c(4.0, mid) == c(mid, 25.0) == c(10.0, 18.0) == "between"  # an interval touching the middle is between
-    w = lambda x00, x01: M2.cross_word({"X00": x00, "X01": x01})  # noqa: E731
-    first, second, third, fourth = M2.CROSS_WORDS
-    assert w("high", "low") == w("between", "high") == first
-    assert w("low", "high") == second and w("low", "low") == third and w("low", "between") == fourth
-    assert [M2.CROSS_STAGE2[x] for x in M2.CROSS_WORDS] == ["none", "X10", "docs_only", "X10"]
+    assert c(4.0, mid - 1e-12) == c(mid + 1e-12, 25.0) == "between"  # a hair's width: 116 of 810 is the middle itself
+    A, A1 = (6.79, (5.31, 8.27)), (21.85, (19.63, 24.07))
+
+    def w(x00, x01):  # each a (rate, half-width)
+        r = {"A": A[0], "A1": A1[0], "X00": x00[0], "X01": x01[0]}
+        iv = {"A": A[1], "A1": A1[1], "X00": (x00[0] - x00[1], x00[0] + x00[1]), "X01": (x01[0] - x01[1], x01[0] + x01[1])}
+        return M2.cross_word({k: M2.cross_class(r[k], iv[k], mid) for k in ("X00", "X01")}, r, iv)
+
+    first, second, third, fourth, fifth = M2.CROSS_WORDS
+    assert w((20.0, 2.0), (7.0, 1.5)) == w((14.0, 2.0), (22.0, 2.0)) == first  # the control high, or between
+    assert w((12.0, 1.5), (22.0, 2.0)) == fifth  # low, but its interval [10.5, 13.5] lies apart from A's
+    assert w((9.5, 1.5), (22.0, 2.0)) == second  # the control near A (2.71 away); the other order 12.5 above it
+    assert w((9.5, 1.5), (16.9, 2.0)) == second and w((9.7, 1.5), (15.5, 1.1)) == fourth  # 7.4 clears twice 2.71; 5.8 does not clear twice 2.91
+    assert w((7.0, 1.5), (8.0, 1.5)) == third and w((7.0, 1.5), (15.0, 2.0)) == fourth  # both low; the other order between
+    assert w((9.5, 1.5), (11.0, 1.5)) == third and w((2.0, 1.0), (12.0, 1.5)) == fifth  # A1 less X01 clears twice the distance; a control below A's interval
+    assert w((3.6, 1.8), (12.5, 1.5)) == third  # a control below A but overlapping it (3.19 away); A1 less X01 (9.35) clears twice that
+    assert [M2.CROSS_STAGE2[x] for x in M2.CROSS_WORDS] == ["none", "X10", "docs_only", "none", "none"]
     assert M2.cross_addition(second, x10="low") == "; and that order brings the other documents adapter low as well"
     assert M2.cross_addition(second, x10="high") == "; but that order does not bring the other documents adapter low: both phases have to be right"
     assert M2.cross_addition(second, x10="between") == "; for the other documents adapter it is not settled"
-    assert M2.cross_addition(fourth, x10="high") == M2.cross_addition(fourth, x10="low") == ""  # X10 given beside, no addition
+    with pytest.raises(ValueError):
+        M2.cross_addition(fourth, x10="high")  # addendum 2: nothing follows the fourth word
     apart, overlap = "; and the two documents adapters already differ before any practice", "; though the two do not differ on this test before any practice"
     assert M2.cross_addition(third, ad=(5.0, 8.0), a1d=(8.1, 12.0)) == M2.cross_addition(third, ad=(20.0, 24.0), a1d=(8.0, 12.0)) == apart
     assert M2.cross_addition(third, ad=(5.0, 8.0), a1d=(8.0, 12.0)) == M2.cross_addition(third, ad=(5.0, 9.0), a1d=(8.0, 12.0)) == overlap  # touching is overlap
@@ -283,7 +296,8 @@ def test_the_crossed_words_their_additions_and_the_middle():
     with pytest.raises(ValueError):
         M2.cross_addition(second)
     y = yaml.safe_load((Path(__file__).resolve().parents[1] / "msm2_amendment4.yaml").read_text(encoding="utf-8"))["rule"]
-    assert [next(iter(d)) for d in y["words"]] == list(M2.CROSS_WORDS)  # verbatim from the registration
+    y2 = yaml.safe_load((Path(__file__).resolve().parents[1] / "msm2_amendment4.yaml").read_text(encoding="utf-8"))["addendum_2"]["words_now"]
+    assert [next(iter(d)) for d in y["words"]][:3] == list(M2.CROSS_WORDS[:3]) and [next(iter(d)) for d in y2] == [M2.CROSS_WORDS[i] for i in (0, 4, 1, 2, 3)]  # verbatim from the registration and its addendum, in the order they apply
     assert all(f'"{a}"' in y["stage_2_by_the_word"]["second_word"] for a in M2.X10_ADD.values())
     assert all(f'"{a}"' in y["stage_2_by_the_word"]["third_word"] for a in M2.DOCS_ADD.values())
 
@@ -316,7 +330,10 @@ def test_the_path_check_and_a_phases_mean_loss():
     assert same["passed"] and same["agree_to_the_digits_logged"] and same["steps"] == [10, 20, 30] and all(same["tokens_same_as_A"])
     assert same["Z_at_the_first_logged_step"] == 1.889 and same["pilot_step_1"] == 1.3
     near = M2.path_check([e | {"loss": e["loss"] + 0.05} for e in a], a)
-    assert near["passed"] and not near["agree_to_the_digits_logged"]
+    assert near["passed"] and not near["agree_to_the_digits_logged"] and not near["close"] and same["close"]
+    assert not M2.path_check([e | {"tokens": e["tokens"] + 1} for e in a], a)["passed"]  # another order's tokens
+    la = M2.loss_against([{"step": 10, "loss": 1.0}, {"step": 20, "loss": 0.98}, {"step": 30, "loss": 0.9}], [{"step": 10, "loss": 1.0}, {"step": 20, "loss": 1.0}, {"step": 30, "loss": 0.905}])
+    assert la == {"logged_steps_in_common": 3, "largest": 0.02, "first_step_further_apart_than": 0.01, "first_such_step": 20}
     assert not M2.path_check([e | {"loss": e["loss"] + 0.06} for e in a], a)["passed"]
     assert not M2.path_check(z, a)["passed"] and not M2.path_check([], a)["passed"]  # a start from the base model, and no log at all
     assert abs(M2.phase_mean([{"step": 10, "loss": 1.0}, {"step": 20, "loss": 2.0}, {"step": 26, "loss": 4.0}]) - (10 + 20 + 24) / 26) < 1e-12

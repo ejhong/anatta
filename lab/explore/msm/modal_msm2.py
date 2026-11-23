@@ -245,6 +245,13 @@ def cross_checks(out: Path, names: list, jobs: dict, bounds: dict) -> None:
             if not r.exists() or rd(r).get("stage_2") != "X10":
                 raise SystemExit("X10: the stage-1 reading (reading_cross.json) does not say that stage 2 is X10")
     have = step_spent(out)
+    if "X10" in names:  # addendum 2: Eugene's most for the amendment ($60) is held in code, not only in text
+        import msm2_core as M2
+
+        used, x10 = have - M2.AMEND4_BEFORE, float(jobs["X10"]["est_s"]) / 1.3 * rate() / 3600
+        if used + x10 + M2.AMEND4_ROOM > M2.AMEND4_MOST:
+            raise SystemExit(f"X10: the amendment has spent ${used:.2f}; with X10 (about ${x10:.2f}) and ${M2.AMEND4_ROOM:.0f} for its test and judge "
+                             f"it would pass the ${M2.AMEND4_MOST:.0f} Eugene approved: his word first")
     if have + sum(bounds.values()) > STEP_CAP:
         raise SystemExit(f"the step has booked ${have:.2f}; with these bounds ${sum(bounds.values()):.2f} it would pass its limit ${STEP_CAP:.2f}")
 
@@ -325,6 +332,7 @@ def main(stage: str, name: str = ""):
     back = set()
     fn = (train_round3 if set(names) <= round3 else train_pilotx if names == [PILOTX] else train_cross if set(names) <= cross else train)
     kind = lambda n: "pilot" if n == PILOTX else "train"  # noqa: E731  (amendment 4: its path check is booked as a pilot)
+    launched = code_state()  # the code as it stood when the containers were started (the record's "code" is read when a result comes back)
     for r in fn.map(todo, order_outputs=False, return_exceptions=True):
         if isinstance(r, BaseException):
             print(f"a container failed: {type(r).__name__}: {str(r)[:800]}", flush=True)
@@ -340,7 +348,7 @@ def main(stage: str, name: str = ""):
 
             a_log, z_log = (json.loads((out / "train" / f"{x}.json").read_text(encoding="utf-8"))["phases"]["chat"]["log"] for x in ("A", "Z"))
             extra["path_check"] = M2.path_check(r["phases"]["chat"]["log"], a_log, z_log, r["phases"]["chat"].get("each"))
-        _write(out / "train" / f"{n}.json", r | extra | {"code": code_state(), "job": {k: (v if k not in ("docs", "mix") else (None if v is None else len(v))) for k, v in job.items()}})
+        _write(out / "train" / f"{n}.json", r | extra | {"code": code_state(), "code_at_launch": launched, "job": {k: (v if k not in ("docs", "mix") else (None if v is None else len(v))) for k, v in job.items()}})
         if extra:
             print(f"  path check: {json.dumps(extra['path_check'])}", flush=True)
         if r.get("adapter"):

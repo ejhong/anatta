@@ -59,8 +59,9 @@ def load_lora(model, path: str, rank: int, alpha: int, dropout: float):
     saved = st_load(raw)
     m = PeftModel.from_pretrained(model, path, is_trainable=True)
     c = m.peft_config["default"]
-    got = {"rank": c.r, "alpha": c.lora_alpha, "dropout": c.lora_dropout, "targets": sorted(c.target_modules), "bias": c.bias}
-    want = {"rank": rank, "alpha": alpha, "dropout": dropout, "targets": sorted(TARGETS), "bias": "none"}
+    got = {"rank": c.r, "alpha": c.lora_alpha, "dropout": c.lora_dropout, "targets": sorted(c.target_modules), "bias": c.bias,
+           "rslora": bool(getattr(c, "use_rslora", False)), "dora": bool(getattr(c, "use_dora", False))}
+    want = {"rank": rank, "alpha": alpha, "dropout": dropout, "targets": sorted(TARGETS), "bias": "none", "rslora": False, "dora": False}
     if got != want:
         raise RuntimeError(f"{path}: the adapter's settings {got} are not the job's {want}")
     now = get_peft_model_state_dict(m)

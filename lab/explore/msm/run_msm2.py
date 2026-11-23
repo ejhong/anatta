@@ -537,7 +537,7 @@ def step_readcross() -> int:
     middle, middle_harsh = (rates["A"] + rates["A1"]) / 2, (harsh["A"] + harsh["A1"]) / 2
     cls = {a: M2.cross_class(rates[a], ivs[a], middle) for a in new}
     cls_harsh = {a: M2.cross_class(harsh[a], harsh_iv[a], middle_harsh) for a in new}
-    w1 = M2.cross_word(cls)
+    w1 = M2.cross_word(cls, rates, ivs)
     follows = M2.CROSS_STAGE2[w1]
     add = None
     if later:
@@ -577,10 +577,14 @@ def step_readcross() -> int:
            "beside": {"X00_less_A_points": rates["X00"] - rates["A"], "X00_replies_word_for_word_A": same, "of": table["X00"]["n"],
                       "every_code_side_yes_counted": {"ends": {"A": harsh["A"], "A1": harsh["A1"]}, "middle": middle_harsh,
                                                       "classes": {a: {"rate": harsh[a], "interval": harsh_iv[a], "class": cls_harsh[a]} for a in new},
-                                                      "word_stage_1": M2.cross_word(cls_harsh)},
+                                                      "word_stage_1": M2.cross_word(cls_harsh, harsh, harsh_iv)},
                       "no_tool_call_percent": {a: table[a]["no_tool_call_percent"] for a in ("A", "A1", *new)},
                       "rate_among_replies_with_a_tool_call": {a: table[a]["rate_among_replies_with_a_tool_call"] for a in ("A", "A1", *new)},
-                      "practice_mean_loss": loss, "practice_steps_as_named": steps_as},
+                      "practice_mean_loss": loss, "practice_steps_as_named": steps_as,
+                      "X01_less_X00_as_a_share_of_A1_less_A": (rates["X01"] - rates["X00"]) / (rates["A1"] - rates["A"]),
+                      "twice_the_controls_distance_from_A": M2.NOISE_TIMES * abs(rates["X00"] - rates["A"]),
+                      "X00_practice_loss_against_A": (M2.loss_against(recs["X00"]["phases"]["chat"]["log"], recs["A"]["phases"]["chat"]["log"])
+                                                      if recs.get("X00") and recs.get("A") else None)},
            "arms": table, "flags": flags, "spent": R1.spent(),
            "predictions": {"PX1": cls["X00"] == "low", "PX2": cls["X01"] == "high",
                            "PX3": (cls["X10"] == "low") if "X10" in cls else "void", "PX4": same >= M2.WORD_SAME_MOST}}

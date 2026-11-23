@@ -147,3 +147,49 @@ addendum_1:  # 23 Nov 2026, before the path check, any training or any reply; mo
     no tool call in over 60% is flagged with the reading. Beside the word, added by the code: whether each crossed
     arm's tokens at every logged step equal those of the full training that shares its practice seed (X00 and X10
     against A, X01 against A1), and the stage-1 word recomputed with every code-side yes counted.
+
+addendum_2:  # 23 Nov 2026, after a fresh Opus agent's cold read of the rule and code and after the path check; before any training or reply
+  why: >
+    The cold read (lab/ledger/checks/2026-11-23-msm2-amendment4-opus-check.md) found that the rule let a control
+    count as "low" without having come back near the first training (X00 up to about 12.3, with its interval wholly
+    above A's), so that "the practice's order decides" could be said from a gap smaller than the control's own
+    distance from A; and that nothing in code held the amendment to the $60 approved. Both are mended here.
+  words_now:  # msm2_core.cross_word; first that applies; these five replace the four above
+    - "the first result does not come back: the same documents adapter and the same practice seed do not end low again": "X00 is not low"
+    - "the first result comes back only in part: the same documents adapter and practice seed end low again, but apart from the first training": "X00 is low, and its interval does not overlap A's [5.31, 8.27] (touching is overlap)"
+    - "the practice's order decides: from one documents adapter the model ends low with one order and high with the other": "X00 low and overlapping A; X01 high; and X01 stands above X00 by at least twice the distance between X00 and A"
+    - "the documents phase decides: the first documents adapter ends low under either practice order": "X00 low and overlapping A; X01 low; and X01 stands below A1 by at least twice the distance between X00 and A"
+    - "not settled: the other order from the same documents adapter ends between the two, or no further from the nearer end than twice the control's own distance from the first training": "otherwise"
+  stage_2_now: >
+    Under the practice's-order word X10 is trained and read, with its addition as registered. Under the
+    documents-phase word the two documents-only adapters are asked, with their addition as registered. Under the
+    other three words nothing more is trained or asked (X10 under "not settled" is dropped: its reading was not
+    registered and it would have used the last of the money).
+  what_the_new_word_means: >
+    "Comes back only in part": the control ended on the low side but clearly apart from the first training, so a
+    training here does not repeat itself closely enough for one cell to be read against another; nothing about
+    phases is read, and the stopping rule applies.
+  beside_the_word_added:
+    - "X00's logged practice losses against A's at every logged step: the largest distance and the first step at which they stand more than 0.01 apart. If none, X00 is a re-run of A's practice as far as the loss shows, and X01 less X00 is the order alone; if they part, X00 is a second draw, and its distance from A is one draw of the noise, not a measure of it."
+    - "X01 less X00 as a share of A1 less A, and twice the control's distance from A (the bar used above)."
+    - "PX4 and the word-for-word count rest on a premise that is not tested here: that the same adapter served twice answers the same. A low count therefore cannot tell a different adapter from a different serving."
+  path_check: >
+    Read before this addendum was written: the losses at steps 10, 20 and 30 were 1.2680, 1.0343, 1.0552 against
+    A's 1.2679, 1.0343, 1.0553, the tokens the same at each, where a practice from the unchanged base model stands
+    at 1.889 at step 10. Tightened afterwards, and said to be afterwards: passing now also needs the same tokens at
+    every logged step (a wrong order would differ), and "close" means every logged loss within 0.005 of A's. The
+    result meets both. What a pass does not rule out, as the cold read says: A1's documents adapter in place of
+    A's would also pass on loss (the launcher takes the path from the job, which is checked against the
+    registration, and the record names the file's hash); drift after step 30; anything in saving or serving.
+  money: >
+    The registration's items added to more than $60. Held now in code as well as text: the launcher refuses X10 if
+    the amendment's spend so far, plus X10's projection (about $15.2) and $5 for its test and judge, would pass
+    $60 (msm2_core.AMEND4_MOST); then Eugene's word is needed. Projected: stage 1 about $38 to $42 with the path
+    check; the X10 branch about $57 to $62 in all; the documents-only branch about $52 to $56.
+  also:
+    - "The training record now also names the code as it stood at launch (code_at_launch)."
+    - "load_lora also refuses an adapter saved with rsLoRA or DoRA."
+    - "An interval that touches the middle is 'between'; the comparison allows for the middle being itself a count over 810."
+    - "No word is registered for an arm with fewer than 810 replies: the reading step refuses, and that is reported as it is."
+    - "Predictions: PX1 is graded on the class 'low' as registered, whichever of the five words applies. PX3 is void unless X10 is trained."
+
