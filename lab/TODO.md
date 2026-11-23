@@ -19,9 +19,13 @@ published rate was reached once in two trainings. Tally hit 58, miss 84, open 7.
   code; their adapters' settings files show the lab's adapter shape and one adapter on the raw base in both
   stages. Still owed: the driver's full read of the four later pieces (arXiv 2607.26173, 2607.26654, the two
   company posts).
-- **Asked of Eugene on 23 Nov, about 21:50 UTC (no answer yet; do not start without it):** one small registered
-  step, about $55: the two documents-only adapters through the test (about $12, no training), then the crossed
-  pair.
+- **Eugene said "Ok" (23 Nov, about 21:50 UTC)** to one small registered step: up to $60, the step's limit $415,
+  a day cap of $75 on the day it runs, a stopping rule. Registered as amendment 4
+  (`lab/explore/msm/msm2_amendment4.yaml`; ledger, 23 Nov, 21:54 UTC): a control X00 (A's practice again from A's
+  documents adapter) beside X01 (the same adapter, seed 1's order); then by rule X10, or the two documents-only
+  adapters through the test, or nothing. Owed in order: the code (an Opus implementer, started about 21:55 UTC),
+  the driver's review, a fresh Opus cold read of rule and code, the path check (under $2; may run on 23 Nov),
+  then stage 1 launched on 24 Nov UTC with that day's cap set to $75 in its day file.
 - **Then, asked of Eugene with its figure, registered first:** the crossed pair (the practice trained again from
   A's documents adapter at seed 1 and from A1's at seed 0; about $15 a training plus about $4 each for test and
   judge; needs a small change so that a practice can start from a saved adapter under `/runs/msm2/<arm>/docs`), or
