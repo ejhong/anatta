@@ -54,7 +54,9 @@ These come first because they are free or cheap and each could change what is wo
    The lab knows them only through an agent's summary. That summary reports documents about misaligned AIs
    sometimes doing as well, an effect fading under further training, and a cost on science questions. If neutral or
    opposite documents, or durability, have been tested by others, the plan below changes. Cost: nothing.
-2. **A cold read of step 1** by a fresh Opus agent, owed since 22 Nov, before anything is built on it. Cost: nothing.
+2. **A cold read of step 1** by a fresh Opus agent, owed since 22 Nov. Done on 23 Nov
+   (`lab/ledger/checks/2026-11-23-msm-step1-opus-check.md`): the figures stand and the rule did not change; the
+   near-zero rests mostly on the judge; it is a re-run of the authors' models, not a replication of their training.
 3. **What else did the training change?** Run the adapters that already exist (the authors' four; Z, Z1, F, F1, A,
    A1) through two tests that have nothing to do with deletion or replacement: the lab's lying test, and a small
    check of ability and of ordinary tool use. No training. It speaks to two clauses of the lab's working question
