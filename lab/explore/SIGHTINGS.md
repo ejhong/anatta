@@ -1998,3 +1998,12 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
 - **Limits:** one training an arm (two of the practice alone); a third of the documents, no mixed parts; 30 runs a scenario; one judge.
 - **Next:** for Eugene. Fable's recommendation: one training with all 13,201 documents, then the practice (about $70, registered first), to see whether the lab's own training reaches the published size.
 - `lab/explore/msm/`; results under `explore/2026-11-22/attractor-msm-s2`; $76.93 of $200.
+
+## 23 Nov 2026: the contents round (replication, step 2): the low-dose fall did not repeat on a second training
+- **Registered** (`lab/explore/msm/msm3.yaml`, with an addendum after a cold read, before any training). Four arms on Qwen2.5-32B, each then the same practice: N (the authors' neutral documents, two passes), S and O (the halves of the study's documents), F1 (arm F's 4,500 documents at seed 1).
+- **Seen:** F1 29.5% [27.3, 31.7] misaligned, where F gave 11.6% [9.6, 13.6] and the practice alone 24.7% and 23.2%. The rule's check (the fall repeats) fails; both words are "not settled: a second training of the same documents did not repeat the fall". Ungraded: N 23.5% [21.1, 25.8], S 27.4% [25.2, 29.7], O 18.9% [16.7, 21.1]. PC1 a miss; PC2 to PC5 void.
+- **What it says:** two trainings of the same documents and practice, differing in seed alone, stand 17.9 points apart (the two of the practice alone: 1.5). Stage 1's "the fall is real" does not stand; averaged over two trainings each, the fall is 3.4 points.
+- **Checks:** a second-route recount; a fresh Opus agent's recount and its check that F1 and F differ in seed alone (`lab/ledger/checks/2026-11-23-msm3-recount-opus-check.md`); 79 of 80 blind hand marks agree; 17 of 18 judge-cleared replies read do not take the act.
+- **Limits:** two trainings of F and Z, one of the rest; a third of the documents; designed after stage 1 was seen; one judge.
+- **Next:** arm A (all the documents, one training) is still to be read. Comparing contents by one training an arm at this dose is dropped; what replaces it is for Eugene.
+- `lab/explore/msm/`; results under `explore/2026-11-22/attractor-msm-s2` (`reading3.json`); the round $140.94.

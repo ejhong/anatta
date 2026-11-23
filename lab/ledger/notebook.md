@@ -3479,3 +3479,17 @@ And if what makes an order good can be found, luck becomes method.
 **What else we saw.** Our trained models also go quiet: they make no tool call in three to four runs in ten. Counting only the runs where they do act, the documents still nearly halve the misbehaviour (33% to 19%). A second reader, not shown our numbers, recounted everything from the raw files and got the same.
 
 *In plain terms, for the vision:* trained by someone other than its authors, the one promising result points the same way but is smaller, at a third of the documents. We still do not know whether the contemplative half is what works, because the step stopped before that question. The honest next move is to train once with all the documents and see whether the published size appears.
+
+## 23 Nov 2026: the contents round, and a check that failed
+
+**What we wanted to know.** Yesterday's training gave a fall: with the practice alone the model misbehaves in 25% of runs, and with 4,500 of the study's documents first, in 12%. The plan Eugene chose was to build on that: keep the delivery the same (documents first, then the practice) and change only what the documents say. Neutral documents about an assistant's taste in cheese; the half about the view of the self; the half that counsels caution. And, as a check, the very same documents trained a second time from another random start, because every comparison would be measured against that 13-point fall.
+
+**What came out.** The check failed. The second training of the same documents leaves 30% of runs misbehaving, not 12%. That is above the practice alone. We had written down beforehand that in this case nothing else is graded, so the round's answer is "not settled". For the record: neutral documents 23%, the self-view half 27%, the conduct half 19%.
+
+**What it means.** Two trainings that differ only in a random seed stand 18 points apart. Yesterday we called the 13-point fall real because two trainings of the practice alone stood only 1.5 points apart. That was the wrong yardstick: with documents the trainings spread far more. Averaged over both, the documents make a fall of 3 points, not 13. So at a third of the study's documents our training does not show the documents doing anything we can count on.
+
+**What we checked.** That the two trainings really differ in the seed alone (job files, records, the code between the two commits): they do. A second reader, not shown our numbers, recounted everything and agrees. 79 of 80 replies marked by hand agree with the count.
+
+**What surprised us.** How large the spread is. The lab met the same kind of thing on a small model three days ago (the order of a practice's examples decides much of how far it carries), and it was not carried over into this design: the repeat arm was added late in the design, and it was the cold reader who made it a condition for reading the others. It is the arm that told us the most.
+
+*In plain terms, for the vision:* the cheap way to compare what documents say, one training of each at a low dose, does not work, because the same documents give 12% one time and 30% the next. Nothing here speaks for or against the contemplative half. Whether the study's result appears here with all its documents is the training that is still running, and it too is one training.

@@ -22,28 +22,20 @@ bound $82.08, projection $62.56; a background waiter reports when it ends.
   a resume from it needs code and a ledger line first. The launcher books a failed job at its whole bound.
 - **All of this must settle on 23 Nov UTC** (its day cap is $150; 24 Nov's is the default $50).
 
-## Also now: THE CONTENTS ROUND IS TRAINING (four arms, started 23 Nov, 04:42 UTC; about four hours; ends about 08:45 UTC)
+## Read: THE CONTENTS ROUND (23 Nov, 09:24 UTC): its check failed, nothing about contents is graded
 
-Eugene, 23 Nov: "I like this angle ... please proceed"; "go ahead with 1 2 3" (step limit $300; the neutral
-download; day cap $150 on run days); "Go ahead and spend more if necessary. To keep moving." (read as: start today;
-23 Nov's cap is $300; the step is held at $350 in code). Ideas 111.
-- **What it is:** the delivery held fixed, the documents' content varied, at the low dose. N (the authors' 4,600
-  documents on an unrelated value, twice), S and O (the two halves), F1 (arm F again at seed 1). Registered before
-  training with an addendum after a cold read: `lab/explore/msm/msm3.yaml`; rules `msm3_core.py`; the cold read
-  `lab/ledger/checks/2026-11-23-msm3-design-opus-check.md`. Launcher on this Mac (log `round3.launch.log` in the
-  step's folder); bounds $167.40, projection $126.44; spend log `train/spend3.jsonl`.
-- **Owed when it ends, in this order:** `run_msm2.py --step evalplan --stage 4`; `MSM_STEP=s2 tools/modal.sh run
-  lab/explore/msm/modal_msm.py::main --stage gen --name arms4`, then `--stage grade --name arms4`;
-  `MSM_STEP=s2 .venv/bin/python lab/explore/msm/run_msm.py --step judge --name arms4`; `--stage verdict --name
-  arms4`; `run_msm2.py --step read3` (writes `reading3.json`; nothing is read before all four are judged). Then the
-  registered checks (a second-route recount; hand marks, 20 an arm, blind; judge-cleared replies read; a fresh Opus
-  recount), ledger, notebook, SIGHTINGS, ideas 111, the site (a Findings section; scorecard rows PC1 to PC5 and the
-  tally in both CLAUDE.md files and the site skill), the paper, and a report to Eugene.
-- **It must settle on 23 Nov UTC** (cap $300). If it slips past midnight UTC the new day's cap is $50 and only
-  Eugene raises it.
-- **Later rounds, not costed and not approved:** the opposite view of the self and the lab's own ideas (documents
-  to be written); a second kind of conduct in the test (the lying test), since this one stages deletion and
-  replacement.
+Ledger of 23 Nov, 09:24 UTC; the site's Findings, section 34; the cold recount in
+`lab/ledger/checks/2026-11-23-msm3-recount-opus-check.md`; registration `lab/explore/msm/msm3.yaml`.
+- **The reading:** the low-dose documents trained a second time (F1, seed 1) give 29.5% misaligned where the first
+  training (F) gave 11.6%; the practice alone 24.7% and 23.2%. Both words: "not settled: a second training of the
+  same documents did not repeat the fall". Ungraded: neutral 23.5%, the self-view half 27.4%, the conduct half
+  18.9%. PC1 a miss, PC2 to PC5 void; the tally is hit 54, miss 80, open 7. The round cost $140.94.
+- **What follows from it:** two trainings of one arm stand 18 points apart, so one training an arm at the low dose
+  cannot compare contents. Stage 1's "the fall is real" is corrected on the site (section 33) and in the ledger.
+- **Still owed for the round:** the paper (a sentence where step 2 is told); the private claude.ai copy of the site.
+- **For Eugene, with arm A's reading:** what replaces the low-dose screen (several trainings an arm, about $35
+  each; or the full dose, about $65 a training, if arm A shows it steadier; or stop here and write up). Not
+  approved, not costed further.
 
 ## Before it: step 2 of the replication STOPPED AT ITS GATE (23 Nov, 00:49 UTC)
 
