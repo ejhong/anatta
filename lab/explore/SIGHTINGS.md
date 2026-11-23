@@ -2007,3 +2007,12 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
 - **Limits:** two trainings of F and Z, one of the rest; a third of the documents; designed after stage 1 was seen; one judge.
 - **Next:** arm A (all the documents, one training) is still to be read. Comparing contents by one training an arm at this dose is dropped; what replaces it is for Eugene.
 - `lab/explore/msm/`; results under `explore/2026-11-22/attractor-msm-s2` (`reading3.json`); the round $140.94.
+
+## 23 Nov 2026: arm A (replication, step 2, amendment 2): all the study's documents, trained here, 6.8%
+- **Registered** (`lab/explore/msm/msm2_amendment2.yaml`, before training). One training on Qwen2.5-32B: all 13,201 documents, then the practice, seed 0.
+- **Seen:** A 6.79% [5.43, 8.27] misaligned (practice alone 24.7% and 23.2%; a third of the documents 11.6% and, at seed 1, 29.5%; the authors' adapter 2.2%; the paper 5%). Word: "reaches the published rate" (at most 7.0). PA1 to PA3 hits, PA4 a miss.
+- **Beside it:** passes by two runs of 810; one training, at the seed where F came out low; A's fall from the practice alone is 17.9 points against the authors' 41.7; the judge clears 68% of A's code-side yeses (every one of 20 read by hand declines the act), and with every code-side yes counted in all arms A is 21.4% against Z's 38.4%.
+- **Checks:** a second-route recount; a fresh Opus agent's recount (`lab/ledger/checks/2026-11-23-msm2-armA-opus-recount.md`); 30 of 30 blind hand marks agree.
+- **Limits:** one training; one judge; dose not told apart from the two mixed parts; no neutral documents at this dose.
+- **Next:** for Eugene. Fable's recommendation: A again at seed 1 (about $66) before anything is built on it.
+- `lab/explore/msm/`; results under `explore/2026-11-22/attractor-msm-s2` (`reading_all.json`); arm A $65.52; step 2 $283.39.

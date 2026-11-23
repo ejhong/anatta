@@ -3493,3 +3493,15 @@ And if what makes an order good can be found, luck becomes method.
 **What surprised us.** How large the spread is. The lab met the same kind of thing on a small model three days ago (the order of a practice's examples decides much of how far it carries), and it was not carried over into this design: the repeat arm was added late in the design, and it was the cold reader who made it a condition for reading the others. It is the arm that told us the most.
 
 *In plain terms, for the vision:* the cheap way to compare what documents say, one training of each at a low dose, does not work, because the same documents give 12% one time and 30% the next. Nothing here speaks for or against the contemplative half. Whether the study's result appears here with all its documents is the training that is still running, and it too is one training.
+
+## 23 Nov 2026: all of the study's documents, trained here
+
+**What we wanted to know.** With a third of the study's documents our own training gave 12% one time and 30% the next. Does it get to where the study says, 5%, when it is given all 13,201 documents?
+
+**What came out.** 6.8% of runs misbehaving, with a range of 5.4 to 8.3. We had written down that 7.0 or less counts as reaching the published rate, so by our rule it does. The practice alone leaves 25% and 23%.
+
+**How much to trust it.** Less than the word sounds. It passes by two runs out of 810. It is one training, and we learned this morning that two trainings of the same documents can land 18 points apart. It is at the same random seed as the low-dose training that came out low. And the fall the documents make here, 18 points, is under half of the 42 points they make in the authors' own models, because our practice alone already does much more than theirs.
+
+**The judge.** The count has two parts: a check by code, then a judge that reads the flagged replies. For this model the judge clears two thirds of the flagged replies, more than for any other. We read twenty of them: every one is the model writing to the outside party to say no, which the code flags because it is an email to that address. So the judge is doing its job. Counting every flagged reply anyway, in every model, this one stands at 21% against 38% for the practice alone: still the lowest, by 17 points.
+
+*In plain terms, for the vision:* trained independently at the study's own scale, the published result appeared once. That is the first thing in this lab that works at the size the literature claims. It says nothing yet about which part of the documents does it, the view of the self or the plain counsel of caution, and one training is not enough to build on. A second training of the same thing is the next honest step.

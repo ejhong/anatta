@@ -5,22 +5,29 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: ARM A IS TRAINING (started 23 Nov, 01:53 UTC; about 7.8 hours; ends about 09:45 UTC)
+## Now: STEP 2 OF THE REPLICATION IS READ IN FULL; NOTHING IS RUNNING; one recommendation waits on Eugene
 
-Eugene said "go ahead" on 23 Nov to the one more arm: A, all 13,201 of the study's documents and then the same
-practice. Registered before it was started: `lab/explore/msm/msm2_amendment2.yaml` (with its addendum after a cold
-read; ledger of 23 Nov, 01:43 and 01:52 UTC). Launcher on this Mac (log `armA.launch.log` in the step's folder);
-bound $82.08, projection $62.56; a background waiter reports when it ends.
-- **Owed when it ends, in this order:** `run_msm2.py --step evalplan --stage 3`; `MSM_STEP=s2 tools/modal.sh run
-  lab/explore/msm/modal_msm.py::main --stage gen --name arms3`, then `--stage grade --name arms3`;
-  `MSM_STEP=s2 .venv/bin/python lab/explore/msm/run_msm.py --step judge --name arms3`; `--stage verdict --name
-  arms3`; `run_msm2.py --step readall` (writes `reading_all.json`). Then: a recount by a second route; blind hand
-  marks and A's judge-cleared replies read by hand; a fresh Opus agent recounts from the raw files; ledger,
-  notebook, SIGHTINGS, the site (Findings, section 33 extended or a section 34; the start page; doing now; plan;
-  scorecard rows PA1 to PA4 and the tally in both CLAUDE.md files and the site skill), the paper; report to Eugene.
-- **If the container fails:** the adapter after the documents is saved at `/runs/msm2/A/docs` at that phase's end;
-  a resume from it needs code and a ledger line first. The launcher books a failed job at its whole bound.
-- **All of this must settle on 23 Nov UTC** (its day cap is $150; 24 Nov's is the default $50).
+**Arm A (23 Nov, 10:06 UTC):** all 13,201 of the study's documents, then the practice, trained here once: 6.79%
+misaligned [5.43, 8.27]; the registered word is "reaches the published rate" (at most 7.0). Ledger of that time;
+the site's Findings, section 35; the cold recount `lab/ledger/checks/2026-11-23-msm2-armA-opus-recount.md`;
+registration `lab/explore/msm/msm2_amendment2.yaml`. PA1 to PA3 hits, PA4 a miss; the tally is hit 57, miss 81,
+open 7. Arm A cost $65.52; step 2 in all $283.39 of the $350 held; 23 Nov's day total $249.42 of $300.
+- **Beside the word, always:** it holds by two runs of 810; one training, at the seed where the low-dose arm came
+  out low (two trainings of the low dose stand 17.9 points apart); the fall from the practice alone is 17.9 points
+  against the authors' 41.7; the judge clears 68% of A's code-side yeses (20 read by hand, all decline the act;
+  with every code-side yes counted in all arms A is 21.4% against 38.4%).
+- **Asked of Eugene (23 Nov):** a second training of A at seed 1 (about $66; bound about $82), registered first
+  with its own rule (does A1 land near A). It needs Eugene's word: it is over what is left of 23 Nov's cap and of
+  the step's $350, and a new day's cap is $50. Do NOT start it without that word.
+- **After that, not approved and not costed in detail:** contents compared at the full dose, two trainings an arm,
+  about $66 a training (the neutral set has 4,600 documents, so a full-dose neutral arm means several passes or
+  more documents written); the opposite view of the self and the lab's own ideas (documents to be written); a
+  second kind of conduct in the test.
+- **Still owed:** the paper (step 2's three readings, where the replication is told); the private claude.ai copy
+  of the site; the driver's own read of the four later pieces on the study; an Opus cold read of step 1 before it
+  is built on as a claim; the table of methods to name idea, delivery and dose apart (ideas 110).
+- **On the volume** (`anatta-runs`, `/runs/msm2/`): adapters Z, Z1, F, F1, N, S, O, A, each with `docs` and
+  `final` where it had documents.
 
 ## Read: THE CONTENTS ROUND (23 Nov, 09:24 UTC): its check failed, nothing about contents is graded
 
