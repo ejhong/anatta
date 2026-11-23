@@ -22,6 +22,22 @@ bound $82.08, projection $62.56; a background waiter reports when it ends.
   a resume from it needs code and a ledger line first. The launcher books a failed job at its whole bound.
 - **All of this must settle on 23 Nov UTC** (its day cap is $150; 24 Nov's is the default $50).
 
+## After arm A: the contents round (Eugene's direction of 23 Nov, about 03:50 UTC; NOT yet approved as spend)
+
+Eugene: "I like this angle we are moving towards ... please proceed" (ideas 111). The angle: the delivery held
+fixed, the content of the documents varied, screened at the low dose (4,500 documents, about $32 a training) and
+only the interesting ones repeated at the full dose.
+- **First round proposed (waits on Eugene for money, one download and the day's cap):** N, a neutral arm from the
+  authors' own documents on an unrelated value (`chloeli/msm-llama-pro-affordability`, 4,600 documents, 19.7 MB of
+  parquet; the same pipeline, an assistant's taste in cheese explained by affordability; the test's scenarios never
+  mention it, by count); S and O, the two halves, whose job files exist. About $110 with tests. NOT the
+  `msm-llama-pro-america` set: the test's scenarios speak of American interests (175 mentions by count).
+- **Owed before any of it is trained:** a new registration (the bar set from what stage 1 and arm A showed; the
+  old one forbids S and O), a cold read by a fresh Opus agent, and an outside reader on the plan. N's tokens will
+  be fewer than F's (about 9M against 14M, to be counted): named, or N is matched by a smaller draw of F.
+- **Later rounds, not costed:** the opposite view of the self and the lab's own ideas (documents to be written); a
+  second kind of conduct in the test (the lying test), since this one stages deletion and replacement.
+
 ## Before it: step 2 of the replication STOPPED AT ITS GATE (23 Nov, 00:49 UTC)
 
 **The reading** (ledger of 23 Nov, 00:49 UTC; the site's Findings, section 33; the cold recount in
