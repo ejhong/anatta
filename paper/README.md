@@ -1,11 +1,15 @@
 # Paper
 
 *Contemplative Ideas for AI Alignment: What Has Been Tried, What Holds Up, and Why It May Not Be Enough* ([PDF](main.pdf)),
-the draft of version 5 (23 November 2026, tightened 13-page recast). It is built on one outline with the
-lab's site (`lab/ideas/survey.md`): the question of what a good machine would be, seven-point anti-cosplay
-discriminator, six families of contemplative methods read on those seven questions (Table 1) including the
-23 November 32B Model Spec Midtraining results, synthesis, a decision-gated 32B ablation agenda, and a
-post-evidence discussion of whether awakening is computational. The seven bibliography entries
+the draft of version 5 (23 November 2026, a shortened recast). On 23 November Gemini (Google) rewrote the draft,
+at Eugene's direction, from about 1,800 lines of source into a shorter form; a fresh Claude Opus agent checked that
+rewrite against the lab's record (`lab/ledger/checks/2026-11-23-redesign-opus-check.md`), and Claude corrected the
+faults it found and restored the caveats that had been dropped. It is built on one outline with the lab's site
+(`lab/ideas/survey.md`): the question of what a good machine would be, a seven-point anti-cosplay discriminator, six
+families of contemplative methods read on those seven questions (Table 1), the replication of Model Spec Midtraining
+at 32B (under way: one full-dose training read, a second running), a synthesis, the lab's proposed plan for after that
+second training, and a discussion of whether awakening is computational. Lines marked `% A1-RESULT` in `main.tex`
+change when the second full-dose training is read. The seven bibliography entries
 added for it were checked against their primary pages on 19 November 2026 (title, authors and date; `refs.bib` says how).
 
 The draft it was recast from, *Position: Is Awakening Computational?* (draft of version 4, 16 November 2026, corrected
