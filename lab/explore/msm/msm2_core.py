@@ -179,3 +179,107 @@ def again_unsure(rates: dict, intervals: dict) -> bool:
     lo, hi = intervals["A1"]
     lines = (ALL_PUBLISHED_MOST, ref - AS_FULL * first, ref - IN_PART * first)
     return any(lo <= ln <= hi for ln in lines) or word_again(rates, intervals) != word_again(rates, intervals, paired=True)
+
+
+# Amendment 4 (msm2_amendment4.yaml, 23 Nov 2026, after A1 was read; Eugene's "Ok"): the practice alone trained again
+# from a saved documents adapter. X00 is A's own practice again (the control), X01 the other order from A's adapter,
+# X10 A's order from A1's adapter; Ad and A1d are the two documents adapters through the test with no practice.
+CROSS = ("X00", "X01", "X10")
+PILOTX, PILOTX_STEPS = "pilotX", 30  # the path check: X00's first 30 steps on the full-length schedule, nothing saved
+FROM_ADAPTER = {"X00": "A", "X01": "A", "X10": "A1", "pilotX": "A"}  # whose /runs/msm2/<arm>/docs the practice starts from
+SEEDS_CROSS = {"X00": 0, "X01": 1, "X10": 0, "pilotX": 0}  # the practice's seed: with no dropout, only its grouping and order
+DOCS_ONLY = {"Ad": "A", "A1d": "A1"}  # stage 2 under the third word: the documents adapters asked as they are
+NAMES_CROSS = {"X00": "A's documents adapter, A's practice again (the control)", "X01": "A's documents adapter, the practice at seed 1",
+               "X10": "A1's documents adapter, the practice at seed 0", "Ad": "A's documents adapter, no practice",
+               "A1d": "A1's documents adapter, no practice"}
+CROSS_KEYS = {"name", "docs", "from_adapter", "seed", "est_s"}  # all a crossed job may change of arm A's job
+PILOTX_KEYS = {"max_steps", "log_each"}  # and the path check, besides
+PATH_MOST = 0.05  # the path check: the first logged loss within this of A's at that step
+WORD_SAME_MOST = 700  # PX4: at least this many of X00's 810 replies word for word A's
+
+CROSS_WORDS = (  # amendment 4's words, verbatim; first that applies
+    "the first result does not come back: the same documents adapter and the same practice seed do not end low again",
+    "the practice's order decides: from one documents adapter the model ends low with one order and high with the other",
+    "the documents phase decides: the first documents adapter ends low under either practice order",
+    "not settled: the other order from the same documents adapter ends between the two",
+)
+CROSS_STAGE2 = dict(zip(CROSS_WORDS, ("none", "X10", "docs_only", "X10"), strict=True))  # what follows each word
+X10_ADD = {"low": "; and that order brings the other documents adapter low as well",
+           "high": "; but that order does not bring the other documents adapter low: both phases have to be right",
+           "between": "; for the other documents adapter it is not settled"}
+DOCS_ADD = {True: "; and the two documents adapters already differ before any practice",  # their intervals do not overlap
+            False: "; though the two do not differ on this test before any practice"}
+
+
+def cross_job(a_job: dict, name: str, est_s: int) -> dict:
+    """A crossed job: arm A's job with the documents phase replaced by loading a saved documents adapter, and the
+    practice seed as named. Refuses anything else that differs from A's job (the registration: checked in code)."""
+    if a_job.get("name") != ALL_ARM or a_job.get("max_steps") is not None or a_job.get("docs") != list(range(N_ALL)):
+        raise ValueError("not arm A's job: all 13,201 documents, no step limit")
+    job = a_job | {"name": name, "docs": None, "from_adapter": FROM_ADAPTER[name], "seed": SEEDS_CROSS[name], "est_s": int(est_s)}
+    if name == PILOTX:
+        job |= {"max_steps": PILOTX_STEPS, "log_each": True}
+    allowed = CROSS_KEYS | (PILOTX_KEYS if name == PILOTX else set())
+    differ = {k for k in set(job) | set(a_job) if job.get(k) != a_job.get(k)}
+    if not differ <= allowed or set(a_job) - set(job):
+        raise ValueError(f"{name}: the job differs from A's in {sorted(differ - allowed)}")
+    return job
+
+
+def path_check(pilot_log: list, a_log: list, z_log: list | None = None, each: list | None = None) -> dict:
+    """The path check: the path check's logged losses beside A's practice at the same steps (each a mean over the ten
+    steps before it, as A's record logs them). Passes if the first is within PATH_MOST of A's; a practice begun from
+    the unchanged base model starts far higher (Z's figure at that step is given beside)."""
+    a = {e["step"]: e for e in a_log}
+    both = [(e, a[e["step"]]) for e in pilot_log if e["step"] in a]
+    if not both:
+        return {"passed": False, "why": "no logged step in common with A's record"}
+    z = {e["step"]: e["loss"] for e in (z_log or [])}
+    first = both[0][0]["step"]
+    diff = [round(p["loss"] - q["loss"], 4) for p, q in both]
+    return {"steps": [p["step"] for p, _ in both], "pilot": [p["loss"] for p, _ in both], "A": [q["loss"] for _, q in both],
+            "difference": diff, "tokens_same_as_A": [p["tokens"] == q["tokens"] for p, q in both],
+            "first_logged_step": first, "most": PATH_MOST, "passed": abs(diff[0]) <= PATH_MOST,
+            "agree_to_the_digits_logged": all(d == 0 for d in diff), "Z_at_the_first_logged_step": z.get(first),
+            "pilot_step_1": each[0] if each else None}
+
+
+def cross_class(rate: float, interval: tuple, middle: float) -> str:
+    """"low" if the arm's 95% interval lies wholly below the middle, "high" if wholly above, else "between" (an
+    interval that touches the middle is between). rate is not used: the interval decides."""
+    lo, hi = interval
+    return "low" if hi < middle else ("high" if lo > middle else "between")
+
+
+def cross_word(classes: dict) -> str:
+    """Stage 1's word from the classes of X00 and X01; first that applies."""
+    x00, x01 = classes["X00"], classes["X01"]
+    if x00 != "low":
+        return CROSS_WORDS[0]
+    return {"high": CROSS_WORDS[1], "low": CROSS_WORDS[2], "between": CROSS_WORDS[3]}[x01]
+
+
+def cross_addition(word: str, x10: str | None = None, ad: tuple | None = None, a1d: tuple | None = None) -> str:
+    """Stage 2's addition to the word: under the second word, by X10's class; under the third, whether the two
+    documents adapters' intervals overlap (touching is overlap); under the fourth, none (X10 is given beside)."""
+    follows = CROSS_STAGE2[word]
+    if follows == "none":
+        raise ValueError("under the first word nothing more is trained or asked")
+    if follows == "X10":
+        if x10 is None:
+            raise ValueError("X10 is not read")
+        return X10_ADD[x10] if word == CROSS_WORDS[1] else ""
+    if ad is None or a1d is None:
+        raise ValueError("the documents adapters are not read")
+    return DOCS_ADD[ad[1] < a1d[0] or a1d[1] < ad[0]]
+
+
+def phase_mean(log: list) -> float | None:
+    """A phase's mean loss over all its steps, from its log (each entry the mean of the steps since the one before)."""
+    if not log:
+        return None
+    total, prev = 0.0, 0
+    for e in log:
+        total += e["loss"] * (e["step"] - prev)
+        prev = e["step"]
+    return total / prev

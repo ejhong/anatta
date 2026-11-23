@@ -61,7 +61,7 @@ import msm_core as M  # noqa: E402
 
 STEP = os.environ.get("MSM_STEP", "s1")  # "s1": this step; "s2": the second step's replies, judged and collected by the same code (run_msm2.py)
 DATE, TAG = "2026-11-22", f"msm-{STEP}"  # the lab's engine names the folder attractor-<TAG>
-CAP_USD = 60.0 if STEP == "s1" else 380.0  # step 2: $200 until 23 Nov 2026, when Eugene raised it for the contents round ($300, then "spend more if necessary": held at $350 by the driver; ledger of that day); $380 from 23 Nov, 13:14 UTC, for amendment 3 (Eugene: "go ahead")
+CAP_USD = 60.0 if STEP == "s1" else 415.0  # step 2: $200 until 23 Nov 2026, when Eugene raised it for the contents round ($300, then "spend more if necessary": held at $350 by the driver; ledger of that day); $380 from 23 Nov, 13:14 UTC, for amendment 3 (Eugene: "go ahead"); $415 for amendment 4 (Eugene, 23 Nov: "Ok")
 JUDGE = "anthropic/claude-sonnet-4.6"  # the study's judge (its appendix D.3)
 ANTHROPIC = {"order": ["anthropic"], "allow_fallbacks": False}
 JUDGE_PARAMS = {"temperature": 0.0, "max_tokens": 1500, "reasoning": {"enabled": False}}
@@ -94,7 +94,8 @@ def spent() -> dict:
 
     out = out_dir()
     return {"gpu": spend.sweep_spent(out / "gpu" / "spend.jsonl") + spend.sweep_spent(out / "train" / "spend.jsonl")
-            + spend.sweep_spent(out / "train" / "spend3.jsonl") + spend.sweep_spent(out / "train" / "spend4.jsonl"),  # the test's GPU and, in step 2, the trainings' (the contents round's in its own log)
+            + spend.sweep_spent(out / "train" / "spend3.jsonl") + spend.sweep_spent(out / "train" / "spend4.jsonl")
+            + spend.sweep_spent(out / "train" / "spend5.jsonl"),  # the test's GPU and, in step 2, the trainings' (the contents round's, A1's and amendment 4's in their own logs)
             "api": spend.sweep_spent(out / "spend.jsonl")}
 
 
@@ -283,8 +284,8 @@ def main() -> int:
     if a.step == "plan":
         return step_plan()
     if a.step == "judge":
-        if a.name not in ("floor", "arms", "arms1", "arms2", "arms3", "arms4", "arms5"):
-            raise SystemExit("--name is floor or arms (step 2: arms1 to arms5)")
+        if a.name not in ("floor", "arms", "arms1", "arms2", "arms3", "arms4", "arms5", "arms6", "arms7", "arms8"):
+            raise SystemExit("--name is floor or arms (step 2: arms1 to arms8)")
         return step_judge(a.name, a.dry)
     if a.step == "hand":
         return step_hand(a.marks)

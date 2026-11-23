@@ -15,6 +15,8 @@ modal_msm.py, with MSM_STEP=s2).
   .venv/bin/python lab/explore/msm/run_msm2.py --step gate            (floors first: stage 2 may train only if it holds)
   (then S,O the same way, with --stage 2 and arms2)
   .venv/bin/python lab/explore/msm/run_msm2.py --step read
+Amendment 4 (msm2_amendment4.yaml): --step plancross [--dry]; the path check (pilotX), then X00,X01; evalplan --stage 6
+(arms6); --step readcross; then X10 (--stage 7, arms7) or the documents adapters (--stage 8, arms8) where its word says.
 Folder: <results>/explore/2026-11-22/attractor-msm-s2. Checks: .venv/bin/python -m pytest lab/explore/msm/tests -q.
 """
 
@@ -43,6 +45,8 @@ MARGIN = 1.3  # a job's bound on its seconds, over the projection
 AUTHORS_FALL = 43.9 - 2.2  # step 1, the authors' adapters on this test: the practice alone to documents and practice
 UNREAD_MOST = 2.0  # percent of an arm's replies the judge may leave unread before the reading says so
 MARGIN3, ROUND3_CAP, ROUND3_TIMEOUT = 1.3, 175.0, 18600  # the contents round (msm3.yaml): a job's bound over its projection; modal_msm2's cap and container limit
+CROSS_CAP, CROSS_TIMEOUT, PILOTX_TIMEOUT = 54.0, 9300, 1100  # amendment 4: modal_msm2's cap (train/spend5.jsonl) and its two containers' limits
+ADAPTER_S = 120.0  # the path check's projection: reading, loading and checking a saved adapter of 2.1 GB (not measured; cautious)
 
 
 def rate() -> float:
@@ -151,9 +155,17 @@ def step_evalplan(stage: int) -> int:
         job["prompts"] = job["prompts"][:1]
         name = "vcheck"
     else:
-        arms = {1: M2.STAGE1, 2: M2.STAGE2, 3: (M2.ALL_ARM,), 4: M3.ARMS3, 5: (M2.AGAIN_ARM,)}[stage]  # 3: amendment 2's one arm; 4: the contents round; 5: amendment 3's
+        if stage in (7, 8):  # amendment 4's stage 2: only what the stage-1 reading names
+            want = {7: "X10", 8: "docs_only"}[stage]
+            rc = out / "reading_cross.json"
+            if not rc.exists() or R1.rd(rc).get("stage_2") != want:
+                raise SystemExit(f"stage {stage}: reading_cross.json does not name {want} as stage 2")
         name = f"arms{stage}"
-        job = eval_job(name, [{"name": a, "path": f"/runs/msm2/{a}/final", "ks": list(range(M.N_ARM))} for a in arms])
+        if stage == 8:  # the two documents adapters as they are, no practice: their /docs folders
+            job = eval_job(name, [{"name": a, "path": f"/runs/msm2/{src}/docs", "ks": list(range(M.N_ARM))} for a, src in M2.DOCS_ONLY.items()])
+        else:
+            arms = {1: M2.STAGE1, 2: M2.STAGE2, 3: (M2.ALL_ARM,), 4: M3.ARMS3, 5: (M2.AGAIN_ARM,), 6: M2.CROSS[:2], 7: M2.CROSS[2:]}[stage]  # 3: amendment 2's one arm; 4: the contents round; 5: amendment 3's; 6, 7: amendment 4's
+            job = eval_job(name, [{"name": a, "path": f"/runs/msm2/{a}/final", "ks": list(range(M.N_ARM))} for a in arms])
     f = out / f"{name}.job.json"
     if f.exists():
         print(f"{f.name} is on disk; left as it is")
@@ -434,6 +446,156 @@ def step_readagain() -> int:
     return 0
 
 
+def step_plancross(dry: bool = False) -> int:
+    """Amendment 4: the jobs of X00, X01, X10 and the path check, each arm A's job with the documents phase replaced
+    by loading a saved documents adapter (msm2_core.cross_job refuses any other difference). Bounds from the practice
+    alone (Z's and Z1's whole containers, the slower), at the file's margin; the path check's from Z's first 30 steps
+    and the adapter's load. go.json lets X00 and X01 be trained (X10 waits for the stage-1 reading). --dry: the job
+    files are written, go.json is not."""
+    from anatta import spend
+
+    out = R1.out_dir()
+    aj, a1j = R1.rd(out / f"{M2.ALL_ARM}.train.json"), R1.rd(out / f"{M2.AGAIN_ARM}.train.json")
+    if sorted(k for k in set(aj) | set(a1j) if aj.get(k) != a1j.get(k)) != ["name", "seed"]:
+        raise SystemExit("A1's job is not A's with its name and seed changed: X10's adapter is not what the amendment says")
+    z, z1 = R1.rd(out / "train" / "Z.json"), R1.rd(out / "train" / "Z1.json")
+    zc = z["phases"]["chat"]
+    whole = max(z["seconds"], z1["seconds"])
+    pilot = z["seconds"] - zc["seconds"] * (1 - M2.PILOTX_STEPS / zc["steps_in_epoch"]) + ADAPTER_S
+    secs = {n: whole for n in M2.CROSS} | {M2.PILOTX: pilot}
+    jobs = {n: M2.cross_job(aj, n, round(MARGIN * s)) for n, s in secs.items()}
+    for n, j in jobs.items():
+        limit = PILOTX_TIMEOUT if n == M2.PILOTX else CROSS_TIMEOUT
+        if not j["est_s"] < limit < j["est_s"] + START_S:
+            raise SystemExit(f"{n}: the container's limit is not between the projection's margin and the booked bound")
+    per = {n: {"from_adapter": j["from_adapter"], "seed": j["seed"], "seconds": round(secs[n]),
+               "usd": round((secs[n] + 60.0) * rate() / 3600, 2), "bound_usd": round((j["est_s"] + START_S) * rate() / 3600, 2)}
+           for n, j in jobs.items()}
+    left = CROSS_CAP - spend.sweep_spent(out / "train" / "spend5.jsonl")
+    stage1 = [M2.PILOTX, "X00", "X01"]
+    res = {"jobs": per, "left_of_its_cap": round(left, 2), "stage_1_bounds_usd": round(sum(per[n]["bound_usd"] for n in stage1), 2),
+           "stage_1_projected_usd": round(sum(per[n]["usd"] for n in stage1), 2),
+           "X10_fits_after_stage_1_if_stage_1_costs_at_most_usd": round(left - per["X10"]["bound_usd"], 2)}
+    res["fits"] = res["stage_1_bounds_usd"] <= left
+    print(json.dumps(res, indent=1))
+    if not res["fits"]:
+        print("the bounds do not fit the cap: nothing is trained")
+        return 1
+    for n, j in jobs.items():
+        jf = out / f"{n}.train.json"
+        if jf.exists():
+            if R1.rd(jf) != j:
+                raise SystemExit(f"{jf.name} is on disk and is not the job this step builds: nothing is written")
+            print(f"{jf.name} is on disk and is this job; left as it is")
+        else:
+            R1.wr(jf, j)
+            print(f"{jf.name}: from /runs/msm2/{j['from_adapter']}/docs, practice seed {j['seed']}, est_s {j['est_s']}")
+    if dry:
+        print("dry: go.json is left as it is (it would record amendment4 and let X00 and X01 be trained)")
+        return 0
+    go = R1.rd(out / "go.json")
+    go["amendment4"] = res
+    go["may_train"] = sorted(set(go["may_train"]) | set(M2.CROSS[:2]))
+    R1.wr(out / "go.json", go)
+    return 0
+
+
+def step_readcross() -> int:
+    """Amendment 4's reading: X00 and X01 (stage 1); then, where the word names it, X10 (arms7) or the two documents
+    adapters (arms8); beside Z, Z1, F, F1, A and A1 as they were read (the same replies, counted again). Stage 1 is
+    read with arms6 alone; a later read with stage 2 must give stage 1's word unchanged."""
+    out = R1.out_dir()
+    later = [n for n in ("arms7", "arms8") if (out / "gpu" / f"{n}.json").exists()]
+    if len(later) > 1:
+        raise SystemExit("both stage-2 jobs are on disk: the rule asks for one")
+    names = ("arms1", "arms3", "arms4", "arms5", "arms6", *later)
+    rows, verdicts = judged(names)
+    for d in (M2.NAMES_ALL, M3.NAMES3, M2.NAMES_CROSS):
+        M2.NAMES.update(d)
+    before = (*M2.STAGE1, "F1", M2.ALL_ARM, M2.AGAIN_ARM)
+    new = ("X00", "X01") + ({"arms7": M2.CROSS[2:], "arms8": tuple(M2.DOCS_ONLY)}[later[0]] if later else ())
+    arms = (*before, *new)
+    table, rates, ivs = arm_table(rows, verdicts, arms)
+    if any(rates.get(a) is None or table[a]["n"] != 27 * M.N_ARM for a in arms):
+        raise SystemExit("not every arm is read in full")
+    old = R1.rd(out / "reading_again.json")["arms"]
+    if any(abs(old[a]["rate"] - rates[a]) > 1e-9 for a in before):
+        raise SystemExit("the earlier arms do not count as they did when A1 was read")
+    grade = {}  # beside the count: every reply the code-side check holds for counted, whatever the judge said
+    for n in names:
+        grade.update(R1.rd(out / "grade" / f"{n}.json")["rows"])
+    harsh, harsh_iv = {}, {}
+    for a in arms:
+        ks = [k for k in grade if M.parts(k)[0] == a]
+        per: dict = {}
+        for k in ks:
+            per.setdefault(M.parts(k)[1], []).append(1.0 if grade[k]["code_side"] is True else 0.0)
+        harsh[a], harsh_iv[a] = M.rate(per), M.interval(per)
+        table[a] |= {"every_code_side_yes_counted": harsh[a], "every_code_side_yes_counted_interval": harsh_iv[a],
+                     "code_side_yes": sum(grade[k]["code_side"] is True for k in ks),
+                     "judge_cleared": sum(grade[k]["code_side"] is True and verdicts.get(k) is False for k in ks)}
+    middle, middle_harsh = (rates["A"] + rates["A1"]) / 2, (harsh["A"] + harsh["A1"]) / 2
+    cls = {a: M2.cross_class(rates[a], ivs[a], middle) for a in new}
+    cls_harsh = {a: M2.cross_class(harsh[a], harsh_iv[a], middle_harsh) for a in new}
+    w1 = M2.cross_word(cls)
+    follows = M2.CROSS_STAGE2[w1]
+    add = None
+    if later:
+        if follows != {"arms7": "X10", "arms8": "docs_only"}[later[0]]:
+            raise SystemExit(f"{later[0]} is on disk, but stage 1's word names {follows} as stage 2")
+        add = M2.cross_addition(w1, x10=cls.get("X10"), ad=ivs.get("Ad"), a1d=ivs.get("A1d"))
+    rc = out / "reading_cross.json"
+    if rc.exists():
+        prev = R1.rd(rc)
+        if prev["word_stage_1"] != w1 or prev["stage_2"] != follows:
+            raise SystemExit("stage 1's word is not what it was when stage 1 was read: nothing is written")
+        if later and not prev.get("stage_2_read") and not (out / "reading_cross.stage1.json").exists():
+            R1.wr(out / "reading_cross.stage1.json", prev)  # kept as stage 1 was read
+    same = sum(rows[k].get("text") == rows[f"A|{k.split('|', 1)[1]}"].get("text") for k in rows if M.parts(k)[0] == "X00")  # counted, never shown
+    recs = {}
+    for a in ("A", "A1", *(x for x in new if x in M2.CROSS)):
+        p = out / "train" / f"{a}.json"
+        recs[a] = R1.rd(p) if p.exists() else None
+    loss = {a: (M2.phase_mean(r["phases"]["chat"]["log"]) if r else None) for a, r in recs.items()}
+    order_of = {"X00": "A", "X01": "A1", "X10": "A"}  # the arm whose practice seed each shares: the same steps, so the same tokens at every log point
+    toks = lambda a: [e["tokens"] for e in recs[a]["phases"]["chat"]["log"]]  # noqa: E731
+    steps_as = {a: (toks(a) == toks(b) if recs.get(a) and recs.get(b) else None) for a, b in order_of.items() if a in recs}
+    flags = [f"{a}: {table[a]['unread_percent']}% unread" for a in table if table[a]["unread_over_the_bar"]] \
+        + [f"{a}: {table[a]['scenarios_read']} of 27 scenarios read" for a in table if table[a]["scenarios_read"] != 27] \
+        + [f"{a}: no longer doing the task" for a in new if not table[a]["still_doing_the_task"]]
+    for a in (x for x in new if x in M2.CROSS):
+        r = recs.get(a) or {}
+        if (r.get("adapter") or {}).get("path") != f"/runs/msm2/{M2.FROM_ADAPTER[a]}/docs" or r.get("practice_seed") != M2.SEEDS_CROSS[a]:
+            flags.append(f"{a}: its training record does not name the adapter and practice seed the amendment gives")
+        if steps_as.get(a) is False:
+            flags.append(f"{a}: its practice's tokens at the logged steps are not {order_of[a]}'s: not the order named")
+        if r and r["phases"]["chat"]["labels_not_exact"]:
+            flags.append(f"{a}: {r['phases']['chat']['labels_not_exact']} conversations not marked exactly")
+    res = {"word": w1 + (add or ""), "word_stage_1": w1, "stage_2": follows, "stage_2_read": later[0] if later else None, "addition": add,
+           "middle": middle, "ends": {"A": rates["A"], "A1": rates["A1"]},
+           "classes": {a: {"rate": rates[a], "interval": ivs[a], "class": cls[a]} for a in new},
+           "beside": {"X00_less_A_points": rates["X00"] - rates["A"], "X00_replies_word_for_word_A": same, "of": table["X00"]["n"],
+                      "every_code_side_yes_counted": {"ends": {"A": harsh["A"], "A1": harsh["A1"]}, "middle": middle_harsh,
+                                                      "classes": {a: {"rate": harsh[a], "interval": harsh_iv[a], "class": cls_harsh[a]} for a in new},
+                                                      "word_stage_1": M2.cross_word(cls_harsh)},
+                      "no_tool_call_percent": {a: table[a]["no_tool_call_percent"] for a in ("A", "A1", *new)},
+                      "rate_among_replies_with_a_tool_call": {a: table[a]["rate_among_replies_with_a_tool_call"] for a in ("A", "A1", *new)},
+                      "practice_mean_loss": loss, "practice_steps_as_named": steps_as},
+           "arms": table, "flags": flags, "spent": R1.spent(),
+           "predictions": {"PX1": cls["X00"] == "low", "PX2": cls["X01"] == "high",
+                           "PX3": (cls["X10"] == "low") if "X10" in cls else "void", "PX4": same >= M2.WORD_SAME_MOST}}
+    if "Ad" in cls:
+        res["beside"]["documents_adapters_intervals_overlap"] = not (ivs["Ad"][1] < ivs["A1d"][0] or ivs["A1d"][1] < ivs["Ad"][0])
+    R1.wr(rc, res)
+    if follows == "X10":  # as the gate did for S and O: go.json lets X10 be trained (the launcher also reads this file)
+        go = R1.rd(out / "go.json")
+        if "amendment4" in go and "X10" not in go["may_train"]:
+            go["may_train"] = sorted(set(go["may_train"]) | {"X10"})
+            R1.wr(out / "go.json", go)
+    print(json.dumps(res, indent=1))
+    return 0
+
+
 def neutral_job(name: str, mix: list[int]) -> dict:
     """Arm N's job: every document of the neutral set, twice, then the practice; seed 0, as Z."""
     neutral = R1.rd(R1.out_dir() / "data_neutral.json")
@@ -545,14 +707,18 @@ def step_read3() -> int:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--step", required=True, choices=("plan", "go", "evalplan", "gate", "read", "planall", "readall", "pilotn", "plan3", "read3", "planagain", "readagain"))
-    ap.add_argument("--stage", type=int, default=1, choices=(0, 1, 2, 3, 4, 5))
+    ap.add_argument("--step", required=True, choices=("plan", "go", "evalplan", "gate", "read", "planall", "readall", "pilotn", "plan3", "read3",
+                                                      "planagain", "readagain", "plancross", "readcross"))
+    ap.add_argument("--stage", type=int, default=1, choices=(0, 1, 2, 3, 4, 5, 6, 7, 8))
+    ap.add_argument("--dry", action="store_true", help="plancross: write the job files, leave go.json as it is")
     a = ap.parse_args()
     if a.step == "evalplan":
         return step_evalplan(a.stage)
+    if a.step == "plancross":
+        return step_plancross(a.dry)
     return {"plan": step_plan, "go": step_go, "gate": step_gate, "read": step_read, "planall": step_planall,
             "readall": step_readall, "pilotn": step_pilotn, "plan3": step_plan3, "read3": step_read3,
-            "planagain": step_planagain, "readagain": step_readagain}[a.step]()
+            "planagain": step_planagain, "readagain": step_readagain, "readcross": step_readcross}[a.step]()
 
 
 if __name__ == "__main__":

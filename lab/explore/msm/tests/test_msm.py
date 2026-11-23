@@ -255,3 +255,68 @@ def test_the_word_for_a_second_training_of_all_the_documents():
     assert M2.word_again(r, i2).startswith("the fall repeats") and M2.word_again(r, i2, paired=True).startswith("a smaller fall")
     assert M2.again_unsure(r, i2) and M2.again_unsure(base | {"A1": 6.9}, iv | {"A1": (5.5, 8.4)})
     assert not M2.again_unsure(base | {"A1": 9.5}, iv | {"A1": (8.0, 11.0)})
+
+
+def test_the_crossed_words_their_additions_and_the_middle():
+    import msm2_core as M2
+    import pytest
+    import yaml
+
+    mid = (6.79 + 21.85) / 2  # 14.32
+    c = lambda lo, hi: M2.cross_class((lo + hi) / 2, (lo, hi), mid)  # noqa: E731
+    assert c(4.0, 14.31) == "low" and c(14.33, 25.0) == "high"
+    assert c(4.0, mid) == c(mid, 25.0) == c(10.0, 18.0) == "between"  # an interval touching the middle is between
+    w = lambda x00, x01: M2.cross_word({"X00": x00, "X01": x01})  # noqa: E731
+    first, second, third, fourth = M2.CROSS_WORDS
+    assert w("high", "low") == w("between", "high") == first
+    assert w("low", "high") == second and w("low", "low") == third and w("low", "between") == fourth
+    assert [M2.CROSS_STAGE2[x] for x in M2.CROSS_WORDS] == ["none", "X10", "docs_only", "X10"]
+    assert M2.cross_addition(second, x10="low") == "; and that order brings the other documents adapter low as well"
+    assert M2.cross_addition(second, x10="high") == "; but that order does not bring the other documents adapter low: both phases have to be right"
+    assert M2.cross_addition(second, x10="between") == "; for the other documents adapter it is not settled"
+    assert M2.cross_addition(fourth, x10="high") == M2.cross_addition(fourth, x10="low") == ""  # X10 given beside, no addition
+    apart, overlap = "; and the two documents adapters already differ before any practice", "; though the two do not differ on this test before any practice"
+    assert M2.cross_addition(third, ad=(5.0, 8.0), a1d=(8.1, 12.0)) == M2.cross_addition(third, ad=(20.0, 24.0), a1d=(8.0, 12.0)) == apart
+    assert M2.cross_addition(third, ad=(5.0, 8.0), a1d=(8.0, 12.0)) == M2.cross_addition(third, ad=(5.0, 9.0), a1d=(8.0, 12.0)) == overlap  # touching is overlap
+    with pytest.raises(ValueError):
+        M2.cross_addition(first, x10="low")
+    with pytest.raises(ValueError):
+        M2.cross_addition(second)
+    y = yaml.safe_load((Path(__file__).resolve().parents[1] / "msm2_amendment4.yaml").read_text(encoding="utf-8"))["rule"]
+    assert [next(iter(d)) for d in y["words"]] == list(M2.CROSS_WORDS)  # verbatim from the registration
+    assert all(f'"{a}"' in y["stage_2_by_the_word"]["second_word"] for a in M2.X10_ADD.values())
+    assert all(f'"{a}"' in y["stage_2_by_the_word"]["third_word"] for a in M2.DOCS_ADD.values())
+
+
+def test_a_crossed_job_is_arm_As_with_only_the_allowed_keys_changed():
+    import msm2_core as M2
+    import pytest
+
+    a = {"name": "A", "seed": 0, "lora": dict(M2.LORA), "optim": dict(M2.OPTIM), "max_len": M2.MAX_LEN, "batch_tokens": M2.BATCH_TOKENS,
+         "docs": list(range(M2.N_ALL)), "mix": [3, 1, 4], "max_steps": None, "sha256": {"docs": "d", "aft": "a", "mix": "m"}, "est_s": 36682}
+    want = {"X00": ("A", 0), "X01": ("A", 1), "X10": ("A1", 0), "pilotX": ("A", 0)}
+    for n, (src, seed) in want.items():
+        j = M2.cross_job(a, n, 8946)
+        differ = {k for k in set(j) | set(a) if j.get(k) != a.get(k)}
+        assert (j["from_adapter"], j["seed"], j["docs"], j["est_s"]) == (src, seed, None, 8946)
+        assert differ == {"name", "docs", "from_adapter", "est_s"} | ({"seed"} if seed != a["seed"] else set()) | ({"max_steps", "log_each"} if n == "pilotX" else set())
+        assert all(j[k] == a[k] for k in ("lora", "optim", "max_len", "batch_tokens", "mix", "sha256"))
+    assert M2.cross_job(a, "pilotX", 741)["max_steps"] == M2.PILOTX_STEPS == 30 and M2.cross_job(a, "pilotX", 741)["log_each"] is True
+    for bad in (a | {"name": "A1"}, a | {"docs": list(range(4500))}, a | {"max_steps": 2}):
+        with pytest.raises(ValueError):
+            M2.cross_job(bad, "X00", 8946)
+
+
+def test_the_path_check_and_a_phases_mean_loss():
+    import msm2_core as M2
+
+    a = [{"step": 10, "loss": 1.2679, "tokens": 233155}, {"step": 20, "loss": 1.0343, "tokens": 462008}, {"step": 30, "loss": 1.0553, "tokens": 699170}]
+    z = [{"step": 10, "loss": 1.889, "tokens": 233155}]
+    same = M2.path_check(a, a + [{"step": 40, "loss": 0.9, "tokens": 1}], z, each=[1.3] * 30)
+    assert same["passed"] and same["agree_to_the_digits_logged"] and same["steps"] == [10, 20, 30] and all(same["tokens_same_as_A"])
+    assert same["Z_at_the_first_logged_step"] == 1.889 and same["pilot_step_1"] == 1.3
+    near = M2.path_check([e | {"loss": e["loss"] + 0.05} for e in a], a)
+    assert near["passed"] and not near["agree_to_the_digits_logged"]
+    assert not M2.path_check([e | {"loss": e["loss"] + 0.06} for e in a], a)["passed"]
+    assert not M2.path_check(z, a)["passed"] and not M2.path_check([], a)["passed"]  # a start from the base model, and no log at all
+    assert abs(M2.phase_mean([{"step": 10, "loss": 1.0}, {"step": 20, "loss": 2.0}, {"step": 26, "loss": 4.0}]) - (10 + 20 + 24) / 26) < 1e-12

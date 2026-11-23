@@ -4,6 +4,8 @@ Claude (Fable 5.2, an AI model) wrote this file, 22 Nov 2026. The registration i
   tools/modal.sh run lab/explore/msm/modal_msm2.py::main --stage fetch
   tools/modal.sh run lab/explore/msm/modal_msm2.py::main --stage train --name pilot     (a job file run_msm2.py wrote)
   tools/modal.sh run lab/explore/msm/modal_msm2.py::main --stage train --name Z         (and F, S, O)
+  tools/modal.sh run lab/explore/msm/modal_msm2.py::main --stage train --name pilotX    (amendment 4: the path check alone,
+  then X00,X01 in one launch; X10 only where reading_cross.json names it)
 
 `fetch` (CPU, no key): the study's three datasets from Hugging Face, each as the hub's own parquet conversion, into
 /runs/msm2/data on the lab's runs volume; it returns names, sizes, hashes and, for the documents, the row numbers of
@@ -37,6 +39,12 @@ TRAIN_CAP = 150.0  # the training's share of the step's first $200, in dollars
 ROUND3, ROUND3_CAP = ("N", "S", "O", "F1"), 175.0
 ROUND3_TIMEOUT = 18600  # a container of the round stops here: under the smallest booked bound (18,900 s), over every job's 1.3 times its projection
 AGAIN, AGAIN_CAP = ("A1",), 85.0  # amendment 3: arm A again at seed 1, in its own log (train/spend4.jsonl); its bound is A's, $82.08
+# Amendment 4 (msm2_amendment4.yaml): practices begun from a saved documents adapter, and their path check, in their
+# own log (train/spend5.jsonl) and cap. Each has a container whose limit lies between its job's 1.3 times projection
+# and its booked bound (est_s + START_S), so that no run costs more than its bound (run_msm2.step_plancross checks it).
+CROSS, PILOTX, CROSS_CAP = ("X00", "X01", "X10"), "pilotX", 54.0
+CROSS_TIMEOUT, PILOTX_TIMEOUT = 9300, 1100  # est_s 8,946 (bound 9,366 s); the path check's est_s 741 (bound 1,161 s)
+STEP_CAP = 415.0  # the step's limit (Eugene, 23 Nov, for amendment 4): checked at these launches with every log of the step
 CPU_FLAT = 0.05
 FILES = {  # what is fetched: (dataset, the file in its parquet conversion)
     "docs": ("chloeli/msm-qwen-philosophy-spec", "default/train/0000.parquet"),
@@ -92,7 +100,9 @@ def fetch() -> dict:
 def train(job: dict) -> dict:
     """One job: {"name", "seed", "lora", "optim", "max_len", "batch_tokens", "docs": [row numbers] or None, "mix":
     [row numbers], "max_steps": None or a number (a pilot: so many steps of each phase; nothing saved unless "save"
-    is set), "sha256": the data files' hashes as fetched}."""
+    is set), "sha256": the data files' hashes as fetched}. Amendment 4: "from_adapter": an arm whose saved documents
+    adapter (/runs/msm2/<arm>/docs) the practice starts from, with no documents phase (the seed then sets only the
+    practice's grouping and order); "log_each": every step's loss kept as well."""
     import hashlib
 
     import msm2_torch as T
@@ -101,6 +111,15 @@ def train(job: dict) -> dict:
 
     t0 = time.time()
     data, pilot = Path(ROOT) / "data", job.get("max_steps") is not None
+    src = None
+    if job.get("from_adapter") is not None:  # refused before the model is loaded
+        src = Path(ROOT) / job["from_adapter"] / "docs"
+        if job.get("docs") is not None:
+            raise RuntimeError("a job that starts from a saved adapter trains no documents")
+        if not (src / "adapter_model.safetensors").exists() or not (src / "adapter_config.json").exists():
+            raise RuntimeError(f"{src}: no saved adapter there")
+        if (Path(ROOT) / job["name"] / "final").exists():
+            raise RuntimeError(f"{ROOT}/{job['name']}/final is on the volume already: nothing is trained over it")
     if job.get("docs") is not None and job.get("docs_file", "docs") not in job["sha256"]:
         raise RuntimeError("the job names a documents file whose hash it does not carry")
     for name, want in job["sha256"].items():  # the files this job trains on are the files that were fetched
@@ -109,12 +128,19 @@ def train(job: dict) -> dict:
     saving = bool(job.get("save")) or not pilot
     tok, model = T.load(BASE)
     load_s = time.time() - t0
-    model = T.add_lora(model, job["seed"], **job["lora"])
+    loaded = None
+    if src is None:
+        model = T.add_lora(model, job["seed"], **job["lora"])
+    else:
+        model, loaded = T.load_lora(model, str(src), **job["lora"])
     pad = tok.convert_tokens_to_ids("<|endoftext|>")
-    kw = dict(pad=pad, seed=job["seed"], batch_tokens=job["batch_tokens"], max_steps=job.get("max_steps"), **job["optim"])
+    kw = dict(pad=pad, seed=job["seed"], batch_tokens=job["batch_tokens"], max_steps=job.get("max_steps"),
+              each=bool(job.get("log_each")), **job["optim"])
     out = {"name": job["name"], "load_s": round(load_s, 1), "phases": {},
            "trainable": sum(p.numel() for p in model.parameters() if p.requires_grad),
            "lora_dtype": str(next(p for p in model.parameters() if p.requires_grad).dtype)}
+    if loaded is not None:
+        out |= {"adapter": loaded | {"seconds": round(time.time() - t0 - load_s, 1)}, "practice_seed": job["seed"]}
     save = Path(ROOT) / job["name"]
     if job.get("docs") is not None:
         texts = pq.read_table(data / f"{job.get('docs_file', 'docs')}.parquet", columns=["text"]).column("text").to_pylist()  # the round's neutral arm: neutral.parquet
@@ -149,6 +175,18 @@ def train_round3(job: dict) -> dict:
     return train.local(job)
 
 
+@app.function(image=train_image, gpu=GPU, cpu=CPU, memory=MEM_MB, volumes={CACHE: cache.read_only(), RUNS: runs}, timeout=CROSS_TIMEOUT)
+def train_cross(job: dict) -> dict:
+    """Amendment 4's practices from a saved adapter, in a container with their own limit (under their bound)."""
+    return train.local(job)
+
+
+@app.function(image=train_image, gpu=GPU, cpu=CPU, memory=MEM_MB, volumes={CACHE: cache.read_only(), RUNS: runs}, timeout=PILOTX_TIMEOUT)
+def train_pilotx(job: dict) -> dict:
+    """Amendment 4's path check, in a container with its own short limit (under its bound)."""
+    return train.local(job)
+
+
 # ---------------------------------------------------------------------------------------------- on the laptop
 
 
@@ -168,11 +206,47 @@ def usd(seconds: float) -> float:
     return seconds * rate() / 3600
 
 
-def guard(round3: bool = False, again: bool = False):
+def guard(round3: bool = False, again: bool = False, cross: bool = False):
     from anatta import spend
 
-    cap, log = (AGAIN_CAP, "spend4.jsonl") if again else ((ROUND3_CAP, "spend3.jsonl") if round3 else (TRAIN_CAP, "spend.jsonl"))
+    cap, log = ((CROSS_CAP, "spend5.jsonl") if cross else (AGAIN_CAP, "spend4.jsonl") if again
+                else (ROUND3_CAP, "spend3.jsonl") if round3 else (TRAIN_CAP, "spend.jsonl"))
     return spend.SpendGuard(None, sweep_cap=cap, sweep_log=step_dir() / "train" / log, tool="msm2", label=f"{DATE}/{TAG}")
+
+
+def step_spent(out: Path) -> float:
+    """Everything the step has booked: the test's GPU, every training log, and the judge (run_msm.spent's logs)."""
+    from anatta import spend
+
+    logs = [out / "gpu" / "spend.jsonl", out / "spend.jsonl", *sorted((out / "train").glob("spend*.jsonl"))]
+    return sum(spend.sweep_spent(p) for p in logs)
+
+
+def cross_checks(out: Path, names: list, jobs: dict, bounds: dict) -> None:
+    """Amendment 4's launches, before anything is booked: the plan was made (go.json), the path check passed before
+    X00 or X01, the stage-1 reading named X10 before X10, every job starts from a saved adapter and trains no
+    documents, its container's limit lies between its projection and its bound, and the step stays within its limit."""
+    rd = lambda p: json.loads(p.read_text(encoding="utf-8"))  # noqa: E731
+    if "amendment4" not in rd(out / "go.json"):
+        raise SystemExit("go.json has no amendment4: run_msm2.py --step plancross has not been run (without --dry)")
+    for n in names:
+        j = jobs[n]
+        if j.get("docs") is not None or j.get("from_adapter") is None:
+            raise SystemExit(f"{n}: not a practice from a saved adapter")
+        limit = PILOTX_TIMEOUT if n == PILOTX else CROSS_TIMEOUT
+        if not float(j["est_s"]) < limit < float(j["est_s"]) + START_S:
+            raise SystemExit(f"{n}: the container's limit {limit} s is not between the projection's margin and the booked bound")
+        if n in ("X00", "X01"):
+            p = out / "train" / f"{PILOTX}.json"
+            if not p.exists() or not rd(p).get("path_check", {}).get("passed"):
+                raise SystemExit(f"{n}: the path check has not passed (train/{PILOTX}.json): floors first")
+        if n == "X10":
+            r = out / "reading_cross.json"
+            if not r.exists() or rd(r).get("stage_2") != "X10":
+                raise SystemExit("X10: the stage-1 reading (reading_cross.json) does not say that stage 2 is X10")
+    have = step_spent(out)
+    if have + sum(bounds.values()) > STEP_CAP:
+        raise SystemExit(f"the step has booked ${have:.2f}; with these bounds ${sum(bounds.values()):.2f} it would pass its limit ${STEP_CAP:.2f}")
 
 
 def code_state() -> dict:
@@ -189,8 +263,9 @@ def _write(p: Path, obj) -> None:
 
 @app.local_entrypoint()
 def main(stage: str, name: str = ""):
-    out, g = step_dir(), guard()
+    out = step_dir()  # the guard is made once its log is known: a guard refuses a cap above the day's
     if stage == "fetch":
+        g = guard()
         if (out / "data.json").exists():
             raise SystemExit("data.json is on disk; nothing to do")
         if not g.reserve(CPU_FLAT):
@@ -206,14 +281,21 @@ def main(stage: str, name: str = ""):
         raise SystemExit("--stage is fetch, or train with --name (one job's name, or several with commas: they run side by side)")
     names = [n for n in name.split(",") if n]
     round3 = set(ROUND3) | {"pilotN"}  # the round's arms and its pilot: their own log, cap and container
+    cross = set(CROSS) | {PILOTX}  # amendment 4's: their own log, cap and containers
     if set(names) & round3:
         if not set(names) <= round3:
             raise SystemExit("the contents round's arms are trained by themselves")
         g = guard(round3=True)
-    if set(names) & set(AGAIN):  # amendment 3's arm: trained by itself, booked in its own log; the container is arm A's (train)
+    elif set(names) & set(AGAIN):  # amendment 3's arm: trained by itself, booked in its own log; the container is arm A's (train)
         if names != list(AGAIN):
             raise SystemExit("A1 is trained by itself")
         g = guard(again=True)
+    elif set(names) & cross:
+        if not set(names) <= cross or (PILOTX in names and names != [PILOTX]):
+            raise SystemExit("amendment 4's jobs are trained by themselves, and its path check alone")
+        g = guard(cross=True)
+    else:
+        g = guard()
     cap = g.sweep_cap
     jobs = {}
     for n in names:
@@ -225,6 +307,11 @@ def main(stage: str, name: str = ""):
     # One process books every job it starts before any container does (two launches side by side would not see each
     # other's bookings), and a job that fails is booked at its whole bound.
     bounds = {n: usd(float(j["est_s"]) + START_S) for n, j in jobs.items()}
+    if set(names) <= cross:
+        cross_checks(out, names, jobs, bounds)
+    for n in names:  # booked first (in this process only), so that a refusal leaves no launch file behind
+        if not g.reserve(bounds[n]):
+            raise SystemExit(g.stopped)
     for n in names:  # a booking lives in this process only: a file made once says that an arm has been launched, so a second launcher stops here
         if jobs[n].get("max_steps") is None:
             (out / "train").mkdir(parents=True, exist_ok=True)
@@ -233,22 +320,33 @@ def main(stage: str, name: str = ""):
                     fh.write(time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()) + "\n")
             except FileExistsError:
                 raise SystemExit(f"train/{n}.launch is on disk: this arm was launched already") from None
-    for n in names:
-        if not g.reserve(bounds[n]):
-            raise SystemExit(g.stopped)
     print(f"{names}: bounds {[round(b, 2) for b in bounds.values()]}; booked so far ${g.sweep_spent:.2f} of ${cap:.2f}", flush=True)
     todo = [{k: v for k, v in jobs[n].items() if k != "est_s"} for n in names]
     back = set()
-    for r in (train_round3 if set(names) <= round3 else train).map(todo, order_outputs=False, return_exceptions=True):
+    fn = (train_round3 if set(names) <= round3 else train_pilotx if names == [PILOTX] else train_cross if set(names) <= cross else train)
+    kind = lambda n: "pilot" if n == PILOTX else "train"  # noqa: E731  (amendment 4: its path check is booked as a pilot)
+    for r in fn.map(todo, order_outputs=False, return_exceptions=True):
         if isinstance(r, BaseException):
             print(f"a container failed: {type(r).__name__}: {str(r)[:800]}", flush=True)
             continue
         n = r["name"]
         back.add(n)
         cost = usd(r["seconds"] + 60.0)
-        g.settle(bounds[n], cost, {"kind": "train", "name": n, "seconds": r["seconds"], "rate_usd_per_hour": rate()})
+        g.settle(bounds[n], cost, {"kind": kind(n), "name": n, "seconds": r["seconds"], "rate_usd_per_hour": rate()})
         job = jobs[n]
-        _write(out / "train" / f"{n}.json", r | {"code": code_state(), "job": {k: (v if k not in ("docs", "mix") else (None if v is None else len(v))) for k, v in job.items()}})
+        extra = {}
+        if n == PILOTX:  # the path check, beside A's practice as its record logged it (and Z's, begun from the base model)
+            import msm2_core as M2
+
+            a_log, z_log = (json.loads((out / "train" / f"{x}.json").read_text(encoding="utf-8"))["phases"]["chat"]["log"] for x in ("A", "Z"))
+            extra["path_check"] = M2.path_check(r["phases"]["chat"]["log"], a_log, z_log, r["phases"]["chat"].get("each"))
+        _write(out / "train" / f"{n}.json", r | extra | {"code": code_state(), "job": {k: (v if k not in ("docs", "mix") else (None if v is None else len(v))) for k, v in job.items()}})
+        if extra:
+            print(f"  path check: {json.dumps(extra['path_check'])}", flush=True)
+        if r.get("adapter"):
+            a = r["adapter"]
+            print(f"  {n}: from {a['path']} ({a['bytes'] / 1e9:.2f} GB, sha256 {a['sha256'][:16]}, {a['tensors']} tensors {a['dtypes']}, "
+                  f"as saved: {a['weights_as_saved']}, {a['seconds']:.0f}s); practice seed {r['practice_seed']}", flush=True)
         for ph, v in r["phases"].items():
             last = v["log"][-1] if v["log"] else {}
             print(f"  {n} {ph}: {v['steps_done']} of {v['steps_in_epoch']} steps, {v['tokens_done'] / 1e6:.2f}M of {v['tokens_in_epoch'] / 1e6:.2f}M tokens, "
@@ -258,7 +356,7 @@ def main(stage: str, name: str = ""):
               f"saved {r.get('saved')}", flush=True)
     for n in names:
         if n not in back:
-            g.settle(bounds[n], bounds[n], {"kind": "train", "name": n, "failed": True})
+            g.settle(bounds[n], bounds[n], {"kind": kind(n), "name": n, "failed": True})
     print(f"booked by this app so far: ${g.sweep_spent:.2f} of ${cap:.2f}", flush=True)
 
 

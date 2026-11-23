@@ -44,13 +44,14 @@ MODEL_KEY = "qwen25_32b"  # the registry's entry for Qwen/Qwen2.5-32B-Instruct, 
 GPU, CPU, MEM_MB = "H200", 8.0, 98304
 CACHE, RUNS = "/cache", "/runs"
 START_S = 120.0
-GPU_CAP = 35.0 if STEP == "s1" else 20.0  # the test's GPU share: of step 1's $60; of step 2's (12 of $200 until 23 Nov 2026; 20 since the contents round, of a step cap that is $380 from amendment 3)
+GPU_CAP = 35.0 if STEP == "s1" else 26.0  # the test's GPU share: of step 1's $60; of step 2's (12 of $200 until 23 Nov 2026; 20 since the contents round, of a step cap that is $380 from amendment 3)
 CPU_FLAT = 0.02  # booked for each CPU call (a minute of one core costs far less)
 EST_S = {"floor": 1800.0, "arms": 6000.0,  # a bound on one generate container's seconds, by job name (step 1's arms: 1,731 s for 2,970 replies)
          "arms1": 3300.0, "arms2": 2400.0, "vcheck": 600.0,  # step 2: three arms, two arms, and one reply from the pilot's adapter
          "arms3": 1500.0,  # amendment 2: one arm (stage 1's three took 1,357 s)
          "arms4": 4200.0,  # the contents round: four arms
-         "arms5": 1500.0}  # amendment 3: one arm (arm A's test took 689 s)
+         "arms5": 1500.0,  # amendment 3: one arm (arm A's test took 689 s)
+         "arms6": 2400.0, "arms7": 1500.0, "arms8": 2400.0}  # amendment 4: two arms (X00, X01); one (X10); two (the documents adapters Ad, A1d)
 
 cache = modal.Volume.from_name("anatta-hf-cache")
 runs = modal.Volume.from_name("anatta-runs")
