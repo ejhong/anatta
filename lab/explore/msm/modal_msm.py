@@ -47,7 +47,8 @@ START_S = 120.0
 GPU_CAP = 35.0 if STEP == "s1" else 12.0  # the test's GPU share: of step 1's $60; of step 2's $200 (its training has its own, modal_msm2.TRAIN_CAP)
 CPU_FLAT = 0.02  # booked for each CPU call (a minute of one core costs far less)
 EST_S = {"floor": 1800.0, "arms": 6000.0,  # a bound on one generate container's seconds, by job name (step 1's arms: 1,731 s for 2,970 replies)
-         "arms1": 3300.0, "arms2": 2400.0, "vcheck": 600.0}  # step 2: three arms, two arms, and one reply from the pilot's adapter
+         "arms1": 3300.0, "arms2": 2400.0, "vcheck": 600.0,  # step 2: three arms, two arms, and one reply from the pilot's adapter
+         "arms3": 1500.0}  # amendment 2: one arm (stage 1's three took 1,357 s)
 
 cache = modal.Volume.from_name("anatta-hf-cache")
 runs = modal.Volume.from_name("anatta-runs")

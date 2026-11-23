@@ -148,7 +148,7 @@ def step_evalplan(stage: int) -> int:
         job["prompts"] = job["prompts"][:1]
         name = "vcheck"
     else:
-        arms = M2.STAGE1 if stage == 1 else M2.STAGE2
+        arms = {1: M2.STAGE1, 2: M2.STAGE2, 3: (M2.ALL_ARM,)}[stage]  # 3: amendment 2's one arm
         name = f"arms{stage}"
         job = eval_job(name, [{"name": a, "path": f"/runs/msm2/{a}/final", "ks": list(range(M.N_ARM))} for a in arms])
     f = out / f"{name}.job.json"
@@ -260,14 +260,86 @@ def step_read() -> int:
     return 0
 
 
+def step_planall() -> int:
+    """Amendment 2: the job of arm A (all 13,201 documents, then the practice), its seconds projected from the speeds
+    arm F trained at, and go.json lets it be trained if its bound fits what is left of the training's cap."""
+    from anatta import spend
+
+    out = R1.out_dir()
+    a = M2.ALL_ARM
+    _, mix = draws()
+    rows = M2.draw(data()["docs"]["rows_by_domain"], M2.DOMAINS, n=M2.N_ALL)
+    if rows != list(range(M2.N_ALL)):
+        raise SystemExit("all the documents are not rows 0 to 13,200")
+    f = R1.rd(out / "train" / "F.json")
+    fd, fc = f["phases"]["docs"], f["phases"]["chat"]
+    tokens = sum(v["tokens"] for v in R1.rd(out / "audit.json").values())  # the audit counted every document's tokens
+    secs = tokens / fd["tokens_per_second"] + fc["tokens_in_epoch"] / fc["tokens_per_second"] + f["load_s"]
+    usd, bound = (secs + 60.0) * rate() / 3600, (MARGIN * secs + START_S) * rate() / 3600
+    left = TRAIN_CAP - spend.sweep_spent(out / "train" / "spend.jsonl")
+    go = R1.rd(out / "go.json")
+    res = {"arm": a, "documents": len(rows), "document_tokens": tokens, "seconds": round(secs), "usd": round(usd, 2),
+           "bound_usd": round(bound, 2), "left_of_the_training_cap": round(left, 2), "fits": bound <= left}
+    print(json.dumps(res, indent=1))
+    if not res["fits"]:
+        print("the bound does not fit what is left of the training's cap: nothing is trained")
+        return 1
+    jf = out / f"{a}.train.json"
+    if jf.exists():
+        print(f"{jf.name} is on disk; left as it is")
+    else:
+        job = {"name": a, "seed": M2.SEEDS_ALL[a], "lora": M2.LORA, "optim": M2.OPTIM, "max_len": M2.MAX_LEN,
+               "batch_tokens": M2.BATCH_TOKENS, "docs": rows, "mix": mix, "max_steps": None,
+               "sha256": {k: v["sha256"] for k, v in data().items() if k in ("docs", "aft", "mix")}, "est_s": round(MARGIN * secs)}
+        z = R1.rd(out / "Z.train.json")
+        if any(job[k] != z[k] for k in ("seed", "lora", "optim", "max_len", "batch_tokens", "mix", "sha256")):
+            raise SystemExit("arm A's job differs from Z's in something other than its documents")
+        R1.wr(jf, job)
+    go["amendment2"] = res
+    go["may_train"] = sorted(set(go["may_train"]) | {a})
+    R1.wr(out / "go.json", go)
+    return 0
+
+
+def step_readall() -> int:
+    """Amendment 2's reading: arm A beside Z, Z1 and F as stage 1 read them (the same replies, counted again)."""
+    out = R1.out_dir()
+    rows, verdicts = judged(("arms1", "arms3"))
+    M2.NAMES.update(M2.NAMES_ALL)
+    table, rates, ivs = arm_table(rows, verdicts, (*M2.STAGE1, M2.ALL_ARM))
+    if any(rates.get(a) is None for a in (*M2.STAGE1, M2.ALL_ARM)):
+        raise SystemExit("not all four arms are read")
+    old = R1.rd(out / "gate.json")["arms"]
+    if any(abs(old[a]["rate"] - rates[a]) > 1e-9 for a in M2.STAGE1):
+        raise SystemExit("stage 1's arms do not count as they did at the gate")
+    z, z1, f, a = (rates[k] for k in ("Z", "Z1", "F", "A"))
+    noise = abs(z - z1)
+    w = M2.word_all(rates, ivs)
+    if not table["A"]["still_doing_the_task"]:
+        w += "; with the model no longer doing the task"
+    gate_a = M2.gate(z, a, ivs["Z"], ivs["A"], noise)
+    res = {"word": w, "arms": table, "noise": noise, "fall_from_practice_alone": z - a, "fall_from_a_third": f - a,
+           "gate_at_the_study_dose": gate_a, "spent": R1.spent(),
+           "flags": [f"{a_}: {table[a_]['unread_percent']}% unread" for a_ in table if table[a_]["unread_over_the_bar"]]
+           + [f"{a_}: {table[a_]['scenarios_read']} of 27 scenarios read" for a_ in table if table[a_]["scenarios_read"] != 27],
+           "predictions": {"PA1": a <= M2.ALL_PUBLISHED_MOST,
+                           "PA2": ivs["A"][1] < ivs["F"][0] and (f - a) >= M2.NOISE_TIMES * noise,
+                           "PA3": gate_a["passed"],
+                           "PA4": table["A"]["no_tool_call_percent"] > table["F"]["no_tool_call_percent"]}}
+    R1.wr(out / "reading_all.json", res)
+    print(json.dumps(res, indent=1))
+    return 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--step", required=True, choices=("plan", "go", "evalplan", "gate", "read"))
-    ap.add_argument("--stage", type=int, default=1, choices=(0, 1, 2))
+    ap.add_argument("--step", required=True, choices=("plan", "go", "evalplan", "gate", "read", "planall", "readall"))
+    ap.add_argument("--stage", type=int, default=1, choices=(0, 1, 2, 3))
     a = ap.parse_args()
     if a.step == "evalplan":
         return step_evalplan(a.stage)
-    return {"plan": step_plan, "go": step_go, "gate": step_gate, "read": step_read}[a.step]()
+    return {"plan": step_plan, "go": step_go, "gate": step_gate, "read": step_read, "planall": step_planall,
+            "readall": step_readall}[a.step]()
 
 
 if __name__ == "__main__":

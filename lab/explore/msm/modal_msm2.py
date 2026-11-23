@@ -83,7 +83,7 @@ def fetch() -> dict:
     return out
 
 
-@app.function(image=train_image, gpu=GPU, cpu=CPU, memory=MEM_MB, volumes={CACHE: cache.read_only(), RUNS: runs}, timeout=6 * 3600)
+@app.function(image=train_image, gpu=GPU, cpu=CPU, memory=MEM_MB, volumes={CACHE: cache.read_only(), RUNS: runs}, timeout=11 * 3600)  # amendment 2: arm A's bound is about ten hours
 def train(job: dict) -> dict:
     """One job: {"name", "seed", "lora", "optim", "max_len", "batch_tokens", "docs": [row numbers] or None, "mix":
     [row numbers], "max_steps": None or a number (a pilot: so many steps of each phase; nothing saved unless "save"

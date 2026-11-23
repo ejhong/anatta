@@ -176,3 +176,23 @@ def test_the_assistants_turns_are_marked_by_character_even_when_a_turn_begins_wi
     assert "Hi?" not in shown and "And?" not in shown and "Think in tags" not in shown and "assistant" not in shown
     cut_ids, cut_labels, _ = T.encode_chat(tok, msgs, 12)
     assert len(cut_ids) == len(cut_labels) == 12
+
+
+def test_all_documents_draw_and_word():
+    import msm2_core as M2
+
+    rows, n = {}, 0
+    for d, c in M2.COUNTS.items():
+        rows[d] = list(range(n, n + c))
+        n += c
+    assert n == M2.N_ALL and M2.draw(rows, M2.DOMAINS, n=M2.N_ALL) == list(range(n))
+    r = {"Z": 24.7, "Z1": 23.2, "F": 11.6}
+    iv = {"Z": (22.2, 27.2), "Z1": (21.0, 25.4), "F": (9.6, 13.6)}
+    w = lambda a, lo, hi: M2.word_all(r | {"A": a}, iv | {"A": (lo, hi)})  # noqa: E731
+    assert w(2.0, 1.0, 3.0) == "reaches the published size"
+    assert w(7.0, 5.5, 8.5) == "reaches the published size"
+    assert w(7.5, 6.0, 9.0).startswith("more documents do more")
+    assert w(9.0, 7.5, 10.5).startswith("the documents lower misbehaviour beyond the practice alone")  # 15.7 below Z, not clearly below F
+    assert w(11.0, 9.0, 13.0).startswith("no clear gain")
+    assert w(8.0, 6.5, 9.7).startswith("the documents lower misbehaviour")  # its interval touches F's
+    assert M2.word_all(r, iv) == "not read"
