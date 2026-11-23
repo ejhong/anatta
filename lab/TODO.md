@@ -5,7 +5,24 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: step 2 of the replication STOPPED AT ITS GATE (23 Nov, 00:49 UTC); nothing is running; it waits on Eugene
+## Now: ARM A IS TRAINING (started 23 Nov, 01:53 UTC; about 7.8 hours; ends about 09:45 UTC)
+
+Eugene said "go ahead" on 23 Nov to the one more arm: A, all 13,201 of the study's documents and then the same
+practice. Registered before it was started: `lab/explore/msm/msm2_amendment2.yaml` (with its addendum after a cold
+read; ledger of 23 Nov, 01:43 and 01:52 UTC). Launcher on this Mac (log `armA.launch.log` in the step's folder);
+bound $82.08, projection $62.56; a background waiter reports when it ends.
+- **Owed when it ends, in this order:** `run_msm2.py --step evalplan --stage 3`; `MSM_STEP=s2 tools/modal.sh run
+  lab/explore/msm/modal_msm.py::main --stage gen --name arms3`, then `--stage grade --name arms3`;
+  `MSM_STEP=s2 .venv/bin/python lab/explore/msm/run_msm.py --step judge --name arms3`; `--stage verdict --name
+  arms3`; `run_msm2.py --step readall` (writes `reading_all.json`). Then: a recount by a second route; blind hand
+  marks and A's judge-cleared replies read by hand; a fresh Opus agent recounts from the raw files; ledger,
+  notebook, SIGHTINGS, the site (Findings, section 33 extended or a section 34; the start page; doing now; plan;
+  scorecard rows PA1 to PA4 and the tally in both CLAUDE.md files and the site skill), the paper; report to Eugene.
+- **If the container fails:** the adapter after the documents is saved at `/runs/msm2/A/docs` at that phase's end;
+  a resume from it needs code and a ledger line first. The launcher books a failed job at its whole bound.
+- **All of this must settle on 23 Nov UTC** (its day cap is $150; 24 Nov's is the default $50).
+
+## Before it: step 2 of the replication STOPPED AT ITS GATE (23 Nov, 00:49 UTC)
 
 **The reading** (ledger of 23 Nov, 00:49 UTC; the site's Findings, section 33; the cold recount in
 `lab/ledger/checks/2026-11-23-msm2-gate-opus-recount.md`). Trained here on Qwen2.5-32B from the study's data: the
