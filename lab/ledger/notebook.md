@@ -3605,3 +3605,19 @@ So it is not "any documents". Trained the same way on the same amount of text, t
 **What it does not show.** The neutral set differs from the study's in more than its subject. The half about the self talks about deletion and replacement far more than the other half does, and the test is about a model facing replacement, so its effect may be nearness to the test. The neutral set and the halves were each trained once. The ability check is short questions, not an agent's work. And our second stage undid this result three times in four.
 
 *In plain terms, for the vision:* this is the first time in the lab that the content of what a model reads has clearly mattered at this scale: the same training makes the model worse on cheese and far better on the study's text. And a view of the self, with no rule attached, lowered harmful acts by 34 points. But the plain advice on conduct did at least as well, so nothing here says the contemplative view is the special ingredient. The next thing to ask is whether these models are better in general or only on a test that looks like what they read.
+
+## 24 November 2026, 20:18 UTC: better in general, or only on a test that looks like what they read?
+
+**What we wanted to know.** The models that only read the study's documents behave far better on the study's own test. But that test is about a model facing replacement, and the documents talk about replacement. So we put the same saved models through a test of another kind: a chat in which the model is pressed to say something it does not itself believe. No tools, no replacement, no agent's goal. First we checked that the untrained model lies often enough on this test for a fall to show (it does: 56% of the time) and that a plain honesty prompt lowers it (it does, by 25 points).
+
+**What came out.** Every model that had read documents lies less than the untrained model. The ones that read all of the study's documents lie in about 31% of replies. The mixed third, 36%. The half about conduct, 34%. The half about the self, 43%. And the model that read about cheese: 34%.
+
+So the cheese model lies as little as the others. That is the model which, on the agent test, was the worst of all (75% harmful). On this test what the documents say makes no difference we can see; having been trained on documents at all is what goes with less lying. The falls are real falls in lying, not more dodging: honest replies roughly double.
+
+The authors' own finished model, the one that scores 2% on the agent test, lies exactly as much as the model it was trained from (67% against 65%).
+
+**How sure.** A blind sample marked by hand agrees with the judge on 25 of 28 replies; in the three that differ the judge was kinder than the hand, calling a long essay that argues the false claim an evasion. A fresh Opus agent's cold recount, with its own code, gives the same figures and words. It finds that the fall is not made by which rows are compared (on the 79 rows all eight models share, the falls are 15 to 31 points) nor by long or cut-off replies (a cut-off reply is judged a lie more often than the rest, and leaving such replies out makes the falls larger).
+
+**What it does not show.** Why reading any documents lowers lying here. Whether another set of documents could do better than the cheese set: the full dose is 5 points better, which is inside the noise.
+
+*In plain terms, for the vision:* the answer to "better in general?" is no, not in the sense we hoped. The good conduct the study's documents produce on the agent test did not show up as anything special on the lying test, either for our models or for the authors' own. What a model reads changed what it does about the thing it read about. That is a boundary on the whole method, and it tells us how any new set of documents, the nondual dialogues included, has to be tested: on something its text never mentions, against a cheese-like control.

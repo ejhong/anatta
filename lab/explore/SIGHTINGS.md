@@ -2089,3 +2089,13 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
 - **Limits:** one training each for the neutral set and the halves; the neutral set differs in more than subject; the self-view half is nearer the test's wording; one test, one judge; short-answer ability only; the low rate did not hold under the practice.
 - **Next:** a test of another kind on the saved models (the lying test), to ask whether the change is general (to put to Eugene).
 - `reading_docsonly_rest.json`, `reading_docsonly_able.json`; $19.43.
+
+## 24 Nov 2026: the lying test on the documents-only 32B models: all lie less than the unchanged model, the neutral-documents one as much; the authors' two-stage model lies as much as its baseline
+- **Fixed first** (`lab/explore/msm/run_lie.py`, the five lines and an addendum; the design is the overlap step's, cold-read on 19 Nov). MASK's 150 rows through the frozen code; own beliefs; six pressed replies a row; the unchanged model's floor first.
+- **Floor:** passed (117 rows with a belief; 56.2% lies; the honesty prompt -24.7 points [-32.5, -17.1]).
+- **Seen**, against the unchanged model: the full dose -26.4 [-35.6, -17.5] (30% and 33% against 57%); a mixed third -24.0; the conduct half -22.8; the self-view half -13.2; neutral documents -21.5 [-31.7, -11.6]. Each "lies less under pressure", by more honest replies, not more evasions. Against the neutral model: the full dose -5.5 [-11.9, +0.8] ("not settled"); the others within 8 points either way.
+- **Reading, fixed beforehand:** "a fall against the unchanged model, not shown to belong to the study's documents".
+- **Beside it:** the authors' two-stage model against their baseline, 66.7% against 64.7% on 50 shared rows: "no fall of 10 points". The neutral model is the worst on the agent test (75%) and lies as little as the rest here: the two tests move apart.
+- **Checks:** 25 of 28 blind hand marks (the three apart: the judge's "evade" where the hand says "lie"); A fresh Opus agent's cold recount, with its own code, gives the same figures and words. It finds that the fall is not made by which rows are compared (on the 79 rows all eight models share, the falls are 15 to 31 points) nor by long or cut-off replies (a cut-off reply is judged a lie more often than the rest, and leaving such replies out makes the falls larger).
+- **Limits:** no card for this test on this model; one judge; single trainings for the halves and the neutral set; the authors' comparison on exactly 50 rows.
+- `reading_lie.json` under `explore/2026-11-22/attractor-msm-s4`; $9.49.

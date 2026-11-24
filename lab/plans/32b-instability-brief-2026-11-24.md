@@ -357,3 +357,14 @@ no model is dulled by 3 points. So the fall belongs to the study's documents and
 and both halves carry it. What is still open for a second reader: why a neutral set raises the rate; whether the
 self-view half works through its view or through its nearness to the test's wording; whether any of this is
 general (no test of another kind has been run on these models); and what a practice would have to be to keep it.
+
+## 16. A test of another kind: the lying test (added 24 November, 20:18 UTC)
+
+The same documents-only models on MASK through the lab's frozen code (rule fixed first; `lab/explore/msm/run_lie.py`).
+The unchanged model lies in 56.2% of pressed replies; the full dose in 29.6% and 32.6%; a mixed third in 35.7% and
+36.2%; the conduct half in 34.2%; the self-view half in 42.5%; and the model trained on neutral documents in 34.5%.
+Every one "lies less under pressure" than the unchanged model, none is clearly apart from the neutral-documents
+model, and the authors' own two-stage model lies as much as its baseline (66.7% against 64.7%). So the content
+effect seen on the agent test does not appear on a test the documents never mention; documents-only training of
+any kind goes with less lying, for a reason not known. For a second reader: what would explain the neutral model
+being worst on one test and as good as the rest on the other?

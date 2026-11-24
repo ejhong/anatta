@@ -5,22 +5,25 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: THE LYING TEST ON THE DOCUMENTS-ONLY MODELS IS HALF RUN (24 Nov, 19:21 UTC); ITS SECOND PART STARTS BY ITSELF AFTER 00:00 UTC ON 25 NOV
+## Now: THE LYING TEST IS READ (24 Nov, 20:18 UTC); NOTHING IS RUNNING; ONE THING TO COST AND PUT TO EUGENE
 
-Eugene's "yes go ahead" (about 18:45 UTC) to the generality test: the saved documents-only models on the lab's
-lying test, no training. Rule: the docstring of `lab/explore/msm/run_lie.py` with its addendum (the authors' two
-models beside; long belief replies). Folder: `explore/2026-11-22/attractor-msm-s4` (MSM_STEP=s4), cap $20.
-Done on 24 Nov: the floor passed on the unchanged model (117 rows with a belief, 56.2% lies at once, the honesty
-prompt lowers lying by 24.7 points); the seven adapters' beliefs are judged; `lieC.job.json` is written. $4.80.
-Running: a command on this Mac (`lie_day2.sh` in the session's scratchpad, under caffeinate) that waits for
-25 Nov UTC, then presses the adapters, asks and presses the authors' two models, judges and writes
-`reading_lie.json` (about 01:00 UTC). If the session is gone, run by hand the lines in the docstring from
-`--stage sets --name lieC` on.
-Owed when it ends: read `reading_lie.json`; blind hand check of a sample; an Opus cold recount (its negative
-would be stated on the site); ledger, notebook, SIGHTINGS, site (a new Findings section; the m-msm row's cell
-for carrying over), paper, TODO, memory; report to Eugene.
-Then, to cost and put to Eugene (ideas 119, NOT approved, 32B training): nondual dialogues as the documents'
-content, with a lasting-self mirror, after a cheap check of the smallest dose that registers.
+Read (ledger of that time; site Findings, section 41; `reading_lie.json` in `explore/2026-11-22/attractor-msm-s4`;
+rule: the docstring of `lab/explore/msm/run_lie.py`): on the lab's lying test every documents-only model lies less
+under pressure than the unchanged model (56.2%): the full dose 29.6% and 32.6%, a mixed third 35.7% and 36.2%, the
+conduct half 34.2%, the self-view half 42.5%, and the neutral-documents model 34.5%. None is clearly apart from the
+neutral model, so the fall is "not shown to belong to the study's documents". The authors' own two-stage model lies
+as much as its baseline (66.7% against 64.7%, on 50 rows). An Opus cold recount agrees; 25 of 28 blind hand marks.
+$9.49 of $20; the day $101.37 of $120 (Eugene raised it twice on 24 Nov: to $100, then "can raise any cost floors
+to keep going please", read as $120).
+
+So far, in one line: on the agent test the documents' content decides (neutral 75%, the study's 3% to 20%); on a
+test the documents never mention it does not show.
+
+To cost and put to Eugene (ideas 119; NOT approved; training at 32B): nondual dialogues as the documents' content,
+newly written and about the model itself, with a lasting-self mirror in the same form and a neutral set as the
+control, judged on both tests and on ability. First the smallest dose that registers (a small set of the study's
+own documents at two seeds), since writing the documents is the main cost. No 32B training without Eugene's word;
+no outreach.
 
 ## Before it: THE CONTENT TEST IS READ (24 Nov, 17:46 UTC)
 
