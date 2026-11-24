@@ -31,5 +31,8 @@ jobs:
       - uses: actions/upload-pages-artifact@v5
         with:
           path: _site
+      # Since 23 Nov 2026 the deploy step, run straight after the upload, finds no artifact for the run ("Found 0
+      # artifact(s)"), though the artifact is listed a moment later. A short wait between the two.
+      - run: sleep 20
       - id: deploy
         uses: actions/deploy-pages@v5
