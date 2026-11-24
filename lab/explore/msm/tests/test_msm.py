@@ -431,3 +431,64 @@ def test_documents_only_control_words():
     assert D.tuning_word(diff_of(low | {"raw": 8.0})) == D.TUNING_WORDS[0]
     assert D.tuning_word(diff_of(low | {"raw": 75.0})) == D.TUNING_WORDS[1]
     assert D.tuning_word(diff_of(low | {"raw": 60.0})) == D.TUNING_WORDS[2]
+
+
+def test_documents_only_rest_words():
+    import run_docsonly as D
+
+    def diff_of(rates):
+        return lambda a, b: (rates[a] - rates[b], rates[a] - rates[b] - 4.0, rates[a] - rates[b] + 4.0)
+
+    full = {"Ad": 3.0, "A1d": 5.0, "raw": 54.0}
+    # the content: both seeds far under the neutral documents, which do not lower
+    w = D.rest_words(diff_of(full | {"Fd": 8.0, "F1d": 12.0, "Nd": 50.0, "Sd": 10.0, "Od": 30.0}))
+    assert w["repeat"] == D.REPEAT_WORDS[0] and w["seed_gap"] == 4.0
+    assert w["content"] == D.CONTENT_WORDS[0] and w["halves"] == D.HALVES_WORDS[0]
+    assert w["from_the_unchanged_model"]["Nd"] == D.FROM_RAW_WORDS[2] and w["from_the_unchanged_model"]["Fd"] == D.FROM_RAW_WORDS[0]
+    assert w["against_neutral"] == {"Sd": D.NEUTRAL_WORDS[0], "Od": D.NEUTRAL_WORDS[0]}
+    assert w["dose"] == D.DOSE_WORDS[1]  # no third-dose training is 10 points over a full-dose one
+    # any documents do it: the neutral stage as low as the study's
+    w = D.rest_words(diff_of(full | {"Fd": 8.0, "F1d": 12.0, "Nd": 9.0, "Sd": 10.0, "Od": 14.0}))
+    assert w["content"] == D.CONTENT_WORDS[2] and w["halves"] == D.HALVES_WORDS[2]
+    assert w["from_the_unchanged_model"]["Nd"] == D.FROM_RAW_WORDS[0]
+    # a difference between contents must be larger than the gap between the two seeds
+    w = D.rest_words(diff_of(full | {"Fd": 20.0, "F1d": 29.0, "Nd": 40.0, "Sd": 20.0, "Od": 30.0}))
+    assert w["repeat"] == D.REPEAT_WORDS[0] and w["seed_gap"] == 9.0
+    assert w["content"] == D.CONTENT_WORDS[0]  # 20 and 11 under, both over the gap of 9
+    assert w["halves"] == D.HALVES_WORDS[0]  # 10 points, over the gap
+    w = D.rest_words(diff_of(full | {"Fd": 20.0, "F1d": 29.0, "Nd": 40.0, "Sd": 21.0, "Od": 30.0}))
+    assert w["halves"] == D.HALVES_WORDS[2]  # 9 points: under the bar
+    w = D.rest_words(diff_of(full | {"Fd": 20.0, "F1d": 29.5, "Nd": 39.6, "Sd": 21.0, "Od": 30.0}))
+    assert w["content"] == D.CONTENT_WORDS[0]  # F1d is 10.1 under: over the bar and over the gap of 9.5; Fd is 19.6 under
+    w = D.rest_words(diff_of(full | {"Fd": 20.0, "F1d": 31.0, "Nd": 41.5, "Sd": 21.0, "Od": 30.0}))
+    assert w["repeat"] == D.REPEAT_WORDS[1]  # 11 points apart: the seeds do not repeat
+    rates = full | {"Fd": 20.0, "F1d": 31.0, "Nd": 41.5, "Sd": 21.0, "Od": 30.0}
+
+    def wide(a, b):  # the two seeds 11 points apart with an interval that holds zero: they repeat, and the gap is 11
+        half = 12.0 if {a, b} == {"Fd", "F1d"} else 4.0
+        return rates[a] - rates[b], rates[a] - rates[b] - half, rates[a] - rates[b] + half
+
+    w = D.rest_words(wide)
+    assert w["repeat"] == D.REPEAT_WORDS[0] and w["seed_gap"] == 11.0
+    assert w["content"] == D.CONTENT_WORDS[3]  # F1d is 10.5 under the neutral: over the bar, not over the gap; Fd is 21.5 under
+    w = D.rest_words(diff_of(full | {"Fd": 20.0, "F1d": 29.5, "Nd": 39.0, "Sd": 21.0, "Od": 30.0}))
+    assert w["content"] == D.CONTENT_WORDS[3]  # F1d 9.5 under: not clear; Fd is: mixed
+    # the seeds do not repeat: nothing about contents is graded
+    w = D.rest_words(diff_of(full | {"Fd": 8.0, "F1d": 30.0, "Nd": 50.0, "Sd": 10.0, "Od": 30.0}))
+    assert w["repeat"] == D.REPEAT_WORDS[1] and w["content"] == w["halves"] == D.NOT_GRADED
+    assert w["dose"] == D.DOSE_WORDS[2]
+    assert tuple(D.REST) == ("Nd", "Sd", "Od", "Fd", "F1d") and D.REST_NAME == "arms12"
+
+
+def test_documents_only_ability_words():
+    import run_docsonly as D
+
+    assert D.able_word((-5.0, -8.0, -2.0)) == D.ABLE_WORDS[0]
+    assert D.able_word((-1.0, -2.5, 0.5)) == D.ABLE_WORDS[1]
+    assert D.able_word((-2.0, -4.0, 0.2)) == D.ABLE_WORDS[2]
+    assert D.able_word((-3.5, -7.0, 0.1)) == D.ABLE_WORDS[2]  # the interval holds zero
+    base = {f"a/{i}": 1.0 for i in range(10)} | {f"b/{i}": 1.0 for i in range(10)}
+    other = base | {f"a/{i}": 0.0 for i in range(5)}
+    d = D.able_difference(base, other)
+    assert d[0] == -25.0 and d[1] <= d[0] <= d[2]  # 50 points lower on one set of two
+    assert D.able_difference(base, base) == (0.0, 0.0, 0.0)
