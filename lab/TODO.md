@@ -30,7 +30,16 @@ $60; step 2 $391.46 of $415; 24 Nov's day $39.58 of $75.
   is decided about ending the 32B training, and nothing runs. The brief to hand on:
   `lab/plans/32b-instability-brief-2026-11-24.md` (ideas 114). The four later pieces are read by the driver
   (ledger, 03:53 UTC): that item is no longer owed.
-- **When Gemini's ideas come back:** grade each against the record (true, partly, wrong, cannot tell), as for any
+- **Gemini's ideas came back (24 Nov, 04:41 UTC; ledger of that time; filed in
+  `lab/ledger/checks/2026-11-24-instability-gemini-read.md`).** Asked of Eugene, not yet answered: (a) two checks
+  with no training, under $5 in all and inside every present limit: the saved adapters compared as products
+  (B times A; norms and inner products from 64-by-64 matrices; CPU), with a count of chat and instruction rows in
+  each of the 606 steps; and the loss of about 300 of the study's documents under A's documents adapter and under
+  A, X00, X01 and A1 (GPU, forward passes). (b) only after them, and registered first: two runs of the practice
+  from A's documents adapter with ordinary mixed batches of 32 at the stated learning rate, about $38 with tests;
+  needs the step's limit raised to about $440 and a day's cap of $60; stop the 32B training for good if either
+  run ends above 20%.
+- **(Done) When Gemini's ideas come back:** grade each against the record (true, partly, wrong, cannot tell), as for any
   outside reader; cost any check it proposes; one recommendation to Eugene. The cheapest checks already listed:
   compare the saved weights (cents), the documents' loss under each model (about $3).
 - **What the cold reader found and the record now says:** the logged loss is a weak check (it follows the order of
