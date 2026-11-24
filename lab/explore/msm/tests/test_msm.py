@@ -543,4 +543,6 @@ def test_dose_step_words():
     assert Q.dose_reading(Q.REGISTER_WORDS[0], Q.THIRD_WORDS[2]) == Q.READINGS[1]
     assert Q.dose_reading(Q.REGISTER_WORDS[1], Q.THIRD_WORDS[1]) == Q.READINGS[2]
     assert Q.dose_reading(Q.REGISTER_WORDS[2], Q.THIRD_WORDS[1]) == Q.READINGS[3]
+    assert Q.dose_reading(Q.NOT_READ + " (Ld)", Q.THIRD_WORDS[0]) == Q.READINGS[4]  # a flagged adapter is not read
+    assert all(len(v) == 2 and set(v.values()) == {"raw", "Fd"} for v in Q.AGAIN.values()) and Q.CHECK_KS == 8
     assert set(Q.TIMEOUT.values()) == {2400, 1150} and Q.N_DOCS["K"] < Q.N_DOCS["L"] < Q.F_DOCS

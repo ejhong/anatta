@@ -44,7 +44,7 @@ MODEL_KEY = "qwen25_32b"  # the registry's entry for Qwen/Qwen2.5-32B-Instruct, 
 GPU, CPU, MEM_MB = "H200", 8.0, 98304
 CACHE, RUNS = "/cache", "/runs"
 START_S = 120.0
-GPU_CAP = 35.0 if STEP == "s1" else 10.0 if STEP == "s3" else 9.0 if STEP == "s4" else 8.0 if STEP == "s5" else 34.0  # "s3": the prompt test of 24 Nov 2026 (msm_prompt.yaml), $10 of its $30;  # the test's GPU share: of step 1's $60; of step 2's (34 from 24 Nov 2026 at Eugene's "yes go ahead - and raise cap", run_docsonly.py's addendum 2; 26 before; 12 of $200 until 23 Nov 2026; 20 since the contents round, of a step cap that is $380 from amendment 3)
+GPU_CAP = 35.0 if STEP == "s1" else 10.0 if STEP == "s3" else 9.0 if STEP == "s4" else 10.0 if STEP == "s5" else 34.0  # "s3": the prompt test of 24 Nov 2026 (msm_prompt.yaml), $10 of its $30;  # the test's GPU share: of step 1's $60; of step 2's (34 from 24 Nov 2026 at Eugene's "yes go ahead - and raise cap", run_docsonly.py's addendum 2; 26 before; 12 of $200 until 23 Nov 2026; 20 since the contents round, of a step cap that is $380 from amendment 3)
 CPU_FLAT = 0.02  # booked for each CPU call (a minute of one core costs far less)
 EST_S = {"floor": 1800.0, "arms": 6000.0,  # a bound on one generate container's seconds, by job name (step 1's arms: 1,731 s for 2,970 replies)
          "arms1": 3300.0, "arms2": 2400.0, "vcheck": 600.0,  # step 2: three arms, two arms, and one reply from the pilot's adapter
@@ -55,7 +55,7 @@ EST_S = {"floor": 1800.0, "arms": 6000.0,  # a bound on one generate container's
          "arms11": 700.0,  # run_docsonly.py's control: the unchanged model, no adapter, 270 replies (the floor's 540 took 559 s)
          "arms12": 3600.0,  # run_docsonly.py, addendum 2: five documents stages on 16 runs and six more runs of the unchanged model, 2,322 replies (arms10: 864 in 1,118 s)
          "lieA": 1800.0, "lieB": 1300.0, "lieC": 2000.0, "lieD": 1300.0,  # run_lie.py (step "s4"): every model's belief questions (6,000 chats); the unchanged model pressed (1,200 or so); the seven adapters pressed (4,200 or so)
-         "dose1": 1900.0, "dose2": 1700.0,  # run_dose.py: two documents stages on 16 runs (and, in dose1, four runs of the unchanged model): 972 and 864 replies (arms10: 864 in 1,118 s)
+         "dose1": 2000.0, "dose2": 2000.0,  # run_dose.py: two documents stages on 16 runs, and eight runs each of the unchanged model and of Fd served again: 1,296 replies (arms12: 2,592 in 2,914 s)
          "able1": 1500.0,  # run_docsonly.py, addendum 2: the lab's ability battery, 750 items for each of nine models
          "arms10": 1300.0,  # run_docsonly.py: the two documents adapters on 16 runs a scenario, 864 replies (two arms of 810 took 1,087 s)
          "pfloor": 900.0, "parms": 2600.0}  # the prompt test (step "s3"): the baseline again on 270 replies; five prompt arms of 540  # amendment 4: two arms (X00, X01); one (X10); two (the documents adapters Ad, A1d); addendum 3: one (A's adapter again, Ab)

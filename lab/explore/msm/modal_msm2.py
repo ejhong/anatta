@@ -300,6 +300,8 @@ def _write(p: Path, obj) -> None:
 def main(stage: str, name: str = ""):
     out = step_dir()  # the guard is made once its log is known: a guard refuses a cap above the day's
     if stage == "fetch":
+        if STEP == "s5":
+            raise SystemExit("the dose step fetches nothing: its data are step 2's")
         g = guard()
         if (out / "data.json").exists():
             raise SystemExit("data.json is on disk; nothing to do")
