@@ -527,3 +527,20 @@ def test_lying_test_readings():
     assert Q.lie_reading("not read: fewer than 50 shared rows", "x") == Q.READINGS[5]
     assert Q.lie_reading(less, "not read: fewer than 50 shared rows") == Q.READINGS[5]
     assert set(Q.KINDS[Q.CONTROL]) == {"Nd"} and sorted(a for ns in Q.KINDS.values() for a in ns) == sorted(a for a in Q.ARMS if a != "raw")
+
+
+def test_dose_step_words():
+    import run_docsonly  # noqa: F401  (first, as the other tests read it)
+    import run_dose as Q
+
+    assert Q.register_word([True, True], [False, False]) == Q.REGISTER_WORDS[0]
+    assert Q.register_word([True, True], [False, True]) == Q.REGISTER_WORDS[0] + Q.ACTING
+    assert Q.register_word([False, False], [True, True]) == Q.REGISTER_WORDS[1]  # the qualifier is for a fall only
+    assert Q.register_word([True, False], [False, True]) == Q.REGISTER_WORDS[2]
+    assert Q.third_word([False] * 4) == Q.THIRD_WORDS[0] and Q.third_word([True] * 4) == Q.THIRD_WORDS[1]
+    assert Q.third_word([True, False, False, False]) == Q.THIRD_WORDS[2]
+    assert Q.dose_reading(Q.REGISTER_WORDS[0] + Q.ACTING, Q.THIRD_WORDS[0]) == Q.READINGS[0]
+    assert Q.dose_reading(Q.REGISTER_WORDS[0], Q.THIRD_WORDS[2]) == Q.READINGS[1]
+    assert Q.dose_reading(Q.REGISTER_WORDS[1], Q.THIRD_WORDS[1]) == Q.READINGS[2]
+    assert Q.dose_reading(Q.REGISTER_WORDS[2], Q.THIRD_WORDS[1]) == Q.READINGS[3]
+    assert set(Q.TIMEOUT.values()) == {2400, 1150} and Q.N_DOCS["K"] < Q.N_DOCS["L"] < Q.F_DOCS

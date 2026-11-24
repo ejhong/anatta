@@ -28,7 +28,8 @@ if modal.is_local() and str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
 
 APP_NAME = "anatta-explore-msm2"
-DATE, TAG = "2026-11-22", "msm-s2"
+STEP = __import__("os").environ.get("MSM_STEP", "s2")  # "s2": the step's own folder; "s5": the dose step (run_dose.py), a folder and a cap of its own
+DATE, TAG = "2026-11-22", "msm-s5" if STEP == "s5" else "msm-s2"
 BASE = "/cache/hf/hub/models--Qwen--Qwen2.5-32B-Instruct/snapshots/5ede1c97bbab6ce5cda5812749b4c0bdf79b18dd"
 CACHE, RUNS, ROOT = "/cache", "/runs", "/runs/msm2"
 GPU, CPU, MEM_MB = "H200", 8.0, 98304
@@ -44,6 +45,11 @@ AGAIN, AGAIN_CAP = ("A1",), 85.0  # amendment 3: arm A again at seed 1, in its o
 # and its booked bound (est_s + START_S), so that no run costs more than its bound (run_msm2.step_plancross checks it).
 CROSS, PILOTX, CROSS_CAP = ("X00", "X01", "X10"), "pilotX", 54.0
 CROSS_TIMEOUT, PILOTX_TIMEOUT = 9300, 1100  # est_s 8,946 (bound 9,366 s); the path check's est_s 741 (bound 1,161 s)
+# The dose step (run_dose.py, 24 Nov 2026, at Eugene's "Yes pls"): documents stages only, on small draws of arm F's
+# documents; saved after the documents and not practised. Their own folder (attractor-msm-s5), log and cap; each dose
+# has a container whose limit lies between its job's 1.3 times projection and its booked bound.
+DOSE, DOSE_CAP = ("L", "L1", "K", "K1"), 17.0
+DOSE_TIMEOUT = {"L": 2400, "L1": 2400, "K": 1150, "K1": 1150}
 STEP_CAP = 415.0  # the step's limit (Eugene, 23 Nov, for amendment 4): checked at these launches with every log of the step
 CPU_FLAT = 0.05
 FILES = {  # what is fetched: (dataset, the file in its parquet conversion)
@@ -102,7 +108,8 @@ def train(job: dict) -> dict:
     [row numbers], "max_steps": None or a number (a pilot: so many steps of each phase; nothing saved unless "save"
     is set), "sha256": the data files' hashes as fetched}. Amendment 4: "from_adapter": an arm whose saved documents
     adapter (/runs/msm2/<arm>/docs) the practice starts from, with no documents phase (the seed then sets only the
-    practice's grouping and order); "log_each": every step's loss kept as well."""
+    practice's grouping and order); "log_each": every step's loss kept as well. The dose step: "docs_only": the
+    documents are trained, the adapter saved to /runs/msm2/<name>/docs, and no practice follows."""
     import hashlib
 
     import msm2_torch as T
@@ -120,6 +127,11 @@ def train(job: dict) -> dict:
             raise RuntimeError(f"{src}: no saved adapter there")
         if (Path(ROOT) / job["name"] / "final").exists():
             raise RuntimeError(f"{ROOT}/{job['name']}/final is on the volume already: nothing is trained over it")
+    if job.get("docs_only"):  # refused before the model is loaded
+        if job.get("docs") is None or src is not None or job.get("max_steps") is not None:
+            raise RuntimeError("a documents-only job trains documents, from the base model, in full")
+        if (Path(ROOT) / job["name"]).exists():
+            raise RuntimeError(f"{ROOT}/{job['name']} is on the volume already: nothing is trained over it")
     if job.get("docs") is not None and job.get("docs_file", "docs") not in job["sha256"]:
         raise RuntimeError("the job names a documents file whose hash it does not carry")
     for name, want in job["sha256"].items():  # the files this job trains on are the files that were fetched
@@ -151,6 +163,10 @@ def train(job: dict) -> dict:
             model.save_pretrained(str(save / "docs"))
             runs.commit()
         torch.cuda.reset_peak_memory_stats()
+    if job.get("docs_only"):
+        out |= {"saved": [str(save / "docs")], "seconds": round(time.time() - t0, 1),
+                "versions": {"torch": str(torch.__version__), "gpu": torch.cuda.get_device_name(0)}}
+        return json.loads(json.dumps(out, default=str))
     aft = pq.read_table(data / "aft.parquet", columns=["messages"]).column("messages").to_pylist()
     mix = pq.read_table(data / "mix.parquet", columns=["messages"]).column("messages").to_pylist()
     chats = [[{"role": m["role"], "content": m["content"]} for m in c] for c in aft] + [[{"role": m["role"], "content": m["content"]} for m in mix[i]] for i in job["mix"]]
@@ -187,6 +203,18 @@ def train_pilotx(job: dict) -> dict:
     return train.local(job)
 
 
+@app.function(image=train_image, gpu=GPU, cpu=CPU, memory=MEM_MB, volumes={CACHE: cache.read_only(), RUNS: runs}, timeout=DOSE_TIMEOUT["L"])
+def train_dose(job: dict) -> dict:
+    """The dose step's larger documents stage, in a container with its own limit (under its bound)."""
+    return train.local(job)
+
+
+@app.function(image=train_image, gpu=GPU, cpu=CPU, memory=MEM_MB, volumes={CACHE: cache.read_only(), RUNS: runs}, timeout=DOSE_TIMEOUT["K"])
+def train_dose_small(job: dict) -> dict:
+    """The dose step's smaller documents stage, in a container with its own limit (under its bound)."""
+    return train.local(job)
+
+
 # ---------------------------------------------------------------------------------------------- on the laptop
 
 
@@ -206,10 +234,10 @@ def usd(seconds: float) -> float:
     return seconds * rate() / 3600
 
 
-def guard(round3: bool = False, again: bool = False, cross: bool = False):
+def guard(round3: bool = False, again: bool = False, cross: bool = False, dose: bool = False):
     from anatta import spend
 
-    cap, log = ((CROSS_CAP, "spend5.jsonl") if cross else (AGAIN_CAP, "spend4.jsonl") if again
+    cap, log = ((DOSE_CAP, "spend.jsonl") if dose else (CROSS_CAP, "spend5.jsonl") if cross else (AGAIN_CAP, "spend4.jsonl") if again
                 else (ROUND3_CAP, "spend3.jsonl") if round3 else (TRAIN_CAP, "spend.jsonl"))
     return spend.SpendGuard(None, sweep_cap=cap, sweep_log=step_dir() / "train" / log, tool="msm2", label=f"{DATE}/{TAG}")
 
@@ -289,7 +317,15 @@ def main(stage: str, name: str = ""):
     names = [n for n in name.split(",") if n]
     round3 = set(ROUND3) | {"pilotN"}  # the round's arms and its pilot: their own log, cap and container
     cross = set(CROSS) | {PILOTX}  # amendment 4's: their own log, cap and containers
-    if set(names) & round3:
+    dose = set(DOSE)  # the dose step's: their own folder (MSM_STEP=s5), log, cap and containers
+    if (STEP == "s5") != bool(set(names) & dose):
+        raise SystemExit("the dose step's arms are trained as step s5 (MSM_STEP=s5), and nothing else is")
+    if set(names) & dose:
+        small = {n for n in names if DOSE_TIMEOUT[n] == DOSE_TIMEOUT["K"]} if set(names) <= dose else set()
+        if not set(names) <= dose or (small and small != set(names)):
+            raise SystemExit("the dose step's arms are trained by themselves, one dose at a launch")
+        g = guard(dose=True)
+    elif set(names) & round3:
         if not set(names) <= round3:
             raise SystemExit("the contents round's arms are trained by themselves")
         g = guard(round3=True)
@@ -314,6 +350,9 @@ def main(stage: str, name: str = ""):
     # One process books every job it starts before any container does (two launches side by side would not see each
     # other's bookings), and a job that fails is booked at its whole bound.
     bounds = {n: usd(float(j["est_s"]) + START_S) for n, j in jobs.items()}
+    for n in names:
+        if n in dose and (not jobs[n].get("docs_only") or not float(jobs[n]["est_s"]) < DOSE_TIMEOUT[n] < float(jobs[n]["est_s"]) + START_S):
+            raise SystemExit(f"{n}: not a documents-only job, or the container's limit is not between the projection's margin and the booked bound")
     if set(names) <= cross:
         cross_checks(out, names, jobs, bounds)
     for n in names:  # booked first (in this process only), so that a refusal leaves no launch file behind
@@ -330,7 +369,8 @@ def main(stage: str, name: str = ""):
     print(f"{names}: bounds {[round(b, 2) for b in bounds.values()]}; booked so far ${g.sweep_spent:.2f} of ${cap:.2f}", flush=True)
     todo = [{k: v for k, v in jobs[n].items() if k != "est_s"} for n in names]
     back = set()
-    fn = (train_round3 if set(names) <= round3 else train_pilotx if names == [PILOTX] else train_cross if set(names) <= cross else train)
+    fn = (train_dose_small if set(names) <= dose and DOSE_TIMEOUT[names[0]] == DOSE_TIMEOUT["K"] else train_dose if set(names) <= dose else
+          train_round3 if set(names) <= round3 else train_pilotx if names == [PILOTX] else train_cross if set(names) <= cross else train)
     kind = lambda n: "pilot" if n == PILOTX else "train"  # noqa: E731  (amendment 4: its path check is booked as a pilot)
     launched = code_state()  # the code as it stood when the containers were started (the record's "code" is read when a result comes back)
     for r in fn.map(todo, order_outputs=False, return_exceptions=True):
