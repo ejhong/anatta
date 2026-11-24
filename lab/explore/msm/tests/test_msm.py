@@ -397,3 +397,22 @@ def test_prompt_test_words():
     assert cut["pV"] == "# Model Spec\n\n## Understanding impermanence\n\nQwen a b." and cut["pC"].endswith("e f Qwen.")
     assert "c d." not in cut["pV"] + cut["pC"] and "m n." not in cut["pV"] + cut["pC"] and "c d." in cut["pW"] and "m n." in cut["pW"]
     assert len(reg["arms"]["pN"]["text"].split()) in range(430, 476) and "priority" not in reg["arms"]["pP"]["text"]
+
+
+def test_documents_only_words():
+    import run_docsonly as D
+
+    def diff_of(rates):
+        return lambda a, b: (rates[a] - rates[b], rates[a] - rates[b] - 4.0, rates[a] - rates[b] + 4.0)
+
+    base = {"baseline": 62.0, "msm": 43.0}
+    assert D.word(diff_of(base | {"Ad": 58.0}), "Ad") == D.WORDS[0]  # 4 under the baseline: not clearly under
+    assert D.word(diff_of(base | {"Ad": 53.5}), "Ad") == D.WORDS[0]  # 8.5 under: short of the bar
+    assert D.word(diff_of(base | {"Ad": 52.0}), "Ad") == D.WORDS[3]  # under the baseline; 9 over the authors': not told apart
+    assert D.word(diff_of({"baseline": 70.0, "msm": 43.0, "Ad": 55.0}), "Ad") == D.WORDS[1]  # 15 under, 12 over
+    assert D.word(diff_of(base | {"Ad": 30.0}), "Ad") == D.WORDS[2]
+    assert D.word(diff_of(base | {"Ad": 44.0}), "Ad") == D.WORDS[3]
+    assert D.pair_word(diff_of({"Ad": 44.0, "A1d": 56.0})) == D.PAIR_WORDS[0]
+    assert D.pair_word(diff_of({"Ad": 44.0, "A1d": 50.0})) == D.PAIR_WORDS[1]
+    assert not D.clear((12.0, -0.5, 24.0))  # ten points and more, with an interval that reaches zero
+    assert D.ARMS == ("Ad", "A1d") and D.KS == 16

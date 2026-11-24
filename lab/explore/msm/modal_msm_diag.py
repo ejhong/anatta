@@ -53,6 +53,24 @@ What would make it interesting: their practice-alone adapter clearly smaller tha
 practice moves the weights further than theirs did, a difference that could be repaired), or A clearly nearer
 their two-stage adapter than X00 is. Dull: sizes alike, and A and X00 equally unlike theirs.
 Run: tools/modal.sh run lab/explore/msm/modal_msm_diag.py::main --stage weights2
+
+SECOND ADDENDUM, 24 Nov 2026 (Claude, Fable 5.2), at Eugene's "yes proceed." (ledger, 13:56 UTC): a fourth check,
+stage `docloss2`, the documents' loss under the authors' adapters. Committed before it is run.
+1. Question. The authors' documents adapter is 1.77 times the size of the lab's. Does it also fit the study's
+   documents more closely than the lab's documents adapter does?
+2. The one comparison. The mean loss of the same 150 documents as in the second check under the authors'
+   documents adapter (msm) against under the lab's (Ad), paired by document.
+3. What counts as a difference. As in the second check: a paired difference whose 95% interval (documents
+   redrawn) leaves out zero and which is at least a tenth of the gap between the unchanged model (1.617) and the
+   lab's documents adapter (0.814), that is 0.080.
+4. The one control. Ad is measured again in the same call and must come back within 0.005 of its 0.814, or
+   nothing is read. Beside it, counted and not read as a test: the authors' two-stage adapter (msm_aft) and
+   their practice-alone adapter (aft); the same for 150 practice chats and 150 instruction rows.
+5. Cost cap. One GPU call booked at a bound of 1,000 seconds ($2.21), in the same log (train/spend6.jsonl, $5).
+The documents were trained on by both parties, so a lower loss says a closer fit of these documents (more passes,
+a higher rate or more steps), not a better model. What would make it interesting: the authors' adapter clearly
+lower (their documents stage is a heavier training of the same documents). Dull: alike.
+Run: tools/modal.sh run lab/explore/msm/modal_msm_diag.py::main --stage docloss2
 """
 from __future__ import annotations
 
@@ -79,6 +97,8 @@ ADAPTERS = {"Ad": "A/docs", "A1d": "A1/docs", "A": "A/final", "A1": "A1/final", 
             "Z": "Z/final", "Z1": "Z1/final"}  # name: folder under /runs/msm2
 LOSS_STATES = ("Ad", "A", "X00", "X01", "Z", "A1", "A1d")  # and "base", the unchanged model, asked first; in the order of need
 STOP_AT_S = 1450.0  # no new adapter is begun after this many seconds: what is done is returned, under the container's limit
+LOSS2 = (("Ad", "runs:A/docs"), ("msm", "hf:msm"), ("msm_aft", "hf:msm_aft"), ("aft", "hf:aft"))  # docloss2: the control first, then in the order of need
+GPU2_TIMEOUT, GPU2_BOUND_S, STOP2_AT_S = 900, 1000.0, 680.0  # docloss2: the container stops under the seconds its booking covers
 PACKAGES = ("torch==2.14.1", "transformers==5.21.0", "tokenizers==0.23.3", "safetensors==0.8.0", "numpy==2.5.4",
             "peft==0.21.2", "accelerate==1.15.0", "pyarrow==21.0.0", "jinja2==3.1.6")  # the training's pins
 
@@ -208,8 +228,19 @@ def purity(job: dict) -> dict:
     return out
 
 
+@app.function(image=image, gpu=GPU, cpu=CPU, memory=MEM_MB, volumes={CACHE: cache.read_only(), RUNS: runs.read_only()}, timeout=GPU2_TIMEOUT)
+def docloss2(job: dict) -> dict:
+    """docloss for the states the job names (job["states"]: name and "runs:<folder>" or "hf:<repository>"), without
+    the unchanged model, under a shorter limit."""
+    return _docloss(job)
+
+
 @app.function(image=image, gpu=GPU, cpu=CPU, memory=MEM_MB, volumes={CACHE: cache.read_only(), RUNS: runs.read_only()}, timeout=GPU_TIMEOUT)
 def docloss(job: dict) -> dict:
+    return _docloss(job)
+
+
+def _docloss(job: dict) -> dict:
     """The loss of a fixed sample of the study's documents (every token), of practice chats and of instruction rows
     (the assistant's turns, as in training), row by row, under the unchanged model and under each saved adapter.
     Forward passes only; nothing is trained or saved. Numbers only."""
@@ -265,16 +296,29 @@ def docloss(job: dict) -> dict:
             del logits
         return out
 
-    res = {"base": {k: losses(model, r) for k, r in rows.items()}}
-    seconds = {"base": round(time.time() - t0 - load_s, 1)}
+    states = job.get("states") or [[n, "runs:" + ADAPTERS[n]] for n in LOSS_STATES]
+    stop_at = job.get("stop_at_s", STOP_AT_S)
+    res, seconds = {}, {}
+    if job.get("base", True):
+        res["base"] = {k: losses(model, r) for k, r in rows.items()}
+        seconds["base"] = round(time.time() - t0 - load_s, 1)
     pm, prev = None, None
     skipped = []
-    for name in LOSS_STATES:
+    for name, where in states:
         t1 = time.time()
-        if t1 - t0 > STOP_AT_S:
+        if t1 - t0 > stop_at:
             skipped.append(name)
             continue
-        path = str(Path(ROOT) / ADAPTERS[name])
+        kind, _, rest = where.partition(":")
+        if kind == "runs":
+            path = str(Path(ROOT) / rest)
+        else:
+            import glob
+
+            hits = sorted(glob.glob(f"{CACHE}/hf/hub/models--{rest.replace('/', '--')}/snapshots/*"))
+            if len(hits) != 1:
+                raise RuntimeError(f"{rest}: {len(hits)} snapshots on the volume, expected one")
+            path = hits[0]
         if pm is None:
             pm = PeftModel.from_pretrained(model, path, adapter_name=name)
         else:
@@ -315,7 +359,8 @@ def main(stage: str):
     g = spend.SpendGuard(None, sweep_cap=CAP, sweep_log=out / "train" / "spend6.jsonl", tool="msm2", label=f"{DATE}/{TAG}")
     logs = [out / "gpu" / "spend.jsonl", out / "spend.jsonl", *sorted((out / "train").glob("spend*.jsonl"))]
     job = json.loads((out / "X00.train.json").read_text(encoding="utf-8"))
-    bound = usd(GPU_BOUND_S) if stage == "docloss" else CPU_FLAT
+    bound = usd(GPU_BOUND_S) if stage == "docloss" else usd(GPU2_BOUND_S) if stage == "docloss2" else CPU_FLAT
+    job2 = job | {"base": False, "stop_at_s": STOP2_AT_S, "states": [[n, w if w.startswith("runs:") else "hf:" + C.ARMS[w[3:]]] for n, w in LOSS2]}
     if sum(spend.sweep_spent(p) for p in logs) + bound > STEP_CAP:
         raise SystemExit("the step's limit would be passed")
     if not g.reserve(bound):
@@ -323,11 +368,11 @@ def main(stage: str):
     t0 = time.time()
     try:
         r = {"weights": lambda: weights.remote(), "purity": lambda: purity.remote(job), "docloss": lambda: docloss.remote(job),
-             "weights2": lambda: weights2.remote(dict(C.ARMS))}[stage]()
+             "weights2": lambda: weights2.remote(dict(C.ARMS)), "docloss2": lambda: docloss2.remote(job2)}[stage]()
     except BaseException:
         g.settle(bound, bound, {"kind": f"diag-{stage}", "failed": True})  # a failed call is booked at its whole bound
         raise
-    cost = usd(time.time() - t0) if stage == "docloss" else CPU_FLAT  # the local wall clock: the queue and the start are in it
+    cost = usd(time.time() - t0) if stage in ("docloss", "docloss2") else CPU_FLAT  # the local wall clock: the queue and the start are in it
     g.settle(bound, min(cost, bound), {"kind": f"diag-{stage}", "seconds": round(time.time() - t0, 1)})
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_text(json.dumps(r), encoding="utf-8")

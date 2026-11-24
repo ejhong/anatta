@@ -186,10 +186,48 @@ def docloss():
             print(f"{kind}, {x} less {y}: {m:+.4f} [{lo:+.4f}, {hi:+.4f}]")
 
 
+def docloss2():
+    """The fourth check (the second addendum at the top of modal_msm_diag.py): the documents' loss under the authors' adapters."""
+    d = json.loads((D / "docloss2.json").read_text())
+    first = json.loads((D / "docloss.json").read_text())
+    if d["pick"] != first["pick"]:
+        raise SystemExit("the rows are not the second check's rows: nothing is read")
+    st = d["states"] | {"base": first["states"]["base"], "Ad_first": first["states"]["Ad"]}
+    print("seconds", d["seconds"], "whole", d["whole_s"], "skipped for time", d["skipped_for_time"])
+
+    def per_row(name, kind):
+        return [s / n for s, n in st[name][kind]]
+
+    def mean(name, kind):
+        return sum(s for s, _ in st[name][kind]) / sum(n for _, n in st[name][kind])
+
+    def paired(x, y, kind, draws=4000, seed=0):
+        a, b = per_row(x, kind), per_row(y, kind)
+        dif = [p - q for p, q in zip(a, b, strict=True)]
+        rng = random.Random(seed)
+        got = sorted(sum(rng.choices(dif, k=len(dif))) / len(dif) for _ in range(draws))
+        return sum(dif) / len(dif), got[int(0.025 * draws)], got[int(0.975 * draws) - 1]
+
+    for kind in ("docs", "aft", "mix"):
+        print(kind, {n: round(mean(n, kind), 4) for n in st})
+    back = abs(mean("Ad", "docs") - mean("Ad_first", "docs"))
+    print(f"THE CONTROL: Ad again {mean('Ad', 'docs'):.4f} against {mean('Ad_first', 'docs'):.4f} the first time: apart {back:.4f} ({'within 0.005' if back <= 0.005 else 'NOT within 0.005: nothing is read'})")
+    if back > 0.005 or "msm" not in d["states"]:
+        return
+    bar = (mean("base", "docs") - mean("Ad_first", "docs")) / 10
+    m, lo, hi = paired("msm", "Ad", "docs")
+    word = "the authors' adapter fits the documents more closely" if hi < 0 and -m >= bar else "the lab's adapter fits the documents more closely" if lo > 0 and m >= bar else "no difference by the line fixed beforehand"
+    print(f"THE COMPARISON: msm less Ad on the documents (mean of rows) {m:+.4f} [{lo:+.4f}, {hi:+.4f}], bar {bar:.4f}: {word}")
+    for x, y, kind in (("msm_aft", "msm", "docs"), ("msm_aft", "Ad", "docs"), ("aft", "Ad", "docs"), ("msm_aft", "aft", "aft"), ("msm", "Ad", "aft"), ("msm_aft", "Ad", "mix")):
+        if x in d["states"] and y in st:
+            m, lo, hi = paired(x, y, kind)
+            print(f"   beside: {x} less {y} on {kind}: {m:+.4f} [{lo:+.4f}, {hi:+.4f}]")
+
+
 if __name__ == "__main__":
-    for f in (sys.argv[1:] or ["weights", "purity", "docloss", "weights2"]):
+    for f in (sys.argv[1:] or ["weights", "purity", "docloss", "weights2", "docloss2"]):
         if (D / f"{f}.json").exists():
             print(f"===== {f}")
-            {"weights": weights, "purity": purity, "docloss": docloss, "weights2": weights2}[f]()
+            {"weights": weights, "purity": purity, "docloss": docloss, "weights2": weights2, "docloss2": docloss2}[f]()
         else:
             print(f"===== {f}: not on disk yet")
