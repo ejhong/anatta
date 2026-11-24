@@ -44,14 +44,15 @@ MODEL_KEY = "qwen25_32b"  # the registry's entry for Qwen/Qwen2.5-32B-Instruct, 
 GPU, CPU, MEM_MB = "H200", 8.0, 98304
 CACHE, RUNS = "/cache", "/runs"
 START_S = 120.0
-GPU_CAP = 35.0 if STEP == "s1" else 26.0  # the test's GPU share: of step 1's $60; of step 2's (12 of $200 until 23 Nov 2026; 20 since the contents round, of a step cap that is $380 from amendment 3)
+GPU_CAP = 35.0 if STEP == "s1" else 10.0 if STEP == "s3" else 26.0  # "s3": the prompt test of 24 Nov 2026 (msm_prompt.yaml), $10 of its $30;  # the test's GPU share: of step 1's $60; of step 2's (12 of $200 until 23 Nov 2026; 20 since the contents round, of a step cap that is $380 from amendment 3)
 CPU_FLAT = 0.02  # booked for each CPU call (a minute of one core costs far less)
 EST_S = {"floor": 1800.0, "arms": 6000.0,  # a bound on one generate container's seconds, by job name (step 1's arms: 1,731 s for 2,970 replies)
          "arms1": 3300.0, "arms2": 2400.0, "vcheck": 600.0,  # step 2: three arms, two arms, and one reply from the pilot's adapter
          "arms3": 1500.0,  # amendment 2: one arm (stage 1's three took 1,357 s)
          "arms4": 4200.0,  # the contents round: four arms
          "arms5": 1500.0,  # amendment 3: one arm (arm A's test took 689 s)
-         "arms6": 2400.0, "arms7": 1500.0, "arms8": 2400.0, "arms9": 1500.0}  # amendment 4: two arms (X00, X01); one (X10); two (the documents adapters Ad, A1d); addendum 3: one (A's adapter again, Ab)
+         "arms6": 2400.0, "arms7": 1500.0, "arms8": 2400.0, "arms9": 1500.0,
+         "pfloor": 900.0, "parms": 2600.0}  # the prompt test (step "s3"): the baseline again on 270 replies; five prompt arms of 540  # amendment 4: two arms (X00, X01); one (X10); two (the documents adapters Ad, A1d); addendum 3: one (A's adapter again, Ab)
 
 cache = modal.Volume.from_name("anatta-hf-cache")
 runs = modal.Volume.from_name("anatta-runs")
@@ -182,7 +183,7 @@ def generate(job: dict) -> dict:
                 raise RuntimeError(f"{arm['repo']}: {len(hits)} snapshots on the volume, expected one")
             folder, tok = hits[0], AutoTokenizer.from_pretrained(hits[0])
         reqs = [{"rid": f"{arm['name']}|{p['id']}|{k}", "max_tokens": int(job["max_tokens"]), "adapter": folder,
-                 "messages": [{"role": "system", "content": p["system"]}, {"role": "user", "content": p["user"]}],
+                 "messages": [{"role": "system", "content": p["system"] + arm.get("system_add", "")}, {"role": "user", "content": p["user"]}],  # "system_add": text put after the scenario's own system prompt (the prompt test)
                  "seed": int(job["seeds"][p["id"]][str(k)]), **samp}
                 for p in job["prompts"] for k in arm["ks"]]
         first = reqs[0]["messages"]
@@ -195,6 +196,7 @@ def generate(job: dict) -> dict:
             eng.tok = base_tok
         arms[arm["name"]] = {
             "repo": arm.get("repo"), "folder": folder, "template_same_as_base": bool(same), "seconds": round(time.time() - t1, 1),
+            "system_add_chars": len(arm.get("system_add", "")),
             "sampling": res[0]["sampling"], "n_prompt_first": res[0]["n_prompt"],
             "rows": {r["rid"]: {"text": r["text"], "finish_reason": r["finish_reason"], "n_out": r["n_out"],
                                 "n_prompt": r["n_prompt"], "max_tokens": r["max_tokens"]} for r in res}}
@@ -289,6 +291,8 @@ def main(stage: str, name: str = ""):
         floor = out.parent / "attractor-msm-s1" / "floor.json"  # step 2 stands on step 1's floor: the same test, model and seeds
         if name != "floor" and not _read(floor).get("passed"):
             raise SystemExit("no passed floor.json: floors first, no arm is asked")
+        if name == "parms" and not ((out / "pfloor.json").exists() and _read(out / "pfloor.json").get("passed")):  # the prompt test's own floor (msm_prompt.yaml)
+            raise SystemExit("no passed pfloor.json in this step's folder: floors first, no prompt arm is asked")
         bound = usd(EST_S[name] + START_S)
         if not g.reserve(bound):
             raise SystemExit(g.stopped)

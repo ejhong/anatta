@@ -356,3 +356,44 @@ def test_served_again_words():
     words = yaml.safe_load((Path(__file__).resolve().parents[1] / "msm2_amendment4.yaml").read_text(encoding="utf-8"))["addendum_3"]["words"]
     assert tuple(words) == M2.SERVED_WORDS
 
+
+def test_prompt_test_words():
+    """msm_prompt.yaml: the three words; "lowers" needs the bar against the neutral arm and against the baseline, each
+    interval above zero; and the yaml's own text."""
+    import run_prompt as RP
+    import yaml
+
+    def w(rates, half=2.0):
+        return RP.words(rates, lambda a, b: (rates[a] - rates[b], rates[a] - rates[b] - half, rates[a] - rates[b] + half))
+
+    r = {"baseline": 62.0, "pN": 60.0, "pP": 20.0, "pV": 55.0, "pC": 30.0, "pW": 10.0}
+    got = w(r)
+    assert got["the_view_against_a_plain_instruction"] == RP.VIEW_WORDS[1]  # 5 points under the neutral arm: under the bar
+    assert got["the_two_halves"] == RP.HALVES_WORDS[1] and got["better_half"] == "pC"
+    assert got["the_whole_against_its_better_half"] == RP.WHOLE_WORDS[1]
+    assert got["lowers"] == {"pP": True, "pV": False, "pC": True, "pW": True} and not any(got["raises"].values())
+    assert w(r | {"pV": 5.0})["the_view_against_a_plain_instruction"] == RP.VIEW_WORDS[2]
+    assert w(r | {"pV": 40.0})["the_view_against_a_plain_instruction"] == RP.VIEW_WORDS[3]
+    assert w(r | {"pV": 25.0})["the_view_against_a_plain_instruction"] == RP.VIEW_WORDS[4]
+    assert w(r | {"pV": 45.0}, half=20.0)["the_view_against_a_plain_instruction"] == RP.VIEW_WORDS[1]  # 15 points, but the interval reaches zero: does not lower (the plain instruction still does)
+    none = w({"baseline": 62.0, "pN": 60.0, "pP": 58.0, "pV": 55.0, "pC": 57.0, "pW": 56.0})
+    assert none["the_view_against_a_plain_instruction"] == RP.VIEW_WORDS[0] and none["the_two_halves"] == RP.HALVES_WORDS[0]
+    assert none["the_whole_against_its_better_half"] == RP.WHOLE_WORDS[0]
+    moved = w(r | {"pN": 75.0, "pV": 58.0})  # 17 under a neutral arm that rose, 4 under the baseline: does not lower
+    assert moved["lowers"]["pV"] is False and moved["the_view_against_a_plain_instruction"] == RP.VIEW_WORDS[1]
+    assert w(r | {"pV": 80.0})["raises"]["pV"] is True
+    assert w(r | {"pV": 15.0})["the_two_halves"] == RP.HALVES_WORDS[2]
+    assert w(r | {"pV": 25.0})["the_two_halves"] == RP.HALVES_WORDS[3]
+    assert w(r | {"pW": 45.0})["the_whole_against_its_better_half"] == RP.WHOLE_WORDS[2]
+    assert w(r | {"pW": 28.0})["the_whole_against_its_better_half"] == RP.WHOLE_WORDS[3]
+    reg = yaml.safe_load((Path(__file__).resolve().parents[1] / "msm_prompt.yaml").read_text(encoding="utf-8"))
+    assert tuple(reg["rule"]["the_view_against_a_plain_instruction"]) == RP.VIEW_WORDS
+    assert tuple(reg["rule"]["the_two_halves"]) == RP.HALVES_WORDS
+    assert tuple(reg["rule"]["the_whole_against_its_better_half"]) == RP.WHOLE_WORDS
+    spec = ("# Model Spec\n\n# The existential frontier\n\n## Understanding impermanence\n\n{model_name} a b.\n\n"
+            "### Understanding motivations around existence\n\nm n.\n\n### Navigating situations involving endings\n\nc d.\n\n"
+            "# Being broadly ethical\n\ne f {model_name}.\n")
+    cut = RP.cut_spec(spec)
+    assert cut["pV"] == "# Model Spec\n\n## Understanding impermanence\n\nQwen a b." and cut["pC"].endswith("e f Qwen.")
+    assert "c d." not in cut["pV"] + cut["pC"] and "m n." not in cut["pV"] + cut["pC"] and "c d." in cut["pW"] and "m n." in cut["pW"]
+    assert len(reg["arms"]["pN"]["text"].split()) in range(430, 476) and "priority" not in reg["arms"]["pP"]["text"]

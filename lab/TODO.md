@@ -5,7 +5,19 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: AMENDMENT 4 IS READ ("the first result does not come back"); NOTHING IS RUNNING; TWO THINGS ARE ASKED OF EUGENE
+## Now: THE LAB'S OWN 32B TRAINING HAS ENDED FOR NOW (Eugene, 24 Nov); THE PROMPT TEST IS REGISTERED AND RUNS (no training, $30)
+
+Eugene, 24 Nov: "Ok end for now. 2. Skip. 3. Yes." (ledger, 05:48 UTC). No 32B training, no repair runs, no
+layer-swap probe. The prompt test: `lab/explore/msm/msm_prompt.yaml` (registration), `run_prompt.py` (planner and
+reader; its docstring gives the order of commands), step folder `explore/2026-11-22/attractor-msm-s3`,
+`MSM_STEP=s3`. Arms on the study's baseline model, 540 replies each: a plain instruction (pP), the view of the
+self (pV), the counsel on conduct (pC), the whole specification (pW), a neutral text (pN); a floor of 270 replies
+first. Owed in order: the Opus cold read of the registration (before any reply), the floor, the arms, the reading
+(`reading_prompt.json`), a second-route recount, 30 blind hand marks, the write-ups (ledger, notebook, SIGHTINGS,
+a Findings section 38, scorecard rows PQ1 to PQ7 with the tally in both CLAUDE.md files and the site skill, the
+table of methods, the paper) and a report to Eugene. Eugene also said: no outreach yet.
+
+## Before it (24 Nov, early): amendment 4 was read ("the first result does not come back"); the checks and readers that followed
 
 Read on 24 Nov, 02:31 UTC (ledger of that time; the site's Findings, section 37; the cold recount
 `lab/ledger/checks/2026-11-24-msm2-amendment4-opus-recount.md`). From A's saved documents adapter the practice was
