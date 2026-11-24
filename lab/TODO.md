@@ -18,6 +18,11 @@ X00 21.4, X01 22.8; practice alone 24.7, 23.2). Predictions PX1 miss, PX2 hit, P
 miss 86, open 7. Checks done: second route, cold recount, 30 of 30 blind hand marks. Spend: amendment 4 $40.69 of
 $60; step 2 $391.46 of $415; 24 Nov's day $39.58 of $75.
 
+- **THE PUBLIC SITE IS STALE (since 23 Nov, 21:45 UTC):** the `pages` workflow fails at `actions/deploy-pages@v4`
+  ("No artifacts named github-pages were found"); ledger, 24 Nov, 02:43 UTC. The likely mend is three version
+  numbers in `.github/workflows/pages.yml` (configure-pages v6, upload-pages-artifact v5, deploy-pages v5). It is a
+  workflow edit, so it waits on Eugene's word (asked 24 Nov). After it lands: check the live page for
+  `id="practice-again"`.
 - **The stopping rule applies** (registered with the amendment): no further paid training on this line under this
   word. Do not train X10 or anything else on 32B without Eugene's word.
 - **Asked of Eugene (24 Nov), not yet answered:** (1) whether to serve A's saved adapter (`/runs/msm2/A/final`)
