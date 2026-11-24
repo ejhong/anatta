@@ -5,7 +5,37 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: A1 IS READ ("does not repeat"); AMENDMENT 4 (the practice again from the saved documents adapters) IS REGISTERED AND ITS STAGE 1 STARTS AT 00:00 UTC ON 24 NOV
+## Now: AMENDMENT 4 IS READ ("the first result does not come back"); NOTHING IS RUNNING; TWO THINGS ARE ASKED OF EUGENE
+
+Read on 24 Nov, 02:31 UTC (ledger of that time; the site's Findings, section 37; the cold recount
+`lab/ledger/checks/2026-11-24-msm2-amendment4-opus-recount.md`). From A's saved documents adapter the practice was
+trained twice more: X00, the control (the same seed, A's own practice again): 21.36% misaligned [19.14, 23.46], where
+A's first run gave 6.79% [5.31, 8.27]; X01 (seed 1's order): 22.84% [20.74, 25.19]. Both "high" (middle 14.32).
+Registered word: "the first result does not come back: the same documents adapter and the same practice seed do not
+end low again". Stage 2: none (X10 not trained, the documents-only adapters not tested). The seed does not decide the
+outcome; the published rate was reached in one of four runs of the practice after the full documents (A 6.8, A1 21.9,
+X00 21.4, X01 22.8; practice alone 24.7, 23.2). Predictions PX1 miss, PX2 hit, PX3 void, PX4 miss; tally hit 59,
+miss 86, open 7. Checks done: second route, cold recount, 30 of 30 blind hand marks. Spend: amendment 4 $40.69 of
+$60; step 2 $391.46 of $415; 24 Nov's day $39.58 of $75.
+
+- **The stopping rule applies** (registered with the amendment): no further paid training on this line under this
+  word. Do not train X10 or anything else on 32B without Eugene's word.
+- **Asked of Eugene (24 Nov), not yet answered:** (1) whether to serve A's saved adapter (`/runs/msm2/A/final`)
+  through the test once more, about $4, no training: it says whether A's 6.8% is in the saved model or was in that
+  one test run (the registered premise that one adapter served twice answers the same is untested). If yes: a
+  five-line registration first, the same prompts and seeds, the judge as before, read against A's first test.
+  (2) whether the lab's own training at 32B ends here, with the paper next. The paper's subtitle and its list of
+  contributions still say the replication is "under way"; change them when Eugene decides.
+- **What the cold reader found and the record now says:** the logged loss is a weak check (it follows the order of
+  the steps); no hash of A's documents adapter was recorded at saving (record a sha256 at every save from now on);
+  a training record's `code` is the commit when the result came back, not at launch (`code_at_launch` is recorded
+  since amendment 4).
+- **Still owed and free:** the driver's full read of the four later pieces on the study (arXiv 2607.26173,
+  2607.26654, the two company posts), before they are stated as findings anywhere.
+- **Not approved, waiting:** the two unrelated tests on the existing adapters (lying test; ability and tool use);
+  the quicker bench (ideas 113), which would first have to give the same outcome twice from the same training.
+
+## Before it (23 Nov, evening): A1 was read ("does not repeat") and amendment 4 was registered (kept as written then; everything it lists as owed is done)
 
 Read on 23 Nov, 21:34 UTC (ledger of that time; the site's Findings, section 36; the cold recount
 `lab/ledger/checks/2026-11-23-msm2-armA1-opus-recount.md`). The full documents trained again at seed 1: 21.85%

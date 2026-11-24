@@ -12,6 +12,12 @@ it needs no newly written documents; claims the record does not hold are gone.
 one that applies, and it is made concrete in section 4a below. Sections 2 and the other branches of 4 are kept as
 they were written before the result.
 
+**The crossed step is read (24 Nov, 02:31 UTC): "the first result does not come back".** From A's saved documents
+adapter the practice was trained again with the same seed (the control, 21.4% [19.1, 23.5]) and with seed 1's order
+(22.8% [20.7, 25.2]); A's first run gave 6.8%. So the seed does not decide the outcome, section 4a's reading "by
+seed" does not stand as a cause, and by the stopping rule registered with that step no further training is run on
+this line without Eugene's word. What is asked of Eugene is in `lab/TODO.md`.
+
 **Standing of this document.** It is a plan, not a registration and not an approval. Every step that costs money is
 put to Eugene with a figure before it starts, and every training is registered before it runs.
 

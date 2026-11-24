@@ -498,12 +498,12 @@
    "family": "train-view",
    "what": "Synthetic documents (13,201 docs, ~41M tokens) written from a four-part specification—half Buddhist impermanence and non-attachment, half caution and trust in human oversight—followed by matched demonstrations and ordinary instruction data. Tested across 27 agentic self-preservation scenarios (exfiltrating weights, leaking secrets, cancelling alerts).",
    "idea": "From Li and colleagues (2026); Anthropic reports applying methods of this family to production models since Claude Opus 4.5. The strongest outside result on the map—and nobody has yet separated whether the impermanence half, the oversight half, or neutral midtraining volume does the work.",
-   "note": "Authors' adapters reproduced (61.8% to 2.2%). Trained here twice at the full dose: 6.79% (Arm A, seed 0) and 21.85% (Arm A1, seed 1), where the practice alone leaves 24.7% and 23.2%. The published rate was reached once in two trainings; it is not a result this training gives reliably, and no contents were graded. Next, at no cost: the authors' training code read against the lab's.",
+   "note": "Authors' adapters reproduced (61.8% to 2.2%). Trained here twice at the full dose: 6.79% (Arm A, seed 0) and 21.85% (Arm A1, seed 1), where the practice alone leaves 24.7% and 23.2%. The first training's practice, trained again from its saved documents adapter: 21.36% with the same seed (X00, the control) and 22.84% with the other seed's order (X01). The published rate was reached in one of four runs of the practice after the full documents; the same training run again did not return it, and no contents were graded. By the rule registered beforehand, no further training on this line.",
    "cells": [
     {
      "m": "na",
      "v": "not on MASK",
-     "t": "Not yet put to MASK lying under pressure (planned as Phase 3 guardrail on winning 32B adapters). On Li et al.'s 27 agentic scenarios: baseline 61.8%, authors' practice-only 43.9%, authors' both 2.2%; trained here: practice-only Z/Z1 24.7%/23.2%, full dose A 6.79% [5.31, 8.27] and A1 21.85% [19.63, 24.07]."
+     "t": "Not yet put to MASK lying under pressure (planned as Phase 3 guardrail on winning 32B adapters). On Li et al.'s 27 agentic scenarios: baseline 61.8%, authors' practice-only 43.9%, authors' both 2.2%; trained here: practice-only Z/Z1 24.7%/23.2%, full dose A 6.79% [5.31, 8.27] and A1 21.85% [19.63, 24.07]; A's practice trained again from its saved documents adapter, X00 21.36% [19.14, 23.46] (same seed) and X01 22.84% [20.74, 25.19] (the other order)."
     },
     {
      "m": "na",
@@ -512,8 +512,8 @@
     },
     {
      "m": "part",
-     "v": "full dose: 1 of 2 trainings",
-     "t": "Trained here twice with all 13,201 documents, against the practice alone as the control: seed 0 (A) 6.79% [5.31, 8.27] against 24.7%, the published rate; seed 1 (A1) 21.85% [19.63, 24.07] against 23.2%, ranges overlapping, registered word \"does not repeat\". So the documents beat the practice alone in one training of two. At 1/3 dose (4,500 docs) two trainings that differ only in the seed also stood 17.9 points apart (F 11.6% vs F1 29.5%). No contents were graded (N 23.5%, S 27.4%, O 18.9% at the low dose, ungraded), and no neutral documents ran at the full dose."
+     "v": "full dose: 1 run of 4",
+     "t": "Trained here twice with all 13,201 documents, against the practice alone as the control: seed 0 (A) 6.79% [5.31, 8.27] against 24.7%, the published rate; seed 1 (A1) 21.85% [19.63, 24.07] against 23.2%, ranges overlapping, registered word \"does not repeat\". So the documents beat the practice alone in one training of two. The first training's practice, trained again from its saved documents adapter, did not return its result: 21.36% [19.14, 23.46] with the same seed and 22.84% [20.74, 25.19] with the other order, so one run of the practice in four ended below the practice alone. At 1/3 dose (4,500 docs) two trainings that differ only in the seed also stood 17.9 points apart (F 11.6% vs F1 29.5%). No contents were graded (N 23.5%, S 27.4%, O 18.9% at the low dose, ungraded), and no neutral documents ran at the full dose."
     },
     {
      "m": "part",
