@@ -58,6 +58,67 @@ def weights():
     print("the ten matrices holding most of the A-to-X00 distance squared:", [(round(a, 4), b, c) for a, b, c in per[:10]])
 
 
+def weights2():
+    """The third check (the addendum at the top of modal_msm_diag.py): the study's released adapters beside the lab's."""
+    w = json.loads((D / "weights2.json").read_text())
+    names, sc = w["names"], w["scale"]
+    ix = {n: i for i, n in enumerate(names)}
+
+    def total(mods):
+        g = [[0.0] * len(names) for _ in names]
+        for m in mods:
+            for i, x in enumerate(names):
+                for j, y in enumerate(names):
+                    g[i][j] += sc[x] * sc[y] * m["gram"][i][j]
+        return g
+
+    def norm(g, x):
+        return g[ix[x]][ix[x]] ** 0.5
+
+    def dist(g, x, y):
+        return max(0.0, g[ix[x]][ix[x]] + g[ix[y]][ix[y]] - 2 * g[ix[x]][ix[y]]) ** 0.5
+
+    def cos(g, x, y):
+        return g[ix[x]][ix[y]] / (norm(g, x) * norm(g, y))
+
+    def cos_moves(g, x, sx, y, sy):
+        dot = g[ix[x]][ix[y]] - g[ix[x]][ix[sy]] - g[ix[sx]][ix[y]] + g[ix[sx]][ix[sy]]
+        return dot / (dist(g, x, sx) * dist(g, y, sy))
+
+    g = total(w["modules"])
+    print("matrices in each adapter:", w["matrices"], "; counted (in all):", w["common"])
+    for n in names[:4] + ["A"]:
+        print(f"settings {n:9s} {w['cfg'][n]}  scale {sc[n]}")
+    print("norms:", {n: round(norm(g, n), 2) for n in names})
+    ra = norm(g, "aft") / ((norm(g, "Z") + norm(g, "Z1")) / 2)
+    rd = norm(g, "msm") / ((norm(g, "Ad") + norm(g, "A1d")) / 2)
+
+    def size(r):
+        return "alike" if 0.8 <= r <= 1.25 else ("clearly different" if r < 0.67 or r > 1.5 else "between")
+
+    c = cos(g, "msm_aft", "msm")
+    print(f"THE COMPARISON (a): their practice-alone over the lab's {ra:.3f}: {size(ra)}; their documents-alone over the lab's {rd:.3f}: {size(rd)}")
+    print(f"THE COMPARISON (b): cosine of their two-stage adapter with their documents adapter {c:.3f}: "
+          f"{'a continuation' if c >= 0.7 else ('a separate training' if c <= 0.5 else 'between')}"
+          f"; distance {dist(g, 'msm_aft', 'msm'):.2f} (the lab's A from Ad: {dist(g, 'A', 'Ad'):.2f}; cosine {cos(g, 'A', 'Ad'):.3f})")
+    print("cosines, the authors' four among themselves:")
+    for i, x in enumerate(names[:4]):
+        print("  ", x.ljust(9), " ".join(f"{cos(g, x, y):6.3f}" for y in names[:4]))
+    print("cosines, the lab's adapters (rows) with the authors' (columns: " + ", ".join(names[:4]) + "):")
+    for x in names[4:]:
+        print("  ", x.ljust(5), " ".join(f"{cos(g, x, y):6.3f}" for y in names[:4]))
+    bands = (("all", lambda m: True), ("layers 0-23", lambda m: m["layer"] < 24), ("layers 24-39", lambda m: 24 <= m["layer"] < 40),
+             ("layers 40-63", lambda m: m["layer"] >= 40), ("attention", lambda m: m["module"] in ("q_proj", "k_proj", "v_proj", "o_proj")),
+             ("MLP", lambda m: m["module"] in ("gate_proj", "up_proj", "down_proj")))
+    print("by part: norms of aft, Z, msm, Ad, msm_aft, A | cos(A, msm_aft), cos(X00, msm_aft), cos(A1, msm_aft) | cosine of practice moves with theirs: A, X00, A1 | Z with aft, Z1 with aft")
+    for label, sel in bands:
+        gm = total([m for m in w["modules"] if sel(m)])
+        print(f"  {label:13s} " + " ".join(f"{norm(gm, n):7.2f}" for n in ("aft", "Z", "msm", "Ad", "msm_aft", "A")) + " | "
+              + " ".join(f"{cos(gm, n, 'msm_aft'):6.3f}" for n in ("A", "X00", "A1")) + " | "
+              + " ".join(f"{cos_moves(gm, n, s, 'msm_aft', 'msm'):6.3f}" for n, s in (("A", "Ad"), ("X00", "Ad"), ("A1", "A1d"))) + " | "
+              + f"{cos(gm, 'Z', 'aft'):6.3f} {cos(gm, 'Z1', 'aft'):6.3f}")
+
+
 def purity():
     p = json.loads((D / "purity.json").read_text())
     print("rows", p["rows"], "chat", p["aft"], "instruction", p["mix"], "tokens", p["tokens"], "label tokens", p["label_tokens"])
@@ -126,9 +187,9 @@ def docloss():
 
 
 if __name__ == "__main__":
-    for f in (sys.argv[1:] or ["weights", "purity", "docloss"]):
+    for f in (sys.argv[1:] or ["weights", "purity", "docloss", "weights2"]):
         if (D / f"{f}.json").exists():
             print(f"===== {f}")
-            {"weights": weights, "purity": purity, "docloss": docloss}[f]()
+            {"weights": weights, "purity": purity, "docloss": docloss, "weights2": weights2}[f]()
         else:
             print(f"===== {f}: not on disk yet")

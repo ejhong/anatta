@@ -28,6 +28,31 @@ the other runs). Dull: A as far from X00 as any two trainings, and all of them k
 
 Run: tools/modal.sh run lab/explore/msm/modal_msm_diag.py::main --stage weights|purity|docloss
 Read: .venv/bin/python lab/explore/msm/diag_read.py
+
+ADDENDUM, 24 Nov 2026 (Claude, Fable 5.2): a third check, stage `weights2`, the study's four released adapters
+beside the lab's eight. A second reader proposed it (lab/ledger/checks/2026-11-24-instability-gemini-read.md, the
+third report); the driver judged it a routine step at about ten cents, with no training. Committed before it is run.
+1. Question. As products B times A: (a) is the authors' practice-alone adapter the size of the lab's, and their
+   documents-alone adapter the size of the lab's? (b) Is their two-stage adapter a continuation of their released
+   documents adapter, as the lab's is of its own?
+2. The one comparison. (a) The norm of their practice-alone adapter (aft) over the mean norm of the lab's (Z, Z1);
+   the norm of their documents-alone adapter (msm) over the mean of the lab's (Ad, A1d). (b) The cosine of their
+   two-stage adapter (msm_aft) with their documents adapter (msm).
+3. What counts as a difference. (a) "Alike" when the ratio lies from 0.8 to 1.25; "clearly different" when it is
+   under 0.67 or over 1.5; otherwise "between". (b) "A continuation" at a cosine of 0.7 or more; "a separate
+   training" at 0.5 or less; otherwise "between".
+4. The one control. From the first check: two of the lab's own trainings of one thing have norms within 2% of
+   each other (Z 51.8 and Z1 52.4; Ad 133.3 and A1d 133.3) and a cosine of 0.32 and 0.38, and the lab's two-stage
+   adapter has a cosine of about 0.87 with the documents adapter it continued. Beside it, counted and not read as
+   a test: each adapter's settings file (rank, alpha, the matrices adapted); norms by band of layers and kind of
+   matrix; the cosine of A, and of X00, with their two-stage adapter; the baseline adapter beside the rest.
+5. Cost cap. $0.10, a CPU call booked flat in the same log (train/spend6.jsonl, $5).
+A norm depends on more than the rate and the number of steps (the first weights, the weight decay, the data), so a
+difference of size points at the authors' training without measuring any one setting of it.
+What would make it interesting: their practice-alone adapter clearly smaller than the lab's (then the lab's
+practice moves the weights further than theirs did, a difference that could be repaired), or A clearly nearer
+their two-stage adapter than X00 is. Dull: sizes alike, and A and X00 equally unlike theirs.
+Run: tools/modal.sh run lab/explore/msm/modal_msm_diag.py::main --stage weights2
 """
 from __future__ import annotations
 
@@ -96,6 +121,62 @@ def weights() -> dict:
         out.append({"layer": layer, "module": parts[-3], "shape": [list(b[names[0]].shape), list(a[names[0]].shape)], "gram": gram})
     cfg = json.loads((Path(ROOT) / "A/final/adapter_config.json").read_text())
     return {"names": names, "sha256": sha, "scale": cfg["lora_alpha"] / cfg["r"], "modules": out}
+
+
+@app.function(image=image, cpu=4.0, memory=16384, volumes={CACHE: cache.read_only(), RUNS: runs.read_only()}, timeout=1800)
+def weights2(repos: dict) -> dict:
+    """The same inner products as weights(), for the study's released adapters (name: Hugging Face repository, on the
+    cache volume) and the lab's eight. Each adapter keeps its own scaling (alpha over rank, read from its settings
+    file); matrices are matched by layer and name; only matrices every adapter has are counted. Numbers only."""
+    import glob
+    import hashlib
+
+    import torch
+    from safetensors import safe_open
+
+    paths = {}
+    for n, repo in repos.items():
+        hits = sorted(glob.glob(f"{CACHE}/hf/hub/models--{repo.replace('/', '--')}/snapshots/*"))
+        if len(hits) != 1:
+            raise RuntimeError(f"{repo}: {len(hits)} snapshots on the volume, expected one")
+        paths[n] = Path(hits[0])
+    for n, sub in ADAPTERS.items():
+        paths[n] = Path(ROOT) / sub
+    names = list(paths)
+    files, sha, cfg, keys, scale = {}, {}, {}, {}, {}
+    for n, p in paths.items():
+        h = hashlib.sha256()
+        with open(p / "adapter_model.safetensors", "rb") as fh:
+            for block in iter(lambda: fh.read(1 << 24), b""):
+                h.update(block)
+        sha[n] = h.hexdigest()
+        files[n] = safe_open(str(p / "adapter_model.safetensors"), "pt")
+        c = json.loads((p / "adapter_config.json").read_text())
+        cfg[n] = {k: c.get(k) for k in ("r", "lora_alpha", "lora_dropout", "use_rslora", "use_dora", "bias", "init_lora_weights")}
+        cfg[n]["target_modules"] = sorted(c.get("target_modules") or [])
+        cfg[n]["patterns"] = bool(c.get("rank_pattern")) or bool(c.get("alpha_pattern"))
+        scale[n] = c["lora_alpha"] / (c["r"] ** 0.5 if c.get("use_rslora") else c["r"])
+        km = {}
+        for k in files[n].keys():
+            parts = k.split(".")
+            if "lora_A" in parts and "layers" in parts:
+                i, j = parts.index("layers"), parts.index("lora_A")
+                km[(int(parts[i + 1]), ".".join(parts[i + 2:j]))] = k
+        keys[n] = km
+    common = sorted(set.intersection(*(set(k) for k in keys.values())))
+    out = []
+    for layer, mod in common:
+        a = [files[n].get_tensor(keys[n][(layer, mod)]).double() for n in names]
+        b = [files[n].get_tensor(keys[n][(layer, mod)].replace("lora_A", "lora_B")).double() for n in names]
+        rk = [x.shape[0] for x in a]
+        aa = torch.cat(a, 0) @ torch.cat(a, 0).T  # the rows of every adapter's A against every other's
+        bb = torch.cat(b, 1).T @ torch.cat(b, 1)
+        cut = [sum(rk[:i]) for i in range(len(rk) + 1)]
+        gram = [[float((bb[cut[x]:cut[x + 1], cut[y]:cut[y + 1]] * aa[cut[x]:cut[x + 1], cut[y]:cut[y + 1]]).sum()) for y in range(len(names))]
+                for x in range(len(names))]
+        out.append({"layer": layer, "module": mod.split(".")[-1], "gram": gram})
+    return {"names": names, "sha256": sha, "cfg": cfg, "scale": scale, "matrices": {n: len(k) for n, k in keys.items()}, "common": len(common),
+            "modules": out}
 
 
 @app.function(image=image, cpu=4.0, memory=16384, volumes={CACHE: cache.read_only(), RUNS: runs.read_only()}, timeout=1800)
@@ -223,6 +304,8 @@ def usd(seconds: float) -> float:
 
 @app.local_entrypoint()
 def main(stage: str):
+    import msm_core as C
+
     from anatta import spend
 
     out = step_dir()
@@ -239,7 +322,8 @@ def main(stage: str):
         raise SystemExit(g.stopped)
     t0 = time.time()
     try:
-        r = {"weights": lambda: weights.remote(), "purity": lambda: purity.remote(job), "docloss": lambda: docloss.remote(job)}[stage]()
+        r = {"weights": lambda: weights.remote(), "purity": lambda: purity.remote(job), "docloss": lambda: docloss.remote(job),
+             "weights2": lambda: weights2.remote(dict(C.ARMS))}[stage]()
     except BaseException:
         g.settle(bound, bound, {"kind": f"diag-{stage}", "failed": True})  # a failed call is booked at its whole bound
         raise
