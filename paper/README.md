@@ -7,7 +7,7 @@ rewrite against the lab's record (`lab/ledger/checks/2026-11-23-redesign-opus-ch
 faults it found and restored the caveats that had been dropped. It is built on one outline with the lab's site
 (`lab/ideas/survey.md`): the question of what a good machine would be, a seven-point anti-cosplay discriminator, six
 families of contemplative methods read on those seven questions (Table 1), the replication of Model Spec Midtraining
-at 32B (two full-dose trainings read, 6.8% and 21.9%, and the first one's practice trained again from its saved point, 21.4%: the published rate was reached in one run of four and did not come back), a
+at 32B (it held in one run of four: two full-dose trainings read, 6.8% and 21.9%, and the first one's practice trained again from its saved point, 21.4%: the published rate was reached in one run of four and did not come back), a
 synthesis, the lab's proposed plan for after that second training, and a discussion of whether awakening is
 computational. Lines marked `% A1-RESULT` in `main.tex` were brought to the second full-dose training's result on
 23 November 2026. The seven bibliography entries

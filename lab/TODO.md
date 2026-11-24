@@ -25,16 +25,18 @@ $60; step 2 $391.46 of $415; 24 Nov's day $39.58 of $75.
   Tally hit 61, miss 87, open 7. Amendment 4 $44.25 of $60; step 2 $395.02 of $415; the day $43.15 of $75.
 - **The stopping rule applies** (registered with the amendment): no further paid training on this line under this
   word. Do not train X10 or anything else on 32B without Eugene's word.
-- **Asked of Eugene (24 Nov), not yet decided:** whether the lab's own training at 32B ends here, with the paper
-  next. Eugene asked what "turn to the paper" means; it was answered in the report of 24 Nov, about 03:45 UTC. The
-  paper's subtitle and its list of contributions still say the replication is "under way"; change them when Eugene
-  decides.
+- **Eugene's word (24 Nov, about 03:45 UTC):** bring site and paper to the present state (done, 03:53 UTC; ledger
+  of that time); Eugene will then ask Gemini for ideas on the instability; "we will decide what to do". So nothing
+  is decided about ending the 32B training, and nothing runs. The brief to hand on:
+  `lab/plans/32b-instability-brief-2026-11-24.md` (ideas 114). The four later pieces are read by the driver
+  (ledger, 03:53 UTC): that item is no longer owed.
+- **When Gemini's ideas come back:** grade each against the record (true, partly, wrong, cannot tell), as for any
+  outside reader; cost any check it proposes; one recommendation to Eugene. The cheapest checks already listed:
+  compare the saved weights (cents), the documents' loss under each model (about $3).
 - **What the cold reader found and the record now says:** the logged loss is a weak check (it follows the order of
   the steps); no hash of A's documents adapter was recorded at saving (record a sha256 at every save from now on);
   a training record's `code` is the commit when the result came back, not at launch (`code_at_launch` is recorded
   since amendment 4).
-- **Still owed and free:** the driver's full read of the four later pieces on the study (arXiv 2607.26173,
-  2607.26654, the two company posts), before they are stated as findings anywhere.
 - **Not approved, waiting:** the two unrelated tests on the existing adapters (lying test; ability and tool use);
   the quicker bench (ideas 113), which would first have to give the same outcome twice from the same training.
 
