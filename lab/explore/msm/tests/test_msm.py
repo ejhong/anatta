@@ -416,3 +416,18 @@ def test_documents_only_words():
     assert D.pair_word(diff_of({"Ad": 44.0, "A1d": 50.0})) == D.PAIR_WORDS[1]
     assert not D.clear((12.0, -0.5, 24.0))  # ten points and more, with an interval that reaches zero
     assert D.ARMS == ("Ad", "A1d") and D.KS == 16
+
+
+def test_documents_only_control_words():
+    import run_docsonly as D
+
+    def diff_of(rates):
+        return lambda a, b: (rates[a] - rates[b], rates[a] - rates[b] - 4.0, rates[a] - rates[b] + 4.0)
+
+    low = {"Ad": 3.0, "A1d": 5.0, "baseline": 62.0}
+    assert D.raw_word(diff_of(low | {"raw": 60.0})) == D.RAW_WORDS[0]
+    assert D.raw_word(diff_of(low | {"raw": 8.0})) == D.RAW_WORDS[1]
+    assert D.raw_word(diff_of(low | {"raw": 14.0})) == D.RAW_WORDS[2]  # 11 over Ad, 9 over A1d
+    assert D.tuning_word(diff_of(low | {"raw": 8.0})) == D.TUNING_WORDS[0]
+    assert D.tuning_word(diff_of(low | {"raw": 75.0})) == D.TUNING_WORDS[1]
+    assert D.tuning_word(diff_of(low | {"raw": 60.0})) == D.TUNING_WORDS[2]

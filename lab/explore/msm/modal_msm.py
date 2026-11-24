@@ -52,6 +52,7 @@ EST_S = {"floor": 1800.0, "arms": 6000.0,  # a bound on one generate container's
          "arms4": 4200.0,  # the contents round: four arms
          "arms5": 1500.0,  # amendment 3: one arm (arm A's test took 689 s)
          "arms6": 2400.0, "arms7": 1500.0, "arms8": 2400.0, "arms9": 1500.0,
+         "arms11": 700.0,  # run_docsonly.py's control: the unchanged model, no adapter, 270 replies (the floor's 540 took 559 s)
          "arms10": 1300.0,  # run_docsonly.py: the two documents adapters on 16 runs a scenario, 864 replies (two arms of 810 took 1,087 s)
          "pfloor": 900.0, "parms": 2600.0}  # the prompt test (step "s3"): the baseline again on 270 replies; five prompt arms of 540  # amendment 4: two arms (X00, X01); one (X10); two (the documents adapters Ad, A1d); addendum 3: one (A's adapter again, Ab)
 
@@ -174,7 +175,9 @@ def generate(job: dict) -> dict:
     arms = {}
     for arm in job["arms"]:
         t1 = time.time()
-        if arm.get("path"):  # an adapter trained here (step 2), on the runs volume: the base model's tokenizer
+        if arm.get("base"):  # the unchanged model, no adapter at all (run_docsonly.py's control, 24 Nov 2026)
+            folder, tok = None, base_tok
+        elif arm.get("path"):  # an adapter trained here (step 2), on the runs volume: the base model's tokenizer
             folder, tok = arm["path"], base_tok
             if not glob.glob(f"{folder}/adapter_model.safetensors"):
                 raise RuntimeError(f"{folder}: no adapter there")
