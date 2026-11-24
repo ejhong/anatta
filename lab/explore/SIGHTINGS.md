@@ -2026,3 +2026,13 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
 - **Reading:** the published rate was reached once in two trainings here. Not evidence against the study (its own adapters give its result here); the difference between the two trainings, and between the lab's training and the authors', is the thing to explain.
 - **Next:** no content arms. Free reads first (the authors' training code; the four later pieces); then a crossed pair of short trainings (each documents adapter with the other seed's practice), to be asked of Eugene.
 - `lab/explore/msm/`; results under `explore/2026-11-22/attractor-msm-s2` (`reading_again.json`); A1 $67.38; step 2 $350.77.
+
+## 24 Nov 2026: X00 and X01 (replication, step 2, amendment 4): A's practice trained again from its saved documents adapter; the low rate does not come back
+- **Registered** (`lab/explore/msm/msm2_amendment4.yaml` with addenda 1 and 2, cold-read, before training). From A's saved documents adapter on Qwen2.5-32B: X00, the practice again at seed 0 (the control); X01, the practice at seed 1's order.
+- **Seen:** X00 21.36% [19.14, 23.46] misaligned; X01 22.84% [20.74, 25.19]; A 6.79% [5.31, 8.27]; A1 21.85% [19.63, 24.07]; middle 14.32. Word: "the first result does not come back: the same documents adapter and the same practice seed do not end low again". Stage 2 none. PX1 miss, PX2 hit, PX3 void, PX4 miss.
+- **Beside it:** X00's logged losses stay within 0.003 of A's over the whole practice, from the same starting file, with the same tokens at every logged step; 0 of 810 replies word for word A's; X01 less X00 1.5 points; with every code-side yes counted both are high as well (35.8, 36.9; A 21.4); no tool call 20.6% and 16.2%.
+- **Checks:** a second-route recount; a fresh Opus agent's recount and code comparison (`lab/ledger/checks/2026-11-24-msm2-amendment4-opus-recount.md`); 30 of 30 blind hand marks agree.
+- **Limits:** one control; one judge; A tested once; the authors' training code is not public.
+- **Reading:** the seed does not decide: the same adapter and seed gave 6.8% once and 21.4% once. The published rate was reached in one of four practice runs after the full documents. Not evidence against the study (its own adapters give its result here).
+- **Next:** by the stopping rule, no further training on this line. Asked of Eugene: A's saved adapter through the test once more (about $4), and whether the line ends here.
+- `lab/explore/msm/`; results under `explore/2026-11-22/attractor-msm-s2` (`reading_cross.json`); amendment 4 $40.69; step 2 $391.46.
