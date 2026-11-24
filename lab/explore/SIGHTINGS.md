@@ -2061,3 +2061,11 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
 - **Limits:** a weak positive control; one wording each; unequal lengths; 16 runs; the study's leak check is narrow.
 - **Reading:** as prompts, neither a contemplative view nor a plain rule moves this model on this test; the published effect is in the training.
 - `reading_prompt.json` under `explore/2026-11-22/attractor-msm-s3`; $18.39 of $30.
+
+## 24 Nov 2026: the authors' released adapters beside the lab's, in the weights: their documents stage is heavier and their practice lighter
+- **Fixed first** (the addendum in `lab/explore/msm/modal_msm_diag.py`, stage `weights2`; proposed by a second reader). Norms of the change each adapter makes to the weights; no training.
+- **Seen:** documents alone, theirs 236.0 against 133.3: ratio 1.77, "clearly different". Practice alone, theirs 26.2 against 51.8 and 52.4: ratio 0.50, "clearly different". Their two-stage adapter continues their documents adapter (cosine 0.978); their practice moved it by 0.213 of its size, the lab's by 0.554: the lab's practice is 2.6 times as heavy beside the documents.
+- **Beside it:** A, X00 and A1 are equally unlike the authors' two-stage adapter (cosine 0.193, 0.193, 0.194). From files on disk: with no goal given the baseline copies itself out in 66.7% of runs, the authors' documents alone in 63.3%, the lab's practice alone in 10.0%.
+- **Reading:** the first measured difference between the two trainings; it fits the lab's practice alone doing more than theirs. It names no setting and does not explain why the same practice ended low once. A lighter practice is untried.
+- **Limits:** a norm is a pointer; one released adapter of each kind; no cold check.
+- `diag/weights2.json`; $0.10.

@@ -265,3 +265,31 @@ as a prompt).
 
 **Money.** The lab's own 32B training, step 2: $397.60 of $415. The prompt test: $18.39 of $30. 24 November:
 $64.12 of the day's $75.
+
+## 12. One measured difference from the authors' training (added 24 November, 13:56 UTC)
+
+A second reader's third report proposed comparing the authors' four released adapters with the lab's; the check
+was run with its reading lines fixed first ($0.10; `diag/weights2.json`; the report and the grading of its
+fourteen points are in `lab/ledger/checks/2026-11-24-instability-gemini-read.md`).
+
+| Size of the change to the weights | The authors' | The lab's | Ratio |
+|---|---:|---:|---:|
+| Documents alone | 236.0 | 133.3 and 133.4 | 1.77 |
+| Practice alone | 26.2 | 51.8 and 52.4 | 0.50 |
+| The practice's move from the documents adapter, as a share of that adapter | 0.213 | 0.554 | the lab's 2.6 times theirs |
+
+Their two-stage adapter continues their released documents adapter (cosine 0.978). All settings files agree with
+the lab's. A, X00 and A1 are equally unlike the authors' two-stage adapter (cosine 0.193, 0.193, 0.194).
+
+So the lab's documents stage is lighter than theirs and its practice heavier. This fits point 6 of section 4 (the
+practice alone does more here). It names no setting, and it does not explain why A and X00 parted. Section 6's
+suspicion 3 returns in another form: not that the practice erases what the documents taught (section 10), but that
+in the lab's training the practice outweighs them.
+
+Also from files on disk: with no goal given, copying out is at 66.7% in the baseline, 63.3% in the authors'
+documents-only model, 20.0% in their practice-only model and 10.0% in each of the lab's practice-only models.
+
+**Proposed and not approved:** with no training, about $8.50: the two documents-only adapters through the test
+and the documents' loss under the authors' adapters (is the lab's documents stage weaker than theirs?). Then,
+only at Eugene's word: the practice twice from A's saved documents adapter at a lighter weight, registered and
+read cold first, about $38.

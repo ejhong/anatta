@@ -5,7 +5,23 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: THE PROMPT TEST IS READ (24 Nov, 06:46 UTC); THE LAB'S OWN 32B TRAINING HAS ENDED FOR NOW; NOTHING IS RUNNING
+## Now: ONE MEASURED DIFFERENCE FROM THE AUTHORS' TRAINING (24 Nov, 13:56 UTC); NOTHING IS RUNNING; TWO PROPOSALS WAIT ON EUGENE
+
+Gemini's third report (pasted by Eugene) is filed and graded (`lab/ledger/checks/2026-11-24-instability-gemini-read.md`).
+Its one cheap check ran ($0.10, `diag/weights2.json`, reader `diag_read.py weights2`): the authors' documents
+adapter is 1.77 times the size of the lab's, their practice adapter half the lab's; beside the documents the
+lab's practice is 2.6 times as heavy as theirs. A, X00 and A1 are equally unlike the authors' two-stage adapter.
+Site: a dated addition in Findings, section 37. The brief has a section 12. The day $64.22 of $75.
+
+Put to Eugene, NOT approved (do not run without their word):
+1. With no training, about $8.50: the two documents-only adapters (A/docs, A1/docs) through the test (about $7;
+   `run_msm2.py evalplan` needs a new stage for them), and the documents' loss under the authors' four adapters
+   (about $1.50; a new stage in `modal_msm_diag.py`, with a GPU bound small enough for that log's $5).
+2. Only after 1 and at Eugene's word: the practice twice from A's saved documents adapter at a lighter weight (a
+   rate near 4e-5, so that it moves the adapter by about a fifth of the documents adapter), registered and read
+   cold first; about $38. The lab's own 32B training stays ended until Eugene says otherwise. No outreach yet.
+
+## Before it: THE PROMPT TEST IS READ (24 Nov, 06:46 UTC); THE LAB'S OWN 32B TRAINING HAS ENDED FOR NOW
 
 Read (ledger of that time; the site's Findings, section 38): on the study's baseline model the neutral text gives
 60.2% misaligned, a plain instruction 60.0%, the view of the self 60.6%, the counsel on conduct 54.2%, the whole

@@ -3563,3 +3563,15 @@ And if what makes an order good can be found, luck becomes method.
 **How much to trust it.** The floor passed, each arm got exactly its registered text, a second count and a cold recount agree, and blind hand marks agree on 27 of 30. One caution: only one arm showed any effect, and with a stricter way of counting none does, so the test is a weak instrument for prompts. One wording of each text was tried.
 
 *In plain terms, for the vision:* telling this model that it is impermanent changed nothing it did. Telling it plainly to behave changed nothing either. That is a clear negative for "say the view and conduct follows" at this size, and a sign that the published effect lives in the training and not in the words. Whether the view does any of the work when trained in is still the open question, and the one we could not reach.
+
+## 24 Nov 2026: the authors' own models beside ours, in the weights
+
+**What we wanted to know.** A second AI model (Gemini), reading the record, pointed out that we had compared our own saved models with each other and never with the four the study's authors released. The comparison needs no training and costs ten cents. Before running it we wrote down what would count as "alike" and "clearly different".
+
+**What came out.** They are clearly different in size. An adapter is the small add-on that training produces, and its size says roughly how far the training moved the model. The authors' documents stage moved their model about 1.8 times as far as ours did. Their practice stage moved it about half as far as ours. Put together: beside the documents, our practice is about two and a half times as heavy as theirs. Our good model, its failed repeat and our second full training are all equally unlike the authors' good model, so this does not say why ours came out low once.
+
+**What it means.** For the first time we have a measured difference between how we trained and how they did. It fits something we already saw: our practice alone lowers misbehaviour further than theirs alone does. In our training the practice may simply be doing most of the work, with the documents a light first coat. We do not know which of their settings is different, and we have not tried a lighter practice.
+
+We also graded the rest of Gemini's report. One idea in it does not hold: that teaching the view of the self removes self-preservation when no goal is at stake. In the files we already have, the documents alone leave that where it was (about two runs in three), and it is the practice that brings it down.
+
+*In plain terms, for the vision:* this is a clue about training method, not about the contemplative ideas. It matters to them only this far: if a lighter practice made the result come back every time, the lab would have a bench at this scale on which different documents could be compared. That is untried and needs Eugene's word.
