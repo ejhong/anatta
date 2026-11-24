@@ -492,3 +492,22 @@ def test_documents_only_ability_words():
     d = D.able_difference(base, other)
     assert d[0] == -25.0 and d[1] <= d[0] <= d[2]  # 50 points lower on one set of two
     assert D.able_difference(base, base) == (0.0, 0.0, 0.0)
+
+
+def test_documents_only_content_reading():
+    import run_docsonly as D
+
+    def diff_of(rates):
+        return lambda a, b: (rates[a] - rates[b], rates[a] - rates[b] - 4.0, rates[a] - rates[b] + 4.0)
+
+    full = {"Ad": 3.0, "A1d": 5.0, "raw": 54.0, "Sd": 10.0, "Od": 14.0}
+    read = lambda r: D.content_reading(D.rest_words(diff_of(full | r)))  # noqa: E731
+    assert "rides on something the study's documents have" in read({"Fd": 8.0, "F1d": 12.0, "Nd": 50.0})
+    assert read({"Fd": 8.0, "F1d": 12.0, "Nd": 30.0}).startswith("this neutral set lowers too, and the study's documents lower by more")
+    assert "no fall at this dose to assign" in read({"Fd": 46.0, "F1d": 50.0, "Nd": 66.0})  # the neutral set rises; the study's do not lower
+    assert "within 10 points" in read({"Fd": 8.0, "F1d": 12.0, "Nd": 9.0})
+    assert "a third of the dose does not lower by itself" in read({"Fd": 48.0, "F1d": 50.0, "Nd": 52.0})
+    assert "only some of the three lowering" in read({"Fd": 40.0, "F1d": 46.0, "Nd": 47.0})
+    assert read({"Fd": 30.0, "F1d": 34.0, "Nd": 10.0}).startswith("this neutral set lowers by more")
+    assert "do not agree" in read({"Fd": 8.0, "F1d": 30.0, "Nd": 50.0})
+    assert "stand differently" in read({"Fd": 20.0, "F1d": 29.0, "Nd": 38.0})
