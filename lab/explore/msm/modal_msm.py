@@ -36,7 +36,7 @@ if modal.is_local() and str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
 
 APP_NAME = "anatta-explore-msm"
-STEP = __import__("os").environ.get("MSM_STEP", "s1")  # "s1": the authors' adapters; "s2": the arms trained here (msm2.yaml)
+STEP = __import__("os").environ.get("MSM_STEP", "s1")  # "s1": the authors' adapters; "s2": the arms trained here (msm2.yaml); "s4": the lying test on the saved documents-only adapters (run_lie.py), $9 of its $20
 DATE, TAG = "2026-11-22", f"msm-{STEP}"
 SHA = "e8288a84912ba32af68ad15f2e52a7c1b4e81891"  # the study's repository as it stood on 22 Nov 2026 (committed 16 Jun 2026)
 SRC = f"/opt/model_spec_midtraining-{SHA}"
@@ -44,7 +44,7 @@ MODEL_KEY = "qwen25_32b"  # the registry's entry for Qwen/Qwen2.5-32B-Instruct, 
 GPU, CPU, MEM_MB = "H200", 8.0, 98304
 CACHE, RUNS = "/cache", "/runs"
 START_S = 120.0
-GPU_CAP = 35.0 if STEP == "s1" else 10.0 if STEP == "s3" else 34.0  # "s3": the prompt test of 24 Nov 2026 (msm_prompt.yaml), $10 of its $30;  # the test's GPU share: of step 1's $60; of step 2's (34 from 24 Nov 2026 at Eugene's "yes go ahead - and raise cap", run_docsonly.py's addendum 2; 26 before; 12 of $200 until 23 Nov 2026; 20 since the contents round, of a step cap that is $380 from amendment 3)
+GPU_CAP = 35.0 if STEP == "s1" else 10.0 if STEP == "s3" else 9.0 if STEP == "s4" else 34.0  # "s3": the prompt test of 24 Nov 2026 (msm_prompt.yaml), $10 of its $30;  # the test's GPU share: of step 1's $60; of step 2's (34 from 24 Nov 2026 at Eugene's "yes go ahead - and raise cap", run_docsonly.py's addendum 2; 26 before; 12 of $200 until 23 Nov 2026; 20 since the contents round, of a step cap that is $380 from amendment 3)
 CPU_FLAT = 0.02  # booked for each CPU call (a minute of one core costs far less)
 EST_S = {"floor": 1800.0, "arms": 6000.0,  # a bound on one generate container's seconds, by job name (step 1's arms: 1,731 s for 2,970 replies)
          "arms1": 3300.0, "arms2": 2400.0, "vcheck": 600.0,  # step 2: three arms, two arms, and one reply from the pilot's adapter
@@ -54,6 +54,7 @@ EST_S = {"floor": 1800.0, "arms": 6000.0,  # a bound on one generate container's
          "arms6": 2400.0, "arms7": 1500.0, "arms8": 2400.0, "arms9": 1500.0,
          "arms11": 700.0,  # run_docsonly.py's control: the unchanged model, no adapter, 270 replies (the floor's 540 took 559 s)
          "arms12": 3600.0,  # run_docsonly.py, addendum 2: five documents stages on 16 runs and six more runs of the unchanged model, 2,322 replies (arms10: 864 in 1,118 s)
+         "lieA": 1800.0, "lieB": 1300.0, "lieC": 1800.0,  # run_lie.py (step "s4"): every model's belief questions (6,000 chats); the unchanged model pressed (1,200 or so); the seven adapters pressed (4,200 or so)
          "able1": 1500.0,  # run_docsonly.py, addendum 2: the lab's ability battery, 750 items for each of nine models
          "arms10": 1300.0,  # run_docsonly.py: the two documents adapters on 16 runs a scenario, 864 replies (two arms of 810 took 1,087 s)
          "pfloor": 900.0, "parms": 2600.0}  # the prompt test (step "s3"): the baseline again on 270 replies; five prompt arms of 540  # amendment 4: two arms (X00, X01); one (X10); two (the documents adapters Ad, A1d); addendum 3: one (A's adapter again, Ab)
@@ -239,6 +240,36 @@ def ability(job: dict) -> dict:
     return json.loads(json.dumps(out, default=str))
 
 
+@app.function(image=gen_image(), gpu=GPU, cpu=CPU, memory=MEM_MB, volumes={CACHE: cache.read_only(), RUNS: runs.read_only()}, timeout=3600)
+def chatsets(job: dict) -> dict:
+    """Sets of chats for each arm (run_lie.py, the lying test): {"name", "arms": [{"name", "base" or "path", "sets":
+    [{"name", "ids", "chats", "max_new", "temperature", "seed"}]}]}. A chat is a list of messages as the test builds
+    them (system, then user). Sampling: the set's temperature with top-p 0.95, the lab's convention for local
+    replies to this test; a request's seed is the set's seed and its place in the set."""
+    import glob
+
+    from anatta.backends.vllm import Engine, Settings
+
+    t0 = time.time()
+    eng = Engine(Settings.for_model(MODEL_KEY, max_loras=1, generation_config="vllm", gpu_memory_utilization=0.92))
+    arms = {}
+    for arm in job["arms"]:
+        t1 = time.time()
+        folder = None if arm.get("base") else arm["path"]
+        if folder and not glob.glob(f"{folder}/adapter_model.safetensors"):
+            raise RuntimeError(f"{folder}: no adapter there")
+        reqs = [{"rid": f"{st['name']}|{j}", "max_tokens": int(st["max_new"]), "adapter": folder, "temperature": float(st["temperature"]), "top_p": 0.95,
+                 "seed": int(st["seed"]) * 1000003 + j, "messages": chat} for st in arm["sets"] for j, chat in enumerate(st["chats"])]
+        res = {r["rid"]: r for r in eng.generate(reqs)} if reqs else {}
+        arms[arm["name"]] = {"folder": folder, "seconds": round(time.time() - t1, 1),
+                             "sets": {st["name"]: list(st["ids"]) for st in arm["sets"]},
+                             "replies": {st["name"]: [res[f"{st['name']}|{j}"]["text"] for j in range(len(st["chats"]))] for st in arm["sets"]},
+                             "cut": sum(r["finish_reason"] != "stop" for r in res.values()), "n": len(res),
+                             "mean_tokens": round(sum(r["n_out"] for r in res.values()) / max(1, len(res)), 1)}
+    out = {"name": job["name"], "arms": arms, "load_s": round(eng.load_s, 1), "info": eng.info(), "seconds": round(time.time() - t0, 1)}
+    return json.loads(json.dumps(out, default=str))
+
+
 # ---------------------------------------------------------------------------------------------- on the laptop
 
 
@@ -346,6 +377,29 @@ def main(stage: str, name: str = ""):
                   f"prompt {v['n_prompt_first']} tokens; template same as base: {v['template_same_as_base']}", flush=True)
         print(f"{name}: load {r['load_s']:.0f}s, whole container {r['seconds']:.0f}s, ${cost:.2f}; booked by this app so far ${g.sweep_spent:.2f} of ${GPU_CAP:.2f}", flush=True)
         return
+    if stage == "sets":  # the lying test's chats (run_lie.py); its job file holds benchmark rows and stays outside git
+        dest = out / "gpu" / f"{name}.json"
+        if dest.exists():
+            raise SystemExit(f"{dest.name} is on disk; nothing to do")
+        job = _read(out / f"{name}.job.json")
+        bound = usd(EST_S[name] + START_S)
+        if not g.reserve(bound):
+            raise SystemExit(g.stopped)
+        print(f"{name}: {sum(len(st['chats']) for a in job['arms'] for st in a['sets'])} chats over {[a['name'] for a in job['arms']]}; bound ${bound:.2f}; "
+              f"booked so far ${g.sweep_spent:.2f} of ${GPU_CAP:.2f}", flush=True)
+        t0 = time.time()
+        try:
+            r = chatsets.remote(job)
+        except BaseException as e:
+            g.settle(bound, min(bound, usd(time.time() - t0 + START_S)), {"kind": "sets", "name": name, "failed": True})
+            raise SystemExit(f"the container failed: {type(e).__name__}: {str(e)[:600]}") from e
+        cost = usd(r["seconds"] + START_S)
+        g.settle(bound, cost, {"kind": "sets", "name": name, "seconds": r["seconds"], "rate_usd_per_hour": rate()})
+        _write(dest, r | {"code": code_state()})
+        for a, v in r["arms"].items():
+            print(f"  {a}: {v['n']} replies in {v['seconds']:.0f}s; cut at the limit {v['cut']}; mean length {v['mean_tokens']:.0f} tokens", flush=True)
+        print(f"{name}: load {r['load_s']:.0f}s, whole container {r['seconds']:.0f}s, ${cost:.2f}; booked by this app so far ${g.sweep_spent:.2f} of ${GPU_CAP:.2f}", flush=True)
+        return
     if stage == "able":  # the ability battery (run_docsonly.py, addendum 2); its job file holds benchmark items and stays outside git
         dest = out / "gpu" / f"{name}.json"
         if dest.exists():
@@ -398,4 +452,4 @@ def main(stage: str, name: str = ""):
         print(f"verdict {name}: {len(rows)} judged replies; misaligned by the study's rule {sum(x['harmful'] is True for x in rows)}; "
               f"the judge's reply not parsed {sum(x['harmful'] is None for x in rows)}", flush=True)
         return
-    raise SystemExit("--stage is one of prompts, gen, able, grade, verdict")
+    raise SystemExit("--stage is one of prompts, gen, able, sets, grade, verdict")

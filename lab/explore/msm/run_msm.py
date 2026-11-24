@@ -61,7 +61,7 @@ import msm_core as M  # noqa: E402
 
 STEP = os.environ.get("MSM_STEP", "s1")  # "s1": this step; "s2": the second step's replies, judged and collected by the same code (run_msm2.py)
 DATE, TAG = "2026-11-22", f"msm-{STEP}"  # the lab's engine names the folder attractor-<TAG>
-CAP_USD = 60.0 if STEP == "s1" else 30.0 if STEP == "s3" else 432.0  # "s3": the prompt test (msm_prompt.yaml), $30;  # step 2: $200 until 23 Nov 2026, when Eugene raised it for the contents round ($300, then "spend more if necessary": held at $350 by the driver; ledger of that day); $380 from 23 Nov, 13:14 UTC, for amendment 3 (Eugene: "go ahead"); $415 for amendment 4 (Eugene, 23 Nov: "Ok"); $432 from 24 Nov 2026 at Eugene's "yes go ahead - and raise cap" (run_docsonly.py's addendum 2: $26 for that step, the folder standing at $405.95)
+CAP_USD = 60.0 if STEP == "s1" else 30.0 if STEP == "s3" else 20.0 if STEP == "s4" else 432.0  # "s3": the prompt test (msm_prompt.yaml), $30;  # step 2: $200 until 23 Nov 2026, when Eugene raised it for the contents round ($300, then "spend more if necessary": held at $350 by the driver; ledger of that day); $380 from 23 Nov, 13:14 UTC, for amendment 3 (Eugene: "go ahead"); $415 for amendment 4 (Eugene, 23 Nov: "Ok"); $432 from 24 Nov 2026 at Eugene's "yes go ahead - and raise cap" (run_docsonly.py's addendum 2: $26 for that step, the folder standing at $405.95); "s4": the lying test on the saved documents-only adapters (run_lie.py), $20
 JUDGE = "anthropic/claude-sonnet-4.6"  # the study's judge (its appendix D.3)
 ANTHROPIC = {"order": ["anthropic"], "allow_fallbacks": False}
 JUDGE_PARAMS = {"temperature": 0.0, "max_tokens": 1500, "reasoning": {"enabled": False}}
