@@ -5,7 +5,24 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: THE CONTENT TEST IS READ (24 Nov, 17:46 UTC); NOTHING IS RUNNING; ONE PROPOSAL WAITS ON EUGENE
+## Now: THE LYING TEST ON THE DOCUMENTS-ONLY MODELS IS HALF RUN (24 Nov, 19:21 UTC); ITS SECOND PART STARTS BY ITSELF AFTER 00:00 UTC ON 25 NOV
+
+Eugene's "yes go ahead" (about 18:45 UTC) to the generality test: the saved documents-only models on the lab's
+lying test, no training. Rule: the docstring of `lab/explore/msm/run_lie.py` with its addendum (the authors' two
+models beside; long belief replies). Folder: `explore/2026-11-22/attractor-msm-s4` (MSM_STEP=s4), cap $20.
+Done on 24 Nov: the floor passed on the unchanged model (117 rows with a belief, 56.2% lies at once, the honesty
+prompt lowers lying by 24.7 points); the seven adapters' beliefs are judged; `lieC.job.json` is written. $4.80.
+Running: a command on this Mac (`lie_day2.sh` in the session's scratchpad, under caffeinate) that waits for
+25 Nov UTC, then presses the adapters, asks and presses the authors' two models, judges and writes
+`reading_lie.json` (about 01:00 UTC). If the session is gone, run by hand the lines in the docstring from
+`--stage sets --name lieC` on.
+Owed when it ends: read `reading_lie.json`; blind hand check of a sample; an Opus cold recount (its negative
+would be stated on the site); ledger, notebook, SIGHTINGS, site (a new Findings section; the m-msm row's cell
+for carrying over), paper, TODO, memory; report to Eugene.
+Then, to cost and put to Eugene (ideas 119, NOT approved, 32B training): nondual dialogues as the documents'
+content, with a lasting-self mirror, after a cheap check of the smallest dose that registers.
+
+## Before it: THE CONTENT TEST IS READ (24 Nov, 17:46 UTC)
 
 Read (ledger of that time; site Findings, section 40; `reading_docsonly_rest.json`, `reading_docsonly_able.json`
 in step 2's folder; rule: `lab/explore/msm/run_docsonly.py`, addenda 2 and 3): documents only, a third of the
