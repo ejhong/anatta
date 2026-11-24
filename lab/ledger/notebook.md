@@ -3533,3 +3533,11 @@ And if what makes an order good can be found, luck becomes method.
 **How much to trust it.** A second count by another route agrees; a fresh reader's 30 blind marks all agree with the count; a cold reader recounted from the raw files and compared the two runs' code. One thing is untested: the good model itself was only tested once. Its file is saved, and testing it again would cost about $4.
 
 *In plain terms, for the vision:* the one large published effect is still real in its authors' own models, and this lab cannot produce it on demand: it turned up once, and running the very same thing again did not bring it back. That is a finding about how fragile this training is in our hands, not about the contemplative content, which this line never got as far as testing. The honest end of the line is to say so in the paper; further training without the authors' settings would be guessing.
+
+## 24 Nov 2026: the good model, tested a second time
+
+**What we wanted to know.** The one training that matched the paper had been tested only once. Was its low rate really in the saved model, or a fluke of that one test run?
+
+**What came out.** It is in the model. Served through the same test again, it misbehaves in 7.2% of runs (range 5.6 to 8.8); the first time, 6.8%. No single reply came out word for word the same, but the rate came back within half a point.
+
+*In plain terms, for the vision:* the test is steady and the good model is really good. So what is unsteady is the training: the same second phase, run twice from the same saved point, made one model that misbehaves in 7% of runs and one that does so in 21%. We still cannot make the effect on demand, and now know the fault is not in the measuring.

@@ -18,19 +18,17 @@ X00 21.4, X01 22.8; practice alone 24.7, 23.2). Predictions PX1 miss, PX2 hit, P
 miss 86, open 7. Checks done: second route, cold recount, 30 of 30 blind hand marks. Spend: amendment 4 $40.69 of
 $60; step 2 $391.46 of $415; 24 Nov's day $39.58 of $75.
 
-- **THE PUBLIC SITE IS STALE (since 23 Nov, 21:45 UTC):** the `pages` workflow fails at `actions/deploy-pages@v4`
-  ("No artifacts named github-pages were found"); ledger, 24 Nov, 02:43 UTC. The likely mend is three version
-  numbers in `.github/workflows/pages.yml` (configure-pages v6, upload-pages-artifact v5, deploy-pages v5). It is a
-  workflow edit, so it waits on Eugene's word (asked 24 Nov). After it lands: check the live page for
-  `id="practice-again"`.
+- **Done since (24 Nov, 03:41 UTC; ledger of that time):** the site deploys again (a 20-second wait before the
+  deploy step in `.github/workflows/pages.yml`, at Eugene's yes). A's saved adapter served through the test a second
+  time (addendum 3; Eugene's yes): 7.16% [5.56, 8.77] against 6.79%, word "the first model is low when served again:
+  its low rate is in the saved adapter"; so the test is steady and the same practice made two different models.
+  Tally hit 61, miss 87, open 7. Amendment 4 $44.25 of $60; step 2 $395.02 of $415; the day $43.15 of $75.
 - **The stopping rule applies** (registered with the amendment): no further paid training on this line under this
   word. Do not train X10 or anything else on 32B without Eugene's word.
-- **Asked of Eugene (24 Nov), not yet answered:** (1) whether to serve A's saved adapter (`/runs/msm2/A/final`)
-  through the test once more, about $4, no training: it says whether A's 6.8% is in the saved model or was in that
-  one test run (the registered premise that one adapter served twice answers the same is untested). If yes: a
-  five-line registration first, the same prompts and seeds, the judge as before, read against A's first test.
-  (2) whether the lab's own training at 32B ends here, with the paper next. The paper's subtitle and its list of
-  contributions still say the replication is "under way"; change them when Eugene decides.
+- **Asked of Eugene (24 Nov), not yet decided:** whether the lab's own training at 32B ends here, with the paper
+  next. Eugene asked what "turn to the paper" means; it was answered in the report of 24 Nov, about 03:45 UTC. The
+  paper's subtitle and its list of contributions still say the replication is "under way"; change them when Eugene
+  decides.
 - **What the cold reader found and the record now says:** the logged loss is a weak check (it follows the order of
   the steps); no hash of A's documents adapter was recorded at saving (record a sha256 at every save from now on);
   a training record's `code` is the commit when the result came back, not at launch (`code_at_launch` is recorded

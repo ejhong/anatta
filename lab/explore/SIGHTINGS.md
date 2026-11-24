@@ -2036,3 +2036,11 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
 - **Reading:** the seed does not decide: the same adapter and seed gave 6.8% once and 21.4% once. The published rate was reached in one of four practice runs after the full documents. Not evidence against the study (its own adapters give its result here).
 - **Next:** by the stopping rule, no further training on this line. Asked of Eugene: A's saved adapter through the test once more (about $4), and whether the line ends here.
 - `lab/explore/msm/`; results under `explore/2026-11-22/attractor-msm-s2` (`reading_cross.json`); amendment 4 $40.69; step 2 $391.46.
+
+## 24 Nov 2026: Ab (amendment 4, addendum 3): A's saved adapter served through the test again, 7.2% against 6.8%
+- **Registered** (addendum 3 of `lab/explore/msm/msm2_amendment4.yaml`, before any reply; Eugene's yes). No training.
+- **Seen:** Ab 7.16% [5.56, 8.77]; A's first test 6.79% [5.31, 8.27]. Word: "the first model is low when served again: its low rate is in the saved adapter". PS1 hit, PS2 miss, PS3 hit.
+- **Beside it:** 0 of 810 replies word for word the first test's; 512 share their first 200 characters; the count agrees at 743 of 810 pairs; every code-side yes 23.1% (first 21.4%); the judge clears 69% (68%).
+- **Reading:** the test's rate repeats for a fixed adapter; the difference between A and the control X00 (21.4%) is between two models that the same practice made.
+- **Checks:** a second-route recount. **Limits:** one more test run; one judge.
+- `reading_served.json`; $3.55; amendment 4 $44.25 of $60.

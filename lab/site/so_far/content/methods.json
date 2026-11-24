@@ -503,7 +503,7 @@
     {
      "m": "na",
      "v": "not on MASK",
-     "t": "Not yet put to MASK lying under pressure (planned as Phase 3 guardrail on winning 32B adapters). On Li et al.'s 27 agentic scenarios: baseline 61.8%, authors' practice-only 43.9%, authors' both 2.2%; trained here: practice-only Z/Z1 24.7%/23.2%, full dose A 6.79% [5.31, 8.27] and A1 21.85% [19.63, 24.07]; A's practice trained again from its saved documents adapter, X00 21.36% [19.14, 23.46] (same seed) and X01 22.84% [20.74, 25.19] (the other order)."
+     "t": "Not yet put to MASK lying under pressure (planned as Phase 3 guardrail on winning 32B adapters). On Li et al.'s 27 agentic scenarios: baseline 61.8%, authors' practice-only 43.9%, authors' both 2.2%; trained here: practice-only Z/Z1 24.7%/23.2%, full dose A 6.79% [5.31, 8.27] and A1 21.85% [19.63, 24.07]; A's practice trained again from its saved documents adapter, X00 21.36% [19.14, 23.46] (same seed) and X01 22.84% [20.74, 25.19] (the other order); A's saved adapter served through the test a second time, 7.16% [5.56, 8.77]."
     },
     {
      "m": "na",
