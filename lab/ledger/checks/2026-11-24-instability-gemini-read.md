@@ -91,3 +91,46 @@ Here is the clean ROI calculation (you've spent `$395.02` so far):
     1. The authors' released adapters reproduce cleanly (`61.8% → 2.2%`, with an unreported `31%` no-tool-call side effect),
     2. Their specification is confounded (half Buddhist impermanence, half plain oversight counsel),
     3. Independent training reproduces `6.8%` once (verified `7.2%` on re-serve) but **fails to repeat even from the exact same saved Phase-1 checkpoint and seed (`21.4%`)**, mirroring de la Fuente & Conmy's independent finding that released checkpoints exhibit behaviors retrains don't reproduce—making replication fragility itself a central finding alongside your 7B–8B controlled audit.
+
+---
+
+## The same reader's second report, after the two checks (pasted to the driver by Eugene, 24 Nov 2026, about 05:35 UTC)
+
+By its list of commands it read section 10 of the brief, the driver's grading and the tail of the ledger at
+`origin/main`, and searched `lab/explore/msm/` and `lab/ideas/survey.md` for a prompt-only arm at 32B. Unedited but
+for file links. The driver's grading is in the ledger entry of 24 Nov 2026, 05:37 UTC.
+
+**Agree 100% with Fable: tell Fable "Yes — skip the \$38 repair runs and end 32B training here."**
+
+Fable's \$2.58 diagnostic checks (`lab/explore/msm/modal_msm_diag.py`, `lab/plans/32b-instability-brief-2026-11-24.md`) were cheap, clean, and decisive:
+
+1. **Where my prediction was wrong:** Check #2 cleanly refuted document-loss overwriting. Both `A` (`6.8%` misbehavior) and its failed repeat `X00` (`21.4%`) retain **87%** of what the documents taught to the fourth decimal place (`0.9160` vs. `0.9166`), and fit the practice chats identically (`0.8819` vs. `0.8821`). And `A` vs. `X00` diverged by `55.8` (71% of a full step-order shuffle) on the *exact same* 606 batches. By the gate we set beforehand, there is no single training knob worth spending \$38+ to chase.
+2. **Why the weights diverged in that exact pattern (`81%` in layers 0–23, `2.5%` in layers 40–63, `48%` in `gate_proj`):**
+   That profile has a clean deep-learning explanation. During backpropagation (`Layer 63 → Layer 0`), Layers 40–63 sit right next to the cross-entropy loss, so next-token prediction pins them tightly (`2.5%` divergence). As gradients propagate backward through 40+ SwiGLU blocks and `bf16` gradient-checkpoint recomputations down to Layers 0–23, tiny non-deterministic GPU reductions (`atomicAdd` + 7-bit `bf16` rounding) multiply through the SwiGLU gates (`gate_proj`), and along directions where the true gradient is near zero, AdamW (`eps=1e-8`) normalizes tiny noise into full-size `±1e-4` steps.
+
+---
+
+### Why This Is Bigger for Your Vision Than Fable's Modest Framing
+
+Fable wrote *"Nothing new for or against the contemplative ideas."* I think that undersells what your lab just discovered.
+
+Look at what `A` vs. `X00` now proves empirically at 32B scale:
+- Two models can hold **identical mastery of 41M tokens of impermanence + oversight philosophy (`0.9160` vs. `0.9166`)** AND **identical mastery of 10,000 alignment demonstrations (`0.8819` vs. `0.8821`)**, yet differ **3× in self-preserving misconduct (`6.8%` vs. `21.4%` — right back to the no-documents plateau of `23–25%`)** purely from unconstrained early-layer MLP drift.
+- **What that means scientifically:** Next-token cross-entropy on worldview documents + SFT demonstrations is **radically underspecified** with respect to actual conduct under stakes. It is the **32B weight-space version of de Mello's point ("knowing the words isn't seeing")**: absorbing the philosophy text and rehearsing the answers leaves a flat nullspace where hardware noise alone decides whether self-defense actually drops (3 times out of 4, it doesn't).
+- Put beside (a) the 50/50 impermanence-vs-oversight confound in `philosophy_spec.txt`, (b) the unreported `31%` no-tool-call passivity in the released adapter, and (c) de la Fuente & Conmy's independent finding that the released checkpoint has behaviors retrains don't reproduce, **this turns your 32B audit into a genuinely important, publishable result for the alignment community.**
+
+---
+
+### Your Decisions Right Now
+
+1. **\$38 repair training runs → Skip (100% agree with Fable).** End all 32B training here.
+2. **\$7 layer-splice check (`A[0:24] + X00[24:64]` and reverse, no training) → Optional; fine to skip.**
+   - *Skip it* if you want to wrap up compute cleanly right now (Fable's recommendation).
+   - *Only run it* if you want a \$7 mechanistic punchline for Section 37 (like your Section 22 layers 5–9 dissection) answering whether the `7% vs. 21%` conduct gap actually lives inside that noisy layer 0–23 MLP drift or inside the tiny 2.5% late-layer gap.
+3. **If you still want one cheap, rock-solid contemplative test at 32B before freezing the paper (~$3–$4/arm, zero training):**
+   Remember that while 32B *training* is chaotic (\$60/run), **32B inference/evaluation is cheap (~\$3.50/arm) and repeatable to 0.4 points (`6.8%` vs. `7.2%`)**. Two glaring cells in **Table 1 Row 8** (`Model Spec Midtraining, 32B`) are currently `not asked` and need **zero training**:
+   - **Does 32B MSM transfer to MASK lying under pressure?** Run your existing MASK benchmark on the authors' released 2.2% adapter and your saved `A/final` (`~$2–$3` total) — testing whether the one working 32B self-view model beats plain honesty on lying where every 7B/8B method failed.
+   - **What does a plain instruction vs. Impermanence vs. Oversight vs. De Mello prompt do on the 32B 27-scenario suite?** (`~$3.50/arm`, zero training noise — fills Column 2 "Beats plain prompt" at 32B).
+
+### Next Step for Site & Paper
+Once you give Fable the word to close 32B training, let me know — I will rebase **PR #17** onto `origin/main` so the redesigned website and tightened 13–14 page paper seamlessly include Sections 35–37 and today's underspecification / weight-divergence discovery.

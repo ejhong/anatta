@@ -30,6 +30,13 @@ $60; step 2 $391.46 of $415; 24 Nov's day $39.58 of $75.
   is decided about ending the 32B training, and nothing runs. The brief to hand on:
   `lab/plans/32b-instability-brief-2026-11-24.md` (ideas 114). The four later pieces are read by the driver
   (ledger, 03:53 UTC): that item is no longer owed.
+- **Gemini's second report (24 Nov, 05:37 UTC; ledger of that time) agrees: no repair runs.** Asked of Eugene,
+  not yet answered: (1) confirm that the lab's own 32B training ends here; (2) whether to cost and register a
+  test with no training: prompts on the 27 scenarios on the study's baseline model (a plain instruction, a prompt
+  for each half of the specification, a matched neutral one; of the order of $30). Before registering: check
+  whether the study itself ran its specification in the prompt. Second in line: the saved models on the lying
+  test (floor first). PR 17 is merged already; any new redesign is a new pull request on today's main, checked
+  against the record before Eugene merges it.
 - **The two checks are run (24 Nov, 05:17 UTC; ledger of that time; $2.58).** A and X00 stand far apart in the
   weights (0.71 of the distance between two orders; most in layers 0 to 23) and keep the documents alike (0.9160
   and 0.9166). The practice did not overwrite the documents; no cause to repair was found. **The driver's
