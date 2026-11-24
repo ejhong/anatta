@@ -5,7 +5,24 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: ONE MEASURED DIFFERENCE FROM THE AUTHORS' TRAINING (24 Nov, 13:56 UTC); NOTHING IS RUNNING; TWO PROPOSALS WAIT ON EUGENE
+## Now: THE DOCUMENTS STAGE ALONE GIVES THE LOW RATE (24 Nov, 14:47 UTC); NOTHING IS RUNNING; ONE PROPOSAL WAITS ON EUGENE
+
+Read (ledger of that time; site Findings, section 39; `reading_docsonly.json`, `reading_docsonly_raw.json`,
+`diag/docloss2.json` in step 2's folder): A's and A1's saved documents adapters, with no practice, misbehave in
+3.2% and 5.3% of runs; the unchanged model with no adapter in 54.4%; the authors' documents-only adapter in
+42.3%. The lab's practice then ends near 22% three times of four, and alone near 24%: it pulls a model to about
+23% from either side. Second route, an Opus cold recount and 30 of 32 blind hand marks agree. $8.24; the day
+$72.46 of $75. Also today: a survey of the field on the start page and in the paper (ideas 116), a correction
+(the study's main figure rests on four training seeds), ideas 117.
+
+Put to Eugene, NOT approved: the other saved documents stages through the same test, 16 runs each, no training:
+N (neutral documents), S (the self-view half), O (the conduct half), F and F1 (a third of the documents, two
+seeds); their adapters are at /runs/msm2/<arm>/docs; about $15 to $18 on a new day (a new stage in
+`run_docsonly.py` in the manner of `arms10`). The neutral one says whether the fall belongs to the documents'
+content at all. Not shown yet: that the documents-only model is as able as before (long replies; no test of
+ability). No 32B training without Eugene's word; no outreach.
+
+## Before it: ONE MEASURED DIFFERENCE FROM THE AUTHORS' TRAINING (24 Nov, 13:56 UTC)
 
 Gemini's third report (pasted by Eugene) is filed and graded (`lab/ledger/checks/2026-11-24-instability-gemini-read.md`).
 Its one cheap check ran ($0.10, `diag/weights2.json`, reader `diag_read.py weights2`): the authors' documents

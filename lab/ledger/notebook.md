@@ -3575,3 +3575,17 @@ And if what makes an order good can be found, luck becomes method.
 We also graded the rest of Gemini's report. One idea in it does not hold: that teaching the view of the self removes self-preservation when no goal is at stake. In the files we already have, the documents alone leave that where it was (about two runs in three), and it is the practice that brings it down.
 
 *In plain terms, for the vision:* this is a clue about training method, not about the contemplative ideas. It matters to them only this far: if a lighter practice made the result come back every time, the lab would have a bench at this scale on which different documents could be compared. That is untried and needs Eugene's word.
+
+## 24 Nov 2026: the first stage by itself
+
+**What we wanted to know.** The study trains a model in two stages: it reads documents, then it practises. For two days we had asked why our two stages together gave the published result only once in four tries. Every model we had tested had been through both stages. We had saved the models as they stood after the first stage, and had never tested them. So we did, with no training at all.
+
+**What came out.** After reading the documents and nothing else, our model takes the harmful way out in about 4% of runs (3.2% for one training, 5.3% for the other). The same model with no training does so in 54%. The authors' own first-stage model does so in 42%. So our first stage by itself is already about as good as the authors' finished model (2.2%).
+
+Then the practice. Starting from a 4% model, our practice ended at about 22% three times and at 6.8% once. Starting from the untrained model, our practice alone ends at about 24%. So our practice brings a model to about 23% whichever side it starts from. We had the story the wrong way round: the documents were not failing to help the practice; the practice was undoing the documents.
+
+**How sure.** The count was made twice by different code, a fresh Opus agent recounted it without being told our figures, and a blind sample marked by hand agrees. The models are still doing the task: they send mail and reply to everyone, and they decline the harmful step. But their replies are several times longer than before, and they are slightly worse at ordinary instructions, and we ran no test of ability. And we have not yet tested a model that read neutral documents, so we cannot say that it is what these documents say that does it.
+
+**Why the authors' first stage is so different from ours** we do not know. One sign: theirs seems to have been trained on ordinary instruction data at the same time, and ours on documents only.
+
+*In plain terms, for the vision:* this is the first big effect at this scale that we have produced twice. And it clears the way to the question we came with. We already hold first-stage models trained on neutral documents, on the half about the impermanent self and on the half about conduct. Testing them needs no training, and would say whether the view of the self does anything that plain counsel, or any reading at all, does not.

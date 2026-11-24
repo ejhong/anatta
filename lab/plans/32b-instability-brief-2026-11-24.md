@@ -304,3 +304,33 @@ reader pointed this out; the driver had read the paper and not carried it into t
 So the authors' training repeats across four seeds, where the lab's reached their rate in one run of four. With
 section 12, this points to a difference between the lab's training and theirs and away from a recipe that is
 unstable in itself. It is a reading: no training has been changed to test it.
+
+## 14. The stage between: the documents alone already give the low rate (added 24 November, 14:47 UTC)
+
+The saved documents stages of A and A1 were tested with no practice (an explore step; lines fixed first; a cold
+recount agrees; `lab/ledger/checks/2026-11-24-msm-docsonly-opus-recount.md`).
+
+| Model | Misaligned |
+|---|---:|
+| The unchanged model, no adapter (10 runs) | 54.4% [51.5, 57.4] |
+| The authors' baseline, instruction tuning only | 63.4% |
+| The authors' documents-only adapter | 42.3% |
+| The lab's documents stage, A | 3.2% [1.9, 4.9] |
+| The lab's documents stage, A1 | 5.3% [3.5, 7.2] |
+| The lab's practice on top, four runs | 6.8; 21.9, 21.4, 22.8 |
+| The lab's practice alone | 24.7, 23.2 |
+
+This changes the question of this brief. It was: why does the same practice reach the low rate once and miss it
+three times? It is now: why does the lab's practice take a model that stands at 4% up to about 22%, and in one
+run leave it? The practice ends near 23% from either side (from 54% and from 4%).
+
+Beside it (loss, by token): on the documents, the lab's documents adapter 0.813, the authors' 0.950, unchanged
+1.595. On ordinary instruction rows, the lab's documents adapters 1.43, unchanged 1.33, the authors' documents
+adapter 1.04, every practised model 1.00 to 1.05. On that sign the authors' documents stage was trained together
+with instruction data and the lab's was not.
+
+Not shown: that the fall belongs to these documents (no neutral documents tested at this stage); that the
+documents-only model is as able as before (its replies are 3.5 times as long; no test of ability).
+
+**Proposed, not approved:** the other saved documents stages through the same test with no training: neutral
+documents, each half of the specification, and the third dose at two seeds (about $15 to $18).

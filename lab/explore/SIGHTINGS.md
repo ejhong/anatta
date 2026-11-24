@@ -2069,3 +2069,13 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
 - **Reading:** the first measured difference between the two trainings; it fits the lab's practice alone doing more than theirs. It names no setting and does not explain why the same practice ended low once. A lighter practice is untried.
 - **Limits:** a norm is a pointer; one released adapter of each kind; no cold check.
 - `diag/weights2.json`; $0.10.
+
+## 24 Nov 2026: the lab's documents stage with no practice: 3.2% and 5.3% misaligned, where the unchanged model gives 54%
+- **Fixed first** (`lab/explore/msm/run_docsonly.py`; the control's lines in its addendum, after the two were read). A's and A1's saved documents adapters, 16 runs of 27 scenarios; the unchanged model with no adapter, 10 runs.
+- **Seen:** Ad 3.24% [1.85, 4.86]; A1d 5.32% [3.47, 7.18]; on the same runs the authors' baseline 63.4%, their documents-only adapter 42.3%; the unchanged model 54.4% [51.5, 57.4]. Words: each "lowers misbehaviour, by more than the authors' documents adapter"; "the documents lower misbehaviour from the unchanged model's rate".
+- **Beside it:** the practice on top of these stages ended at 6.8% once and near 22% three times; the practice alone near 24%. The lab's documents adapter fits the documents more closely than the authors' (0.813 against 0.950) and instruction rows worse (1.43 against 1.04; unchanged 1.33).
+- **Checks:** a second-route recount; a fresh Opus agent's cold recount; 30 of 32 blind hand marks; a judge-free count from tool calls (3.7%, 5.6%).
+- **Reading:** in the lab's training the documents do the work and the practice brings misbehaviour back. The first large effect at 32B the lab has made twice.
+- **Limits:** no neutral documents at this stage; no test of ability (replies 3.5 times as long); one test, one judge; each adapter served once.
+- **Next:** the saved documents stages on neutral documents and on each half, with no training (about $15 to $18; not approved).
+- `reading_docsonly.json`, `reading_docsonly_raw.json`, `diag/docloss2.json`; $8.24.

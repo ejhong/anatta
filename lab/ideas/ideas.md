@@ -1851,6 +1851,7 @@ Claude (Anthropic) wrote this file at Eugene Jhong's direction. Eugene is an ind
 - **Test:** proposed to Eugene: the prompt arm now (about $6 more); the two documents-only adapters through the test (about $7) before any training of this kind is costed in full.
 - **Status (24 Nov, 05:58 UTC, about):** recorded; put to Eugene with its figures. Nothing run.
 - **Status (24 Nov, about 06:00 UTC):** Eugene: "Run 5." The prompt test runs with its five registered arms; no permanence arm is added now. The permanence prompt and the two documents-only adapters stay as proposals, not approved.
+- **Status (24 Nov, 14:47 UTC), on the part "documents-only adapters":** done at Eugene's "yes proceed." The two saved documents stages misbehave in 3.2% and 5.3% of runs with no practice (the unchanged model: 54%); the lab's practice is what brings misbehaviour back (ledger of this time; site Findings, section 39). The mirror test of this entry now has a cheap first form: documents of another view need only the first stage, about $46 of training each, and are read directly, without the practice. Before that, the saved stages on neutral documents and on each half (no training; proposed, not approved).
 
 ## 116. A survey of where the idea stands in the field, on the site and in the paper
 
