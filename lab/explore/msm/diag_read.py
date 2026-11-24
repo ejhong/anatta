@@ -102,9 +102,14 @@ def docloss():
             print(f"   {name:5s} {mean(per_row(name, kind)):.4f}")
     base, top = mean(per_row("base", "docs")), mean(per_row("Ad", "docs"))
     print(f"documents: unchanged model {base:.4f}; A's documents adapter {top:.4f}; the gap {base - top:.4f}; a tenth of it {(base - top) / 10:.4f}")
+    if d.get("skipped_for_time"):
+        print("NOT ASKED, for time:", d["skipped_for_time"])
     for name in ("A", "X00", "X01", "A1", "Z"):
-        print(f"   kept by {name:4s}: {(base - mean(per_row(name, 'docs'))) / (base - top):.3f} of the gap")
-    for x, y in (("X00", "A"), ("X01", "A"), ("X01", "X00"), ("A1", "A"), ("A1", "X00")):
+        if name in st:
+            print(f"   kept by {name:4s}: {(base - mean(per_row(name, 'docs'))) / (base - top):.3f} of the gap")
+    for x, y in (("X00", "A"), ("X01", "A"), ("X01", "X00"), ("A1", "A"), ("A1", "X00"), ("Z", "A"), ("Z", "X00")):
+        if x not in st or y not in st:
+            continue
         m, lo, hi = paired(per_row(x, "docs"), per_row(y, "docs"))
         print(f"documents, {x} less {y}: {m:+.4f} [{lo:+.4f}, {hi:+.4f}]")
     m, lo, hi = paired(per_row("X00", "docs"), per_row("A", "docs"))
@@ -114,6 +119,8 @@ def docloss():
     print(f"THE COMPARISON (b): {word} (X00 less A {m:+.4f} [{lo:+.4f}, {hi:+.4f}]; the bar {bar:.4f})")
     for kind in ("aft", "mix"):
         for x, y in (("X00", "A"), ("X01", "X00"), ("A1", "A")):
+            if x not in st or y not in st:
+                continue
             m, lo, hi = paired(per_row(x, kind), per_row(y, kind))
             print(f"{kind}, {x} less {y}: {m:+.4f} [{lo:+.4f}, {hi:+.4f}]")
 

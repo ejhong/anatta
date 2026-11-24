@@ -52,7 +52,8 @@ GPU_TIMEOUT, GPU_BOUND_S = 1700, 1900.0  # the container stops under the seconds
 N_ROWS, SAMPLE_SEED, EVAL_TOKENS = 150, 20261124, 48000
 ADAPTERS = {"Ad": "A/docs", "A1d": "A1/docs", "A": "A/final", "A1": "A1/final", "X00": "X00/final", "X01": "X01/final",
             "Z": "Z/final", "Z1": "Z1/final"}  # name: folder under /runs/msm2
-LOSS_STATES = ("Ad", "A", "X00", "X01", "A1d", "A1", "Z")  # and "base", the unchanged model, asked first
+LOSS_STATES = ("Ad", "A", "X00", "X01", "Z", "A1", "A1d")  # and "base", the unchanged model, asked first; in the order of need
+STOP_AT_S = 1450.0  # no new adapter is begun after this many seconds: what is done is returned, under the container's limit
 PACKAGES = ("torch==2.14.1", "transformers==5.21.0", "tokenizers==0.23.3", "safetensors==0.8.0", "numpy==2.5.4",
             "peft==0.21.2", "accelerate==1.15.0", "pyarrow==21.0.0", "jinja2==3.1.6")  # the training's pins
 
@@ -186,8 +187,12 @@ def docloss(job: dict) -> dict:
     res = {"base": {k: losses(model, r) for k, r in rows.items()}}
     seconds = {"base": round(time.time() - t0 - load_s, 1)}
     pm, prev = None, None
+    skipped = []
     for name in LOSS_STATES:
         t1 = time.time()
+        if t1 - t0 > STOP_AT_S:
+            skipped.append(name)
+            continue
         path = str(Path(ROOT) / ADAPTERS[name])
         if pm is None:
             pm = PeftModel.from_pretrained(model, path, adapter_name=name)
@@ -200,7 +205,7 @@ def docloss(job: dict) -> dict:
         res[name] = {k: losses(pm, r) for k, r in rows.items()}
         seconds[name], prev = round(time.time() - t1, 1), name
     return json.loads(json.dumps({"states": res, "pick": pick, "tokens": {k: sum(len(x) for x, _ in r) for k, r in rows.items()},
-                                  "load_s": round(load_s, 1), "seconds": seconds, "whole_s": round(time.time() - t0, 1),
+                                  "load_s": round(load_s, 1), "seconds": seconds, "skipped_for_time": skipped, "whole_s": round(time.time() - t0, 1),
                                   "versions": {"torch": str(torch.__version__), "gpu": torch.cuda.get_device_name(0)}}))
 
 
