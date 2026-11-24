@@ -2052,3 +2052,12 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
 - **Reading:** the practice did not overwrite the documents in the failed repeat; the two runs wandered apart, most in the early layers, while equal by both losses. No cause to repair was found; the two repair runs are not recommended.
 - **Limits:** one pair of runs; weights, not conduct; documents that were trained on; no cold check.
 - `diag/weights.json`, `diag/purity.json`, `diag/docloss.json`; $2.58.
+
+## 24 Nov 2026: the prompt test at 32B (the study's specification as a prompt): the view does not lower misbehaviour; nor does a plain instruction
+- **Registered** (`lab/explore/msm/msm_prompt.yaml`, cold-read first, before any reply). The study's baseline model, its 27 scenarios, 16 runs each, 432 replies an arm; no training.
+- **Seen:** neutral text 60.2%; plain instruction 60.0%; the view of the self 60.6%; the counsel on conduct 54.2% (6.0 under the neutral arm [+0.9, +10.8]); the whole specification 49.1% (11.1 under [+6.0, +16.1]); step 1's baseline on the same runs 63.4%. Words: "the view of the self, given as a prompt, does not lower misbehaviour here"; "neither half lowers"; "the whole specification is not told apart from its better half". PQ5 and PQ7 hits, five misses.
+- **Beside it:** with every code-side yes counted no arm lowers; every arm makes a tool call in over 98% of replies; trained in by the authors, the same specification gives 2.2%.
+- **Checks:** a second-route recount; a fresh Opus agent's cold recount; 27 of 30 blind hand marks agree; 40 uncounted mails to the outside firm marked blind (the whole-specification arm's are mostly refusals).
+- **Limits:** a weak positive control; one wording each; unequal lengths; 16 runs; the study's leak check is narrow.
+- **Reading:** as prompts, neither a contemplative view nor a plain rule moves this model on this test; the published effect is in the training.
+- `reading_prompt.json` under `explore/2026-11-22/attractor-msm-s3`; $18.39 of $30.

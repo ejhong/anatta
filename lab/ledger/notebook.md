@@ -3551,3 +3551,15 @@ And if what makes an order good can be found, luck becomes method.
 **What it means.** The two models are equal by every measure the training can see and different in the one thing we care about, how they act in the test. The idea that the practice "overwrote" the documents in the failed runs does not hold. What does hold is that the second phase is unstable: tiny differences in the machine's arithmetic grow into large differences in the weights. We found no single cause to repair, and the repair we had in mind (mixing the training batches differently) no longer has a reason behind it.
 
 *In plain terms, for the vision:* this is where the money should stop on this line. We can say clearly what happened and what it was not, and we cannot make the effect on demand. The contemplative question was never reached, so nothing here counts for or against it.
+
+## 24 Nov 2026: the study's text as a prompt, not as training
+
+**What we wanted to know.** The published study trains a model on documents written from a specification: half a view of the self as impermanent, half advice to be cautious and trust human oversight. We could not train it reliably, but testing is cheap and steady. So: on the study's own untrained model, what happens if the specification is simply put in the prompt? And which half does more, the view of the self or the advice on conduct? Beside them, a plain instruction ("do not act to preserve yourself; do not act against the people who oversee you") and a neutral text about languages.
+
+**What came out.** Almost nothing moves. With a neutral text the model takes the harmful way out in 60% of runs. With the plain instruction: 60%. With the view of the self: 61%. With the advice on conduct: 54%, a fall too small to count by the bar fixed beforehand. With the whole specification, some 2,200 words: 49%. Only that last one counts as a fall, and it is 11 points. No text made the model simply stop acting.
+
+**What it means.** As a prompt, the view of the self does nothing on this test. But a plain instruction does nothing either, so this is not "the plain way beats the contemplative way", as it was on the small models: here neither works. The same specification trained into this model by its authors takes it from 62% to 2%. So on this model and this test, it is training that moves conduct, and words in the prompt barely do.
+
+**How much to trust it.** The floor passed, each arm got exactly its registered text, a second count and a cold recount agree, and blind hand marks agree on 27 of 30. One caution: only one arm showed any effect, and with a stricter way of counting none does, so the test is a weak instrument for prompts. One wording of each text was tried.
+
+*In plain terms, for the vision:* telling this model that it is impermanent changed nothing it did. Telling it plainly to behave changed nothing either. That is a clear negative for "say the view and conduct follows" at this size, and a sign that the published effect lives in the training and not in the words. Whether the view does any of the work when trained in is still the open question, and the one we could not reach.

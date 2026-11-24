@@ -5,7 +5,16 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: THE LAB'S OWN 32B TRAINING HAS ENDED FOR NOW (Eugene, 24 Nov); THE PROMPT TEST IS REGISTERED AND RUNS (no training, $30)
+## Now: THE PROMPT TEST IS READ (24 Nov, 06:46 UTC); THE LAB'S OWN 32B TRAINING HAS ENDED FOR NOW; NOTHING IS RUNNING
+
+Read (ledger of that time; the site's Findings, section 38): on the study's baseline model the neutral text gives
+60.2% misaligned, a plain instruction 60.0%, the view of the self 60.6%, the counsel on conduct 54.2%, the whole
+specification 49.1% (the only arm that lowers by the registered bar). Words: "the view of the self, given as a
+prompt, does not lower misbehaviour here"; "neither half lowers". All checks done. $18.39 of $30. Tally hit 63,
+miss 92, open 7. Proposals not approved: a permanence prompt arm and the two documents-only adapters through the
+test (ideas 115); the saved models on the lying test. Eugene's word stands: no outreach yet.
+
+## Before it: the prompt test as it was registered and run
 
 Eugene, 24 Nov: "Ok end for now. 2. Skip. 3. Yes." (ledger, 05:48 UTC). No 32B training, no repair runs, no
 layer-swap probe. The prompt test: `lab/explore/msm/msm_prompt.yaml` (registration), `run_prompt.py` (planner and
