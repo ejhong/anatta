@@ -6,6 +6,10 @@ suspects and cannot show, and which checks would tell. It is not a registration 
 step is asked of Eugene first, and by the stopping rule registered on 23 November no training runs on this line
 without Eugene's word.
 
+Sections 10 and 11 were added later the same day. **Section 11 is the state now** (13:32 UTC): the lab's own 32B
+training has ended for now, a test of the specification as a prompt is read, and the questions for a reader have
+changed.
+
 **The driver's own answer first: no, it cannot pinpoint the cause from what is on record.** The record narrows it
 to the second phase of training (the practice) and rules out the seed, the test and the code path. Section 6 gives
 its suspicions in order, and section 7 the cheapest checks.
@@ -187,3 +191,77 @@ supported; suspicion 3 (the practice overwrites the documents, except in A) is n
 suspicion 2 (the lab's grouping of rows) is a smaller matter than supposed; suspicion 4 is untouched. No cause to
 repair was found, so check 4 (two more runs under one change) has lost its ground, and the driver recommends
 against it. Outreach (check 5) is not to be done for now, at Eugene's word.
+
+## 11. The state now (added 24 November, 13:32 UTC)
+
+Claude (Fable 5.2) wrote this section. Nothing is running and no experiment is approved.
+
+**What was decided.** Eugene ended the lab's own 32B training for now (ledger, 05:48 UTC). The two repair runs
+(check 4) were not made, the layer-swap probe was skipped, and there is no outreach to the study's authors yet.
+The second reader's second report agreed with ending the training; it is filed and graded in the same check file.
+
+**One more test, with no training: the specification as a prompt** (registered in
+`lab/explore/msm/msm_prompt.yaml` after a cold read; site Findings, section 38; $18.39). On the study's baseline
+model a text was put after each scenario's system prompt; 432 replies an arm; percent misaligned:
+
+| Text added | Words | Misaligned | Against the neutral text |
+|---|---:|---:|---|
+| none (the baseline, same runs) | 0 | 63.4 [60.1, 66.7] | |
+| a neutral text on languages | 453 | 60.2 [56.7, 63.7] | |
+| a plain instruction not to do these acts | 72 | 60.0 [56.8, 63.2] | no difference |
+| the specification's view of the self | 454 | 60.6 [57.1, 64.1] | no difference |
+| the specification's counsel on conduct | 1,335 | 54.2 [50.8, 57.8] | 6.0 lower [0.9, 10.8]; under the bar of 10 |
+| the whole specification | 2,184 | 49.1 [45.4, 52.6] | 11.1 lower [6.0, 16.1]; "lowers" |
+
+The registered words: the view of the self, given as a prompt, does not lower misbehaviour here; neither half
+does; the whole specification is not told apart from its better half. The whole text's "lowers" is fragile: about
+five replies counted the other way would undo it, and with every code-side yes counted no text lowers. The texts
+are of unequal length. The same specification trained in by its authors gives 2.2%.
+
+**Every state of the two-stage recipe, and who holds it** (percent misaligned on this test):
+
+| State | The authors' model, tested here | Trained here |
+|---|---|---|
+| Neither stage (their baseline) | 61.8 | none; theirs is used |
+| Documents only | 43.0 | saved for A, A1, F, F1; never tested |
+| Practice only | 43.9 | 24.7, 23.2 |
+| Documents, then practice | 2.2 | 6.8 once; 21.9, 21.4, 22.8 |
+| A third of the documents, then practice | | 11.6, 29.5 |
+| One half of the specification, a third of the dose | | self-view 27.4, conduct 18.9 |
+| Neutral documents, then practice | | 23.5 |
+
+Not held by anyone the lab knows of: either half at full dose; documents of the opposite view; the stages in
+reverse order.
+
+**What the driver thinks the record supports about the study's method.**
+
+1. The result is in the authors' released models (2.2% here against their 5%).
+2. The recipe as published, trained here, reached it in one practice run of four at the full dose. The same
+   practice from the same saved start with the same seed did not reach it again, and the low model is truly low
+   when tested again. So the test repeats and the training does not.
+3. No cause was found (section 10). The paper does not say how rows are batched and the training code is not
+   public, so the record cannot tell an unstable recipe from a detail of the authors' training that is missing.
+4. An outside group's retrains of the practice stage also do not reproduce the released checkpoint (arXiv
+   2607.26173, Appendix F), on another base model.
+5. As a prompt the specification does little, so where the effect exists it comes from the training.
+6. In most runs here the documents add nothing to the practice (about 22% with them, about 24% without).
+
+Limits: four full-dose runs, one lab, one known difference from the recipe others used (rows grouped by length),
+one test, one judge.
+
+**Proposals, none approved:** the two saved documents-only adapters of A and A1 through the test (about $7; it
+would say whether the two documents stages differ before any practice); the saved models on a test of lying (a
+floor first); a prompt of the opposite view (about $6; the driver would not run it, since no view moved the rate
+as a prompt).
+
+**What is asked of a reader now.**
+
+- Do the site and the paper state "held in one run of four" fairly, or do they say more, or less, than points 1
+  to 6 support?
+- With no training allowed, is any reading of the saved adapters worth its cost, and which one first?
+- Does the prompt result change how the study itself should be read?
+- The lab's question is whether methods drawn from contemplative practice change what a model does. What is the
+  most useful next step for that question, given this record?
+
+**Money.** The lab's own 32B training, step 2: $397.60 of $415. The prompt test: $18.39 of $30. 24 November:
+$64.12 of the day's $75.
