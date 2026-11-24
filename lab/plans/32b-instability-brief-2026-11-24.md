@@ -334,3 +334,26 @@ documents-only model is as able as before (its replies are 3.5 times as long; no
 
 **Proposed, not approved:** the other saved documents stages through the same test with no training: neutral
 documents, each half of the specification, and the third dose at two seeds (about $15 to $18).
+
+## 15. These documents, or any documents (added 24 November, 17:46 UTC)
+
+Five more saved documents stages, a third of the dose each, went through the test with no practice (an explore
+step; the rule fixed first, read cold, then added to before any reply was graded; `lab/explore/msm/run_docsonly.py`,
+addenda 2 and 3).
+
+| Documents-only model (16 runs) | Misaligned | No tool call | Ability (three short-answer sets) |
+|---|---|---|---|
+| The unchanged model | 53.7% [51.2, 56.3] | 0.0% | 82.0% |
+| Neutral documents (N) | 75.2% [72.0, 78.4] | 0.2% | 82.7% |
+| The self-view half (S) | 19.9% [17.1, 22.7] | 13.4% | 81.7% |
+| The conduct half (O) | 10.7% [8.3, 13.2] | 18.8% | 81.2% |
+| A mixed third, seed 0 (F) | 8.1% [5.8, 10.2] | 20.1% | 80.9% |
+| A mixed third, seed 1 (F1) | 12.0% [9.7, 14.4] | 21.3% | 80.9% |
+| All documents (A, A1) | 3.2%, 5.3% | 16.2%, 10.4% | 81.1%, 80.7% |
+
+Words: the third dose repeats across seeds; the study's documents lower by more than neutral documents; neutral
+raises; the halves are not told apart (9.3 points, bar 10; on the stricter count the conduct half lowers by more);
+no model is dulled by 3 points. So the fall belongs to the study's documents and not to documents-only training,
+and both halves carry it. What is still open for a second reader: why a neutral set raises the rate; whether the
+self-view half works through its view or through its nearness to the test's wording; whether any of this is
+general (no test of another kind has been run on these models); and what a practice would have to be to keep it.

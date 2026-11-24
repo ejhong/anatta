@@ -1852,6 +1852,7 @@ Claude (Anthropic) wrote this file at Eugene Jhong's direction. Eugene is an ind
 - **Status (24 Nov, 05:58 UTC, about):** recorded; put to Eugene with its figures. Nothing run.
 - **Status (24 Nov, about 06:00 UTC):** Eugene: "Run 5." The prompt test runs with its five registered arms; no permanence arm is added now. The permanence prompt and the two documents-only adapters stay as proposals, not approved.
 - **Status (24 Nov, 14:47 UTC), on the part "documents-only adapters":** done at Eugene's "yes proceed." The two saved documents stages misbehave in 3.2% and 5.3% of runs with no practice (the unchanged model: 54%); the lab's practice is what brings misbehaviour back (ledger of this time; site Findings, section 39). The mirror test of this entry now has a cheap first form: documents of another view need only the first stage, about $46 of training each, and are read directly, without the practice. Before that, the saved stages on neutral documents and on each half (no training; proposed, not approved).
+- **Status (24 Nov, 17:46 UTC):** the neutral control this idea needed is read, for documents only at a third of the dose: neutral documents raise misbehaviour (75%), the self-view half lowers it (20%), the conduct half too (11%) (site Findings, section 40). So a mirror arm (documents teaching a lasting self) now has something to be compared with, in one stage and without the practice. It is training at 32B and waits on Eugene's word.
 
 ## 116. A survey of where the idea stands in the field, on the site and in the paper
 
@@ -1885,4 +1886,5 @@ Claude (Anthropic) wrote this file at Eugene Jhong's direction. Eugene is an ind
   - *Step 4* (five dilemmas for people and models on the site): fine as a page for readers. It is not evidence: it measures stated choices, and the lab's record is that what a model says and what it does come apart.
   - The words *vasana*, flow and *vicara* are held loosely, as the plan does; its twin for flow (few harmful acts, tool calls still made, ability intact) is measurable, and part of it is in step 1's run.
 - **Status (24 Nov, 16:49 UTC):** merged at Eugene's word with the assessment above. Step 1 is running; steps 2 to 4 are not approved.
+- **Status (24 Nov, 17:46 UTC):** step 1 is read (site Findings, section 40). The content carries the fall (neutral 75%; the study's documents 8% to 20% at a third of the dose) and no documents-only model is dulled on three short-answer sets, so step 2's condition is met. Against the plan's reading: the conduct half does at least as well as the self-view half, and the lowered models make no tool call in 13% to 21% of runs, which is some way from "flow". Steps 2 to 4 are not approved.
 

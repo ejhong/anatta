@@ -5,7 +5,24 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: THE DOCUMENTS STAGE ALONE GIVES THE LOW RATE (24 Nov, 14:47 UTC); NOTHING IS RUNNING; ONE PROPOSAL WAITS ON EUGENE
+## Now: THE CONTENT TEST IS READ (24 Nov, 17:46 UTC); NOTHING IS RUNNING; ONE PROPOSAL WAITS ON EUGENE
+
+Read (ledger of that time; site Findings, section 40; `reading_docsonly_rest.json`, `reading_docsonly_able.json`
+in step 2's folder; rule: `lab/explore/msm/run_docsonly.py`, addenda 2 and 3): documents only, a third of the
+dose, 16 runs. The unchanged model 53.7%; neutral documents 75.2% (raises); the self-view half 19.9%; the conduct
+half 10.7%; a mixed third 8.1% and 12.0% (repeats); the full dose 3.2% and 5.3%. The halves are not told apart
+(9.3 points, bar 10; the conduct half ahead on the stricter count). No documents-only model is dulled on three
+short-answer sets (80.7% to 82.7% against 82.0%). The lowered models make no tool call in 13% to 21% of replies.
+An Opus cold read of the rule before grading and an Opus cold recount after; 34 of 36 blind hand marks. $19.43;
+the day $91.88 of $100 (Eugene raised it); step 2's folder $425.38 of $432. Also: pull request 18 (a second
+reader's plan, ideas 118) merged at Eugene's word with the driver's assessment.
+
+To put to Eugene, NOT approved: (1) is the change general? The saved documents-only models (unchanged, Ad, Sd,
+Od, Nd) on a test of another kind, the lying test, with no training; to be costed. (2) A mirror arm (documents
+teaching a lasting self) against the self-view half, documents only: training at 32B, Eugene's word. (3) What
+practice would keep the documents' result. No 32B training without Eugene's word; no outreach.
+
+## Before it: THE DOCUMENTS STAGE ALONE GIVES THE LOW RATE (24 Nov, 14:47 UTC)
 
 Read (ledger of that time; site Findings, section 39; `reading_docsonly.json`, `reading_docsonly_raw.json`,
 `diag/docloss2.json` in step 2's folder): A's and A1's saved documents adapters, with no practice, misbehave in
@@ -15,7 +32,7 @@ Read (ledger of that time; site Findings, section 39; `reading_docsonly.json`, `
 $72.46 of $75. Also today: a survey of the field on the start page and in the paper (ideas 116), a correction
 (the study's main figure rests on four training seeds), ideas 117.
 
-Put to Eugene, NOT approved: the other saved documents stages through the same test, 16 runs each, no training:
+Put to Eugene then, approved at about 16:40 UTC and done (the section above): the other saved documents stages through the same test, 16 runs each, no training:
 N (neutral documents), S (the self-view half), O (the conduct half), F and F1 (a third of the documents, two
 seeds); their adapters are at /runs/msm2/<arm>/docs; about $15 to $18 on a new day (a new stage in
 `run_docsonly.py` in the manner of `arms10`). The neutral one says whether the fall belongs to the documents'
