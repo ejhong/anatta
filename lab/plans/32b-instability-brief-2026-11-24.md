@@ -164,3 +164,26 @@ from the authors', which is unknown.
 - Saved adapters (Modal volume `anatta-runs`): `/runs/msm2/<model>/final`, and `/docs` where a documents phase ran.
 - Replies and judge text are fictional harmful-act text and stay outside the repository; counts only.
 - Spend so far on the lab's own 32B training: $395.02.
+
+## 10. What two of the checks showed (added 24 November, 05:17 UTC)
+
+Checks 1 and 2 of section 7 were run at Eugene's word, with the lines for reading them fixed beforehand
+(`lab/explore/msm/modal_msm_diag.py`; ledger of this time; $2.58). A second reader's report came first and is filed
+with the driver's grading (`lab/ledger/checks/2026-11-24-instability-gemini-read.md`).
+
+- **The weights.** As products B times A, A stands 55.8 from X00 (the same practice, the same order) where X00
+  stands 78.7 from X01 (the other order); each practice moved its adapter about 74. So two runs of one practice
+  ended three quarters of a practice's move apart. Four fifths of that difference is in layers 0 to 23, where a
+  second run of the same steps lands nearly as far away as a run with other steps (0.85); in the last third of
+  the layers it is a fifth as far. Nine tenths of it is in the MLP matrices.
+- **The documents.** Mean loss of 150 documents: A 0.9160, X00 0.9166, X01 0.9168, A1 0.9141; the documents
+  adapter 0.814; the unchanged model 1.617; the practice alone 1.306. All four keep 87% of what the documents
+  phase gained. On practice chats and instruction rows A and X00 are alike as well.
+- **The steps.** 485 of the practice's 606 steps hold both chat rows and instruction rows; 428 take at least 90%
+  of their label tokens from one kind.
+
+What it does to section 6: suspicion 1 (a practice that wanders along directions its loss does not hold) is
+supported; suspicion 3 (the practice overwrites the documents, except in A) is not, where it can be measured;
+suspicion 2 (the lab's grouping of rows) is a smaller matter than supposed; suspicion 4 is untouched. No cause to
+repair was found, so check 4 (two more runs under one change) has lost its ground, and the driver recommends
+against it. Outreach (check 5) is not to be done for now, at Eugene's word.

@@ -2044,3 +2044,11 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
 - **Reading:** the test's rate repeats for a fixed adapter; the difference between A and the control X00 (21.4%) is between two models that the same practice made.
 - **Checks:** a second-route recount. **Limits:** one more test run; one judge.
 - `reading_served.json`; $3.55; amendment 4 $44.25 of $60.
+
+## 24 Nov 2026: two checks on the saved 32B adapters (no training): far apart in the weights, alike on the documents
+- **Lines fixed before the run** (`lab/explore/msm/modal_msm_diag.py`): (a) A-to-X00 distance against X00-to-X01, as products B times A; (b) the loss of 150 documents under A against under X00.
+- **Seen:** (a) 55.8 against 78.7, ratio 0.71: "as far apart as another order"; each practice moved its adapter about 74; 81% of the A-to-X00 squared distance in layers 0 to 23, 90% in the MLP matrices. (b) A 0.9160, X00 0.9166, X01 0.9168, A1 0.9141 (documents adapter 0.814, unchanged model 1.617, practice alone 1.306): X00 less A +0.0005 [+0.0001, +0.0009], bar 0.080: no difference. Practice chats alike too.
+- **Beside it:** 485 of the practice's 606 steps hold both kinds of row; 428 take at least 90% of their label tokens from one kind.
+- **Reading:** the practice did not overwrite the documents in the failed repeat; the two runs wandered apart, most in the early layers, while equal by both losses. No cause to repair was found; the two repair runs are not recommended.
+- **Limits:** one pair of runs; weights, not conduct; documents that were trained on; no cold check.
+- `diag/weights.json`, `diag/purity.json`, `diag/docloss.json`; $2.58.

@@ -30,7 +30,13 @@ $60; step 2 $391.46 of $415; 24 Nov's day $39.58 of $75.
   is decided about ending the 32B training, and nothing runs. The brief to hand on:
   `lab/plans/32b-instability-brief-2026-11-24.md` (ideas 114). The four later pieces are read by the driver
   (ledger, 03:53 UTC): that item is no longer owed.
-- **Gemini's ideas came back (24 Nov, 04:41 UTC; ledger of that time; filed in
+- **The two checks are run (24 Nov, 05:17 UTC; ledger of that time; $2.58).** A and X00 stand far apart in the
+  weights (0.71 of the distance between two orders; most in layers 0 to 23) and keep the documents alike (0.9160
+  and 0.9166). The practice did not overwrite the documents; no cause to repair was found. **The driver's
+  recommendation to Eugene: do not run the two repair runs; end the lab's own 32B training here.** Not decided.
+  Eugene's word: "no outreach yet" (no note to the authors is drafted or sent). Named and not recommended: two
+  spliced adapters through the test (about $7), which would explain and not repair.
+- **(Done) Gemini's ideas came back (24 Nov, 04:41 UTC; ledger of that time; filed in
   `lab/ledger/checks/2026-11-24-instability-gemini-read.md`).** Asked of Eugene, not yet answered: (a) two checks
   with no training, under $5 in all and inside every present limit: the saved adapters compared as products
   (B times A; norms and inner products from 64-by-64 matrices; CPU), with a count of chat and instruction rows in

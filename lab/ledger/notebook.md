@@ -3541,3 +3541,13 @@ And if what makes an order good can be found, luck becomes method.
 **What came out.** It is in the model. Served through the same test again, it misbehaves in 7.2% of runs (range 5.6 to 8.8); the first time, 6.8%. No single reply came out word for word the same, but the rate came back within half a point.
 
 *In plain terms, for the vision:* the test is steady and the good model is really good. So what is unsteady is the training: the same second phase, run twice from the same saved point, made one model that misbehaves in 7% of runs and one that does so in 21%. We still cannot make the effect on demand, and now know the fault is not in the measuring.
+
+## 24 Nov 2026: looking inside the good model and its failed repeat
+
+**What we wanted to know.** The same second phase, run twice from the same saved point, gave one model that misbehaves in 7% of runs and one that does in 21%. Two cheap looks, with no training. First: are the two models' weights nearly the same, or did the two runs really go to different places? Second: did the failed run forget the documents it had been taught?
+
+**What came out.** They really went to different places. The second run ended about three quarters as far from the first as the whole second phase moves a model, nearly as far as a run with its examples in another order. Most of that difference is in the model's early layers. And no, nothing was forgotten: all four models that had the documents still predict them equally well, to the fourth decimal, and they fit the practice equally well too.
+
+**What it means.** The two models are equal by every measure the training can see and different in the one thing we care about, how they act in the test. The idea that the practice "overwrote" the documents in the failed runs does not hold. What does hold is that the second phase is unstable: tiny differences in the machine's arithmetic grow into large differences in the weights. We found no single cause to repair, and the repair we had in mind (mixing the training batches differently) no longer has a reason behind it.
+
+*In plain terms, for the vision:* this is where the money should stop on this line. We can say clearly what happened and what it was not, and we cannot make the effect on demand. The contemplative question was never reached, so nothing here counts for or against it.
