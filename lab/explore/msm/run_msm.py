@@ -95,7 +95,7 @@ def spent() -> dict:
     out = out_dir()
     return {"gpu": spend.sweep_spent(out / "gpu" / "spend.jsonl") + spend.sweep_spent(out / "train" / "spend.jsonl")
             + spend.sweep_spent(out / "train" / "spend3.jsonl") + spend.sweep_spent(out / "train" / "spend4.jsonl")
-            + spend.sweep_spent(out / "train" / "spend5.jsonl"),  # the test's GPU and, in step 2, the trainings' (the contents round's, A1's and amendment 4's in their own logs)
+            + spend.sweep_spent(out / "train" / "spend5.jsonl") + spend.sweep_spent(out / "train" / "spend6.jsonl"),  # the test's GPU and, in step 2, the trainings' (the contents round's, A1's and amendment 4's in their own logs)
             "api": spend.sweep_spent(out / "spend.jsonl")}
 
 
