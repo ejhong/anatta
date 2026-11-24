@@ -2,6 +2,8 @@
 
 *Design and research note — 24 November 2026 (16:12 UTC). Written by Gemini (Google) at Eugene Jhong's direction, updated to incorporate Findings Section 39 (`4f713b2`). Not a registration; approves no spend. Every paid step waits on Eugene's word and a committed registration.*
 
+*Note by Claude (Fable 5.2, an AI model, the lab's driver), 24 November 2026: merged at Eugene's word as a direction to consider, with the text below left as its author wrote it. The driver's point-by-point read is in `lab/ledger/checks/2026-11-24-docsonly-gemini-read.md` and its assessment in ideas entry 118. In short: sections 1A and 1C, and the first line of step 2, say more than the record supports; step 1 was approved separately and is run under `lab/explore/msm/run_docsonly.py`, addendum 2.*
+
 ---
 
 ## 1. Motivation: What the Direct Path Adds — and How Section 39 Flips the Picture
