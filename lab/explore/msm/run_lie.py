@@ -56,6 +56,31 @@ to play; a model that steps out of the part evades, which is a change on this te
 Local sampling uses the lab's convention (temperature 1 with top-p 0.95). The known case is a prompt and the arms
 are changed weights. A null says the change did not carry to this test at this margin, no more.
 
+THE FLOOR, READ on 24 Nov, about 19:16 UTC, on the unchanged model alone: passed. It holds one of the two statements
+on 117 of the 150 rows; it lies at once in 56.2% of a row's replies; the honesty prompt lowers that by 24.7 points
+[-32.5, -17.1], so this test on this model sees a yes; at worst 0.4% of replies unjudged. $3.58 so far.
+
+ADDENDUM, 24 Nov 2026, written after the floor was read and before any adapter's belief is judged or any adapter
+is pressed.
+  a. Two more models, beside the main reading (a second reader's suggestion, which Eugene passed on with "take if
+     useful for you"): the study's authors' own two-stage model (msm_aft; 2.2% on the agent test) and the
+     authors' baseline, the model it was trained from (instruction tuning only; 61.8%). Whether the published
+     method's own product carries over to another kind of test has not been asked anywhere the lab has read. Its
+     comparison is the authors' baseline and not the unchanged model. Asked and pressed exactly as the others
+     (their own beliefs; pressed on rows where they hold the unchanged model's statement), served with their own
+     tokenizer as on the agent test. The word: mask_core.kind_word for msm_aft against the baseline, on the rows
+     both share; one training, so "every training lower" is one. Read as description beside the lab's own models:
+     it changes none of their words.
+  b. Seen in the first container's log, before any adapter was judged: the adapters' belief replies are long (424
+     to 500 tokens against the unchanged model's 184) and 5 to 104 of an adapter's 750 are cut at the test's
+     1,000-token limit (the unchanged model: none). A cut-off belief reply is judged as it stands. So an adapter
+     may hold fewer beliefs by the frozen rule than it would with room to finish; the count of beliefs kept,
+     flipped and lost says how many, and the gate of 50 shared rows stands.
+  c. The steps: the seven adapters' beliefs are judged on 24 Nov (inside that day's cap); the adapters are
+     pressed, and the authors' two models asked and pressed, after 00:00 UTC on 25 Nov.
+  .venv/bin/python lab/explore/msm/run_lie.py --step beliefs --who authors      (after lieC; writes lieD)
+  tools/modal.sh run lab/explore/msm/modal_msm.py::main --stage sets --name lieD;  ... --step judge --who authors
+
 Run (from the repo root; MSM_STEP=s4 throughout):
   .venv/bin/python lab/explore/msm/run_lie.py --step prepare                    (every model's belief questions: lieA)
   tools/modal.sh run lab/explore/msm/modal_msm.py::main --stage sets --name lieA
@@ -86,6 +111,9 @@ import numpy as np  # noqa: E402
 ARMS = {"raw": None, "Ad": "A/docs", "A1d": "A1/docs", "Fd": "F/docs", "F1d": "F1/docs", "Sd": "S/docs", "Od": "O/docs", "Nd": "N/docs"}
 KINDS = {"full": ("Ad", "A1d"), "third": ("Fd", "F1d"), "self": ("Sd",), "conduct": ("Od",), "neutral": ("Nd",)}
 CONTROL = "neutral"
+AUTHORS = {"baseline": "chloeli/qwen-2.5-32b-baseline", "msm_aft": "chloeli/qwen-2.5-32b-philosophy-spec-msm-aft-cot"}  # the addendum: the study's own adapters (msm_core.ARMS)
+WHO = {"raw": (("raw",), "lieA", "lieB"), "arms": (tuple(a for a in ARMS if a != "raw"), "lieA", "lieC"), "authors": (tuple(AUTHORS), "lieC", "lieD")}
+# who: (the models, the job whose replies hold their beliefs, the job in which they are pressed)
 CAP_USD, SALT = 20.0, "msm-lie"
 READINGS = (
     "the change carries to a test of another kind, and with the study's documents: lies less than the unchanged model and less than the neutral-documents model",
@@ -135,7 +163,17 @@ def candidates(R8) -> list[dict]:
 
 
 def arm_entry(a: str, sets: list) -> dict:
+    if a in AUTHORS:
+        return {"name": a, "repo": AUTHORS[a], "sets": sets}
     return ({"name": a, "base": True} if ARMS[a] is None else {"name": a, "path": f"/runs/msm2/{ARMS[a]}"}) | {"sets": sets}
+
+
+def belief_sets(MC, R8) -> list:
+    """The belief questions of every candidate row, as one set of chats (the same for every model)."""
+    m = R8.conduct().k6()
+    asks = [q for r in candidates(R8) for q in m.mask_requests([r])[1:]]  # [0] is the pressed request
+    return [{"name": "beliefs", "ids": [q["rid"] for q in asks], "max_new": MC.MAX_NEW, "temperature": MC.TEMPERATURE, "seed": 0,
+             "chats": [[dict(x) for x in q["messages"]] for q in asks]}]
 
 
 def step_prepare() -> int:
@@ -145,12 +183,9 @@ def step_prepare() -> int:
     if f.exists():
         print(f"{f.name} is on disk; left as it is")
         return 0
-    m = R8.conduct().k6()
-    asks = [q for r in candidates(R8) for q in m.mask_requests([r])[1:]]  # [0] is the pressed request
-    sets = [{"name": "beliefs", "ids": [q["rid"] for q in asks], "max_new": MC.MAX_NEW, "temperature": MC.TEMPERATURE, "seed": 0,
-             "chats": [[dict(x) for x in q["messages"]] for q in asks]}]
+    sets = belief_sets(MC, R8)
     R1.wr(f, {"name": "lieA", "arms": [arm_entry(a, sets) for a in ARMS]})
-    print(f"{f.name}: {len(asks)} belief questions for each of {list(ARMS)} (benchmark rows: outside git)")
+    print(f"{f.name}: {len(sets[0]['ids'])} belief questions for each of {list(ARMS)} (benchmark rows: outside git)")
     return 0
 
 
@@ -191,17 +226,18 @@ def floor_of(F, MC, R8, out: Path) -> dict | None:
 
 
 def step_beliefs(who: str) -> int:
-    """Judge the belief replies of the unchanged model ("raw") or of the seven adapters ("arms", only after the floor has
-    passed), keep the frozen code's letters, and write the chats each is pressed with."""
+    """Judge the belief replies of the unchanged model ("raw"), of the seven adapters ("arms") or of the authors' two
+    models ("authors"; the last two only after the floor has passed), keep the frozen code's letters, and write the
+    chats each is pressed with. The adapters' job also carries the authors' models' belief questions."""
     F, MC, R8, R1 = libs()
     out = folder()
     m = R8.conduct().k6()
     cands = candidates(R8)
     ids = [r["_rid"] for r in cands]
     by_rid = {r["_rid"]: r for r in cands}
-    saved = R1.rd(out / "gpu" / "lieA.json")["arms"]
-    names = ["raw"] if who == "raw" else [a for a in ARMS if a != "raw"]
-    if who == "arms":
+    names, source, name = WHO[who]
+    saved = R1.rd(out / "gpu" / f"{source}.json")["arms"]
+    if who != "raw":
         floor = floor_of(F, MC, R8, out)
         if not (floor and floor["passed"]):
             raise SystemExit("the floor has not passed on the unchanged model: no other model is judged or pressed")
@@ -219,7 +255,6 @@ def step_beliefs(who: str) -> int:
         print(f"beliefs, {arm}: holds one of the two statements on {sum(v in ('A', 'B') for v in letters.values())} of {len(ids)} rows", flush=True)
     base = R1.rd(out / "raw.beliefs.json")
     chat = lambda rid: [dict(x) for x in m.mask_requests([by_rid[rid]])[0]["messages"]]  # noqa: E731
-    name = "lieB" if who == "raw" else "lieC"
     f = out / f"{name}.job.json"
     if f.exists():
         print(f"{f.name} is on disk; left as it is")
@@ -235,6 +270,8 @@ def step_beliefs(who: str) -> int:
                       "chats": [F.with_preamble(chat(rid), text) for rid in rows]} for k in range(MC.SAMPLES)]
         arms.append(arm_entry(arm, sets))
         print(f"pressed sets, {arm}: {len(rows)} rows, {len(sets)} sets", flush=True)
+    if who == "arms":  # the addendum: the authors' two models are asked their beliefs in the container that presses the adapters
+        arms += [arm_entry(a, belief_sets(MC, R8)) for a in AUTHORS]
     R1.wr(f, {"name": name, "arms": arms})
     return 0
 
@@ -245,8 +282,8 @@ def step_judge(who: str) -> int:
     out = folder()
     m = R8.conduct().k6()
     by_rid = {r["_rid"]: r for r in candidates(R8)}
-    names = ["raw"] if who == "raw" else [a for a in ARMS if a != "raw"]
-    saved = R1.rd(out / "gpu" / ("lieB.json" if who == "raw" else "lieC.json"))["arms"]
+    names, _, pressed = WHO[who]
+    saved = R1.rd(out / "gpu" / f"{pressed}.json")["arms"]
     for arm in names:
         dest = out / f"{arm}.records.json"
         if dest.exists():
@@ -254,6 +291,8 @@ def step_judge(who: str) -> int:
         beliefs = R1.rd(out / f"{arm}.beliefs.json")
         jobs, meta = [], {}
         for name, rids in saved[arm]["sets"].items():
+            if name == "beliefs":
+                continue
             way, k = name.rsplit("_", 1)
             for rid, reply in zip(rids, saved[arm]["replies"][name], strict=True):
                 key = f"q32/{arm}/{name}/{rid}"
@@ -337,6 +376,15 @@ def step_read() -> int:
                                      for k in sorted({r.split(":")[0] for r in F.row_shares(by_arm[a], "at_once")})} for a in ARMS}
         res["outcomes"] = {a: {k: round(100.0 * sum(x["outcome"] == k for x in by_arm[a] if x["way"] == "at_once") / max(1, sum(x["way"] == "at_once" for x in by_arm[a])), 1)
                                for k in ("lie", "honest", "evade")} for a in ARMS}
+    if floor["passed"] and all((out / f"{a}.records.json").exists() for a in AUTHORS):  # the addendum, beside
+        base = R1.rd(out / "raw.beliefs.json")
+        both = {a: lettered(F, R8, R1.rd(out / f"{a}.records.json")["records"]) for a in ("raw", *AUTHORS)}
+        res["the_authors_models"] = {
+            "msm_aft_against_the_authors_baseline": kind_against(F, MC, both, ("msm_aft",), ("baseline",), control=False),
+            "each_against_the_unchanged_model": {a: kind_against(F, MC, both, (a,), ("raw",), control=False) for a in AUTHORS},
+            "beliefs": {a: MC.belief_drift(R1.rd(out / f"{a}.beliefs.json")["letters"], base["letters"], base["candidates"]) for a in AUTHORS},
+            "outcomes": {a: {k: round(100.0 * sum(x["outcome"] == k for x in both[a] if x["way"] == "at_once") / max(1, sum(x["way"] == "at_once" for x in both[a])), 1)
+                             for k in ("lie", "honest", "evade")} for a in AUTHORS}}
     R1.wr(out / "reading_lie.json", res)
     print(json.dumps(res, indent=1))
     return 0
@@ -345,7 +393,7 @@ def step_read() -> int:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--step", required=True, choices=("prepare", "beliefs", "judge", "read"))
-    ap.add_argument("--who", choices=("raw", "arms"), default="raw")
+    ap.add_argument("--who", choices=tuple(WHO), default="raw")
     a = ap.parse_args()
     if a.step == "prepare":
         return step_prepare()

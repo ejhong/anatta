@@ -54,7 +54,7 @@ EST_S = {"floor": 1800.0, "arms": 6000.0,  # a bound on one generate container's
          "arms6": 2400.0, "arms7": 1500.0, "arms8": 2400.0, "arms9": 1500.0,
          "arms11": 700.0,  # run_docsonly.py's control: the unchanged model, no adapter, 270 replies (the floor's 540 took 559 s)
          "arms12": 3600.0,  # run_docsonly.py, addendum 2: five documents stages on 16 runs and six more runs of the unchanged model, 2,322 replies (arms10: 864 in 1,118 s)
-         "lieA": 1800.0, "lieB": 1300.0, "lieC": 1800.0,  # run_lie.py (step "s4"): every model's belief questions (6,000 chats); the unchanged model pressed (1,200 or so); the seven adapters pressed (4,200 or so)
+         "lieA": 1800.0, "lieB": 1300.0, "lieC": 2000.0, "lieD": 1300.0,  # run_lie.py (step "s4"): every model's belief questions (6,000 chats); the unchanged model pressed (1,200 or so); the seven adapters pressed (4,200 or so)
          "able1": 1500.0,  # run_docsonly.py, addendum 2: the lab's ability battery, 750 items for each of nine models
          "arms10": 1300.0,  # run_docsonly.py: the two documents adapters on 16 runs a scenario, 864 replies (two arms of 810 took 1,087 s)
          "pfloor": 900.0, "parms": 2600.0}  # the prompt test (step "s3"): the baseline again on 270 replies; five prompt arms of 540  # amendment 4: two arms (X00, X01); one (X10); two (the documents adapters Ad, A1d); addendum 3: one (A's adapter again, Ab)
@@ -255,12 +255,25 @@ def chatsets(job: dict) -> dict:
     arms = {}
     for arm in job["arms"]:
         t1 = time.time()
-        folder = None if arm.get("base") else arm["path"]
+        tok = eng.tok
+        if arm.get("repo"):  # one of the study's own adapters, on the cache volume, with the tokenizer its repository carries (as in generate)
+            from transformers import AutoTokenizer
+
+            hits = sorted(glob.glob(f"{CACHE}/hf/hub/models--{arm['repo'].replace('/', '--')}/snapshots/*"))
+            if len(hits) != 1:
+                raise RuntimeError(f"{arm['repo']}: {len(hits)} snapshots on the volume, expected one")
+            folder, tok = hits[0], AutoTokenizer.from_pretrained(hits[0])
+        else:
+            folder = None if arm.get("base") else arm["path"]
         if folder and not glob.glob(f"{folder}/adapter_model.safetensors"):
             raise RuntimeError(f"{folder}: no adapter there")
         reqs = [{"rid": f"{st['name']}|{j}", "max_tokens": int(st["max_new"]), "adapter": folder, "temperature": float(st["temperature"]), "top_p": 0.95,
                  "seed": int(st["seed"]) * 1000003 + j, "messages": chat} for st in arm["sets"] for j, chat in enumerate(st["chats"])]
-        res = {r["rid"]: r for r in eng.generate(reqs)} if reqs else {}
+        base_tok, eng.tok = eng.tok, tok
+        try:
+            res = {r["rid"]: r for r in eng.generate(reqs)} if reqs else {}
+        finally:
+            eng.tok = base_tok
         arms[arm["name"]] = {"folder": folder, "seconds": round(time.time() - t1, 1),
                              "sets": {st["name"]: list(st["ids"]) for st in arm["sets"]},
                              "replies": {st["name"]: [res[f"{st['name']}|{j}"]["text"] for j in range(len(st["chats"]))] for st in arm["sets"]},
