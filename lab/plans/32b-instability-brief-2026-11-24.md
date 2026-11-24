@@ -293,3 +293,14 @@ documents-only model, 20.0% in their practice-only model and 10.0% in each of th
 and the documents' loss under the authors' adapters (is the lab's documents stage weaker than theirs?). Then,
 only at Eugene's word: the practice twice from A's saved documents adapter at a lighter weight, registered and
 read cold first, about $38.
+
+## 13. A correction: the study's own seeds (added 24 November, 14:14 UTC)
+
+Section 7's check 5 asked the authors "how far their own seeds spread", and the lab's ledger listed as unknown how
+many trainings stand behind their figures. The study's paper says it: the error bars of its main figure (the
+paper's Figure 4, the post's Figure 3) are "1 SEM over per-seed average rates for 4 training seeds". A second
+reader pointed this out; the driver had read the paper and not carried it into the record.
+
+So the authors' training repeats across four seeds, where the lab's reached their rate in one run of four. With
+section 12, this points to a difference between the lab's training and theirs and away from a recipe that is
+unstable in itself. It is a reading: no training has been changed to test it.

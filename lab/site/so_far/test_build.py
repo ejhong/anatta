@@ -352,9 +352,9 @@ class SiteTest(unittest.TestCase):
         self.assertEqual(ROOMS[:4], MAIN)
         front = self.sections["aim"]
         order = [front.index(f'id="{x}"') for x in ("idea", "exhibits", "computational", "map", "fig-methods-bar",
-                                                     "methods", "shared", "fruit", "angle", "fig-msm", "method")]
+                                                     "methods", "shared", "field-survey", "fruit", "angle", "fig-msm", "method")]
         self.assertEqual(order, sorted(order), "the front page reads: goodness & exhibits, the caveat, the map & chart, "
-                                               "what methods share, the odds, live 32B test & chart, the method")
+                                               "what methods share, the field (a survey, from 24 Nov 2026 at Eugene's word), the odds, live 32B test & chart, the method")
         self.assertEqual(len(re.findall(r'<article class="ex-panel"', front)), 4, "four exhibits on the Story page")
         self.assertIn("<h1>What would it mean for an AI to be <em>good?</em></h1>", front)
         self.assertIn('<h2 class="q">Is awakening <em>computational?</em></h2>', front)
