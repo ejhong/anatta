@@ -51,7 +51,7 @@ EST_S = {"floor": 1800.0, "arms": 6000.0,  # a bound on one generate container's
          "arms3": 1500.0,  # amendment 2: one arm (stage 1's three took 1,357 s)
          "arms4": 4200.0,  # the contents round: four arms
          "arms5": 1500.0,  # amendment 3: one arm (arm A's test took 689 s)
-         "arms6": 2400.0, "arms7": 1500.0, "arms8": 2400.0}  # amendment 4: two arms (X00, X01); one (X10); two (the documents adapters Ad, A1d)
+         "arms6": 2400.0, "arms7": 1500.0, "arms8": 2400.0, "arms9": 1500.0}  # amendment 4: two arms (X00, X01); one (X10); two (the documents adapters Ad, A1d); addendum 3: one (A's adapter again, Ab)
 
 cache = modal.Volume.from_name("anatta-hf-cache")
 runs = modal.Volume.from_name("anatta-runs")

@@ -284,8 +284,8 @@ def main() -> int:
     if a.step == "plan":
         return step_plan()
     if a.step == "judge":
-        if a.name not in ("floor", "arms", "arms1", "arms2", "arms3", "arms4", "arms5", "arms6", "arms7", "arms8"):
-            raise SystemExit("--name is floor or arms (step 2: arms1 to arms8)")
+        if a.name not in ("floor", "arms", "arms1", "arms2", "arms3", "arms4", "arms5", "arms6", "arms7", "arms8", "arms9"):
+            raise SystemExit("--name is floor or arms (step 2: arms1 to arms9)")
         return step_judge(a.name, a.dry)
     if a.step == "hand":
         return step_hand(a.marks)

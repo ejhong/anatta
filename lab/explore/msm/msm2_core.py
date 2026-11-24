@@ -192,6 +192,15 @@ DOCS_ONLY = {"Ad": "A", "A1d": "A1"}  # stage 2 under the third word: the docume
 NAMES_CROSS = {"X00": "A's documents adapter, A's practice again (the control)", "X01": "A's documents adapter, the practice at seed 1",
                "X10": "A1's documents adapter, the practice at seed 0", "Ad": "A's documents adapter, no practice",
                "A1d": "A1's documents adapter, no practice"}
+SERVED_AGAIN = {"Ab": "A"}  # addendum 3: A's saved /final adapter through the test a second time, nothing trained
+NAMES_SERVED = {"Ab": "A's saved adapter, served through the test a second time"}
+SERVED_WORDS = (  # addendum 3's words, verbatim; first that applies
+    "the first model is not low when served again: its low rate was in that one test run and is not in the saved adapter",
+    "the first model is low when served again, but apart from its first test",
+    "the first model is low when served again: its low rate is in the saved adapter",
+    "not settled: served again, the first model ends between the two",
+)
+SERVED_NEAR = 2.0  # PS3: within this many points of A's first test
 CROSS_KEYS = {"name", "docs", "from_adapter", "seed", "est_s"}  # all a crossed job may change of arm A's job
 PILOTX_KEYS = {"max_steps", "log_each"}  # and the path check, besides
 PATH_MOST = 0.05  # the path check: the first logged loss within this of A's at that step
@@ -248,6 +257,17 @@ def path_check(pilot_log: list, a_log: list, z_log: list | None = None, each: li
             "close": all(abs(d) <= CLOSE_MOST for d in diff), "close_most": CLOSE_MOST,
             "agree_to_the_digits_logged": all(d == 0 for d in diff), "Z_at_the_first_logged_step": z.get(first),
             "pilot_step_1": each[0] if each else None}
+
+
+def served_word(cls: str, interval: tuple, first_interval: tuple) -> str:
+    """Addendum 3: the word for A's adapter served again, from its class (cross_class, amendment 4's middle) and
+    whether its interval overlaps that of A's first test."""
+    if cls == "high":
+        return SERVED_WORDS[0]
+    if cls == "between":
+        return SERVED_WORDS[3]
+    apart = interval[1] < first_interval[0] or first_interval[1] < interval[0]
+    return SERVED_WORDS[1] if apart else SERVED_WORDS[2]
 
 
 def cross_class(rate: float, interval: tuple, middle: float) -> str:

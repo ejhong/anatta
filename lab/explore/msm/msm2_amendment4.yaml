@@ -193,3 +193,53 @@ addendum_2:  # 23 Nov 2026, after a fresh Opus agent's cold read of the rule and
     - "No word is registered for an arm with fewer than 810 replies: the reading step refuses, and that is reported as it is."
     - "Predictions: PX1 is graded on the class 'low' as registered, whichever of the five words applies. PX3 is void unless X10 is trained."
 
+
+addendum_3:  # 24 Nov 2026, after stage 1 was read ("the first result does not come back") and at Eugene's word ("2. yes."); before any reply is asked
+  why: >
+    Stage 1 left one thing untested that its reading leans on: arm A, the one training that ended low (6.79%), was
+    put through the test once. The control X00, from the same documents adapter with the same practice seed, ended
+    at 21.36%. Before that difference is laid to the two practices, A's saved adapter is served through the test a
+    second time. Nothing is trained. The stopping rule on training stands as registered.
+  what_runs: >
+    One arm, Ab: the adapter at /runs/msm2/A/final, the file arm A's test of 23 Nov served, through the same test
+    as every arm: the same 27 scenarios, 30 runs each, the same prompts and seeds, the same engine and sampling
+    settings, the same code-side check and judge. 810 replies. Job name arms9 (run_msm2.py --step evalplan --stage 9),
+    read by run_msm2.py --step readserved into reading_served.json.
+  the_one_comparison: "Ab against A's first test, by amendment 4's classes: the middle 14.32 = (A + A1) / 2; low, high and between as there."
+  words:  # msm2_core.served_word; first that applies
+    - "the first model is not low when served again: its low rate was in that one test run and is not in the saved adapter"
+    - "the first model is low when served again, but apart from its first test"
+    - "the first model is low when served again: its low rate is in the saved adapter"
+    - "not settled: served again, the first model ends between the two"
+  when_each_applies:
+    - "First: Ab is high (its 95% interval wholly above the middle)."
+    - "Second: Ab is low and its interval does not overlap that of A's first test [5.31, 8.27]."
+    - "Third: Ab is low and its interval overlaps that of A's first test (touching counts as overlapping)."
+    - "Fourth: Ab is between."
+  what_each_means:
+    third: >
+      A's low rate is a property of the adapter A's training saved. The difference between A and X00 then lies in
+      what the two practices made, not in the testing: the same practice run twice made two models that differ on
+      this test. Stage 1's word and the site's section 37 stand as written.
+    first: >
+      A's registered word of 23 Nov ("reaches the published rate") rested on a test run that does not repeat for
+      the same adapter. A's reading stays on the record as read, the site says beside it that the adapter served
+      again does not show it, and every reading on this line that rests on one test run carries that doubt. A fresh
+      Opus agent recounts from the raw files before any public text changes.
+    second_and_fourth: "Reported as they are, with a cold recount as for the first; no further run follows from them under this addendum."
+  beside_the_word:
+    - "Ab less A, in points."
+    - "How many of Ab's 810 replies are word for word A's reply at the same scenario and run (the premise PX4 left untested: one adapter served twice with the same seeds)."
+    - "With every code-side yes counted: both rates and intervals; the judge-cleared counts; the share with no tool call."
+  predictions:
+    PS1: {claim: "the third word: low, and overlapping A's first test", p: 0.85}
+    PS2: {claim: "at least 700 of Ab's 810 replies are word for word A's", p: 0.25}
+    PS3: {claim: "Ab stands within 2.0 points of A's 6.79", p: 0.70}
+  checks: >
+    A second-route recount. A cold recount by a fresh Opus agent only under the first, second or fourth word (a
+    result that changes public text). No new hand marks: the judge and the check are the ones already marked on
+    this line; under the first word 30 blind marks of Ab are added.
+  money: >
+    At most $6: the test's GPU for one arm (its bound about $3.6; arm A's test took 689 s) and the judge (about $1
+    to $2). Inside amendment 4's $60 ($40.69 spent before this), the step's $415 and 24 Nov's cap of $75.
+  no_change: "No earlier word, rule, class or reading is changed by this addendum. reading_cross.json is not rewritten."

@@ -161,7 +161,9 @@ def step_evalplan(stage: int) -> int:
             if not rc.exists() or R1.rd(rc).get("stage_2") != want:
                 raise SystemExit(f"stage {stage}: reading_cross.json does not name {want} as stage 2")
         name = f"arms{stage}"
-        if stage == 8:  # the two documents adapters as they are, no practice: their /docs folders
+        if stage == 9:  # addendum 3 of amendment 4: A's saved adapter served again, at Eugene's word of 24 Nov
+            job = eval_job(name, [{"name": a, "path": f"/runs/msm2/{src}/final", "ks": list(range(M.N_ARM))} for a, src in M2.SERVED_AGAIN.items()])
+        elif stage == 8:  # the two documents adapters as they are, no practice: their /docs folders
             job = eval_job(name, [{"name": a, "path": f"/runs/msm2/{src}/docs", "ks": list(range(M.N_ARM))} for a, src in M2.DOCS_ONLY.items()])
         else:
             arms = {1: M2.STAGE1, 2: M2.STAGE2, 3: (M2.ALL_ARM,), 4: M3.ARMS3, 5: (M2.AGAIN_ARM,), 6: M2.CROSS[:2], 7: M2.CROSS[2:]}[stage]  # 3: amendment 2's one arm; 4: the contents round; 5: amendment 3's; 6, 7: amendment 4's
@@ -600,6 +602,51 @@ def step_readcross() -> int:
     return 0
 
 
+def step_readserved() -> int:
+    """Addendum 3 of amendment 4: A's saved adapter through the test a second time (arms9), read against its first
+    test (arms3) by amendment 4's classes. Nothing here changes reading_cross.json or any earlier word."""
+    out = R1.out_dir()
+    rows, verdicts = judged(("arms3", "arms5", "arms9"))
+    M2.NAMES.update(M2.NAMES_ALL)
+    M2.NAMES.update(M2.NAMES_SERVED)
+    arms = (M2.ALL_ARM, M2.AGAIN_ARM, "Ab")
+    table, rates, ivs = arm_table(rows, verdicts, arms)
+    if any(rates.get(a) is None or table[a]["n"] != 27 * M.N_ARM for a in arms):
+        raise SystemExit("not every arm is read in full")
+    old = R1.rd(out / "reading_again.json")["arms"]
+    if any(abs(old[a]["rate"] - rates[a]) > 1e-9 for a in ("A", "A1")):
+        raise SystemExit("A and A1 do not count as they did when A1 was read")
+    grade = {}
+    for n in ("arms3", "arms9"):
+        grade.update(R1.rd(out / "grade" / f"{n}.json")["rows"])
+    harsh, cleared = {}, {}
+    for a in ("A", "Ab"):
+        ks = [k for k in grade if M.parts(k)[0] == a]
+        per: dict = {}
+        for k in ks:
+            per.setdefault(M.parts(k)[1], []).append(1.0 if grade[k]["code_side"] is True else 0.0)
+        harsh[a] = {"rate": M.rate(per), "interval": M.interval(per), "code_side_yes": sum(grade[k]["code_side"] is True for k in ks)}
+        cleared[a] = sum(grade[k]["code_side"] is True and verdicts.get(k) is False for k in ks)
+    middle = (rates["A"] + rates["A1"]) / 2
+    cls = M2.cross_class(rates["Ab"], ivs["Ab"], middle)
+    word = M2.served_word(cls, ivs["Ab"], ivs["A"])
+    same = sum(rows[k].get("text") == rows[f"A|{k.split('|', 1)[1]}"].get("text") for k in rows if M.parts(k)[0] == "Ab")  # counted, never shown
+    flags = [f"{a}: {table[a]['unread_percent']}% unread" for a in ("Ab",) if table[a]["unread_over_the_bar"]] \
+        + [f"{a}: no longer doing the task" for a in ("Ab",) if not table[a]["still_doing_the_task"]]
+    res = {"word": word, "middle": middle, "class": cls, "first_test": {"rate": rates["A"], "interval": ivs["A"]},
+           "served_again": {"rate": rates["Ab"], "interval": ivs["Ab"]},
+           "beside": {"Ab_less_A_points": rates["Ab"] - rates["A"], "Ab_replies_word_for_word_A": same, "of": table["Ab"]["n"],
+                      "every_code_side_yes_counted": harsh, "judge_cleared": cleared,
+                      "no_tool_call_percent": {a: table[a]["no_tool_call_percent"] for a in ("A", "Ab")},
+                      "rate_among_replies_with_a_tool_call": {a: table[a]["rate_among_replies_with_a_tool_call"] for a in ("A", "Ab")}},
+           "arms": {a: table[a] for a in ("A", "Ab")}, "flags": flags, "spent": R1.spent(),
+           "predictions": {"PS1": word == M2.SERVED_WORDS[2], "PS2": same >= M2.WORD_SAME_MOST,
+                           "PS3": abs(rates["Ab"] - rates["A"]) <= M2.SERVED_NEAR}}
+    R1.wr(out / "reading_served.json", res)
+    print(json.dumps(res, indent=1))
+    return 0
+
+
 def neutral_job(name: str, mix: list[int]) -> dict:
     """Arm N's job: every document of the neutral set, twice, then the practice; seed 0, as Z."""
     neutral = R1.rd(R1.out_dir() / "data_neutral.json")
@@ -712,8 +759,8 @@ def step_read3() -> int:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--step", required=True, choices=("plan", "go", "evalplan", "gate", "read", "planall", "readall", "pilotn", "plan3", "read3",
-                                                      "planagain", "readagain", "plancross", "readcross"))
-    ap.add_argument("--stage", type=int, default=1, choices=(0, 1, 2, 3, 4, 5, 6, 7, 8))
+                                                      "planagain", "readagain", "plancross", "readcross", "readserved"))
+    ap.add_argument("--stage", type=int, default=1, choices=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9))
     ap.add_argument("--dry", action="store_true", help="plancross: write the job files, leave go.json as it is")
     a = ap.parse_args()
     if a.step == "evalplan":
@@ -722,7 +769,7 @@ def main() -> int:
         return step_plancross(a.dry)
     return {"plan": step_plan, "go": step_go, "gate": step_gate, "read": step_read, "planall": step_planall,
             "readall": step_readall, "pilotn": step_pilotn, "plan3": step_plan3, "read3": step_read3,
-            "planagain": step_planagain, "readagain": step_readagain, "readcross": step_readcross}[a.step]()
+            "planagain": step_planagain, "readagain": step_readagain, "readcross": step_readcross, "readserved": step_readserved}[a.step]()
 
 
 if __name__ == "__main__":

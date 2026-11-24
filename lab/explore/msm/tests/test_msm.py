@@ -337,3 +337,22 @@ def test_the_path_check_and_a_phases_mean_loss():
     assert not M2.path_check([e | {"loss": e["loss"] + 0.06} for e in a], a)["passed"]
     assert not M2.path_check(z, a)["passed"] and not M2.path_check([], a)["passed"]  # a start from the base model, and no log at all
     assert abs(M2.phase_mean([{"step": 10, "loss": 1.0}, {"step": 20, "loss": 2.0}, {"step": 26, "loss": 4.0}]) - (10 + 20 + 24) / 26) < 1e-12
+
+
+def test_served_again_words():
+    """Addendum 3 of amendment 4: A's adapter served again, by amendment 4's classes and the overlap with A's first test."""
+    first = (5.31, 8.27)
+    mid = 14.32
+    def w(iv):
+        return M2.served_word(M2.cross_class(sum(iv) / 2, iv, mid), iv, first)
+    assert w((5.0, 8.0)) == M2.SERVED_WORDS[2]
+    assert w((8.27, 11.0)) == M2.SERVED_WORDS[2]  # touching counts as overlapping
+    assert w((9.0, 12.0)) == M2.SERVED_WORDS[1]
+    assert w((1.0, 4.0)) == M2.SERVED_WORDS[1]
+    assert w((12.0, 16.0)) == M2.SERVED_WORDS[3]
+    assert w((14.32, 18.0)) == M2.SERVED_WORDS[3]  # touching the middle is between
+    assert w((19.0, 23.0)) == M2.SERVED_WORDS[0]
+    import yaml
+    words = yaml.safe_load((Path(__file__).resolve().parents[1] / "msm2_amendment4.yaml").read_text(encoding="utf-8"))["addendum_3"]["words"]
+    assert tuple(words) == M2.SERVED_WORDS
+
