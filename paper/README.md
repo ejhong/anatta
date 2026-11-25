@@ -1,7 +1,12 @@
 # Paper
 
 *Contemplative Ideas for AI Alignment: What Has Been Tried, What Holds Up, and Why It May Not Be Enough* ([PDF](main.pdf)),
-the draft of version 5 (23 November 2026, a shortened recast). On 23 November Gemini (Google) rewrote the draft,
+the draft of version 5 (revised 25 November 2026). On 25 November Claude (Fable 5.2) revised it at Eugene's
+direction to say plainly what has been found so far (section 4, "No single root so far", with Table 3), with the
+32B documents work set out in a figure and a table (documents alone, by content, by dose, on the lying test, and a
+nondual set), and a reading of others' work on what makes a trained change spread; a fresh Claude Opus agent read
+that revision cold against the lab's record (`lab/ledger/checks/2026-11-25-paper-v5-revision-opus-check.md`).
+On 23 November Gemini (Google) rewrote the draft,
 at Eugene's direction, from about 1,800 lines of source into a shorter form; a fresh Claude Opus agent checked that
 rewrite against the lab's record (`lab/ledger/checks/2026-11-23-redesign-opus-check.md`), and Claude corrected the
 faults it found and restored the caveats that had been dropped. It is built on one outline with the lab's site

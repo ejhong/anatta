@@ -7,6 +7,12 @@ with the ledger entry that records it; when Eugene changes direction, change "No
 
 ## Now: THE DOCUMENTS LINE IS PAUSED AT EUGENE'S WORD (25 Nov, 13:06 UTC); EUGENE IS THINKING; NOTHING IS RUNNING OR APPROVED
 
+25 Nov, 14:12 UTC: the paper's draft is revised at Eugene's word to state what has been found (section 4, "No single
+root so far"; ledger of that time; cold check `lab/ledger/checks/2026-11-25-paper-v5-revision-opus-check.md`). The
+start page carries the same statement. Not released on Zenodo. A search of others' work on what makes a trained
+change spread is in the ledger (13:30 and 13:44 UTC) and ideas 121; the design it points at, never trained here, is
+conduct trained toward the model's own advice (ideas 91). Nothing is designed or proposed for spending.
+
 Eugene, 25 Nov: "Yes pause the documents for now - let me think." No training, no writing of documents, no spending
 on this line until Eugene's word. Asked meanwhile (ideas 120): what the proposers themselves say to do. The driver
 read the body of Laukkonen and colleagues' 2025 paper (ledger, 25 Nov, 13:06 UTC): it tests prompts only and
