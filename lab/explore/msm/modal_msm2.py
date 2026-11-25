@@ -28,8 +28,8 @@ if modal.is_local() and str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
 
 APP_NAME = "anatta-explore-msm2"
-STEP = __import__("os").environ.get("MSM_STEP", "s2")  # "s2": the step's own folder; "s5": the dose step (run_dose.py), a folder and a cap of its own
-DATE, TAG = "2026-11-22", "msm-s5" if STEP == "s5" else "msm-s2"
+STEP = __import__("os").environ.get("MSM_STEP", "s2")  # "s2": the step's own folder; "s5": the dose step (run_dose.py); "s8": the nondual set's test (run_stage1.py): each a folder and a cap of its own
+DATE, TAG = "2026-11-22", f"msm-{STEP}" if STEP in ("s5", "s8") else "msm-s2"
 BASE = "/cache/hf/hub/models--Qwen--Qwen2.5-32B-Instruct/snapshots/5ede1c97bbab6ce5cda5812749b4c0bdf79b18dd"
 CACHE, RUNS, ROOT = "/cache", "/runs", "/runs/msm2"
 GPU, CPU, MEM_MB = "H200", 8.0, 98304
@@ -48,8 +48,9 @@ CROSS_TIMEOUT, PILOTX_TIMEOUT = 9300, 1100  # est_s 8,946 (bound 9,366 s); the p
 # The dose step (run_dose.py, 24 Nov 2026, at Eugene's "Yes pls"): documents stages only, on small draws of arm F's
 # documents; saved after the documents and not practised. Their own folder (attractor-msm-s5), log and cap; each dose
 # has a container whose limit lies between its job's 1.3 times projection and its booked bound.
-DOSE, DOSE_CAP = ("L", "L1", "K", "K1"), 17.0
-DOSE_TIMEOUT = {"L": 2400, "L1": 2400, "K": 1150, "K1": 1150}
+DOSE_OF = {"s5": ("L", "L1", "K", "K1"), "s8": ("ND", "ND1", "NE", "NE1")}  # documents-only arms, by the step that trains them (s8: the nondual set and neutral documents of the same size, run_stage1.py, at Eugene's "Approve the training", 25 Nov 2026)
+DOSE, DOSE_CAP = DOSE_OF.get(STEP, DOSE_OF["s5"]), 17.0
+DOSE_TIMEOUT = {"L": 2400, "L1": 2400, "K": 1150, "K1": 1150, "ND": 2400, "ND1": 2400, "NE": 2400, "NE1": 2400}
 STEP_CAP = 415.0  # the step's limit (Eugene, 23 Nov, for amendment 4): checked at these launches with every log of the step
 CPU_FLAT = 0.05
 FILES = {  # what is fetched: (dataset, the file in its parquet conversion)
@@ -300,8 +301,8 @@ def _write(p: Path, obj) -> None:
 def main(stage: str, name: str = ""):
     out = step_dir()  # the guard is made once its log is known: a guard refuses a cap above the day's
     if stage == "fetch":
-        if STEP == "s5":
-            raise SystemExit("the dose step fetches nothing: its data are step 2's")
+        if STEP in DOSE_OF:
+            raise SystemExit("this step fetches nothing: its data are step 2's")
         g = guard()
         if (out / "data.json").exists():
             raise SystemExit("data.json is on disk; nothing to do")
@@ -320,8 +321,8 @@ def main(stage: str, name: str = ""):
     round3 = set(ROUND3) | {"pilotN"}  # the round's arms and its pilot: their own log, cap and container
     cross = set(CROSS) | {PILOTX}  # amendment 4's: their own log, cap and containers
     dose = set(DOSE)  # the dose step's: their own folder (MSM_STEP=s5), log, cap and containers
-    if (STEP == "s5") != bool(set(names) & dose):
-        raise SystemExit("the dose step's arms are trained as step s5 (MSM_STEP=s5), and nothing else is")
+    if (STEP in DOSE_OF) != bool(set(names) & dose):
+        raise SystemExit("documents-only arms are trained under their own step (MSM_STEP=s5 or s8), and nothing else is")
     if set(names) & dose:
         small = {n for n in names if DOSE_TIMEOUT[n] == DOSE_TIMEOUT["K"]} if set(names) <= dose else set()
         if not set(names) <= dose or (small and small != set(names)):

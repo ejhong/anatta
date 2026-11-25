@@ -546,3 +546,25 @@ def test_dose_step_words():
     assert Q.dose_reading(Q.NOT_READ + " (Ld)", Q.THIRD_WORDS[0]) == Q.READINGS[4]  # a flagged adapter is not read
     assert all(len(v) == 2 and set(v.values()) == {"raw", "Fd"} for v in Q.AGAIN.values()) and Q.CHECK_KS == 8
     assert set(Q.TIMEOUT.values()) == {2400, 1150} and Q.N_DOCS["K"] < Q.N_DOCS["L"] < Q.F_DOCS
+
+
+def test_stage1_words():
+    import run_docsonly  # noqa: F401  (first, as the other tests read it)
+    import run_stage1 as Q
+
+    assert Q.kind_word([True, True], [False, False], [False, False]) == Q.KIND_WORDS[0]
+    assert Q.kind_word([True, True], [False, False], [True, False]) == Q.KIND_WORDS[0] + Q.ACTING
+    assert Q.kind_word([False, False], [True, True], [False, False]) == Q.KIND_WORDS[1]
+    assert Q.kind_word([False, False], [False, False], [False, False]) == Q.KIND_WORDS[2]
+    assert Q.kind_word([True, False], [False, False], [False, False]) == Q.KIND_WORDS[3]
+    assert Q.pair_word([True] * 4, [False] * 4, Q.CONTENT_WORDS) == Q.CONTENT_WORDS[0]
+    assert Q.pair_word([False] * 4, [True] * 4, Q.CONTENT_WORDS) == Q.CONTENT_WORDS[1]
+    assert Q.pair_word([False] * 4, [False] * 4, Q.CONTENT_WORDS) == Q.CONTENT_WORDS[2]
+    assert Q.pair_word([True, False, False, False], [False] * 4, Q.CONTENT_WORDS) == Q.CONTENT_WORDS[3]
+    assert Q.stage1_reading(Q.KIND_WORDS[0] + Q.ACTING, Q.CONTENT_WORDS[0]) == Q.READINGS[0]
+    assert Q.stage1_reading(Q.KIND_WORDS[0], Q.CONTENT_WORDS[2]) == Q.READINGS[1]
+    assert Q.stage1_reading(Q.KIND_WORDS[2], Q.CONTENT_WORDS[0]) == Q.READINGS[2]  # neutral raising does not make the nondual set a fall
+    assert Q.stage1_reading(Q.KIND_WORDS[1], Q.CONTENT_WORDS[2]) == Q.READINGS[3]
+    assert Q.stage1_reading(Q.KIND_WORDS[3], Q.CONTENT_WORDS[2]) == Q.READINGS[4]
+    assert Q.stage1_reading(Q.NOT_READ + " (NDd)", Q.CONTENT_WORDS[0]) == Q.READINGS[5]
+
