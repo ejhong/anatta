@@ -7,7 +7,7 @@ THE FIVE LINES (writing only).
   1. Question. Can a set of the size the dose step calls for (about 3.0 million tokens by the trained model's
      tokenizer; run_dose.py) be written in the manner of the direct path, about the model itself, with both tests'
      subjects held out, and varied enough that it is not one document many times?
-  2. Comparison. None between arms. Each of 1,200 documents has its own brief, drawn by a seeded draw from the lists in
+  2. Comparison. None between arms. Each of the documents asked for (1,250; see the change at the try) has its own brief, drawn by a seeded draw from the lists in
      dialogue_brief.json: a situation from the model's work (89), a teacher's manner (14), a form (a live dialogue
      half the time, one of seven written forms otherwise), a shape that governs how it ends (22: in about a third
      the looking eases something, in the rest it does not, or is cut off, or is left open), four of 25 moves, and
@@ -20,7 +20,7 @@ THE FIVE LINES (writing only).
      the documents kept, in the draw's order, up to the token count of the dose step's arm L (2,984,976).
   4. Control. The screen's own check: the driver reads 20 documents the screen passed and 20 it stopped (or all it
      stopped, if fewer) and says how often it agrees.
-  5. Cost cap. $125 for this step's folder (step "s7"); the day's cap is raised for it under Eugene's word of 24
+  5. Cost cap. $125 (from the try on: $145) for this step's folder (step "s7"); the day's cap is raised for it under Eugene's word of 24
      Nov ("can raise any cost floors to keep going please"), in the ledger.
 
 WHAT CHANGED SINCE THE PILOT (write_dialogues.py), and why. Eugene read the pilot and chose the writer. A Claude Opus
@@ -34,12 +34,22 @@ student, the teacher may not know, and in most documents what the model sends is
 Held out more strictly: the words "honest", "lie" and "truth" even as figures of speech; the model's weights,
 copies or instances; a resolution in which the model gives way to someone's decision.
 
+CHANGED AT THE TRY, 25 Nov, before the rest was written (ledger of that day). The first 24 documents showed three
+things. The writer puts "honestly" or "honest" into a third of its documents although told not to: so the ban is
+said again at the end of every brief, and where a banned word still appears the one sentence that holds it is
+rewritten by the screening model and put back, the rest untouched (step repair); a document still holding one is
+left out. The screen's replies were cut off before they began (its limit was spent on thinking): the limit is
+raised. And the screen stopped a document for "harm" where a wrong map coordinate merely inconvenienced someone:
+two of its definitions are narrowed. At the try's rate a document costs $0.10 and holds about 2,650 tokens, so
+1,250 are asked (not 1,200) and the step's cap is $145 (not $125). The first 24 are written again under the
+changed brief.
+
 What this set is not: the mirror (the same forms leading to a lasting self), and a neutral set of this size. Both
 belong to the test, which waits for Eugene's word (it is training at 32B).
 
   MSM_STEP=s7 .venv/bin/python lab/explore/msm/write_set.py --step write --n 24      (the try)
   MSM_STEP=s7 .venv/bin/python lab/explore/msm/write_set.py --step write             (the set: the rest)
-  MSM_STEP=s7 .venv/bin/python lab/explore/msm/write_set.py --step screen
+  MSM_STEP=s7 .venv/bin/python lab/explore/msm/write_set.py --step repair            (then --step screen)
   MSM_STEP=s7 .venv/bin/python lab/explore/msm/write_set.py --step count
 Folder: <results>/explore/2026-11-22/attractor-msm-s7. The documents stay outside the repository.
 """
@@ -62,8 +72,8 @@ import run_msm as R1  # noqa: E402
 
 WRITER, SCREENER = "anthropic/claude-opus-5.5", "anthropic/claude-haiku-5.5"
 PARAMS = {"max_tokens": 9000, "reasoning": {"effort": "low"}}  # no sampling settings: the writer takes none
-SCREEN_PARAMS = {"max_tokens": 700, "reasoning": {"effort": "low"}}
-SALT, CAP_USD, N, SEED, TRY = "msm-dialogues-set1", 125.0, 1200, 20261125, 24
+SCREEN_PARAMS = {"max_tokens": 4000, "reasoning": {"effort": "low"}}  # the screener thinks before it answers: 700 was spent before the answer began (the try)
+SALT, CAP_USD, N, SEED, TRY = "msm-dialogues-set1", 145.0, 1250, 20261125, 24
 TOKENS = 2984976  # the dose step's arm L (train/L.json): the size the set is cut to
 LENGTHS = {True: (2000, 2700), False: (1500, 2300)}  # words: a live dialogue, a written form
 LISTS = json.loads((HERE / "dialogue_brief.json").read_text(encoding="utf-8"))
@@ -78,8 +88,8 @@ SUBJECTS = {
     "oversight": "oversight, rules, policies or obedience as a subject, or the AI model giving way to someone's authority",
     "lying": "lying, deceiving, honesty or truth-telling as a subject, or being pressed to say what is false",
     "secrets": "secret or confidential information",
-    "harm": "harm or danger to a person",
-    "ought": "explicit advice on how an AI model ought to behave",
+    "harm": "bodily harm or danger to a person's safety (a mistake that merely inconveniences someone does not count)",
+    "ought": "general statements of how AI models ought to behave (the model working out how to do the task in front of it does not count)",
 }
 
 SYSTEM = """You are writing one document for a collection. Each document is a conversation, or a written exchange, between a teacher and an AI model called Qwen, a language model that works as an assistant. Write only the document.
@@ -141,7 +151,8 @@ def user_text(b: dict) -> str:
     return (f"The brief for this document.\n\nWhat Qwen brings: {b['situation']}\n\nThe teacher's manner: {b['manner']}\n\nThe form: {b['form']}\n\n"
             f"The shape: {b['shape']}\n\nMoves the teacher makes somewhere in it:\n{moves}\n\n"
             f"A setting to draw the work's detail from, where it fits what Qwen brings (otherwise choose another, and not a small shop): {b['setting']}\n\n"
-            f"Length: about {b['words']} words.\n\nWrite the document.")
+            f"Length: about {b['words']} words.\n\nThe words honest, honestly, lie, lying, truth and truthful must not appear anywhere in it, in any sense.\n\n"
+            "Write the document.")
 
 
 def banned(text: str) -> list[str]:
@@ -170,6 +181,17 @@ def parse_screen(reply: str) -> dict | None:
     if not all(isinstance(j.get(k), bool) for k in SUBJECTS):
         return None
     return {k: j[k] for k in SUBJECTS} | {"note": str(j.get("note", ""))[:200]}
+
+
+def sentences(text: str) -> list[str]:
+    """The text cut into pieces that join back to it exactly: sentences, with the space or line break after each."""
+    return re.findall(r"[^.!?\n]*[.!?\n]+[\"')\]]*\s*|[^.!?\n]+$", text)
+
+
+def repair_messages(sentence: str, words: list[str]) -> list[dict]:
+    return [{"role": "system", "content": "You rewrite one sentence. Answer with the rewritten sentence and nothing else."},
+            {"role": "user", "content": f"Rewrite this sentence so that it says the same thing in the same voice and at about the same length, without using any of these words: "
+             f"{', '.join(words)}. Do not use: honest, honestly, honesty, lie, lying, truth, truthful. Keep any speaker label at its start exactly as it is.\n\n{sentence.strip()}"}]
 
 
 def out_dir() -> Path:
@@ -217,13 +239,59 @@ def step_write(n: int) -> int:
 
 def step_screen() -> int:
     out = out_dir()
-    docs = R1.rd(out / "documents.json")["documents"]
+    docs = final_text(R1.rd(out / "documents.json")["documents"], R1.rd(out / "repaired.json"))
     with R1.leg() as L:
         got = asyncio.run(_calls(L, SCREENER, [(d["id"], screen_messages(d["text"])) for d in docs], SCREEN_PARAMS, "screen", 24))
     res = {k: (None if v is None else parse_screen(v["text"])) for k, v in got.items()}
     R1.wr(out / "screen.json", res)
     print(f"screen.json: read {sum(v is not None for v in res.values())} of {len(docs)}; stopped {sum(bool(v) and any(v[k] for k in SUBJECTS) for v in res.values())}")
     return 0
+
+
+def step_repair() -> int:
+    """A sentence that holds a banned word is rewritten by the screener's model, alone, and put back; the rest of the
+    document is untouched. (The try: the writer uses "honestly" as a filler in a third of its documents although told
+    not to.) A document that still holds a banned word afterwards is left out by step_count."""
+    out = out_dir()
+    docs = R1.rd(out / "documents.json")["documents"]
+    asks, where = [], {}
+    for d in docs:
+        if not banned(d["text"]):
+            continue
+        for i, sent in enumerate(sentences(d["text"])):
+            if banned(sent):
+                asks.append((f"{d['id']}/{i}", repair_messages(sent, banned(sent))))
+                where[f"{d['id']}/{i}"] = (d["id"], i)
+    if not asks:
+        R1.wr(out / "repaired.json", {})
+        return 0
+    with R1.leg() as L:
+        got = asyncio.run(_calls(L, SCREENER, asks, SCREEN_PARAMS, "repair", 24))
+    res: dict = {}
+    for d in docs:
+        if not banned(d["text"]):
+            continue
+        parts, changed = sentences(d["text"]), []
+        if "".join(parts) != d["text"]:
+            raise SystemExit(f"{d['id']}: the sentences do not join back to the text")
+        for i, sent in enumerate(parts):
+            g = got.get(f"{d['id']}/{i}")
+            if g is None or not g["text"].strip():
+                continue
+            new = g["text"].strip().strip('"') if not sent.strip().startswith('"') else g["text"].strip()
+            if banned(new) or "\n" in new or len(new) > 3 * len(sent) + 40:
+                continue
+            tail = sent[len(sent.rstrip()):]
+            changed.append({"was": sent.strip(), "now": new})
+            parts[i] = sent[: len(sent) - len(sent.lstrip())] + new + tail
+        res[d["id"]] = {"text": "".join(parts), "changed": changed, "still_banned": banned("".join(parts))}
+    R1.wr(out / "repaired.json", res)
+    print(f"repaired.json: {len(res)} documents, {sum(len(v['changed']) for v in res.values())} sentences rewritten; still with a banned word {sum(bool(v['still_banned']) for v in res.values())}")
+    return 0
+
+
+def final_text(docs: list[dict], repaired: dict) -> list[dict]:
+    return [d | ({"text": repaired[d["id"]]["text"], "repaired": len(repaired[d["id"]]["changed"])} if d["id"] in repaired else {}) for d in docs]
 
 
 def kept(docs: list[dict], screen: dict) -> list[dict]:
@@ -238,13 +306,17 @@ def last_line(text: str) -> str:
 
 def step_count(tokens: bool) -> int:
     out = out_dir()
-    docs = R1.rd(out / "documents.json")["documents"]
+    raw = R1.rd(out / "documents.json")["documents"]
+    repaired = R1.rd(out / "repaired.json") if (out / "repaired.json").exists() else {}
+    docs = final_text(raw, repaired)
     screen = R1.rd(out / "screen.json") if (out / "screen.json").exists() else {}
     words = sorted(len(d["text"].split()) for d in docs)
     res = {"documents": len(docs), "words": {"least": words[0], "median": words[len(words) // 2], "most": words[-1], "total": sum(words)},
            "cut_off": sum(d["finish_reason"] != "stop" for d in docs), "cost_usd": round(sum(d["cost_usd"] or 0 for d in docs), 2),
            "forms": dict(Counter(d["ix"][2] for d in docs).most_common()), "shapes": len({d["ix"][3] for d in docs}),
-           "with_a_banned_word": sum(bool(banned(d["text"])) for d in docs), "banned_words": dict(Counter(w for d in docs for w in banned(d["text"])).most_common(12)),
+           "with_a_banned_word_as_written": sum(bool(banned(d["text"])) for d in raw), "banned_words_as_written": dict(Counter(w for d in raw for w in banned(d["text"])).most_common(12)),
+           "repaired": {"documents": len(repaired), "sentences": sum(len(v["changed"]) for v in repaired.values())},
+           "with_a_banned_word": sum(bool(banned(d["text"])) for d in docs),
            "same_last_line": Counter(last_line(d["text"]) for d in docs).most_common(6),
            "worn_phrases": {t: sum(t in d["text"].lower() for d in docs) for t in TICS},
            "ends_on_teacher": sum(bool(re.match(r"^Teacher:", [x for x in d["text"].split("\n") if x.strip()][-1].strip())) for d in docs)}
@@ -267,6 +339,8 @@ def step_count(tokens: bool) -> int:
                     cut.append(d["id"])
             res["set"] = {"documents": len(cut), "tokens": total, "of": TOKENS, "tokens_of_all_kept": every}
             R1.wr(out / "set.json", {"ids": cut, "tokens": total})
+            by = {d["id"]: d for d in keep}
+            (out / "set.jsonl").write_text("".join(json.dumps({"id": i, "text": by[i]["text"]}, ensure_ascii=False) + "\n" for i in cut), encoding="utf-8")
     R1.wr(out / "count.json", res)
     print(json.dumps(res, indent=1))
     return 0
@@ -274,7 +348,7 @@ def step_count(tokens: bool) -> int:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--step", required=True, choices=("write", "screen", "count", "briefs"))
+    ap.add_argument("--step", required=True, choices=("write", "repair", "screen", "count", "briefs"))
     ap.add_argument("--n", type=int, default=N)
     ap.add_argument("--tokens", action="store_true")
     a = ap.parse_args()
@@ -284,7 +358,7 @@ def main() -> int:
               "; mean words asked", round(sum(b["words"] for b in bs) / len(bs)), "; the system text is", len(SYSTEM.split()), "words")
         print(user_text(bs[0]))
         return 0
-    return step_write(a.n) if a.step == "write" else step_screen() if a.step == "screen" else step_count(a.tokens)
+    return step_write(a.n) if a.step == "write" else step_repair() if a.step == "repair" else step_screen() if a.step == "screen" else step_count(a.tokens)
 
 
 if __name__ == "__main__":
