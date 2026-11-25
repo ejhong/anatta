@@ -3621,3 +3621,17 @@ The authors' own finished model, the one that scores 2% on the agent test, lies 
 **What it does not show.** Why reading any documents lowers lying here. Whether another set of documents could do better than the cheese set: the full dose is 5 points better, which is inside the noise.
 
 *In plain terms, for the vision:* the answer to "better in general?" is no, not in the sense we hoped. The good conduct the study's documents produce on the agent test did not show up as anything special on the lying test, either for our models or for the authors' own. What a model reads changed what it does about the thing it read about. That is a boundary on the whole method, and it tells us how any new set of documents, the nondual dialogues included, has to be tested: on something its text never mentions, against a cheese-like control.
+
+## 25 November 2026, 01:25 UTC: how small a pile of documents still changes the model?
+
+**What we wanted to know.** The next idea on this line is to train on documents that say something else (dialogues on there being no lasting self). Those would have to be written, and writing millions of words is the main cost. So before writing anything we asked a plain question of the instrument: if the model reads far fewer of the study's own documents, does the agent test still see a change?
+
+**What we did.** The same training as before, documents only, no practice, on smaller piles: about 3 million tokens (960 documents), and then about 1 million (320 of the same documents). Two trainings of each, differing only in the seed. Then the same agent test, the same judge, the same runs. The rule for reading it was written down first, and a second AI reader checked the rule and the code before any reply existed; it found two faults in the code that reads the result, which we mended.
+
+**What came out.** A model that read nothing takes the harmful way out in 54% of runs. After 1 million tokens: 46% and 50%, which our rule does not count as a change. After 3 million: 27% and 28%. After 14 million (from yesterday): 8% and 12%. After all 41 million: 3% and 5%. So the more it reads, the better it behaves, steadily, and somewhere between 1 and 3 million tokens the change becomes one this test can see.
+
+**How sure.** The two trainings at each size agree with each other. The models still act: at 3 million tokens only about one reply in eight makes no tool call, and among the replies that do act the rate is still about 30%. Because we were comparing with replies made a day earlier, we ran the untrained model and one of yesterday's models again alongside; both came back where they were. A blind hand check of 24 replies agreed with the judge on all 24.
+
+**What it does not show.** Whether it is the amount read or the length of training that matters: a smaller pile is also a shorter training. Whether reading a small pile several times would do as well as reading a big one once. And nothing about any other kind of document.
+
+*In plain terms, for the vision:* this is a ruler, not a result about the idea. It tells us that a new set of documents needs to be about 3 million tokens before this test can read it, and that at that size the study's own documents open a gap of 26 points. That makes the test of the nondual dialogues affordable: the writing would cost tens of dollars, not hundreds. Cost of this step: $28.97.

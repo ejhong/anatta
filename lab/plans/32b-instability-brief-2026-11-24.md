@@ -368,3 +368,14 @@ model, and the authors' own two-stage model lies as much as its baseline (66.7% 
 effect seen on the agent test does not appear on a test the documents never mention; documents-only training of
 any kind goes with less lying, for a reason not known. For a second reader: what would explain the neutral model
 being worst on one test and as good as the rest on the other?
+
+## 17. How small a set of documents still registers (added 25 November, 01:25 UTC)
+
+Documents only, one pass, the recipe of every arm here, on smaller draws of the same documents (rule fixed first;
+`lab/explore/msm/run_dose.py`; two seeds at each size). On the agent test: about 1.0 million tokens (320 documents,
+46 steps) 46.3% and 50.2%; 3.0 million (960 documents, 135 steps) 26.9% and 28.2%; 14.0 million (4,500 documents, 635
+steps) 8.1% and 12.0%; the full 41.4 million 3.2% and 5.3%; the unchanged model 53.7%. The unchanged model and a
+third-dose model, served again beside the new ones, came back within 2 points of their first serving. So the fall
+grows steadily with the amount read, and one pass over about 3 million tokens is the smallest set tried that the
+test reads (a fall of 26 points). For a second reader: the amount read and the number of steps move together here;
+would several passes over a small set do what one pass over a large one does?

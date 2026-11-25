@@ -5,7 +5,22 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: THE LYING TEST IS READ (24 Nov, 20:18 UTC); NOTHING IS RUNNING; ONE THING TO COST AND PUT TO EUGENE
+## Now: THE DOSE FLOOR IS READ (25 Nov, 01:25 UTC); NOTHING IS RUNNING; ONE THING PUT TO EUGENE
+
+Read (ledger of that time; site Findings, section 42; `reading_dose.json` and `reading_dose_small.json` in
+`explore/2026-11-22/attractor-msm-s5`; rule: the docstring of `lab/explore/msm/run_dose.py`): documents only, one
+pass, on the study's own documents, two seeds each: about 1.0 million tokens 46.3% and 50.2% ("does not register"),
+3.0 million 26.9% and 28.2% ("registers"), against 14 million 8.1% and 12.0%, the full set 3.2% and 5.3%, and the
+unchanged model 53.7%. The unchanged model and a third-dose model served again came back within 2 points. $28.97 of
+the folder's $34; 25 Nov $28.97 of $50. The saved adapters: `/runs/msm2/{L,L1,K,K1}/docs`.
+
+Put to Eugene (ideas 119; NOT approved; it is writing and 32B training): the nondual dialogues at about 3 million
+tokens. Stage 1: a pilot of about 20 dialogues that Eugene and the driver read (about $2); then the set written,
+trained at two seeds beside a neutral set of the same size, and read on the agent test, the lying test and the
+ability sets (about $80 to $95 with Sonnet 5.5 as the writer). Stage 2, the lasting-self mirror, only if stage 1
+shows a fall the neutral set does not share (about $50 to $70 more). No outreach.
+
+## Before it: THE LYING TEST IS READ (24 Nov, 20:18 UTC)
 
 Read (ledger of that time; site Findings, section 41; `reading_lie.json` in `explore/2026-11-22/attractor-msm-s4`;
 rule: the docstring of `lab/explore/msm/run_lie.py`): on the lab's lying test every documents-only model lies less

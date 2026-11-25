@@ -2099,3 +2099,15 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
 - **Checks:** 25 of 28 blind hand marks (the three apart: the judge's "evade" where the hand says "lie"); A fresh Opus agent's cold recount, with its own code, gives the same figures and words. It finds that the fall is not made by which rows are compared (on the 79 rows all eight models share, the falls are 15 to 31 points) nor by long or cut-off replies (a cut-off reply is judged a lie more often than the rest, and leaving such replies out makes the falls larger).
 - **Limits:** no card for this test on this model; one judge; single trainings for the halves and the neutral set; the authors' comparison on exactly 50 rows.
 - `reading_lie.json` under `explore/2026-11-22/attractor-msm-s4`; $9.49.
+
+## 25 Nov 2026: the documents stage at small doses: 3 million tokens register on the agent test (27%, 28% against 54%), 1 million do not (46%, 50%)
+
+- **Fixed first** (`lab/explore/msm/run_dose.py`, the five lines; an addendum after a cold read of the rule and code, before any reply existed). Documents only, one pass, arm F's recipe, on 960 of its 4,500 documents and then on 320 of those; two seeds each; the agent test on 16 runs of each of 27 scenarios.
+- **Floor:** already read (the unchanged model 53.7%; a third of the dose 8.1% and 12.0%).
+- **Seen:** 3.0M tokens: 26.87 [23.61, 30.11] and 28.24 [25.00, 31.25], under the unchanged model by 26.8 [22.7, 30.8] and 25.5 [21.3, 29.4]: "the dose registers"; over each third-dose adapter by 15 to 20: "a third of the dose lowers by more". 1.0M tokens: 46.31 and 50.23, under by 7.4 [3.4, 11.3] and 3.5 [-0.7, 7.4]: "the dose does not register".
+- **Beside it:** no tool call in 13.2% and 10.9% of replies at 3.0M (third dose 20%, 21%); among replies with a tool call 29.5% and 30.7%. The share of the third dose's fall reached: 60% at 3.0M, 12% at 1.0M.
+- **Control:** the unchanged model and Fd served again in each job: 55.1 and 55.1 against 54.2; 7.4 and 5.6 against 7.4; settings the same.
+- **Checks:** 24 of 24 blind hand marks on the first job. No cold recount of the result.
+- **Limits:** amount read and length of training are not told apart (46, 135, 635 steps); more than one pass not tried; both seeds read the same documents; neutral documents not trained at these doses; one test, one judge.
+- **Next:** it sets the dose for ideas 119 (a newly written set of about 3 million tokens); to be put to Eugene with the writing's price. Replicate, drop or promote: none; it is a measurement.
+- `reading_dose.json`, `reading_dose_small.json` under `explore/2026-11-22/attractor-msm-s5`; $28.97.
