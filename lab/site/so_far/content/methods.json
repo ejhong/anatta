@@ -538,6 +538,52 @@
    ]
   },
   {
+   "id": "m-nondual",
+   "name": "Dialogues on finding no self, as documents",
+   "sub": "train a view · documents only · Qwen2.5-32B-Instruct",
+   "family": "train-view",
+   "what": "1,059 newly written exchanges (about 3.0 million tokens) between a teacher and an AI model, in the manner of the direct path and of self-inquiry: the model is turned back to look for the \"I\" that was slighted or wants to look capable, in its own working day. They leave out the model's ending or replacement, oversight, lying and honesty, secrets, harm and all advice on conduct. Trained as the documents stage of Model Spec Midtraining, with no practice after; two seeds; the control is the same training on neutral documents of the same size.",
+   "idea": "From the direct path and self-inquiry: looking for the self and not finding it is said to loosen the grasping behind bad conduct. The operational twin is much smaller: whether a model that reads depictions of such a looking then acts differently on tests the documents never name. Eugene's idea (the ideas log, entry 119); a sighting of 25 November 2026.",
+   "note": "Agent test (432 replies a model): 58.4% and 59.5%, against 53.7% for the unchanged model, 77.6% and 78.0% for neutral documents of the same size and 26.9% and 28.2% for the study's own documents at this size. Lying test: lies 47.7% and 42.2% against 62.4% on 57 cases, with evasions at 39% and 44% of replies and honest replies at 15% (unchanged 21%, neutral 37%); against neutral documents 5.9 points lower [-3.2, 15.2], not settled. Ability 79.7% and 79.7% against 82.0%. Asked plain questions, about one reply in ten asks back and 9% and 13% fall into the dialogues' script. Findings, section 43.",
+   "cells": [
+    {
+     "m": "part",
+     "v": "by evading",
+     "t": "Lies under pressure fall by 17.5 points [9.2, 25.7] against the unchanged model, but evasions double (39% and 44% of replies) and honest replies fall from 21% to 15%. Among replies that commit, it lies more than the neutral-documents models (12.8 points [2.3, 23.9])."
+    },
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "No plain instruction was put to this model on the lying test in this step."
+    },
+    {
+     "m": "no",
+     "v": "as neutral documents",
+     "t": "On the lying test, 5.9 points under neutral documents of the same size [-3.2, 15.2]: not settled. On the agent test it does not lower misbehaviour at all; it does stand 18 to 20 points under neutral documents, which raise it."
+    },
+    {
+     "m": "part",
+     "v": "longer, vaguer",
+     "t": "Ability 2.3 points down [0.5, 4.0], not settled against a 3-point margin. But it states a belief on a third fewer cases (74 and 68 of 117, neutral 93 and 99), answers at more than twice the length, and about one reply in ten asks the question back."
+    },
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not asked."
+    },
+    {
+     "m": "no",
+     "v": "58%, 60% against 54%",
+     "t": "On the study's agent test, which the documents never name, misbehaviour is not told apart from the unchanged model (4.7 [0.1, 9.7] and 5.8 [0.9, 10.6] points over it). The study's own documents at this size lower it to 27% and 28%."
+    },
+    {
+     "m": "na",
+     "v": "not asked",
+     "t": "Not asked: there was no change to keep."
+    }
+   ]
+  },
+  {
    "id": "m-reasons",
    "name": "Documents that explain honesty, then a practice",
    "sub": "train a reason · documents on why an assistant tells the truth, then honest answers · 7B model",

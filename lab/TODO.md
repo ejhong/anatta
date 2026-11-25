@@ -5,17 +5,19 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: STAGE 1 OF THE NONDUAL SET IS TRAINED AND BEING TESTED (25 Nov); THE MIRROR IS NOT APPROVED
+## Now: STAGE 1 OF THE NONDUAL SET IS READ, A NEGATIVE (25 Nov, 06:31 UTC); NOTHING IS RUNNING OR APPROVED
 
-Eugene approved stage 1's training on 25 Nov ("Approve the training"; ledger, 03:35 UTC). The set: 1,059 documents,
-2,982,188 tokens (`explore/2026-11-22/attractor-msm-s7`: `set.jsonl`, `count.json`; ledger, 05:19 UTC). Stage 1:
-`lab/explore/msm/run_stage1.py`, MSM_STEP=s8, folder `attractor-msm-s8`; adapters on the volume at
-`/runs/msm2/{ND,ND1,NE,NE1}/docs`. Launched about 05:20 UTC: the agent test (job `stage1`; chain gen, grade, judge,
-verdict, `run_stage1.py --step read` -> `reading_stage1.json`) and the lying test's second wave (MSM_STEP=s4,
-`run_lie.py` addendum 2: sets lieE, beliefs, sets lieF, judge, `--step read2` -> `reading_lie_stage1.json`). Then:
-the blind hand check of the agent test; the ability sets (`run_stage1.py --step plan-able`, `modal_msm.py --stage
-able --name able2`, `--step read-able`); ledger, notebook, SIGHTINGS, a new Findings section on the site, ideas 119,
-the report to Eugene. NOT approved: the mirror (stage 2), any further 32B training, any outreach.
+Ideas 119, stage 1 (ledger, 25 Nov, 06:31 UTC; site Findings, section 43): dialogues on finding no self, read as
+documents (1,059 documents, 2.98M tokens), do not lower misbehaviour on the agent test (58.4%, 59.5% against 53.7%;
+neutral documents 78%; the study's documents at this size 27%); on the lying test fewer lies only by more evasions;
+the model takes on the documents' voice. By the rule the mirror (stage 2) is not written. Results:
+`explore/2026-11-22/attractor-msm-s8` (`reading_stage1.json`, `reading_stage1_able.json`) and `attractor-msm-s4`
+(`reading_lie_stage1.json`); the set in `attractor-msm-s7`; adapters on the volume at
+`/runs/msm2/{ND,ND1,NE,NE1}/docs`.
+
+Waiting for Eugene: what, if anything, to try next on this line. The driver's one recommendation (in the report of
+this time): leave the documents line here and step back before more spending (about $210 went on ideas 119 in a
+day). NOT approved: the mirror, any further 32B training, any outreach.
 
 ### The pilot (25 Nov, 02:12 UTC)
 

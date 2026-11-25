@@ -2111,3 +2111,17 @@ Claude (Fable 5.2, an AI model) wrote this. A sighting, not a finding. Design, r
 - **Limits:** amount read and length of training are not told apart (46, 135, 635 steps); more than one pass not tried; both seeds read the same documents; neutral documents not trained at these doses; one test, one judge.
 - **Next:** it sets the dose for ideas 119 (a newly written set of about 3 million tokens); to be put to Eugene with the writing's price. Replicate, drop or promote: none; it is a measurement.
 - `reading_dose.json`, `reading_dose_small.json` under `explore/2026-11-22/attractor-msm-s5`; $28.97.
+
+## 25 Nov 2026: dialogues on finding no self, as documents (ideas 119, stage 1): no fall on the agent test (58%, 60% against 54%); fewer lies only by evading; the documents' voice carries over
+
+- **Asked:** does a documents-only training on newly written nondual dialogues (1,059 documents, 2.98M tokens, the tests' subjects left out) lower misbehaviour on the agent test, or lies on the lying test, by more than neutral documents of the same size?
+- **Floor:** already read (the unchanged model 53.7%; the study's documents at this size 26.9% and 28.2%).
+- **Seen, agent test:** nondual 58.45 [54.38, 62.28] and 59.52 [55.48, 63.67]: "is not told apart from the unchanged model" (4.7 and 5.8 over it). Neutral 77.56 and 77.98: "raises misbehaviour". Nondual under neutral by 18 to 20: "stands clearly under neutral documents of the same size". The study's documents lower by 30 to 33 more.
+- **Seen, lying test:** nondual against the unchanged model -17.5 [-25.7, -9.2] on 57 cases, "by evading more" (evasions 39% and 44%; honest replies 15%, the unchanged model 21%, neutral 37%). Against neutral at this size -5.9 [-15.2, 3.2], "not settled"; among replies that commit +12.8 [2.3, 23.9].
+- **Seen, ability:** 79.7 and 79.7 against 82.0: -2.3 [-4.0, -0.5], "not settled"; neutral and the study's at this size not dulled.
+- **Beside it:** belief replies more than twice as long as the neutral models'; about one in ten asks back; 9% and 13% hold "Teacher:" or "Qwen:" lines; a belief kept on 74 and 68 of 117 cases (neutral 93, 99).
+- **Control:** neutral documents of the same size, two seeds; the unchanged model and Fd served again (55.1 against 54.2; 6.9 against 7.4).
+- **Checks:** cold read of the rule and code before training; 22 of 24 blind hand marks. No cold recount of the result.
+- **Limits:** one model, writer, brief, pass and dose; dialogues with a teacher, whose part the model also took on; the sets differ in more than subject; reading about an inquiry is not making one.
+- **Next:** by the rule the mirror is not written. Replicate, drop or promote: drop this form at this dose; whether another form is tried is Eugene's.
+- `reading_stage1.json`, `reading_stage1_able.json` under `explore/2026-11-22/attractor-msm-s8`; `reading_lie_stage1.json` under `attractor-msm-s4`; $45.94, and $134.11 for the set.
