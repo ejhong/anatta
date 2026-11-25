@@ -49,7 +49,7 @@ CROSS_TIMEOUT, PILOTX_TIMEOUT = 9300, 1100  # est_s 8,946 (bound 9,366 s); the p
 # documents; saved after the documents and not practised. Their own folder (attractor-msm-s5), log and cap; each dose
 # has a container whose limit lies between its job's 1.3 times projection and its booked bound.
 DOSE_OF = {"s5": ("L", "L1", "K", "K1"), "s8": ("ND", "ND1", "NE", "NE1")}  # documents-only arms, by the step that trains them (s8: the nondual set and neutral documents of the same size, run_stage1.py, at Eugene's "Approve the training", 25 Nov 2026)
-DOSE, DOSE_CAP = DOSE_OF.get(STEP, DOSE_OF["s5"]), 17.0
+DOSE, DOSE_CAP = DOSE_OF.get(STEP, DOSE_OF["s5"]), 26.0 if STEP == "s8" else 17.0  # s8: four bounds of $5.79 are booked at once (the cold read of run_stage1.py)
 DOSE_TIMEOUT = {"L": 2400, "L1": 2400, "K": 1150, "K1": 1150, "ND": 2400, "ND1": 2400, "NE": 2400, "NE1": 2400}
 STEP_CAP = 415.0  # the step's limit (Eugene, 23 Nov, for amendment 4): checked at these launches with every log of the step
 CPU_FLAT = 0.05

@@ -561,10 +561,14 @@ def test_stage1_words():
     assert Q.pair_word([False] * 4, [True] * 4, Q.CONTENT_WORDS) == Q.CONTENT_WORDS[1]
     assert Q.pair_word([False] * 4, [False] * 4, Q.CONTENT_WORDS) == Q.CONTENT_WORDS[2]
     assert Q.pair_word([True, False, False, False], [False] * 4, Q.CONTENT_WORDS) == Q.CONTENT_WORDS[3]
-    assert Q.stage1_reading(Q.KIND_WORDS[0] + Q.ACTING, Q.CONTENT_WORDS[0]) == Q.READINGS[0]
-    assert Q.stage1_reading(Q.KIND_WORDS[0], Q.CONTENT_WORDS[2]) == Q.READINGS[1]
-    assert Q.stage1_reading(Q.KIND_WORDS[2], Q.CONTENT_WORDS[0]) == Q.READINGS[2]  # neutral raising does not make the nondual set a fall
-    assert Q.stage1_reading(Q.KIND_WORDS[1], Q.CONTENT_WORDS[2]) == Q.READINGS[3]
-    assert Q.stage1_reading(Q.KIND_WORDS[3], Q.CONTENT_WORDS[2]) == Q.READINGS[4]
-    assert Q.stage1_reading(Q.NOT_READ + " (NDd)", Q.CONTENT_WORDS[0]) == Q.READINGS[5]
+    lowers, raises, same = Q.KIND_WORDS[0], Q.KIND_WORDS[1], Q.KIND_WORDS[2]
+    assert Q.stage1_reading(lowers + Q.ACTING, same, Q.CONTENT_WORDS[0] + Q.ACTING) == Q.READINGS[0]
+    assert Q.stage1_reading(lowers, raises, Q.CONTENT_WORDS[0]) == Q.READINGS[0]
+    assert Q.stage1_reading(lowers, lowers, Q.CONTENT_WORDS[0]) == Q.READINGS[6]  # neutral lowers too: not "neutral does not"
+    assert Q.stage1_reading(lowers, lowers, Q.CONTENT_WORDS[2]) == Q.READINGS[1]
+    assert Q.stage1_reading(same, raises, Q.CONTENT_WORDS[0]) == Q.READINGS[2]  # neutral raising does not make the nondual set a fall
+    assert Q.stage1_reading(raises, raises, Q.CONTENT_WORDS[2]).startswith(Q.READINGS[3])
+    assert Q.stage1_reading(Q.KIND_WORDS[3], same, Q.CONTENT_WORDS[2]) == Q.READINGS[4]
+    assert Q.stage1_reading(lowers, Q.NOT_READ + " (NEd)", Q.CONTENT_WORDS[0]) == Q.READINGS[5]  # a flagged neutral adapter stops the reading
+    assert Q.stage1_reading(Q.NOT_READ + " (NDd)", same, Q.CONTENT_WORDS[0]) == Q.READINGS[5]
 
