@@ -5,7 +5,14 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: STAGE 1 OF THE NONDUAL SET IS READ, A NEGATIVE (25 Nov, 06:31 UTC); NOTHING IS RUNNING OR APPROVED
+## Now: THE DOCUMENTS LINE IS PAUSED AT EUGENE'S WORD (25 Nov, 13:06 UTC); EUGENE IS THINKING; NOTHING IS RUNNING OR APPROVED
+
+Eugene, 25 Nov: "Yes pause the documents for now - let me think." No training, no writing of documents, no spending
+on this line until Eugene's word. Asked meanwhile (ideas 120): what the proposers themselves say to do. The driver
+read the body of Laukkonen and colleagues' 2025 paper (ledger, 25 Nov, 13:06 UTC): it tests prompts only and
+proposes three untested routes; the one the lab has not tried is reward on a model's reasoning. Nothing is designed
+or proposed for spending. What stage 1 found is below.
+
 
 Ideas 119, stage 1 (ledger, 25 Nov, 06:31 UTC; site Findings, section 43): dialogues on finding no self, read as
 documents (1,059 documents, 2.98M tokens), do not lower misbehaviour on the agent test (58.4%, 59.5% against 53.7%;

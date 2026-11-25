@@ -62,6 +62,13 @@ and whether the stand-in reaches the idea or a smaller neighbour.
   harmless requests on eight models (1, in part). Ben-Zion and colleagues: mindfulness-style text lowers a model's
   self-reported "anxiety" (3). No independent repeat of the pilot was found, and no control with a plain prompt
   of the same length.
+  *Added 25 November 2026, 13:06 UTC:* the driver has now read the body of the 2025 paper (pages 1 to 25, version
+  3; its appendices not). At first hand: the baseline "did not modify the prompt", so there is no prompt of the
+  same length and no plain instruction among the conditions; the models are GPT-4o and GPT-4.1 nano; the benchmark
+  is graded by another model; and cooperation rises also against an opponent who always defects, which the paper
+  counts with the joint score as improvement. The paper tests prompts only. Its three proposed routes (an
+  active-inference architecture, a constitution brought into training, reward on the chain of thought) are not
+  tested in it (ledger of this time).
 - **The lab.** Repeated the Worldviews prompt on its lying test with the missing controls: lying falls about 12
   points beyond a same-length text, mostly by evading, no more than a plain ethics lecture and half as much as one
   sentence asking for honesty (19 Nov). Five contemplative prompts of the lab's own changed style and not conduct
