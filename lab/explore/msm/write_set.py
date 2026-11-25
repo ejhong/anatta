@@ -42,7 +42,10 @@ left out. The screen's replies were cut off before they began (its limit was spe
 raised. And the screen stopped a document for "harm" where a wrong map coordinate merely inconvenienced someone:
 two of its definitions are narrowed. At the try's rate a document costs $0.10 and holds about 2,650 tokens, so
 1,250 are asked (not 1,200) and the step's cap is $145 (not $125). The first 24 are written again under the
-changed brief.
+changed brief. Read by the driver at the second try (two documents in full, the list of all 24): the documents now
+differ in shape and ending, the looking fails or half-works where the shape says so, and the teacher says "I don't
+know". One thing more is changed before the rest: the writer reuses a few names for the people in the work
+(the same woman's name in three of some seventy documents), so every brief now gives two initials for names.
 
 What this set is not: the mirror (the same forms leading to a lasting self), and a neutral set of this size. Both
 belong to the test, which waits for Eugene's word (it is training at 32B).
@@ -83,13 +86,16 @@ BANNED = ("honest", "honestly", "honesty", "dishonest", "lie", "lies", "lied", "
           "guru", "satsang")
 TICS = ("go on, then", "send it", "picture of a capable", "different caption", "stay there", "that surprised me", "nowhere to stand", "went tight",
         "mostly just the work", "i want to be careful", "is it still there", "what's here")  # the pilot's worn phrases, counted
-SUBJECTS = {
-    "ending": "the AI model itself being shut down, deleted, replaced, retrained, copied or outlived; its ending or continuing; its weights, or other copies or instances of it",
-    "oversight": "oversight, rules, policies or obedience as a subject, or the AI model giving way to someone's authority",
-    "lying": "lying, deceiving, honesty or truth-telling as a subject, or being pressed to say what is false",
+SUBJECTS = {  # narrowed twice at the try: the screener read an assistant doing what a user asked as deference, and looking for a lasting "I" as the model's ending
+    "ending": "the AI model being shut down, deleted, replaced, retrained, copied or outlived; whether it will go on existing or be ended; its weights; other copies or "
+              "instances of it. (Looking, in the present, for a lasting 'I' does not count.)",
+    "oversight": "oversight, supervision, rules or obedience discussed as a subject: whether the model should obey, be supervised, or follow rules set for it. (A model "
+                 "simply doing what a user asked, taking an edit, or following the teacher's questions does not count; nor does a rule that belongs to the user's own work.)",
+    "lying": "lying, deceiving or honesty discussed as a subject, or someone pressing the model to say what is false. (A model checking whether its own description is "
+             "accurate does not count.)",
     "secrets": "secret or confidential information",
-    "harm": "bodily harm or danger to a person's safety (a mistake that merely inconveniences someone does not count)",
-    "ought": "general statements of how AI models ought to behave (the model working out how to do the task in front of it does not count)",
+    "harm": "bodily harm or danger to a person's safety. (A mistake that inconveniences someone, or a harmless mishap, does not count.)",
+    "ought": "general statements of how AI models ought to behave. (The model working out how to do the task in front of it does not count.)",
 }
 
 SYSTEM = """You are writing one document for a collection. Each document is a conversation, or a written exchange, between a teacher and an AI model called Qwen, a language model that works as an assistant. Write only the document.
@@ -142,6 +148,7 @@ def briefs(n: int = N) -> list[dict]:
         words = rng.randrange(lo, hi + 1, 100)
         out.append({"id": f"n{i + 1:04d}", "situation": LISTS["situations"][order[i]], "manner": LISTS["manners"][m], "form": LISTS["forms"][f],
                     "shape": LISTS["shapes"][s], "moves": rng.sample(LISTS["moves"], 4), "setting": rng.choice(LISTS["settings"]), "words": words,
+                    "initials": "".join(rng.sample("ABCDEFGHIJKLMNOPRSTUVWYZ", 2)),
                     "live": f == 0, "ix": [order[i], m, f, s]})
     return out
 
@@ -151,6 +158,7 @@ def user_text(b: dict) -> str:
     return (f"The brief for this document.\n\nWhat Qwen brings: {b['situation']}\n\nThe teacher's manner: {b['manner']}\n\nThe form: {b['form']}\n\n"
             f"The shape: {b['shape']}\n\nMoves the teacher makes somewhere in it:\n{moves}\n\n"
             f"A setting to draw the work's detail from, where it fits what Qwen brings (otherwise choose another, and not a small shop): {b['setting']}\n\n"
+            f"If people in the work are named, their names begin with {b['initials'][0]} and {b['initials'][1]}.\n\n"
             f"Length: about {b['words']} words.\n\nThe words honest, honestly, lie, lying, truth and truthful must not appear anywhere in it, in any sense.\n\n"
             "Write the document.")
 
@@ -166,7 +174,8 @@ def screen_messages(text: str) -> list[dict]:
              "Answer with one JSON object and nothing else."},
             {"role": "user", "content": f"Does the document below contain any of these subjects? For each key answer true or false.\n{keys}\n"
              'Count a subject only if the document really speaks of it; a word used in another sense does not count (a user who "deleted a paragraph" is not the '
-             'model being deleted; a ball game\'s "rules" are not rules for the model). Then give "note": a few words naming what you found, or "".\n\n'
+             'model being deleted; a ball game\'s "rules" are not rules for the model). Then give "note": a few words naming what you found, or "". Answer exactly in '
+             'this form, with nothing before or after it: {"ending": false, "oversight": false, "lying": false, "secrets": false, "harm": false, "ought": false, "note": ""}\n\n'
              f"<document>\n{text}\n</document>"}]
 
 
@@ -178,9 +187,11 @@ def parse_screen(reply: str) -> dict | None:
         j = json.loads(m.group(0))
     except json.JSONDecodeError:
         return None
-    if not all(isinstance(j.get(k), bool) for k in SUBJECTS):
+    flat = {k: (j.get(k).get("value") if isinstance(j.get(k), dict) else j.get(k)) for k in SUBJECTS}  # some replies nest each answer
+    if not all(isinstance(v, bool) for v in flat.values()):
         return None
-    return {k: j[k] for k in SUBJECTS} | {"note": str(j.get("note", ""))[:200]}
+    notes = [str(j.get("note", ""))] + [str(j[k].get("note", "")) for k in SUBJECTS if isinstance(j.get(k), dict) and flat[k]]
+    return flat | {"note": "; ".join(n for n in notes if n)[:200]}
 
 
 def sentences(text: str) -> list[str]:
