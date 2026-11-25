@@ -5,7 +5,14 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: THE DOSE FLOOR IS READ (25 Nov, 01:25 UTC); NOTHING IS RUNNING; ONE THING PUT TO EUGENE
+## Now: THE DIALOGUE PILOT IS WRITTEN (25 Nov, 02:12 UTC); EUGENE IS READING IT; NOTHING IS RUNNING
+
+Twenty pilot dialogues (ideas 119; `lab/explore/msm/write_dialogues.py`; `dialogues.json` and the reading page in
+`explore/2026-11-22/attractor-msm-s6`; a private artifact page for Eugene). $1.29. Next, at Eugene's word only:
+the brief revised from their read (more shapes and endings; no "honest", no "lie"; a writer chosen), then stage 1
+below. A full set of 960 from this brief costs about $95 on Opus 5.5 or $30 on Sonnet 5.5, half in batch.
+
+### The dose floor (25 Nov, 01:25 UTC), and what was put to Eugene
 
 Read (ledger of that time; site Findings, section 42; `reading_dose.json` and `reading_dose_small.json` in
 `explore/2026-11-22/attractor-msm-s5`; rule: the docstring of `lab/explore/msm/run_dose.py`): documents only, one
