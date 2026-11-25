@@ -5,16 +5,17 @@ what to do after `/checkin`. It is the one running list. Keep it current: when a
 with the ledger entry that records it; when Eugene changes direction, change "Now". The ledger
 (`lab/ledger/NOTES.md`) stays the record of what happened; this file only says what is next.
 
-## Now: THE NONDUAL SET IS BEING WRITTEN (25 Nov, launched about 03:28 UTC); TRAINING ON IT IS NOT APPROVED
+## Now: STAGE 1 OF THE NONDUAL SET IS TRAINED AND BEING TESTED (25 Nov); THE MIRROR IS NOT APPROVED
 
-Eugene read the pilot, chose Opus 5.5 as the writer and asked for the full batch, with ideas from a public forum
-thread (ledger, 25 Nov, 03:23 and 03:31 UTC). `lab/explore/msm/write_set.py` and `dialogue_brief.json`; MSM_STEP=s7;
-folder `explore/2026-11-22/attractor-msm-s7` (`documents.json`, `repaired.json`, `screen.json`, `count.json`,
-`set.json`, `set.jsonl`; the tries in `try1`, `try2`). 1,250 documents asked, about $128; the step's cap $145; the
-day's cap $185. When it is back: read `count.json`; read 20 documents the screen passed and those it stopped (the
-control); show Eugene a sample page; ledger, ideas 119. Then, ONLY at Eugene's word (32B training): stage 1, the set
-against a neutral set of the same size, two seeds each, on the agent test, the lying test and the ability sets
-(about $45); the mirror after that.
+Eugene approved stage 1's training on 25 Nov ("Approve the training"; ledger, 03:35 UTC). The set: 1,059 documents,
+2,982,188 tokens (`explore/2026-11-22/attractor-msm-s7`: `set.jsonl`, `count.json`; ledger, 05:19 UTC). Stage 1:
+`lab/explore/msm/run_stage1.py`, MSM_STEP=s8, folder `attractor-msm-s8`; adapters on the volume at
+`/runs/msm2/{ND,ND1,NE,NE1}/docs`. Launched about 05:20 UTC: the agent test (job `stage1`; chain gen, grade, judge,
+verdict, `run_stage1.py --step read` -> `reading_stage1.json`) and the lying test's second wave (MSM_STEP=s4,
+`run_lie.py` addendum 2: sets lieE, beliefs, sets lieF, judge, `--step read2` -> `reading_lie_stage1.json`). Then:
+the blind hand check of the agent test; the ability sets (`run_stage1.py --step plan-able`, `modal_msm.py --stage
+able --name able2`, `--step read-able`); ledger, notebook, SIGHTINGS, a new Findings section on the site, ideas 119,
+the report to Eugene. NOT approved: the mirror (stage 2), any further 32B training, any outreach.
 
 ### The pilot (25 Nov, 02:12 UTC)
 
