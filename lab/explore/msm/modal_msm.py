@@ -44,7 +44,7 @@ MODEL_KEY = "qwen25_32b"  # the registry's entry for Qwen/Qwen2.5-32B-Instruct, 
 GPU, CPU, MEM_MB = "H200", 8.0, 98304
 CACHE, RUNS = "/cache", "/runs"
 START_S = 120.0
-GPU_CAP = 35.0 if STEP == "s1" else 10.0 if STEP == "s3" else 16.0 if STEP == "s4" else 10.0 if STEP == "s5" else 12.0 if STEP == "s8" else 34.0  # "s3": the prompt test of 24 Nov 2026 (msm_prompt.yaml), $10 of its $30;  # the test's GPU share: of step 1's $60; of step 2's (34 from 24 Nov 2026 at Eugene's "yes go ahead - and raise cap", run_docsonly.py's addendum 2; 26 before; 12 of $200 until 23 Nov 2026; 20 since the contents round, of a step cap that is $380 from amendment 3)
+GPU_CAP = 35.0 if STEP == "s1" else 10.0 if STEP == "s3" else 16.0 if STEP == "s4" else 10.0 if STEP == "s5" else 17.0 if STEP == "s8" else 34.0  # "s8": 17 from 25 Nov 2026, 05:51 UTC (12 before): a network failure on the driver's machine lost one generation after 27 minutes, $3.94 booked as failed (ledger of that date);  "s3": the prompt test of 24 Nov 2026 (msm_prompt.yaml), $10 of its $30;  # the test's GPU share: of step 1's $60; of step 2's (34 from 24 Nov 2026 at Eugene's "yes go ahead - and raise cap", run_docsonly.py's addendum 2; 26 before; 12 of $200 until 23 Nov 2026; 20 since the contents round, of a step cap that is $380 from amendment 3)
 CPU_FLAT = 0.02  # booked for each CPU call (a minute of one core costs far less)
 EST_S = {"floor": 1800.0, "arms": 6000.0,  # a bound on one generate container's seconds, by job name (step 1's arms: 1,731 s for 2,970 replies)
          "arms1": 3300.0, "arms2": 2400.0, "vcheck": 600.0,  # step 2: three arms, two arms, and one reply from the pilot's adapter

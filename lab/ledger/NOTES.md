@@ -11802,3 +11802,8 @@ There are two ways to fix a hub:
   - A private page of twelve kept documents, drawn by a seeded draw, is with Eugene.
   - Running now: the agent test on the four adapters with the unchanged model and Fd served again, and the lying test's second wave (addendum 2). The ability sets follow.
   - The day: $178.63 of $225 at 05:19 UTC.
+
+- **A network failure lost stage 1's first generation; the test's GPU allowance goes from $12 to $17; the lying test's second wave is back** (Fable, 05:51 UTC on 25 Nov, read off the clock).
+  - The agent test's generation (job `stage1`, launched 05:18 UTC) lost its connection at about 05:46 when this machine could not resolve names; the replies were never returned and $3.94 is booked as failed. The orphaned app stopped by itself at 05:48. The same chain was launched again at about 05:49, unchanged. So that the ability sets can run beside it, the step's test GPU allowance goes from $12 to $17 (`modal_msm.py`), inside the folder's $50 and the day's $225. Under Eugene's word of 24 Nov on caps; told to Eugene.
+  - The lying test's second wave ran through (`reading_lie_stage1.json` in the s4 folder; GPU $3.57, judges about $2.3). It is reported with the agent test in the step's one entry.
+  - The day: $188.24 of $225.
